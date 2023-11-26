@@ -30,6 +30,7 @@ fun main() {
         install(ContentNegotiation) {
             json()
         }
+        staticResources()
         configureRouting()
         contactUsModule()
     }.start(wait = true)

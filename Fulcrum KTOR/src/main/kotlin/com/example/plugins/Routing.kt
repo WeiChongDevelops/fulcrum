@@ -3,25 +3,34 @@ package com.example.plugins
 import io.ktor.http.*
 import io.ktor.http.ContentDisposition.Companion.File
 import io.ktor.server.application.*
+import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import java.io.File
 
+fun Application.staticResources() {
+    routing {
+        staticResources("/", "static/dist") {
+            default("index.html")
+        }
+    }
+}
+
 fun Application.configureRouting() {
     routing {
-        get("/") {
-//            println("URI: ${call.request.uri}") // "/"
-//            println("Headers: ${call.request.headers.names()}")
-//            println("User-Agent: ${call.request.headers["User-Agent"]}")
-//            println("Host: ${call.request.headers["Host"]}")
-//            println("Connection: ${call.request.headers["Connection"]}")
-//            println("Query Parameters: ${call.request.queryParameters.names()}")
-//            println("Username: ${call.request.queryParameters["usr"]}")
-//            println("Password: ${call.request.queryParameters["pw"]}")
-            call.respondText("Front Website Here")
-        }
+//        get("/") {
+////            println("URI: ${call.request.uri}") // "/"
+////            println("Headers: ${call.request.headers.names()}")
+////            println("User-Agent: ${call.request.headers["User-Agent"]}")
+////            println("Host: ${call.request.headers["Host"]}")
+////            println("Connection: ${call.request.headers["Connection"]}")
+////            println("Query Parameters: ${call.request.queryParameters.names()}")
+////            println("Username: ${call.request.queryParameters["usr"]}")
+////            println("Password: ${call.request.queryParameters["pw"]}")
+//            call.respondText("Front Website Here")
+//        }
 
         get("/api/expenses") {
             call.respondText("Expenses API Here")
