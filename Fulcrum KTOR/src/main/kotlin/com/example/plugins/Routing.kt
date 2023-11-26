@@ -23,28 +23,12 @@ fun Application.configureRouting() {
             call.respondText("Front Website Here")
         }
 
-        get("/app") {
-            call.respondText("App Here")
+        get("/api/expenses") {
+            call.respondText("Expenses API Here")
         }
 
-        get("/login") {
-            call.respondText("Login Here")
-        }
-
-        get("/signup") {
-            call.respondText("Sign Up Here")
-        }
-
-        get("/app/expenses") {
-            call.respondText("Expenses Here")
-        }
-
-        get("/app/budget") {
-            call.respondText("Budget Here")
-        }
-
-        get("app/tools") {
-            call.respondText("Tools Here")
+        get("/api/budget") {
+            call.respondText("Budget API Here")
         }
 
 //        get("/blog/{page}") {
