@@ -1,1 +1,1 @@
-rootProject.name = "LearnKtor2"
+rootProject.name = "Fulcrum KTOR"

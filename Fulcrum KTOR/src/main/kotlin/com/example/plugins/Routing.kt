@@ -20,54 +20,78 @@ fun Application.configureRouting() {
 //            println("Query Parameters: ${call.request.queryParameters.names()}")
 //            println("Username: ${call.request.queryParameters["usr"]}")
 //            println("Password: ${call.request.queryParameters["pw"]}")
-            call.respondText("Hello World!")
+            call.respondText("Front Website Here")
         }
 
-        get("/blog/{page}") {
-            val pageNumber = call.parameters["page"]
-            call.respondText("You are on page $pageNumber")
+        get("/app") {
+            call.respondText("App Here")
         }
 
-        post("/login") {
-            val userInfo = call.receive<UserInfo>()
-            println(userInfo)
-            call.respondText("Post request functional.")
+        get("/login") {
+            call.respondText("Login Here")
         }
 
-        get("/json") {
-            val myJSON = UserInfo("123@123.com", "pwpwpw")
-            call.respond(myJSON);
+        get("/signup") {
+            call.respondText("Sign Up Here")
         }
 
-        get("/headers") {
-            call.response.headers.append("fruit", "orange")
-            call.respondText("Extra header attached.")
+        get("/app/expenses") {
+            call.respondText("Expenses Here")
         }
 
-        get("/fileDownload") {
-            val file = File("iris.jpg")
-
-            call.response.header(
-                HttpHeaders.ContentDisposition,
-                ContentDisposition.Attachment.withParameter(
-                    ContentDisposition.Parameters.FileName, "openImage.jpg"
-                ).toString()
-            )
-            call.respondFile(file)
+        get("/app/budget") {
+            call.respondText("Budget Here")
         }
 
-
-        get("/fileOpen") {
-            val file = File("iris.jpg")
-
-            call.response.header(
-                HttpHeaders.ContentDisposition,
-                ContentDisposition.Inline.withParameter(
-                    ContentDisposition.Parameters.FileName, "openImage.jpg"
-                ).toString()
-            )
-            call.respondFile(file)
+        get("app/tools") {
+            call.respondText("Tools Here")
         }
+
+//        get("/blog/{page}") {
+//            val pageNumber = call.parameters["page"]
+//            call.respondText("You are on page $pageNumber")
+//        }
+//
+//        post("/login") {
+//            val userInfo = call.receive<UserInfo>()
+//            println(userInfo)
+//            call.respondText("Post request functional.")
+//        }
+//
+//        get("/json") {
+//            val myJSON = UserInfo("123@123.com", "pwpwpw")
+//            call.respond(myJSON);
+//        }
+//
+//        get("/headers") {
+//            call.response.headers.append("fruit", "orange")
+//            call.respondText("Extra header attached.")
+//        }
+//
+//        get("/fileDownload") {
+//            val file = File("iris.jpg")
+//
+//            call.response.header(
+//                HttpHeaders.ContentDisposition,
+//                ContentDisposition.Attachment.withParameter(
+//                    ContentDisposition.Parameters.FileName, "openImage.jpg"
+//                ).toString()
+//            )
+//            call.respondFile(file)
+//        }
+//
+//
+//        get("/fileOpen") {
+//            val file = File("iris.jpg")
+//
+//            call.response.header(
+//                HttpHeaders.ContentDisposition,
+//                ContentDisposition.Inline.withParameter(
+//                    ContentDisposition.Parameters.FileName, "openImage.jpg"
+//                ).toString()
+//            )
+//            call.respondFile(file)
+//        }
     }
 }
 
