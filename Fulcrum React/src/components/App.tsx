@@ -1,11 +1,20 @@
-import './App.css'
+import '../css/App.css'
+import ExpenseList from "./ExpenseList.tsx";
+import BudgetList from "./BudgetList.tsx";
+import {useState} from "react";
+import {tempStartBudgetList, tempStartExpenseList} from "../util.ts";
+import DBInsertionForm from "./DBInsertionForm.tsx";
 
-function App() {
-  return (
-    <>
-      <h1 className="text-green-500 font-extrabold">Hello World</h1>
-    </>
-  )
+export default function App() {
+
+    const [expenseArray, setExpenseArray] = useState(tempStartExpenseList);
+    const [budgetArray, setBudgetArray] = useState(tempStartBudgetList);
+
+    return (
+        <>
+            <ExpenseList expenseArray={expenseArray} setExpenseArray={setExpenseArray}/>
+            <BudgetList budgetArray={budgetArray} setBudgetArray={setBudgetArray}/>
+            <DBInsertionForm/>
+        </>
+    )
 }
-
-export default App

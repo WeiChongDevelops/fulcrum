@@ -1,4 +1,11 @@
-export default function ExpenseItem(category: string, categoryId: string, amount: number) {
+
+interface BudgetItemProps {
+    category: string
+    categoryId: number
+    amount: number
+}
+
+export default function BudgetItem({category, categoryId, amount}: BudgetItemProps) {
     return (
         <li>{`Category: ${category}, ID: ${categoryId}, $${amount}`}</li>
     )
