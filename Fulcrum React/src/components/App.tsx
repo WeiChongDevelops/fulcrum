@@ -5,6 +5,7 @@ import {useState} from "react";
 import {tempStartBudgetList, tempStartExpenseList} from "../util.ts";
 import DBInsertionForm from "./DBInsertionForm.tsx";
 import DBDeletionForm from "./DBDeletionForm.tsx";
+import DBUpdatingForm from "./DBUpdatingForm.tsx";
 
 export default function App() {
 
@@ -17,6 +18,7 @@ export default function App() {
             <BudgetList budgetArray={budgetArray} setBudgetArray={setBudgetArray}/>
             <DBInsertionForm/>
             <DBDeletionForm/>
+            <DBUpdatingForm/>
         </>
     )
 }
