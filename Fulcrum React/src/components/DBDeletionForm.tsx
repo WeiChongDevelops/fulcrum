@@ -2,9 +2,9 @@ import NewItemButton from "./NewItemButton.tsx";
 import {useState} from "react";
 import { v4 as uuid } from "uuid";
 
-export default function DBInsertionForm() {
+export default function DBDeletionForm() {
 
-    const [formData, setFormData] = useState({category: "", amount: 0});
+    const [formData, setFormData] = useState({categoryId: 0});
 
     function handleInputChange(e: any) {
         setFormData( currentFormData => {
@@ -15,15 +15,13 @@ export default function DBInsertionForm() {
         e.preventDefault();
 
         const writeData = async() => {
-            const response = await fetch("http://localhost:8080/api/createExpense", {
-                method: "POST",
+            const response = await fetch("http://localhost:8080/api/deleteExpense", {
+                method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "category": formData.category,
-                    "categoryId": parseInt(uuid()),
-                    "amount": formData.amount
+                    "categoryId": formData.categoryId,
                 })
             })
             .then(data => console.log(data))
@@ -32,26 +30,23 @@ export default function DBInsertionForm() {
 
         writeData();
 
-        setFormData({category: "", amount: 0})
+        setFormData({categoryId: 0})
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="category">Category</label>
-            <input type="text"
-                   onChange={handleInputChange}
-                   value={formData.category}
-                   name="category"
-                   id="category"
-                   className="mb-3"/>
-            <label htmlFor="amount">Amount</label>
-            <input type="text"
-                   onChange={handleInputChange}
-                   value={formData.amount}
-                   name="amount"
-                   id="amount"
-                   className="mb-3"/>
-            <NewItemButton itemType="Expense Submission" />
-        </form>
+        <>
+            <h1>[Deletion Form]</h1>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="categoryId">Category ID</label>
+                <input type="text"
+                       onChange={handleInputChange}
+                       value={formData.categoryId}
+                       name="categoryId"
+                       id="categoryId"
+                       className="mb-3"/>
+                <NewItemButton itemType="Delete Expense" />
+            </form>
+        </>
+
     )
 }
