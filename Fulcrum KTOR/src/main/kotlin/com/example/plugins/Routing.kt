@@ -2,6 +2,8 @@ package com.example.plugins
 
 import com.example.entities.*
 import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.gotrue.gotrue
+import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
@@ -163,6 +165,22 @@ fun Application.configureRouting() {
             } catch (e: Exception) {
                 call.application.log.error("Error while reading expenses", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expenses not read."))
+            }
+        }
+
+        post("/api/signup") {
+            val userCreds = call.receive<UserInfo>()
+            val user = supabase.gotrue.signUpWith(Email) {
+                email = userCreds.email
+                password = userCreds.password
+            }
+        }
+
+        post("/api/login") {
+            val userCreds = call.receive<UserInfo>()
+            val user = supabase.gotrue.loginWith(Email) {
+                email = userCreds.email
+                password = userCreds.password
             }
         }
 //
