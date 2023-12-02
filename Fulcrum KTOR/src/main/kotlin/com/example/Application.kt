@@ -1,17 +1,15 @@
 package com.example
 
 import com.example.plugins.*
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.serialization.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.plugins.contentnegotiation.*
-import org.ktorm.database.Database
-import org.ktorm.dsl.*
-import com.example.entities.ListEntity
+import io.ktor.server.plugins.cors.routing.*
+import kotlinx.coroutines.launch
+
 
 //fun main() {
 //    embeddedServer(Netty, port=8080, host="localhost") {
@@ -28,48 +26,38 @@ import com.example.entities.ListEntity
 //}
 
 fun main() {
-//    System.setProperty("io.ktor.development", "true")
-    embeddedServer(Netty, port=8080, host="localhost") {
-        install(ContentNegotiation) {
-            json()
-        }
-        staticResources()
-        configureRouting()
-        contactUsModule()
-
-//        val database = Database.connect(
-//            url = "jdbc:mysql://localhost:3306/notes",
-//            driver = "com.mysql.cj.jdbc.Driver",
-//            user = "root",
-//            password = "fAbrication!23"
-//        )
-//
-////        database.insert(NotesEntity) {
-////            set(it.note, "Apple")
-////        }
-////
-////        database.insert(NotesEntity) {
-////            set(it.note, "Orange")
-////        }
-////
-////        database.insert(NotesEntity) {
-////            set(it.note, "Banana")
-////        }
-//        database.update(ListEntity) {
-//            set(it.note, "Replacement Value")
-//            where {
-//                it.id eq 1
-//            }
-//        }
-//
-//        database.delete(ListEntity) {
-//            it.id eq 1
-//        }
-//
-//        var notes = database.from(ListEntity)
-//            .select()
-//        for(row in notes) {
-//            println("${row[ListEntity.id]},${row[ListEntity.note]}")
-//        }
+    embeddedServer(Netty, port = 8080, host = "localhost") {
+        serverConfig()
     }.start(wait = true)
 }
+
+private fun Application.serverConfig() {
+    install(ContentNegotiation) {
+        json()
+    }
+
+    install(CORS) {
+        allowMethod(HttpMethod.Get)
+        allowMethod(HttpMethod.Post)
+        allowMethod(HttpMethod.Delete)
+        allowMethod(HttpMethod.Put)
+        // Add other methods as needed
+
+        allowHeader(HttpHeaders.Authorization)
+        allowHeader(HttpHeaders.ContentType)
+        // Add other headers as needed
+
+        allowCredentials = true
+        allowNonSimpleContentTypes = true
+
+        allowHost("localhost:5173", schemes = listOf("http"))
+        // Add other hosts as needed
+    }
+
+    staticResources()
+    contactUsModule()
+    launch {
+        configureRouting()
+    }
+}
+

@@ -1,14 +1,21 @@
 package com.example.plugins
 
+import com.example.entities.CategoryIdOnly
+import com.example.entities.ExpenseItem
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Returning
+import io.ktor.client.*
+import io.ktor.client.engine.apache5.*
 import io.ktor.http.*
-import io.ktor.http.ContentDisposition.Companion.File
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
-import java.io.File
+import org.apache.hc.core5.http.HttpHost
 
 fun Application.staticResources() {
     routing {
@@ -19,7 +26,106 @@ fun Application.staticResources() {
 }
 
 fun Application.configureRouting() {
+        val supabaseUrl = "https://pdtitoimxnivxfswjhty.supabase.co"
+        val supabaseKey = System.getenv("SUPABASE_KEY")
+        val supabase = createSupabaseClient(supabaseUrl, supabaseKey) {
+            install(Postgrest)
+            val client = HttpClient(Apache5) {
+                engine {
+                    followRedirects = true
+                    socketTimeout = 10_000
+                    connectTimeout = 10_000
+                    connectionRequestTimeout = 20_000
+                    customizeClient {
+                        setProxy(HttpHost("127.0.0.1", 8080))
+                    }
+                }
+            }
+        }
+//    val listItems = supabase.postgrest["expenses"].select(columns = Columns.list("category, categoryId, amount")).decodeList<GenericListItem>()
+//    if (listItems.isNotEmpty()) {
+//        val listItem = listItems.first()
+//        println(listItem.category)
+//    } else {
+//        println("No items found")
+//    }
+
+
+//    val itemToInsert = GenericListItem(category = "InsertedValue3", categoryId = 9426, amount = 1)
+//    val test = supabase.postgrest["expenses"].insert(itemToInsert, returning = Returning.REPRESENTATION) //returning defaults to Returning.REPRESENTATION
+//    println(test.body)
+
+//    val itemToInsert = GenericListItem(category = "InsertedValue3", categoryId = 9426, amount = 1)
+//    val test = supabase.postgrest["expenses"].insert(itemToInsert, returning = Returning.MINIMAL) //returning defaults to Returning.REPRESENTATION
+//    println(test.body)
+
+
+//    val updatedItem = supabase.postgrest["expenses"].update(
+//        {
+//            set("categoryId", "942")
+//        }
+//    ) {
+//        eq("categoryId", "379817289189")
+//    }.decodeSingle<GenericListItem>()
+//    println(updatedItem.categoryId)
+
+//    supabase.postgrest["expenses"].delete {
+//        eq("categoryId", "942")
+//    }
     routing {
+
+        post("/api/createExpense") {
+            try {
+                val itemToInsert = call.receive<ExpenseItem>()
+                val test = supabase.postgrest["expenses"].insert(
+                    itemToInsert,
+                    returning = Returning.REPRESENTATION
+                ) //returning defaults to Returning.REPRESENTATION
+                if (test.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, "Expense not added.")
+                } else {
+                    call.respond(HttpStatusCode.OK, "Expense added successfully.")
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, "Expense not added.")
+            }
+        }
+
+        delete("/api/deleteExpense") {
+            val expense = call.receive<CategoryIdOnly>()
+            supabase.postgrest["expenses"].delete {
+                eq("categoryId", expense.categoryId.toString())
+            }
+            call.respond("Expense deleted.")
+        }
+
+        put("/api/updateExpense") {
+            val expense = call.receive<ExpenseItem>()
+            val updatedItem = supabase.postgrest["expenses"].update(
+                {
+                    set("category", expense.category)
+                    set("amount", expense.amount)
+                }
+            ) {
+                eq("categoryId", expense.categoryId.toString())
+            }.decodeSingle<ExpenseItem>()
+            println(updatedItem.categoryId)
+            call.respond(updatedItem)
+        }
+//
+//        get("/api/getExpenses") {
+//            val listItems = supabase.postgrest["expenses"].select(columns = Columns.list("category, categoryId, amount")).decodeList<GenericListItem>()
+//            if (listItems.isNotEmpty()) {
+//                val listItem = listItems.first()
+//                println(listItem.category)
+//            } else {
+//                println("No items found")
+//            }
+//            call.respond(listItems)
+//        }
+//
+
+
 //        get("/") {
 ////            println("URI: ${call.request.uri}") // "/"
 ////            println("Headers: ${call.request.headers.names()}")

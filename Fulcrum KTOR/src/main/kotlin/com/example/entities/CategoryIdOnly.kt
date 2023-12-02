@@ -1,3 +1,8 @@
 package com.example.entities
 
-data class CategoryIdOnly()
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class CategoryIdOnly(
+    val categoryId: Int
+)

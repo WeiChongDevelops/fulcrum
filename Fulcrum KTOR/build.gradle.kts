@@ -23,6 +23,9 @@ repositories {
 }
 
 dependencies {
+
+    implementation("io.ktor:ktor-server-cors-jvm:2.3.6")
+
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
@@ -31,8 +34,8 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
 
-    implementation("org.ktorm:ktorm-core:3.6.0")
-    implementation("com.mysql:mysql-connector-j:8.2.0")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:1.4.7")
+    implementation("io.ktor:ktor-client-apache5:$ktor_version")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
