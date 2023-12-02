@@ -16,6 +16,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import org.apache.hc.core5.http.HttpHost
+import kotlin.math.exp
 
 fun Application.staticResources() {
     routing {
@@ -73,12 +74,6 @@ fun Application.configureRouting() {
 //        eq("categoryId", "942")
 //    }
 
-    suspend fun categoryToCategoryId(category: String): String {
-        return supabase.postgrest["categories"]
-            .select(columns = Columns.list("categoryId")) {
-                eq("categoryName", category)
-            }.decodeList<CategoryIdResponse>().first().categoryId
-    }
 
     routing {
 
@@ -88,7 +83,7 @@ fun Application.configureRouting() {
 
                 val itemToInsert = ExpenseCreateRequestSent(
                     userId = expenseCreateRequest.userId,
-                    categoryId = categoryToCategoryId(expenseCreateRequest.category),
+                    category = expenseCreateRequest.category,
                     amount = expenseCreateRequest.amount
                 )
                 val insertedItem = supabase.postgrest["expenses"].insert(
@@ -129,12 +124,12 @@ fun Application.configureRouting() {
             try {
                 val expenseUpdateRequest = call.receive<ExpenseUpdateRequestReceived>()
 
-                val updatedCategoryId = categoryToCategoryId(expenseUpdateRequest.category)
+                val updatedCategory = expenseUpdateRequest.category
 
                 val updatedItem = supabase.postgrest["expenses"].update(
                     {
                         set("amount", expenseUpdateRequest.amount)
-                        set("categoryId", updatedCategoryId)
+                        set("category", updatedCategory)
                     }
                 ) {
                     eq("expenseId", expenseUpdateRequest.expenseId)
@@ -151,16 +146,25 @@ fun Application.configureRouting() {
             }
         }
 //
-//        get("/api/getExpenses") {
-//            val listItems = supabase.postgrest["expenses"].select(columns = Columns.list("category, categoryId, amount")).decodeList<GenericListItem>()
-//            if (listItems.isNotEmpty()) {
-//                val listItem = listItems.first()
-//                println(listItem.category)
-//            } else {
-//                println("No items found")
-//            }
-//            call.respond(listItems)
-//        }
+        get("/api/getExpenses") {
+            try {
+                val expenseList = supabase.postgrest["expenses"].select(columns = Columns.raw (
+                    """
+                        expenseId,
+                        userId,
+                        category,
+                        amount,
+                        timestamp,
+                    """)
+                ).decodeList<ExpenseItemResponse>()
+
+                call.respond(HttpStatusCode.OK, expenseList)
+
+            } catch (e: Exception) {
+                call.application.log.error("Error while reading expenses", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expenses not read."))
+            }
+        }
 //
 
 

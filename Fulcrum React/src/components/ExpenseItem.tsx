@@ -1,13 +1,12 @@
 
 import {ExpenseItemEntity} from "../util.ts";
 
-export default function ExpenseItem({expenseId, userId, categoryId, amount, timestamp}: ExpenseItemEntity) {
+export default function ExpenseItem({expenseId, category, amount, timestamp}: ExpenseItemEntity) {
     return (
-        <li>{`expenseId: ${expenseId}, 
-        userId: ${userId}, 
-        categoryId: $${categoryId}, 
-        amount:${amount}, 
-        timestamp:${timestamp}`}
+        <li>{`expenseId: ${expenseId} |
+        category: ${category} |
+        amount: ${amount} |
+        timestamp: ${timestamp}`}
         </li>
     )
 }

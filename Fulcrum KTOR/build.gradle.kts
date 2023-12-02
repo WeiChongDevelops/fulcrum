@@ -23,6 +23,7 @@ repositories {
 }
 
 dependencies {
+    runtimeOnly("org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.5.0")
 
     implementation("io.ktor:ktor-server-cors-jvm:2.3.6")
 

@@ -1,14 +1,11 @@
-import {Dispatch, SetStateAction} from "react";
-import {ExpenseItemEntity, tempStartExpenseList} from "../util.ts";
+import {ExpenseItemEntity} from "../util.ts";
 import ExpenseItem from "./ExpenseItem.tsx";
 
 interface ExpenseListProps {
     expenseArray: ExpenseItemEntity[]
-    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
 }
 
-export default function ExpenseList({expenseArray, setExpenseArray}: ExpenseListProps) {
-    setExpenseArray(tempStartExpenseList) // Filler use of setExpenseArray
+export default function ExpenseList({expenseArray}: ExpenseListProps) {
 
     const date = new Date();
 
@@ -18,8 +15,7 @@ export default function ExpenseList({expenseArray, setExpenseArray}: ExpenseList
             <ul>
             {expenseArray.map(expenseElement => {
                 return <ExpenseItem expenseId={expenseElement.expenseId}
-                                    userId={expenseElement.userId}
-                                    categoryId={expenseElement.categoryId}
+                                    category={expenseElement.category}
                                     amount={expenseElement.amount}
                                     timestamp={date}/>
             })}
