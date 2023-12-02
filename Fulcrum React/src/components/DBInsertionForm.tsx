@@ -1,7 +1,13 @@
 import NewItemButton from "./NewItemButton.tsx";
-import {FormEvent, useState} from "react";
+import {Dispatch, FormEvent, SetStateAction, useState} from "react";
+import {ExpenseItemEntity, getExpenseList} from "../util.ts";
+import { v4 as uuid } from 'uuid';
 
-export default function DBInsertionForm() {
+interface DBInsertionFormProps {
+    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
+}
+
+export default function DBInsertionForm({setExpenseArray}: DBInsertionFormProps) {
     interface FormData {
         category: string;
         amount: number | null;
@@ -18,6 +24,17 @@ export default function DBInsertionForm() {
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
+        const newExpenseId = uuid()
+
+        const newExpenseItem: ExpenseItemEntity = {
+            expenseId: newExpenseId,
+            category: formData.category,
+            amount: formData.amount!!,
+            timestamp: new Date()
+        }
+
+        setExpenseArray(current => [...current, newExpenseItem])
+
         try {
             const response = await fetch("http://localhost:8080/api/createExpense", {
                 method: "POST",
@@ -25,6 +42,7 @@ export default function DBInsertionForm() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    expenseId: newExpenseId,
                     userId: "123e4567-e89b-12d3-a456-426614174000", // Temporary hard-coded value before auth is implemented
                     category: formData.category,
                     amount: formData.amount
@@ -34,7 +52,7 @@ export default function DBInsertionForm() {
             if (!response.ok) {
                 console.error(`HTTP error - status: ${response.status}`);
             }
-            const responseData = await response.json();
+            const responseData = await response.json()
             console.log(responseData);
 
         } catch (error) {
@@ -42,6 +60,8 @@ export default function DBInsertionForm() {
         }
 
         setFormData({ category: "", amount: null });
+
+
     }
 
 

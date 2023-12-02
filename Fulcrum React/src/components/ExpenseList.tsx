@@ -7,7 +7,6 @@ interface ExpenseListProps {
 
 export default function ExpenseList({expenseArray}: ExpenseListProps) {
 
-    const date = new Date();
 
     return(
         <>
@@ -17,7 +16,7 @@ export default function ExpenseList({expenseArray}: ExpenseListProps) {
                 return <ExpenseItem expenseId={expenseElement.expenseId}
                                     category={expenseElement.category}
                                     amount={expenseElement.amount}
-                                    timestamp={date}/>
+                                    timestamp={expenseElement.timestamp}/>
             })}
             </ul>
         </>

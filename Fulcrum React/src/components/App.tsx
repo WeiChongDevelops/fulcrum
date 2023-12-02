@@ -24,7 +24,7 @@ export default function App() {
         <>
             <ExpenseList expenseArray={expenseArray}/>
             {/*<BudgetList budgetArray={budgetArray} setBudgetArray={setBudgetArray}/>*/}
-            <DBInsertionForm/>
+            <DBInsertionForm setExpenseArray={setExpenseArray}/>
             <DBDeletionForm/>
             <DBUpdatingForm/>
         </>
