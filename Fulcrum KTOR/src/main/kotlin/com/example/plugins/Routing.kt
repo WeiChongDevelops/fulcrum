@@ -2,6 +2,7 @@ package com.example.plugins
 
 import com.example.entities.*
 import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.gotrue.GoTrue
 import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.Postgrest
@@ -33,6 +34,7 @@ fun Application.configureRouting() {
         val supabaseKey = System.getenv("SUPABASE_KEY")
         val supabase = createSupabaseClient(supabaseUrl, supabaseKey) {
             install(Postgrest)
+            install(GoTrue)
             val client = HttpClient(Apache5) {
                 engine {
                     followRedirects = true
@@ -45,6 +47,7 @@ fun Application.configureRouting() {
                 }
             }
         }
+
 //    val listItems = supabase.postgrest["expenses"].select(columns = Columns.list("category, categoryId, amount")).decodeList<GenericListItem>()
 //    if (listItems.isNotEmpty()) {
 //        val listItem = listItems.first()
@@ -174,6 +177,7 @@ fun Application.configureRouting() {
                 email = userCreds.email
                 password = userCreds.password
             }
+            call.respond(HttpStatusCode.OK, "User created successfully.")
         }
 
         post("/api/login") {
@@ -182,6 +186,7 @@ fun Application.configureRouting() {
                 email = userCreds.email
                 password = userCreds.password
             }
+            call.respond(HttpStatusCode.OK, "User logged in successfully.")
         }
 //
 
