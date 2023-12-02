@@ -1,6 +1,6 @@
 import NewItemButton from "./NewItemButton.tsx";
 import {Dispatch, FormEvent, SetStateAction, useState} from "react";
-import {ExpenseItemEntity, getExpenseList} from "../util.ts";
+import {ExpenseItemEntity} from "../util.ts";
 import { v4 as uuid } from 'uuid';
 
 interface DBInsertionFormProps {
