@@ -1,10 +1,10 @@
 import {Dispatch, SetStateAction} from "react";
-import {GenericItemList, tempStartExpenseList} from "../util.ts";
+import {ExpenseItemEntity, tempStartExpenseList} from "../util.ts";
 import ExpenseItem from "./ExpenseItem.tsx";
 
 interface ExpenseListProps {
-    expenseArray: GenericItemList[]
-    setExpenseArray: Dispatch<SetStateAction<GenericItemList[]>>
+    expenseArray: ExpenseItemEntity[]
+    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
 }
 
 export default function ExpenseList({expenseArray, setExpenseArray}: ExpenseListProps) {
@@ -17,10 +17,10 @@ export default function ExpenseList({expenseArray, setExpenseArray}: ExpenseList
             <h1>ExpenseList</h1>
             <ul>
             {expenseArray.map(expenseElement => {
-                return <ExpenseItem category={expenseElement.category}
+                return <ExpenseItem expenseId={expenseElement.expenseId}
+                                    userId={expenseElement.userId}
                                     categoryId={expenseElement.categoryId}
                                     amount={expenseElement.amount}
-                                    userId={0}
                                     timestamp={date}/>
             })}
             </ul>

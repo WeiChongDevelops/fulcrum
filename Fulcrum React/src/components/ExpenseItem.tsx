@@ -1,18 +1,12 @@
 
-interface ExpenseItemProps {
-    category: string
-    categoryId: number
-    amount: number
-    userId: number
-    timestamp: Date
-}
+import {ExpenseItemEntity} from "../util.ts";
 
-export default function ExpenseItem({category, categoryId, amount, userId, timestamp}: ExpenseItemProps) {
+export default function ExpenseItem({expenseId, userId, categoryId, amount, timestamp}: ExpenseItemEntity) {
     return (
-        <li>{`category: ${category}, 
-        categoryId: ${categoryId}, 
-        amount: $${amount}, 
-        userId:${userId}, 
+        <li>{`expenseId: ${expenseId}, 
+        userId: ${userId}, 
+        categoryId: $${categoryId}, 
+        amount:${amount}, 
         timestamp:${timestamp}`}
         </li>
     )
