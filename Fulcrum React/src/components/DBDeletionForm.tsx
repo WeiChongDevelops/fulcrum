@@ -1,48 +1,52 @@
 import NewItemButton from "./NewItemButton.tsx";
 import {useState} from "react";
-import { v4 as uuid } from "uuid";
 
 export default function DBDeletionForm() {
 
-    const [formData, setFormData] = useState({categoryId: 0});
+    const [formData, setFormData] = useState({expenseId: ""});
 
     function handleInputChange(e: any) {
         setFormData( currentFormData => {
             return {...currentFormData, [e.target.name]: e.target.value}
         });
     }
-    function handleSubmit(e: any) {
+    async function handleSubmit(e: any) {
         e.preventDefault();
 
-        const writeData = async() => {
+        try {
             const response = await fetch("http://localhost:8080/api/deleteExpense", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "categoryId": formData.categoryId,
+                    "expenseId": formData.expenseId,
                 })
             })
-            .then(data => console.log(data))
-            .catch(error => console.error("Error:" + error));
+
+            if (!response.ok) {
+                console.error(`HTTP error - status: ${response.status}`);
+            }
+            const responseData = await response.json();
+            console.log(responseData);
+
+        } catch(error) {
+            console.error("Error:", error);
         }
 
-        writeData();
-
-        setFormData({categoryId: 0})
+        setFormData({expenseId: ""})
     }
 
     return (
         <>
-            <h1>[Deletion Form]</h1>
+            <h1>Deletion Form</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="categoryId">Category ID</label>
+                <label htmlFor="expenseId">Expense ID</label>
                 <input type="text"
                        onChange={handleInputChange}
-                       value={formData.categoryId}
-                       name="categoryId"
-                       id="categoryId"
+                       value={formData.expenseId}
+                       name="expenseId"
+                       id="expenseId"
                        className="mb-3"/>
                 <NewItemButton itemType="Delete Expense" />
             </form>

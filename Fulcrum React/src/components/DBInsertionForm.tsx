@@ -2,8 +2,13 @@ import NewItemButton from "./NewItemButton.tsx";
 import {FormEvent, useState} from "react";
 
 export default function DBInsertionForm() {
+    interface FormData {
+        category: string;
+        amount: number | null;
+    }
 
-    const [formData, setFormData] = useState({category: "", amount: 0});
+    const [formData, setFormData] = useState<FormData>({ category: "", amount: null });
+
 
     function handleInputChange(e: any) {
         setFormData( currentFormData => {
@@ -36,13 +41,13 @@ export default function DBInsertionForm() {
             console.error("Error:", error);
         }
 
-        setFormData({ category: "", amount: 0 });
+        setFormData({ category: "", amount: null });
     }
 
 
     return (
         <>
-            <h1>[Insertion Form]</h1>
+            <h1>Insertion Form</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="category">Category</label>
                 <input type="text"
@@ -54,7 +59,7 @@ export default function DBInsertionForm() {
                 <label htmlFor="amount">Amount</label>
                 <input type="text"
                        onChange={handleInputChange}
-                       value={formData.amount}
+                       value={formData.amount == null ? "" : formData.amount}
                        name="amount"
                        id="amount"
                        className="mb-3"/>

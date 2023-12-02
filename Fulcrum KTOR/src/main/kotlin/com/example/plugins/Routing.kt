@@ -108,11 +108,21 @@ fun Application.configureRouting() {
         }
 
         delete("/api/deleteExpense") {
-            val expense = call.receive<ExpenseItemResponse>()
-            supabase.postgrest["expenses"].delete {
-                eq("expenseId", expense.expenseId.toString())
+            try {
+                val expenseIdToDelete = call.receive<ExpenseIdOnly>()
+                val deletedExpense = supabase.postgrest["expenses"].delete {
+                    eq("expenseId", expenseIdToDelete.expenseId)
+                }
+
+                if (deletedExpense.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not deleted."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Expense deleted successfully."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while deleting expense", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not deleted."))
             }
-            call.respond("Expense deleted.")
         }
 
         put("/api/updateExpense") {
