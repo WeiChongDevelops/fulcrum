@@ -92,9 +92,9 @@ fun Application.configureRouting() {
         }
 
         delete("/api/deleteExpense") {
-            val expense = call.receive<CategoryIdOnly>()
+            val expense = call.receive<ExpenseItem>()
             supabase.postgrest["expenses"].delete {
-                eq("categoryId", expense.categoryId.toString())
+                eq("expenseId", expense.expenseId.toString())
             }
             call.respond("Expense deleted.")
         }
@@ -103,7 +103,6 @@ fun Application.configureRouting() {
             val expense = call.receive<ExpenseItem>()
             val updatedItem = supabase.postgrest["expenses"].update(
                 {
-                    set("category", expense.category)
                     set("amount", expense.amount)
                 }
             ) {
