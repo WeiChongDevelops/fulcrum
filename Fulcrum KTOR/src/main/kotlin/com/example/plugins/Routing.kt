@@ -16,7 +16,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import org.apache.hc.core5.http.HttpHost
-import java.util.*
 
 fun Application.staticResources() {
     routing {
@@ -73,23 +72,24 @@ fun Application.configureRouting() {
 //    supabase.postgrest["expenses"].delete {
 //        eq("categoryId", "942")
 //    }
+
+    suspend fun categoryToCategoryId(category: String): String {
+        return supabase.postgrest["categories"]
+            .select(columns = Columns.list("categoryId")) {
+                eq("categoryName", category)
+            }.decodeList<CategoryIdResponse>().first().categoryId
+    }
+
     routing {
 
         post("/api/createExpense") {
             try {
-                val receivedExpenseItem = call.receive<ExpenseItemRequestReceived>()
+                val expenseCreateRequest = call.receive<ExpenseCreateRequestReceived>()
 
-                val requestedCategory = receivedExpenseItem.category
-                val requestedCategoryId = supabase.postgrest["categories"]
-                    .select(columns = Columns.list("categoryId")) {
-                        eq("categoryName", requestedCategory)
-                    }.decodeList<CategoryIdOnly>().first().categoryId
-
-
-                val itemToInsert = ExpenseItemRequestSent(
-                    userId = receivedExpenseItem.userId,
-                    categoryId = requestedCategoryId,
-                    amount = receivedExpenseItem.amount
+                val itemToInsert = ExpenseCreateRequestSent(
+                    userId = expenseCreateRequest.userId,
+                    categoryId = categoryToCategoryId(expenseCreateRequest.category),
+                    amount = expenseCreateRequest.amount
                 )
                 val insertedItem = supabase.postgrest["expenses"].insert(
                     itemToInsert,
@@ -109,9 +109,9 @@ fun Application.configureRouting() {
 
         delete("/api/deleteExpense") {
             try {
-                val expenseIdToDelete = call.receive<ExpenseIdOnly>()
+                val expenseDeleteRequest = call.receive<ExpenseDeleteRequestReceived>()
                 val deletedExpense = supabase.postgrest["expenses"].delete {
-                    eq("expenseId", expenseIdToDelete.expenseId)
+                    eq("expenseId", expenseDeleteRequest.expenseId)
                 }
 
                 if (deletedExpense.body == null) {
@@ -126,16 +126,29 @@ fun Application.configureRouting() {
         }
 
         put("/api/updateExpense") {
-            val expense = call.receive<ExpenseItemResponse>()
-            val updatedItem = supabase.postgrest["expenses"].update(
-                {
-                    set("amount", expense.amount)
+            try {
+                val expenseUpdateRequest = call.receive<ExpenseUpdateRequestReceived>()
+
+                val updatedCategoryId = categoryToCategoryId(expenseUpdateRequest.category)
+
+                val updatedItem = supabase.postgrest["expenses"].update(
+                    {
+                        set("amount", expenseUpdateRequest.amount)
+                        set("categoryId", updatedCategoryId)
+                    }
+                ) {
+                    eq("expenseId", expenseUpdateRequest.expenseId)
                 }
-            ) {
-                eq("categoryId", expense.categoryId.toString())
-            }.decodeSingle<ExpenseItemResponse>()
-            println(updatedItem.categoryId)
-            call.respond(updatedItem)
+
+                if (updatedItem.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not updated"))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Expense updated."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while updating expense", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not updated."))
+            }
         }
 //
 //        get("/api/getExpenses") {

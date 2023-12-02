@@ -1,11 +1,10 @@
 package com.example.entities
 
 import kotlinx.serialization.Serializable
-import java.util.*
 
 @Serializable
-data class ExpenseItemRequestSent(
+data class ExpenseCreateRequestReceived(
     val userId: String,
-    val categoryId: String,
+    val category: String,
     val amount: Double
 )

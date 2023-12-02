@@ -1,64 +1,73 @@
 import NewItemButton from "./NewItemButton.tsx";
 import {useState} from "react";
-import { v4 as uuid } from "uuid";
 
 export default function DBUpdatingForm() {
 
-    const [formData, setFormData] = useState({category: "", amount: 0, categoryId: 0});
+    interface FormData {
+        expenseId: string;
+        category: string | null;
+        amount: number | null;
+    }
+
+    const [formData, setFormData] = useState<FormData>({expenseId: "", amount: null, category: null});
 
     function handleInputChange(e: any) {
         setFormData( currentFormData => {
-            return {...currentFormData, [e.target.name]: e.target.value}
+            return {...currentFormData, [e.target.name]: e.target.value }
         });
     }
-    function handleSubmit(e: any) {
+    async function handleSubmit(e: any) {
         e.preventDefault();
 
-        const writeData = async() => {
+        try {
             const response = await fetch("http://localhost:8080/api/updateExpense", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    "expenseId": formData.expenseId,
                     "category": formData.category,
-                    "categoryId": formData.categoryId,
                     "amount": formData.amount
                 })
             })
-                .then(data => console.log(data))
-                .catch(error => console.error("Error:" + error));
+            if (!response.ok) {
+                console.error(`HTTP error - status: ${response.status}`);
+            }
+            const responseData = await response.json();
+            console.log(responseData);
+
+        } catch (error) {
+            console.error("Error:", error);
         }
 
-        writeData();
-
-        setFormData({category: "", amount: 0, categoryId: 0})
+        setFormData({expenseId: "", amount: null, category: null})
     }
 
     return (
         <>
-            <h1>[Updating Form]</h1>
+            <h1>Updating Form</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="categoryId">Category ID</label>
+                <label htmlFor="expenseId">Expense ID</label>
                 <input type="text"
                        onChange={handleInputChange}
-                       value={formData.categoryId}
-                       name="categoryId"
-                       id="categoryId"
-                       className="mb-3"/>
-                <label htmlFor="category">Category</label>
-                <input type="text"
-                       onChange={handleInputChange}
-                       value={formData.category}
-                       name="category"
-                       id="category"
+                       value={formData.expenseId}
+                       name="expenseId"
+                       id="expenseId"
                        className="mb-3"/>
                 <label htmlFor="amount">Amount</label>
                 <input type="text"
                        onChange={handleInputChange}
-                       value={formData.amount}
+                       value={formData.amount ? formData.amount : ""}
                        name="amount"
                        id="amount"
+                       className="mb-3"/>
+                <label htmlFor="category">Category</label>
+                <input type="text"
+                       onChange={handleInputChange}
+                       value={formData.category ? formData.category : ""}
+                       name="category"
+                       id="category"
                        className="mb-3"/>
                 <NewItemButton itemType="Update Expense" />
             </form>
