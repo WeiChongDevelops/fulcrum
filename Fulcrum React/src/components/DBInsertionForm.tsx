@@ -1,6 +1,5 @@
 import NewItemButton from "./NewItemButton.tsx";
-import {useState} from "react";
-import { v4 as uuid } from "uuid";
+import {FormEvent, useState} from "react";
 
 export default function DBInsertionForm() {
 
@@ -11,29 +10,35 @@ export default function DBInsertionForm() {
             return {...currentFormData, [e.target.name]: e.target.value}
         });
     }
-    function handleSubmit(e: any) {
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const writeData = async() => {
+        try {
             const response = await fetch("http://localhost:8080/api/createExpense", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "category": formData.category,
-                    "categoryId": parseInt(uuid()),
-                    "amount": formData.amount
+                    userId: "123e4567-e89b-12d3-a456-426614174000", // Temporary hard-coded value before auth is implemented
+                    category: formData.category,
+                    amount: formData.amount
                 })
-            })
-            .then(data => console.log(data))
-            .catch(error => console.error("Error:" + error));
+            });
+
+            if (!response.ok) {
+                console.error(`HTTP error - status: ${response.status}`);
+            }
+            const responseData = await response.json();
+            console.log(responseData);
+
+        } catch (error) {
+            console.error("Error:", error);
         }
 
-        writeData();
-
-        setFormData({category: "", amount: 0})
+        setFormData({ category: "", amount: 0 });
     }
+
 
     return (
         <>

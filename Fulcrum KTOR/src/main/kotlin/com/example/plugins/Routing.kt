@@ -1,10 +1,10 @@
 package com.example.plugins
 
-import com.example.entities.CategoryIdOnly
-import com.example.entities.ExpenseItem
+import com.example.entities.*
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
 import io.ktor.client.*
 import io.ktor.client.engine.apache5.*
@@ -16,6 +16,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import org.apache.hc.core5.http.HttpHost
+import java.util.*
 
 fun Application.staticResources() {
     routing {
@@ -76,23 +77,38 @@ fun Application.configureRouting() {
 
         post("/api/createExpense") {
             try {
-                val itemToInsert = call.receive<ExpenseItem>()
-                val test = supabase.postgrest["expenses"].insert(
+                val receivedExpenseItem = call.receive<ExpenseItemRequestReceived>()
+
+                val requestedCategory = receivedExpenseItem.category
+                val requestedCategoryId = supabase.postgrest["categories"]
+                    .select(columns = Columns.list("categoryId")) {
+                        eq("categoryName", requestedCategory)
+                    }.decodeList<CategoryIdOnly>().first().categoryId
+
+
+                val itemToInsert = ExpenseItemRequestSent(
+                    userId = receivedExpenseItem.userId,
+                    categoryId = requestedCategoryId,
+                    amount = receivedExpenseItem.amount
+                )
+                val insertedItem = supabase.postgrest["expenses"].insert(
                     itemToInsert,
                     returning = Returning.REPRESENTATION
-                ) //returning defaults to Returning.REPRESENTATION
-                if (test.body == null) {
-                    call.respond(HttpStatusCode.BadRequest, "Expense not added.")
+                )
+
+                if (insertedItem.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not added."))
                 } else {
-                    call.respond(HttpStatusCode.OK, "Expense added successfully.")
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Expense added successfully."))
                 }
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest, "Expense not added.")
+                call.application.log.error("Error while creating expense", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not added."))
             }
         }
 
         delete("/api/deleteExpense") {
-            val expense = call.receive<ExpenseItem>()
+            val expense = call.receive<ExpenseItemResponse>()
             supabase.postgrest["expenses"].delete {
                 eq("expenseId", expense.expenseId.toString())
             }
@@ -100,14 +116,14 @@ fun Application.configureRouting() {
         }
 
         put("/api/updateExpense") {
-            val expense = call.receive<ExpenseItem>()
+            val expense = call.receive<ExpenseItemResponse>()
             val updatedItem = supabase.postgrest["expenses"].update(
                 {
                     set("amount", expense.amount)
                 }
             ) {
                 eq("categoryId", expense.categoryId.toString())
-            }.decodeSingle<ExpenseItem>()
+            }.decodeSingle<ExpenseItemResponse>()
             println(updatedItem.categoryId)
             call.respond(updatedItem)
         }

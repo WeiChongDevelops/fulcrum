@@ -6,10 +6,10 @@ import java.sql.Timestamp
 import java.util.*
 
 @Serializable
-data class ExpenseItem(
-    @Contextual val expenseId: UUID,
-    @Contextual val userId: UUID,
-    @Contextual val categoryId: UUID,
-    val amount: Float,
+data class ExpenseItemResponse(
+    val expenseId: String,
+    val userId: String,
+    val categoryId: String,
+    val amount: Double,
     @Contextual val timestamp: Timestamp,
 )

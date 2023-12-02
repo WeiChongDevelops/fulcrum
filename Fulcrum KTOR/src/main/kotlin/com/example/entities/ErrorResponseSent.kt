@@ -3,6 +3,6 @@ package com.example.entities
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CategoryIdOnly(
-    val categoryId: String
+data class ErrorResponseSent(
+    val error: String
 )
