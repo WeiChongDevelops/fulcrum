@@ -23,8 +23,8 @@ export default function FulcrumApp() {
         <>
                 <ExpenseList expenseArray={expenseArray}/>
                 <DBInsertionForm setExpenseArray={setExpenseArray}/>
-                <DBDeletionForm/>
-                <DBUpdatingForm/>
+                <DBDeletionForm setExpenseArray={setExpenseArray}/>
+                <DBUpdatingForm setExpenseArray={setExpenseArray}/>
         </>
     )
 }

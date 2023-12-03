@@ -1,7 +1,13 @@
 import NewItemButton from "./NewItemButton.tsx";
-import {useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
+import {ExpenseItemEntity, getExpenseList} from "../util.ts";
 
-export default function DBUpdatingForm() {
+
+interface DBUpdatingFormProps {
+    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
+}
+
+export default function DBUpdatingForm({setExpenseArray}: DBUpdatingFormProps) {
 
     interface FormData {
         expenseId: string;
@@ -41,6 +47,7 @@ export default function DBUpdatingForm() {
             console.error("Error:", error);
         }
 
+        getExpenseList().then( expenseList => setExpenseArray(expenseList))
         setFormData({expenseId: "", amount: null, category: null})
     }
 

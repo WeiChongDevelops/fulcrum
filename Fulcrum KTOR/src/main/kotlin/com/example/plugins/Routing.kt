@@ -141,6 +141,7 @@ fun Application.configureRouting() {
                     }
                 ) {
                     eq("expenseId", expenseUpdateRequest.expenseId)
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                 }
 
                 if (updatedItem.body == null) {
@@ -153,7 +154,7 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not updated."))
             }
         }
-//
+
         get("/api/getExpenses") {
             try {
                 val expenseList = supabase.postgrest["expenses"].select() {
@@ -191,28 +192,6 @@ fun Application.configureRouting() {
             }
             val currentUser = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
             call.respond(HttpStatusCode.OK, currentUser)
-        }
-//
-
-
-//        get("/") {
-////            println("URI: ${call.request.uri}") // "/"
-////            println("Headers: ${call.request.headers.names()}")
-////            println("User-Agent: ${call.request.headers["User-Agent"]}")
-////            println("Host: ${call.request.headers["Host"]}")
-////            println("Connection: ${call.request.headers["Connection"]}")
-////            println("Query Parameters: ${call.request.queryParameters.names()}")
-////            println("Username: ${call.request.queryParameters["usr"]}")
-////            println("Password: ${call.request.queryParameters["pw"]}")
-//            call.respondText("Front Website Here")
-//        }
-
-        get("/api/expenses") {
-            call.respondText("Expenses API Here")
-        }
-
-        get("/api/budget") {
-            call.respondText("Budget API Here")
         }
 
 //        get("/blog/{page}") {
