@@ -1,4 +1,4 @@
-import {ExpenseItemEntity} from "../util.ts";
+import {ExpenseItemEntity} from "../../util.ts";
 import ExpenseItem from "./ExpenseItem.tsx";
 
 interface ExpenseListProps {
@@ -7,12 +7,11 @@ interface ExpenseListProps {
 
 export default function ExpenseList({expenseArray}: ExpenseListProps) {
 
-
     return(
         <>
             <h1>ExpenseList</h1>
             <ul>
-            {expenseArray.map(expenseElement => {
+            {expenseArray?.map(expenseElement => {
                 return <ExpenseItem expenseId={expenseElement.expenseId}
                                     category={expenseElement.category}
                                     amount={expenseElement.amount}

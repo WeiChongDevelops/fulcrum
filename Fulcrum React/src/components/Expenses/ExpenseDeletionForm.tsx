@@ -1,12 +1,12 @@
-import NewItemButton from "./NewItemButton.tsx";
+import NewItemButton from "../NewItemButton.tsx";
 import {Dispatch, SetStateAction, useState} from "react";
-import {ExpenseItemEntity, getExpenseList} from "../util.ts";
+import {ExpenseItemEntity, getExpenseList} from "../../util.ts";
 
 interface DBDeletionFormProps {
     setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
 }
 
-export default function DBDeletionForm({setExpenseArray}: DBDeletionFormProps) {
+export default function ExpenseDeletionForm({setExpenseArray}: DBDeletionFormProps) {
 
     const [formData, setFormData] = useState({expenseId: ""});
 

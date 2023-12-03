@@ -7,7 +7,6 @@ import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
-import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
 import io.ktor.client.*
 import io.ktor.client.engine.apache5.*
@@ -19,8 +18,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import org.apache.hc.core5.http.HttpHost
-import javax.management.Query.eq
-import kotlin.math.exp
 
 fun Application.staticResources() {
     routing {
@@ -167,6 +164,91 @@ fun Application.configureRouting() {
             } catch (e: Exception) {
                 call.application.log.error("Error while reading expenses", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expenses not read."))
+            }
+        }
+        post("/api/createBudget") {
+            try {
+                val budgetCreateRequest = call.receive<BudgetCreateRequestReceived>()
+
+                val itemToInsert = BudgetCreateRequestSent(
+                    userId = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id,
+                    category = budgetCreateRequest.category,
+                    amount = budgetCreateRequest.amount,
+                )
+                val insertedItem = supabase.postgrest["budgets"].insert(
+                    itemToInsert,
+                    returning = Returning.REPRESENTATION
+                )
+
+                if (insertedItem.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not added."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget added successfully."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while creating budget", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not added."))
+            }
+        }
+
+        delete("/api/deleteBudget") {
+            try {
+                val budgetDeleteRequest = call.receive<BudgetDeleteRequestReceived>()
+                val deletedBudget = supabase.postgrest["budgets"].delete {
+                    eq("category", budgetDeleteRequest.category)
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+
+                if (deletedBudget.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not deleted."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Budge deleted successfully."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while deleting budget", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not deleted."))
+            }
+        }
+
+        put("/api/updateBudget") {
+            try {
+                val budgetUpdateRequest = call.receive<BudgetUpdateRequestReceived>()
+
+                val updatedCategory = budgetUpdateRequest.category
+
+                val updatedItem = supabase.postgrest["budgets"].update(
+                    {
+                        set("amount", budgetUpdateRequest.amount)
+                        set("category", updatedCategory)
+                    }
+                ) {
+                    eq("category", budgetUpdateRequest.category)
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+
+                if (updatedItem.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not updated"))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget updated."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while updating budget", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not updated."))
+            }
+        }
+
+        get("/api/getBudget") {
+            try {
+                val budgetList = supabase.postgrest["budgets"].select() {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                    .decodeList<BudgetItemResponse>()
+
+                call.respond(HttpStatusCode.OK, budgetList)
+
+            } catch (e: Exception) {
+                call.application.log.error("Error while reading budget", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not read."))
             }
         }
 

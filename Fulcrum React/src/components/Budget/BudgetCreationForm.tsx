@@ -1,13 +1,12 @@
-import NewItemButton from "./NewItemButton.tsx";
+import NewItemButton from "../NewItemButton.tsx";
 import {Dispatch, FormEvent, SetStateAction, useState} from "react";
-import {ExpenseItemEntity, getExpenseList} from "../util.ts";
-import { v4 as uuid } from 'uuid';
+import {BudgetItemEntity, getBudgetList} from "../../util.ts";
 
 interface DBInsertionFormProps {
-    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
 }
 
-export default function DBInsertionForm({setExpenseArray}: DBInsertionFormProps) {
+export default function BudgetCreationForm({setBudgetArray}: DBInsertionFormProps) {
     interface FormData {
         category: string;
         amount: number | null;
@@ -24,33 +23,30 @@ export default function DBInsertionForm({setExpenseArray}: DBInsertionFormProps)
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const newExpenseId = uuid()
-
-        const newExpenseItem: ExpenseItemEntity = {
-            expenseId: newExpenseId,
+        const newBudgetItem: BudgetItemEntity = {
             category: formData.category,
-            amount: formData.amount!,
-            timestamp: new Date()
+            amount: formData.amount ? formData.amount : 0
         }
 
-        setExpenseArray(current => [...current, newExpenseItem])
 
         try {
-            const response = await fetch("http://localhost:8080/api/createExpense", {
+            const response = await fetch("http://localhost:8080/api/createBudget", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    expenseId: newExpenseId,
                     category: formData.category,
-                    amount: formData.amount,
-                    timestamp: new Date()
+                    amount: formData.amount
                 })
             });
 
             if (!response.ok) {
                 console.error(`HTTP error - status: ${response.status}`);
+            } else {
+                await getBudgetList().then( () => {
+                    setBudgetArray(current => [...current, newBudgetItem])
+                })
             }
             const responseData = await response.json()
             console.log(responseData);
@@ -60,7 +56,6 @@ export default function DBInsertionForm({setExpenseArray}: DBInsertionFormProps)
         }
 
         setFormData({ category: "", amount: null });
-        getExpenseList();
 
     }
 
@@ -83,7 +78,7 @@ export default function DBInsertionForm({setExpenseArray}: DBInsertionFormProps)
                        name="amount"
                        id="amount"
                        className="mb-3"/>
-                <NewItemButton itemType="Insert Expense" />
+                <NewItemButton itemType="Insert Budget" />
             </form>
         </>
     )

@@ -1,8 +1,8 @@
 import '../css/App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import FulcrumApp from "./FulcrumApp.tsx";
-import Signup from "./Signup.tsx";
-import Login from "./Login.tsx";
+import Signup from "./Auth/Signup.tsx";
+import Login from "./Auth/Login.tsx";
 
 export default function App() {
 

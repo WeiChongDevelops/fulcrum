@@ -1,21 +1,20 @@
-import NewItemButton from "./NewItemButton.tsx";
+import NewItemButton from "../NewItemButton.tsx";
 import {Dispatch, SetStateAction, useState} from "react";
-import {ExpenseItemEntity, getExpenseList} from "../util.ts";
+import {BudgetItemEntity, getBudgetList} from "../../util.ts";
 
 
 interface DBUpdatingFormProps {
-    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
 }
 
-export default function DBUpdatingForm({setExpenseArray}: DBUpdatingFormProps) {
+export default function BudgetUpdatingForm({setBudgetArray}: DBUpdatingFormProps) {
 
     interface FormData {
-        expenseId: string;
         category: string | null;
         amount: number | null;
     }
 
-    const [formData, setFormData] = useState<FormData>({expenseId: "", amount: null, category: null});
+    const [formData, setFormData] = useState<FormData>({category: null, amount: null});
 
     function handleInputChange(e: any) {
         setFormData( currentFormData => {
@@ -26,13 +25,12 @@ export default function DBUpdatingForm({setExpenseArray}: DBUpdatingFormProps) {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8080/api/updateExpense", {
+            const response = await fetch("http://localhost:8080/api/updateBudget", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "expenseId": formData.expenseId,
                     "category": formData.category,
                     "amount": formData.amount
                 })
@@ -47,20 +45,20 @@ export default function DBUpdatingForm({setExpenseArray}: DBUpdatingFormProps) {
             console.error("Error:", error);
         }
 
-        getExpenseList().then( expenseList => setExpenseArray(expenseList))
-        setFormData({expenseId: "", amount: null, category: null})
+        setFormData({category: null, amount: null})
+        getBudgetList().then( budgetList => setBudgetArray(budgetList))
     }
 
     return (
         <>
             <h1>Updating Form</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="expenseId">Expense ID</label>
+                <label htmlFor="category">Category</label>
                 <input type="text"
                        onChange={handleInputChange}
-                       value={formData.expenseId}
-                       name="expenseId"
-                       id="expenseId"
+                       value={formData.category ? formData.category : ""}
+                       name="category"
+                       id="category"
                        className="mb-3"/>
                 <label htmlFor="amount">Amount</label>
                 <input type="text"
@@ -69,14 +67,7 @@ export default function DBUpdatingForm({setExpenseArray}: DBUpdatingFormProps) {
                        name="amount"
                        id="amount"
                        className="mb-3"/>
-                <label htmlFor="category">Category</label>
-                <input type="text"
-                       onChange={handleInputChange}
-                       value={formData.category ? formData.category : ""}
-                       name="category"
-                       id="category"
-                       className="mb-3"/>
-                <NewItemButton itemType="Update Expense" />
+                <NewItemButton itemType="Update Budget" />
             </form>
         </>
 
