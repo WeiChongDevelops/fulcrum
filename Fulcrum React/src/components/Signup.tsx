@@ -13,6 +13,7 @@ export default function Signup() {
             return;
         }
 
+        // Add to users list in supabase (not the table)
         try {
             const response = await fetch("http://localhost:8080/api/signup", {
                 method: "POST",
@@ -34,9 +35,13 @@ export default function Signup() {
             console.error("Error:", error);
         }
 
+
         setEmail("");
         setPassword("");
+        setConfirmPassword("");
     }
+    // Add to users table in supabase
+
 
     return (
         <div className="flex items-center justify-center h-screen">

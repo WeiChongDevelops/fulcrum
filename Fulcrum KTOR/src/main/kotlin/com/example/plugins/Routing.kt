@@ -19,6 +19,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import org.apache.hc.core5.http.HttpHost
+import javax.management.Query.eq
 import kotlin.math.exp
 
 fun Application.staticResources() {
@@ -87,9 +88,10 @@ fun Application.configureRouting() {
                 val expenseCreateRequest = call.receive<ExpenseCreateRequestReceived>()
 
                 val itemToInsert = ExpenseCreateRequestSent(
-                    userId = expenseCreateRequest.userId,
+                    userId = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id,
                     category = expenseCreateRequest.category,
-                    amount = expenseCreateRequest.amount
+                    amount = expenseCreateRequest.amount,
+                    timestamp = expenseCreateRequest.timestamp
                 )
                 val insertedItem = supabase.postgrest["expenses"].insert(
                     itemToInsert,
@@ -112,6 +114,7 @@ fun Application.configureRouting() {
                 val expenseDeleteRequest = call.receive<ExpenseDeleteRequestReceived>()
                 val deletedExpense = supabase.postgrest["expenses"].delete {
                     eq("expenseId", expenseDeleteRequest.expenseId)
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                 }
 
                 if (deletedExpense.body == null) {
@@ -153,15 +156,10 @@ fun Application.configureRouting() {
 //
         get("/api/getExpenses") {
             try {
-                val expenseList = supabase.postgrest["expenses"].select(columns = Columns.raw (
-                    """
-                        expenseId,
-                        userId,
-                        category,
-                        amount,
-                        timestamp,
-                    """)
-                ).decodeList<ExpenseItemResponse>()
+                val expenseList = supabase.postgrest["expenses"].select() {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                    .decodeList<ExpenseItemResponse>()
 
                 call.respond(HttpStatusCode.OK, expenseList)
 
@@ -172,12 +170,17 @@ fun Application.configureRouting() {
         }
 
         post("/api/signup") {
-            val userCreds = call.receive<UserInfo>()
-            val user = supabase.gotrue.signUpWith(Email) {
-                email = userCreds.email
-                password = userCreds.password
+            try {
+                val userCreds = call.receive<UserInfo>()
+                val user = supabase.gotrue.signUpWith(Email) {
+                    email = userCreds.email
+                    password = userCreds.password
+                }
+                call.respond(HttpStatusCode.OK, SuccessResponseSent("User added successfully."))
+            } catch (e: Exception) {
+                call.application.log.error("Error while creating user", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("User not added."))
             }
-            call.respond(HttpStatusCode.OK, "User created successfully.")
         }
 
         post("/api/login") {
@@ -186,7 +189,8 @@ fun Application.configureRouting() {
                 email = userCreds.email
                 password = userCreds.password
             }
-            call.respond(HttpStatusCode.OK, "User logged in successfully.")
+            val currentUser = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
+            call.respond(HttpStatusCode.OK, currentUser)
         }
 //
 

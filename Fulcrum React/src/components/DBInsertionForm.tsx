@@ -1,6 +1,6 @@
 import NewItemButton from "./NewItemButton.tsx";
 import {Dispatch, FormEvent, SetStateAction, useState} from "react";
-import {ExpenseItemEntity} from "../util.ts";
+import {ExpenseItemEntity, getExpenseList} from "../util.ts";
 import { v4 as uuid } from 'uuid';
 
 interface DBInsertionFormProps {
@@ -29,7 +29,7 @@ export default function DBInsertionForm({setExpenseArray}: DBInsertionFormProps)
         const newExpenseItem: ExpenseItemEntity = {
             expenseId: newExpenseId,
             category: formData.category,
-            amount: formData.amount!!,
+            amount: formData.amount!,
             timestamp: new Date()
         }
 
@@ -43,9 +43,9 @@ export default function DBInsertionForm({setExpenseArray}: DBInsertionFormProps)
                 },
                 body: JSON.stringify({
                     expenseId: newExpenseId,
-                    userId: "123e4567-e89b-12d3-a456-426614174000", // Temporary hard-coded value before auth is implemented
                     category: formData.category,
-                    amount: formData.amount
+                    amount: formData.amount,
+                    timestamp: new Date()
                 })
             });
 
@@ -60,7 +60,7 @@ export default function DBInsertionForm({setExpenseArray}: DBInsertionFormProps)
         }
 
         setFormData({ category: "", amount: null });
-
+        getExpenseList();
 
     }
 

@@ -22,7 +22,7 @@ export default function Login() {
             if (!response.ok) {
                 console.error(`HTTP error - status: ${response.status}`);
             }
-            console.log(response);
+            console.log(response.json());
 
         } catch (error) {
             console.error("Error:", error);
