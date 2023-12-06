@@ -11,11 +11,12 @@ export default function ExpenseList({expenseArray}: ExpenseListProps) {
         <>
             <h1>ExpenseList</h1>
             <ul>
-            {expenseArray?.map(expenseElement => {
+            {expenseArray?.map((expenseElement, key) => {
                 return <ExpenseItem expenseId={expenseElement.expenseId}
                                     category={expenseElement.category}
                                     amount={expenseElement.amount}
-                                    timestamp={expenseElement.timestamp}/>
+                                    timestamp={expenseElement.timestamp}
+                                    key={key}/>
             })}
             </ul>
         </>

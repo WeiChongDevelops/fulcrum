@@ -11,9 +11,10 @@ export default function BudgetList({budgetArray}: BudgetListProps) {
         <>
             <h1>BudgetList</h1>
             <ul>
-            {budgetArray?.map(budgetElement => {
+            {budgetArray?.map((budgetElement, key) => {
                 return <BudgetItem category={budgetElement.category}
-                                   amount={budgetElement.amount}/>
+                                   amount={budgetElement.amount}
+                                    key={key}/>
             })}
             </ul>
         </>
