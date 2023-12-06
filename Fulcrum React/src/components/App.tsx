@@ -11,7 +11,7 @@ export default function App() {
             <Routes>
                 <Route path="/login" Component={Login} />
                 <Route path="/signup" Component={Signup} />
-                <Route path="/" Component={FulcrumApp} />
+                <Route path="/app" Component={FulcrumApp} />
             </Routes>
         </Router>
     )
