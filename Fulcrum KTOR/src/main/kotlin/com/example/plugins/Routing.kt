@@ -252,7 +252,7 @@ fun Application.configureRouting() {
             }
         }
 
-        post("/api/signup") {
+        post("/api/register") {
             try {
                 val userCreds = call.receive<UserInfo>()
                 val user = supabase.gotrue.signUpWith(Email) {

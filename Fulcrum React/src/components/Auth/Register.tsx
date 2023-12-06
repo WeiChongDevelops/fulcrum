@@ -1,6 +1,6 @@
 import {FormEvent, useState} from "react";
 
-export default function Signup() {
+export default function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -15,7 +15,7 @@ export default function Signup() {
 
         // Add to users list in supabase (not the table)
         try {
-            const response = await fetch("http://localhost:8080/api/signup", {
+            const response = await fetch("http://localhost:8080/api/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -28,8 +28,12 @@ export default function Signup() {
 
             if (!response.ok) {
                 console.error(`HTTP error - status: ${response.status}`);
+                console.error("User already exists.")
+            } else {
+                console.log("Successful login.");
+                console.log(response.json());
+                window.location.href = "/app";
             }
-            console.log(response)
 
         } catch (error) {
             console.error("Error:", error);
