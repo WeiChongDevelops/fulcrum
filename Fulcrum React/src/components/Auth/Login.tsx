@@ -24,7 +24,7 @@ export default function Login() {
             } else {
                 console.log("Successful login.");
                 console.log(response.json());
-                window.location.href = "/";
+                window.location.href = "/app";
             }
 
         } catch (error) {
