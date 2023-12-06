@@ -18,11 +18,14 @@ export default function Login() {
                     "password": password
                 })
             });
-
-            if (!response.ok) {
+            if (!response.ok ) {
                 console.error(`HTTP error - status: ${response.status}`);
+                console.error("User not found.")
+            } else {
+                console.log("Successful login.");
+                console.log(response.json());
+                window.location.href = "/";
             }
-            console.log(response.json());
 
         } catch (error) {
             console.error("Error:", error);
