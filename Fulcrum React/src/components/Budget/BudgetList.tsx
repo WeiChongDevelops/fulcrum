@@ -1,26 +1,33 @@
-import {BudgetItemEntity} from "../../util.ts";
+import { BudgetItemEntity } from "../../util.ts";
 import BudgetItem from "./BudgetItem.tsx";
-import {Dispatch, SetStateAction} from "react";
+import { Dispatch, SetStateAction } from "react";
 
 interface BudgetListProps {
-    budgetArray: BudgetItemEntity[]
-    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
+    budgetArray: BudgetItemEntity[];
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+    setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
+    setEditingCategory: Dispatch<SetStateAction<string | null>>;
+    setEditingOldAmount: Dispatch<SetStateAction<number | null>>;
 }
 
-export default function BudgetList({budgetArray, setBudgetArray}: BudgetListProps) {
-
-    return(
-        <>
+export default function BudgetList({ budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount}: BudgetListProps) {
+    return (
+        <div>
             <h1>BudgetList</h1>
             <div>
-            {budgetArray?.map((budgetElement, key) => {
-                return <BudgetItem category={budgetElement.category}
-                                   amount={budgetElement.amount}
-                                   icon="/src/assets/icons/construction-icon.svg"
-                                   setBudgetArray={setBudgetArray}
-                                   key={key}/>
-            })}
+                {budgetArray.map((budgetElement, key) => (
+                    <BudgetItem
+                        category={budgetElement.category}
+                        amount={budgetElement.amount}
+                        icon="/src/assets/icons/construction-icon.svg"
+                        setBudgetArray={setBudgetArray}
+                        setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
+                        setEditingCategory={setEditingCategory}
+                        setEditingOldAmount={setEditingOldAmount}
+                        key={key}
+                    />
+                ))}
             </div>
-        </>
-    )
+        </div>
+    );
 }

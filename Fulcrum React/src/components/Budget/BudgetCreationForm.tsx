@@ -4,17 +4,17 @@ import {BudgetItemEntity} from "../../util.ts";
 
 interface DBInsertionFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-    setIsFormVisible: Dispatch<SetStateAction<boolean>>;
+    setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function BudgetCreationForm({setBudgetArray, setIsFormVisible}: DBInsertionFormProps) {
+export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVisible}: DBInsertionFormProps) {
 
     const formRef = useRef<HTMLDivElement>(null);
     const handleClickOutside = (e: MouseEvent) => {
         const target = e.target as Node
         // If focus is on the form (if it's open) AND the click is outside the form, then close the form
         if (formRef.current && !formRef.current.contains(target)) {
-            setIsFormVisible(false);
+            setIsCreateBudgetVisible(false);
         }
     };
     useEffect(() => {
@@ -44,7 +44,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsFormVisible}: D
             amount: formData.amount ? formData.amount : 0
         }
         setBudgetArray(current => [...current, newBudgetItem])
-        setIsFormVisible(false)
+        setIsCreateBudgetVisible(false)
 
         try {
             const response = await fetch("http://localhost:8080/api/createBudget", {
@@ -108,7 +108,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsFormVisible}: D
                 <FulcrumButton displayText="Insert Budget"/>
                 <button className="mt-2" onClick={(e) => {
                     e.preventDefault()
-                    setIsFormVisible(false)
+                    setIsCreateBudgetVisible(false)
                 }}>x</button>
             </form>
         </div>

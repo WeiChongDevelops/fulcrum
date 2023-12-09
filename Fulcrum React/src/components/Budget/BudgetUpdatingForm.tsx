@@ -1,28 +1,43 @@
 import FulcrumButton from "../FulcrumButton.tsx";
-import {Dispatch, SetStateAction, useState} from "react";
-import {BudgetItemEntity, getBudgetList} from "../../util.ts";
-
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import { BudgetItemEntity, getBudgetList } from "../../util.ts";
 
 interface DBUpdatingFormProps {
-    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+    category: string | null;
+    setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
+    oldAmount: number | null;
 }
 
-export default function BudgetUpdatingForm({setBudgetArray}: DBUpdatingFormProps) {
-
+export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, oldAmount }: DBUpdatingFormProps) {
     interface FormData {
-        category: string | null;
         amount: number | null;
     }
 
-    const [formData, setFormData] = useState<FormData>({category: null, amount: null});
+    const formRef = useRef<HTMLDivElement>(null);
 
-    function handleInputChange(e: any) {
-        setFormData( currentFormData => {
-            return {...currentFormData, [e.target.name]: e.target.value }
-        });
+    const handleClickOutside = (e: MouseEvent) => {
+        if (formRef.current && !formRef.current.contains(e.target as Node)) {
+            setIsUpdateBudgetVisible(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            window.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const [formData, setFormData] = useState<FormData>({ amount: null });
+
+    function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+        setFormData(currentFormData => ({ ...currentFormData, [e.target.name]: e.target.value }));
     }
-    async function handleSubmit(e: any) {
+
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        setIsUpdateBudgetVisible(false);
 
         try {
             const response = await fetch("http://localhost:8080/api/updateBudget", {
@@ -31,7 +46,7 @@ export default function BudgetUpdatingForm({setBudgetArray}: DBUpdatingFormProps
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "category": formData.category,
+                    "category": category,
                     "amount": formData.amount
                 })
             })
@@ -45,31 +60,31 @@ export default function BudgetUpdatingForm({setBudgetArray}: DBUpdatingFormProps
             console.error("Error:", error);
         }
 
-        setFormData({category: null, amount: null})
-        getBudgetList().then( budgetList => setBudgetArray(budgetList))
+        setFormData({ amount: null });
+        getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
 
-    return (
-        <>
-            <h1>Updating Form</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="category">Category</label>
-                <input type="text"
-                       onChange={handleInputChange}
-                       value={formData.category ? formData.category : ""}
-                       name="category"
-                       id="category"
-                       className="mb-3"/>
-                <label htmlFor="amount">Amount</label>
-                <input type="text"
-                       onChange={handleInputChange}
-                       value={formData.amount ? formData.amount : ""}
-                       name="amount"
-                       id="amount"
-                       className="mb-3"/>
-                <FulcrumButton itemType="Update Budget" />
-            </form>
-        </>
+    const styles = {
+        top: 200,
+        left: 200,
+        right: 200,
+        bottom: 200,
+        backgroundColor: "rgba(0,0,0,0.8)",
+    };
 
-    )
+    return (
+        <div ref={formRef} className="fixed flex flex-col justify-center items-center rounded-3xl text-white" style={styles}>
+            <h1>Updating Budget for {category}</h1>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="amount">Amount</label>
+                <input type="text" onChange={handleInputChange} value={formData.amount ?? ""} name="amount" id="amount" className="mb-3" placeholder={oldAmount?.toString()} />
+                <FulcrumButton displayText="Update Budget" />
+                <button className="mt-2" onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsUpdateBudgetVisible(false);
+                }}>x</button>
+            </form>
+        </div>
+    );
 }
