@@ -3,8 +3,8 @@ import {Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "
 import {BudgetItemEntity, getBudgetList} from "../../util.ts";
 
 interface DBInsertionFormProps {
-    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
-    setIsFormVisible: Dispatch<SetStateAction<boolean>>
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+    setIsFormVisible: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function BudgetCreationForm({setBudgetArray, setIsFormVisible}: DBInsertionFormProps) {
@@ -43,7 +43,8 @@ export default function BudgetCreationForm({setBudgetArray, setIsFormVisible}: D
             category: formData.category,
             amount: formData.amount ? formData.amount : 0
         }
-
+        setBudgetArray(current => [...current, newBudgetItem])
+        setIsFormVisible(false)
 
         try {
             const response = await fetch("http://localhost:8080/api/createBudget", {
@@ -59,6 +60,14 @@ export default function BudgetCreationForm({setBudgetArray, setIsFormVisible}: D
 
             if (!response.ok) {
                 console.error(`HTTP error - status: ${response.status}`);
+                window.alert("Category name is invalid or already has assigned budget.")
+                setBudgetArray( current => {
+                    const indexOfInvalidItem = current.map(item => item.category).lastIndexOf(newBudgetItem.category);
+                    if (indexOfInvalidItem !== -1) {
+                        return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)]
+                    }
+                    return current;
+                })
             } else {
                 await getBudgetList().then( () => {
                     setBudgetArray(current => [...current, newBudgetItem])
@@ -66,7 +75,6 @@ export default function BudgetCreationForm({setBudgetArray, setIsFormVisible}: D
             }
             const responseData = await response.json()
             console.log(responseData);
-            setIsFormVisible(false)
 
         } catch (error) {
             console.error("Error:", error);
