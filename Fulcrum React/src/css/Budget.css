@@ -1,0 +1,8 @@
+.circle-button {
+    transition: background-color 0.3s ease;
+}
+
+.circle-button:hover {
+    background-color: #E8E8E8;
+    cursor: pointer;
+}

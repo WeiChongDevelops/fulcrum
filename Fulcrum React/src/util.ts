@@ -1,3 +1,4 @@
+import {Dispatch, SetStateAction} from "react";
 
 export interface ExpenseItemEntity {
     expenseId: string
@@ -51,3 +52,27 @@ export async function getBudgetList() {
     }
 }
 
+export async function handleDeletion(category: string, setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
+    try {
+        const response = await fetch("http://localhost:8080/api/deleteBudget", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "category": category,
+            })
+        })
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch(error) {
+        console.error("Error:", error);
+    }
+
+    getBudgetList().then( budgetList => setBudgetArray(budgetList))
+}

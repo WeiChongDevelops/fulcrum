@@ -54,7 +54,7 @@ export default function BudgetDeletionForm({setBudgetArray}: DBDeletionFormProps
                        name="category"
                        id="category"
                        className="mb-3"/>
-                <FulcrumButton itemType="Delete Category" />
+                <FulcrumButton displayText="Delete Category" />
             </form>
         </>
 

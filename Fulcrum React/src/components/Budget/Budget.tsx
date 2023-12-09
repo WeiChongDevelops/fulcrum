@@ -20,7 +20,7 @@ export default function Budget() {
 
     return (
         <div>
-            <BudgetList2 budgetArray={budgetArray}/>
+            <BudgetList2 budgetArray={budgetArray} setBudgetArray={setBudgetArray}/>
             <AddNewBudgetButton setIsFormVisible={setIsFormVisible}/>
             {isFormVisible && <BudgetCreationForm setIsFormVisible={setIsFormVisible} setBudgetArray={setBudgetArray}/>}
             <BudgetDeletionForm setBudgetArray={setBudgetArray}/>
