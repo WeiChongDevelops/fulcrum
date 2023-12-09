@@ -53,6 +53,7 @@ export async function getBudgetList() {
 }
 
 export async function handleDeletion(category: string, setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
+    setBudgetArray(prevState => prevState.filter(budgetItem => budgetItem.category !== category))
     try {
         const response = await fetch("http://localhost:8080/api/deleteBudget", {
             method: "DELETE",
