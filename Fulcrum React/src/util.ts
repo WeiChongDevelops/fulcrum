@@ -50,3 +50,4 @@ export async function getBudgetList() {
         console.error("Error:", error);
     }
 }
+

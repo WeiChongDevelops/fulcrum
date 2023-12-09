@@ -1,4 +1,4 @@
-import NewItemButton from "../NewItemButton.tsx";
+import FulcrumButton from "../FulcrumButton.tsx";
 import {Dispatch, FormEvent, SetStateAction, useState} from "react";
 import {ExpenseItemEntity, getExpenseList} from "../../util.ts";
 import { v4 as uuid } from 'uuid';
@@ -86,7 +86,7 @@ export default function ExpenseCreationForm({setExpenseArray}: DBInsertionFormPr
                        name="amount"
                        id="amount"
                        className="mb-3"/>
-                <NewItemButton itemType="Insert Expense" />
+                <FulcrumButton itemType="Insert Expense" />
             </form>
         </>
     )

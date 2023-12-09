@@ -1,4 +1,4 @@
-import NewItemButton from "../NewItemButton.tsx";
+import FulcrumButton from "../FulcrumButton.tsx";
 import {Dispatch, SetStateAction, useState} from "react";
 import {BudgetItemEntity, getBudgetList} from "../../util.ts";
 
@@ -67,7 +67,7 @@ export default function BudgetUpdatingForm({setBudgetArray}: DBUpdatingFormProps
                        name="amount"
                        id="amount"
                        className="mb-3"/>
-                <NewItemButton itemType="Update Budget" />
+                <FulcrumButton itemType="Update Budget" />
             </form>
         </>
 

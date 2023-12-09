@@ -1,19 +1,35 @@
-import NewItemButton from "../NewItemButton.tsx";
-import {Dispatch, FormEvent, SetStateAction, useState} from "react";
+import FulcrumButton from "../FulcrumButton.tsx";
+import {Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {BudgetItemEntity, getBudgetList} from "../../util.ts";
 
 interface DBInsertionFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
+    setIsFormVisible: Dispatch<SetStateAction<boolean>>
 }
 
-export default function BudgetCreationForm({setBudgetArray}: DBInsertionFormProps) {
+export default function BudgetCreationForm({setBudgetArray, setIsFormVisible}: DBInsertionFormProps) {
+
+    const formRef = useRef<HTMLDivElement>(null);
+    const handleClickOutside = (e: MouseEvent) => {
+        const target = e.target as Node
+        // If focus is on the form (if it's open) AND the click is outside the form, then close the form
+        if (formRef.current && !formRef.current.contains(target)) {
+            setIsFormVisible(false);
+        }
+    };
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     interface FormData {
         category: string;
         amount: number | null;
     }
 
     const [formData, setFormData] = useState<FormData>({ category: "", amount: null });
-
 
     function handleInputChange(e: any) {
         setFormData( currentFormData => {
@@ -50,20 +66,27 @@ export default function BudgetCreationForm({setBudgetArray}: DBInsertionFormProp
             }
             const responseData = await response.json()
             console.log(responseData);
+            setIsFormVisible(false)
 
         } catch (error) {
             console.error("Error:", error);
         }
 
         setFormData({ category: "", amount: null });
-
     }
 
+    const styles = {
+        top: 200,
+        left: 200,
+        right: 200,
+        bottom: 200,
+        backgroundColor: "rgba(0,0,0,0.8)",
+    }
 
     return (
-        <>
-            <h1>Insertion Form</h1>
-            <form onSubmit={handleSubmit}>
+        <div ref={formRef}  className="fixed flex flex-col justify-center items-center rounded-3xl" style={styles}>
+            <h1 className="mb-3">New Budget Item</h1>
+            <form onSubmit={handleSubmit} className="flex flex-col items-center">
                 <label htmlFor="category">Category</label>
                 <input type="text"
                        onChange={handleInputChange}
@@ -78,8 +101,12 @@ export default function BudgetCreationForm({setBudgetArray}: DBInsertionFormProp
                        name="amount"
                        id="amount"
                        className="mb-3"/>
-                <NewItemButton itemType="Insert Budget" />
+                <FulcrumButton displayText="Insert Budget"/>
+                <button className="mt-2" onClick={(e) => {
+                    e.preventDefault()
+                    setIsFormVisible(false)
+                }}>x</button>
             </form>
-        </>
+        </div>
     )
 }

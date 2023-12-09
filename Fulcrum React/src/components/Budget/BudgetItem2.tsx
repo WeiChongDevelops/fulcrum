@@ -11,7 +11,7 @@ export default function BudgetItem2({category, amount, icon}: BudgetItem2Props) 
     }
 
     return (
-        <div className="flex flex-row justify-between items-center bg-blue-200 p-1.5 rounded-3xl my-3 text-black"
+        <div className="flex flex-row justify-between items-center bg-blue-200 py-1.5 px-2.5 rounded-3xl my-3 text-black"
              style={styles}>
             <div className="flex flex-row items-start">
                 <div className="rounded-full bg-green-950 p-2">

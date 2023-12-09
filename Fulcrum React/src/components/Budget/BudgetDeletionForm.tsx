@@ -1,4 +1,4 @@
-import NewItemButton from "../NewItemButton.tsx";
+import FulcrumButton from "../FulcrumButton.tsx";
 import {Dispatch, SetStateAction, useState} from "react";
 import {BudgetItemEntity, getBudgetList} from "../../util.ts";
 
@@ -54,7 +54,7 @@ export default function BudgetDeletionForm({setBudgetArray}: DBDeletionFormProps
                        name="category"
                        id="category"
                        className="mb-3"/>
-                <NewItemButton itemType="Delete Category" />
+                <FulcrumButton itemType="Delete Category" />
             </form>
         </>
 

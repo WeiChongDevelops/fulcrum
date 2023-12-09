@@ -1,4 +1,4 @@
-import NewItemButton from "../NewItemButton.tsx";
+import FulcrumButton from "../FulcrumButton.tsx";
 import {Dispatch, SetStateAction, useState} from "react";
 import {ExpenseItemEntity, getExpenseList} from "../../util.ts";
 
@@ -54,7 +54,7 @@ export default function ExpenseDeletionForm({setExpenseArray}: DBDeletionFormPro
                        name="expenseId"
                        id="expenseId"
                        className="mb-3"/>
-                <NewItemButton itemType="Delete Expense" />
+                <FulcrumButton itemType="Delete Expense" />
             </form>
         </>
 
