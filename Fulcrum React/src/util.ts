@@ -77,17 +77,3 @@ export async function handleDeletion(category: string, setBudgetArray: Dispatch<
 
     getBudgetList().then( budgetList => setBudgetArray(budgetList))
 }
-
-export function removeInvalidNewBudgetItem(current: BudgetItemEntity[], category) {
-    // Find the index of the last item that matches the condition
-    const index = current.map(item => item.category)
-        .lastIndexOf(newBudgetItem.category);
-
-    // If a matching item is found, remove it
-    if (index !== -1) {
-        return [...current.slice(0, index), ...current.slice(index + 1)];
-    }
-
-    // If no matching item is found, return the array as is
-    return current;
-}

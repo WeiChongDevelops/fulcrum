@@ -1,4 +1,4 @@
-import BudgetList2 from "./BudgetList2.tsx";
+import BudgetList from "./BudgetList.tsx";
 import BudgetCreationForm from "./BudgetCreationForm.tsx";
 import BudgetDeletionForm from "./BudgetDeletionForm.tsx";
 import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
@@ -20,7 +20,7 @@ export default function Budget() {
 
     return (
         <div>
-            <BudgetList2 budgetArray={budgetArray} setBudgetArray={setBudgetArray}/>
+            <BudgetList budgetArray={budgetArray} setBudgetArray={setBudgetArray}/>
             <AddNewBudgetButton setIsFormVisible={setIsFormVisible}/>
             {isFormVisible && <BudgetCreationForm setIsFormVisible={setIsFormVisible} setBudgetArray={setBudgetArray}/>}
             <BudgetDeletionForm setBudgetArray={setBudgetArray}/>

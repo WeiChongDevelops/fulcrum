@@ -1,6 +1,6 @@
 import FulcrumButton from "../FulcrumButton.tsx";
 import {Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
-import {BudgetItemEntity, getBudgetList} from "../../util.ts";
+import {BudgetItemEntity} from "../../util.ts";
 
 interface DBInsertionFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
