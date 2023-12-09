@@ -68,10 +68,6 @@ export default function BudgetCreationForm({setBudgetArray, setIsFormVisible}: D
                     }
                     return current;
                 })
-            } else {
-                await getBudgetList().then( () => {
-                    setBudgetArray(current => [...current, newBudgetItem])
-                })
             }
             const responseData = await response.json()
             console.log(responseData);
