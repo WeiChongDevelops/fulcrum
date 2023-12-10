@@ -64,6 +64,7 @@ export default function Login() {
                 <button type="submit" className="w-full px-4 py-2 text-lg font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700">
                     Login
                 </button>
+                <a href="/register" className="mt-6">Don't have an account? Register here.</a>
             </form>
         </div>
     );

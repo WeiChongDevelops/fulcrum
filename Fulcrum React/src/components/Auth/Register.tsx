@@ -38,14 +38,10 @@ export default function Register() {
         } catch (error) {
             console.error("Error:", error);
         }
-
-
         setEmail("");
         setPassword("");
         setConfirmPassword("");
     }
-    // Add to users table in supabase
-
 
     return (
         <div className="flex items-center justify-center h-screen">
@@ -87,6 +83,7 @@ export default function Register() {
                 <button type="submit" className="w-full px-4 py-2 text-lg font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700">
                     Register
                 </button>
+                <a href="/login" className="mt-6">Already have an account? Login here.</a>
             </form>
         </div>
     );
