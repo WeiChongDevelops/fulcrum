@@ -6,13 +6,14 @@ interface BudgetItemProps {
     category: string;
     amount: number;
     icon: string;
+    group: string;
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setEditingCategory: Dispatch<SetStateAction<string | null>>;
     setEditingOldAmount: Dispatch<SetStateAction<number | null>>;
 }
 
-export default function BudgetItem({ category, amount, icon, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount}: BudgetItemProps) {
+export default function BudgetItem({ category, amount, icon, group, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount}: BudgetItemProps) {
 
     function handleEditClick(e: React.MouseEvent<HTMLDivElement>) {
         e.stopPropagation();
@@ -40,7 +41,7 @@ export default function BudgetItem({ category, amount, icon, setBudgetArray, set
                 </div>
                 <div className="flex flex-col items-start ml-2">
                     <b>{category}</b>
-                    <h3>Parent Category Filler</h3>
+                    <h3>{group}</h3>
                 </div>
             </div>
             <div className="flex flex-row items-center">

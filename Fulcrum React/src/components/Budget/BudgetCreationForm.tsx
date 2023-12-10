@@ -28,9 +28,10 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
         category: string;
         amount: number | null;
         iconPath: string;
+        group: string;
     }
 
-    const [formData, setFormData] = useState<FormData>({ category: "", amount: null, iconPath: "" });
+    const [formData, setFormData] = useState<FormData>({ category: "", amount: null, iconPath: "", group: ""});
 
     function handleInputChange(e: any) {
         setFormData( currentFormData => {
@@ -63,7 +64,8 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
         const newBudgetItem: BudgetItemEntity = {
             category: formData.category,
             amount: formData.amount ? formData.amount : 0,
-            iconPath: formData.iconPath
+            iconPath: formData.iconPath,
+            group: formData.group ? formData.group : "Miscellaneous"
         }
         console.log("FORMDATA ICON PATH:")
         console.log(formData.iconPath);
@@ -80,7 +82,8 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                 body: JSON.stringify({
                     category: formData.category,
                     amount: formData.amount,
-                    iconPath: formData.iconPath ? formData.iconPath : "/src/assets/category-icons/category-default-icon.svg"
+                    iconPath: formData.iconPath ? formData.iconPath : "/src/assets/category-icons/category-default-icon.svg",
+                    group: formData.group ? formData.group : "Miscellaneous"
                 })
             });
 
@@ -102,7 +105,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
             console.error("Error:", error);
         }
 
-        setFormData({ category: "", amount: null, iconPath: ""});
+        setFormData({ category: "", amount: null, iconPath: "", group: ""});
     }
 
     const styles = {
@@ -131,7 +134,13 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                        name="amount"
                        id="amount"
                        className="mb-3"/>
-                <FulcrumButton displayText="Insert Budget"/>
+                <label htmlFor="group">Group</label>
+                <input type="group"
+                       onChange={handleInputChange}
+                       value={formData.group}
+                       name="group"
+                       id="group"
+                       className="mb-3"/>
 
                 <div id="icon-selector">
                     <button type="button" className="category-icon-selectable" data-value="category-bank-icon.svg">
@@ -145,6 +154,8 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                     </button>
                 </div>
                 <input type="hidden" id="iconPath" name="iconPath" value="test"/>
+
+                <FulcrumButton displayText="Insert Budget"/>
 
                 <button className="mt-2" onClick={(e) => {
                     e.preventDefault()

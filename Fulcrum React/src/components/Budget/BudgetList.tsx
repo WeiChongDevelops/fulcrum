@@ -19,6 +19,7 @@ export default function BudgetList({ budgetArray, setBudgetArray, setIsUpdateBud
                     <BudgetItem
                         category={budgetElement.category}
                         amount={budgetElement.amount}
+                        group={budgetElement.group}
                         // icon="/src/assets/icons/construction-icon.svg"
                         icon={budgetElement.iconPath}
                         setBudgetArray={setBudgetArray}

@@ -11,6 +11,7 @@ export interface BudgetItemEntity {
     category: string
     amount: number
     iconPath: string
+    group: string
 }
 
 export async function getExpenseList() {

@@ -174,10 +174,9 @@ fun Application.configureRouting() {
                     userId = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id,
                     category = budgetCreateRequest.category,
                     amount = budgetCreateRequest.amount,
-                    iconPath = budgetCreateRequest.iconPath
+                    iconPath = budgetCreateRequest.iconPath,
+                    group = budgetCreateRequest.group
                 )
-                println(budgetCreateRequest.iconPath)
-                println("\n\n\n\n\n\n\n\n\n")
                 val insertedItem = supabase.postgrest["budgets"].insert(
                     itemToInsert,
                     returning = Returning.REPRESENTATION

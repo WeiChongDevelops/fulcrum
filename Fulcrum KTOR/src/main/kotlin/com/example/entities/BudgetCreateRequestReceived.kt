@@ -8,5 +8,6 @@ import kotlinx.serialization.Serializable
 data class BudgetCreateRequestReceived(
     val category: String,
     val amount: Double,
-    val iconPath: String
+    val iconPath: String,
+    val group: String
 )
