@@ -12,8 +12,8 @@ export default function App() {
             <Routes>
                 <Route path="/login" Component={Login} />
                 <Route path="/register" Component={Register} />
-                <Route path="/app/expenses" Component={Expenses} />
-                <Route path="/app/budget" Component={Budget} />
+                <Route path="/expenses" Component={Expenses} />
+                <Route path="/budget" Component={Budget} />
             </Routes>
         </Router>
     )

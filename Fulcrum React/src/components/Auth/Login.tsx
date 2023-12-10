@@ -1,8 +1,24 @@
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    async function checkForUser() {
+        try {
+            const response = await fetch("http://localhost:8080/api/checkForUser", {
+                method: "GET",
+            });
+            if (!response.ok) {
+                console.log("User already logged in.");
+                window.location.href = "/budget";
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    useEffect(() => {checkForUser()}, []);
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
@@ -18,13 +34,20 @@ export default function Login() {
                     "password": password
                 })
             });
-            if (!response.ok ) {
+            if (response.status === 500 ) {
                 console.error(`HTTP error - status: ${response.status}`);
                 console.error("User not found.")
             } else {
-                console.log("Successful login.");
-                console.log(response.json());
-                window.location.href = "/app";
+                if (response.status === 400) {
+                    console.error(`HTTP error - status: ${response.status}`);
+                    console.error("User already logged in.")
+                    window.location.href = "/budget"
+                }
+                else {
+                    console.log("Successful login.");
+                    console.log(response.json());
+                    window.location.href = "/budget";
+                }
             }
 
         } catch (error) {
@@ -48,6 +71,7 @@ export default function Login() {
             focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
                 </div>
                 <div className="mb-6">
@@ -59,6 +83,7 @@ export default function Login() {
             focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                     />
                 </div>
                 <button type="submit" className="w-full px-4 py-2 text-lg font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700">

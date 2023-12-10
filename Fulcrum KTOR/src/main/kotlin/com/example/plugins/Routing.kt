@@ -268,12 +268,33 @@ fun Application.configureRouting() {
 
         post("/api/login") {
             val userCreds = call.receive<UserInfo>()
-            val user = supabase.gotrue.loginWith(Email) {
-                email = userCreds.email
-                password = userCreds.password
+            val currentUser = supabase.gotrue.currentSessionOrNull()
+            if (currentUser == null) {
+                val user = supabase.gotrue.loginWith(Email) {
+                    email = userCreds.email
+                    password = userCreds.password
+                }
+                val loggedInUser = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
+                call.respond(HttpStatusCode.OK, loggedInUser)
+            } else {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("User already logged in."))
             }
-            val currentUser = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
-            call.respond(HttpStatusCode.OK, currentUser)
+        }
+
+        get("/api/checkForUser") {
+            val currentUser = supabase.gotrue.currentSessionOrNull()
+            try {
+                val statusJSON = if (currentUser != null) {
+                    val user = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
+                    UserStatusCheck(loggedIn = false)
+                } else {
+                    UserStatusCheck(loggedIn = true)
+                }
+                call.respond(HttpStatusCode.OK, statusJSON)
+            } catch (e: Exception) {
+                call.application.log.error("Error while checking for user", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while checking for user."))
+            }
         }
 
 

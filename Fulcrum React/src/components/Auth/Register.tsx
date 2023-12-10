@@ -30,9 +30,9 @@ export default function Register() {
                 console.error(`HTTP error - status: ${response.status}`);
                 console.error("User already exists.")
             } else {
-                console.log("Successful login.");
+                console.log("Successful registration.");
                 console.log(response.json());
-                window.location.href = "/app";
+                window.location.href = "/login";
             }
 
         } catch (error) {
@@ -56,6 +56,7 @@ export default function Register() {
             focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
                 </div>
                 <div className="mb-4">
@@ -67,6 +68,7 @@ export default function Register() {
             focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                     />
                 </div>
                 <div className="mb-6">
@@ -78,6 +80,7 @@ export default function Register() {
             focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
                     />
                 </div>
                 <button type="submit" className="w-full px-4 py-2 text-lg font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700">
