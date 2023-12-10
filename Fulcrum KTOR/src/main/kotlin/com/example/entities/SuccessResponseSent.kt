@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SuccessResponseSent(
-    val error: String
+    val success: String
 )

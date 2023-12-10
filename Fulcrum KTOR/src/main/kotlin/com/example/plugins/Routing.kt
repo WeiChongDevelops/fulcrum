@@ -276,6 +276,17 @@ fun Application.configureRouting() {
             call.respond(HttpStatusCode.OK, currentUser)
         }
 
+
+        post("/api/logout") {
+            val currentUser = supabase.gotrue.currentSessionOrNull()
+            if (currentUser != null) {
+                supabase.gotrue.logout()
+                call.respond(HttpStatusCode.OK, SuccessResponseSent(currentUser.user?.email!!))
+            } else {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("No user logged in."))
+            }
+        }
+
 //        get("/blog/{page}") {
 //            val pageNumber = call.parameters["page"]
 //            call.respondText("You are on page $pageNumber")

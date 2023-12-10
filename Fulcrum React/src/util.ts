@@ -42,6 +42,7 @@ export async function getBudgetList() {
         });
         if (!response.ok) {
             console.error(`HTTP error - status: ${response.status}`);
+            window.location.href = "/register"
         }
         const responseData = await response.json();
         console.log(responseData);

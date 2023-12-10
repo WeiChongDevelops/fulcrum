@@ -17,7 +17,7 @@ export default function Budget() {
             const budgetList = await getBudgetList();
             setBudgetArray(budgetList);
         }
-        fetchData();
+        fetchData()
     }, []);
 
     return (
