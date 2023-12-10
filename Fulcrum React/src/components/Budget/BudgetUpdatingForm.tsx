@@ -65,15 +65,15 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
     }
 
     const styles = {
-        top: 200,
-        left: 200,
-        right: 200,
-        bottom: 200,
+        top: "20%",
+        left: "30%",
+        right: "30%",
+        bottom: "20%",
         backgroundColor: "rgba(0,0,0,0.8)",
     };
 
     return (
-        <div ref={formRef} className="fixed flex flex-col justify-center items-center rounded-3xl text-white" style={styles}>
+        <div ref={formRef} className="fixed flex flex-col justify-start items-center rounded-3xl text-white p-20" style={styles}>
             <h1>Updating Budget for {category}</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="amount">Amount</label>

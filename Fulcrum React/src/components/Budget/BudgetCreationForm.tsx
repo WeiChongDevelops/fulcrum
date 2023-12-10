@@ -27,13 +27,34 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
     interface FormData {
         category: string;
         amount: number | null;
+        iconPath: string;
     }
 
-    const [formData, setFormData] = useState<FormData>({ category: "", amount: null });
+    const [formData, setFormData] = useState<FormData>({ category: "", amount: null, iconPath: "" });
 
     function handleInputChange(e: any) {
         setFormData( currentFormData => {
             return {...currentFormData, [e.target.name]: e.target.value}
+        });
+
+        const categoryIcons: NodeListOf<HTMLImageElement> = document.querySelectorAll(".category-icon-selectable");
+        categoryIcons.forEach((icon): void => {
+            icon.addEventListener("click", (e: MouseEvent) => {
+                e.preventDefault();
+                const iconPath = `/src/assets/category-icons/${icon.getAttribute("data-value")!}`;
+                console.log(iconPath);
+
+                // document.getElementById("iconPath")?.setAttribute("value", iconPath);
+                setFormData( currentFormData => {
+                    return {...currentFormData, ["iconPath"]: iconPath}
+                });
+
+                console.log("Setting value of iconPath to: ", iconPath);
+                console.log(document.getElementById("iconPath")?.getAttribute("value"));
+
+                document.querySelectorAll('.icon-button').forEach(btn => btn.classList.remove('selected'));
+                icon.classList.add('selected');
+            });
         });
     }
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -41,8 +62,12 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
 
         const newBudgetItem: BudgetItemEntity = {
             category: formData.category,
-            amount: formData.amount ? formData.amount : 0
+            amount: formData.amount ? formData.amount : 0,
+            iconPath: formData.iconPath
         }
+        console.log("FORMDATA ICON PATH:")
+        console.log(formData.iconPath);
+
         setBudgetArray(current => [...current, newBudgetItem])
         setIsCreateBudgetVisible(false)
 
@@ -54,7 +79,8 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                 },
                 body: JSON.stringify({
                     category: formData.category,
-                    amount: formData.amount
+                    amount: formData.amount,
+                    iconPath: formData.iconPath ? formData.iconPath : "/src/assets/category-icons/category-default-icon.svg"
                 })
             });
 
@@ -76,7 +102,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
             console.error("Error:", error);
         }
 
-        setFormData({ category: "", amount: null });
+        setFormData({ category: "", amount: null, iconPath: ""});
     }
 
     const styles = {
@@ -106,10 +132,25 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                        id="amount"
                        className="mb-3"/>
                 <FulcrumButton displayText="Insert Budget"/>
+
+                <div id="icon-selector">
+                    <button type="button" className="category-icon-selectable" data-value="category-bank-icon.svg">
+                        <img src="/src/assets/category-icons/category-bank-icon.svg" alt="Bank"/>
+                    </button>
+                    <button type="button" className="category-icon-selectable" data-value="category-water-icon.svg">
+                        <img src="/src/assets/category-icons/category-water-icon.svg" alt="Water"/>
+                    </button>
+                    <button type="button" className="category-icon-selectable" data-value="category-pig-icon.svg">
+                        <img src="/src/assets/category-icons/category-pig-icon.svg" alt="Piggy Bank"/>
+                    </button>
+                </div>
+                <input type="hidden" id="iconPath" name="iconPath" value="test"/>
+
                 <button className="mt-2" onClick={(e) => {
                     e.preventDefault()
                     setIsCreateBudgetVisible(false)
                 }}>x</button>
+
             </form>
         </div>
     )

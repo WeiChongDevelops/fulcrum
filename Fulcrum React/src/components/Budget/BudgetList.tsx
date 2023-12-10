@@ -19,7 +19,8 @@ export default function BudgetList({ budgetArray, setBudgetArray, setIsUpdateBud
                     <BudgetItem
                         category={budgetElement.category}
                         amount={budgetElement.amount}
-                        icon="/src/assets/icons/construction-icon.svg"
+                        // icon="/src/assets/icons/construction-icon.svg"
+                        icon={budgetElement.iconPath}
                         setBudgetArray={setBudgetArray}
                         setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                         setEditingCategory={setEditingCategory}

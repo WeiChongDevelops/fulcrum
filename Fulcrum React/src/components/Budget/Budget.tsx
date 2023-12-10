@@ -4,6 +4,7 @@ import { BudgetItemEntity, getBudgetList } from "../../util.ts";
 import { useEffect, useState } from "react";
 import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
 import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
+import Navbar from "../Navbar.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -20,9 +21,18 @@ export default function Budget() {
         fetchData()
     }, []);
 
+    useEffect( () => {
+        document.getElementById("category")?.focus();
+    }, [isCreateBudgetVisible, isUpdateBudgetVisible])
+
+
+
+
     return (
         <div>
-            <div className={`elementsBelowPopUpForm ${(isCreateBudgetVisible || isUpdateBudgetVisible) && "blur"}`}>
+            <Navbar/>
+            <div className={`elementsBelowPopUpForm ${(isCreateBudgetVisible || isUpdateBudgetVisible) && "blur"} 
+            px-16`}>
                 <BudgetList
                     budgetArray={budgetArray}
                     setBudgetArray={setBudgetArray}
