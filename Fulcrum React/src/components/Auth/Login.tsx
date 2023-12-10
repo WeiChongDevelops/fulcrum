@@ -36,9 +36,9 @@ export default function Login() {
     }
 
     return (
-        <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col items-center justify-center h-screen">
             <form onSubmit={handleSubmit} className="p-8 bg-white rounded shadow-md">
-                <h2 className="text-lg font-bold mb-6">Login</h2>
+                <h2 className="text-lg text-black font-bold mb-6">Log Into Fulcrum</h2>
                 <div className="mb-4">
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
                     <input
@@ -64,8 +64,8 @@ export default function Login() {
                 <button type="submit" className="w-full px-4 py-2 text-lg font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700">
                     Login
                 </button>
-                <a href="/register" className="mt-6">Don't have an account? Register here.</a>
             </form>
+            <a href="/register" className="mt-6">Don't have an account? Register here.</a>
         </div>
     );
 }

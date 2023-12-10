@@ -46,7 +46,7 @@ export default function Register() {
     return (
         <div className="flex items-center justify-center h-screen">
             <form onSubmit={handleSubmit} className="p-8 bg-white rounded shadow-md">
-                <h2 className="text-lg font-bold mb-6">Register</h2>
+                <h2 className="text-lg text-black font-bold mb-6">Join Fulcrum for Free</h2>
                 <div className="mb-4">
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
                     <input
