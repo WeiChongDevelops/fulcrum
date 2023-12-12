@@ -32,10 +32,12 @@ export default function BudgetItem({ category, amount, icon, group, setBudgetArr
         boxShadow: "8px 8px 0px 0px rgba(0, 0, 0, 1)"
     };
 
-    let amountDisplay = amount.toLocaleString()
-    if (amount % 1 === 0) {
-        amountDisplay += ".00"
-    }
+    const formatNumberWithCommas = (numberString: string) => {
+        return numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    const amountDisplay =  formatNumberWithCommas(amount.toFixed(2)).toUpperCase()
+
 
 
     return (
