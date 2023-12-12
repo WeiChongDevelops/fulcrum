@@ -1,6 +1,6 @@
 import FulcrumButton from "../FulcrumButton.tsx";
 import {Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
-import {BudgetItemEntity} from "../../util.ts";
+import {BudgetItemEntity, getBudgetList} from "../../util.ts";
 
 interface DBInsertionFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
@@ -100,6 +100,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
             }
             const responseData = await response.json()
             console.log(responseData);
+            setBudgetArray(await getBudgetList());
 
         } catch (error) {
             console.error("Error:", error);
