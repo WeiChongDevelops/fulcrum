@@ -9,5 +9,6 @@ data class BudgetItemResponse(
     val userId: String,
     val category: String,
     val amount: Double,
-    val iconPath: String
+    val iconPath: String,
+    val group: String
 )

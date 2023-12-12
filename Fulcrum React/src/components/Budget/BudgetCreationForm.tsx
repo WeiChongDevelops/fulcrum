@@ -89,7 +89,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
 
             if (!response.ok) {
                 console.error(`HTTP error - status: ${response.status}`);
-                window.alert("Category name is invalid or already has assigned budget.")
+                window.alert("Category name is invalid or already has assigned budget; or $999,999,999 limit exceeded.")
                 setBudgetArray( current => {
                     const indexOfInvalidItem = current.map(item => item.category).lastIndexOf(newBudgetItem.category);
                     if (indexOfInvalidItem !== -1) {
