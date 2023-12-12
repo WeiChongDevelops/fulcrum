@@ -36,7 +36,7 @@ export default function BudgetItem({ category, amount, icon, group, setBudgetArr
         return numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    const amountDisplay =  formatNumberWithCommas(amount.toFixed(2)).toUpperCase()
+    const amountDisplay =  formatNumberWithCommas(amount.toFixed(2))
 
 
 
