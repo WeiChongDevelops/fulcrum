@@ -64,7 +64,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
         const newBudgetItem: BudgetItemEntity = {
             category: formData.category,
             amount: formData.amount ? formData.amount : 0,
-            iconPath: formData.iconPath,
+            iconPath: formData.iconPath != "" ? formData.iconPath : "/src/assets/category-icons/category-default-icon.svg",
             group: formData.group ? formData.group : "Miscellaneous"
         }
         console.log("FORMDATA ICON PATH:")
@@ -82,7 +82,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                 body: JSON.stringify({
                     category: formData.category,
                     amount: formData.amount,
-                    iconPath: formData.iconPath ? formData.iconPath : "/src/assets/category-icons/category-default-icon.svg",
+                    iconPath: formData.iconPath != "" ? formData.iconPath : "/src/assets/category-icons/category-default-icon.svg",
                     group: formData.group ? formData.group : "Miscellaneous"
                 })
             });
