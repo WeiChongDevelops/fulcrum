@@ -43,9 +43,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
             icon.addEventListener("click", (e: MouseEvent) => {
                 e.preventDefault();
                 const iconPath = `/src/assets/category-icons/${icon.getAttribute("data-value")!}`;
-                console.log(iconPath);
 
-                // document.getElementById("iconPath")?.setAttribute("value", iconPath);
                 setFormData( currentFormData => {
                     return {...currentFormData, ["iconPath"]: iconPath}
                 });

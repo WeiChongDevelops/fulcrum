@@ -12,6 +12,8 @@ interface DBUpdatingFormProps {
 export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, oldAmount }: DBUpdatingFormProps) {
     interface FormData {
         amount: number | null;
+        group: string;
+        iconPath: string;
     }
 
     const formRef = useRef<HTMLDivElement>(null);
@@ -29,10 +31,27 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
         };
     }, []);
 
-    const [formData, setFormData] = useState<FormData>({ amount: null });
+    const [formData, setFormData] = useState<FormData>({ amount: null, iconPath: "", group: "" });
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
         setFormData(currentFormData => ({ ...currentFormData, [e.target.name]: e.target.value }));
+        const categoryIcons: NodeListOf<HTMLImageElement> = document.querySelectorAll(".category-icon-selectable");
+        categoryIcons.forEach((icon): void => {
+            icon.addEventListener("click", (e: MouseEvent) => {
+                e.preventDefault();
+                const iconPath = `/src/assets/category-icons/${icon.getAttribute("data-value")!}`;
+
+                setFormData( currentFormData => {
+                    return {...currentFormData, ["iconPath"]: iconPath}
+                });
+
+                console.log("Setting value of iconPath to: ", iconPath);
+                console.log(document.getElementById("iconPath")?.getAttribute("value"));
+
+                document.querySelectorAll('.icon-button').forEach(btn => btn.classList.remove('selected'));
+                icon.classList.add('selected');
+            });
+        });
     }
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -47,7 +66,9 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
                 },
                 body: JSON.stringify({
                     "category": category,
-                    "amount": formData.amount
+                    "amount": formData.amount,
+                    "group": formData.group,
+                    "iconPath": formData.iconPath
                 })
             })
             if (!response.ok) {
@@ -60,7 +81,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
             console.error("Error:", error);
         }
 
-        setFormData({ amount: null });
+        setFormData({ amount: null, iconPath: "", group: "" });
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
 
@@ -75,9 +96,29 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
     return (
         <div ref={formRef} className="fixed flex flex-col justify-start items-center rounded-3xl text-white p-20" style={styles}>
             <h1>Updating Budget for {category}</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="flex flex-col items-center">
                 <label htmlFor="amount">Amount</label>
                 <input type="text" onChange={handleInputChange} value={formData.amount ?? ""} name="amount" id="amount" className="mb-3" placeholder={oldAmount?.toString()} />
+                <label htmlFor="group">Group</label>
+                <input type="group"
+                       onChange={handleInputChange}
+                       value={formData.group}
+                       name="group"
+                       id="group"
+                       className="mb-3"/>
+
+                <div id="icon-selector">
+                    <button type="button" className="category-icon-selectable" data-value="category-bank-icon.svg">
+                        <img src="/src/assets/category-icons/category-bank-icon.svg" alt="Bank"/>
+                    </button>
+                    <button type="button" className="category-icon-selectable" data-value="category-water-icon.svg">
+                        <img src="/src/assets/category-icons/category-water-icon.svg" alt="Water"/>
+                    </button>
+                    <button type="button" className="category-icon-selectable" data-value="category-pig-icon.svg">
+                        <img src="/src/assets/category-icons/category-pig-icon.svg" alt="Piggy Bank"/>
+                    </button>
+                </div>
+                <input type="hidden" id="iconPath" name="iconPath" value="test"/>
                 <FulcrumButton displayText="Update Budget" />
                 <button className="mt-2" onClick={(e) => {
                     e.preventDefault();

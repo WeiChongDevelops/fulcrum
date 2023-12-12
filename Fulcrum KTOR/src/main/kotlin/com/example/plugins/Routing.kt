@@ -218,7 +218,7 @@ fun Application.configureRouting() {
 
                 val updatedCategory = budgetUpdateRequest.category
 
-                val updatedItem = supabase.postgrest["budgets"].update(
+                val updatedItemNoIconOrGroup = supabase.postgrest["budgets"].update(
                     {
                         set("amount", budgetUpdateRequest.amount)
                         set("category", updatedCategory)
@@ -228,10 +228,31 @@ fun Application.configureRouting() {
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                 }
 
-                if (updatedItem.body == null) {
+                if (updatedItemNoIconOrGroup.body == null) {
                     call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not updated"))
                 } else {
-                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget updated."))
+                    if (budgetUpdateRequest.iconPath != "") {
+                        val updatedItemIconOnly = supabase.postgrest["budgets"].update(
+                            {
+                                set("iconPath", budgetUpdateRequest.iconPath)
+                            }
+                        ) {
+                            eq("category", updatedCategory)
+                            eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                        }
+                        call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget updated."))
+                    }
+                    if (budgetUpdateRequest.group != "") {
+                        val updatedItemGroupOnly = supabase.postgrest["budgets"].update(
+                            {
+                                set("group", budgetUpdateRequest.group)
+                            }
+                        ) {
+                            eq("category", updatedCategory)
+                            eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                        }
+                        call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget updated."))
+                    }
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while updating budget", e)
