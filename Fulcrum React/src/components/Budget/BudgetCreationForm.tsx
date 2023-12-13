@@ -72,15 +72,17 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                        className="mb-3"
                        required/>
                 <label htmlFor="amount">Amount</label>
-                <input type="text"
+                <input type="number"
                        onChange={handleInputChange}
                        value={formData.amount === null ? "" : formData.amount}
                        name="amount"
                        id="amount"
                        className="mb-3"
+                       min={0.01}
+                       step={0.01}
                        required/>
                 <label htmlFor="group">Group</label>
-                <input type="group"
+                <input type="text"
                        onChange={handleInputChange}
                        value={formData.group}
                        name="group"

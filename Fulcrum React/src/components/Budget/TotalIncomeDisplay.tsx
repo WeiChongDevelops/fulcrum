@@ -42,6 +42,8 @@ export default function TotalIncomeDisplay({ totalIncome, setTotalIncome, amount
                         onChange={handleInputChange}
                         onBlur={handleInputBlur}
                         autoFocus
+                        min={0.01}
+                        step={0.01}
                     />
                 </form>: <span className="text-4xl" onClick={handleEditClick}>${formatNumberWithCommas(totalIncome.toFixed(2))}</span>}
             </div>

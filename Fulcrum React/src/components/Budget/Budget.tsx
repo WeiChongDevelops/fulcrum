@@ -27,7 +27,7 @@ export default function Budget() {
 
     useEffect( () => {
         setAmountLeftToBudget(totalIncome - getAmountBudgeted(budgetArray))
-    },[budgetArray])
+    },[budgetArray, totalIncome])
 
     useEffect( () => {
         document.getElementById("category")?.focus();

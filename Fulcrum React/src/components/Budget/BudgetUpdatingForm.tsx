@@ -40,6 +40,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
         setIsUpdateBudgetVisible(false);
 
         await handleBudgetUpdating(category, formData);
@@ -60,7 +61,15 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
             <h1 className="mb-6">Updating Budget for {category}</h1>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="amount">Amount</label>
-                <input type="text" onChange={handleInputChange} value={formData.amount ?? ""} name="amount" id="amount" className="mb-3" placeholder={oldAmount?.toString()} />
+                <input type="number" onChange={handleInputChange}
+                       value={formData.amount ?? ""}
+                       name="amount"
+                       id="amount"
+                       className="mb-3"
+                       placeholder={oldAmount?.toString()}
+                       min={0.01}
+                       step={0.01}
+                />
                 <label htmlFor="group">Group</label>
                 <input type="group"
                        onChange={handleInputChange}
