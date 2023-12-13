@@ -15,11 +15,7 @@ export default function Budget() {
     const [email, setEmail] = useState<string>("");
 
     useEffect(() => {
-        async function fetchData() {
-            const budgetList = await getBudgetList();
-            setBudgetArray(budgetList);
-        }
-        fetchData()
+        getBudgetList().then((budgetList) => setBudgetArray(budgetList));
     }, []);
 
     useEffect( () => {

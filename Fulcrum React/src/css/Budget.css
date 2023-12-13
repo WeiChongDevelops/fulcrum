@@ -18,3 +18,19 @@
 .selected {
     outline: aquamarine solid 2px;
 }
+
+input::placeholder {
+    text-align: center;
+}
+
+.budgetForm {
+    top: 20%;
+    left: 30%;
+    right: 30%;
+    bottom: 20%;
+    background-color: rgba(0,0,0,0.8);
+}
+
+.boxShadow {
+    box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 1);
+}
