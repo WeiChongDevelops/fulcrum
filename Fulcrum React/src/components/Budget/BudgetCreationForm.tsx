@@ -48,9 +48,6 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                     return {...currentFormData, ["iconPath"]: iconPath}
                 });
 
-                console.log("Setting value of iconPath to: ", iconPath);
-                console.log(document.getElementById("iconPath")?.getAttribute("value"));
-
                 document.querySelectorAll('.icon-button').forEach(btn => btn.classList.remove('selected'));
                 icon.classList.add('selected');
             });
@@ -61,12 +58,10 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
 
         const newBudgetItem: BudgetItemEntity = {
             category: formData.category,
-            amount: formData.amount ? formData.amount : 0,
+            amount: formData.amount ? parseFloat(String(formData.amount)) : 0,
             iconPath: formData.iconPath != "" ? formData.iconPath : "/src/assets/category-icons/category-default-icon.svg",
             group: formData.group ? formData.group : "Miscellaneous"
         }
-        console.log("FORMDATA ICON PATH:")
-        console.log(formData.iconPath);
 
         setBudgetArray(current => [...current, newBudgetItem])
         setIsCreateBudgetVisible(false)
