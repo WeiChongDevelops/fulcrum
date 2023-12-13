@@ -1,4 +1,4 @@
-package com.example.entities
+package com.example.entities.budget
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

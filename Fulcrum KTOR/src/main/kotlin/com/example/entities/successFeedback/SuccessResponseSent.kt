@@ -1,4 +1,4 @@
-package com.example.entities
+package com.example.entities.successFeedback
 
 import kotlinx.serialization.Serializable
 

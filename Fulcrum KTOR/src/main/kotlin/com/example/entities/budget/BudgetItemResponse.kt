@@ -1,13 +1,14 @@
-package com.example.entities
+package com.example.entities.budget
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ExpenseCreateRequestReceived(
-    val expenseId: String,
+data class BudgetItemResponse(
+    val userId: String,
     val category: String,
     val amount: Double,
-    @Contextual val timestamp: Instant
+    val iconPath: String,
+    val group: String
 )

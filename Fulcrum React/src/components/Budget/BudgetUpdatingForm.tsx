@@ -1,4 +1,4 @@
-import FulcrumButton from "../FulcrumButton.tsx";
+import FulcrumButton from "../Other/FulcrumButton.tsx";
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import {
     addIconSelectionFunctionality,

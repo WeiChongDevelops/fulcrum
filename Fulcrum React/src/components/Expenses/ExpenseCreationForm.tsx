@@ -1,4 +1,4 @@
-import FulcrumButton from "../FulcrumButton.tsx";
+import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {Dispatch, FormEvent, SetStateAction, useState} from "react";
 import {ExpenseItemEntity, getExpenseList} from "../../util.ts";
 import { v4 as uuid } from 'uuid';

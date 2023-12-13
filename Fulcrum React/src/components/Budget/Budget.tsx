@@ -4,7 +4,7 @@ import { BudgetItemEntity, getBudgetList } from "../../util.ts";
 import { useEffect, useState } from "react";
 import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
 import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
-import Navbar from "../Navbar.tsx";
+import Navbar from "../Other/Navbar.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);

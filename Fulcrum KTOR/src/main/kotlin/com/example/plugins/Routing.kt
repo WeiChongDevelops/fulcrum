@@ -1,6 +1,10 @@
 package com.example.plugins
 
-import com.example.entities.*
+import com.example.entities.budget.*
+import com.example.entities.expense.*
+import com.example.entities.successFeedback.ErrorResponseSent
+import com.example.entities.successFeedback.SuccessResponseSent
+import com.example.entities.user.UserEmail
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.GoTrue
 import io.github.jan.supabase.gotrue.gotrue
