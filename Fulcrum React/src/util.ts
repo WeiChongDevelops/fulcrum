@@ -44,7 +44,7 @@ export async function getBudgetList() {
         });
         if (!response.ok) {
             console.error(`HTTP error - status: ${response.status}`);
-            // window.location.href = "/login"
+            window.location.href = "/login"
         }
         const responseData = await response.json();
         console.log(responseData);

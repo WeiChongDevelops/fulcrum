@@ -264,6 +264,7 @@ fun Application.configureRouting() {
             try {
                 val budgetList = supabase.postgrest["budgets"].select() {
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+//                    eq("userId", supabase.gotrue.currentSessionOrNull()?.user?.id!!)
                 }
                     .decodeList<BudgetItemResponse>()
 
@@ -304,21 +305,36 @@ fun Application.configureRouting() {
             }
         }
 
-        get("/api/checkForUser") {
-            val currentUser = supabase.gotrue.currentSessionOrNull()
+        get("/api/getUserEmail") {
             try {
-                val statusJSON = if (currentUser != null) {
-                    val user = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
-                    UserStatusCheck(loggedIn = false)
+                val currentUser = supabase.gotrue.currentSessionOrNull()
+                if (currentUser != null) {
+//                    val user = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
+                    call.respond(HttpStatusCode.OK, UserEmail(email = currentUser.user?.email!!))
                 } else {
-                    UserStatusCheck(loggedIn = true)
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("No user logged in."))
                 }
-                call.respond(HttpStatusCode.OK, statusJSON)
             } catch (e: Exception) {
                 call.application.log.error("Error while checking for user", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while checking for user."))
             }
         }
+//
+//        get("/api/checkForUser") {
+//            val currentUser = supabase.gotrue.currentSessionOrNull()
+//            try {
+//                val statusJSON = if (currentUser != null) {
+//                    val user = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
+//                    UserStatusCheck(loggedIn = false)
+//                } else {
+//                    UserStatusCheck(loggedIn = true)
+//                }
+//                call.respond(HttpStatusCode.OK, statusJSON)
+//            } catch (e: Exception) {
+//                call.application.log.error("Error while checking for user", e)
+//                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while checking for user."))
+//            }
+//        }
 
 
         post("/api/logout") {

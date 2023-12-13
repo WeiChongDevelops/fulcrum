@@ -1,9 +1,10 @@
 
 interface FulcrumButtonProps {
     displayText: string;
+    onClick?: () => void;
 }
-export default function FulcrumButton({displayText}: FulcrumButtonProps) {
+export default function FulcrumButton({displayText, onClick}: FulcrumButtonProps) {
     return (
-        <button>{displayText}</button>
+        <button onClick={onClick}>{displayText}</button>
     )
 }

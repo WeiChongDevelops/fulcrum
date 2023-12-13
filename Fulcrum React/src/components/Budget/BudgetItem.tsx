@@ -1,6 +1,6 @@
 import '/src/css/Budget.css';
 import { BudgetItemEntity, handleDeletion } from "../../util.ts";
-import React, { Dispatch, SetStateAction} from "react";
+import React, {Dispatch, SetStateAction, useEffect} from "react";
 
 interface BudgetItemProps {
     category: string;
@@ -36,8 +36,14 @@ export default function BudgetItem({ category, amount, icon, group, setBudgetArr
         return numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    const amountDisplay =  formatNumberWithCommas(amount.toFixed(2))
+    const amountDisplay = typeof amount === 'number'
+        ? formatNumberWithCommas(amount.toFixed(2))
+        : formatNumberWithCommas(parseFloat(amount).toFixed(2))
 
+    useEffect(() => {
+        console.log(`amount: ${amount}`);
+        console.log(`typeof amount: ${typeof amount}`);
+    }, [])
 
 
     return (

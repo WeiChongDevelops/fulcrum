@@ -79,7 +79,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                 },
                 body: JSON.stringify({
                     category: formData.category,
-                    amount: formData.amount,
+                    amount: formData.amount ? formData.amount : 0,
                     iconPath: formData.iconPath != "" ? formData.iconPath : "/src/assets/category-icons/category-default-icon.svg",
                     group: formData.group ? formData.group : "Miscellaneous"
                 })
@@ -103,7 +103,6 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
         } catch (error) {
             console.error("Error:", error);
         }
-
         setFormData({ category: "", amount: null, iconPath: "", group: ""});
     }
 
@@ -129,7 +128,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                 <label htmlFor="amount">Amount</label>
                 <input type="text"
                        onChange={handleInputChange}
-                       value={formData.amount == null ? "" : formData.amount}
+                       value={formData.amount === null ? "" : formData.amount}
                        name="amount"
                        id="amount"
                        className="mb-3"/>

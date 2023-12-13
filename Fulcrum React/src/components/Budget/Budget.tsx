@@ -12,6 +12,7 @@ export default function Budget() {
     const [isUpdateBudgetVisible, setIsUpdateBudgetVisible] = useState<boolean>(false);
     const [editingCategory, setEditingCategory] = useState<string | null>(null);
     const [editingOldAmount, setEditingOldAmount] = useState<number | null>(null);
+    const [email, setEmail] = useState<string>("");
 
     useEffect(() => {
         async function fetchData() {
@@ -25,12 +26,9 @@ export default function Budget() {
         document.getElementById("category")?.focus();
     }, [isCreateBudgetVisible, isUpdateBudgetVisible])
 
-
-
-
     return (
         <div>
-            <Navbar/>
+            <Navbar email={email} setEmail={setEmail}/>
             <div className={`elementsBelowPopUpForm ${(isCreateBudgetVisible || isUpdateBudgetVisible) && "blur"} 
             px-16`}>
                 <BudgetList
