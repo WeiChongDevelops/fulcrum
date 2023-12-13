@@ -1,10 +1,11 @@
 import BudgetList from "./BudgetList.tsx";
 import BudgetCreationForm from "./BudgetCreationForm.tsx";
-import { BudgetItemEntity, getBudgetList } from "../../util.ts";
+import {BudgetItemEntity, getAmountBudgeted, getBudgetList} from "../../util.ts";
 import { useEffect, useState } from "react";
 import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
 import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
 import Navbar from "../Other/Navbar.tsx";
+import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -13,10 +14,19 @@ export default function Budget() {
     const [editingCategory, setEditingCategory] = useState<string | null>(null);
     const [editingOldAmount, setEditingOldAmount] = useState<number | null>(null);
     const [email, setEmail] = useState<string>("");
+    const [totalIncome, setTotalIncome] = useState<number>(1000);
+    const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0)
 
     useEffect(() => {
-        getBudgetList().then((budgetList) => setBudgetArray(budgetList));
+        getBudgetList()
+            .then(budgetList => {
+                setBudgetArray(budgetList)
+            })
     }, []);
+
+    useEffect( () => {
+        setAmountLeftToBudget(totalIncome - getAmountBudgeted(budgetArray))
+    },[budgetArray])
 
     useEffect( () => {
         document.getElementById("category")?.focus();
@@ -25,7 +35,11 @@ export default function Budget() {
     return (
         <div>
             <Navbar email={email} setEmail={setEmail}/>
+            <h1 className="my-6">Budget</h1>
+            <TotalIncomeDisplay totalIncome={totalIncome} setTotalIncome={setTotalIncome} amountLeftToBudget={amountLeftToBudget}/>
+
             <div className={`elementsBelowPopUpForm ${(isCreateBudgetVisible || isUpdateBudgetVisible) && "blur"} 
+            
             px-16`}>
                 <BudgetList
                     budgetArray={budgetArray}

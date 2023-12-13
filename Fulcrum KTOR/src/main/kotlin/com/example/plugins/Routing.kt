@@ -11,7 +11,9 @@ import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
+import io.github.jan.supabase.postgrest.rpc
 import io.ktor.client.*
 import io.ktor.client.engine.apache5.*
 import io.ktor.http.*

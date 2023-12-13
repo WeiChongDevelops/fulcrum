@@ -1,5 +1,5 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
-import {Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
+import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addIconSelectionFunctionality,
     BudgetCreationFormData,
@@ -29,7 +29,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
         };
     }, []);
 
-    function handleInputChange(e: any) {
+    function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
         setFormData( currentFormData => {
             return {...currentFormData, [e.target.name]: e.target.value}
         });

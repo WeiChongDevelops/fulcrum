@@ -13,7 +13,6 @@ interface BudgetListProps {
 export default function BudgetList({ budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount}: BudgetListProps) {
     return (
         <div>
-            <h1 className="my-6">Budget</h1>
             <div>
                 {budgetArray.map((budgetElement, key) => (
                     <BudgetItem

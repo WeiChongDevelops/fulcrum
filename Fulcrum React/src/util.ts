@@ -173,6 +173,16 @@ export function addIconSelectionFunctionality(setFormData:
     });
 }
 
+export function getAmountBudgeted(budgetArray: BudgetItemEntity[]) {
+    const amountArray = budgetArray.map( budgetItem => (
+        budgetItem.amount
+    ))
+    console.log(amountArray)
+    return amountArray.reduce((accumulator, currentValue) => (
+        accumulator + currentValue
+    ), 0)
+}
+
 export function formatNumberWithCommas(numberString: string) {
     return numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };

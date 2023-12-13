@@ -50,7 +50,6 @@ export default function BudgetItem({ category, amount, icon, group, setBudgetArr
                     </div>
                 </div>
             </div>
-
         </div>
     );
 }
