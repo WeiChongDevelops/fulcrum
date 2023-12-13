@@ -6,6 +6,7 @@ import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
 import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
 import Navbar from "../Other/Navbar.tsx";
 import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
+import FulcrumAnimation from "./FulcrumAnimation.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -38,9 +39,13 @@ export default function Budget() {
             <h1 className="my-6">Budget</h1>
             <TotalIncomeDisplay totalIncome={totalIncome} setTotalIncome={setTotalIncome} amountLeftToBudget={amountLeftToBudget}/>
 
+
             <div className={`elementsBelowPopUpForm ${(isCreateBudgetVisible || isUpdateBudgetVisible) && "blur"} 
             
+            
             px-16`}>
+
+                <FulcrumAnimation amountLeftToBudget={amountLeftToBudget} totalIncome={totalIncome}/>
                 <BudgetList
                     budgetArray={budgetArray}
                     setBudgetArray={setBudgetArray}
@@ -48,10 +53,12 @@ export default function Budget() {
                     setEditingCategory={setEditingCategory}
                     setEditingOldAmount={setEditingOldAmount}
                 />
-                <AddNewBudgetButton setIsFormVisible={setIsCreateBudgetVisible} />
+
             </div>
             {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible} setBudgetArray={setBudgetArray} />}
             {isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray} category={editingCategory} setIsUpdateBudgetVisible={setIsUpdateBudgetVisible} oldAmount={editingOldAmount}/>}
+
+            <AddNewBudgetButton setIsFormVisible={setIsCreateBudgetVisible} />
         </div>
     );
 }
