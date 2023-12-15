@@ -304,6 +304,7 @@ fun Application.configureRouting() {
                     email = userCreds.email
                     password = userCreds.password
                 }
+                val session = supabase.gotrue.refreshSession(refreshToken = "refreshToken")
                 val loggedInUser = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
                 call.respond(HttpStatusCode.OK, loggedInUser)
             } else {

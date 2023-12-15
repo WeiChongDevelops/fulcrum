@@ -1,5 +1,6 @@
 import FulcrumButton from "./FulcrumButton.tsx";
 import {Dispatch, SetStateAction, useEffect} from "react";
+import {Outlet} from "react-router-dom";
 
 
 interface NavbarProps {
@@ -50,6 +51,7 @@ export default function Navbar({ email, setEmail }: NavbarProps) {
     }, []);
 
     return (
+        <div>
         <nav className="bg-gray-500 text-white p-4">
             <div className="flex justify-between items-center mx-auto">
 
@@ -80,5 +82,7 @@ export default function Navbar({ email, setEmail }: NavbarProps) {
                 </div>
             </div>
         </nav>
+            <Outlet />
+        </div>
     );
 }

@@ -4,7 +4,6 @@ import {BudgetItemEntity, getAmountBudgeted, getBudgetList} from "../../util.ts"
 import { useEffect, useState } from "react";
 import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
 import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
-import Navbar from "../Other/Navbar.tsx";
 import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 
@@ -14,7 +13,6 @@ export default function Budget() {
     const [isUpdateBudgetVisible, setIsUpdateBudgetVisible] = useState<boolean>(false);
     const [editingCategory, setEditingCategory] = useState<string | null>(null);
     const [editingOldAmount, setEditingOldAmount] = useState<number | null>(null);
-    const [email, setEmail] = useState<string>("");
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0)
 
@@ -35,7 +33,6 @@ export default function Budget() {
 
     return (
         <div>
-            <Navbar email={email} setEmail={setEmail}/>
             <h1 className="my-6">Budget</h1>
             <TotalIncomeDisplay totalIncome={totalIncome} setTotalIncome={setTotalIncome} amountLeftToBudget={amountLeftToBudget}/>
 
