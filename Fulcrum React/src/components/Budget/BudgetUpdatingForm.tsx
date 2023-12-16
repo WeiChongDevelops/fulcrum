@@ -1,27 +1,37 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addIconSelectionFunctionality,
     BudgetItemEntity,
     BudgetUpdatingFormData,
     getBudgetList,
-    handleBudgetUpdating
+    getGroupListAsOptions,
+    handleBudgetUpdating,
+    RetrievedGroupData
 } from "../../util.ts";
+
+import CreatableSelect from 'react-select/creatable';
 
 interface DBUpdatingFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     category: string | null;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
-    oldAmount: number | null;
+    oldAmount: number;
 }
 
 export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, oldAmount }: DBUpdatingFormProps) {
 
-    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: null, iconPath: "", group: "" });
+
+    const [initialGroupOptions, setInitialGroupOptions] = useState<RetrievedGroupData[]>()
+    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: oldAmount, iconPath: "", group: "" });
     const formRef = useRef<HTMLDivElement>(null);
+
+
 
     useEffect(() => {
         window.addEventListener("mousedown", handleClickOutside);
+        getGroupListAsOptions()
+            .then( results => setInitialGroupOptions(results))
         return () => {
             window.removeEventListener("mousedown", handleClickOutside);
         };
@@ -38,6 +48,10 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
         addIconSelectionFunctionality(setFormData);
     }
 
+    function handleGroupInputChange(e: any) {
+        setFormData(currentFormData => ({ ...currentFormData, group: e.value }));
+    }
+
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
@@ -45,9 +59,35 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
 
         await handleBudgetUpdating(category, formData);
 
-        setFormData({ amount: null, iconPath: "", group: "" });
+        setFormData({ amount: oldAmount, iconPath: "", group: "" });
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
+
+
+    // const options = [
+    //     { value: "jack", label: "Jack", color: "#FF8B00" },
+    //     { value: "john", label: "John", color: "#36B37E" },
+    //     { value: "mike", label: "Mike", color: "#0052CC" },
+    // ];
+    const colourStyles = {
+        control: (styles: any) => ({ ...styles, backgroundColor: "white" }),
+        option: (styles: any, {data, isDisabled, isFocused, isSelected}: any) => {
+            return { ...styles, colour: data.color };
+        },
+        multiValue: (styles: any, {data}: any) => {
+            return {
+                ...styles,
+                backgroundColor: data.colour,
+                colour: "#fff",
+            };
+        },
+        multiValueLabel: (styles: any, {data}: any) => {
+            return {
+                ...styles,
+                colour: "#fff",
+            };
+        }
+    };
 
     return (
         <div ref={formRef} className="budgetForm fixed flex flex-col justify-start items-center rounded-3xl text-white">
@@ -71,12 +111,21 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
                        step={0.01}
                 />
                 <label htmlFor="group">Group</label>
-                <input type="group"
-                       onChange={handleInputChange}
-                       value={formData.group}
-                       name="group"
-                       id="group"
-                       className="mb-3"/>
+                {/*<input type="text"*/}
+                {/*       onChange={handleInputChange}*/}
+                {/*       value={formData.group}*/}
+                {/*       name="group"*/}
+                {/*       id="group"*/}
+                {/*       className="mb-3"/>*/}
+
+                <CreatableSelect
+                    id="group"
+                    name="group"
+                    options={initialGroupOptions}
+                    onChange={handleGroupInputChange}
+                    styles={colourStyles}
+                />
+
 
                 <div id="icon-selector">
                     <button type="button" className="category-icon-selectable" data-value="category-bank-icon.svg">

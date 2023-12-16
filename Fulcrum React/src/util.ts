@@ -16,15 +16,20 @@ export interface BudgetItemEntity {
 
 export interface BudgetCreationFormData {
     category: string;
-    amount: number | null;
+    amount: number;
     iconPath: string;
     group: string;
 }
 
 export interface BudgetUpdatingFormData {
-    amount: number | null;
+    amount: number;
     group: string;
     iconPath: string;
+}
+
+export interface RetrievedGroupData {
+    group: string;
+    colour: string;
 }
 
 export async function getExpenseList() {
@@ -152,6 +157,45 @@ export async function handleBudgetUpdating(category: string | null, formData: Bu
     } catch (error) {
         console.error("Error:", error);
     }
+}
+
+export async function getGroupListAsOptions() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getGroups", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`)
+        } else {
+            const responseData = await response.json();
+            return responseData.map(
+                (groupColourPair: { group: String, colour: String }) => (
+                    {value: groupColourPair.group, label: groupColourPair.group, colour: groupColourPair.colour}
+                )
+            )
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+export function getRandomColour() {
+    const colourArray = [
+        '#81e1d7', '#5cd67b', '#6087d6', '#c4696d',
+        '#c08757', '#65a9c6', '#4ab6a3', '#6ec15d',
+        '#5f74da', '#81d16d', '#ae7cd1', '#e49b84',
+        '#71d0be', '#bb5171', '#8065c6', '#8d66b2'
+    ];
+
+    // Gives number between 0 and 1: Math.random()
+    // Gives number within bounds of array size: Math.random() * colourArray.length
+    // Floor it.
+
+    const randomColourIndex = Math.floor(Math.random() * colourArray.length);
+    return colourArray[randomColourIndex];
 }
 
 export function addIconSelectionFunctionality(setFormData:

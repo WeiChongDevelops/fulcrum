@@ -273,12 +273,24 @@ fun Application.configureRouting() {
 //                    eq("userId", supabase.gotrue.currentSessionOrNull()?.user?.id!!)
                 }
                     .decodeList<BudgetItemResponse>()
-
                 call.respond(HttpStatusCode.OK, budgetList)
 
             } catch (e: Exception) {
                 call.application.log.error("Error while reading budget", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not read."))
+            }
+        }
+
+        get("/api/getGroups") {
+            try {
+                val groupList = supabase.postgrest["groups"].select(columns = Columns.list("group, colour")) {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                    .decodeList<GroupResponse>()
+                call.respond(HttpStatusCode.OK, groupList)
+            } catch (e: Exception) {
+                call.application.log.error("Error while reading group list", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group list not read."))
             }
         }
 
