@@ -7,7 +7,7 @@ interface BudgetListProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setEditingCategory: Dispatch<SetStateAction<string | null>>;
-    setEditingOldAmount: Dispatch<SetStateAction<number | null>>;
+    setEditingOldAmount: Dispatch<SetStateAction<number>>;
 }
 
 export default function BudgetList({ budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount}: BudgetListProps) {

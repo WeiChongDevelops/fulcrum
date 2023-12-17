@@ -4,17 +4,19 @@ import {
     addIconSelectionFunctionality,
     BudgetCreationFormData,
     BudgetItemEntity,
-    handleBudgetCreation
+    handleBudgetCreation, RetrievedGroupData
 } from "../../util.ts";
+import CreatableSelect from 'react-select/creatable';
 
 interface DBInsertionFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
+    initialGroupOptions: RetrievedGroupData[] | undefined;
 }
 
-export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVisible}: DBInsertionFormProps) {
+export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions}: DBInsertionFormProps) {
 
-    const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: null, iconPath: "", group: ""});
+    const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: ""});
     const formRef = useRef<HTMLDivElement>(null);
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
@@ -50,8 +52,19 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
         setIsCreateBudgetVisible(false)
 
         await handleBudgetCreation(formData, setBudgetArray, newBudgetItem);
-        setFormData({ category: "", amount: null, iconPath: "", group: ""});
+        setFormData({ category: "", amount: 0, iconPath: "", group: ""});
     }
+
+    function handleGroupInputChange(e: any) {
+        setFormData(currentFormData => ({ ...currentFormData, group: e.value }));
+    }
+
+    const colourStyles = {
+        control: (styles: any) => ({ ...styles, backgroundColor: "white" }),
+        option: (styles: any, {data}: any) => {
+            return { ...styles, colour: data.color };
+        }
+    };
 
     return (
         <div ref={formRef}  className="budgetForm fixed flex flex-col justify-center items-center rounded-3xl">
@@ -74,7 +87,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                 <label htmlFor="amount">Amount</label>
                 <input type="number"
                        onChange={handleInputChange}
-                       value={formData.amount === null ? "" : formData.amount}
+                       value={formData.amount === 0 ? "" : formData.amount}
                        name="amount"
                        id="amount"
                        className="mb-3"
@@ -82,13 +95,21 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                        step={0.01}
                        required/>
                 <label htmlFor="group">Group</label>
-                <input type="text"
-                       onChange={handleInputChange}
-                       value={formData.group}
-                       name="group"
-                       id="group"
-                       className="mb-3"
-                       placeholder="Miscellaneous"/>
+                {/*<input type="text"*/}
+                {/*       onChange={handleInputChange}*/}
+                {/*       value={formData.group}*/}
+                {/*       name="group"*/}
+                {/*       id="group"*/}
+                {/*       className="mb-3"*/}
+                {/*       placeholder="Miscellaneous"/>*/}
+
+                <CreatableSelect
+                    id="group"
+                    name="group"
+                    options={initialGroupOptions}
+                    onChange={handleGroupInputChange}
+                    styles={colourStyles}
+                />
 
                 <div id="icon-selector">
                     <button type="button" className="category-icon-selectable" data-value="category-bank-icon.svg">

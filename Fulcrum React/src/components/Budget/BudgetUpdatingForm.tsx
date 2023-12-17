@@ -5,11 +5,9 @@ import {
     BudgetItemEntity,
     BudgetUpdatingFormData,
     getBudgetList,
-    getGroupListAsOptions,
     handleBudgetUpdating,
     RetrievedGroupData
 } from "../../util.ts";
-
 import CreatableSelect from 'react-select/creatable';
 
 interface DBUpdatingFormProps {
@@ -17,12 +15,12 @@ interface DBUpdatingFormProps {
     category: string | null;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     oldAmount: number;
+    initialGroupOptions: RetrievedGroupData[] | undefined;
 }
 
-export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, oldAmount }: DBUpdatingFormProps) {
+export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, oldAmount, initialGroupOptions }: DBUpdatingFormProps) {
 
 
-    const [initialGroupOptions, setInitialGroupOptions] = useState<RetrievedGroupData[]>()
     const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: oldAmount, iconPath: "", group: "" });
     const formRef = useRef<HTMLDivElement>(null);
 
@@ -30,8 +28,6 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
 
     useEffect(() => {
         window.addEventListener("mousedown", handleClickOutside);
-        getGroupListAsOptions()
-            .then( results => setInitialGroupOptions(results))
         return () => {
             window.removeEventListener("mousedown", handleClickOutside);
         };
@@ -63,29 +59,10 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
 
-
-    // const options = [
-    //     { value: "jack", label: "Jack", color: "#FF8B00" },
-    //     { value: "john", label: "John", color: "#36B37E" },
-    //     { value: "mike", label: "Mike", color: "#0052CC" },
-    // ];
     const colourStyles = {
         control: (styles: any) => ({ ...styles, backgroundColor: "white" }),
-        option: (styles: any, {data, isDisabled, isFocused, isSelected}: any) => {
+        option: (styles: any, {data}: any) => {
             return { ...styles, colour: data.color };
-        },
-        multiValue: (styles: any, {data}: any) => {
-            return {
-                ...styles,
-                backgroundColor: data.colour,
-                colour: "#fff",
-            };
-        },
-        multiValueLabel: (styles: any, {data}: any) => {
-            return {
-                ...styles,
-                colour: "#fff",
-            };
         }
     };
 

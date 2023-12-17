@@ -1,6 +1,12 @@
 import BudgetList from "./BudgetList.tsx";
 import BudgetCreationForm from "./BudgetCreationForm.tsx";
-import {BudgetItemEntity, getAmountBudgeted, getBudgetList} from "../../util.ts";
+import {
+    BudgetItemEntity,
+    getAmountBudgeted,
+    getBudgetList,
+    getGroupListAsOptions,
+    RetrievedGroupData
+} from "../../util.ts";
 import { useEffect, useState } from "react";
 import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
 import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
@@ -12,15 +18,18 @@ export default function Budget() {
     const [isCreateBudgetVisible, setIsCreateBudgetVisible] = useState<boolean>(false);
     const [isUpdateBudgetVisible, setIsUpdateBudgetVisible] = useState<boolean>(false);
     const [editingCategory, setEditingCategory] = useState<string | null>(null);
-    const [editingOldAmount, setEditingOldAmount] = useState<number | null>(null);
+    const [editingOldAmount, setEditingOldAmount] = useState<number>(0);
     const [totalIncome, setTotalIncome] = useState<number>(1000);
-    const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0)
+    const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
+    const [initialGroupOptions, setInitialGroupOptions] = useState<RetrievedGroupData[] | undefined> ();
 
     useEffect(() => {
         getBudgetList()
             .then(budgetList => {
                 setBudgetArray(budgetList)
             })
+        getGroupListAsOptions()
+            .then( results => setInitialGroupOptions(results))
     }, []);
 
     useEffect( () => {
@@ -52,8 +61,14 @@ export default function Budget() {
                 />
 
             </div>
-            {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible} setBudgetArray={setBudgetArray} />}
-            {isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray} category={editingCategory} setIsUpdateBudgetVisible={setIsUpdateBudgetVisible} oldAmount={editingOldAmount}/>}
+            {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible}
+                                                          setBudgetArray={setBudgetArray}
+                                                          initialGroupOptions={initialGroupOptions}/>}
+            {isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray}
+                                                          category={editingCategory}
+                                                          setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
+                                                          oldAmount={editingOldAmount}
+                                                          initialGroupOptions={initialGroupOptions}/>}
 
             <AddNewBudgetButton setIsFormVisible={setIsCreateBudgetVisible} />
         </div>
