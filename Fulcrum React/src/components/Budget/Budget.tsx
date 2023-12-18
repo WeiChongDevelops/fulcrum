@@ -53,7 +53,7 @@ export default function Budget() {
             px-16`}>
 
                 <FulcrumAnimation amountLeftToBudget={amountLeftToBudget} totalIncome={totalIncome}/>
-                <BudgetList
+                <GroupList
                     budgetArray={budgetArray}
                     setBudgetArray={setBudgetArray}
                     setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
@@ -69,8 +69,6 @@ export default function Budget() {
                                                           category={editingCategory}
                                                           setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                                                           oldAmount={editingOldAmount}
-                                                          oldGroup={oldGroup}
-                                                          oldIconPath={oldIconPath}
                                                           initialGroupOptions={initialGroupOptions}/>}
 
             <AddNewBudgetButton setIsFormVisible={setIsCreateBudgetVisible} />

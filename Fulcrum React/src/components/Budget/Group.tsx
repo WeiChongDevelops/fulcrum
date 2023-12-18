@@ -17,7 +17,7 @@ export default function Group({ groupName, filteredBudgetArray, setBudgetArray, 
         <div className="flex flex-col bg-amber-200 rounded-3xl my-10 p-5">
             <h1 className="mb-5">{groupName}</h1>
             <div className="flex flex-row">
-                {filteredBudgetArray.map((budgetElement, key) => (
+                {filteredBudgetArray.sort().map((budgetElement, key) => (
                     <BudgetTile
                         category={budgetElement.category}
                         amount={budgetElement.amount}

@@ -210,6 +210,7 @@ export function addIconSelectionFunctionality(setFormData:
             setFormData((currentFormData: any) => {
                 return {...currentFormData, ["iconPath"]: iconPath}
             });
+            console.log(`iconPath: ${iconPath}`)
 
             document.querySelectorAll('.icon-button').forEach(btn => btn.classList.remove('selected'));
             icon.classList.add('selected');

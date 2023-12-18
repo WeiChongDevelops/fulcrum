@@ -26,6 +26,8 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
+
+        addIconSelectionFunctionality(setFormData);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -35,8 +37,6 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
         setFormData( currentFormData => {
             return {...currentFormData, [e.target.name]: e.target.value}
         });
-
-        addIconSelectionFunctionality(setFormData);
     }
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
