@@ -21,6 +21,7 @@ export default function Budget() {
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
     const [initialGroupOptions, setInitialGroupOptions] = useState<GroupOptionsFormattedData[]>([]);
+    const [groupOfNewItem, setGroupOfNewItem] = useState<string>("");
 
     useEffect(() => {
         getBudgetList()
@@ -44,11 +45,7 @@ export default function Budget() {
             <h1 className="my-6">Budget</h1>
             <TotalIncomeDisplay totalIncome={totalIncome} setTotalIncome={setTotalIncome} amountLeftToBudget={amountLeftToBudget}/>
 
-
-            <div className={`elementsBelowPopUpForm ${(isCreateBudgetVisible || isUpdateBudgetVisible) && "blur"} 
-            
-            
-            px-16`}>
+            <div className={`elementsBelowPopUpForm ${(isCreateBudgetVisible || isUpdateBudgetVisible) && "blur"} px-16`}>
 
                 <FulcrumAnimation amountLeftToBudget={amountLeftToBudget} totalIncome={totalIncome}/>
                 {setInitialGroupOptions.length > 0 && <GroupList
@@ -58,12 +55,14 @@ export default function Budget() {
                     setEditingCategory={setEditingCategory}
                     setEditingOldAmount={setEditingOldAmount}
                     initialGroupOptions={initialGroupOptions}
-                />}
+                    setGroupOfNewItem={setGroupOfNewItem}
+                    setIsCreateBudgetVisible={setIsCreateBudgetVisible}/>}
 
             </div>
             {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                                                           setBudgetArray={setBudgetArray}
-                                                          initialGroupOptions={initialGroupOptions}/>}
+                                                          initialGroupOptions={initialGroupOptions}
+                                                          groupOfNewItem={groupOfNewItem}/>}
             {isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray}
                                                           category={editingCategory}
                                                           setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}

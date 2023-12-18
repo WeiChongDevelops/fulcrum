@@ -12,11 +12,12 @@ interface DBInsertionFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     initialGroupOptions: GroupOptionsFormattedData[];
+    groupOfNewItem: string;
 }
 
-export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions}: DBInsertionFormProps) {
+export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions, groupOfNewItem }: DBInsertionFormProps) {
 
-    const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: ""});
+    const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupOfNewItem});
     const formRef = useRef<HTMLDivElement>(null);
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
@@ -52,7 +53,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
         setIsCreateBudgetVisible(false)
 
         await handleBudgetCreation(formData, setBudgetArray, newBudgetItem);
-        setFormData({ category: "", amount: 0, iconPath: "", group: ""});
+        setFormData({ category: "", amount: 0, iconPath: "", group: groupOfNewItem});
     }
 
     function handleGroupInputChange(e: any) {
@@ -106,6 +107,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                 <CreatableSelect
                     id="group"
                     name="group"
+                    defaultInputValue={groupOfNewItem}
                     options={initialGroupOptions}
                     onChange={handleGroupInputChange}
                     styles={colourStyles}
