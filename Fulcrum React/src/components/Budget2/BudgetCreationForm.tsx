@@ -2,64 +2,61 @@ import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addIconSelectionFunctionality,
+    BudgetCreationFormData,
     BudgetItemEntity,
-    BudgetUpdatingFormData,
-    getBudgetList,
-    handleBudgetUpdating,
-    RetrievedGroupData
+    handleBudgetCreation, RetrievedGroupData
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 
-interface DBUpdatingFormProps {
+interface DBInsertionFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-    category: string | null;
-    setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
-    oldAmount: number;
+    setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     initialGroupOptions: RetrievedGroupData[] | undefined;
-    oldGroup: string;
-    oldIconPath: string;
 }
 
-export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, oldAmount, oldGroup, oldIconPath, initialGroupOptions }: DBUpdatingFormProps) {
+export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions}: DBInsertionFormProps) {
 
-
-    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: oldAmount, iconPath: oldIconPath, group: oldGroup });
+    const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: ""});
     const formRef = useRef<HTMLDivElement>(null);
-
-
-
-    useEffect(() => {
-        window.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            window.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setIsUpdateBudgetVisible(false);
+            setIsCreateBudgetVisible(false);
         }
     };
 
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-        setFormData(currentFormData => ({ ...currentFormData, [e.target.name]: e.target.value }));
+        setFormData( currentFormData => {
+            return {...currentFormData, [e.target.name]: e.target.value}
+        });
+
         addIconSelectionFunctionality(setFormData);
+    }
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        const newBudgetItem: BudgetItemEntity = {
+            category: formData.category,
+            amount: formData.amount ? parseFloat(String(formData.amount)) : 0,
+            iconPath: formData.iconPath != "" ? formData.iconPath : "/src/assets/category-icons/category-default-icon.svg",
+            group: formData.group ? formData.group : "Miscellaneous"
+        }
+
+        setBudgetArray(current => [...current, newBudgetItem])
+        setIsCreateBudgetVisible(false)
+
+        await handleBudgetCreation(formData, setBudgetArray, newBudgetItem);
+        setFormData({ category: "", amount: 0, iconPath: "", group: ""});
     }
 
     function handleGroupInputChange(e: any) {
         setFormData(currentFormData => ({ ...currentFormData, group: e.value }));
-    }
-
-    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-
-        setIsUpdateBudgetVisible(false);
-
-        console.log(formData)
-        await handleBudgetUpdating(category, formData);
-
-        setFormData({ amount: oldAmount, iconPath: oldIconPath, group: oldGroup });
-        getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
 
     const colourStyles = {
@@ -70,33 +67,41 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
     };
 
     return (
-        <div ref={formRef} className="budgetForm fixed flex flex-col justify-start items-center rounded-3xl text-white">
+        <div ref={formRef}  className="budgetForm fixed flex flex-col justify-center items-center rounded-3xl">
 
             <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setIsUpdateBudgetVisible(false);
+                e.preventDefault()
+                setIsCreateBudgetVisible(false)
             }}>Close</button>
 
-            <h1 className="mb-6">Updating Budget for {category}</h1>
+            <h1 className="mb-6">New Budget Item</h1>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
+                <label htmlFor="category">Category</label>
+                <input type="text"
+                       onChange={handleInputChange}
+                       value={formData.category}
+                       name="category"
+                       id="category"
+                       className="mb-3"
+                       required/>
                 <label htmlFor="amount">Amount</label>
-                <input type="number" onChange={handleInputChange}
-                       value={formData.amount ?? ""}
+                <input type="number"
+                       onChange={handleInputChange}
+                       value={formData.amount === 0 ? "" : formData.amount}
                        name="amount"
                        id="amount"
                        className="mb-3"
-                       placeholder={oldAmount?.toString()}
                        min={0.01}
                        step={0.01}
-                />
+                       required/>
                 <label htmlFor="group">Group</label>
                 {/*<input type="text"*/}
                 {/*       onChange={handleInputChange}*/}
                 {/*       value={formData.group}*/}
                 {/*       name="group"*/}
                 {/*       id="group"*/}
-                {/*       className="mb-3"/>*/}
+                {/*       className="mb-3"*/}
+                {/*       placeholder="Miscellaneous"/>*/}
 
                 <CreatableSelect
                     id="group"
@@ -105,7 +110,6 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
                     onChange={handleGroupInputChange}
                     styles={colourStyles}
                 />
-
 
                 <div id="icon-selector">
                     <button type="button" className="category-icon-selectable" data-value="category-bank-icon.svg">
@@ -119,8 +123,9 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
                     </button>
                 </div>
                 <input type="hidden" id="iconPath" name="iconPath" value="test"/>
-                <FulcrumButton displayText="Update Budget" />
+
+                <FulcrumButton displayText="Insert Budget"/>
             </form>
         </div>
-    );
+    )
 }

@@ -16,14 +16,12 @@ interface DBUpdatingFormProps {
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     oldAmount: number;
     initialGroupOptions: RetrievedGroupData[] | undefined;
-    oldGroup: string;
-    oldIconPath: string;
 }
 
-export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, oldAmount, oldGroup, oldIconPath, initialGroupOptions }: DBUpdatingFormProps) {
+export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, oldAmount, initialGroupOptions }: DBUpdatingFormProps) {
 
 
-    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: oldAmount, iconPath: oldIconPath, group: oldGroup });
+    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: oldAmount, iconPath: "", group: "" });
     const formRef = useRef<HTMLDivElement>(null);
 
 
@@ -55,10 +53,9 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
 
         setIsUpdateBudgetVisible(false);
 
-        console.log(formData)
         await handleBudgetUpdating(category, formData);
 
-        setFormData({ amount: oldAmount, iconPath: oldIconPath, group: oldGroup });
+        setFormData({ amount: oldAmount, iconPath: "", group: "" });
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
 

@@ -1,3 +1,4 @@
+import BudgetList from "./BudgetList.tsx";
 import BudgetCreationForm from "./BudgetCreationForm.tsx";
 import {
     BudgetItemEntity,
@@ -11,8 +12,6 @@ import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
 import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
 import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
-import GroupList from "./GroupList.tsx";
-import BudgetList from "./BudgetList.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -69,8 +68,6 @@ export default function Budget() {
                                                           category={editingCategory}
                                                           setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                                                           oldAmount={editingOldAmount}
-                                                          oldGroup={oldGroup}
-                                                          oldIconPath={oldIconPath}
                                                           initialGroupOptions={initialGroupOptions}/>}
 
             <AddNewBudgetButton setIsFormVisible={setIsCreateBudgetVisible} />

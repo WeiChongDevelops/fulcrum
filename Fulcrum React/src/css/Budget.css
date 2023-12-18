@@ -34,3 +34,12 @@ input::placeholder {
 .boxShadow {
     box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 1);
 }
+
+.budgetTile {
+    width: 10%;
+    height: 250px;
+}
+
+.budget-icon {
+    width: 100px;
+}
