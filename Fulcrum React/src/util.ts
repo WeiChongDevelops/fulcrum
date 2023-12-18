@@ -218,7 +218,7 @@ export function addIconSelectionFunctionality(setFormData:
             });
             console.log(`iconPath: ${iconPath}`)
 
-            document.querySelectorAll('.icon-button').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.category-icon-selectable').forEach(btn => btn.classList.remove('selected'));
             icon.classList.add('selected');
         });
     });

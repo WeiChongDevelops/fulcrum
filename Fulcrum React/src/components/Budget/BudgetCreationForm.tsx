@@ -111,7 +111,7 @@ export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVis
                     styles={colourStyles}
                 />
 
-                <div id="icon-selector">
+                <div id="icon-selector" className="my-2">
                     <button type="button" className="category-icon-selectable" data-value="category-bank-icon.svg">
                         <img src="/src/assets/category-icons/category-bank-icon.svg" alt="Bank"/>
                     </button>
