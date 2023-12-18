@@ -5,7 +5,7 @@ import {
     getAmountBudgeted,
     getBudgetList,
     getGroupListAsOptions,
-    RetrievedGroupData
+    BasicGroupData
 } from "../../util.ts";
 import { useEffect, useState } from "react";
 import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
@@ -21,7 +21,7 @@ export default function Budget() {
     const [editingOldAmount, setEditingOldAmount] = useState<number>(0);
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
-    const [initialGroupOptions, setInitialGroupOptions] = useState<RetrievedGroupData[] | undefined> ();
+    const [initialGroupOptions, setInitialGroupOptions] = useState<BasicGroupData[] | undefined> ();
 
     useEffect(() => {
         getBudgetList()

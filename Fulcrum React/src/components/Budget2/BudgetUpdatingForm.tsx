@@ -6,7 +6,7 @@ import {
     BudgetUpdatingFormData,
     getBudgetList,
     handleBudgetUpdating,
-    RetrievedGroupData
+    BasicGroupData
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 
@@ -15,7 +15,7 @@ interface DBUpdatingFormProps {
     category: string | null;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     oldAmount: number;
-    initialGroupOptions: RetrievedGroupData[] | undefined;
+    initialGroupOptions: BasicGroupData[] | undefined;
 }
 
 export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, oldAmount, initialGroupOptions }: DBUpdatingFormProps) {

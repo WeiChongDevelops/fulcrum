@@ -11,11 +11,16 @@ import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
 import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
+import GroupCreationForm from "./GroupCreationForm.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
+
     const [isCreateBudgetVisible, setIsCreateBudgetVisible] = useState<boolean>(false);
     const [isUpdateBudgetVisible, setIsUpdateBudgetVisible] = useState<boolean>(false);
+    const [isCreateGroupVisible, setIsCreateGroupVisible] = useState<boolean>(false);
+
+
     const [editingCategory, setEditingCategory] = useState<string | null>(null);
     const [editingOldAmount, setEditingOldAmount] = useState<number>(0);
     const [totalIncome, setTotalIncome] = useState<number>(1000);
@@ -56,7 +61,8 @@ export default function Budget() {
                     setEditingOldAmount={setEditingOldAmount}
                     initialGroupOptions={initialGroupOptions}
                     setGroupOfNewItem={setGroupOfNewItem}
-                    setIsCreateBudgetVisible={setIsCreateBudgetVisible}/>}
+                    setIsCreateBudgetVisible={setIsCreateBudgetVisible}
+                    setIsCreateGroupVisible={setIsCreateGroupVisible}/>}
 
             </div>
             {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible}
@@ -68,6 +74,8 @@ export default function Budget() {
                                                           setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                                                           oldAmount={editingOldAmount}
                                                           initialGroupOptions={initialGroupOptions}/>}
+            {isCreateGroupVisible && <GroupCreationForm setIsCreateGroupVisible={setIsCreateGroupVisible}
+                                                        setInitialGroupOptions={setInitialGroupOptions}/>}
 
             <AddNewBudgetButton setIsFormVisible={setIsCreateBudgetVisible} />
         </div>

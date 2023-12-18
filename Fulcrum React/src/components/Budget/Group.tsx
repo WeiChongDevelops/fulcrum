@@ -17,11 +17,14 @@ interface GroupProps {
 
 export default function Group({ groupName, filteredBudgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, groupColour, setIsCreateBudgetVisible, setGroupOfNewItem }: GroupProps) {
 
+    console.log("filteredbudgerray:")
+    console.log(filteredBudgetArray)
+
     return (
         <div className="flex flex-col bg-amber-200 rounded-3xl my-10 p-5" style={{backgroundColor: `${groupColour}`}}>
             <h1 className="mb-5">{groupName}</h1>
             <div className="flex flex-row">
-                {filteredBudgetArray.sort().map((budgetElement, key) => (
+                {filteredBudgetArray.length > 0 ? filteredBudgetArray.sort().map((budgetElement, key) => (
                     <BudgetTile
                         category={budgetElement.category}
                         amount={budgetElement.amount}
@@ -32,11 +35,11 @@ export default function Group({ groupName, filteredBudgetArray, setBudgetArray, 
                         setEditingOldAmount={setEditingOldAmount}
                         key={key}
                     />
-                ))}
+                )) : <h1>Empty</h1>}
+                <AddNewBudgetToGroupButton setIsCreateBudgetVisible={setIsCreateBudgetVisible}
+                                           setGroupOfNewItem={setGroupOfNewItem}
+                                           clickedGroup={groupName}/>
             </div>
-            <AddNewBudgetToGroupButton setIsCreateBudgetVisible={setIsCreateBudgetVisible}
-                                       setGroupOfNewItem={setGroupOfNewItem}
-                                       clickedGroup={groupName}/>
         </div>
     );
 }

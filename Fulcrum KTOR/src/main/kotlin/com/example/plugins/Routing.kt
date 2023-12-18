@@ -294,6 +294,31 @@ fun Application.configureRouting() {
             }
         }
 
+        post("/api/createGroup") {
+            try {
+                val groupCreateRequest = call.receive<GroupCreateRequestReceived>()
+
+                val itemToInsert = GroupCreateRequestSent(
+                    userId = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id,
+                    group = groupCreateRequest.group,
+                    colour = groupCreateRequest.colour
+                )
+                val insertedItem = supabase.postgrest["groups"].insert(
+                    itemToInsert,
+                    returning = Returning.REPRESENTATION
+                )
+
+                if (insertedItem.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not added."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Group added successfully."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while creating group", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not added."))
+            }
+        }
+
         post("/api/register") {
             try {
                 val userCreds = call.receive<UserInfo>()

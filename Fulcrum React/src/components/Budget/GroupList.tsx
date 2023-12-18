@@ -1,6 +1,7 @@
 import {BudgetItemEntity, GroupOptionsFormattedData} from "../../util.ts";
 import Group from "./Group.tsx";
 import {Dispatch, SetStateAction} from "react";
+import AddNewGroupButton from "./AddNewGroupButton.tsx";
 
 interface GroupListProps {
     budgetArray: BudgetItemEntity[]
@@ -11,30 +12,26 @@ interface GroupListProps {
     initialGroupOptions: GroupOptionsFormattedData[];
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>
     setGroupOfNewItem: Dispatch<SetStateAction<string>>
+    setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>
 }
 
-export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, initialGroupOptions, setIsCreateBudgetVisible, setGroupOfNewItem }: GroupListProps ) {
+export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, initialGroupOptions, setIsCreateBudgetVisible, setGroupOfNewItem, setIsCreateGroupVisible }: GroupListProps ) {
 
     // 1. Make an array containing unique group in the budgetArray
-    const groupArray = Array.from(new Set(budgetArray.map( (budgetItem: BudgetItemEntity) => budgetItem.group)))
-
-    console.log("INITIAL")
-    console.log(initialGroupOptions)
-
+    // const groupArray = Array.from(new Set(budgetArray.map( (budgetItem: BudgetItemEntity) => budgetItem.group)))
+    const groupArray = initialGroupOptions.map( groupOption => groupOption.label)
 
     return (
-        <>
+        <div>
             {
                 // 2. For each unique group, create a filtered version of the budgetArray with only budgetItems with that group
                 groupArray.map( (group: string, key) => {
                     const filteredBudgetArray = budgetArray.filter( (budgetItem: BudgetItemEntity) => {
                         return budgetItem.group === group
                     })
-                    console.log(`LOOKING FOR COLOUR OF ${group}`)
                     const groupColour = initialGroupOptions.filter( (groupOption) => {
                         return groupOption.value === group
                     } )[0].colour
-                    // const groupColour = "#6ec15d"
                     return <Group groupName={group}
                                   filteredBudgetArray={filteredBudgetArray}
                                   setBudgetArray={setBudgetArray}
@@ -47,6 +44,7 @@ export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBud
                                   key={key}/>
                 })
             }
-        </>
+            <AddNewGroupButton setIsCreateGroupVisible={setIsCreateGroupVisible}/>
+        </div>
     )
 }

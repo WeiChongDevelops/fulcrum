@@ -27,7 +27,7 @@ export interface BudgetUpdatingFormData {
     iconPath: string;
 }
 
-export interface RetrievedGroupData {
+export interface BasicGroupData {
     group: string;
     colour: string;
 }
@@ -188,6 +188,37 @@ export async function getGroupListAsOptions() {
     }
 }
 
+export async function handleGroupCreation(formData: BasicGroupData, setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>, newGroupItem: BasicGroupData) {
+    try {
+        const response = await fetch("http://localhost:8080/api/createGroup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                group: formData.group,
+                colour: formData.colour
+            })
+        });
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+            window.alert("Group name is invalid or already exists.")
+            setInitialGroupOptions(current => {
+                const indexOfInvalidItem = current.map(item => item.label).lastIndexOf(newGroupItem.group);
+                if (indexOfInvalidItem !== -1) {
+                    return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)]
+                }
+                return current;
+            })
+        }
+        const responseData = await response.json()
+        console.log(responseData);
+        setInitialGroupOptions(await getGroupListAsOptions());
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
 export function getRandomColour() {
     const colourArray = [
         '#81e1d7', '#5cd67b', '#6087d6', '#c4696d',
@@ -233,6 +264,8 @@ export function getAmountBudgeted(budgetArray: BudgetItemEntity[]) {
         accumulator + currentValue
     ), 0)
 }
+
+
 
 export function formatNumberWithCommas(numberString: string) {
     return numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
