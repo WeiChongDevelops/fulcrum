@@ -9,12 +9,13 @@ interface GroupProps {
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setEditingCategory: Dispatch<SetStateAction<string | null>>;
     setEditingOldAmount: Dispatch<SetStateAction<number>>;
+    groupColour: string | null;
 }
 
-export default function Group({ groupName, filteredBudgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount }: GroupProps) {
+export default function Group({ groupName, filteredBudgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, groupColour }: GroupProps) {
 
     return (
-        <div className="flex flex-col bg-amber-200 rounded-3xl my-10 p-5">
+        <div className="flex flex-col bg-amber-200 rounded-3xl my-10 p-5" style={{backgroundColor: `${groupColour}`}}>
             <h1 className="mb-5">{groupName}</h1>
             <div className="flex flex-row">
                 {filteredBudgetArray.sort().map((budgetElement, key) => (

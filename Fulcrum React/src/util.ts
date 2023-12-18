@@ -32,6 +32,12 @@ export interface RetrievedGroupData {
     colour: string;
 }
 
+export interface GroupOptionsFormattedData {
+    value: string;
+    label: string;
+    colour: string;
+}
+
 export async function getExpenseList() {
     try {
         const response = await fetch("http://localhost:8080/api/getExpenses", {

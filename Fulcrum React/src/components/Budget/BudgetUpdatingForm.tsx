@@ -4,9 +4,8 @@ import {
     addIconSelectionFunctionality,
     BudgetItemEntity,
     BudgetUpdatingFormData,
-    getBudgetList,
+    getBudgetList, GroupOptionsFormattedData,
     handleBudgetUpdating,
-    RetrievedGroupData
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 
@@ -15,7 +14,7 @@ interface DBUpdatingFormProps {
     category: string | null;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     oldAmount: number;
-    initialGroupOptions: RetrievedGroupData[] | undefined;
+    initialGroupOptions: GroupOptionsFormattedData[];
 }
 
 export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, oldAmount, initialGroupOptions }: DBUpdatingFormProps) {

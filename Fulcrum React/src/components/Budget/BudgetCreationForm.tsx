@@ -3,15 +3,15 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addIconSelectionFunctionality,
     BudgetCreationFormData,
-    BudgetItemEntity,
-    handleBudgetCreation, RetrievedGroupData
+    BudgetItemEntity, GroupOptionsFormattedData,
+    handleBudgetCreation
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 
 interface DBInsertionFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
-    initialGroupOptions: RetrievedGroupData[] | undefined;
+    initialGroupOptions: GroupOptionsFormattedData[];
 }
 
 export default function BudgetCreationForm({setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions}: DBInsertionFormProps) {

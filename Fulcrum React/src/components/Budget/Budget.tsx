@@ -3,8 +3,7 @@ import {
     BudgetItemEntity,
     getAmountBudgeted,
     getBudgetList,
-    getGroupListAsOptions,
-    RetrievedGroupData
+    getGroupListAsOptions, GroupOptionsFormattedData,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
 import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
@@ -12,7 +11,6 @@ import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
 import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
-import BudgetList from "./BudgetList.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -22,12 +20,12 @@ export default function Budget() {
     const [editingOldAmount, setEditingOldAmount] = useState<number>(0);
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
-    const [initialGroupOptions, setInitialGroupOptions] = useState<RetrievedGroupData[] | undefined> ();
+    const [initialGroupOptions, setInitialGroupOptions] = useState<GroupOptionsFormattedData[]>([]);
 
     useEffect(() => {
         getBudgetList()
             .then(budgetList => {
-                setBudgetArray(budgetList)
+                setBudgetArray(budgetList.sort())
             })
         getGroupListAsOptions()
             .then( results => setInitialGroupOptions(results))
@@ -53,13 +51,14 @@ export default function Budget() {
             px-16`}>
 
                 <FulcrumAnimation amountLeftToBudget={amountLeftToBudget} totalIncome={totalIncome}/>
-                <GroupList
+                {setInitialGroupOptions.length > 0 && <GroupList
                     budgetArray={budgetArray}
                     setBudgetArray={setBudgetArray}
                     setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                     setEditingCategory={setEditingCategory}
                     setEditingOldAmount={setEditingOldAmount}
-                />
+                    initialGroupOptions={initialGroupOptions}
+                />}
 
             </div>
             {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible}

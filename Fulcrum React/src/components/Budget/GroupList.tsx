@@ -1,4 +1,4 @@
-import {BudgetItemEntity} from "../../util.ts";
+import {BudgetItemEntity, GroupOptionsFormattedData} from "../../util.ts";
 import Group from "./Group.tsx";
 import {Dispatch, SetStateAction} from "react";
 
@@ -8,12 +8,17 @@ interface GroupListProps {
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setEditingCategory: Dispatch<SetStateAction<string | null>>;
     setEditingOldAmount: Dispatch<SetStateAction<number>>;
+    initialGroupOptions: GroupOptionsFormattedData[];
 }
 
-export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount }: GroupListProps ) {
+export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, initialGroupOptions }: GroupListProps ) {
 
     // 1. Make an array containing unique group in the budgetArray
     const groupArray = Array.from(new Set(budgetArray.map( (budgetItem: BudgetItemEntity) => budgetItem.group)))
+
+    console.log("INITIAL")
+    console.log(initialGroupOptions)
+
 
     return (
         <>
@@ -23,13 +28,19 @@ export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBud
                     const filteredBudgetArray = budgetArray.filter( (budgetItem: BudgetItemEntity) => {
                         return budgetItem.group === group
                     })
-                        return <Group groupName={group}
-                                      filteredBudgetArray={filteredBudgetArray}
-                                      setBudgetArray={setBudgetArray}
-                                      setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
-                                      setEditingCategory={setEditingCategory}
-                                      setEditingOldAmount={setEditingOldAmount}
-                                      key={key}/>
+                    console.log(`LOOKING FOR COLOUR OF ${group}`)
+                    const groupColour = initialGroupOptions.filter( (groupOption) => {
+                        return groupOption.value === group
+                    } )[0].colour
+                    // const groupColour = "#6ec15d"
+                    return <Group groupName={group}
+                                  filteredBudgetArray={filteredBudgetArray}
+                                  setBudgetArray={setBudgetArray}
+                                  setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
+                                  setEditingCategory={setEditingCategory}
+                                  setEditingOldAmount={setEditingOldAmount}
+                                  groupColour={groupColour}
+                                  key={key}/>
                 })
             }
         </>
