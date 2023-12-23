@@ -65,8 +65,8 @@ export default function GroupCreationForm(this: any, { setIsCreateGroupVisible, 
         <div ref={formRef} className="budgetForm fixed flex flex-col justify-center items-center rounded-3xl">
 
             <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
-                e.preventDefault()
-                setIsCreateGroupVisible(false)
+                e.preventDefault();
+                setIsCreateGroupVisible(false);
             }}>Close</button>
 
             <h1 className="mb-6">New Group</h1>

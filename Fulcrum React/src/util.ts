@@ -280,7 +280,6 @@ export function getAmountBudgeted(budgetArray: BudgetItemEntity[]) {
 }
 
 
-
 export function formatNumberWithCommas(numberString: string) {
     return numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };

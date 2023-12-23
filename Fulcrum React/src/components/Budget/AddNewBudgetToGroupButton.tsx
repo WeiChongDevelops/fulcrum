@@ -14,7 +14,7 @@ export default function AddNewBudgetToGroupButton({ setIsCreateBudgetVisible, se
     }
 
     return (
-        <button onClick={handleClick}>
+        <button className="addBudgetButton" onClick={handleClick}>
             <b>+</b>
         </button>
     )

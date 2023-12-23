@@ -52,6 +52,7 @@ export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVi
 
         setBudgetArray(current => [...current, newBudgetItem])
 
+        setIsCreateBudgetVisible(false);
         await handleBudgetCreation(formData, setBudgetArray, newBudgetItem);
         setFormData({ category: "", amount: 0, iconPath: "", group: groupOfNewItem});
     }
@@ -96,13 +97,6 @@ export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVi
                        step={0.01}
                        required/>
                 <label htmlFor="group">Group</label>
-                {/*<input type="text"*/}
-                {/*       onChange={handleInputChange}*/}
-                {/*       value={formData.group}*/}
-                {/*       name="group"*/}
-                {/*       id="group"*/}
-                {/*       className="mb-3"*/}
-                {/*       placeholder="Miscellaneous"/>*/}
 
                 <CreatableSelect
                     id="group"

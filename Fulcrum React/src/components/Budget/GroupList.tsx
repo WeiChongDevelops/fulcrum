@@ -18,8 +18,8 @@ interface GroupListProps {
 export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, initialGroupOptions, setIsCreateBudgetVisible, setGroupOfNewItem, setIsCreateGroupVisible }: GroupListProps ) {
 
     // 1. Make an array containing unique group in the budgetArray
-    // const groupArray = Array.from(new Set(budgetArray.map( (budgetItem: BudgetItemEntity) => budgetItem.group)))
     const groupArray = initialGroupOptions.map( groupOption => groupOption.label)
+    console.log(groupArray)
 
     return (
         <div>

@@ -38,6 +38,11 @@ export default function Budget() {
     }, []);
 
     useEffect( () => {
+        getGroupListAsOptions()
+            .then( results => setInitialGroupOptions(results))
+    }, [budgetArray])
+
+    useEffect( () => {
         setAmountLeftToBudget(totalIncome - getAmountBudgeted(budgetArray))
     },[budgetArray, totalIncome])
 
