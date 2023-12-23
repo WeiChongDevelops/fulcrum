@@ -67,7 +67,8 @@ export default function Budget() {
                     initialGroupOptions={initialGroupOptions}
                     setGroupOfNewItem={setGroupOfNewItem}
                     setIsCreateBudgetVisible={setIsCreateBudgetVisible}
-                    setIsCreateGroupVisible={setIsCreateGroupVisible}/>}
+                    setIsCreateGroupVisible={setIsCreateGroupVisible}
+                    setInitialGroupOptions={setInitialGroupOptions}/>}
 
             </div>
             {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible}

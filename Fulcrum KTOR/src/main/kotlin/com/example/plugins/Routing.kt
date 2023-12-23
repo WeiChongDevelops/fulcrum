@@ -319,6 +319,40 @@ fun Application.configureRouting() {
             }
         }
 
+    delete("/api/deleteGroup") {
+        val groupDeleteRequest = call.receive<GroupDeleteRequestReceived>()
+        // First we reassign any groups with this name to miscellaneous
+        try {
+            supabase.postgrest["budgets"].update(
+                {
+                    set("group", "Miscellaneous")
+                }
+            ) {
+                eq("group", groupDeleteRequest.group)
+                eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+            }
+        } catch (e: Exception) {
+            call.application.log.error("Error while reassigning budgets to Misc", e)
+            call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group deletion failed at reassignment."))
+        }
+        // Then we delete the group from the groups table
+        try {
+            val deletedGroup = supabase.postgrest["groups"].delete {
+                eq("group", groupDeleteRequest.group)
+                eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+            }
+
+            if (deletedGroup.body == null) {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not deleted."))
+            } else {
+                call.respond(HttpStatusCode.OK, SuccessResponseSent("Group deleted successfully."))
+            }
+        } catch (e: Exception) {
+            call.application.log.error("Error while deleting group", e)
+            call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not deleted."))
+        }
+    }
+
         post("/api/register") {
             try {
                 val userCreds = call.receive<UserInfo>()
