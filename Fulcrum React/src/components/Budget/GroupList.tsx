@@ -10,13 +10,14 @@ interface GroupListProps {
     setEditingCategory: Dispatch<SetStateAction<string | null>>;
     setEditingOldAmount: Dispatch<SetStateAction<number>>;
     initialGroupOptions: GroupOptionsFormattedData[];
-    setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>
-    setGroupOfNewItem: Dispatch<SetStateAction<string>>
-    setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>
-    setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>
+    setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
+    setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
+    setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>;
+    setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>;
+    setGroupColourOfNewItem: Dispatch<SetStateAction<string>>;
 }
 
-export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, initialGroupOptions, setIsCreateBudgetVisible, setGroupOfNewItem, setIsCreateGroupVisible, setInitialGroupOptions }: GroupListProps ) {
+export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, initialGroupOptions, setIsCreateBudgetVisible, setGroupNameOfNewItem, setIsCreateGroupVisible, setInitialGroupOptions, setGroupColourOfNewItem }: GroupListProps ) {
 
     // 1. Make an array containing unique group in the budgetArray
     const groupArray = initialGroupOptions.map( groupOption => groupOption.label)
@@ -30,9 +31,9 @@ export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBud
                     const filteredBudgetArray = budgetArray.filter( (budgetItem: BudgetItemEntity) => {
                         return budgetItem.group === group
                     })
-                    const groupColour = initialGroupOptions.filter( (groupOption) => {
+                    const groupColour: string = initialGroupOptions.filter( (groupOption) => {
                         return groupOption.value === group
-                    } )[0].colour
+                    } )[0].colour!!
                     return <Group groupName={group}
                                   filteredBudgetArray={filteredBudgetArray}
                                   setBudgetArray={setBudgetArray}
@@ -41,7 +42,8 @@ export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBud
                                   setEditingOldAmount={setEditingOldAmount}
                                   groupColour={groupColour}
                                   setIsCreateBudgetVisible={setIsCreateBudgetVisible}
-                                  setGroupOfNewItem={setGroupOfNewItem}
+                                  setGroupNameOfNewItem={setGroupNameOfNewItem}
+                                  setGroupColourOfNewItem={setGroupColourOfNewItem}
                                   setInitialGroupOptions={setInitialGroupOptions}
                                   key={key}/>
                 })

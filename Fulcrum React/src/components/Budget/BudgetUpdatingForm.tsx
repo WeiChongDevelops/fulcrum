@@ -3,7 +3,7 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addIconSelectionFunctionality,
     BudgetItemEntity,
-    BudgetUpdatingFormData,
+    BudgetUpdatingFormData, colourStyles,
     getBudgetList, GroupOptionsFormattedData,
     handleBudgetUpdating,
 } from "../../util.ts";
@@ -58,13 +58,6 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
         setFormData({ amount: oldAmount, iconPath: "", group: "" });
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
-
-    const colourStyles = {
-        control: (styles: any) => ({ ...styles, backgroundColor: "white" }),
-        option: (styles: any, {data}: any) => {
-            return { ...styles, colour: data.color };
-        }
-    };
 
     return (
         <div ref={formRef} className="budgetForm fixed flex flex-col justify-start items-center rounded-3xl text-white">

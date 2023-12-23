@@ -10,10 +10,11 @@ interface GroupProps {
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setEditingCategory: Dispatch<SetStateAction<string | null>>;
     setEditingOldAmount: Dispatch<SetStateAction<number>>;
-    groupColour: string | null;
+    groupColour: string;
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>
-    setGroupOfNewItem: Dispatch<SetStateAction<string>>
+    setGroupNameOfNewItem: Dispatch<SetStateAction<string>>
     setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>
+    setGroupColourOfNewItem: Dispatch<SetStateAction<string>>
 }
 
 export default function Group({ groupName,
@@ -24,7 +25,8 @@ export default function Group({ groupName,
                                   setEditingOldAmount,
                                   groupColour,
                                   setIsCreateBudgetVisible,
-                                  setGroupOfNewItem,
+                                  setGroupNameOfNewItem,
+                                  setGroupColourOfNewItem,
                                   setInitialGroupOptions}: GroupProps) {
 
     function handleEditClick() {
@@ -54,8 +56,10 @@ export default function Group({ groupName,
                     />
                 ))}
                 <AddNewBudgetToGroupButton setIsCreateBudgetVisible={setIsCreateBudgetVisible}
-                                           setGroupOfNewItem={setGroupOfNewItem}
-                                           clickedGroup={groupName}/>
+                                           setGroupNameOfNewItem={setGroupNameOfNewItem}
+                                           setGroupColourOfNewItem={setGroupColourOfNewItem}
+                                           groupNameOfNewItem={groupName}
+                                           groupColourOfNewItem={groupColour}/>
             </div>
 
             <div className="circle-button rounded-full p-1" onClick={handleEditClick}>

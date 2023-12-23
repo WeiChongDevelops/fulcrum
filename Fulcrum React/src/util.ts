@@ -38,6 +38,32 @@ export interface GroupOptionsFormattedData {
     colour: string | null;
 }
 
+
+const dot = (color = 'transparent') => ({
+    alignItems: 'center',
+    display: 'flex',
+
+    ':before': {
+        backgroundColor: color,
+        borderRadius: 10,
+        content: '" "',
+        display: 'block',
+        marginRight: 8,
+        height: 10,
+        width: 10,
+    },
+});
+
+export const colourStyles = {
+    control: (styles: any) => ({ ...styles, backgroundColor: "white" }),
+    option: (styles: any, {data}: any) => {
+        return { ...styles, color: data.colour || "red" };
+    },
+    input: (styles: any) => ({ ...styles, ...dot() }),
+    placeholder: (styles: any) => ({ ...styles, ...dot('#ccc') }),
+    singleValue: (styles: any, {data}: any) => ({ ...styles, ...dot(data.colour) }),
+};
+
 export async function getExpenseList() {
     try {
         const response = await fetch("http://localhost:8080/api/getExpenses", {

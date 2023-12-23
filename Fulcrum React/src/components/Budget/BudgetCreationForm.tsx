@@ -3,7 +3,7 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addIconSelectionFunctionality,
     BudgetCreationFormData,
-    BudgetItemEntity, GroupOptionsFormattedData,
+    BudgetItemEntity, colourStyles, GroupOptionsFormattedData,
     handleBudgetCreation
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
@@ -13,12 +13,13 @@ interface DBInsertionFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     initialGroupOptions: GroupOptionsFormattedData[];
-    groupOfNewItem: string;
+    groupNameOfNewItem: string;
+    groupColourOfNewItem: string;
 }
 
-export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions, groupOfNewItem }: DBInsertionFormProps) {
+export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions, groupNameOfNewItem, groupColourOfNewItem }: DBInsertionFormProps) {
 
-    const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupOfNewItem});
+    const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     const formRef = useRef<HTMLDivElement>(null);
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
@@ -54,19 +55,12 @@ export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVi
 
         setIsCreateBudgetVisible(false);
         await handleBudgetCreation(formData, setBudgetArray, newBudgetItem);
-        setFormData({ category: "", amount: 0, iconPath: "", group: groupOfNewItem});
+        setFormData({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     }
 
     function handleGroupInputChange(e: any) {
         setFormData(currentFormData => ({ ...currentFormData, group: e.value }));
     }
-
-    const colourStyles = {
-        control: (styles: any) => ({ ...styles, backgroundColor: "white" }),
-        option: (styles: any, {data}: any) => {
-            return { ...styles, colour: data.color };
-        }
-    };
 
     return (
         <div ref={formRef}  className="budgetForm fixed flex flex-col justify-center items-center rounded-3xl">
@@ -101,10 +95,23 @@ export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVi
                 <CreatableSelect
                     id="group"
                     name="group"
-                    defaultInputValue={groupOfNewItem}
-                    options={initialGroupOptions}
+                    // defaultInputValue={groupOfNewItem}
+                    // options={initialGroupOptions}
+                    defaultValue={{label: groupNameOfNewItem, value: groupNameOfNewItem, colour: groupColourOfNewItem}}
+                    options={initialGroupOptions.map(option => {
+                        return {label: option.label, value: option.value, colour: option.colour!!}
+                    })}
                     onChange={handleGroupInputChange}
                     styles={colourStyles}
+                    theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                            ...theme.colors,
+                            primary25: '#262925',
+                            primary: "black"
+                        },
+                    })}
                 />
 
                 <div id="icon-selector" className="my-2">

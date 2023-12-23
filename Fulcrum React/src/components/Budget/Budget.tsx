@@ -26,7 +26,8 @@ export default function Budget() {
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
     const [initialGroupOptions, setInitialGroupOptions] = useState<GroupOptionsFormattedData[]>([]);
-    const [groupOfNewItem, setGroupOfNewItem] = useState<string>("");
+    const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
+    const [groupColourOfNewItem, setGroupColourOfNewItem] = useState<string>("");
 
     useEffect(() => {
         getBudgetList()
@@ -65,16 +66,18 @@ export default function Budget() {
                     setEditingCategory={setEditingCategory}
                     setEditingOldAmount={setEditingOldAmount}
                     initialGroupOptions={initialGroupOptions}
-                    setGroupOfNewItem={setGroupOfNewItem}
+                    setGroupNameOfNewItem={setGroupNameOfNewItem}
                     setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                     setIsCreateGroupVisible={setIsCreateGroupVisible}
-                    setInitialGroupOptions={setInitialGroupOptions}/>}
+                    setInitialGroupOptions={setInitialGroupOptions}
+                    setGroupColourOfNewItem={setGroupColourOfNewItem}/>}
 
             </div>
             {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                                                           setBudgetArray={setBudgetArray}
                                                           initialGroupOptions={initialGroupOptions}
-                                                          groupOfNewItem={groupOfNewItem}/>}
+                                                          groupNameOfNewItem={groupNameOfNewItem}
+                                                          groupColourOfNewItem={groupColourOfNewItem}/>}
             {isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray}
                                                           category={editingCategory}
                                                           setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
