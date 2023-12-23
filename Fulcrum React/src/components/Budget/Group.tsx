@@ -17,8 +17,8 @@ interface GroupProps {
 
 export default function Group({ groupName, filteredBudgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, groupColour, setIsCreateBudgetVisible, setGroupOfNewItem }: GroupProps) {
 
-    console.log("filteredbudgerray:")
-    console.log(filteredBudgetArray)
+    // If the issue arises again with the colour of the tile being undefined, set a default colour for it to use when the value
+    // is found to be undefined
 
     return (
         <div className="flex flex-col bg-amber-200 rounded-3xl my-10 p-5" style={{backgroundColor: `${groupColour}`}}>

@@ -29,13 +29,13 @@ export interface BudgetUpdatingFormData {
 
 export interface BasicGroupData {
     group: string;
-    colour: string;
+    colour: string | null;
 }
 
 export interface GroupOptionsFormattedData {
     value: string;
     label: string;
-    colour: string;
+    colour: string | null;
 }
 
 export async function getExpenseList() {
@@ -249,10 +249,24 @@ export function addIconSelectionFunctionality(setFormData:
             });
             console.log(`iconPath: ${iconPath}`)
 
-            document.querySelectorAll('.category-icon-selectable').forEach(btn => btn.classList.remove('selected'));
-            icon.classList.add('selected');
+            document.querySelectorAll('.category-icon-selectable').forEach(btn => btn.classList.remove("selectedIcon"));
+            icon.classList.add("selectedIcon");
         });
     });
+}
+
+export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAction<BasicGroupData>>) {
+    const colourElementList: NodeListOf<HTMLImageElement> = document.querySelectorAll(".group-colour-triangle");
+    colourElementList.forEach(colourSelectable => {
+        colourSelectable.addEventListener("click", (e: MouseEvent) => {
+            e.preventDefault();
+            setFormData((current: BasicGroupData) => {
+                return {...current, ["colour"]: colourSelectable.getAttribute("data-value")}
+            });
+            colourElementList.forEach(colourSelectable => colourSelectable.classList.remove("selectedColour"));
+            colourSelectable.classList.add("selectedColour");
+        })
+    })
 }
 
 export function getAmountBudgeted(budgetArray: BudgetItemEntity[]) {

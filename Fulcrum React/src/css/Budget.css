@@ -15,10 +15,6 @@
     filter: blur(5px);
 }
 
-.selected {
-    outline: aquamarine solid 2px;
-}
-
 input::placeholder {
     text-align: center;
 }
@@ -42,4 +38,70 @@ input::placeholder {
 
 .budget-icon {
     width: 100px;
+}
+
+#icon-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    padding: 60px;
+}
+
+.category-icon-selectable {
+    display: flex;
+    flex: 0 0 15%;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.category-icon-selectable img {
+    width: 40px;
+    height: 40px;
+}
+
+#group-colour-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    padding: 60px;
+}
+
+.group-colour-selectable-container {
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    margin: 10px;
+    flex: 0 0 10%;
+    width: 65px;
+    height: 65px;
+}
+
+.group-colour-triangle {
+    transition: all 0.1s ease;
+    width: 50px;
+    height: 43px;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+
+.selectedIcon {
+    outline: aquamarine solid 2px;
+}
+
+.selectedColour {
+    width: 68px;
+    height: 58px;
+    transform: translate(0, -10%)
+}
+
+@Media screen and (max-width: 1560px) {
+    .category-icon-selectable {
+        flex-basis: auto;
+    }
 }
