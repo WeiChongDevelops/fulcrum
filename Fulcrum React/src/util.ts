@@ -72,6 +72,10 @@ export function getColourOfGroup(groupName: string, groupOptions: GroupOptionsFo
     return null;
 }
 
+export function capitalizeFirstLetter(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export async function getExpenseList() {
     try {
         const response = await fetch("http://localhost:8080/api/getExpenses", {

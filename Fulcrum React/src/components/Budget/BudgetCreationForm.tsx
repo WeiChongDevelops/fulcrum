@@ -3,7 +3,7 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addIconSelectionFunctionality,
     BudgetCreationFormData,
-    BudgetItemEntity, colourStyles, GroupOptionsFormattedData,
+    BudgetItemEntity, capitalizeFirstLetter, colourStyles, GroupOptionsFormattedData,
     handleBudgetCreation
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
@@ -75,7 +75,7 @@ export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVi
                 <label htmlFor="category">Category</label>
                 <input type="text"
                        onChange={handleInputChange}
-                       value={formData.category}
+                       value={capitalizeFirstLetter(formData.category)}
                        name="category"
                        id="category"
                        className="mb-3"
