@@ -80,19 +80,15 @@ export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVi
                        step={0.01}
                 />
                 <label htmlFor="group">Group</label>
-                {/*<input type="text"*/}
-                {/*       onChange={handleInputChange}*/}
-                {/*       value={formData.group}*/}
-                {/*       name="group"*/}
-                {/*       id="group"*/}
-                {/*       className="mb-3"/>*/}
 
                 <CreatableSelect
                     id="group"
                     name="group"
-                    // defaultInputValue={groupOfNewItem}
-                    // options={initialGroupOptions}
-                    defaultValue={{label: oldBudgetBeingEdited.oldGroup, value: oldBudgetBeingEdited.oldGroup, colour: getColourOfGroup(oldBudgetBeingEdited.oldGroup, initialGroupOptions)}}
+                    defaultValue={{
+                        label: oldBudgetBeingEdited.oldGroup,
+                        value: oldBudgetBeingEdited.oldGroup,
+                        colour: getColourOfGroup(oldBudgetBeingEdited.oldGroup, initialGroupOptions)
+                    }}
                     options={initialGroupOptions.map(option => {
                         return {label: option.label, value: option.value, colour: option.colour!!}
                     })}

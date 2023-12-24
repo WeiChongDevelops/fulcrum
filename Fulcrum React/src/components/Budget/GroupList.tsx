@@ -6,13 +6,16 @@ import AddNewGroupButton from "./AddNewGroupButton.tsx";
 interface GroupListProps {
     budgetArray: BudgetItemEntity[]
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-    setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
+
     initialGroupOptions: GroupOptionsFormattedData[];
-    setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
-    setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
-    setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>;
     setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>;
-    setGroupColourOfNewItem: Dispatch<SetStateAction<string>>;
+
+    setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
+    setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
+    setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>;
+
+    setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
+
     setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>
 }
 
@@ -24,7 +27,6 @@ export default function GroupList( { budgetArray,
                                        setGroupNameOfNewItem,
                                        setIsCreateGroupVisible,
                                        setInitialGroupOptions,
-                                       setGroupColourOfNewItem,
                                        setOldBudgetBeingEdited}: GroupListProps ) {
 
     // 1. Make an array containing unique group in the budgetArray
@@ -50,7 +52,6 @@ export default function GroupList( { budgetArray,
                                   groupColour={groupColour}
                                   setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                                   setGroupNameOfNewItem={setGroupNameOfNewItem}
-                                  setGroupColourOfNewItem={setGroupColourOfNewItem}
                                   setInitialGroupOptions={setInitialGroupOptions}
                                   key={key}/>
                 })

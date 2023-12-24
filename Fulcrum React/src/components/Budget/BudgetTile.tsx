@@ -40,7 +40,8 @@ export default function BudgetTile({ category,
     }
 
     return (
-        <div className="boxShadow budgetTile flex flex-col justify-center items-center mx-10 rounded-2xl" style={{backgroundColor: `${tempHardCodedColour}`}}>
+        <div className="boxShadow budgetTile flex flex-col justify-center items-center mx-10 rounded-2xl"
+             style={{backgroundColor: `${tempHardCodedColour}`}}>
             <div className="flex justify-center items-center rounded-full bg-green-950 p-4 w-20 h-20">
                 <img className="budget-icon" src={icon} alt="" />
             </div>

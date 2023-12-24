@@ -4,15 +4,17 @@ import BudgetTile from "./BudgetTile.tsx";
 import AddNewBudgetToGroupButton from "./AddNewBudgetToGroupButton.tsx";
 
 interface GroupProps {
-    groupName: string;
-    filteredBudgetArray: BudgetItemEntity[];
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-    setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
+
+    groupName: string;
     groupColour: string;
+
+    filteredBudgetArray: BudgetItemEntity[];
+
+    setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
     setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>;
-    setGroupColourOfNewItem: Dispatch<SetStateAction<string>>;
     setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>;
 }
 
@@ -23,7 +25,6 @@ export default function Group({ groupName,
                                   groupColour,
                                   setIsCreateBudgetVisible,
                                   setGroupNameOfNewItem,
-                                  setGroupColourOfNewItem,
                                   setInitialGroupOptions,
                                   setOldBudgetBeingEdited}: GroupProps) {
 
@@ -55,9 +56,7 @@ export default function Group({ groupName,
                 ))}
                 <AddNewBudgetToGroupButton setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                                            setGroupNameOfNewItem={setGroupNameOfNewItem}
-                                           setGroupColourOfNewItem={setGroupColourOfNewItem}
-                                           groupNameOfNewItem={groupName}
-                                           groupColourOfNewItem={groupColour}/>
+                                           groupNameOfNewItem={groupName}/>
             </div>
 
             <div className="circle-button rounded-full p-1" onClick={handleEditClick}>

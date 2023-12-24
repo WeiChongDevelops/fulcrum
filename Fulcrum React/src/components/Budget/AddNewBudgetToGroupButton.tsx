@@ -3,17 +3,14 @@ import {Dispatch, SetStateAction} from "react";
 interface AddNewBudgetToGroupButtonProps {
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>
-    setGroupColourOfNewItem: Dispatch<SetStateAction<string>>
     groupNameOfNewItem: string;
-    groupColourOfNewItem: string;
 }
 
-export default function AddNewBudgetToGroupButton({ setIsCreateBudgetVisible, setGroupNameOfNewItem, setGroupColourOfNewItem, groupNameOfNewItem, groupColourOfNewItem }: AddNewBudgetToGroupButtonProps) {
+export default function AddNewBudgetToGroupButton({ setIsCreateBudgetVisible, setGroupNameOfNewItem, groupNameOfNewItem}: AddNewBudgetToGroupButtonProps) {
 
     function handleClick() {
         setIsCreateBudgetVisible(true)
         setGroupNameOfNewItem(groupNameOfNewItem)
-        setGroupColourOfNewItem(groupColourOfNewItem)
     }
 
     return (

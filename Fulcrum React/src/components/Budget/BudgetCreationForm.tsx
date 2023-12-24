@@ -3,7 +3,7 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addIconSelectionFunctionality,
     BudgetCreationFormData,
-    BudgetItemEntity, capitalizeFirstLetter, colourStyles, GroupOptionsFormattedData,
+    BudgetItemEntity, capitalizeFirstLetter, colourStyles, getColourOfGroup, GroupOptionsFormattedData,
     handleBudgetCreation
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
@@ -14,10 +14,9 @@ interface BudgetCreationFormProps {
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     initialGroupOptions: GroupOptionsFormattedData[];
     groupNameOfNewItem: string;
-    groupColourOfNewItem: string;
 }
 
-export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions, groupNameOfNewItem, groupColourOfNewItem }: BudgetCreationFormProps) {
+export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions, groupNameOfNewItem }: BudgetCreationFormProps) {
 
     const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     const formRef = useRef<HTMLDivElement>(null);
@@ -95,9 +94,11 @@ export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVi
                 <CreatableSelect
                     id="group"
                     name="group"
-                    // defaultInputValue={groupOfNewItem}
-                    // options={initialGroupOptions}
-                    defaultValue={{label: groupNameOfNewItem, value: groupNameOfNewItem, colour: groupColourOfNewItem}}
+                    defaultValue={{
+                        label: groupNameOfNewItem,
+                        value: groupNameOfNewItem,
+                        colour: getColourOfGroup(groupNameOfNewItem, initialGroupOptions)
+                }}
                     options={initialGroupOptions.map(option => {
                         return {label: option.label, value: option.value, colour: option.colour!!}
                     })}

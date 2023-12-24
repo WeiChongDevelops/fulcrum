@@ -25,8 +25,8 @@ export default function Budget() {
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
     const [initialGroupOptions, setInitialGroupOptions] = useState<GroupOptionsFormattedData[]>([]);
+
     const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
-    const [groupColourOfNewItem, setGroupColourOfNewItem] = useState<string>("");
 
     useEffect(() => {
         getBudgetList()
@@ -53,11 +53,14 @@ export default function Budget() {
     return (
         <div>
             <h1 className="my-6">Budget</h1>
-            <TotalIncomeDisplay totalIncome={totalIncome} setTotalIncome={setTotalIncome} amountLeftToBudget={amountLeftToBudget}/>
+            <TotalIncomeDisplay
+                totalIncome={totalIncome}
+                setTotalIncome={setTotalIncome}
+                amountLeftToBudget={amountLeftToBudget}/>
 
             <div className={`elementsBelowPopUpForm ${(isCreateBudgetVisible || isUpdateBudgetVisible) && "blur"} px-16`}>
-
                 <FulcrumAnimation amountLeftToBudget={amountLeftToBudget} totalIncome={totalIncome}/>
+
                 {setInitialGroupOptions.length > 0 && <GroupList
                     budgetArray={budgetArray}
                     setBudgetArray={setBudgetArray}
@@ -67,15 +70,12 @@ export default function Budget() {
                     setGroupNameOfNewItem={setGroupNameOfNewItem}
                     setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                     setIsCreateGroupVisible={setIsCreateGroupVisible}
-                    setInitialGroupOptions={setInitialGroupOptions}
-                    setGroupColourOfNewItem={setGroupColourOfNewItem}/>}
-
+                    setInitialGroupOptions={setInitialGroupOptions}/>}
             </div>
             {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                                                           setBudgetArray={setBudgetArray}
                                                           initialGroupOptions={initialGroupOptions}
-                                                          groupNameOfNewItem={groupNameOfNewItem}
-                                                          groupColourOfNewItem={groupColourOfNewItem}/>}
+                                                          groupNameOfNewItem={groupNameOfNewItem}/>}
             {isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray}
                                                           setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                                                           oldBudgetBeingEdited={oldBudgetBeingEdited}

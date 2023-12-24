@@ -80,15 +80,6 @@ export default function GroupCreationForm(this: any, { setIsCreateGroupVisible, 
                        className="mb-3"
                        required/>
 
-                {/*<label htmlFor="colour">Colour Hex (TEMP)</label>*/}
-                {/*<input type="text"*/}
-                {/*       onChange={handleInputChange}*/}
-                {/*       value={formData.colour ? formData.colour: ""}*/}
-                {/*       name="colour"*/}
-                {/*       id="colour"*/}
-                {/*       className="mb-3"*/}
-                {/*       required/>*/}
-
                 <div id="group-colour-selector">
                     <div className="group-colour-selectable-container">
                         <div className="group-colour-triangle bg-[rgb(208,68,67)]" data-value="rgb(208,68,67)"></div>
