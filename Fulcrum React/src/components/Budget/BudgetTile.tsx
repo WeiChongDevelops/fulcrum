@@ -9,18 +9,24 @@ interface BudgetTileProps {
     icon: string;
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
-    setEditingCategory: Dispatch<SetStateAction<string | null>>;
-    setEditingOldAmount: Dispatch<SetStateAction<number>>;
-    setEditingOldGroup: Dispatch<SetStateAction<string>>;
+    setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>;
 }
 
-export default function BudgetTile({ category, amount, group, icon, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, setEditingOldGroup }: BudgetTileProps) {
+export default function BudgetTile({ category,
+                                       amount,
+                                       group,
+                                       icon,
+                                       setBudgetArray,
+                                       setIsUpdateBudgetVisible,
+                                       setOldBudgetBeingEdited }: BudgetTileProps) {
 
     function handleEditClick(e: React.MouseEvent<HTMLDivElement>) {
         e.stopPropagation();
-        setEditingCategory(category);
-        setEditingOldAmount(amount);
-        setEditingOldGroup(group);
+        setOldBudgetBeingEdited({
+            oldCategory: category,
+            oldAmount: amount,
+            oldGroup: group
+        })
 
         setIsUpdateBudgetVisible(true);
     }

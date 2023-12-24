@@ -11,17 +11,15 @@ import CreatableSelect from 'react-select/creatable';
 
 interface DBUpdatingFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-    category: string | null;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
-    editingOldAmount: number;
-    editingOldGroup: string;
+    oldBudgetBeingEdited: { oldAmount: number, oldCategory: string, oldGroup: string }
     initialGroupOptions: GroupOptionsFormattedData[];
 }
 
-export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, editingOldAmount, editingOldGroup, initialGroupOptions }: DBUpdatingFormProps) {
+export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVisible, initialGroupOptions, oldBudgetBeingEdited }: DBUpdatingFormProps) {
 
 
-    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: editingOldAmount, iconPath: "", group: "" });
+    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
     const formRef = useRef<HTMLDivElement>(null);
 
 
@@ -53,10 +51,10 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
 
         setIsUpdateBudgetVisible(false);
 
-        console.log(formData)
-        await handleBudgetUpdating(category, formData);
+        // await handleBudgetUpdating(editingOldCategory, formData);
+        await handleBudgetUpdating(oldBudgetBeingEdited.oldCategory, formData);
 
-        setFormData({ amount: editingOldAmount, iconPath: "", group: "" });
+        setFormData({ amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
 
@@ -69,7 +67,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
                 setIsUpdateBudgetVisible(false);
             }}>Close</button>
 
-            <h1 className="mb-6">Updating Budget for {category}</h1>
+            <h1 className="mb-6">Updating Budget for {oldBudgetBeingEdited.oldCategory}</h1>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="amount">Amount</label>
                 <input type="number" onChange={handleInputChange}
@@ -77,7 +75,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
                        name="amount"
                        id="amount"
                        className="mb-3"
-                       placeholder={editingOldAmount?.toString()}
+                       placeholder={oldBudgetBeingEdited.oldAmount?.toString()}
                        min={0.01}
                        step={0.01}
                 />
@@ -94,7 +92,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
                     name="group"
                     // defaultInputValue={groupOfNewItem}
                     // options={initialGroupOptions}
-                    defaultValue={{label: editingOldGroup, value: editingOldGroup, colour: getColourOfGroup(editingOldGroup, initialGroupOptions)}}
+                    defaultValue={{label: oldBudgetBeingEdited.oldGroup, value: oldBudgetBeingEdited.oldGroup, colour: getColourOfGroup(oldBudgetBeingEdited.oldGroup, initialGroupOptions)}}
                     options={initialGroupOptions.map(option => {
                         return {label: option.label, value: option.value, colour: option.colour!!}
                     })}

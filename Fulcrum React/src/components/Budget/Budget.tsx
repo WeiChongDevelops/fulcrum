@@ -20,10 +20,8 @@ export default function Budget() {
     const [isUpdateBudgetVisible, setIsUpdateBudgetVisible] = useState<boolean>(false);
     const [isCreateGroupVisible, setIsCreateGroupVisible] = useState<boolean>(false);
 
+    const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState({ oldAmount: 0, oldCategory: "", oldGroup: ""})
 
-    const [editingCategory, setEditingCategory] = useState<string | null>(null);
-    const [editingOldAmount, setEditingOldAmount] = useState<number>(0);
-    const [editingOldGroup, setEditingOldGroup] = useState<string>("");
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
     const [initialGroupOptions, setInitialGroupOptions] = useState<GroupOptionsFormattedData[]>([]);
@@ -64,9 +62,7 @@ export default function Budget() {
                     budgetArray={budgetArray}
                     setBudgetArray={setBudgetArray}
                     setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
-                    setEditingCategory={setEditingCategory}
-                    setEditingOldAmount={setEditingOldAmount}
-                    setEditingOldGroup={setEditingOldGroup}
+                    setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                     initialGroupOptions={initialGroupOptions}
                     setGroupNameOfNewItem={setGroupNameOfNewItem}
                     setIsCreateBudgetVisible={setIsCreateBudgetVisible}
@@ -81,10 +77,8 @@ export default function Budget() {
                                                           groupNameOfNewItem={groupNameOfNewItem}
                                                           groupColourOfNewItem={groupColourOfNewItem}/>}
             {isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray}
-                                                          category={editingCategory}
                                                           setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
-                                                          editingOldAmount={editingOldAmount}
-                                                          editingOldGroup={editingOldGroup}
+                                                          oldBudgetBeingEdited={oldBudgetBeingEdited}
                                                           initialGroupOptions={initialGroupOptions}/>}
             {isCreateGroupVisible && <GroupCreationForm setIsCreateGroupVisible={setIsCreateGroupVisible}
                                                         setInitialGroupOptions={setInitialGroupOptions}/>}

@@ -4,32 +4,28 @@ import BudgetTile from "./BudgetTile.tsx";
 import AddNewBudgetToGroupButton from "./AddNewBudgetToGroupButton.tsx";
 
 interface GroupProps {
-    groupName: string
-    filteredBudgetArray: BudgetItemEntity[]
+    groupName: string;
+    filteredBudgetArray: BudgetItemEntity[];
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
-    setEditingCategory: Dispatch<SetStateAction<string | null>>;
-    setEditingOldAmount: Dispatch<SetStateAction<number>>;
     groupColour: string;
-    setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>
-    setGroupNameOfNewItem: Dispatch<SetStateAction<string>>
-    setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>
-    setGroupColourOfNewItem: Dispatch<SetStateAction<string>>
-    setEditingOldGroup: Dispatch<SetStateAction<string>>
+    setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
+    setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
+    setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>;
+    setGroupColourOfNewItem: Dispatch<SetStateAction<string>>;
+    setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>;
 }
 
 export default function Group({ groupName,
                                   filteredBudgetArray,
                                   setBudgetArray,
                                   setIsUpdateBudgetVisible,
-                                  setEditingCategory,
-                                  setEditingOldAmount,
                                   groupColour,
                                   setIsCreateBudgetVisible,
                                   setGroupNameOfNewItem,
                                   setGroupColourOfNewItem,
                                   setInitialGroupOptions,
-                                  setEditingOldGroup}: GroupProps) {
+                                  setOldBudgetBeingEdited}: GroupProps) {
 
     function handleEditClick() {
         // Open a form to edit the group name/colour
@@ -53,9 +49,7 @@ export default function Group({ groupName,
                         icon={budgetElement.iconPath}
                         setBudgetArray={setBudgetArray}
                         setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
-                        setEditingCategory={setEditingCategory}
-                        setEditingOldAmount={setEditingOldAmount}
-                        setEditingOldGroup={setEditingOldGroup}
+                        setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                         key={key}
                     />
                 ))}

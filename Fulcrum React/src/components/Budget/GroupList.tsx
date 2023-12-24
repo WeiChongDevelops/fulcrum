@@ -7,18 +7,25 @@ interface GroupListProps {
     budgetArray: BudgetItemEntity[]
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
-    setEditingCategory: Dispatch<SetStateAction<string | null>>;
-    setEditingOldAmount: Dispatch<SetStateAction<number>>;
     initialGroupOptions: GroupOptionsFormattedData[];
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
     setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>;
     setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>;
     setGroupColourOfNewItem: Dispatch<SetStateAction<string>>;
-    setEditingOldGroup: Dispatch<SetStateAction<string>>;
+    setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>
 }
 
-export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, initialGroupOptions, setIsCreateBudgetVisible, setGroupNameOfNewItem, setIsCreateGroupVisible, setInitialGroupOptions, setGroupColourOfNewItem, setEditingOldGroup }: GroupListProps ) {
+export default function GroupList( { budgetArray,
+                                       setBudgetArray,
+                                       setIsUpdateBudgetVisible,
+                                       initialGroupOptions,
+                                       setIsCreateBudgetVisible,
+                                       setGroupNameOfNewItem,
+                                       setIsCreateGroupVisible,
+                                       setInitialGroupOptions,
+                                       setGroupColourOfNewItem,
+                                       setOldBudgetBeingEdited}: GroupListProps ) {
 
     // 1. Make an array containing unique group in the budgetArray
     const groupArray = initialGroupOptions.map( groupOption => groupOption.label)
@@ -39,9 +46,7 @@ export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBud
                                   filteredBudgetArray={filteredBudgetArray}
                                   setBudgetArray={setBudgetArray}
                                   setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
-                                  setEditingCategory={setEditingCategory}
-                                  setEditingOldAmount={setEditingOldAmount}
-                                  setEditingOldGroup={setEditingOldGroup}
+                                  setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                                   groupColour={groupColour}
                                   setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                                   setGroupNameOfNewItem={setGroupNameOfNewItem}
