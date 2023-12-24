@@ -15,9 +15,10 @@ interface GroupListProps {
     setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>;
     setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>;
     setGroupColourOfNewItem: Dispatch<SetStateAction<string>>;
+    setEditingOldGroup: Dispatch<SetStateAction<string>>;
 }
 
-export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, initialGroupOptions, setIsCreateBudgetVisible, setGroupNameOfNewItem, setIsCreateGroupVisible, setInitialGroupOptions, setGroupColourOfNewItem }: GroupListProps ) {
+export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, initialGroupOptions, setIsCreateBudgetVisible, setGroupNameOfNewItem, setIsCreateGroupVisible, setInitialGroupOptions, setGroupColourOfNewItem, setEditingOldGroup }: GroupListProps ) {
 
     // 1. Make an array containing unique group in the budgetArray
     const groupArray = initialGroupOptions.map( groupOption => groupOption.label)
@@ -40,6 +41,7 @@ export default function GroupList( { budgetArray, setBudgetArray, setIsUpdateBud
                                   setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                                   setEditingCategory={setEditingCategory}
                                   setEditingOldAmount={setEditingOldAmount}
+                                  setEditingOldGroup={setEditingOldGroup}
                                   groupColour={groupColour}
                                   setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                                   setGroupNameOfNewItem={setGroupNameOfNewItem}

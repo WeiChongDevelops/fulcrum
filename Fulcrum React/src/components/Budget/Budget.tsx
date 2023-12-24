@@ -23,6 +23,7 @@ export default function Budget() {
 
     const [editingCategory, setEditingCategory] = useState<string | null>(null);
     const [editingOldAmount, setEditingOldAmount] = useState<number>(0);
+    const [editingOldGroup, setEditingOldGroup] = useState<string>("");
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
     const [initialGroupOptions, setInitialGroupOptions] = useState<GroupOptionsFormattedData[]>([]);
@@ -65,6 +66,7 @@ export default function Budget() {
                     setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                     setEditingCategory={setEditingCategory}
                     setEditingOldAmount={setEditingOldAmount}
+                    setEditingOldGroup={setEditingOldGroup}
                     initialGroupOptions={initialGroupOptions}
                     setGroupNameOfNewItem={setGroupNameOfNewItem}
                     setIsCreateBudgetVisible={setIsCreateBudgetVisible}
@@ -81,7 +83,8 @@ export default function Budget() {
             {isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray}
                                                           category={editingCategory}
                                                           setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
-                                                          oldAmount={editingOldAmount}
+                                                          editingOldAmount={editingOldAmount}
+                                                          editingOldGroup={editingOldGroup}
                                                           initialGroupOptions={initialGroupOptions}/>}
             {isCreateGroupVisible && <GroupCreationForm setIsCreateGroupVisible={setIsCreateGroupVisible}
                                                         setInitialGroupOptions={setInitialGroupOptions}/>}

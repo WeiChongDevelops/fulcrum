@@ -64,6 +64,14 @@ export const colourStyles = {
     singleValue: (styles: any, {data}: any) => ({ ...styles, ...dot(data.colour) }),
 };
 
+export function getColourOfGroup(groupName: string, groupOptions: GroupOptionsFormattedData[]) {
+    const groupOption = groupOptions.find(groupOption => groupOption.label === groupName);
+    if (groupOption) {
+        return groupOption.colour;
+    }
+    return null;
+}
+
 export async function getExpenseList() {
     try {
         const response = await fetch("http://localhost:8080/api/getExpenses", {

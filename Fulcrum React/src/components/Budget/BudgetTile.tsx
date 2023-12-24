@@ -5,20 +5,24 @@ import React, {Dispatch, SetStateAction} from "react";
 interface BudgetTileProps {
     category: string;
     amount: number;
+    group: string;
     icon: string;
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setEditingCategory: Dispatch<SetStateAction<string | null>>;
     setEditingOldAmount: Dispatch<SetStateAction<number>>;
+    setEditingOldGroup: Dispatch<SetStateAction<string>>;
 }
 
-export default function BudgetTile({ category, amount, icon, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount}: BudgetTileProps) {
+export default function BudgetTile({ category, amount, group, icon, setBudgetArray, setIsUpdateBudgetVisible, setEditingCategory, setEditingOldAmount, setEditingOldGroup }: BudgetTileProps) {
 
     function handleEditClick(e: React.MouseEvent<HTMLDivElement>) {
         e.stopPropagation();
-        setIsUpdateBudgetVisible(true);
         setEditingCategory(category);
         setEditingOldAmount(amount);
+        setEditingOldGroup(group);
+
+        setIsUpdateBudgetVisible(true);
     }
 
     const tempHardCodedColour = "red"

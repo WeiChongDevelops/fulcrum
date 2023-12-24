@@ -4,7 +4,7 @@ import {
     addIconSelectionFunctionality,
     BudgetItemEntity,
     BudgetUpdatingFormData, colourStyles,
-    getBudgetList, GroupOptionsFormattedData,
+    getBudgetList, getColourOfGroup, GroupOptionsFormattedData,
     handleBudgetUpdating,
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
@@ -13,14 +13,15 @@ interface DBUpdatingFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     category: string | null;
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
-    oldAmount: number;
+    editingOldAmount: number;
+    editingOldGroup: string;
     initialGroupOptions: GroupOptionsFormattedData[];
 }
 
-export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, oldAmount, initialGroupOptions }: DBUpdatingFormProps) {
+export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpdateBudgetVisible, editingOldAmount, editingOldGroup, initialGroupOptions }: DBUpdatingFormProps) {
 
 
-    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: oldAmount, iconPath: "", group: "" });
+    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: editingOldAmount, iconPath: "", group: "" });
     const formRef = useRef<HTMLDivElement>(null);
 
 
@@ -55,7 +56,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
         console.log(formData)
         await handleBudgetUpdating(category, formData);
 
-        setFormData({ amount: oldAmount, iconPath: "", group: "" });
+        setFormData({ amount: editingOldAmount, iconPath: "", group: "" });
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
 
@@ -76,7 +77,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
                        name="amount"
                        id="amount"
                        className="mb-3"
-                       placeholder={oldAmount?.toString()}
+                       placeholder={editingOldAmount?.toString()}
                        min={0.01}
                        step={0.01}
                 />
@@ -91,9 +92,23 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
                 <CreatableSelect
                     id="group"
                     name="group"
-                    options={initialGroupOptions}
+                    // defaultInputValue={groupOfNewItem}
+                    // options={initialGroupOptions}
+                    defaultValue={{label: editingOldGroup, value: editingOldGroup, colour: getColourOfGroup(editingOldGroup, initialGroupOptions)}}
+                    options={initialGroupOptions.map(option => {
+                        return {label: option.label, value: option.value, colour: option.colour!!}
+                    })}
                     onChange={handleGroupInputChange}
                     styles={colourStyles}
+                    theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                            ...theme.colors,
+                            primary25: '#262925',
+                            primary: "black"
+                        },
+                    })}
                 />
 
 

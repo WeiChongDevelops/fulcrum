@@ -9,7 +9,7 @@ import {
 import CreatableSelect from 'react-select/creatable';
 import "../../css/Budget.css"
 
-interface DBInsertionFormProps {
+interface BudgetCreationFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     initialGroupOptions: GroupOptionsFormattedData[];
@@ -17,7 +17,7 @@ interface DBInsertionFormProps {
     groupColourOfNewItem: string;
 }
 
-export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions, groupNameOfNewItem, groupColourOfNewItem }: DBInsertionFormProps) {
+export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions, groupNameOfNewItem, groupColourOfNewItem }: BudgetCreationFormProps) {
 
     const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     const formRef = useRef<HTMLDivElement>(null);

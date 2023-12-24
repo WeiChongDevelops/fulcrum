@@ -15,6 +15,7 @@ interface GroupProps {
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>
     setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>
     setGroupColourOfNewItem: Dispatch<SetStateAction<string>>
+    setEditingOldGroup: Dispatch<SetStateAction<string>>
 }
 
 export default function Group({ groupName,
@@ -27,7 +28,8 @@ export default function Group({ groupName,
                                   setIsCreateBudgetVisible,
                                   setGroupNameOfNewItem,
                                   setGroupColourOfNewItem,
-                                  setInitialGroupOptions}: GroupProps) {
+                                  setInitialGroupOptions,
+                                  setEditingOldGroup}: GroupProps) {
 
     function handleEditClick() {
         // Open a form to edit the group name/colour
@@ -47,11 +49,13 @@ export default function Group({ groupName,
                     <BudgetTile
                         category={budgetElement.category}
                         amount={budgetElement.amount}
+                        group={groupName}
                         icon={budgetElement.iconPath}
                         setBudgetArray={setBudgetArray}
                         setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                         setEditingCategory={setEditingCategory}
                         setEditingOldAmount={setEditingOldAmount}
+                        setEditingOldGroup={setEditingOldGroup}
                         key={key}
                     />
                 ))}
