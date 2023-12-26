@@ -40,7 +40,16 @@ export default function Group({ groupName,
 
     return (
         <div className="boxShadow flex flex-col bg-amber-200 rounded-3xl my-10 p-5" style={{backgroundColor: `${groupColour}`}}>
-            <h1 className="mb-5">{groupName}</h1>
+            <div className="flex flex-row justify-center items-center mb-5">
+                <h1 className="mr-4">{groupName}</h1>
+
+                <div className="circle-button rounded-full p-1 mt-3" onClick={handleEditClick}>
+                    <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-6 h-6" />
+                </div>
+                <div className="circle-button rounded-full p-1 mt-3" onClick={handleDeleteClick}>
+                    <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="mx-1 w-6 h-6" />
+                </div>
+            </div>
             <div className="flex flex-row">
                 {filteredBudgetArray.length > 0 && filteredBudgetArray.sort().map((budgetElement, key) => (
                     <BudgetTile
@@ -59,12 +68,6 @@ export default function Group({ groupName,
                                            groupNameOfNewItem={groupName}/>
             </div>
 
-            <div className="circle-button rounded-full p-1" onClick={handleEditClick}>
-                <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-6 h-6" />
-            </div>
-            <div className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
-                <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="mx-1 w-6 h-6" />
-            </div>
         </div>
     );
 }

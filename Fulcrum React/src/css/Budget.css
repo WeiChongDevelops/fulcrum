@@ -93,9 +93,10 @@ input::placeholder {
     width: 10%;
     height: 250px;
     background: transparent;
-    outline: black 2px dashed;
+    border: black 2px dashed;
     color: black;
 }
+
 
 .addBudgetButton:hover {
     background: rgba(222, 222, 222, 0.1);
