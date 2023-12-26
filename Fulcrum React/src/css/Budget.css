@@ -1,3 +1,12 @@
+/* GLOBAL */
+
+input::placeholder {
+    text-align: center;
+}
+
+
+/* EDIT-DELETE BUTTONS */
+
 .circle-button {
     transition: background-color 0.3s ease;
 }
@@ -7,6 +16,8 @@
     cursor: pointer;
 }
 
+/* BACKGROUND BLUR FOCUS EFFECT*/
+
 .elementsBelowPopUpForm {
     transition: all 0.1s ease-out;
 }
@@ -15,9 +26,8 @@
     filter: blur(5px);
 }
 
-input::placeholder {
-    text-align: center;
-}
+
+/* BUDGET FORMS */
 
 .budgetForm {
     top: 20%;
@@ -27,19 +37,23 @@ input::placeholder {
     background-color: rgba(0,0,0,0.8);
 }
 
-.boxShadow {
-    box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 1);
-}
-
-.budget-name {
-    margin: 5px;
-}
+/* BUDGET TILE AND BOX SHADOW EFFECT */
 
 .budgetTile {
     width: 165px;
     height: 230px;
     margin: 10px 10px;
 }
+
+.budget-name {
+    margin: 5px;
+}
+
+.boxShadow {
+    box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 1);
+}
+
+/* ADD NEW BUDGET BUTTON */
 
 .addBudgetButton {
     width: 165px;
@@ -54,6 +68,9 @@ input::placeholder {
 .addBudgetButton:hover {
     background: rgba(222, 222, 222, 0.1);
 }
+
+
+/* BUDGET ICON SELECTOR */
 
 .budget-icon {
     width: 100px;
@@ -82,6 +99,13 @@ input::placeholder {
     height: 40px;
 }
 
+.selectedIcon {
+    outline: aquamarine solid 2px;
+}
+
+
+/* GROUP COLOUR SELECTOR */
+
 #group-colour-selector {
     display: flex;
     flex-wrap: wrap;
@@ -108,16 +132,14 @@ input::placeholder {
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
-
-.selectedIcon {
-    outline: aquamarine solid 2px;
-}
-
 .selectedColour {
     width: 68px;
     height: 58px;
     transform: translate(0, -10%)
 }
+
+
+/* MEDIA QUERIES */
 
 @Media screen and (max-width: 1560px) {
     .category-icon-selectable {
