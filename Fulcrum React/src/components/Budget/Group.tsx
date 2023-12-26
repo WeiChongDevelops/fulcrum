@@ -58,7 +58,7 @@ export default function Group({ groupName,
                     <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="mx-1 w-6 h-6" />
                 </div>
             </div>
-            <div className="flex flex-row">
+            <div className="flex flex-row flex-wrap flex-shrink-0 basis-0 justify-center">
                 {filteredBudgetArray.length > 0 && filteredBudgetArray.sort().map((budgetElement, key) => (
                     <BudgetTile
                         category={budgetElement.category}

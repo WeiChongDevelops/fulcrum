@@ -32,8 +32,23 @@ input::placeholder {
 }
 
 .budgetTile {
-    width: 10%;
+    width: 180px;
     height: 250px;
+    margin: 25pxg 15px;
+}
+
+.addBudgetButton {
+    width: 180px;
+    height: 250px;
+    background: transparent;
+    border: black 2px dashed;
+    color: black;
+    margin: 0 15px;
+}
+
+
+.addBudgetButton:hover {
+    background: rgba(222, 222, 222, 0.1);
 }
 
 .budget-icon {
@@ -87,19 +102,6 @@ input::placeholder {
     width: 50px;
     height: 43px;
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-}
-
-.addBudgetButton {
-    width: 10%;
-    height: 250px;
-    background: transparent;
-    border: black 2px dashed;
-    color: black;
-}
-
-
-.addBudgetButton:hover {
-    background: rgba(222, 222, 222, 0.1);
 }
 
 
