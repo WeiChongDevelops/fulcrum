@@ -22,8 +22,6 @@ export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVi
     const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
     const formRef = useRef<HTMLDivElement>(null);
 
-
-
     useEffect(() => {
         addIconSelectionFunctionality(setFormData);
         window.addEventListener("mousedown", handleClickOutside);
@@ -51,7 +49,6 @@ export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVi
 
         setIsUpdateBudgetVisible(false);
 
-        // await handleBudgetUpdating(editingOldCategory, formData);
         await handleBudgetUpdating(oldBudgetBeingEdited.oldCategory, formData);
 
         setFormData({ amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
@@ -70,7 +67,8 @@ export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVi
             <h1 className="mb-6">Updating Budget for {oldBudgetBeingEdited.oldCategory}</h1>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="amount">Amount</label>
-                <input type="number" onChange={handleInputChange}
+                <input type="number"
+                       onChange={handleInputChange}
                        value={formData.amount ?? ""}
                        name="amount"
                        id="amount"

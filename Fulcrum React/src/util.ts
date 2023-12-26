@@ -284,7 +284,51 @@ export async function handleGroupCreation(formData: BasicGroupData, setInitialGr
         console.log(responseData);
         setInitialGroupOptions(await getGroupListAsOptions());
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Failed to create group:", error);
+    }
+}
+
+export async function handleGroupUpdating(originalGroupName: string, originalColour: string, newGroupName: string, newColour: string | null, setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>, initialGroupOptions: GroupOptionsFormattedData[]) {
+    if (!initialGroupOptions.map(option => option.label).includes(newGroupName)) {
+        try {
+            const response = await fetch("http://localhost:8080/api/updateGroup", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify( {
+                    originalGroupName: originalGroupName,
+                    newGroupName: newGroupName,
+                    newColour: newColour ? newColour : ""
+                })
+            });
+            if (!response.ok) {
+                console.error(`HTTP error - status: ${response.status}`)
+                window.alert("Updated group is invalid.")
+                setInitialGroupOptions(currentGroupOptions => {
+
+                    const revertedGroupOptions = [...currentGroupOptions]
+                    const indexOfInvalidlyEditedOption = currentGroupOptions.map(option => option.label).lastIndexOf(newGroupName);
+                    if (indexOfInvalidlyEditedOption !== -1) {
+                        revertedGroupOptions[indexOfInvalidlyEditedOption] = {
+                            label: originalGroupName,
+                            value: originalGroupName,
+                            colour: originalColour
+                        }
+                    }
+                    return revertedGroupOptions;
+                })
+            } else {
+                console.log("Group successfully updated.")
+                getGroupListAsOptions()
+                    .then(options => setInitialGroupOptions(options))
+            }
+        } catch (error) {
+            console.error("Failed to update group:", error)
+        }
+    } else {
+        console.error("Selected group name already taken.")
+        window.alert("Selected group name already taken.")
     }
 }
 

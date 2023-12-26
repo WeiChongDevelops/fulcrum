@@ -12,6 +12,7 @@ import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
 import GroupCreationForm from "./GroupCreationForm.tsx";
+import GroupUpdatingForm from "./GroupUpdatingForm.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -19,8 +20,10 @@ export default function Budget() {
     const [isCreateBudgetVisible, setIsCreateBudgetVisible] = useState<boolean>(false);
     const [isUpdateBudgetVisible, setIsUpdateBudgetVisible] = useState<boolean>(false);
     const [isCreateGroupVisible, setIsCreateGroupVisible] = useState<boolean>(false);
+    const [isUpdateGroupVisible, setIsUpdateGroupVisible] = useState<boolean>(false);
 
     const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState({ oldAmount: 0, oldCategory: "", oldGroup: ""})
+    const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState({ oldColour: "", oldGroupName: "" })
 
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
@@ -66,10 +69,12 @@ export default function Budget() {
                     setBudgetArray={setBudgetArray}
                     setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                     setOldBudgetBeingEdited={setOldBudgetBeingEdited}
+                    setOldGroupBeingEdited={setOldGroupBeingEdited}
                     initialGroupOptions={initialGroupOptions}
                     setGroupNameOfNewItem={setGroupNameOfNewItem}
                     setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                     setIsCreateGroupVisible={setIsCreateGroupVisible}
+                    setIsUpdateGroupVisible={setIsUpdateGroupVisible}
                     setInitialGroupOptions={setInitialGroupOptions}/>}
             </div>
             {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible}
@@ -82,6 +87,11 @@ export default function Budget() {
                                                           initialGroupOptions={initialGroupOptions}/>}
             {isCreateGroupVisible && <GroupCreationForm setIsCreateGroupVisible={setIsCreateGroupVisible}
                                                         setInitialGroupOptions={setInitialGroupOptions}/>}
+            {isUpdateGroupVisible && <GroupUpdatingForm oldGroupBeingEdited={oldGroupBeingEdited}
+                                                        setIsUpdateGroupVisible={setIsUpdateGroupVisible}
+                                                        setBudgetArray={setBudgetArray}
+                                                        setInitialGroupOptions={setInitialGroupOptions}
+                                                        initialGroupOptions={initialGroupOptions}/>}
 
             <AddNewBudgetButton setIsFormVisible={setIsCreateBudgetVisible} />
         </div>

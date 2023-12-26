@@ -319,39 +319,85 @@ fun Application.configureRouting() {
             }
         }
 
-    delete("/api/deleteGroup") {
-        val groupDeleteRequest = call.receive<GroupDeleteRequestReceived>()
-        // First we reassign any groups with this name to miscellaneous
-        try {
-            supabase.postgrest["budgets"].update(
-                {
-                    set("group", "Miscellaneous")
+        delete("/api/deleteGroup") {
+            val groupDeleteRequest = call.receive<GroupDeleteRequestReceived>()
+            // First we reassign any groups with this name to miscellaneous
+            try {
+                supabase.postgrest["budgets"].update(
+                    {
+                        set("group", "Miscellaneous")
+                    }
+                ) {
+                    eq("group", groupDeleteRequest.group)
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                 }
-            ) {
-                eq("group", groupDeleteRequest.group)
-                eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+            } catch (e: Exception) {
+                call.application.log.error("Error while reassigning budgets to Misc", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group deletion failed at reassignment."))
             }
-        } catch (e: Exception) {
-            call.application.log.error("Error while reassigning budgets to Misc", e)
-            call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group deletion failed at reassignment."))
-        }
-        // Then we delete the group from the groups table
-        try {
-            val deletedGroup = supabase.postgrest["groups"].delete {
-                eq("group", groupDeleteRequest.group)
-                eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
-            }
+            // Then we delete the group from the groups table
+            try {
+                val deletedGroup = supabase.postgrest["groups"].delete {
+                    eq("group", groupDeleteRequest.group)
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
 
-            if (deletedGroup.body == null) {
+                if (deletedGroup.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not deleted."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Group deleted successfully."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while deleting group", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not deleted."))
-            } else {
-                call.respond(HttpStatusCode.OK, SuccessResponseSent("Group deleted successfully."))
             }
-        } catch (e: Exception) {
-            call.application.log.error("Error while deleting group", e)
-            call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not deleted."))
         }
-    }
+
+        put("/api/updateGroup") {
+            try {
+                val groupUpdateRequest = call.receive<GroupUpdateRequestReceived>()
+
+                // First, if a new colour was passed, update it
+                if (groupUpdateRequest.newColour.isNotEmpty()) {
+                    val updatedColour = supabase.postgrest["groups"].update(
+                        {
+                            set("colour", groupUpdateRequest.newColour)
+                        }
+                    ) {
+                        eq("group", groupUpdateRequest.originalGroupName)
+                        eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                    }
+                    if (updatedColour.body == null) {
+                        call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group colour not updated."))
+                    } else {
+                        call.respond(HttpStatusCode.OK, SuccessResponseSent("Group colour updated successfully."))
+                    }
+                }
+
+
+                // Then, update the group name. ON UPDATE CASCADE constraint ensures budget entries will be updated.
+                if (groupUpdateRequest.newGroupName == groupUpdateRequest.originalGroupName) {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Group name unchanged."))
+                }
+                val updatedGroupName = supabase.postgrest["groups"].update(
+                    {
+                        set("group", groupUpdateRequest.newGroupName)
+                    }
+                ) {
+                    eq("group", groupUpdateRequest.originalGroupName)
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+
+                if (updatedGroupName.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group name not updated."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Group name updated successfully."))
+                }
+            } catch (e: Exception){
+                call.application.log.error("Error while updating group.", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not updated."))
+            }
+        }
 
         post("/api/register") {
             try {
@@ -387,7 +433,6 @@ fun Application.configureRouting() {
             try {
                 val currentUser = supabase.gotrue.currentSessionOrNull()
                 if (currentUser != null) {
-//                    val user = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
                     call.respond(HttpStatusCode.OK, UserEmail(email = currentUser.user?.email!!))
                 } else {
                     call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("No user logged in."))

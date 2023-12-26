@@ -13,10 +13,12 @@ interface GroupListProps {
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>;
+    setIsUpdateGroupVisible: Dispatch<SetStateAction<boolean>>;
 
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
 
     setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>
+    setOldGroupBeingEdited: Dispatch<SetStateAction<{ oldGroupName: string, oldColour: string }>>
 }
 
 export default function GroupList( { budgetArray,
@@ -26,8 +28,10 @@ export default function GroupList( { budgetArray,
                                        setIsCreateBudgetVisible,
                                        setGroupNameOfNewItem,
                                        setIsCreateGroupVisible,
+                                       setIsUpdateGroupVisible,
                                        setInitialGroupOptions,
-                                       setOldBudgetBeingEdited}: GroupListProps ) {
+                                       setOldBudgetBeingEdited,
+                                       setOldGroupBeingEdited}: GroupListProps ) {
 
     // 1. Make an array containing unique group in the budgetArray
     const groupArray = initialGroupOptions.map( groupOption => groupOption.label)
@@ -49,10 +53,12 @@ export default function GroupList( { budgetArray,
                                   setBudgetArray={setBudgetArray}
                                   setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                                   setOldBudgetBeingEdited={setOldBudgetBeingEdited}
+                                  setOldGroupBeingEdited={setOldGroupBeingEdited}
                                   groupColour={groupColour}
                                   setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                                   setGroupNameOfNewItem={setGroupNameOfNewItem}
                                   setInitialGroupOptions={setInitialGroupOptions}
+                                  setIsUpdateGroupVisible={setIsUpdateGroupVisible}
                                   key={key}/>
                 })
             }

@@ -7,6 +7,7 @@ import {
     handleGroupCreation
 } from "../../util.ts";
 import "../../css/Budget.css"
+import GroupColourSelector from "./GroupColourSelector.tsx";
 
 interface GroupCreationFormProps {
     setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>
@@ -80,50 +81,7 @@ export default function GroupCreationForm(this: any, { setIsCreateGroupVisible, 
                        className="mb-3"
                        required/>
 
-                <div id="group-colour-selector">
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(208,68,67)]" data-value="rgb(208,68,67)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(255,112,122)]" data-value="rgb(255,112,122)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(242,147,203)]" data-value="rgb(242,147,203)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(155,65,241)]" data-value="rgb(155,65,241)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(78,94,233)]" data-value="rgb(78,94,233)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(115,174,240)]" data-value="rgb(115,174,240)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(57,207,221)]" data-value="rgb(57,207,221)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(38,221,155)]" data-value="rgb(38,221,155)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(181,208,75)]" data-value="rgb(181,208,75)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(229,232,57)]" data-value="rgb(229,232,57)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(236,197,154)]" data-value="rgb(236,197,154)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(251,174,56)]" data-value="rgb(251,174,56)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(170,125,66)]" data-value="rgb(170,125,66)"></div>
-                    </div>
-                    <div className="group-colour-selectable-container">
-                        <div className="group-colour-triangle bg-[rgb(211,209,210)]" data-value="rgb(211,209,210)"></div>
-                    </div>
-                </div>
+                <GroupColourSelector/>
 
                 <FulcrumButton displayText="Add New Category Group"/>
             </form>

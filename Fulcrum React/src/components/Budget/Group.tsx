@@ -13,9 +13,13 @@ interface GroupProps {
 
     setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
+    setIsUpdateGroupVisible: Dispatch<SetStateAction<boolean>>;
+
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
     setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>;
+
     setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>;
+    setOldGroupBeingEdited: Dispatch<SetStateAction<{ oldGroupName: string, oldColour: string }>>
 }
 
 export default function Group({ groupName,
@@ -24,12 +28,16 @@ export default function Group({ groupName,
                                   setIsUpdateBudgetVisible,
                                   groupColour,
                                   setIsCreateBudgetVisible,
+                                  setIsUpdateGroupVisible,
                                   setGroupNameOfNewItem,
                                   setInitialGroupOptions,
-                                  setOldBudgetBeingEdited}: GroupProps) {
+                                  setOldBudgetBeingEdited,
+                                  setOldGroupBeingEdited}: GroupProps) {
 
     function handleEditClick() {
         // Open a form to edit the group name/colour
+        setOldGroupBeingEdited( { oldGroupName: groupName, oldColour: groupColour });
+        setIsUpdateGroupVisible(true);
     }
     function handleDeleteClick() {
         // Delete the group
