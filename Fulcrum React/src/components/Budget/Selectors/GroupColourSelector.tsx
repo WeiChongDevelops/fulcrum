@@ -1,4 +1,4 @@
-import "../../css/Budget.css"
+import "../../../css/Budget.css"
 import {useEffect} from "react";
 
 interface GroupColourSelectorProps {

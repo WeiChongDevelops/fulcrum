@@ -1,4 +1,4 @@
-import FulcrumButton from "../Other/FulcrumButton.tsx";
+import FulcrumButton from "../../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addIconSelectionFunctionality,
@@ -6,8 +6,9 @@ import {
     BudgetUpdatingFormData, colourStyles,
     getBudgetList, getColourOfGroup, GroupOptionsFormattedData,
     handleBudgetUpdating,
-} from "../../util.ts";
+} from "../../../util.ts";
 import CreatableSelect from 'react-select/creatable';
+import BudgetIconSelector from "../Selectors/BudgetIconSelector.tsx";
 
 interface DBUpdatingFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
@@ -19,7 +20,7 @@ interface DBUpdatingFormProps {
 export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVisible, initialGroupOptions, oldBudgetBeingEdited }: DBUpdatingFormProps) {
 
 
-    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
+    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ category: oldBudgetBeingEdited.oldCategory, amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
     const formRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -51,7 +52,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVi
 
         await handleBudgetUpdating(oldBudgetBeingEdited.oldCategory, formData);
 
-        setFormData({ amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
+        setFormData({ category: oldBudgetBeingEdited.oldCategory, amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
 
@@ -66,6 +67,15 @@ export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVi
 
             <h1 className="mb-6">Updating Budget for {oldBudgetBeingEdited.oldCategory}</h1>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
+                <label htmlFor="category">Category Name</label>
+                <input type="text"
+                       onChange={handleInputChange}
+                       value={formData.category}
+                       name="category"
+                       id="category"
+                       defaultValue={oldBudgetBeingEdited.oldCategory}
+                       maxLength={22}/>
+
                 <label htmlFor="amount">Amount</label>
                 <input type="number"
                        onChange={handleInputChange}
@@ -73,12 +83,13 @@ export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVi
                        name="amount"
                        id="amount"
                        className="mb-3"
-                       placeholder={oldBudgetBeingEdited.oldAmount?.toString()}
+                       defaultValue={oldBudgetBeingEdited.oldAmount?.toString()}
                        min={0.01}
                        step={0.01}
                 />
-                <label htmlFor="group">Group</label>
 
+
+                <label htmlFor="group">Group</label>
                 <CreatableSelect
                     id="group"
                     name="group"
@@ -104,17 +115,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVi
                 />
 
 
-                <div id="icon-selector" className="my-2">
-                    <button type="button" className="category-icon-selectable" data-value="category-bank-icon.svg">
-                        <img src="/src/assets/category-icons/category-bank-icon.svg" alt="Bank"/>
-                    </button>
-                    <button type="button" className="category-icon-selectable" data-value="category-water-icon.svg">
-                        <img src="/src/assets/category-icons/category-water-icon.svg" alt="Water"/>
-                    </button>
-                    <button type="button" className="category-icon-selectable" data-value="category-pig-icon.svg">
-                        <img src="/src/assets/category-icons/category-pig-icon.svg" alt="Piggy Bank"/>
-                    </button>
-                </div>
+                <BudgetIconSelector/>
                 <input type="hidden" id="iconPath" name="iconPath" value="test"/>
                 <FulcrumButton displayText="Update Budget" />
             </form>

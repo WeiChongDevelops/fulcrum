@@ -222,15 +222,15 @@ fun Application.configureRouting() {
             try {
                 val budgetUpdateRequest = call.receive<BudgetUpdateRequestReceived>()
 
-                val updatedCategory = budgetUpdateRequest.category
+                val categoryToChange = budgetUpdateRequest.category
 
                 val updatedItemNoIconOrGroup = supabase.postgrest["budgets"].update(
                     {
                         set("amount", budgetUpdateRequest.amount)
-                        set("category", updatedCategory)
+                        set("category", budgetUpdateRequest.newCategoryName)
                     }
                 ) {
-                    eq("category", budgetUpdateRequest.category)
+                    eq("category", categoryToChange)
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                 }
 
@@ -243,7 +243,7 @@ fun Application.configureRouting() {
                                 set("iconPath", budgetUpdateRequest.iconPath)
                             }
                         ) {
-                            eq("category", updatedCategory)
+                            eq("category", categoryToChange)
                             eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                         }
                         call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget updated."))
@@ -254,7 +254,7 @@ fun Application.configureRouting() {
                                 set("group", budgetUpdateRequest.group)
                             }
                         ) {
-                            eq("category", updatedCategory)
+                            eq("category", categoryToChange)
                             eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                         }
                         call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget updated."))

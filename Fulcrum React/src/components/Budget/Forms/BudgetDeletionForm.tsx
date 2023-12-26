@@ -1,6 +1,6 @@
-import FulcrumButton from "../Other/FulcrumButton.tsx";
+import FulcrumButton from "../../Other/FulcrumButton.tsx";
 import {Dispatch, SetStateAction, useState} from "react";
-import {BudgetItemEntity, getBudgetList} from "../../util.ts";
+import {BudgetItemEntity, getBudgetList} from "../../../util.ts";
 
 interface DBDeletionFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>

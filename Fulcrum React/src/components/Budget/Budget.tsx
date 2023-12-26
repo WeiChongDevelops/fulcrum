@@ -1,4 +1,4 @@
-import BudgetCreationForm from "./BudgetCreationForm.tsx";
+import BudgetCreationForm from "./Forms/BudgetCreationForm.tsx";
 import {
     BudgetItemEntity, dynamicallySizeBudgetNameDisplays,
     getAmountBudgeted,
@@ -7,12 +7,12 @@ import {
 } from "../../util.ts";
 import { useEffect, useState } from "react";
 import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
-import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
+import BudgetUpdatingForm from "./Forms/BudgetUpdatingForm.tsx";
 import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
-import GroupCreationForm from "./GroupCreationForm.tsx";
-import GroupUpdatingForm from "./GroupUpdatingForm.tsx";
+import GroupCreationForm from "./Forms/GroupCreationForm.tsx";
+import GroupUpdatingForm from "./Forms/GroupUpdatingForm.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);

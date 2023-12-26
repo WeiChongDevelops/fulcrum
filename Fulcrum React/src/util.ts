@@ -22,6 +22,7 @@ export interface BudgetCreationFormData {
 }
 
 export interface BudgetUpdatingFormData {
+    category: string;
     amount: number;
     group: string;
     iconPath: string;
@@ -218,6 +219,7 @@ export async function handleBudgetUpdating(category: string | null, formData: Bu
             },
             body: JSON.stringify({
                 "category": category,
+                "newCategoryName": formData.category,
                 "amount": formData.amount,
                 "group": formData.group,
                 "iconPath": formData.iconPath

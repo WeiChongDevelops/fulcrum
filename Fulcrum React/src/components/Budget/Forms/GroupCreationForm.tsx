@@ -1,13 +1,13 @@
-import FulcrumButton from "../Other/FulcrumButton.tsx";
+import FulcrumButton from "../../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addColourSelectionFunctionality,
     BasicGroupData, capitalizeFirstLetter,
     GroupOptionsFormattedData,
     handleGroupCreation
-} from "../../util.ts";
-import "../../css/Budget.css"
-import GroupColourSelector from "./GroupColourSelector.tsx";
+} from "../../../util.ts";
+import "../../../css/Budget.css"
+import GroupColourSelector from "../Selectors/GroupColourSelector.tsx";
 
 interface GroupCreationFormProps {
     setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>
