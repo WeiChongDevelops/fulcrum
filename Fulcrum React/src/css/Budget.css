@@ -31,19 +31,23 @@ input::placeholder {
     box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 1);
 }
 
+.budget-name {
+    margin: 5px;
+}
+
 .budgetTile {
-    width: 180px;
-    height: 250px;
-    margin: 25px 15px;
+    width: 165px;
+    height: 230px;
+    margin: 10px 10px;
 }
 
 .addBudgetButton {
-    width: 180px;
-    height: 250px;
+    width: 165px;
+    height: 230px;
     background: transparent;
     border: black 2px dashed;
     color: black;
-    margin: 0 15px;
+    margin: 10px 10px;
 }
 
 

@@ -382,6 +382,25 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
     })
 }
 
+export function dynamicallySizeBudgetNameDisplays() {
+    const budgetNameElements = document.querySelectorAll(".budget-name") as NodeListOf<HTMLElement>;
+    budgetNameElements.forEach(budgetNameElement => {
+        let dynamicFontSize = ""
+        const budgetNameLength = budgetNameElement.textContent?.length!;
+        if (budgetNameLength <= 10) {
+            dynamicFontSize = "24px";
+        } else if (budgetNameLength <= 14) {
+            dynamicFontSize = "20px";
+        } else if (budgetNameLength <= 18) {
+            dynamicFontSize = "16px";
+        } else if (budgetNameLength <= 22) {
+            dynamicFontSize = "12px";
+        }
+        console.log(`The size of ${budgetNameElement.innerText} (${budgetNameLength} characters) is ${dynamicFontSize}`);
+        budgetNameElement.style.fontSize = dynamicFontSize;
+    })
+}
+
 export function getAmountBudgeted(budgetArray: BudgetItemEntity[]) {
     const amountArray = budgetArray.map( budgetItem => (
         budgetItem.amount

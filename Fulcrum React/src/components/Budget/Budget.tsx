@@ -1,6 +1,6 @@
 import BudgetCreationForm from "./BudgetCreationForm.tsx";
 import {
-    BudgetItemEntity,
+    BudgetItemEntity, dynamicallySizeBudgetNameDisplays,
     getAmountBudgeted,
     getBudgetList,
     getGroupListAsOptions, GroupOptionsFormattedData,
@@ -38,9 +38,11 @@ export default function Budget() {
             })
         getGroupListAsOptions()
             .then( results => setInitialGroupOptions(results))
+
     }, []);
 
     useEffect( () => {
+        dynamicallySizeBudgetNameDisplays()
         getGroupListAsOptions()
             .then( results => setInitialGroupOptions(results))
     }, [budgetArray])

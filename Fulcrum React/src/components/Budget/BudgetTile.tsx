@@ -20,6 +20,8 @@ export default function BudgetTile({ category,
                                        setIsUpdateBudgetVisible,
                                        setOldBudgetBeingEdited }: BudgetTileProps) {
 
+
+
     function handleEditClick(e: React.MouseEvent<HTMLDivElement>) {
         e.stopPropagation();
         setOldBudgetBeingEdited({
@@ -45,17 +47,18 @@ export default function BudgetTile({ category,
             <div className="flex justify-center items-center rounded-full bg-green-950 p-4 w-20 h-20">
                 <img className="budget-icon" src={icon} alt="" />
             </div>
-            <b>{category}</b>
+            <b className="budget-name">{category}</b>
 
             <div className="flex flex-row items-center">
                 <b>${formatNumberWithCommas(amount.toFixed(2))}</b>
             </div>
-
-            <div className="circle-button rounded-full p-1" onClick={handleEditClick}>
-                <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-6 h-6" />
-            </div>
-            <div className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
-                <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="mx-1 w-6 h-6" />
+            <div className="flex flex-row mt-2">
+                <div className="circle-button rounded-full p-1" onClick={handleEditClick}>
+                    <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-6 h-6" />
+                </div>
+                <div className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
+                    <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="mx-1 w-6 h-6" />
+                </div>
             </div>
         </div>
     );

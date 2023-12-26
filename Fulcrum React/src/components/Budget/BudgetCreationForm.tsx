@@ -78,6 +78,7 @@ export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVi
                        name="category"
                        id="category"
                        className="mb-3"
+                       maxLength={22}
                        required/>
                 <label htmlFor="amount">Amount</label>
                 <input type="number"
