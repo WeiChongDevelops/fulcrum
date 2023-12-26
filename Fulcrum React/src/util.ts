@@ -396,7 +396,7 @@ export function dynamicallySizeBudgetNameDisplays() {
         } else if (budgetNameLength <= 22) {
             dynamicFontSize = "12px";
         }
-        console.log(`The size of ${budgetNameElement.innerText} (${budgetNameLength} characters) is ${dynamicFontSize}`);
+        // console.log(`The size of ${budgetNameElement.innerText} (${budgetNameLength} characters) is ${dynamicFontSize}`);
         budgetNameElement.style.fontSize = dynamicFontSize;
     })
 }
@@ -405,7 +405,7 @@ export function getAmountBudgeted(budgetArray: BudgetItemEntity[]) {
     const amountArray = budgetArray.map( budgetItem => (
         budgetItem.amount
     ))
-    console.log(amountArray)
+    // console.log(amountArray)
     return amountArray.reduce((accumulator, currentValue) => (
         accumulator + currentValue
     ), 0)

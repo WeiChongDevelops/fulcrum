@@ -35,7 +35,6 @@ export default function GroupList( { budgetArray,
 
     // 1. Make an array containing unique group in the budgetArray
     const groupArray = initialGroupOptions.map( groupOption => groupOption.label)
-    console.log(groupArray)
 
     return (
         <div>

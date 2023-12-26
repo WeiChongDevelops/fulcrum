@@ -79,6 +79,7 @@ export default function GroupCreationForm(this: any, { setIsCreateGroupVisible, 
                        name="group"
                        id="group"
                        className="mb-3"
+                       maxLength={22}
                        required/>
 
                 <GroupColourSelector/>
