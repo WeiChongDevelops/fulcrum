@@ -69,6 +69,26 @@ input::placeholder {
     background: rgba(222, 222, 222, 0.1);
 }
 
+/* GROUP */
+
+.group {
+    width: 100%;
+}
+
+/* ADD NEW GROUP BUTTON */
+
+.create-group-button {
+    width: 100%;
+    padding: 150px 30px 150px 30px;
+    background: transparent;
+    border: black 2px dashed;
+    color: black;
+}
+
+.create-group-button:hover {
+    background: rgba(222, 222, 222, 0.5);
+}
+
 
 /* BUDGET ICON SELECTOR */
 

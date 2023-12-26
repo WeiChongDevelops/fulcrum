@@ -49,8 +49,8 @@ export default function Group({ groupName,
     }
 
     return (
-        <div className="box-shadow flex flex-col bg-amber-200 rounded-3xl my-10 p-5" style={{backgroundColor: `${groupColour}`}}>
-            <div className="flex flex-row justify-center items-center mb-5">
+        <div className="box-shadow group flex flex-col bg-amber-200 rounded-3xl p-5 mb-8" style={{backgroundColor: `${groupColour}`}}>
+            <div className="flex flex-row justify-center items-center mb-4">
                 <h1 className="m-4">{groupName}</h1>
 
                 {groupName !== "Miscellaneous" &&

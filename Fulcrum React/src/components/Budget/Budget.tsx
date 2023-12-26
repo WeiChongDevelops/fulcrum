@@ -60,7 +60,6 @@ export default function Budget() {
 
     return (
         <div>
-
             <div className={`elementsBelowPopUpForm ${(Object.values(budgetFormVisibility).includes(true)) && "blur"} px-16`}>
                 <TotalIncomeDisplay
                     totalIncome={totalIncome}
@@ -79,6 +78,8 @@ export default function Budget() {
                     setBudgetFormVisibility={setBudgetFormVisibility}
 
                     setInitialGroupOptions={setInitialGroupOptions}/>}
+
+                <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
             </div>
             {budgetFormVisibility.isCreateBudgetVisible && <BudgetCreationForm setBudgetArray={setBudgetArray}
                                                           initialGroupOptions={initialGroupOptions}
@@ -96,7 +97,6 @@ export default function Budget() {
                                                         initialGroupOptions={initialGroupOptions}
                                                         setBudgetFormVisibility={setBudgetFormVisibility}/>}
 
-            <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
         </div>
     );
 }
