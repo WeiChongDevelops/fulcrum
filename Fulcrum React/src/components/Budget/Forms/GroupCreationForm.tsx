@@ -2,7 +2,7 @@ import FulcrumButton from "../../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addColourSelectionFunctionality,
-    BasicGroupData, capitalizeFirstLetter,
+    BasicGroupData, BudgetFormVisibilityState, capitalizeFirstLetter,
     GroupOptionsFormattedData,
     handleGroupCreation
 } from "../../../util.ts";
@@ -10,17 +10,17 @@ import "../../../css/Budget.css"
 import GroupColourSelector from "../Selectors/GroupColourSelector.tsx";
 
 interface GroupCreationFormProps {
-    setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>
     setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 }
 
-export default function GroupCreationForm(this: any, { setIsCreateGroupVisible, setInitialGroupOptions }: GroupCreationFormProps) {
+export default function GroupCreationForm(this: any, { setInitialGroupOptions, setBudgetFormVisibility }: GroupCreationFormProps) {
 
     const [formData, setFormData] = useState<BasicGroupData>({ group: "", colour: "" })
     const formRef = useRef<HTMLDivElement>(null);
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setIsCreateGroupVisible(false);
+            setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}))
         }
     };
 
@@ -56,18 +56,18 @@ export default function GroupCreationForm(this: any, { setIsCreateGroupVisible, 
         setInitialGroupOptions( (oldGroupOptions) => {
             return [...oldGroupOptions, newGroupOption]
         })
-        setIsCreateGroupVisible(false)
+        setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}))
         await handleGroupCreation(formData, setInitialGroupOptions, newGroupItem);
         setFormData({ group: "", colour: "" });
 
     }
 
     return (
-        <div ref={formRef} className="budgetForm fixed flex flex-col justify-center items-center rounded-3xl">
+        <div ref={formRef} className="budget-form fixed flex flex-col justify-center items-center rounded-3xl">
 
             <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
-                setIsCreateGroupVisible(false);
+                setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}))
             }}>Close</button>
 
             <h1 className="mb-6">New Group</h1>

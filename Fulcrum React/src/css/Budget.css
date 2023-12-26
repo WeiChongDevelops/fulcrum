@@ -29,7 +29,7 @@ input::placeholder {
 
 /* BUDGET FORMS */
 
-.budgetForm {
+.budget-form {
     top: 20%;
     left: 30%;
     right: 30%;
@@ -39,7 +39,7 @@ input::placeholder {
 
 /* BUDGET TILE AND BOX SHADOW EFFECT */
 
-.budgetTile {
+.budget-tile {
     width: 165px;
     height: 230px;
     margin: 10px 10px;
@@ -49,13 +49,13 @@ input::placeholder {
     margin: 5px;
 }
 
-.boxShadow {
+.box-shadow {
     box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 1);
 }
 
 /* ADD NEW BUDGET BUTTON */
 
-.addBudgetButton {
+.create-budget-button {
     width: 165px;
     height: 230px;
     background: transparent;
@@ -65,7 +65,7 @@ input::placeholder {
 }
 
 
-.addBudgetButton:hover {
+.create-budget-button:hover {
     background: rgba(222, 222, 222, 0.1);
 }
 
@@ -99,7 +99,7 @@ input::placeholder {
     height: 40px;
 }
 
-.selectedIcon {
+.selected-icon {
     outline: aquamarine solid 2px;
 }
 

@@ -1,5 +1,5 @@
 import '/src/css/Budget.css';
-import {BudgetItemEntity, formatNumberWithCommas, handleBudgetDeletion} from "../../util.ts";
+import {BudgetFormVisibilityState, BudgetItemEntity, formatNumberWithCommas, handleBudgetDeletion} from "../../util.ts";
 import React, {Dispatch, SetStateAction} from "react";
 
 interface BudgetTileProps {
@@ -8,8 +8,9 @@ interface BudgetTileProps {
     group: string;
     icon: string;
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-    setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>;
+
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 }
 
 export default function BudgetTile({ category,
@@ -17,8 +18,8 @@ export default function BudgetTile({ category,
                                        group,
                                        icon,
                                        setBudgetArray,
-                                       setIsUpdateBudgetVisible,
-                                       setOldBudgetBeingEdited }: BudgetTileProps) {
+                                       setOldBudgetBeingEdited,
+                                       setBudgetFormVisibility}: BudgetTileProps) {
 
 
 
@@ -30,8 +31,10 @@ export default function BudgetTile({ category,
             oldGroup: group
         })
 
-        setIsUpdateBudgetVisible(true);
+        // setIsUpdateBudgetVisible(true);
+        setBudgetFormVisibility( current => ({...current, isUpdateBudgetVisible: true}))
     }
+
 
     const tempHardCodedColour = "red"
 
@@ -42,7 +45,7 @@ export default function BudgetTile({ category,
     }
 
     return (
-        <div className="boxShadow budgetTile flex flex-col justify-center items-center rounded-2xl"
+        <div className="box-shadow budget-tile flex flex-col justify-center items-center rounded-2xl"
              style={{backgroundColor: `${tempHardCodedColour}`}}>
             <div className="flex justify-center items-center rounded-full bg-green-950 p-4 w-20 h-20">
                 <img className="budget-icon" src={icon} alt="" />

@@ -1,7 +1,7 @@
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addColourSelectionFunctionality,
-    BasicGroupData,
+    BasicGroupData, BudgetFormVisibilityState,
     BudgetItemEntity,
     getBudgetList, GroupOptionsFormattedData,
     handleGroupUpdating
@@ -11,13 +11,13 @@ import GroupColourSelector from "../Selectors/GroupColourSelector.tsx";
 
 interface GroupUpdatingFormProps {
     oldGroupBeingEdited: { oldColour: string, oldGroupName: string };
-    setIsUpdateGroupVisible: Dispatch<SetStateAction<boolean>>;
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>;
     initialGroupOptions: GroupOptionsFormattedData[]
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 }
 
-export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited, setIsUpdateGroupVisible, setInitialGroupOptions, initialGroupOptions }: GroupUpdatingFormProps) {
+export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited, setInitialGroupOptions, initialGroupOptions, setBudgetFormVisibility }: GroupUpdatingFormProps) {
 
     const [formData, setFormData]
         = useState<BasicGroupData>({
@@ -36,7 +36,7 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
 
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setIsUpdateGroupVisible(false);
+            setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}))
         }
     };
 
@@ -55,8 +55,8 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
                 label: formData.group
             } : groupOption)
         })
+        setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}))
 
-        setIsUpdateGroupVisible(false);
         await handleGroupUpdating(oldGroupBeingEdited.oldGroupName, oldGroupBeingEdited.oldColour, formData.group, formData.colour, setInitialGroupOptions, initialGroupOptions)
 
         setFormData({
@@ -68,11 +68,11 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
     }
 
     return (
-        <div ref={formRef} className="budgetForm fixed flex flex-col justify-start items-center rounded-3xl text-white">
+        <div ref={formRef} className="budget-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
             <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                setIsUpdateGroupVisible(false);
+                setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}))
             }}>Close</button>
 
             <h1 className="mb-6">Updating Group {oldGroupBeingEdited.oldGroupName}</h1>

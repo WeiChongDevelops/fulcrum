@@ -6,21 +6,23 @@ import {
     getGroupListAsOptions, GroupOptionsFormattedData,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
-import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
 import BudgetUpdatingForm from "./Forms/BudgetUpdatingForm.tsx";
 import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
 import GroupCreationForm from "./Forms/GroupCreationForm.tsx";
 import GroupUpdatingForm from "./Forms/GroupUpdatingForm.tsx";
+import AddNewGroupButton from "./AddNewGroupButton.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
 
-    const [isCreateBudgetVisible, setIsCreateBudgetVisible] = useState<boolean>(false);
-    const [isUpdateBudgetVisible, setIsUpdateBudgetVisible] = useState<boolean>(false);
-    const [isCreateGroupVisible, setIsCreateGroupVisible] = useState<boolean>(false);
-    const [isUpdateGroupVisible, setIsUpdateGroupVisible] = useState<boolean>(false);
+    const [budgetFormVisibility, setBudgetFormVisibility] = useState({
+        isCreateBudgetVisible: false,
+        isUpdateBudgetVisible: false,
+        isCreateGroupVisible: false,
+        isUpdateGroupVisible: false,
+    });
 
     const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState({ oldAmount: 0, oldCategory: "", oldGroup: ""})
     const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState({ oldColour: "", oldGroupName: "" })
@@ -53,49 +55,48 @@ export default function Budget() {
 
     useEffect( () => {
         document.getElementById("category")?.focus();
-    }, [isCreateBudgetVisible, isUpdateBudgetVisible])
+        console.log(budgetFormVisibility);
+    }, [budgetFormVisibility])
 
     return (
         <div>
-            <h1 className="my-6">Budget</h1>
-            <TotalIncomeDisplay
-                totalIncome={totalIncome}
-                setTotalIncome={setTotalIncome}
-                amountLeftToBudget={amountLeftToBudget}/>
 
-            <div className={`elementsBelowPopUpForm ${(isCreateBudgetVisible || isUpdateBudgetVisible) && "blur"} px-16`}>
+            <div className={`elementsBelowPopUpForm ${(Object.values(budgetFormVisibility).includes(true)) && "blur"} px-16`}>
+                <TotalIncomeDisplay
+                    totalIncome={totalIncome}
+                    setTotalIncome={setTotalIncome}
+                    amountLeftToBudget={amountLeftToBudget}/>
+
                 <FulcrumAnimation amountLeftToBudget={amountLeftToBudget} totalIncome={totalIncome}/>
 
                 {setInitialGroupOptions.length > 0 && <GroupList
                     budgetArray={budgetArray}
                     setBudgetArray={setBudgetArray}
-                    setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                     setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                     setOldGroupBeingEdited={setOldGroupBeingEdited}
                     initialGroupOptions={initialGroupOptions}
                     setGroupNameOfNewItem={setGroupNameOfNewItem}
-                    setIsCreateBudgetVisible={setIsCreateBudgetVisible}
-                    setIsCreateGroupVisible={setIsCreateGroupVisible}
-                    setIsUpdateGroupVisible={setIsUpdateGroupVisible}
+                    setBudgetFormVisibility={setBudgetFormVisibility}
+
                     setInitialGroupOptions={setInitialGroupOptions}/>}
             </div>
-            {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible}
-                                                          setBudgetArray={setBudgetArray}
+            {budgetFormVisibility.isCreateBudgetVisible && <BudgetCreationForm setBudgetArray={setBudgetArray}
                                                           initialGroupOptions={initialGroupOptions}
-                                                          groupNameOfNewItem={groupNameOfNewItem}/>}
-            {isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray}
-                                                          setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
+                                                          groupNameOfNewItem={groupNameOfNewItem}
+                                                          setBudgetFormVisibility={setBudgetFormVisibility}/>}
+            {budgetFormVisibility.isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray}
                                                           oldBudgetBeingEdited={oldBudgetBeingEdited}
-                                                          initialGroupOptions={initialGroupOptions}/>}
-            {isCreateGroupVisible && <GroupCreationForm setIsCreateGroupVisible={setIsCreateGroupVisible}
-                                                        setInitialGroupOptions={setInitialGroupOptions}/>}
-            {isUpdateGroupVisible && <GroupUpdatingForm oldGroupBeingEdited={oldGroupBeingEdited}
-                                                        setIsUpdateGroupVisible={setIsUpdateGroupVisible}
+                                                          initialGroupOptions={initialGroupOptions}
+                                                          setBudgetFormVisibility={setBudgetFormVisibility}/>}
+            {budgetFormVisibility.isCreateGroupVisible && <GroupCreationForm setInitialGroupOptions={setInitialGroupOptions}
+                                                        setBudgetFormVisibility={setBudgetFormVisibility}/>}
+            {budgetFormVisibility.isUpdateGroupVisible && <GroupUpdatingForm oldGroupBeingEdited={oldGroupBeingEdited}
                                                         setBudgetArray={setBudgetArray}
                                                         setInitialGroupOptions={setInitialGroupOptions}
-                                                        initialGroupOptions={initialGroupOptions}/>}
+                                                        initialGroupOptions={initialGroupOptions}
+                                                        setBudgetFormVisibility={setBudgetFormVisibility}/>}
 
-            <AddNewBudgetButton setIsFormVisible={setIsCreateBudgetVisible} />
+            <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
         </div>
     );
 }

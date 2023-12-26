@@ -1,7 +1,6 @@
-import {BudgetItemEntity, GroupOptionsFormattedData} from "../../util.ts";
+import {BudgetFormVisibilityState, BudgetItemEntity, GroupOptionsFormattedData} from "../../util.ts";
 import Group from "./Group.tsx";
 import {Dispatch, SetStateAction} from "react";
-import AddNewGroupButton from "./AddNewGroupButton.tsx";
 
 interface GroupListProps {
     budgetArray: BudgetItemEntity[]
@@ -10,10 +9,7 @@ interface GroupListProps {
     initialGroupOptions: GroupOptionsFormattedData[];
     setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>;
 
-    setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
-    setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
-    setIsCreateGroupVisible: Dispatch<SetStateAction<boolean>>;
-    setIsUpdateGroupVisible: Dispatch<SetStateAction<boolean>>;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
 
@@ -23,15 +19,13 @@ interface GroupListProps {
 
 export default function GroupList( { budgetArray,
                                        setBudgetArray,
-                                       setIsUpdateBudgetVisible,
                                        initialGroupOptions,
-                                       setIsCreateBudgetVisible,
                                        setGroupNameOfNewItem,
-                                       setIsCreateGroupVisible,
-                                       setIsUpdateGroupVisible,
                                        setInitialGroupOptions,
                                        setOldBudgetBeingEdited,
-                                       setOldGroupBeingEdited}: GroupListProps ) {
+                                       setOldGroupBeingEdited,
+                                       setBudgetFormVisibility,
+                                   }: GroupListProps ) {
 
     // 1. Make an array containing unique group in the budgetArray
     const groupArray = initialGroupOptions.map( groupOption => groupOption.label)
@@ -50,18 +44,15 @@ export default function GroupList( { budgetArray,
                     return <Group groupName={group}
                                   filteredBudgetArray={filteredBudgetArray}
                                   setBudgetArray={setBudgetArray}
-                                  setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
                                   setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                                   setOldGroupBeingEdited={setOldGroupBeingEdited}
                                   groupColour={groupColour}
-                                  setIsCreateBudgetVisible={setIsCreateBudgetVisible}
                                   setGroupNameOfNewItem={setGroupNameOfNewItem}
                                   setInitialGroupOptions={setInitialGroupOptions}
-                                  setIsUpdateGroupVisible={setIsUpdateGroupVisible}
+                                  setBudgetFormVisibility={setBudgetFormVisibility}
                                   key={key}/>
                 })
             }
-            <AddNewGroupButton setIsCreateGroupVisible={setIsCreateGroupVisible}/>
         </div>
     )
 }

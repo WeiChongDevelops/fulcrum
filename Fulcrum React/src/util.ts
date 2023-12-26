@@ -39,6 +39,13 @@ export interface GroupOptionsFormattedData {
     colour: string | null;
 }
 
+export interface BudgetFormVisibilityState {
+    isCreateBudgetVisible: boolean,
+        isUpdateBudgetVisible: boolean,
+    isCreateGroupVisible: boolean,
+    isUpdateGroupVisible: boolean,
+}
+
 
 const dot = (color = 'transparent') => ({
     alignItems: 'center',
@@ -364,22 +371,28 @@ export function addIconSelectionFunctionality(setFormData:
             });
             console.log(`iconPath: ${iconPath}`)
 
-            document.querySelectorAll('.category-icon-selectable').forEach(btn => btn.classList.remove("selectedIcon"));
-            icon.classList.add("selectedIcon");
+            document.querySelectorAll('.category-icon-selectable').forEach(btn => btn.classList.remove("selected-icon"));
+            icon.classList.add("selected-icon");
         });
     });
 }
 
 export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAction<BasicGroupData>>) {
-    const colourElementList: NodeListOf<HTMLImageElement> = document.querySelectorAll(".group-colour-triangle");
+    const colourElementList: NodeListOf<HTMLImageElement> = document.querySelectorAll(".group-colour-selectable-container");
     colourElementList.forEach(colourSelectable => {
         colourSelectable.addEventListener("click", (e: MouseEvent) => {
+            const triangleElement = colourSelectable.firstChild as HTMLDivElement;
+
             e.preventDefault();
             setFormData((current: BasicGroupData) => {
-                return {...current, ["colour"]: colourSelectable.getAttribute("data-value")}
+                return {...current, ["colour"]: triangleElement.getAttribute("data-value")}
             });
-            colourElementList.forEach(colourSelectable => colourSelectable.classList.remove("selectedColour"));
-            colourSelectable.classList.add("selectedColour");
+
+            colourElementList.forEach(colourSelectable => {
+                const triangle = colourSelectable.firstChild as HTMLDivElement;
+                triangle.classList.remove("selectedColour")
+            });
+            triangleElement.classList.add("selectedColour");
         })
     })
 }

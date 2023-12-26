@@ -67,7 +67,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, category, setIsUpda
     };
 
     return (
-        <div ref={formRef} className="budgetForm fixed flex flex-col justify-start items-center rounded-3xl text-white">
+        <div ref={formRef} className="budget-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
 
             <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();

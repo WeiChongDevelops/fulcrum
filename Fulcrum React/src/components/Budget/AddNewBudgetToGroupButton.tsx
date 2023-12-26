@@ -1,20 +1,22 @@
 import {Dispatch, SetStateAction} from "react";
+import {BudgetFormVisibilityState} from "../../util.ts";
 
 interface AddNewBudgetToGroupButtonProps {
-    setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>
     groupNameOfNewItem: string;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 }
 
-export default function AddNewBudgetToGroupButton({ setIsCreateBudgetVisible, setGroupNameOfNewItem, groupNameOfNewItem}: AddNewBudgetToGroupButtonProps) {
+export default function AddNewBudgetToGroupButton({ setGroupNameOfNewItem, groupNameOfNewItem, setBudgetFormVisibility }: AddNewBudgetToGroupButtonProps) {
 
     function handleClick() {
-        setIsCreateBudgetVisible(true)
+        // setIsCreateBudgetVisible(true)
+        setBudgetFormVisibility( current => ({...current, isCreateBudgetVisible: true}))
         setGroupNameOfNewItem(groupNameOfNewItem)
     }
 
     return (
-        <button className="addBudgetButton" onClick={handleClick}>
+        <button className="create-budget-button" onClick={handleClick}>
             <b>+</b>
         </button>
     )

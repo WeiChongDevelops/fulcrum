@@ -2,7 +2,7 @@ import FulcrumButton from "../../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addIconSelectionFunctionality,
-    BudgetCreationFormData,
+    BudgetCreationFormData, BudgetFormVisibilityState,
     BudgetItemEntity, capitalizeFirstLetter, colourStyles, getColourOfGroup, GroupOptionsFormattedData,
     handleBudgetCreation
 } from "../../../util.ts";
@@ -12,18 +12,18 @@ import BudgetIconSelector from "../Selectors/BudgetIconSelector.tsx";
 
 interface BudgetCreationFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-    setIsCreateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     initialGroupOptions: GroupOptionsFormattedData[];
     groupNameOfNewItem: string;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 }
 
-export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVisible, initialGroupOptions, groupNameOfNewItem }: BudgetCreationFormProps) {
+export default function BudgetCreationForm({ setBudgetArray, initialGroupOptions, groupNameOfNewItem, setBudgetFormVisibility }: BudgetCreationFormProps) {
 
     const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     const formRef = useRef<HTMLDivElement>(null);
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setIsCreateBudgetVisible(false);
+            setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}))
         }
     };
 
@@ -53,7 +53,7 @@ export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVi
 
         setBudgetArray(current => [...current, newBudgetItem])
 
-        setIsCreateBudgetVisible(false);
+        setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}))
         await handleBudgetCreation(formData, setBudgetArray, newBudgetItem);
         setFormData({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     }
@@ -63,11 +63,11 @@ export default function BudgetCreationForm({ setBudgetArray, setIsCreateBudgetVi
     }
 
     return (
-        <div ref={formRef}  className="budgetForm fixed flex flex-col justify-center items-center rounded-3xl">
+        <div ref={formRef}  className="budget-form fixed flex flex-col justify-center items-center rounded-3xl">
 
             <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault()
-                setIsCreateBudgetVisible(false)
+                setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}))
             }}>Close</button>
 
             <h1 className="mb-6">New Budget Item</h1>

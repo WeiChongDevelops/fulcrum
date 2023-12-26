@@ -29,7 +29,7 @@ export default function BudgetItem({ category, amount, icon, group, setBudgetArr
     }
 
     return (
-        <div className="boxShadow flex flex-row justify-between items-center bg-blue-200 py-1.5 px-2.5 rounded-3xl my-3 text-black">
+        <div className="box-shadow flex flex-row justify-between items-center bg-blue-200 py-1.5 px-2.5 rounded-3xl my-3 text-black">
             <div className="flex flex-row items-center">
                 <div className="rounded-full bg-green-950 p-2">
                     <img src={icon} alt="" />

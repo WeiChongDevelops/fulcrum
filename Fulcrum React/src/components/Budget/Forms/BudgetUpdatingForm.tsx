@@ -1,7 +1,7 @@
 import FulcrumButton from "../../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
-    addIconSelectionFunctionality,
+    addIconSelectionFunctionality, BudgetFormVisibilityState,
     BudgetItemEntity,
     BudgetUpdatingFormData, colourStyles,
     getBudgetList, getColourOfGroup, GroupOptionsFormattedData,
@@ -12,12 +12,12 @@ import BudgetIconSelector from "../Selectors/BudgetIconSelector.tsx";
 
 interface DBUpdatingFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-    setIsUpdateBudgetVisible: Dispatch<SetStateAction<boolean>>;
     oldBudgetBeingEdited: { oldAmount: number, oldCategory: string, oldGroup: string }
     initialGroupOptions: GroupOptionsFormattedData[];
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 }
 
-export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVisible, initialGroupOptions, oldBudgetBeingEdited }: DBUpdatingFormProps) {
+export default function BudgetUpdatingForm({ setBudgetArray, initialGroupOptions, oldBudgetBeingEdited, setBudgetFormVisibility }: DBUpdatingFormProps) {
 
 
     const [formData, setFormData] = useState<BudgetUpdatingFormData>({ category: oldBudgetBeingEdited.oldCategory, amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
@@ -33,7 +33,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVi
 
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setIsUpdateBudgetVisible(false);
+            setBudgetFormVisibility(current => ({...current, isUpdateBudgetVisible: false}))
         }
     };
 
@@ -48,7 +48,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVi
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        setIsUpdateBudgetVisible(false);
+        setBudgetFormVisibility(current => ({...current, isUpdateBudgetVisible: false}))
 
         await handleBudgetUpdating(oldBudgetBeingEdited.oldCategory, formData);
 
@@ -57,12 +57,12 @@ export default function BudgetUpdatingForm({ setBudgetArray, setIsUpdateBudgetVi
     }
 
     return (
-        <div ref={formRef} className="budgetForm fixed flex flex-col justify-start items-center rounded-3xl text-white">
+        <div ref={formRef} className="budget-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
 
             <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                setIsUpdateBudgetVisible(false);
+                setBudgetFormVisibility(current => ({...current, isUpdateBudgetVisible: false}))
             }}>Close</button>
 
             <h1 className="mb-6">Updating Budget for {oldBudgetBeingEdited.oldCategory}</h1>
