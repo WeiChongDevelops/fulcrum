@@ -4,8 +4,8 @@ import {
     addIconSelectionFunctionality, BudgetFormVisibilityState,
     BudgetItemEntity,
     BudgetUpdatingFormData, colourStyles,
-    getBudgetList, getColourOfGroup, GroupOptionsFormattedData,
-    handleBudgetUpdating,
+    getBudgetList, getColourOfGroup, groupListAsOptions,
+    handleBudgetUpdating, GroupItemEntity,
 } from "../../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import BudgetIconSelector from "../Selectors/BudgetIconSelector.tsx";
@@ -13,11 +13,11 @@ import BudgetIconSelector from "../Selectors/BudgetIconSelector.tsx";
 interface DBUpdatingFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     oldBudgetBeingEdited: { oldAmount: number, oldCategory: string, oldGroup: string }
-    initialGroupOptions: GroupOptionsFormattedData[];
+    groupArray: GroupItemEntity[];
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 }
 
-export default function BudgetUpdatingForm({ setBudgetArray, initialGroupOptions, oldBudgetBeingEdited, setBudgetFormVisibility }: DBUpdatingFormProps) {
+export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudgetBeingEdited, setBudgetFormVisibility }: DBUpdatingFormProps) {
 
 
     const [formData, setFormData] = useState<BudgetUpdatingFormData>({ category: oldBudgetBeingEdited.oldCategory, amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
@@ -59,7 +59,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, initialGroupOptions
     return (
         <div ref={formRef} className="budget-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
 
-            <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
+            <button className="ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 setBudgetFormVisibility(current => ({...current, isUpdateBudgetVisible: false}))
@@ -96,9 +96,9 @@ export default function BudgetUpdatingForm({ setBudgetArray, initialGroupOptions
                     defaultValue={{
                         label: oldBudgetBeingEdited.oldGroup,
                         value: oldBudgetBeingEdited.oldGroup,
-                        colour: getColourOfGroup(oldBudgetBeingEdited.oldGroup, initialGroupOptions)
+                        colour: getColourOfGroup(oldBudgetBeingEdited.oldGroup, groupListAsOptions((groupArray)))
                     }}
-                    options={initialGroupOptions.map(option => {
+                    options={groupListAsOptions(groupArray).map(option => {
                         return {label: option.label, value: option.value, colour: option.colour!!}
                     })}
                     onChange={handleGroupInputChange}

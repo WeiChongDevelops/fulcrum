@@ -30,10 +30,11 @@ input::placeholder {
 /* BUDGET FORMS */
 
 .budget-form {
-    top: 20%;
-    left: 30%;
-    right: 30%;
-    bottom: 20%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 2%;
+    transform: translate(-50%, -50%);
     background-color: rgba(0,0,0,0.8);
 }
 
@@ -129,8 +130,8 @@ input::placeholder {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    margin: 10px;
-    padding: 60px;
+    margin: 5px;
+    padding: 10px;
 }
 
 .group-colour-selectable-container {

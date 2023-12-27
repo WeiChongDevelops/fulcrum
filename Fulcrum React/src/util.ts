@@ -33,6 +33,12 @@ export interface BasicGroupData {
     colour: string | null;
 }
 
+export interface GroupItemEntity {
+    group: string;
+    colour: string;
+    dateCreated: Date;
+}
+
 export interface GroupOptionsFormattedData {
     value: string;
     label: string;
@@ -152,9 +158,9 @@ export async function handleBudgetDeletion(category: string, setBudgetArray: Dis
 }
 
 export async function handleGroupDeletion(groupName: string,
-                                          setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>,
+                                          setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
                                           setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
-    setInitialGroupOptions(prevState => prevState.filter(groupOption => groupOption.label !== groupName))
+    setGroupArray(prevState => prevState.filter(groupItem => groupItem.group !== groupName))
     try {
         const response = await fetch("http://localhost:8080/api/deleteGroup", {
             method: "DELETE",
@@ -176,8 +182,8 @@ export async function handleGroupDeletion(groupName: string,
         console.error("Error:", error);
     }
 
-    getGroupListAsOptions()
-        .then( options => setInitialGroupOptions(options))
+    await getGroupList()
+        .then( options => setGroupArray(options))
         .then( () => getBudgetList().then( budgets => setBudgetArray(budgets)))
 }
 
@@ -243,7 +249,7 @@ export async function handleBudgetUpdating(category: string | null, formData: Bu
     }
 }
 
-export async function getGroupListAsOptions() {
+export async function getGroupList() {
     try {
         const response = await fetch("http://localhost:8080/api/getGroups", {
             method: "GET",
@@ -252,21 +258,24 @@ export async function getGroupListAsOptions() {
             }
         })
         if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`)
+            console.error(`HTTP error - status: ${response.status}`);
         } else {
             const responseData = await response.json();
-            return responseData.map(
-                (groupColourPair: { group: String, colour: String }) => (
-                    {value: groupColourPair.group, label: groupColourPair.group, colour: groupColourPair.colour}
-                )
-            )
+            console.log(responseData)
+            return responseData.sort((a: GroupItemEntity, b: GroupItemEntity) => new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime());
         }
     } catch (error) {
         console.error("Error:", error);
     }
 }
 
-export async function handleGroupCreation(formData: BasicGroupData, setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>, newGroupItem: BasicGroupData) {
+export function groupListAsOptions(groupList: GroupItemEntity[]) {
+    return groupList.map( rawGroupDataItem => {
+        return { value: rawGroupDataItem.group, label: rawGroupDataItem.group, colour: rawGroupDataItem.colour }
+    });
+}
+
+export async function handleGroupCreation(formData: BasicGroupData, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, newGroupItem: GroupItemEntity) {
     try {
         const response = await fetch("http://localhost:8080/api/createGroup", {
             method: "POST",
@@ -281,24 +290,31 @@ export async function handleGroupCreation(formData: BasicGroupData, setInitialGr
         if (!response.ok) {
             console.error(`HTTP error - status: ${response.status}`);
             window.alert("Group name is invalid or already exists.")
-            setInitialGroupOptions(current => {
-                const indexOfInvalidItem = current.map(item => item.label).lastIndexOf(newGroupItem.group);
+            setGroupArray((currentGroupArray) => {
+                const indexOfInvalidItem = currentGroupArray.map(item => item.group).lastIndexOf(newGroupItem.group);
                 if (indexOfInvalidItem !== -1) {
-                    return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)]
+                    return [...currentGroupArray.slice(0, indexOfInvalidItem), ...currentGroupArray.slice(indexOfInvalidItem + 1)]
                 }
-                return current;
+                return currentGroupArray;
             })
         }
         const responseData = await response.json()
         console.log(responseData);
-        setInitialGroupOptions(await getGroupListAsOptions());
+        setGroupArray(await getGroupList());
     } catch (error) {
         console.error("Failed to create group:", error);
     }
 }
 
-export async function handleGroupUpdating(originalGroupName: string, originalColour: string, newGroupName: string, newColour: string | null, setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>, initialGroupOptions: GroupOptionsFormattedData[]) {
-    if (!initialGroupOptions.map(option => option.label).includes(newGroupName)) {
+export async function handleGroupUpdating(originalGroupName: string, originalColour: string, formData: BasicGroupData, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, groupArray: GroupItemEntity[]) {
+        if (originalGroupName === formData.group || !groupArray.map(groupItem => groupItem.group).includes(formData.group)) {
+        setGroupArray(currentGroupArray => {
+            return currentGroupArray.map(groupItem => groupItem.group == originalGroupName ? {
+                colour: formData.colour ? formData.colour : groupItem.colour,
+                group: formData.group,
+                dateCreated: groupItem.dateCreated
+            } : groupItem)
+        })
         try {
             const response = await fetch("http://localhost:8080/api/updateGroup", {
                 method: "PUT",
@@ -307,30 +323,29 @@ export async function handleGroupUpdating(originalGroupName: string, originalCol
                 },
                 body: JSON.stringify( {
                     originalGroupName: originalGroupName,
-                    newGroupName: newGroupName,
-                    newColour: newColour ? newColour : ""
+                    newGroupName: formData.group,
+                    newColour: formData.colour ? formData.colour : ""
                 })
             });
             if (!response.ok) {
                 console.error(`HTTP error - status: ${response.status}`)
                 window.alert("Updated group is invalid.")
-                setInitialGroupOptions(currentGroupOptions => {
+                setGroupArray(currentGroupArray => {
 
-                    const revertedGroupOptions = [...currentGroupOptions]
-                    const indexOfInvalidlyEditedOption = currentGroupOptions.map(option => option.label).lastIndexOf(newGroupName);
+                    const revertedGroupOptions = [...currentGroupArray]
+                    const indexOfInvalidlyEditedOption = currentGroupArray.map(groupItem => groupItem.group).lastIndexOf(formData.group);
                     if (indexOfInvalidlyEditedOption !== -1) {
                         revertedGroupOptions[indexOfInvalidlyEditedOption] = {
-                            label: originalGroupName,
-                            value: originalGroupName,
-                            colour: originalColour
+                            group: originalGroupName,
+                            colour: originalColour,
+                            dateCreated: revertedGroupOptions[indexOfInvalidlyEditedOption].dateCreated
                         }
                     }
                     return revertedGroupOptions;
                 })
             } else {
                 console.log("Group successfully updated.")
-                getGroupListAsOptions()
-                    .then(options => setInitialGroupOptions(options))
+                setGroupArray(await getGroupList());
             }
         } catch (error) {
             console.error("Failed to update group:", error)

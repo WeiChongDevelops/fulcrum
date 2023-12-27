@@ -1,8 +1,7 @@
 import {
     BudgetFormVisibilityState,
     BudgetItemEntity,
-    GroupOptionsFormattedData,
-    handleGroupDeletion
+    handleGroupDeletion, GroupItemEntity
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
 import BudgetTile from "./BudgetTile.tsx";
@@ -10,6 +9,7 @@ import AddNewBudgetToGroupButton from "./AddNewBudgetToGroupButton.tsx";
 
 interface GroupProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
 
     groupName: string;
     groupColour: string;
@@ -17,7 +17,6 @@ interface GroupProps {
     filteredBudgetArray: BudgetItemEntity[];
 
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
-    setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>;
 
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 
@@ -31,7 +30,7 @@ export default function Group({ groupName,
                                   setBudgetArray,
                                   groupColour,
                                   setGroupNameOfNewItem,
-                                  setInitialGroupOptions,
+                                  setGroupArray,
                                   setOldBudgetBeingEdited,
                                   setOldGroupBeingEdited,
                                   setBudgetFormVisibility}: GroupProps) {
@@ -41,7 +40,7 @@ export default function Group({ groupName,
         setBudgetFormVisibility( current => ({...current, isUpdateGroupVisible: true}))
     }
     function handleDeleteClick() {
-        handleGroupDeletion(groupName, setInitialGroupOptions, setBudgetArray)
+        handleGroupDeletion(groupName, setGroupArray, setBudgetArray)
             .then(() => console.log("Deletion successful"))
             .catch((error) => console.log("Deletion unsuccessful", error));
     }
@@ -52,12 +51,12 @@ export default function Group({ groupName,
                 <b className="mt-2 text-xl">{groupName}</b>
 
                 {groupName !== "Miscellaneous" &&
-                    <div className="flex flex-row justify-center items-center">
-                        <div className="circle-button rounded-full p-1 mt-3" onClick={handleEditClick}>
-                            <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-10 h-10" />
+                    <div className="flex flex-row justify-center items-center ml-1">
+                        <div className="circle-button rounded-full p-1 mt-2" onClick={handleEditClick}>
+                            <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="w-4 h-4" />
                         </div>
-                        <div className="circle-button rounded-full p-1 mt-3" onClick={handleDeleteClick}>
-                            <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="mx-1 w-10 h-10" />
+                        <div className="circle-button rounded-full p-1 mt-2" onClick={handleDeleteClick}>
+                            <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="w-4 h-4" />
                         </div>
                     </div>
                 }

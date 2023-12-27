@@ -3,8 +3,8 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addIconSelectionFunctionality,
     BudgetCreationFormData, BudgetFormVisibilityState,
-    BudgetItemEntity, capitalizeFirstLetter, colourStyles, getColourOfGroup, GroupOptionsFormattedData,
-    handleBudgetCreation
+    BudgetItemEntity, capitalizeFirstLetter, colourStyles, getColourOfGroup, groupListAsOptions,
+    handleBudgetCreation, GroupItemEntity
 } from "../../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import "../../../css/Budget.css"
@@ -12,12 +12,12 @@ import BudgetIconSelector from "../Selectors/BudgetIconSelector.tsx";
 
 interface BudgetCreationFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-    initialGroupOptions: GroupOptionsFormattedData[];
+    groupArray: GroupItemEntity[];
     groupNameOfNewItem: string;
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 }
 
-export default function BudgetCreationForm({ setBudgetArray, initialGroupOptions, groupNameOfNewItem, setBudgetFormVisibility }: BudgetCreationFormProps) {
+export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNameOfNewItem, setBudgetFormVisibility }: BudgetCreationFormProps) {
 
     const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     const formRef = useRef<HTMLDivElement>(null);
@@ -65,7 +65,7 @@ export default function BudgetCreationForm({ setBudgetArray, initialGroupOptions
     return (
         <div ref={formRef}  className="budget-form fixed flex flex-col justify-center items-center rounded-3xl">
 
-            <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
+            <button className="ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault()
                 setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}))
             }}>Close</button>
@@ -99,9 +99,9 @@ export default function BudgetCreationForm({ setBudgetArray, initialGroupOptions
                     defaultValue={{
                         label: groupNameOfNewItem,
                         value: groupNameOfNewItem,
-                        colour: getColourOfGroup(groupNameOfNewItem, initialGroupOptions)
+                        colour: getColourOfGroup(groupNameOfNewItem, groupListAsOptions(groupArray))
                 }}
-                    options={initialGroupOptions.map(option => {
+                    options={groupListAsOptions(groupArray).map(option => {
                         return {label: option.label, value: option.value, colour: option.colour!!}
                     })}
                     onChange={handleGroupInputChange}

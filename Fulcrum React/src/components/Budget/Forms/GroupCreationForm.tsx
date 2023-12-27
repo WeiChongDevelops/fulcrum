@@ -3,18 +3,17 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addColourSelectionFunctionality,
     BasicGroupData, BudgetFormVisibilityState, capitalizeFirstLetter,
-    GroupOptionsFormattedData,
-    handleGroupCreation
+    handleGroupCreation, GroupItemEntity
 } from "../../../util.ts";
 import "../../../css/Budget.css"
 import GroupColourSelector from "../Selectors/GroupColourSelector.tsx";
 
 interface GroupCreationFormProps {
-    setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>
+    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 }
 
-export default function GroupCreationForm(this: any, { setInitialGroupOptions, setBudgetFormVisibility }: GroupCreationFormProps) {
+export default function GroupCreationForm(this: any, { setGroupArray, setBudgetFormVisibility }: GroupCreationFormProps) {
 
     const [formData, setFormData] = useState<BasicGroupData>({ group: "", colour: "" })
     const formRef = useRef<HTMLDivElement>(null);
@@ -42,22 +41,17 @@ export default function GroupCreationForm(this: any, { setInitialGroupOptions, s
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const newGroupOption = {
-            value: formData.group,
-            label: formData.group,
-            colour: formData.colour
-        }
-
-        const newGroupItem = {
+        const newGroupItem: GroupItemEntity = {
             group: formData.group,
-            colour: formData.colour
+            colour: formData.colour ? formData.colour : "",
+            dateCreated: new Date()
         }
 
-        setInitialGroupOptions( (oldGroupOptions) => {
-            return [...oldGroupOptions, newGroupOption]
+        setGroupArray( (oldGroupArray) => {
+            return [...oldGroupArray, newGroupItem]
         })
         setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}))
-        await handleGroupCreation(formData, setInitialGroupOptions, newGroupItem);
+        await handleGroupCreation(formData, setGroupArray, newGroupItem);
         setFormData({ group: "", colour: "" });
 
     }
@@ -65,7 +59,7 @@ export default function GroupCreationForm(this: any, { setInitialGroupOptions, s
     return (
         <div ref={formRef} className="budget-form fixed flex flex-col justify-center items-center rounded-3xl">
 
-            <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
+            <button className="ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
                 setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}))
             }}>Close</button>

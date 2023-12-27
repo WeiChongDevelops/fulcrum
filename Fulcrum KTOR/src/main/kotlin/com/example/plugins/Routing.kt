@@ -283,7 +283,7 @@ fun Application.configureRouting() {
 
         get("/api/getGroups") {
             try {
-                val groupList = supabase.postgrest["groups"].select(columns = Columns.list("group, colour")) {
+                val groupList = supabase.postgrest["groups"].select(columns = Columns.list("group, colour, dateCreated")) {
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                 }
                     .decodeList<GroupResponse>()

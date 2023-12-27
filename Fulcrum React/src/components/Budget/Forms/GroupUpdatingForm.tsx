@@ -3,7 +3,7 @@ import {
     addColourSelectionFunctionality,
     BasicGroupData, BudgetFormVisibilityState,
     BudgetItemEntity,
-    getBudgetList, GroupOptionsFormattedData,
+    getBudgetList, GroupItemEntity,
     handleGroupUpdating
 } from "../../../util.ts";
 import FulcrumButton from "../../Other/FulcrumButton.tsx";
@@ -12,12 +12,12 @@ import GroupColourSelector from "../Selectors/GroupColourSelector.tsx";
 interface GroupUpdatingFormProps {
     oldGroupBeingEdited: { oldColour: string, oldGroupName: string };
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-    setInitialGroupOptions: Dispatch<SetStateAction<GroupOptionsFormattedData[]>>;
-    initialGroupOptions: GroupOptionsFormattedData[]
+    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
+    groupArray: GroupItemEntity[]
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 }
 
-export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited, setInitialGroupOptions, initialGroupOptions, setBudgetFormVisibility }: GroupUpdatingFormProps) {
+export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited, setGroupArray, groupArray, setBudgetFormVisibility }: GroupUpdatingFormProps) {
 
     const [formData, setFormData]
         = useState<BasicGroupData>({
@@ -48,16 +48,9 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        setInitialGroupOptions(currentGroupOptions => {
-            return currentGroupOptions.map(groupOption => groupOption.label == oldGroupBeingEdited.oldGroupName ? {
-                colour: formData.colour,
-                value: formData.group,
-                label: formData.group
-            } : groupOption)
-        })
         setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}))
 
-        await handleGroupUpdating(oldGroupBeingEdited.oldGroupName, oldGroupBeingEdited.oldColour, formData.group, formData.colour, setInitialGroupOptions, initialGroupOptions)
+        await handleGroupUpdating(oldGroupBeingEdited.oldGroupName, oldGroupBeingEdited.oldColour, formData, setGroupArray, groupArray)
 
         setFormData({
             colour: oldGroupBeingEdited.oldColour,
@@ -69,7 +62,7 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
 
     return (
         <div ref={formRef} className="budget-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
-            <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
+            <button className="ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}))
