@@ -66,7 +66,7 @@ export default function Budget() {
                     setTotalIncome={setTotalIncome}
                     amountLeftToBudget={amountLeftToBudget}/>
 
-                <FulcrumAnimation amountLeftToBudget={amountLeftToBudget} totalIncome={totalIncome}/>
+                <FulcrumAnimation amountLeftToBudget={amountLeftToBudget} totalIncome={totalIncome} setTotalIncome={setTotalIncome}/>
 
                 {setInitialGroupOptions.length > 0 && <GroupList
                     budgetArray={budgetArray}

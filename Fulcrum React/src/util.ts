@@ -403,13 +403,13 @@ export function dynamicallySizeBudgetNameDisplays() {
         let dynamicFontSize = ""
         const budgetNameLength = budgetNameElement.textContent?.length!;
         if (budgetNameLength <= 10) {
-            dynamicFontSize = "24px";
+            dynamicFontSize = "18px";
         } else if (budgetNameLength <= 14) {
-            dynamicFontSize = "20px";
-        } else if (budgetNameLength <= 18) {
             dynamicFontSize = "16px";
-        } else if (budgetNameLength <= 22) {
+        } else if (budgetNameLength <= 18) {
             dynamicFontSize = "12px";
+        } else if (budgetNameLength <= 22) {
+            dynamicFontSize = "10px";
         }
         // console.log(`The size of ${budgetNameElement.innerText} (${budgetNameLength} characters) is ${dynamicFontSize}`);
         budgetNameElement.style.fontSize = dynamicFontSize;

@@ -3,23 +3,24 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	margin: 12% auto 1% auto;
+	margin: 8% auto 2% auto;
 }
 
 .line {
 	width: 1000px;
-	height: 16px;
+	height: 24px;
 	background-color: white;
 	transition: transform 0.5s ease;
 	transform-origin: bottom center;
-	background-image: url("../assets/fulcrum-animation/fulcrum-line-red.svg");
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
+	/*background-image: url("../assets/fulcrum-animation/fulcrum-line-red.svg");*/
+	/*background-size: cover;*/
+	/*background-repeat: no-repeat;*/
+	/*background-position: center center;*/
 	outline: black 2px solid;
 	outline-offset: -1px;
 }
 
 .triangle {
-	transform: translate(0, -10px)
+	transform: translate(0, -10px);
+	width: 150px;
 }

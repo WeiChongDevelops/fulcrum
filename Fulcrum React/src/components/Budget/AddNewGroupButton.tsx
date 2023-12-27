@@ -13,7 +13,7 @@ export default function AddNewGroupButton({ setBudgetFormVisibility }: AddNewGro
 
     return (
         <button className="create-group-button rounded-3xl mb-8" onClick={handleClick}>
-            New Group
+            +
         </button>
     )
 }

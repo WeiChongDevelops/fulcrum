@@ -38,20 +38,18 @@ export default function Group({ groupName,
 
     function handleEditClick() {
         setOldGroupBeingEdited( { oldGroupName: groupName, oldColour: groupColour });
-        // setIsUpdateGroupVisible(true);
         setBudgetFormVisibility( current => ({...current, isUpdateGroupVisible: true}))
     }
     function handleDeleteClick() {
-        // Delete the group
         handleGroupDeletion(groupName, setInitialGroupOptions, setBudgetArray)
             .then(() => console.log("Deletion successful"))
             .catch((error) => console.log("Deletion unsuccessful", error));
     }
 
     return (
-        <div className="box-shadow group flex flex-col bg-amber-200 rounded-3xl p-5 mb-8" style={{backgroundColor: `${groupColour}`}}>
+        <div className="group flex flex-col rounded-3xl p-2 mb-5" style={{backgroundColor: `${groupColour}`}}>
             <div className="flex flex-row justify-center items-center mb-4">
-                <h1 className="m-4">{groupName}</h1>
+                <b className="mt-2 text-xl">{groupName}</b>
 
                 {groupName !== "Miscellaneous" &&
                     <div className="flex flex-row justify-center items-center">
