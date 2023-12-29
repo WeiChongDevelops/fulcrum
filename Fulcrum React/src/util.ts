@@ -279,7 +279,7 @@ export async function handleGroupCreation(formData: BasicGroupData, setGroupArra
 export async function handleGroupDeletion(groupName: string,
                                           setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
                                           setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
-                                          deletePreference: string) {
+                                          keepContainedBudgets: boolean) {
     setGroupArray(prevState => prevState.filter(groupItem => groupItem.group !== groupName))
     try {
         const response = await fetch("http://localhost:8080/api/deleteGroup", {
@@ -289,7 +289,7 @@ export async function handleGroupDeletion(groupName: string,
             },
             body: JSON.stringify({
                 group: groupName,
-                deletePreference: deletePreference
+                keepContainedBudgets: keepContainedBudgets
             })
         })
 

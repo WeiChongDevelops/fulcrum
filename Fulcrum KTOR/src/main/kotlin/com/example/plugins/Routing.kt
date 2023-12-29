@@ -325,7 +325,7 @@ fun Application.configureRouting() {
             // Actually, if this block below runs and renames groups, the cascade behaviour would make no difference - there would be nothing to cascade deletes to.
             // So if the property of the request 'moveCategoriesToMisc' is true, we run this.
             // Now, in React, we need a way for the user to pick between two options.
-            if (groupDeleteRequest.deletePreference == "keep") {
+            if (groupDeleteRequest.keepContainedBudgets) {
                 try {
                     supabase.postgrest["budgets"].update(
                         {

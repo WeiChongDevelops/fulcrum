@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GroupDeleteRequestReceived(
     val group: String,
-    val deletePreference: String
+    val keepContainedBudgets: Boolean
 )

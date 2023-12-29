@@ -61,9 +61,9 @@ export default function Budget() {
         console.log(budgetFormVisibility);
     }, [budgetFormVisibility])
 
-    function runGroupDeletionWithUserPreference(preference: string) {
+    function runGroupDeletionWithUserPreference(keepContainedBudgets: boolean) {
         setIsDeleteOptionsModalVisible(false);
-        handleGroupDeletion(groupToDelete, setGroupArray, setBudgetArray, preference)
+        handleGroupDeletion(groupToDelete, setGroupArray, setBudgetArray, keepContainedBudgets)
             .then(() => console.log("Deletion successful"))
             .catch((error) => console.log("Deletion unsuccessful", error));
     }
@@ -84,7 +84,6 @@ export default function Budget() {
                     setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                     setOldGroupBeingEdited={setOldGroupBeingEdited}
                     groupArray={groupArray}
-                    setGroupArray={setGroupArray}
                     setGroupNameOfNewItem={setGroupNameOfNewItem}
                     setBudgetFormVisibility={setBudgetFormVisibility}
                     setGroupToDelete={setGroupToDelete}
@@ -107,11 +106,14 @@ export default function Budget() {
                                                         groupArray={groupArray}
                                                         setGroupArray={setGroupArray}
                                                         setBudgetFormVisibility={setBudgetFormVisibility}/>}
-            {isDeleteOptionsModalVisible && <TwoOptionModal optionOneText="Keep Categories"
-                                                       optionOneFunction={() => runGroupDeletionWithUserPreference("keep")}
-                                                       optionTwoText="Delete Categories"
-                                                       optionTwoFunction={() => runGroupDeletionWithUserPreference("destroy")}
-                                                       setVisible={setIsDeleteOptionsModalVisible}/>}
+            {isDeleteOptionsModalVisible && <TwoOptionModal
+                optionOneText="Keep Categories"
+                optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
+                optionTwoText="Delete Categories"
+                optionTwoFunction={() => runGroupDeletionWithUserPreference(false)}
+                setVisible={setIsDeleteOptionsModalVisible}
+            />}
+
         </div>
     );
 }
