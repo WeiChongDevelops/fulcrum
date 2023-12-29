@@ -73,7 +73,6 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
                        value={formData.category}
                        name="category"
                        id="category"
-                       defaultValue={oldBudgetBeingEdited.oldCategory}
                        maxLength={22}/>
 
                 <label htmlFor="amount">Amount</label>
@@ -83,7 +82,6 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
                        name="amount"
                        id="amount"
                        className="mb-3"
-                       defaultValue={oldBudgetBeingEdited.oldAmount?.toString()}
                        min={0.01}
                        step={0.01}
                 />

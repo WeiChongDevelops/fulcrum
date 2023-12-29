@@ -2,13 +2,14 @@ import {Dispatch, MouseEventHandler, SetStateAction, useEffect, useRef} from "re
 
 interface TwoOptionModalProps {
     optionOneText: string;
-    optionOneFunction: MouseEventHandler<HTMLButtonElement>
+    optionOneFunction: MouseEventHandler<HTMLButtonElement>;
     optionTwoText: string;
-    optionTwoFunction: MouseEventHandler<HTMLButtonElement>
+    optionTwoFunction: MouseEventHandler<HTMLButtonElement>;
     setVisible: Dispatch<SetStateAction<boolean>>;
+    title: string;
 }
 
-export default function TwoOptionModal( { optionOneText, optionOneFunction, optionTwoText, optionTwoFunction, setVisible }: TwoOptionModalProps) {
+export default function TwoOptionModal( { optionOneText, optionOneFunction, optionTwoText, optionTwoFunction, setVisible, title }: TwoOptionModalProps) {
 
     const formRef = useRef<HTMLDivElement>(null);
 
@@ -32,11 +33,11 @@ export default function TwoOptionModal( { optionOneText, optionOneFunction, opti
                 setVisible(false);
             }}>Cancel</button>
 
-            <h2 className="mt-8">Deleting Group</h2>
+            <h2 className="mt-8 mx-4">{title}</h2>
 
             <div className="flex flex-row justify-between mt-12">
-                <button onClick={optionOneFunction}>{optionOneText}</button>
-                <button onClick={optionTwoFunction}>{optionTwoText}</button>
+                <button onClick={optionOneFunction} className="mx-2">{optionOneText}</button>
+                <button onClick={optionTwoFunction} className="mx-2">{optionTwoText}</button>
             </div>
         </div>
     );

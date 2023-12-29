@@ -1,18 +1,14 @@
-import BudgetCreationForm from "./Forms/BudgetCreationForm.tsx";
 import {
     BudgetItemEntity, dynamicallySizeBudgetNameDisplays,
     getAmountBudgeted,
     getBudgetList, getGroupList, GroupItemEntity, handleGroupDeletion,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
-import BudgetUpdatingForm from "./Forms/BudgetUpdatingForm.tsx";
 import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
-import GroupCreationForm from "./Forms/GroupCreationForm.tsx";
-import GroupUpdatingForm from "./Forms/GroupUpdatingForm.tsx";
 import AddNewGroupButton from "./AddNewGroupButton.tsx";
-import TwoOptionModal from "../Other/TwoOptionModal.tsx";
+import ModalsAndForms from "./Forms/ModalsAndForms.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -26,6 +22,7 @@ export default function Budget() {
     });
 
     const [isDeleteOptionsModalVisible, setIsDeleteOptionsModalVisible] = useState<boolean>(false);
+    const [isConfirmDestructionModalVisible, setIsConfirmDestructionModalVisible] = useState<boolean>(false);
     const [groupToDelete, setGroupToDelete] = useState<string>("");
 
     const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState({ oldAmount: 0, oldCategory: "", oldGroup: ""});
@@ -63,6 +60,7 @@ export default function Budget() {
 
     function runGroupDeletionWithUserPreference(keepContainedBudgets: boolean) {
         setIsDeleteOptionsModalVisible(false);
+        setIsConfirmDestructionModalVisible(false);
         handleGroupDeletion(groupToDelete, setGroupArray, setBudgetArray, keepContainedBudgets)
             .then(() => console.log("Deletion successful"))
             .catch((error) => console.log("Deletion unsuccessful", error));
@@ -84,6 +82,7 @@ export default function Budget() {
                     setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                     setOldGroupBeingEdited={setOldGroupBeingEdited}
                     groupArray={groupArray}
+                    setGroupArray={setGroupArray}
                     setGroupNameOfNewItem={setGroupNameOfNewItem}
                     setBudgetFormVisibility={setBudgetFormVisibility}
                     setGroupToDelete={setGroupToDelete}
@@ -91,28 +90,21 @@ export default function Budget() {
 
                 <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
             </div>
-            {budgetFormVisibility.isCreateBudgetVisible && <BudgetCreationForm setBudgetArray={setBudgetArray}
-                                                          groupArray={groupArray}
-                                                          groupNameOfNewItem={groupNameOfNewItem}
-                                                          setBudgetFormVisibility={setBudgetFormVisibility}/>}
-            {budgetFormVisibility.isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray}
-                                                          oldBudgetBeingEdited={oldBudgetBeingEdited}
-                                                          groupArray={groupArray}
-                                                          setBudgetFormVisibility={setBudgetFormVisibility}/>}
-            {budgetFormVisibility.isCreateGroupVisible && <GroupCreationForm setGroupArray={setGroupArray}
-                                                        setBudgetFormVisibility={setBudgetFormVisibility}/>}
-            {budgetFormVisibility.isUpdateGroupVisible && <GroupUpdatingForm oldGroupBeingEdited={oldGroupBeingEdited}
-                                                        setBudgetArray={setBudgetArray}
-                                                        groupArray={groupArray}
-                                                        setGroupArray={setGroupArray}
-                                                        setBudgetFormVisibility={setBudgetFormVisibility}/>}
-            {isDeleteOptionsModalVisible && <TwoOptionModal
-                optionOneText="Keep Categories"
-                optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
-                optionTwoText="Delete Categories"
-                optionTwoFunction={() => runGroupDeletionWithUserPreference(false)}
-                setVisible={setIsDeleteOptionsModalVisible}
-            />}
+
+            <ModalsAndForms budgetFormVisibility={budgetFormVisibility}
+                            setBudgetArray={setBudgetArray}
+                            groupArray={groupArray}
+                            groupNameOfNewItem={groupNameOfNewItem}
+                            setBudgetFormVisibility={setBudgetFormVisibility}
+                            oldBudgetBeingEdited={oldBudgetBeingEdited}
+                            setGroupArray={setGroupArray}
+                            oldGroupBeingEdited={oldGroupBeingEdited}
+                            isDeleteOptionsModalVisible={isDeleteOptionsModalVisible}
+                            groupToDelete={groupToDelete}
+                            runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
+                            setIsDeleteOptionsModalVisible={setIsDeleteOptionsModalVisible}
+                            setIsConfirmDestructionModalVisible={setIsConfirmDestructionModalVisible}
+                            isConfirmDestructionModalVisible={isConfirmDestructionModalVisible}/>
 
         </div>
     );

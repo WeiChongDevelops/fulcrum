@@ -1,6 +1,6 @@
 import {
     BudgetFormVisibilityState,
-    BudgetItemEntity
+    BudgetItemEntity, GroupItemEntity, handleGroupDeletion
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
 import BudgetTile from "./BudgetTile.tsx";
@@ -8,6 +8,7 @@ import AddNewBudgetToGroupButton from "./AddNewBudgetToGroupButton.tsx";
 
 interface GroupProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
 
     groupName: string;
     groupColour: string;
@@ -28,6 +29,7 @@ interface GroupProps {
 export default function Group({ groupName,
                                   filteredBudgetArray,
                                   setBudgetArray,
+                                  setGroupArray,
                                   groupColour,
                                   setGroupNameOfNewItem,
                                   setOldBudgetBeingEdited,
@@ -42,7 +44,14 @@ export default function Group({ groupName,
     }
     function handleDeleteClick() {
         setGroupToDelete(groupName);
-        setIsDeleteOptionsModalVisible(true);
+        // If there are categories inside this group, allow the user to choose between retaining them and deleting them.
+        if (filteredBudgetArray.length > 0) {
+            setIsDeleteOptionsModalVisible(true);
+        } else {
+            handleGroupDeletion(groupName, setGroupArray, setBudgetArray, false)
+                .then(() => console.log("Deletion successful"))
+                .catch((error) => console.log("Deletion unsuccessful", error));
+        }
     }
 
     return (

@@ -11,6 +11,7 @@ interface GroupListProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
     groupArray: GroupItemEntity[];
+    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
 
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 
@@ -26,6 +27,7 @@ interface GroupListProps {
 export default function GroupList( { budgetArray,
                                        setBudgetArray,
                                        groupArray,
+                                       setGroupArray,
                                        setGroupNameOfNewItem,
                                        setOldBudgetBeingEdited,
                                        setOldGroupBeingEdited,
@@ -50,6 +52,7 @@ export default function GroupList( { budgetArray,
                     return <Group groupName={groupDataItem.group}
                                   filteredBudgetArray={filteredBudgetArray}
                                   setBudgetArray={setBudgetArray}
+                                  setGroupArray={setGroupArray}
                                   setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                                   setOldGroupBeingEdited={setOldGroupBeingEdited}
                                   groupColour={groupDataItem.colour}
