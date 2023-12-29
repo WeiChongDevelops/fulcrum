@@ -12,7 +12,6 @@ export default function GroupColourSelector( { oldColour }:GroupColourSelectorPr
         oldColourSelectable?.classList.add("selectedColour")
     }, [])
 
-
     return (
         <div id="group-colour-selector">
             <div className="group-colour-selectable-container">

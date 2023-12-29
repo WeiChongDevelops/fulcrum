@@ -3,7 +3,7 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addColourSelectionFunctionality,
     BasicGroupData, BudgetFormVisibilityState, capitalizeFirstLetter,
-    handleGroupCreation, GroupItemEntity
+    handleGroupCreation, GroupItemEntity, getRandomColour
 } from "../../../util.ts";
 import "../../../css/Budget.css"
 import GroupColourSelector from "../Selectors/GroupColourSelector.tsx";
@@ -41,9 +41,11 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
+        const randomColour = getRandomColour();
+
         const newGroupItem: GroupItemEntity = {
             group: formData.group,
-            colour: formData.colour ? formData.colour : "",
+            colour: formData.colour ? formData.colour : randomColour,
             dateCreated: new Date()
         }
 
@@ -51,7 +53,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
             return [...oldGroupArray, newGroupItem]
         })
         setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}))
-        await handleGroupCreation(formData, setGroupArray, newGroupItem);
+        await handleGroupCreation(formData.group, formData.colour ? formData.colour : randomColour, setGroupArray, newGroupItem);
         setFormData({ group: "", colour: "" });
 
     }

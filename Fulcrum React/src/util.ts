@@ -251,7 +251,7 @@ export function groupListAsOptions(groupList: GroupItemEntity[]) {
     });
 }
 
-export async function handleGroupCreation(formData: BasicGroupData, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, newGroupItem: GroupItemEntity) {
+export async function handleGroupCreation(group: string, colour: string, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, newGroupItem: GroupItemEntity) {
     try {
         const response = await fetch("http://localhost:8080/api/createGroup", {
             method: "POST",
@@ -259,8 +259,8 @@ export async function handleGroupCreation(formData: BasicGroupData, setGroupArra
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                group: formData.group,
-                colour: formData.colour
+                group: group,
+                colour: colour
             })
         });
         if (!response.ok) {
@@ -366,15 +366,21 @@ export async function handleGroupUpdating(originalGroupName: string, originalCol
 
 export function getRandomColour() {
     const colourArray = [
-        '#81e1d7', '#5cd67b', '#6087d6', '#c4696d',
-        '#c08757', '#65a9c6', '#4ab6a3', '#6ec15d',
-        '#5f74da', '#81d16d', '#ae7cd1', '#e49b84',
-        '#71d0be', '#bb5171', '#8065c6', '#8d66b2'
+        "#d04443",
+        "#ff707a",
+        "#f293cb",
+        "#9b41f1",
+        "#4e5ee9",
+        "#73aef0",
+        "#39cfdd",
+        "#26dd9b",
+        "#b5d04b",
+        "#e5e839",
+        "#ecc59a",
+        "#fbae38",
+        "#aa7d42",
+        "#d3d1d2"
     ];
-
-    // Gives number between 0 and 1: Math.random()
-    // Gives number within bounds of array size: Math.random() * colourArray.length
-    // Floor it.
 
     const randomColourIndex = Math.floor(Math.random() * colourArray.length);
     return colourArray[randomColourIndex];
