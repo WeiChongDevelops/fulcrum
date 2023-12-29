@@ -19,6 +19,9 @@ interface GroupListProps {
 
     setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>
     setOldGroupBeingEdited: Dispatch<SetStateAction<{ oldGroupName: string, oldColour: string }>>
+
+    setGroupToDelete: Dispatch<SetStateAction<string>>;
+    setIsDeleteOptionsModalVisible: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function GroupList( { budgetArray,
@@ -29,6 +32,8 @@ export default function GroupList( { budgetArray,
                                        setOldBudgetBeingEdited,
                                        setOldGroupBeingEdited,
                                        setBudgetFormVisibility,
+                                       setGroupToDelete,
+                                       setIsDeleteOptionsModalVisible
                                    }: GroupListProps ) {
 
     // 1. Make an array containing unique group in the budgetArray
@@ -53,6 +58,8 @@ export default function GroupList( { budgetArray,
                                   setGroupNameOfNewItem={setGroupNameOfNewItem}
                                   setGroupArray={setGroupArray}
                                   setBudgetFormVisibility={setBudgetFormVisibility}
+                                  setGroupToDelete={setGroupToDelete}
+                                  setIsDeleteOptionsModalVisible={setIsDeleteOptionsModalVisible}
                                   key={key}/>
                 })
             }

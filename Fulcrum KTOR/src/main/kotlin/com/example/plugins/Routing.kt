@@ -321,20 +321,26 @@ fun Application.configureRouting() {
 
         delete("/api/deleteGroup") {
             val groupDeleteRequest = call.receive<GroupDeleteRequestReceived>()
-            // First we reassign any groups with this name to miscellaneous
-            try {
-                supabase.postgrest["budgets"].update(
-                    {
-                        set("group", "Miscellaneous")
+            // First we reassign any groups with this name to miscellaneous. If we want to have an alternate behaviour, that data needs to be included in the above entity, chosen in react and sent to ktor API as part of body.
+            // Actually, if this block below runs and renames groups, the cascade behaviour would make no difference - there would be nothing to cascade deletes to.
+            // So if the property of the request 'moveCategoriesToMisc' is true, we run this.
+            // Now, in React, we need a way for the user to pick between two options.
+            if (groupDeleteRequest.deletePreference == "keep") {
+                try {
+                    supabase.postgrest["budgets"].update(
+                        {
+                            set("group", "Miscellaneous")
+                        }
+                    ) {
+                        eq("group", groupDeleteRequest.group)
+                        eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                     }
-                ) {
-                    eq("group", groupDeleteRequest.group)
-                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                } catch (e: Exception) {
+                    call.application.log.error("Error while reassigning budgets to Misc", e)
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group deletion failed at reassignment."))
                 }
-            } catch (e: Exception) {
-                call.application.log.error("Error while reassigning budgets to Misc", e)
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group deletion failed at reassignment."))
             }
+
             // Then we delete the group from the groups table
             try {
                 val deletedGroup = supabase.postgrest["groups"].delete {

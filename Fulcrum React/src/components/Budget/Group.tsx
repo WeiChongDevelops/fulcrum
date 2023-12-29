@@ -20,9 +20,11 @@ interface GroupProps {
 
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
 
-
     setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>;
     setOldGroupBeingEdited: Dispatch<SetStateAction<{ oldGroupName: string, oldColour: string }>>
+
+    setGroupToDelete: Dispatch<SetStateAction<string>>;
+    setIsDeleteOptionsModalVisible: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Group({ groupName,
@@ -33,16 +35,21 @@ export default function Group({ groupName,
                                   setGroupArray,
                                   setOldBudgetBeingEdited,
                                   setOldGroupBeingEdited,
-                                  setBudgetFormVisibility}: GroupProps) {
+                                  setBudgetFormVisibility,
+                                  setGroupToDelete,
+                                  setIsDeleteOptionsModalVisible}: GroupProps) {
 
     function handleEditClick() {
         setOldGroupBeingEdited( { oldGroupName: groupName, oldColour: groupColour });
         setBudgetFormVisibility( current => ({...current, isUpdateGroupVisible: true}))
     }
     function handleDeleteClick() {
-        handleGroupDeletion(groupName, setGroupArray, setBudgetArray)
-            .then(() => console.log("Deletion successful"))
-            .catch((error) => console.log("Deletion unsuccessful", error));
+        setGroupToDelete(groupName);
+        setIsDeleteOptionsModalVisible(true);
+
+        // handleGroupDeletion(groupName, setGroupArray, setBudgetArray)
+        //     .then(() => console.log("Deletion successful"))
+        //     .catch((error) => console.log("Deletion unsuccessful", error));
     }
 
     return (

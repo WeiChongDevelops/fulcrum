@@ -61,7 +61,7 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
     }
 
     return (
-        <div ref={formRef} className="budget-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
+        <div ref={formRef} className="budget-form">
             <button className="ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

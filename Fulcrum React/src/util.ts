@@ -157,36 +157,6 @@ export async function handleBudgetDeletion(category: string, setBudgetArray: Dis
     getBudgetList().then( budgetList => setBudgetArray(budgetList))
 }
 
-export async function handleGroupDeletion(groupName: string,
-                                          setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
-                                          setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
-    setGroupArray(prevState => prevState.filter(groupItem => groupItem.group !== groupName))
-    try {
-        const response = await fetch("http://localhost:8080/api/deleteGroup", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "group": groupName,
-            })
-        })
-
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-
-    } catch(error) {
-        console.error("Error:", error);
-    }
-
-    await getGroupList()
-        .then( options => setGroupArray(options))
-        .then( () => getBudgetList().then( budgets => setBudgetArray(budgets)))
-}
-
 
 export async function handleBudgetCreation(formData: BudgetCreationFormData, setBudgetArray: (value: (((prevState: BudgetItemEntity[]) => BudgetItemEntity[]) | BudgetItemEntity[])) => void, newBudgetItem: BudgetItemEntity) {
     try {
@@ -306,6 +276,38 @@ export async function handleGroupCreation(formData: BasicGroupData, setGroupArra
     }
 }
 
+export async function handleGroupDeletion(groupName: string,
+                                          setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
+                                          setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
+                                          deletePreference: string) {
+    setGroupArray(prevState => prevState.filter(groupItem => groupItem.group !== groupName))
+    try {
+        const response = await fetch("http://localhost:8080/api/deleteGroup", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                group: groupName,
+                deletePreference: deletePreference
+            })
+        })
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch(error) {
+        console.error("Error:", error);
+    }
+
+    await getGroupList()
+        .then( options => setGroupArray(options))
+        .then( () => getBudgetList().then( budgets => setBudgetArray(budgets)))
+}
+
 export async function handleGroupUpdating(originalGroupName: string, originalColour: string, formData: BasicGroupData, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, groupArray: GroupItemEntity[]) {
         if (originalGroupName === formData.group || !groupArray.map(groupItem => groupItem.group).includes(formData.group)) {
         setGroupArray(currentGroupArray => {
@@ -420,7 +422,7 @@ export function dynamicallySizeBudgetNameDisplays() {
         if (budgetNameLength <= 10) {
             dynamicFontSize = "18px";
         } else if (budgetNameLength <= 14) {
-            dynamicFontSize = "16px";
+            dynamicFontSize = "14px";
         } else if (budgetNameLength <= 18) {
             dynamicFontSize = "12px";
         } else if (budgetNameLength <= 22) {

@@ -2,7 +2,7 @@ import BudgetCreationForm from "./Forms/BudgetCreationForm.tsx";
 import {
     BudgetItemEntity, dynamicallySizeBudgetNameDisplays,
     getAmountBudgeted,
-    getBudgetList, getGroupList, GroupItemEntity,
+    getBudgetList, getGroupList, GroupItemEntity, handleGroupDeletion,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
 import BudgetUpdatingForm from "./Forms/BudgetUpdatingForm.tsx";
@@ -12,6 +12,7 @@ import GroupList from "./GroupList.tsx";
 import GroupCreationForm from "./Forms/GroupCreationForm.tsx";
 import GroupUpdatingForm from "./Forms/GroupUpdatingForm.tsx";
 import AddNewGroupButton from "./AddNewGroupButton.tsx";
+import TwoOptionModal from "../Other/TwoOptionModal.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -24,8 +25,11 @@ export default function Budget() {
         isUpdateGroupVisible: false,
     });
 
-    const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState({ oldAmount: 0, oldCategory: "", oldGroup: ""})
-    const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState({ oldColour: "", oldGroupName: "" })
+    const [isDeleteOptionsModalVisible, setIsDeleteOptionsModalVisible] = useState<boolean>(false);
+    const [groupToDelete, setGroupToDelete] = useState<string>("");
+
+    const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState({ oldAmount: 0, oldCategory: "", oldGroup: ""});
+    const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState({ oldColour: "", oldGroupName: "" });
 
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
@@ -57,9 +61,16 @@ export default function Budget() {
         console.log(budgetFormVisibility);
     }, [budgetFormVisibility])
 
+    function runGroupDeletionWithUserPreference(preference: string) {
+        setIsDeleteOptionsModalVisible(false);
+        handleGroupDeletion(groupToDelete, setGroupArray, setBudgetArray, preference)
+            .then(() => console.log("Deletion successful"))
+            .catch((error) => console.log("Deletion unsuccessful", error));
+    }
+
     return (
         <div>
-            <div className={`flex flex-col elementsBelowPopUpForm ${(Object.values(budgetFormVisibility).includes(true)) && "blur"} px-16`}>
+            <div className={`flex flex-col elementsBelowPopUpForm ${((Object.values(budgetFormVisibility).includes(true)) || isDeleteOptionsModalVisible) && "blur"} px-16`}>
                 <TotalIncomeDisplay
                     totalIncome={totalIncome}
                     setTotalIncome={setTotalIncome}
@@ -75,7 +86,9 @@ export default function Budget() {
                     groupArray={groupArray}
                     setGroupArray={setGroupArray}
                     setGroupNameOfNewItem={setGroupNameOfNewItem}
-                    setBudgetFormVisibility={setBudgetFormVisibility}/>}
+                    setBudgetFormVisibility={setBudgetFormVisibility}
+                    setGroupToDelete={setGroupToDelete}
+                    setIsDeleteOptionsModalVisible={setIsDeleteOptionsModalVisible}/>}
 
                 <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
             </div>
@@ -94,7 +107,11 @@ export default function Budget() {
                                                         groupArray={groupArray}
                                                         setGroupArray={setGroupArray}
                                                         setBudgetFormVisibility={setBudgetFormVisibility}/>}
-
+            {isDeleteOptionsModalVisible && <TwoOptionModal optionOneText="Keep Categories"
+                                                       optionOneFunction={() => runGroupDeletionWithUserPreference("keep")}
+                                                       optionTwoText="Delete Categories"
+                                                       optionTwoFunction={() => runGroupDeletionWithUserPreference("destroy")}
+                                                       setVisible={setIsDeleteOptionsModalVisible}/>}
         </div>
     );
 }
