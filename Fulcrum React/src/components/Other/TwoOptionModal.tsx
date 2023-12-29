@@ -1,4 +1,4 @@
-import {Dispatch, MouseEventHandler, SetStateAction} from "react";
+import {Dispatch, MouseEventHandler, SetStateAction, useEffect, useRef} from "react";
 
 interface TwoOptionModalProps {
     optionOneText: string;
@@ -9,8 +9,24 @@ interface TwoOptionModalProps {
 }
 
 export default function TwoOptionModal( { optionOneText, optionOneFunction, optionTwoText, optionTwoFunction, setVisible }: TwoOptionModalProps) {
+
+    const formRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        window.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            window.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const handleClickOutside = (e: MouseEvent) => {
+        if (formRef.current && !formRef.current.contains(e.target as Node)) {
+            setVisible(false);
+        }
+    };
+
     return (
-        <div className="budget-modal">
+        <div className="budget-modal" ref={formRef}>
             <button className="ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
                 setVisible(false);
