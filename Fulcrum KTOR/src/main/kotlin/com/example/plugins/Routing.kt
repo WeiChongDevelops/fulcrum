@@ -210,7 +210,7 @@ fun Application.configureRouting() {
                 if (deletedBudget.body == null) {
                     call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not deleted."))
                 } else {
-                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Budge deleted successfully."))
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget deleted successfully."))
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while deleting budget", e)

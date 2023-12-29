@@ -1,5 +1,5 @@
 import '/src/css/Budget.css';
-import {BudgetFormVisibilityState, BudgetItemEntity, formatNumberWithCommas, handleBudgetDeletion} from "../../util.ts";
+import {BudgetFormVisibilityState, BudgetModalVisibilityState, formatNumberWithCommas} from "../../util.ts";
 import React, {Dispatch, SetStateAction} from "react";
 
 interface BudgetTileProps {
@@ -7,21 +7,24 @@ interface BudgetTileProps {
     amount: number;
     group: string;
     icon: string;
-    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+
     setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>;
 
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
+    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibilityState>>;
+
+    setCategoryToDelete: Dispatch<SetStateAction<string>>;
+
 }
 
 export default function BudgetTile({ category,
                                        amount,
                                        group,
                                        icon,
-                                       setBudgetArray,
                                        setOldBudgetBeingEdited,
-                                       setBudgetFormVisibility}: BudgetTileProps) {
-
-
+                                       setBudgetFormVisibility,
+                                       setModalFormVisibility,
+                                       setCategoryToDelete}: BudgetTileProps) {
 
     function handleEditClick(e: React.MouseEvent<HTMLDivElement>) {
         e.stopPropagation();
@@ -33,13 +36,11 @@ export default function BudgetTile({ category,
         setBudgetFormVisibility( current => ({...current, isUpdateBudgetVisible: true}))
     }
 
-
     const tempHardCodedColour = "red"
 
     function handleDeleteClick() {
-        handleBudgetDeletion(category, setBudgetArray)
-            .then((response) => console.log("Deletion successful", response))
-            .catch((error) => console.log("Deletion unsuccessful", error));
+        setCategoryToDelete(category);
+        setModalFormVisibility(current => ({...current, isConfirmCategoryDestructionModalVisible: true}))
     }
 
     return (

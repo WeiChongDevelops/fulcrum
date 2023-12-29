@@ -8,7 +8,7 @@ import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
 import AddNewGroupButton from "./AddNewGroupButton.tsx";
-import ModalsAndForms from "./Forms/ModalsAndForms.tsx";
+import ModalsAndForms from "./ModalsAndForms/ModalsAndForms.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -21,9 +21,18 @@ export default function Budget() {
         isUpdateGroupVisible: false,
     });
 
-    const [isDeleteOptionsModalVisible, setIsDeleteOptionsModalVisible] = useState<boolean>(false);
-    const [isConfirmDestructionModalVisible, setIsConfirmDestructionModalVisible] = useState<boolean>(false);
+    const [modalFormVisibility, setModalFormVisibility] = useState( {
+        isDeleteOptionsModalVisible: false,
+        isConfirmGroupDestructionModalVisible: false,
+        isConfirmCategoryDestructionModalVisible: false
+    })
+
+    // const [isDeleteOptionsModalVisible, setIsDeleteOptionsModalVisible] = useState<boolean>(false);
+    // const [isConfirmGroupDestructionModalVisible, setIsConfirmGroupDestructionModalVisible] = useState<boolean>(false);
+    // const [isConfirmCategoryDestructionModalVisible, setIsConfirmCategoryDestructionModalVisible] = useState<boolean>(false);
+
     const [groupToDelete, setGroupToDelete] = useState<string>("");
+    const [categoryToDelete, setCategoryToDelete] = useState<string>("");
 
     const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState({ oldAmount: 0, oldCategory: "", oldGroup: ""});
     const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState({ oldColour: "", oldGroupName: "" });
@@ -59,8 +68,11 @@ export default function Budget() {
     }, [budgetFormVisibility])
 
     function runGroupDeletionWithUserPreference(keepContainedBudgets: boolean) {
-        setIsDeleteOptionsModalVisible(false);
-        setIsConfirmDestructionModalVisible(false);
+        setModalFormVisibility(current => ({...current,
+            isDeleteOptionsModalVisible: false,
+            isConfirmGroupDestructionModalVisible: false
+        }))
+
         handleGroupDeletion(groupToDelete, setGroupArray, setBudgetArray, keepContainedBudgets)
             .then(() => console.log("Deletion successful"))
             .catch((error) => console.log("Deletion unsuccessful", error));
@@ -68,7 +80,9 @@ export default function Budget() {
 
     return (
         <div>
-            <div className={`flex flex-col elementsBelowPopUpForm ${((Object.values(budgetFormVisibility).includes(true)) || isDeleteOptionsModalVisible) && "blur"} px-16`}>
+            <div className={`flex flex-col elementsBelowPopUpForm 
+            ${((Object.values(budgetFormVisibility).includes(true)) 
+                || Object.values(modalFormVisibility).includes(true)) && "blur"} px-16`}>
                 <TotalIncomeDisplay
                     totalIncome={totalIncome}
                     setTotalIncome={setTotalIncome}
@@ -86,7 +100,8 @@ export default function Budget() {
                     setGroupNameOfNewItem={setGroupNameOfNewItem}
                     setBudgetFormVisibility={setBudgetFormVisibility}
                     setGroupToDelete={setGroupToDelete}
-                    setIsDeleteOptionsModalVisible={setIsDeleteOptionsModalVisible}/>}
+                    setCategoryToDelete={setCategoryToDelete}
+                    setModalFormVisibility={setModalFormVisibility}/>}
 
                 <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
             </div>
@@ -99,12 +114,11 @@ export default function Budget() {
                             oldBudgetBeingEdited={oldBudgetBeingEdited}
                             setGroupArray={setGroupArray}
                             oldGroupBeingEdited={oldGroupBeingEdited}
-                            isDeleteOptionsModalVisible={isDeleteOptionsModalVisible}
                             groupToDelete={groupToDelete}
+                            categoryToDelete={categoryToDelete}
                             runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
-                            setIsDeleteOptionsModalVisible={setIsDeleteOptionsModalVisible}
-                            setIsConfirmDestructionModalVisible={setIsConfirmDestructionModalVisible}
-                            isConfirmDestructionModalVisible={isConfirmDestructionModalVisible}/>
+                            modalFormVisibility={modalFormVisibility}
+                            setModalFormVisibility={setModalFormVisibility}/>
 
         </div>
     );

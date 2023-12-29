@@ -1,6 +1,6 @@
 import {
     BudgetFormVisibilityState,
-    BudgetItemEntity, GroupItemEntity, handleGroupDeletion
+    BudgetItemEntity, BudgetModalVisibilityState, GroupItemEntity, handleGroupDeletion
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
 import BudgetTile from "./BudgetTile.tsx";
@@ -18,12 +18,15 @@ interface GroupProps {
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
 
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
+    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibilityState>>;
 
     setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>;
     setOldGroupBeingEdited: Dispatch<SetStateAction<{ oldGroupName: string, oldColour: string }>>
 
     setGroupToDelete: Dispatch<SetStateAction<string>>;
-    setIsDeleteOptionsModalVisible: Dispatch<SetStateAction<boolean>>;
+
+    setCategoryToDelete: Dispatch<SetStateAction<string>>;
+
 }
 
 export default function Group({ groupName,
@@ -36,7 +39,8 @@ export default function Group({ groupName,
                                   setOldGroupBeingEdited,
                                   setBudgetFormVisibility,
                                   setGroupToDelete,
-                                  setIsDeleteOptionsModalVisible}: GroupProps) {
+                                  setCategoryToDelete,
+                                  setModalFormVisibility}: GroupProps) {
 
     function handleEditClick() {
         setOldGroupBeingEdited( { oldGroupName: groupName, oldColour: groupColour });
@@ -46,7 +50,7 @@ export default function Group({ groupName,
         setGroupToDelete(groupName);
         // If there are categories inside this group, allow the user to choose between retaining them and deleting them.
         if (filteredBudgetArray.length > 0) {
-            setIsDeleteOptionsModalVisible(true);
+            setModalFormVisibility(current => ({...current, isDeleteOptionsModalVisible: true}))
         } else {
             handleGroupDeletion(groupName, setGroupArray, setBudgetArray, false)
                 .then(() => console.log("Deletion successful"))
@@ -78,9 +82,10 @@ export default function Group({ groupName,
                         amount={budgetElement.amount}
                         group={groupName}
                         icon={budgetElement.iconPath}
-                        setBudgetArray={setBudgetArray}
                         setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                         setBudgetFormVisibility={setBudgetFormVisibility}
+                        setModalFormVisibility={setModalFormVisibility}
+                        setCategoryToDelete={setCategoryToDelete}
                         key={key}
                     />
                 ))}

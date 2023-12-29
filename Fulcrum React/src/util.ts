@@ -47,9 +47,15 @@ export interface GroupOptionsFormattedData {
 
 export interface BudgetFormVisibilityState {
     isCreateBudgetVisible: boolean,
-        isUpdateBudgetVisible: boolean,
+    isUpdateBudgetVisible: boolean,
     isCreateGroupVisible: boolean,
     isUpdateGroupVisible: boolean,
+}
+
+export interface BudgetModalVisibilityState {
+    isDeleteOptionsModalVisible: boolean;
+    isConfirmGroupDestructionModalVisible: boolean;
+    isConfirmCategoryDestructionModalVisible: boolean;
 }
 
 

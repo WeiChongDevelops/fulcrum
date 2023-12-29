@@ -1,6 +1,6 @@
 import {
     BudgetFormVisibilityState,
-    BudgetItemEntity,
+    BudgetItemEntity, BudgetModalVisibilityState,
     GroupItemEntity
 } from "../../util.ts";
 import Group from "./Group.tsx";
@@ -14,6 +14,7 @@ interface GroupListProps {
     setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
 
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
+    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibilityState>>;
 
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
 
@@ -21,7 +22,9 @@ interface GroupListProps {
     setOldGroupBeingEdited: Dispatch<SetStateAction<{ oldGroupName: string, oldColour: string }>>
 
     setGroupToDelete: Dispatch<SetStateAction<string>>;
-    setIsDeleteOptionsModalVisible: Dispatch<SetStateAction<boolean>>;
+
+    setCategoryToDelete: Dispatch<SetStateAction<string>>;
+
 }
 
 export default function GroupList( { budgetArray,
@@ -33,8 +36,8 @@ export default function GroupList( { budgetArray,
                                        setOldGroupBeingEdited,
                                        setBudgetFormVisibility,
                                        setGroupToDelete,
-                                       setIsDeleteOptionsModalVisible
-                                   }: GroupListProps ) {
+                                       setModalFormVisibility,
+                                       setCategoryToDelete}: GroupListProps ) {
 
     // 1. Make an array containing unique group in the budgetArray
     // const groupOptions = groupListAsOptions(groupArray);
@@ -59,7 +62,8 @@ export default function GroupList( { budgetArray,
                                   setGroupNameOfNewItem={setGroupNameOfNewItem}
                                   setBudgetFormVisibility={setBudgetFormVisibility}
                                   setGroupToDelete={setGroupToDelete}
-                                  setIsDeleteOptionsModalVisible={setIsDeleteOptionsModalVisible}
+                                  setCategoryToDelete={setCategoryToDelete}
+                                  setModalFormVisibility={setModalFormVisibility}
                                   key={key}/>
                 })
             }

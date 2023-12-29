@@ -1,15 +1,17 @@
 import {Dispatch, MouseEventHandler, SetStateAction, useEffect, useRef} from "react";
+import {BudgetModalVisibilityState} from "../../../util.ts";
 
 interface TwoOptionModalProps {
     optionOneText: string;
     optionOneFunction: MouseEventHandler<HTMLButtonElement>;
     optionTwoText: string;
     optionTwoFunction: MouseEventHandler<HTMLButtonElement>;
-    setVisible: Dispatch<SetStateAction<boolean>>;
+    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibilityState>>;
+    setVisible: string;
     title: string;
 }
 
-export default function TwoOptionModal( { optionOneText, optionOneFunction, optionTwoText, optionTwoFunction, setVisible, title }: TwoOptionModalProps) {
+export default function TwoOptionModal( { optionOneText, optionOneFunction, optionTwoText, optionTwoFunction, setModalFormVisibility, setVisible, title }: TwoOptionModalProps) {
 
     const formRef = useRef<HTMLDivElement>(null);
 
@@ -22,7 +24,7 @@ export default function TwoOptionModal( { optionOneText, optionOneFunction, opti
 
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setVisible(false);
+            setModalFormVisibility(current => ({...current, [`${setVisible}`]: false}))
         }
     };
 
@@ -30,7 +32,7 @@ export default function TwoOptionModal( { optionOneText, optionOneFunction, opti
         <div className="budget-modal" ref={formRef}>
             <button className="ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
-                setVisible(false);
+                setModalFormVisibility(current => ({...current, [`${setVisible}`]: false}))
             }}>Cancel</button>
 
             <h2 className="mt-8 mx-4">{title}</h2>
