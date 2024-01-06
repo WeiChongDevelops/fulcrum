@@ -79,7 +79,7 @@ export default function Budget() {
     }
 
     return (
-        <div>
+        <div className="flex flex-row justify-center items-center">
             <div className={`flex flex-col elementsBelowPopUpForm 
             ${((Object.values(budgetFormVisibility).includes(true)) 
                 || Object.values(modalFormVisibility).includes(true)) && "blur"} px-16`}>

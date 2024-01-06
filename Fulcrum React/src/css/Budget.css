@@ -185,3 +185,75 @@ input::placeholder {
         flex-basis: auto;
     }
 }
+
+/* ANIMATION */
+
+
+.fulcrum-animation-container {
+    position: relative;
+    padding-top: 15%;
+    margin-bottom: 10%;
+    width: 95vw;
+}
+
+.fulcrum-triangle-container {
+    position: absolute;
+    top: 64%;
+    left: 50%;
+    width: 12%;
+    height: 12%;
+    transform: translateX(-50%);
+}
+
+.contact-shadow {
+    position: absolute;
+    left: 50%;
+    top: 702%;
+    transform: translate(-50%, -50%);
+    width: 20%;
+    height: 18%;
+    background-color: black;
+    border-radius: 50%;
+}
+
+.bowl-shadow-right {
+    position: absolute;
+    left: 252%;
+    top: 702%;
+    width: 20%;
+    transform: translate(-50%, -50%);
+    height: 16%;
+    background-color: black;
+    border-radius: 50%;
+    transition: all ease-in-out 750ms
+}
+
+.rotating-container {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform-origin: 0 50%;
+    transition: all ease-out 500ms;
+}
+
+.fulcrum-bowl-left {
+    position: absolute;
+    top: 275%;
+    left: 0.5%;
+    transform: translate(-50%, -50%);
+    width: 14%;
+    transform-origin: top center;
+    transition: all ease 1300ms;
+}
+
+.fulcrum-bowl-right {
+    position: absolute;
+    top: 275%;
+    left: 99.5%;
+    transform: translate(-50%, -50%);
+    width: 14%;
+    transform-origin: top center;
+    transition: all ease 1300ms;
+}
+
+

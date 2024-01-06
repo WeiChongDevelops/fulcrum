@@ -366,20 +366,22 @@ export async function handleGroupUpdating(originalGroupName: string, originalCol
 
 export function getRandomColour() {
     const colourArray = [
-        "#d04443",
-        "#ff707a",
-        "#f293cb",
-        "#9b41f1",
-        "#4e5ee9",
-        "#73aef0",
-        "#39cfdd",
-        "#26dd9b",
-        "#b5d04b",
-        "#e5e839",
-        "#ecc59a",
-        "#fbae38",
-        "#aa7d42",
-        "#d3d1d2"
+        '#fbb39a',
+        '#fbdee0',
+        '#f8b2bc',
+        '#f1afa1',
+        '#fbf5ab',
+        '#e6eda0',
+        '#9fd5be',
+        '#c3e6df',
+        '#9dc7b9',
+        '#acbfa1',
+        '#c6e2ba',
+        '#ccd7c6',
+        '#a6c7ea',
+        '#b2b4da',
+        '#dfcde3',
+        '#ceb4d9'
     ];
 
     const randomColourIndex = Math.floor(Math.random() * colourArray.length);
