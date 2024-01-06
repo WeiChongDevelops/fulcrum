@@ -14,16 +14,16 @@ export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : F
     const [rightBowlShadowDimensions, setRightBowlShadowDimensions] = useState( {
         width: "0",
         height: "0",
-        transform: "translateX(0,0)",
+        transform: "translate(-50%, -50%)",
     })
     const [leftBowlShadowDimensions, setLeftBowlShadowDimensions] = useState( {
         width: "0",
         height: "0",
-        transform: "translateX(0,0)",
+        transform: "translate(50%, 50%)",
     })
 
-    // const dilator = window.innerWidth * 100;
-    const dilator = 200;
+    const dilator = window.innerWidth / 2 ;
+    // const dilator = 500;
 
     // const percentageIncomeRemaining =
     const percentageIncomeRemaining = amountLeftToBudget/totalIncome * 100;
@@ -46,15 +46,15 @@ export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : F
 
 
         setRightBowlShadowDimensions({
-            width: `${bowlWidth - (functionalPercentageIncomeRemaining / bowlWidth * 10)}px`,
+            width: `${bowlWidth - (functionalPercentageIncomeRemaining / bowlWidth * 50)}px`,
             height: `${bowlWidth / 8 - (functionalPercentageIncomeRemaining / bowlWidth)}px`,
-            transform: `translateX(${leverEndXOffset.rightEnd}px`,
+            transform: `translate(-50%, -50%) translateX(${leverEndXOffset.rightEnd}px`,
         });
 
         setLeftBowlShadowDimensions({
-            width: `${bowlWidth + (functionalPercentageIncomeRemaining / bowlWidth * 10)}px`,
+            width: `${bowlWidth + (functionalPercentageIncomeRemaining / bowlWidth * 50)}px`,
             height: `${bowlWidth / 8 + (functionalPercentageIncomeRemaining / bowlWidth)}px`,
-            transform: `translateX(${leverEndXOffset.leftEnd}px`,
+            transform: `translate(50%, -50%)  translateX(${leverEndXOffset.leftEnd}px`,
         });
 
 
