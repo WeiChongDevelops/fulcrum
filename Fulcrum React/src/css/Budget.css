@@ -218,11 +218,19 @@ input::placeholder {
 
 .bowl-shadow-right {
     position: absolute;
-    left: 252%;
+    left: 227%;
     top: 702%;
-    width: 20%;
     transform: translate(-50%, -50%);
-    height: 16%;
+    background-color: black;
+    border-radius: 50%;
+    transition: all ease-in-out 750ms
+}
+
+.bowl-shadow-left {
+    position: absolute;
+    right: 229%;
+    top: 702%;
+    transform: translate(-50%, -50%);
     background-color: black;
     border-radius: 50%;
     transition: all ease-in-out 750ms

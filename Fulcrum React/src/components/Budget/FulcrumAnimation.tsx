@@ -9,16 +9,21 @@ interface FulcrumAnimationProps {
 export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : FulcrumAnimationProps) {
 
     const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-icon-red.png");
-    const [leverEndXOffset, setLeverEndXOffset] = useState(0);
+    const [leverEndXOffset, setLeverEndXOffset] = useState({leftEnd: 0, rightEnd: 0});
     const [bowlWidth, setBowlWidth] = useState(0);
     const [rightBowlShadowDimensions, setRightBowlShadowDimensions] = useState( {
         width: "0",
         height: "0",
-        transform: "translate(-50%, -50%)",
+        transform: "translateX(0,0)",
+    })
+    const [leftBowlShadowDimensions, setLeftBowlShadowDimensions] = useState( {
+        width: "0",
+        height: "0",
+        transform: "translateX(0,0)",
     })
 
-    const dilator = window.innerWidth / 2;
-    // const dilator = 500;
+    // const dilator = window.innerWidth * 100;
+    const dilator = 200;
 
     // const percentageIncomeRemaining =
     const percentageIncomeRemaining = amountLeftToBudget/totalIncome * 100;
@@ -30,17 +35,31 @@ export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : F
         functionalPercentageIncomeRemaining / (100/14.5);
 
     function fetchAnimationNumbers() {
-        const leverEndYOffset = window.innerWidth * Math.sin(lineAngle);
-        setLeverEndXOffset(0 - Math.pow(leverEndYOffset/dilator, 2));
+        const leverEndYOffset = window.innerWidth * Math.sin(lineAngle * (Math.PI / 180));
+        setLeverEndXOffset({
+            leftEnd: 0 - Math.pow(leverEndYOffset/dilator, 2),
+            rightEnd: Math.pow(leverEndYOffset/dilator, 2)
+        })
 
         const bowlElement = document.querySelector(".fulcrum-bowl-right")
         setBowlWidth(bowlElement ? bowlElement.clientWidth : 135);
 
+
         setRightBowlShadowDimensions({
             width: `${bowlWidth - (functionalPercentageIncomeRemaining / bowlWidth * 10)}px`,
             height: `${bowlWidth / 8 - (functionalPercentageIncomeRemaining / bowlWidth)}px`,
-            transform: `translate(-50%, -50%) translateX(${leverEndXOffset}px`,
+            transform: `translateX(${leverEndXOffset.rightEnd}px`,
         });
+
+        setLeftBowlShadowDimensions({
+            width: `${bowlWidth + (functionalPercentageIncomeRemaining / bowlWidth * 10)}px`,
+            height: `${bowlWidth / 8 + (functionalPercentageIncomeRemaining / bowlWidth)}px`,
+            transform: `translateX(${leverEndXOffset.leftEnd}px`,
+        });
+
+
+        console.log(rightBowlShadowDimensions)
+        console.log(leftBowlShadowDimensions)
     }
 
     useEffect( () => {
@@ -65,7 +84,7 @@ export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : F
               <img src={activeTriangleFulcrum} alt="Triangle fulcrum"/>
               <div className="contact-shadow"></div>
               <div className="bowl-shadow-right" style={rightBowlShadowDimensions}></div>
-              {/*<div className="bowl-shadow-left" style{{width:}}></div>*/}
+              <div className="bowl-shadow-left" style={leftBowlShadowDimensions}></div>
           </div>
           <div className="rotating-container" style={{transform: `rotate(${lineAngle}deg) translateX(-50%)`}}>
               <img src="/src/assets/fulcrum-animation/rectangle-fulcrum.png" className="fulcrum-rectangle" alt="Fulcrum lever"/>
