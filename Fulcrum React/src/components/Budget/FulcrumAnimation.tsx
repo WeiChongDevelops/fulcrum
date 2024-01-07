@@ -21,9 +21,10 @@ export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : F
         transform: "translate(50%, 50%)",
     })
 
-    const dilator = 80;
-    // const dilator = window.innerWidth / 2 ;
+    const dilator = window.innerWidth / 2 ;
+    // const dilator = 500;
 
+    // const percentageIncomeRemaining =
     const percentageIncomeRemaining = amountLeftToBudget/totalIncome * 100;
     // Any disproportionately small or large numbers pulled into normal ranges for the animation
     const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
@@ -34,7 +35,6 @@ export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : F
 
     function fetchAnimationNumbers() {
         const leverEndYOffset = window.innerWidth * Math.sin(lineAngle * (Math.PI / 180));
-        console.log(leverEndYOffset)
         setLeverEndXOffset({
             leftEnd: 0 - Math.pow(leverEndYOffset/dilator, 2),
             rightEnd: Math.pow(leverEndYOffset/dilator, 2)
@@ -45,16 +45,20 @@ export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : F
 
 
         setRightBowlShadowDimensions({
-            width: `${bowlWidth - (functionalPercentageIncomeRemaining / bowlWidth * 50)}px`,
-            height: `${bowlWidth / 8 - (functionalPercentageIncomeRemaining / bowlWidth)}px`,
+            width: `${bowlWidth - (functionalPercentageIncomeRemaining / bowlWidth)}px`,
+            height: `${bowlWidth / 12 - (functionalPercentageIncomeRemaining / bowlWidth )}px`,
             transform: `translate(-50%, -50%) translateX(${leverEndXOffset.rightEnd}px`,
         });
 
         setLeftBowlShadowDimensions({
-            width: `${bowlWidth + (functionalPercentageIncomeRemaining / bowlWidth * 50)}px`,
-            height: `${bowlWidth / 8 + (functionalPercentageIncomeRemaining / bowlWidth)}px`,
+            width: `${bowlWidth + (functionalPercentageIncomeRemaining / bowlWidth * 18)}px`,
+            height: `${bowlWidth / 12 + (functionalPercentageIncomeRemaining / bowlWidth)}px`,
             transform: `translate(50%, -50%)  translateX(${leverEndXOffset.leftEnd}px`,
         });
+
+
+        console.log(rightBowlShadowDimensions)
+        console.log(leftBowlShadowDimensions)
     }
 
     useEffect( () => {
