@@ -5,6 +5,7 @@ import com.example.entities.expense.*
 import com.example.entities.successFeedback.ErrorResponseSent
 import com.example.entities.successFeedback.SuccessResponseSent
 import com.example.entities.user.UserEmail
+import com.example.entities.user.UserStatusCheck
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.GoTrue
 import io.github.jan.supabase.gotrue.gotrue
@@ -405,6 +406,7 @@ fun Application.configureRouting() {
             }
         }
 
+
         post("/api/register") {
             try {
                 val userCreds = call.receive<UserInfo>()
@@ -412,9 +414,62 @@ fun Application.configureRouting() {
                     email = userCreds.email
                     password = userCreds.password
                 }
+
+                // Call writes for default groups and categories.
+                // Misc Group
+//                val miscGroupCreated = GroupCreateRequestSent(
+//                    userId = user!!.id,
+//                    group = "Miscellaneous",
+//                    colour = "#ccd7c6"
+//                )
+//                val miscGroupInserted = supabase.postgrest["groups"].insert(
+//                    miscGroupCreated,
+//                    returning = Returning.REPRESENTATION
+//                )
+//
+//                if (miscGroupInserted.body == null) {
+//                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
+//                } else {
+//                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
+//                }
+//                // Savings Group
+//                val savingsGroupCreated = GroupCreateRequestSent(
+//                    userId = user.id,
+//                    group = "Savings",
+//                    colour = "#9fd5be"
+//                )
+//                val savingsGroupInserted = supabase.postgrest["groups"].insert(
+//                    savingsGroupCreated,
+//                    returning = Returning.REPRESENTATION
+//                )
+//
+//                if (savingsGroupInserted.body == null) {
+//                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
+//                } else {
+//                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
+//                }
+//                // Other
+//                val otherCategoryCreated = BudgetCreateRequestSent(
+//                    userId = user.id,
+//                    category = "Other",
+//                    amount = 0.00,
+//                    iconPath = "/src/assets/category-icons/category-default-icon.svg",
+//                    group = "Miscellaneous"
+//                )
+//                val otherCategoryInserted = supabase.postgrest["budgets"].insert(
+//                    otherCategoryCreated,
+//                    returning = Returning.REPRESENTATION
+//                )
+//
+//                if (otherCategoryInserted.body == null) {
+//                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
+//                } else {
+//                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
+//                }
+
                 call.respond(HttpStatusCode.OK, SuccessResponseSent("User added successfully."))
             } catch (e: Exception) {
-                call.application.log.error("Error while creating user", e)
+//                call.application.log.error("Error while creating user", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("User not added."))
             }
         }
@@ -427,7 +482,7 @@ fun Application.configureRouting() {
                     email = userCreds.email
                     password = userCreds.password
                 }
-                val session = supabase.gotrue.refreshSession(refreshToken = "refreshToken")
+//                val session = supabase.gotrue.refreshSession(refreshToken = "refreshToken")
                 val loggedInUser = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
                 call.respond(HttpStatusCode.OK, loggedInUser)
             } else {
@@ -435,35 +490,33 @@ fun Application.configureRouting() {
             }
         }
 
-        get("/api/getUserEmail") {
+        get("/api/getUserEmailIfLoggedIn") {
             try {
                 val currentUser = supabase.gotrue.currentSessionOrNull()
                 if (currentUser != null) {
                     call.respond(HttpStatusCode.OK, UserEmail(email = currentUser.user?.email!!))
                 } else {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("No user logged in."))
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("No user logged in."))
                 }
             } catch (e: Exception) {
-                call.application.log.error("Error while checking for user", e)
+//                call.application.log.error("Error while checking for user", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while checking for user."))
             }
         }
-//
-//        get("/api/checkForUser") {
-//            val currentUser = supabase.gotrue.currentSessionOrNull()
-//            try {
-//                val statusJSON = if (currentUser != null) {
-//                    val user = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
-//                    UserStatusCheck(loggedIn = false)
-//                } else {
-//                    UserStatusCheck(loggedIn = true)
-//                }
-//                call.respond(HttpStatusCode.OK, statusJSON)
-//            } catch (e: Exception) {
-//                call.application.log.error("Error while checking for user", e)
-//                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while checking for user."))
-//            }
-//        }
+
+        get("/api/checkForUser") {
+            val currentUser = supabase.gotrue.currentSessionOrNull()
+            try {
+                val statusJSON = if (currentUser == null) {
+                    UserStatusCheck(loggedIn = false)
+                } else {
+                    UserStatusCheck(loggedIn = true)
+                }
+                call.respond(HttpStatusCode.OK, statusJSON)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while checking for user."))
+            }
+        }
 
 
         post("/api/logout") {

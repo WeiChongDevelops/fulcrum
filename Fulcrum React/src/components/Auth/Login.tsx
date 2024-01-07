@@ -10,8 +10,16 @@ export default function Login() {
                 method: "GET",
             });
             if (!response.ok) {
-                console.log("User already logged in.");
-                window.location.href = "/budget";
+                console.error("Failed to check for user status.")
+            } else {
+                const userStatus = await response.json();
+                console.log(userStatus)
+                if (userStatus["loggedIn"]) {
+                    console.log("User already logged in.");
+                    window.location.href = "/budget";
+                } else {
+                    console.log("User not logged in, login page access greenlighted.");
+                }
             }
         } catch (error) {
             console.error("Error:", error);
@@ -41,12 +49,12 @@ export default function Login() {
                 if (response.status === 400) {
                     console.error(`HTTP error - status: ${response.status}`);
                     console.error("User already logged in.")
-                    window.location.href = "/budget"
+                    // window.location.href = "/budget"
                 }
                 else {
                     console.log("Successful login.");
                     console.log(response.json());
-                    window.location.href = "/budget";
+                    // window.location.href = "/budget";
                 }
             }
 
@@ -90,7 +98,7 @@ export default function Login() {
                     Login
                 </button>
             </form>
-            <a href="/register" className="mt-6">Don't have an account? Register here.</a>
+            <a href="/register" className="mt-6 text-black underline">Don't have an account? Register here.</a>
         </div>
     );
 }

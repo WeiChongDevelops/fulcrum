@@ -44,7 +44,7 @@ export default function Register() {
     }
 
     return (
-        <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col items-center justify-center h-screen">
             <form onSubmit={handleSubmit} className="p-8 bg-white rounded shadow-md">
                 <h2 className="text-lg text-black font-bold mb-6">Join Fulcrum for Free</h2>
                 <div className="mb-4">
@@ -86,8 +86,8 @@ export default function Register() {
                 <button type="submit" className="w-full px-4 py-2 text-lg font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700">
                     Register
                 </button>
-                <a href="/login" className="mt-6">Already have an account? Login here.</a>
             </form>
+            <a href="/login" className="mt-6 text-black underline">Already have an account? Login here.</a>
         </div>
     );
 }

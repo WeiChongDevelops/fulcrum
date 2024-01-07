@@ -23,9 +23,7 @@ export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : F
     })
 
     const dilator = window.innerWidth / 2 ;
-    // const dilator = 500;
 
-    // const percentageIncomeRemaining =
     const percentageIncomeRemaining = amountLeftToBudget/totalIncome * 100;
     // Any disproportionately small or large numbers pulled into normal ranges for the animation
     const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
@@ -56,10 +54,6 @@ export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : F
             height: `${bowlWidth / 8 + (functionalPercentageIncomeRemaining / bowlWidth)}px`,
             transform: `translate(50%, -50%)  translateX(${leverEndXOffset.leftEnd}px`,
         });
-
-
-        console.log(rightBowlShadowDimensions)
-        console.log(leftBowlShadowDimensions)
     }
 
     useEffect( () => {
