@@ -244,7 +244,7 @@ fun Application.configureRouting() {
                                 set("iconPath", budgetUpdateRequest.iconPath)
                             }
                         ) {
-                            eq("category", categoryToChange)
+                            eq("category", budgetUpdateRequest.newCategoryName)
                             eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                         }
                         call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget updated."))
@@ -255,7 +255,7 @@ fun Application.configureRouting() {
                                 set("group", budgetUpdateRequest.group)
                             }
                         ) {
-                            eq("category", categoryToChange)
+                            eq("category", budgetUpdateRequest.newCategoryName)
                             eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                         }
                         call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget updated."))
@@ -415,57 +415,59 @@ fun Application.configureRouting() {
                     password = userCreds.password
                 }
 
+                val uid = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id
+
                 // Call writes for default groups and categories.
                 // Misc Group
-//                val miscGroupCreated = GroupCreateRequestSent(
-//                    userId = user!!.id,
-//                    group = "Miscellaneous",
-//                    colour = "#ccd7c6"
-//                )
-//                val miscGroupInserted = supabase.postgrest["groups"].insert(
-//                    miscGroupCreated,
-//                    returning = Returning.REPRESENTATION
-//                )
-//
-//                if (miscGroupInserted.body == null) {
-//                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
-//                } else {
-//                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
-//                }
-//                // Savings Group
-//                val savingsGroupCreated = GroupCreateRequestSent(
-//                    userId = user.id,
-//                    group = "Savings",
-//                    colour = "#9fd5be"
-//                )
-//                val savingsGroupInserted = supabase.postgrest["groups"].insert(
-//                    savingsGroupCreated,
-//                    returning = Returning.REPRESENTATION
-//                )
-//
-//                if (savingsGroupInserted.body == null) {
-//                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
-//                } else {
-//                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
-//                }
-//                // Other
-//                val otherCategoryCreated = BudgetCreateRequestSent(
-//                    userId = user.id,
-//                    category = "Other",
-//                    amount = 0.00,
-//                    iconPath = "/src/assets/category-icons/category-default-icon.svg",
-//                    group = "Miscellaneous"
-//                )
-//                val otherCategoryInserted = supabase.postgrest["budgets"].insert(
-//                    otherCategoryCreated,
-//                    returning = Returning.REPRESENTATION
-//                )
-//
-//                if (otherCategoryInserted.body == null) {
-//                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
-//                } else {
-//                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
-//                }
+                val miscGroupCreated = GroupCreateRequestSent(
+                    userId = uid,
+                    group = "Miscellaneous",
+                    colour = "#495B68"
+                )
+                val miscGroupInserted = supabase.postgrest["groups"].insert(
+                    miscGroupCreated,
+                    returning = Returning.REPRESENTATION
+                )
+
+                if (miscGroupInserted.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
+                }
+                // Savings Group
+                val savingsGroupCreated = GroupCreateRequestSent(
+                    userId = uid,
+                    group = "Savings",
+                    colour = "#9fd5be"
+                )
+                val savingsGroupInserted = supabase.postgrest["groups"].insert(
+                    savingsGroupCreated,
+                    returning = Returning.REPRESENTATION
+                )
+
+                if (savingsGroupInserted.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
+                }
+                // Other
+                val otherCategoryCreated = BudgetCreateRequestSent(
+                    userId = uid,
+                    category = "Other",
+                    amount = 0.00,
+                    iconPath = "/src/assets/category-icons/category-default-icon.svg",
+                    group = "Miscellaneous"
+                )
+                val otherCategoryInserted = supabase.postgrest["budgets"].insert(
+                    otherCategoryCreated,
+                    returning = Returning.REPRESENTATION
+                )
+
+                if (otherCategoryInserted.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
+                }
 
                 call.respond(HttpStatusCode.OK, SuccessResponseSent("User added successfully."))
             } catch (e: Exception) {

@@ -200,6 +200,13 @@ export async function handleBudgetCreation(formData: BudgetCreationFormData, set
 }
 
 export async function handleBudgetUpdating(category: string | null, formData: BudgetUpdatingFormData) {
+    console.log({
+        "category": category,
+        "newCategoryName": formData.category,
+        "amount": formData.amount,
+        "group": formData.group,
+        "iconPath": formData.iconPath
+    })
     try {
         const response = await fetch("http://localhost:8080/api/updateBudget", {
             method: "PUT",
@@ -216,6 +223,8 @@ export async function handleBudgetUpdating(category: string | null, formData: Bu
         })
         if (!response.ok) {
             console.error(`HTTP error - status: ${response.status}`);
+            const responseData = await response.json();
+            console.log(responseData);
         }
         const responseData = await response.json();
         console.log(responseData);

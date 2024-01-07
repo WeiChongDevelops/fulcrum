@@ -1,4 +1,3 @@
-import "../../css/FulcrumAnimation.css"
 import {useEffect, useState} from "react";
 
 interface FulcrumAnimationProps {
@@ -22,7 +21,8 @@ export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : F
         transform: "translate(50%, 50%)",
     })
 
-    const dilator = window.innerWidth / 2 ;
+    const dilator = 80;
+    // const dilator = window.innerWidth / 2 ;
 
     const percentageIncomeRemaining = amountLeftToBudget/totalIncome * 100;
     // Any disproportionately small or large numbers pulled into normal ranges for the animation
@@ -34,6 +34,7 @@ export default function FulcrumAnimation( { amountLeftToBudget, totalIncome} : F
 
     function fetchAnimationNumbers() {
         const leverEndYOffset = window.innerWidth * Math.sin(lineAngle * (Math.PI / 180));
+        console.log(leverEndYOffset)
         setLeverEndXOffset({
             leftEnd: 0 - Math.pow(leverEndYOffset/dilator, 2),
             rightEnd: Math.pow(leverEndYOffset/dilator, 2)

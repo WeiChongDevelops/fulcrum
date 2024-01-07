@@ -45,16 +45,17 @@ export default function Login() {
             if (response.status === 500 ) {
                 console.error(`HTTP error - status: ${response.status}`);
                 console.error("User not found.")
+                window.alert("User not found - please check your credentials.")
             } else {
                 if (response.status === 400) {
                     console.error(`HTTP error - status: ${response.status}`);
                     console.error("User already logged in.")
-                    // window.location.href = "/budget"
+                    window.location.href = "/budget"
                 }
                 else {
                     console.log("Successful login.");
                     console.log(response.json());
-                    // window.location.href = "/budget";
+                    window.location.href = "/budget";
                 }
             }
 

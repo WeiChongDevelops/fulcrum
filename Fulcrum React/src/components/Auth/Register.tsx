@@ -28,11 +28,12 @@ export default function Register() {
 
             if (!response.ok) {
                 console.error(`HTTP error - status: ${response.status}`);
-                console.error("User already exists.")
+                console.log(await response.json())
+                window.alert("Registration failed - user may already exist.")
             } else {
                 console.log("Successful registration.");
-                console.log(response.json());
-                window.location.href = "/login";
+                console.log(await response.json());
+                // window.location.href = "/login";
             }
 
         } catch (error) {

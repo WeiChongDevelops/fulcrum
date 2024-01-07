@@ -61,7 +61,7 @@ export default function Group({ groupName,
     return (
         <div className="group flex flex-col rounded-3xl p-2 mb-5" style={{backgroundColor: `${groupColour}`}}>
             <div className="flex flex-row justify-center items-center mb-4">
-                <b className="mt-2 text-xl">{groupName}</b>
+                <b className="mt-2 text-xl text-black">{groupName}</b>
 
                 {groupName !== "Miscellaneous" &&
                     <div className="flex flex-row justify-center items-center ml-1">

@@ -20,7 +20,7 @@ interface DBUpdatingFormProps {
 export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudgetBeingEdited, setBudgetFormVisibility }: DBUpdatingFormProps) {
 
 
-    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ category: oldBudgetBeingEdited.oldCategory, amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
+    const [formData, setFormData] = useState<BudgetUpdatingFormData>({ category: oldBudgetBeingEdited.oldCategory, amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: oldBudgetBeingEdited.oldGroup });
     const formRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -52,7 +52,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
 
         await handleBudgetUpdating(oldBudgetBeingEdited.oldCategory, formData);
 
-        setFormData({ category: oldBudgetBeingEdited.oldCategory, amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: "" });
+        setFormData({ category: oldBudgetBeingEdited.oldCategory, amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: oldBudgetBeingEdited.oldGroup });
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
 
