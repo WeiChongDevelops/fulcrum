@@ -218,7 +218,7 @@ input::placeholder {
 
 .bowl-shadow-right {
     position: absolute;
-    left: 251%;
+    left: 255%;
     top: 702%;
     transform: translate(-50%, -50%);
     background-color: black;
@@ -228,9 +228,9 @@ input::placeholder {
 
 .bowl-shadow-left {
     position: absolute;
-    right: 251%;
+    right: 255.5%;
     top: 702%;
-    transform: translate(-50%, -50%);
+    transform: translate(50%, -50%);
     background-color: black;
     border-radius: 50%;
     transition: all ease-in-out 750ms

@@ -78,6 +78,14 @@ export default function Budget() {
             .catch((error) => console.log("Deletion unsuccessful", error));
     }
 
+    const percentageIncomeRemaining = amountLeftToBudget/totalIncome * 100;
+    // Any disproportionately small or large numbers pulled into normal ranges for the animation
+    const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
+
+    const lineAngle = functionalPercentageIncomeRemaining <= -100 ? 14.5 :
+        functionalPercentageIncomeRemaining === 100 ? -14.5 :
+            functionalPercentageIncomeRemaining / (100/14.5);
+
     return (
         <div className="flex flex-row justify-center items-center">
             <div className={`flex flex-col elementsBelowPopUpForm 
@@ -88,7 +96,7 @@ export default function Budget() {
                     setTotalIncome={setTotalIncome}
                     amountLeftToBudget={amountLeftToBudget}/>
 
-                <FulcrumAnimation amountLeftToBudget={amountLeftToBudget} totalIncome={totalIncome} setTotalIncome={setTotalIncome}/>
+                <FulcrumAnimation lineAngle={lineAngle}/>
 
                 {groupArray?.length > 0 && <GroupList
                     budgetArray={budgetArray}
