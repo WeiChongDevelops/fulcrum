@@ -87,7 +87,7 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
                 <div className="bowl-shadow-left" style={leftBowlShadowDimensions}></div>
             </div>
             <div className="rotating-container" style={{transform: `rotate(${-lineAngle}deg) translateX(-50%)`}}>
-                <div className="rotating-text-label-container absolute flex flex-row justify-between w-[95%] ml-[2.5%] text-[1.5em] bottom-8">
+                <div className="rotating-text-label-container absolute flex flex-row justify-between w-[100%] text-[1.5em] bottom-8">
                     <b className="text-black">Budget</b>
                     <b className="text-black">Income</b>
                 </div>

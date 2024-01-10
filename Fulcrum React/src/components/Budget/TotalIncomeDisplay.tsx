@@ -36,7 +36,7 @@ export default function TotalIncomeDisplay({ totalIncome, setTotalIncome, amount
                 <span className="text-4xl">MONTHLY INCOME: </span>
                 {isEditing ? <form className="inline" onSubmit={handleSubmit}>
                     <input
-                        className="w-auto h-5"
+                        className="w-auto h-5 text-center"
                         type="text"
                         name="incomeDisplay"
                         onChange={handleInputChange}
@@ -47,7 +47,7 @@ export default function TotalIncomeDisplay({ totalIncome, setTotalIncome, amount
                     />
                 </form>: <span className="text-4xl" onClick={handleEditClick}>${formatNumberWithCommas(totalIncome.toFixed(2))}</span>}
             </div>
-            <div className="flex-1 text-center bg-red-300 py1.5 px-2.5 rounded-3xl my-3 mx-6 text-black p-5">
+            <div className="flex-1 text-center py1.5 px-2.5 rounded-3xl my-3 mx-6 text-black p-5" style={{backgroundColor: `${amountLeftToBudget === 0 ? "green" : "red"}`}}>
                 <span className="text-4xl">REMAINING INCOME: </span>
                 <span className="text-4xl">${formatNumberWithCommas(amountLeftToBudget.toFixed(2))}</span>
             </div>
