@@ -15,46 +15,52 @@ export default function GroupColourSelector( { oldColour }:GroupColourSelectorPr
     return (
         <div id="group-colour-selector">
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#d04443]" data-value="#d04443"></div>
+                <div className="group-colour-triangle bg-[#fbb39a]" data-value="#fbb39a"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#ff707a]" data-value="#ff707a"></div>
+                <div className="group-colour-triangle bg-[#fbdee0]" data-value="#fbdee0"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#f293cb]" data-value="#f293cb"></div>
+                <div className="group-colour-triangle bg-[#f8b2bc]" data-value="#f8b2bc"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#9b41f1]" data-value="#9b41f1"></div>
+                <div className="group-colour-triangle bg-[#f1afa1]" data-value="#f1afa1"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#4e5ee9]" data-value="#4e5ee9"></div>
+                <div className="group-colour-triangle bg-[#fbf5ab]" data-value="#fbf5ab"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#73aef0]" data-value="#73aef0"></div>
+                <div className="group-colour-triangle bg-[#e6eda0]" data-value="#e6eda0"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#39cfdd]" data-value="#39cfdd"></div>
+                <div className="group-colour-triangle bg-[#9fd5be]" data-value="#9fd5be"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#26dd9b]" data-value="#26dd9b"></div>
+                <div className="group-colour-triangle bg-[#c3e6df]" data-value="#c3e6df"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#b5d04b]" data-value="#b5d04b"></div>
+                <div className="group-colour-triangle bg-[#9dc7b9]" data-value="#9dc7b9"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#e5e839]" data-value="#e5e839"></div>
+                <div className="group-colour-triangle bg-[#acbfa1]" data-value="#acbfa1"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#ecc59a]" data-value="#ecc59a"></div>
+                <div className="group-colour-triangle bg-[#c6e2ba]" data-value="#c6e2ba"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#fbae38]" data-value="#fbae38"></div>
+                <div className="group-colour-triangle bg-[#ccd7c6]" data-value="#ccd7c6"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#aa7d42]" data-value="#aa7d42"></div>
+                <div className="group-colour-triangle bg-[#a6c7ea]" data-value="#a6c7ea"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#d3d1d2]" data-value="#d3d1d2"></div>
+                <div className="group-colour-triangle bg-[#b2b4da]" data-value="#b2b4da"></div>
+            </div>
+            <div className="group-colour-selectable-container">
+                <div className="group-colour-triangle bg-[#dfcde3]" data-value="#dfcde3"></div>
+            </div>
+            <div className="group-colour-selectable-container">
+                <div className="group-colour-triangle bg-[#ceb4d9]" data-value="#ceb4d9"></div>
             </div>
         </div>
     );

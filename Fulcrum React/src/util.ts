@@ -247,11 +247,17 @@ export async function getGroupList() {
         } else {
             const responseData = await response.json();
             console.log(responseData)
-            return responseData.sort((a: GroupItemEntity, b: GroupItemEntity) => new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime());
+            return responseData.sort(groupSort);
         }
     } catch (error) {
         console.error("Error:", error);
     }
+}
+
+function groupSort (a: GroupItemEntity, b: GroupItemEntity){
+    if (a.group === "Miscellaneous") return 1;
+    if (b.group === "Miscellaneous") return -1;
+    return new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime()
 }
 
 export function groupListAsOptions(groupList: GroupItemEntity[]) {

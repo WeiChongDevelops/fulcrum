@@ -1,13 +1,10 @@
 import FulcrumButton from "./FulcrumButton.tsx";
-import {Dispatch, SetStateAction, useEffect} from "react";
+import {useEffect, useState} from "react";
 import {Outlet} from "react-router-dom";
 
 
-interface NavbarProps {
-    email: string;
-    setEmail: Dispatch<SetStateAction<string>>;
-}
-export default function Navbar({ email, setEmail }: NavbarProps) {
+export default function Navbar() {
+    const [email, setEmail] = useState<string>("");
 
     async function logoutOnClick() {
         try {
