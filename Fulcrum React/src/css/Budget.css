@@ -1,9 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
 /* GLOBAL */
 
 input::placeholder {
     text-align: center;
 }
 
+body {
+    font-family: 'Quicksand', sans-serif;
+}
+
+.background {
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    position: absolute;
+    background-image:
+            linear-gradient(90deg, rgba(199, 199, 199, 0.4) 1px, transparent 1px),
+            linear-gradient(180deg, rgba(199, 199, 199, 0.4) 1px, transparent 1px);
+    background-size: 42px 42px;
+    filter: drop-shadow(1px 1px 2px grey) invert(0.1);
+    overflow: hidden;
+}
+
+.background::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    box-shadow:
+        inset -40px 0 40px -15px rgba(141, 141, 141, 0.3),
+        inset 40px 0 40px -15px rgba(141, 141, 141, 0.3);
+}
 
 /* EDIT-DELETE BUTTONS */
 
@@ -35,6 +62,7 @@ input::placeholder {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    z-index: 3;
     top: 50%;
     left: 50%;
     padding: 2%;
@@ -91,7 +119,7 @@ input::placeholder {
 
 .group {
     width: 100%;
-    box-shadow: 9px 9px 0 0 rgba(0, 0, 0, 1);
+    box-shadow: 12px 12px 0 0 rgba(0, 0, 0, 1);
 }
 
 /* ADD NEW GROUP BUTTON */
@@ -180,9 +208,20 @@ input::placeholder {
 
 /* MEDIA QUERIES */
 
-@Media screen and (max-width: 1560px) {
+@media (max-width: 1560px) {
     .category-icon-selectable {
         flex-basis: auto;
+    }
+}
+@media (max-width: 1115px) {
+    .fulcrum-animation-container {
+        margin-top: 25px;
+    }
+}
+
+@media (max-width: 650px) {
+    .fulcrum-animation-container {
+        margin-top: 35px;
     }
 }
 
@@ -191,9 +230,9 @@ input::placeholder {
 
 .fulcrum-animation-container {
     position: relative;
-    padding-top: 15%;
+    padding-top: 20%;
     margin-bottom: 10%;
-    width: 95vw;
+    width: 90vw;
 }
 
 .fulcrum-triangle-container {
@@ -208,7 +247,7 @@ input::placeholder {
 .contact-shadow {
     position: absolute;
     left: 50%;
-    top: 702%;
+    top: 525%;
     transform: translate(-50%, -50%);
     width: 20%;
     height: 18%;
@@ -219,7 +258,7 @@ input::placeholder {
 .bowl-shadow-right {
     position: absolute;
     left: 255%;
-    top: 702%;
+    top: 525%;
     transform: translate(-50%, -50%);
     background-color: black;
     border-radius: 50%;
@@ -229,7 +268,7 @@ input::placeholder {
 .bowl-shadow-left {
     position: absolute;
     right: 255.5%;
-    top: 702%;
+    top: 525%;
     transform: translate(50%, -50%);
     background-color: black;
     border-radius: 50%;
@@ -265,3 +304,13 @@ input::placeholder {
 }
 
 
+/* INCOME DISPLAY */
+
+.monthly-income {
+    box-shadow: 14px 14px 0 0 rgba(0, 0, 0, 1);
+}
+
+.remaining-income {
+    box-shadow: 14px 14px 0 0 rgba(0, 0, 0, 1);
+    transition: background-color ease-out 650ms;
+}

@@ -31,8 +31,8 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
         console.log(`X offset: ${-Math.abs(lineAngle)}`)
 
         const newOffset = {
-            leftEnd: Math.abs(lineAngle / 1.5),
-            rightEnd: -Math.abs(lineAngle / 1.5)
+            leftEnd: Math.abs(lineAngle / 2.1),
+            rightEnd: -Math.abs(lineAngle / 2.1)
         };
         if (newOffset.leftEnd !== leverEndXOffset.leftEnd || newOffset.rightEnd !== leverEndXOffset.rightEnd) {
             setLeverEndXOffset(newOffset);
@@ -41,13 +41,13 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
 
     function setShadowDimensions() {
         setRightBowlShadowDimensions({
-            width: `${bowlWidth + lineAngle * 1.4}px`,
-            height: `${(bowlWidth + lineAngle * 1.4) / 8}px`,
+            width: `${bowlWidth + lineAngle * 2.7}px`,
+            height: `${(bowlWidth + lineAngle * 1.4) / 10}px`,
             transform: `translate(-50%, -50%) translateX(${leverEndXOffset.rightEnd}px)`,
         });
         setLeftBowlShadowDimensions({
-            width: `${bowlWidth - lineAngle * 1.4}px`,
-            height: `${(bowlWidth - lineAngle * 1.4) / 8}px`,
+            width: `${bowlWidth - lineAngle * 2.7}px`,
+            height: `${(bowlWidth - lineAngle * 1.4) / 10}px`,
             transform: `translate(50%, -50%) translateX(${leverEndXOffset.leftEnd}px)`,
         });
     }
@@ -73,8 +73,8 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
     useEffect( () => {
         setActiveTriangleFulcrum(
             lineAngle === 0
-                ? "/src/assets/fulcrum-animation/fulcrum-icon-green.png"
-                : "/src/assets/fulcrum-animation/fulcrum-icon-red.png"
+                ? "/src/assets/fulcrum-animation/fulcrum-tri-green.webp"
+                : "/src/assets/fulcrum-animation/fulcrum-tri-red.webp"
         )
     },[lineAngle]);
 
@@ -87,13 +87,13 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
                 <div className="bowl-shadow-left" style={leftBowlShadowDimensions}></div>
             </div>
             <div className="rotating-container" style={{transform: `rotate(${-lineAngle}deg) translateX(-50%)`}}>
-                <div className="rotating-text-label-container absolute flex flex-row justify-between w-[100%] text-[1.5em] bottom-8">
+                <div className="rotating-text-label-container absolute flex flex-row justify-between w-[100%] text-[1.5em] bottom-8 ">
                     <b className="text-black">Budget</b>
                     <b className="text-black">Income</b>
                 </div>
-                <img src="/src/assets/fulcrum-animation/rectangle-fulcrum.png" className="fulcrum-rectangle" alt="Fulcrum lever"/>
-                <img src="/src/assets/fulcrum-animation/basket-fulcrum-2.png" alt="Fulcrum bowl" className="fulcrum-bowl-left" style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg)`}}/>
-                <img src="/src/assets/fulcrum-animation/basket-fulcrum-2.png" alt="Fulcrum bowl" className="fulcrum-bowl-right" style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg) `}}/>
+                <img src="/src/assets/fulcrum-animation/fulcrum-rectangle.png" className="fulcrum-rectangle" alt="Fulcrum lever"/>
+                <img src="/src/assets/fulcrum-animation/fulcrum-basket.webp" alt="Fulcrum bowl" className="fulcrum-bowl-left" style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg)`}}/>
+                <img src="/src/assets/fulcrum-animation/fulcrum-basket.webp" alt="Fulcrum bowl" className="fulcrum-bowl-right" style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg) `}}/>
             </div>
         </div>
     );

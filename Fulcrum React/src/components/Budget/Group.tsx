@@ -59,16 +59,16 @@ export default function Group({ groupName,
     }
 
     return (
-        <div className="group flex flex-col rounded-3xl p-2 mb-5" style={{backgroundColor: `${groupColour}`}}>
+        <div className="group flex flex-col rounded-xl p-2 mb-5" style={{backgroundColor: `${groupColour}`}}>
             <div className="flex flex-row justify-center items-center mb-4">
-                <b className="mt-2 text-xl text-black">{groupName}</b>
+                <b className={`mt - 2 text-xl ${groupName !== "Miscellaneous" ? "text-black" : "text-white"}`}>{groupName}</b>
 
                 {groupName !== "Miscellaneous" &&
                     <div className="flex flex-row justify-center items-center ml-1">
-                        <div className="circle-button rounded-full p-1 mt-2" onClick={handleEditClick}>
+                        <div className="circle-button rounded-full p-1" onClick={handleEditClick}>
                             <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="w-4 h-4" />
                         </div>
-                        <div className="circle-button rounded-full p-1 mt-2" onClick={handleDeleteClick}>
+                        <div className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
                             <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="w-4 h-4" />
                         </div>
                     </div>

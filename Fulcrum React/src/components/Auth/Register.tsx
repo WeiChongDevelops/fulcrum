@@ -33,7 +33,7 @@ export default function Register() {
             } else {
                 console.log("Successful registration.");
                 console.log(await response.json());
-                // window.location.href = "/login";
+                window.location.href = "/login";
             }
 
         } catch (error) {

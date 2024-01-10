@@ -52,11 +52,11 @@ export default function Navbar({ email, setEmail }: NavbarProps) {
 
     return (
         <div>
-            <nav className="bg-gray-500 text-white p-4">
+            <nav className="bg-[#455259] text-white p-4 font-bold z-10">
                 <div className="flex justify-between items-center mx-auto">
 
                     <div className="flex-1 flex-row text-left">
-                        <b className="mx-8">Fulcrum</b>
+                        <p className="mx-8">Fulcrum</p>
                     </div>
 
                     <ul className="flex-1 justify-center hidden sm:flex">
@@ -82,7 +82,8 @@ export default function Navbar({ email, setEmail }: NavbarProps) {
                     </div>
                 </div>
             </nav>
-            <Outlet />
+            <div className="background"></div>
+            <Outlet/>
         </div>
     );
 }

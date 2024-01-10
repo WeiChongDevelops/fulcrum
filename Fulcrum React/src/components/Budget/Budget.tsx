@@ -86,9 +86,36 @@ export default function Budget() {
         functionalPercentageIncomeRemaining === 100 ? -14.5 :
             functionalPercentageIncomeRemaining / (100/14.5);
 
+    function adjustBackgroundHeight() {
+        const bodyHeight = document.body.scrollHeight;
+        const backgroundDiv: HTMLDivElement = document.querySelector('.background')!;
+        backgroundDiv!.style.height = bodyHeight + 'px';
+    }
+
+    // Select the node to be observed
+    const targetNode = document.body;
+
+    // Set up the observer options
+        const config = {
+            childList: true,    // Detect direct children changes
+            subtree: true,      // Detect all descendant changes
+            attributes: true    // Detect changes in attributes
+        };
+
+    // Callback function to execute when changes are observed
+        const callback = function() {
+            adjustBackgroundHeight();
+        };
+
+    // Create an instance of the observer
+        const observer = new MutationObserver(callback);
+
+    // Start observing the target node
+        observer.observe(targetNode, config);
+
     return (
         <div className="flex flex-row justify-center items-center">
-            <div className={`flex flex-col elementsBelowPopUpForm 
+            <div className={`flex flex-col elementsBelowPopUpForm z-2
             ${((Object.values(budgetFormVisibility).includes(true)) 
                 || Object.values(modalFormVisibility).includes(true)) && "blur"} px-16`}>
                 <TotalIncomeDisplay
