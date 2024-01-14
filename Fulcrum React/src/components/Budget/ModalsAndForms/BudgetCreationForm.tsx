@@ -2,7 +2,7 @@ import FulcrumButton from "../../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addIconSelectionFunctionality,
-    BudgetCreationFormData, BudgetFormVisibilityState,
+    BudgetFormVisibilityState,
     BudgetItemEntity, capitalizeFirstLetter, colourStyles, getColourOfGroup, groupListAsOptions,
     handleBudgetCreation, GroupItemEntity
 } from "../../../util.ts";
@@ -19,7 +19,7 @@ interface BudgetCreationFormProps {
 
 export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNameOfNewItem, setBudgetFormVisibility }: BudgetCreationFormProps) {
 
-    const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
+    const [formData, setFormData] = useState<BudgetItemEntity>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     const formRef = useRef<HTMLDivElement>(null);
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
@@ -37,7 +37,7 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
     }, []);
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-        setFormData( currentFormData => {
+        setFormData( (currentFormData: BudgetItemEntity) => {
             return {...currentFormData, [e.target.name]: e.target.value}
         });
     }
@@ -54,12 +54,12 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
         setBudgetArray(current => [...current, newBudgetItem])
 
         setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}))
-        await handleBudgetCreation(formData, setBudgetArray, newBudgetItem);
+        await handleBudgetCreation(setBudgetArray, newBudgetItem);
         setFormData({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     }
 
     function handleGroupInputChange(e: any) {
-        setFormData(currentFormData => ({ ...currentFormData, group: e.value }));
+        setFormData((currentFormData: BudgetItemEntity) => ({ ...currentFormData, group: e.value }));
     }
 
     return (
@@ -99,8 +99,8 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
                     defaultValue={{
                         label: groupNameOfNewItem,
                         value: groupNameOfNewItem,
-                        colour: getColourOfGroup(groupNameOfNewItem, groupListAsOptions(groupArray))
-                }}
+                        colour: getColourOfGroup(groupNameOfNewItem, groupArray)
+                    }}
                     options={groupListAsOptions(groupArray).map(option => {
                         return {label: option.label, value: option.value, colour: option.colour!!}
                     })}

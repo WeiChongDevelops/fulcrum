@@ -1,14 +1,14 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {Dispatch, SetStateAction, useState} from "react";
-import {ExpenseItemEntity, getExpenseList} from "../../util.ts";
+import {BudgetItemEntity, getBudgetList} from "../../util.ts";
 
 interface DBDeletionFormProps {
-    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
 }
 
-export default function ExpenseDeletionForm({setExpenseArray}: DBDeletionFormProps) {
+export default function ExpenseDeletionForm({setBudgetArray}: DBDeletionFormProps) {
 
-    const [formData, setFormData] = useState({expenseId: ""});
+    const [formData, setFormData] = useState({category: ""});
 
     function handleInputChange(e: any) {
         setFormData( currentFormData => {
@@ -17,15 +17,14 @@ export default function ExpenseDeletionForm({setExpenseArray}: DBDeletionFormPro
     }
     async function handleSubmit(e: any) {
         e.preventDefault();
-
         try {
-            const response = await fetch("http://localhost:8080/api/deleteExpense", {
+            const response = await fetch("http://localhost:8080/api/deleteBudget", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "expenseId": formData.expenseId,
+                    "category": formData.category,
                 })
             })
 
@@ -39,22 +38,22 @@ export default function ExpenseDeletionForm({setExpenseArray}: DBDeletionFormPro
             console.error("Error:", error);
         }
 
-        setFormData({expenseId: ""})
-        getExpenseList().then( expenseList => setExpenseArray(expenseList))
+        setFormData({category: ""})
+        getBudgetList().then( budgetList => setBudgetArray(budgetList))
     }
 
     return (
         <>
             <h1>Deletion Form</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="expenseId">Expense ID</label>
+                <label htmlFor="category">Category</label>
                 <input type="text"
                        onChange={handleInputChange}
-                       value={formData.expenseId}
-                       name="expenseId"
-                       id="expenseId"
+                       value={formData.category}
+                       name="category"
+                       id="category"
                        className="mb-3"/>
-                <FulcrumButton itemType="Delete Expense" />
+                <FulcrumButton displayText="Delete Category" />
             </form>
         </>
 

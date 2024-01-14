@@ -136,12 +136,10 @@ fun Application.configureRouting() {
             try {
                 val expenseUpdateRequest = call.receive<ExpenseUpdateRequestReceived>()
 
-                val updatedCategory = expenseUpdateRequest.category
-
                 val updatedItem = supabase.postgrest["expenses"].update(
                     {
+                        set("category", expenseUpdateRequest.category)
                         set("amount", expenseUpdateRequest.amount)
-                        set("category", updatedCategory)
                     }
                 ) {
                     eq("expenseId", expenseUpdateRequest.expenseId)

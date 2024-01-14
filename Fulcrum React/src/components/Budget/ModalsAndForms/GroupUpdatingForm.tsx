@@ -73,6 +73,7 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
                 <label htmlFor="groupName">Group Name</label>
                 <input type="text"
                        name="group"
+                       id="group"
                        value={formData.group}
                        onChange={handleInputChange}
                 />

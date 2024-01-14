@@ -7,18 +7,33 @@ export interface ExpenseItemEntity {
     timestamp: Date
 }
 
+export interface ExpenseCreationFormData {
+    category: string,
+    amount: number
+}
+
+export interface ExpenseUpdatingFormData {
+    category: string,
+    amount: number
+}
+
+export interface BudgetCreationFormData {
+    category: string,
+    amount: number,
+    iconPath: string,
+    group: string
+}
+
+export interface GroupColourAndCategories {
+    group: string
+    categories: BudgetItemEntity[]
+}
+
 export interface BudgetItemEntity {
     category: string
     amount: number
     iconPath: string
     group: string
-}
-
-export interface BudgetCreationFormData {
-    category: string;
-    amount: number;
-    iconPath: string;
-    group: string;
 }
 
 export interface BudgetUpdatingFormData {
@@ -36,10 +51,10 @@ export interface BasicGroupData {
 export interface GroupItemEntity {
     group: string;
     colour: string;
-    dateCreated: Date;
+    timestamp: Date;
 }
 
-export interface GroupOptionsFormattedData {
+export interface SelectorOptionsFormattedData {
     value: string;
     label: string;
     colour: string | null;
@@ -84,8 +99,8 @@ export const colourStyles = {
     singleValue: (styles: any, {data}: any) => ({ ...styles, ...dot(data.colour) }),
 };
 
-export function getColourOfGroup(groupName: string, groupOptions: GroupOptionsFormattedData[]) {
-    const groupOption = groupOptions.find(groupOption => groupOption.label === groupName);
+export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]) {
+    const groupOption = groupArray.find(groupItemEntity => groupItemEntity.group === groupName);
     if (groupOption) {
         return groupOption.colour;
     }
@@ -109,11 +124,76 @@ export async function getExpenseList() {
         }
         const responseData = await response.json();
         console.log(responseData);
-        return responseData
+        return responseData.sort(expenseSort)
 
     } catch (error) {
         console.error("Error:", error);
     }
+}
+
+export async function handleExpenseCreation(setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
+                                            setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
+                                            newExpenseItem: ExpenseItemEntity) {
+    try {
+        const response = await fetch("http://localhost:8080/api/createExpense", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                expenseId: newExpenseItem.expenseId,
+                category: newExpenseItem.category,
+                amount: newExpenseItem.amount,
+                timestamp: newExpenseItem.timestamp
+            })
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+            window.alert("Expense entry invalid.")
+            setExpenseArray(current => {
+                const indexOfInvalidItem = current.map(item => item.category).lastIndexOf(newExpenseItem.category);
+                if (indexOfInvalidItem !== -1) {
+                    return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)]
+                }
+                return current;
+            })
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+        setExpenseArray(await getExpenseList());
+        setBudgetArray(await getBudgetList());
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+export async function handleExpenseDeletion(expenseId: string,
+                                            setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
+                                            setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
+    try {
+        const response = await fetch("http://localhost:8080/api/deleteExpense", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "expenseId": expenseId,
+            })
+        })
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch(error) {
+        console.error("Error:", error);
+    }
+    getExpenseList().then( expenseList => setExpenseArray(expenseList))
+    getBudgetList().then( budgetList => setBudgetArray(budgetList))
 }
 
 export async function getBudgetList() {
@@ -126,7 +206,6 @@ export async function getBudgetList() {
         });
         if (!response.ok) {
             console.error(`HTTP error - status: ${response.status}`);
-            window.location.href = "/login"
         }
         const responseData = await response.json();
         console.log(responseData);
@@ -163,8 +242,7 @@ export async function handleBudgetDeletion(category: string, setBudgetArray: Dis
     getBudgetList().then( budgetList => setBudgetArray(budgetList))
 }
 
-
-export async function handleBudgetCreation(formData: BudgetCreationFormData, setBudgetArray: (value: (((prevState: BudgetItemEntity[]) => BudgetItemEntity[]) | BudgetItemEntity[])) => void, newBudgetItem: BudgetItemEntity) {
+export async function handleBudgetCreation(setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>, newBudgetItem: BudgetItemEntity) {
     try {
         const response = await fetch("http://localhost:8080/api/createBudget", {
             method: "POST",
@@ -172,10 +250,10 @@ export async function handleBudgetCreation(formData: BudgetCreationFormData, set
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                category: formData.category,
-                amount: formData.amount ? formData.amount : 0,
-                iconPath: formData.iconPath != "" ? formData.iconPath : "/src/assets/category-icons/category-default-icon.svg",
-                group: formData.group ? formData.group : "Miscellaneous"
+                category: newBudgetItem.category,
+                amount: newBudgetItem.amount ? newBudgetItem.amount : 0,
+                iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : "/src/assets/category-icons/category-default-icon.svg",
+                group: newBudgetItem.group ? newBudgetItem.group : "Miscellaneous"
             })
         });
 
@@ -234,6 +312,30 @@ export async function handleBudgetUpdating(category: string | null, formData: Bu
     }
 }
 
+export async function handleExpenseUpdating(expenseId: string, formData: ExpenseUpdatingFormData) {
+    try {
+        const response = await fetch("http://localhost:8080/api/updateExpense", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "expenseId": expenseId,
+                "category": formData.category,
+                "amount": formData.amount
+            })
+        })
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
 export async function getGroupList() {
     try {
         const response = await fetch("http://localhost:8080/api/getGroups", {
@@ -257,13 +359,27 @@ export async function getGroupList() {
 function groupSort (a: GroupItemEntity, b: GroupItemEntity){
     if (a.group === "Miscellaneous") return 1;
     if (b.group === "Miscellaneous") return -1;
-    return new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime()
+    return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
 }
 
-export function groupListAsOptions(groupList: GroupItemEntity[]) {
-    return groupList.map( rawGroupDataItem => {
-        return { value: rawGroupDataItem.group, label: rawGroupDataItem.group, colour: rawGroupDataItem.colour }
+function expenseSort(a: ExpenseItemEntity, b: ExpenseItemEntity) {
+    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+}
+
+export function groupListAsOptions(groupArray: GroupItemEntity[]): SelectorOptionsFormattedData[] {
+    return groupArray.map( groupItemEntity => {
+        return { value: groupItemEntity.group, label: groupItemEntity.group, colour: groupItemEntity.colour }
     });
+}
+
+export function categoryListAsOptions(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
+    return budgetArray.map( budgetItemEntity => {
+        return {
+            value: budgetItemEntity.category,
+            label: budgetItemEntity.category,
+            colour: getColourOfGroup(getGroupOfCategory(budgetArray, budgetItemEntity.category), groupArray)
+        }
+    })
 }
 
 export async function handleGroupCreation(group: string, colour: string, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, newGroupItem: GroupItemEntity) {
@@ -335,7 +451,7 @@ export async function handleGroupUpdating(originalGroupName: string, originalCol
             return currentGroupArray.map(groupItem => groupItem.group == originalGroupName ? {
                 colour: formData.colour ? formData.colour : groupItem.colour,
                 group: formData.group,
-                dateCreated: groupItem.dateCreated
+                timestamp: groupItem.timestamp
             } : groupItem)
         })
         try {
@@ -361,7 +477,7 @@ export async function handleGroupUpdating(originalGroupName: string, originalCol
                         revertedGroupOptions[indexOfInvalidlyEditedOption] = {
                             group: originalGroupName,
                             colour: originalColour,
-                            dateCreated: revertedGroupOptions[indexOfInvalidlyEditedOption].dateCreated
+                            timestamp: revertedGroupOptions[indexOfInvalidlyEditedOption].timestamp
                         }
                     }
                     return revertedGroupOptions;
@@ -476,3 +592,37 @@ export function getAmountBudgeted(budgetArray: BudgetItemEntity[]) {
 export function formatNumberWithCommas(numberString: string) {
     return numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+export function implementDynamicBackgroundHeight() {
+    function adjustBackgroundHeight() {
+        const bodyHeight = document.body.scrollHeight;
+        const backgroundDiv: HTMLDivElement = document.querySelector('.background')!;
+        backgroundDiv!.style.height = bodyHeight + 'px';
+    }
+
+// Select the node to be observed
+    const targetNode = document.body;
+
+// Set up the observer options
+    const config = {
+        childList: true,    // Detect direct children changes
+        subtree: true,      // Detect all descendant changes
+        attributes: true    // Detect changes in attributes
+    };
+
+// Callback function to execute when changes are observed
+    const callback = function() {
+        adjustBackgroundHeight();
+    };
+
+
+// Create an instance of the observer
+    const observer = new MutationObserver(callback);
+
+// Start observing the target node
+    observer.observe(targetNode, config);
+}
+
+export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string) {
+    return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group
+}

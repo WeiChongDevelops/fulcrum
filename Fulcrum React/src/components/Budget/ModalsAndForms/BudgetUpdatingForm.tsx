@@ -86,7 +86,6 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
                        step={0.01}
                 />
 
-
                 <label htmlFor="group">Group</label>
                 <CreatableSelect
                     id="group"
@@ -94,7 +93,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
                     defaultValue={{
                         label: oldBudgetBeingEdited.oldGroup,
                         value: oldBudgetBeingEdited.oldGroup,
-                        colour: getColourOfGroup(oldBudgetBeingEdited.oldGroup, groupListAsOptions((groupArray)))
+                        colour: getColourOfGroup(oldBudgetBeingEdited.oldGroup, groupArray)
                     }}
                     options={groupListAsOptions(groupArray).map(option => {
                         return {label: option.label, value: option.value, colour: option.colour!!}
@@ -112,9 +111,8 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
                     })}
                 />
 
-
                 <BudgetIconSelector/>
-                <input type="hidden" id="iconPath" name="iconPath" value="test"/>
+                <input type="hidden" id="iconPath" name="iconPath" value=""/>
                 <FulcrumButton displayText="Update Budget" />
             </form>
         </div>

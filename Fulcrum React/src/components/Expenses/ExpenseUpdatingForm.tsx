@@ -1,84 +1,119 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
-import {Dispatch, SetStateAction, useState} from "react";
-import {ExpenseItemEntity, getExpenseList} from "../../util.ts";
+import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
+import {
+    BudgetItemEntity,
+    getBudgetList,
+    ExpenseItemEntity,
+    SelectorOptionsFormattedData,
+    colourStyles,
+    ExpenseUpdatingFormData, handleExpenseUpdating, getExpenseList
+} from "../../util.ts";
+import CreatableSelect from 'react-select/creatable';
 
-
-interface DBUpdatingFormProps {
-    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
+interface ExpenseUpdatingFormProps {
+    setExpenseFormVisibility: Dispatch<SetStateAction<{
+        isCreateExpenseVisible: boolean,
+        isUpdateExpenseVisible: boolean,
+    }>>;
+    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+    categoryOptions: SelectorOptionsFormattedData[];
+    oldExpenseBeingEdited: { expenseId: string, oldCategory: string, oldAmount: number };
 }
 
-export default function ExpenseUpdatingForm({setExpenseArray}: DBUpdatingFormProps) {
+export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpenseArray, setBudgetArray, categoryOptions, oldExpenseBeingEdited }: ExpenseUpdatingFormProps) {
 
-    interface FormData {
-        expenseId: string;
-        category: string | null;
-        amount: number | null;
+
+    const [formData, setFormData] = useState<ExpenseUpdatingFormData>({ category: oldExpenseBeingEdited.oldCategory, amount: oldExpenseBeingEdited.oldAmount });
+    const formRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        window.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            window.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const handleClickOutside = (e: MouseEvent) => {
+        if (formRef.current && !formRef.current.contains(e.target as Node)) {
+            setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}))
+        }
+    };
+
+    function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+        setFormData(currentFormData => ({ ...currentFormData, [e.target.name]: e.target.value }));
     }
 
-    const [formData, setFormData] = useState<FormData>({expenseId: "", amount: null, category: null});
-
-    function handleInputChange(e: any) {
-        setFormData( currentFormData => {
-            return {...currentFormData, [e.target.name]: e.target.value }
-        });
+    function handleCategoryInputChange(e: any) {
+        setFormData(currentFormData => ({ ...currentFormData, category: e.value }));
     }
-    async function handleSubmit(e: any) {
+
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        try {
-            const response = await fetch("http://localhost:8080/api/updateExpense", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "expenseId": formData.expenseId,
-                    "category": formData.category,
-                    "amount": formData.amount
-                })
-            })
-            if (!response.ok) {
-                console.error(`HTTP error - status: ${response.status}`);
-            }
-            const responseData = await response.json();
-            console.log(responseData);
+        setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}))
 
-        } catch (error) {
-            console.error("Error:", error);
-        }
+        await handleExpenseUpdating(oldExpenseBeingEdited.expenseId, formData);
 
-        getExpenseList().then( expenseList => setExpenseArray(expenseList))
-        setFormData({expenseId: "", amount: null, category: null})
+        setFormData({ category: oldExpenseBeingEdited.oldCategory, amount: oldExpenseBeingEdited.oldAmount });
+        getExpenseList().then(expenseList => setExpenseArray(expenseList));
+
+        // To update budgetArray if new category is made:
+        getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
 
     return (
-        <>
-            <h1>Updating Form</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="expenseId">Expense ID</label>
-                <input type="text"
-                       onChange={handleInputChange}
-                       value={formData.expenseId}
-                       name="expenseId"
-                       id="expenseId"
-                       className="mb-3"/>
+        <div ref={formRef} className="budget-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
+
+            <button className="ml-auto mb-auto" onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}))
+            }}>Close</button>
+
+            <h1 className="mb-6">Updating Expense</h1>
+            <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
+                <label htmlFor="category">Category</label>
+                <CreatableSelect
+                    id="category"
+                    name="category"
+                    defaultValue={{
+                        label: oldExpenseBeingEdited.oldCategory,
+                        value: oldExpenseBeingEdited.oldCategory,
+                        colour: categoryOptions.filter(categoryOption => (
+                            categoryOption.label === oldExpenseBeingEdited.oldCategory
+                        ))[0].colour
+                    }}
+                    options={categoryOptions.map(option => {
+                        return {label: option.label, value: option.value, colour: option.colour!!}
+                    })}
+                    onChange={handleCategoryInputChange}
+                    styles={colourStyles}
+                    className="mb-3"
+                    theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                            ...theme.colors,
+                            primary25: '#262925',
+                            primary: "black"
+                        },
+                    })}
+                    required
+                />
+
                 <label htmlFor="amount">Amount</label>
-                <input type="text"
+                <input type="number"
                        onChange={handleInputChange}
-                       value={formData.amount ? formData.amount : ""}
+                       value={formData.amount ?? ""}
                        name="amount"
                        id="amount"
-                       className="mb-3"/>
-                <label htmlFor="category">Category</label>
-                <input type="text"
-                       onChange={handleInputChange}
-                       value={formData.category ? formData.category : ""}
-                       name="category"
-                       id="category"
-                       className="mb-3"/>
-                <FulcrumButton itemType="Update Expense" />
+                       className="mb-3"
+                       min={0.01}
+                       step={0.01}
+                />
+                <FulcrumButton displayText="Update Budget" />
             </form>
-        </>
-
-    )
+        </div>
+    );
 }

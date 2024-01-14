@@ -2,9 +2,10 @@ import '../css/App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Register from "./Auth/Register.tsx";
 import Login from "./Auth/Login.tsx";
-import Expenses from "./Expenses/Expenses.tsx";
+import TestExpenses from "./ExpensesAPI/TestExpenses.tsx";
 import Budget from "./Budget/Budget.tsx";
 import Navbar from "./Other/Navbar.tsx";
+import Expense from "./Expenses/Expense.tsx";
 
 export default function App() {
 
@@ -14,7 +15,8 @@ export default function App() {
                 <Route path="/" element={<Navbar/>} >
                     <Route path="login" element={<Login/>} />
                     <Route path="register" element={<Register/>} />
-                    <Route path="expenses" element={<Expenses/>} />
+                    <Route path="expenses-test" element={<TestExpenses/>} />
+                    <Route path="expenses" element={<Expense/>} />
                     <Route path="budget" element={<Budget/>} />
                 </Route>
             </Routes>

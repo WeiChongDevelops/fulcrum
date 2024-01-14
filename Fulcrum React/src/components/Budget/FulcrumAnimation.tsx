@@ -10,7 +10,7 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
         return bowlElement ? bowlElement.clientWidth : 135;
     }
 
-    const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-icon-red.png");
+    const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-tri-red.webp");
     const [leverEndXOffset, setLeverEndXOffset] = useState({leftEnd: 0, rightEnd: 0});
     const [bowlWidth, setBowlWidth] = useState(getBowlWidth);
     const [rightBowlShadowDimensions, setRightBowlShadowDimensions] = useState( {

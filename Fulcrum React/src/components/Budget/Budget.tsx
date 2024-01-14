@@ -1,14 +1,14 @@
 import {
     BudgetItemEntity, dynamicallySizeBudgetNameDisplays,
     getAmountBudgeted,
-    getBudgetList, getGroupList, GroupItemEntity, handleGroupDeletion,
+    getBudgetList, getGroupList, GroupItemEntity, handleGroupDeletion, implementDynamicBackgroundHeight,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
 import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
 import AddNewGroupButton from "./AddNewGroupButton.tsx";
-import ModalsAndForms from "./ModalsAndForms/ModalsAndForms.tsx";
+import BudgetModalsAndForms from "./ModalsAndForms/BudgetModalsAndForms.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -26,10 +26,6 @@ export default function Budget() {
         isConfirmGroupDestructionModalVisible: false,
         isConfirmCategoryDestructionModalVisible: false
     })
-
-    // const [isDeleteOptionsModalVisible, setIsDeleteOptionsModalVisible] = useState<boolean>(false);
-    // const [isConfirmGroupDestructionModalVisible, setIsConfirmGroupDestructionModalVisible] = useState<boolean>(false);
-    // const [isConfirmCategoryDestructionModalVisible, setIsConfirmCategoryDestructionModalVisible] = useState<boolean>(false);
 
     const [groupToDelete, setGroupToDelete] = useState<string>("");
     const [categoryToDelete, setCategoryToDelete] = useState<string>("");
@@ -49,7 +45,6 @@ export default function Budget() {
             })
         getGroupList()
             .then( results => setGroupArray(results))
-
     }, []);
 
     useEffect( () => {
@@ -63,7 +58,9 @@ export default function Budget() {
     },[budgetArray, totalIncome])
 
     useEffect( () => {
-        document.getElementById("category")?.focus();
+        const formCategoryInput = document.getElementById("category")
+        const formGroupInput = document.getElementById("group")
+        formCategoryInput ? formCategoryInput.focus() : formGroupInput?.focus();
         console.log(budgetFormVisibility);
     }, [budgetFormVisibility])
 
@@ -86,32 +83,7 @@ export default function Budget() {
         functionalPercentageIncomeRemaining === 100 ? -14.5 :
             functionalPercentageIncomeRemaining / (100/14.5);
 
-    function adjustBackgroundHeight() {
-        const bodyHeight = document.body.scrollHeight;
-        const backgroundDiv: HTMLDivElement = document.querySelector('.background')!;
-        backgroundDiv!.style.height = bodyHeight + 'px';
-    }
-
-    // Select the node to be observed
-    const targetNode = document.body;
-
-    // Set up the observer options
-        const config = {
-            childList: true,    // Detect direct children changes
-            subtree: true,      // Detect all descendant changes
-            attributes: true    // Detect changes in attributes
-        };
-
-    // Callback function to execute when changes are observed
-        const callback = function() {
-            adjustBackgroundHeight();
-        };
-
-    // Create an instance of the observer
-        const observer = new MutationObserver(callback);
-
-    // Start observing the target node
-        observer.observe(targetNode, config);
+    implementDynamicBackgroundHeight();
 
     return (
         <div className="flex flex-row justify-center items-center">
@@ -141,19 +113,19 @@ export default function Budget() {
                 <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
             </div>
 
-            <ModalsAndForms budgetFormVisibility={budgetFormVisibility}
-                            setBudgetArray={setBudgetArray}
-                            groupArray={groupArray}
-                            groupNameOfNewItem={groupNameOfNewItem}
-                            setBudgetFormVisibility={setBudgetFormVisibility}
-                            oldBudgetBeingEdited={oldBudgetBeingEdited}
-                            setGroupArray={setGroupArray}
-                            oldGroupBeingEdited={oldGroupBeingEdited}
-                            groupToDelete={groupToDelete}
-                            categoryToDelete={categoryToDelete}
-                            runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
-                            modalFormVisibility={modalFormVisibility}
-                            setModalFormVisibility={setModalFormVisibility}/>
+            <BudgetModalsAndForms budgetFormVisibility={budgetFormVisibility}
+                                  setBudgetArray={setBudgetArray}
+                                  groupArray={groupArray}
+                                  groupNameOfNewItem={groupNameOfNewItem}
+                                  setBudgetFormVisibility={setBudgetFormVisibility}
+                                  oldBudgetBeingEdited={oldBudgetBeingEdited}
+                                  setGroupArray={setGroupArray}
+                                  oldGroupBeingEdited={oldGroupBeingEdited}
+                                  groupToDelete={groupToDelete}
+                                  categoryToDelete={categoryToDelete}
+                                  runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
+                                  modalFormVisibility={modalFormVisibility}
+                                  setModalFormVisibility={setModalFormVisibility}/>
 
         </div>
     );

@@ -46,7 +46,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
         const newGroupItem: GroupItemEntity = {
             group: formData.group,
             colour: formData.colour ? formData.colour : randomColour,
-            dateCreated: new Date()
+            timestamp: new Date()
         }
 
         setGroupArray( (oldGroupArray) => {
@@ -68,7 +68,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
 
             <h1 className="mb-6">New Group</h1>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
-                <label htmlFor="Group Name">Group</label>
+                <label htmlFor="Group Name">Group Name</label>
                 <input type="text"
                        onChange={handleInputChange}
                        value={capitalizeFirstLetter(formData.group)}

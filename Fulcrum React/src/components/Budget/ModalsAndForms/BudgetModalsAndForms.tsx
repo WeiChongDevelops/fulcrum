@@ -31,7 +31,7 @@ interface ModalsAndFormsProps {
     runGroupDeletionWithUserPreference: (keepContainedBudgets: boolean) => void;
 }
 
-export default function ModalsAndForms( { budgetFormVisibility,
+export default function BudgetModalsAndForms({ budgetFormVisibility,
                                             setBudgetArray,
                                             groupArray,
                                             groupNameOfNewItem,
