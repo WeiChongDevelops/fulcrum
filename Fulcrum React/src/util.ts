@@ -172,6 +172,10 @@ export async function handleExpenseCreation(setBudgetArray: Dispatch<SetStateAct
 export async function handleExpenseDeletion(expenseId: string,
                                             setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
                                             setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
+    setExpenseArray(expenseArray => expenseArray.filter( expenseItem => {
+        return expenseItem.expenseId !== expenseId
+        }
+    ))
     try {
         const response = await fetch("http://localhost:8080/api/deleteExpense", {
             method: "DELETE",
