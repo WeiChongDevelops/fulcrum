@@ -1,7 +1,7 @@
 import {
-    BudgetFormVisibilityState,
+    BudgetFormVisibility,
     BudgetItemEntity,
-    BudgetModalVisibilityState,
+    BudgetModalVisibility,
     GroupItemEntity,
     handleGroupDeletion,
     PreviousBudgetBeingEdited,
@@ -22,8 +22,8 @@ interface GroupProps {
 
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
 
-    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
-    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibilityState>>;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
+    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibility>>;
 
     setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>
     setOldGroupBeingEdited: Dispatch<SetStateAction<PreviousGroupBeingEdited>>

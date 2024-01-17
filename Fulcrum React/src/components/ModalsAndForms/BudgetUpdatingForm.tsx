@@ -1,20 +1,20 @@
-import FulcrumButton from "../../Other/FulcrumButton.tsx";
+import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
-    addIconSelectionFunctionality, BudgetFormVisibilityState,
+    addIconSelectionFunctionality, BudgetFormVisibility,
     BudgetItemEntity,
     BudgetUpdatingFormData, colourStyles,
     getBudgetList, getColourOfGroup, groupListAsOptions,
     handleBudgetUpdating, GroupItemEntity,
-} from "../../../util.ts";
+} from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
-import BudgetIconSelector from "../Selectors/BudgetIconSelector.tsx";
+import BudgetIconSelector from "../Budget/Selectors/BudgetIconSelector.tsx";
 
 interface DBUpdatingFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     oldBudgetBeingEdited: { oldAmount: number, oldCategory: string, oldGroup: string }
     groupArray: GroupItemEntity[];
-    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
 }
 
 export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudgetBeingEdited, setBudgetFormVisibility }: DBUpdatingFormProps) {

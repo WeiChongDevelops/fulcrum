@@ -1,6 +1,6 @@
 import {
     BudgetItemEntity, ExpenseFormVisibility,
-    ExpenseItemEntity, getColourOfGroup,
+    ExpenseItemEntity, ExpenseModalVisibility, getColourOfGroup,
     getGroupOfCategory,
     GroupItemEntity, PreviousExpenseBeingEdited
 } from "../../util.ts";
@@ -17,10 +17,21 @@ interface ExpenseListProps {
     groupArray: GroupItemEntity[];
 
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
+    setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
+
     setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
+    setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 }
 
-export default function ExpenseList({ expenseArray, setExpenseArray, budgetArray, setBudgetArray, groupArray, setExpenseFormVisibility, setOldExpenseBeingEdited }: ExpenseListProps) {
+export default function ExpenseList({ expenseArray,
+                                        setExpenseArray,
+                                        budgetArray,
+                                        setBudgetArray,
+                                        groupArray,
+                                        setExpenseFormVisibility,
+                                        setExpenseModalVisibility,
+                                        setOldExpenseBeingEdited,
+                                        setExpenseIdToDelete}: ExpenseListProps) {
 
     return (
         <div>
@@ -63,7 +74,9 @@ export default function ExpenseList({ expenseArray, setExpenseArray, budgetArray
                         setExpenseArray={setExpenseArray}
                         setBudgetArray={setBudgetArray}
                         setExpenseFormVisibility={setExpenseFormVisibility}
+                        setExpenseModalVisibility={setExpenseModalVisibility}
                         setOldExpenseBeingEdited={setOldExpenseBeingEdited}
+                        setExpenseIdToDelete={setExpenseIdToDelete}
                         key={key}
                     />
                 })}

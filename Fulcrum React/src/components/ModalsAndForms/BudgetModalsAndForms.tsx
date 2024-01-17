@@ -4,21 +4,21 @@ import GroupCreationForm from "./GroupCreationForm.tsx";
 import GroupUpdatingForm from "./GroupUpdatingForm.tsx";
 import TwoOptionModal from "./TwoOptionModal.tsx";
 import {
-    BudgetFormVisibilityState,
+    BudgetFormVisibility,
     BudgetItemEntity,
-    BudgetModalVisibilityState,
+    BudgetModalVisibility,
     GroupItemEntity,
     handleBudgetDeletion, PreviousBudgetBeingEdited, PreviousGroupBeingEdited
-} from "../../../util.ts";
+} from "../../util.ts";
 
 import { Dispatch, SetStateAction } from 'react';
 
 interface ModalsAndFormsProps {
-    budgetFormVisibility: BudgetFormVisibilityState;
-    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
+    budgetFormVisibility: BudgetFormVisibility;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
 
-    modalFormVisibility:BudgetModalVisibilityState;
-    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibilityState>>;
+    modalFormVisibility:BudgetModalVisibility;
+    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibility>>;
 
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     groupArray: GroupItemEntity[];

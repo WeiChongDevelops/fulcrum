@@ -1,10 +1,10 @@
 import {Dispatch, SetStateAction} from "react";
-import {BudgetFormVisibilityState} from "../../util.ts";
+import {BudgetFormVisibility} from "../../util.ts";
 
 interface AddNewBudgetToGroupButtonProps {
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>
     groupNameOfNewItem: string;
-    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
 }
 
 export default function AddNewBudgetToGroupButton({ setGroupNameOfNewItem, groupNameOfNewItem, setBudgetFormVisibility }: AddNewBudgetToGroupButtonProps) {

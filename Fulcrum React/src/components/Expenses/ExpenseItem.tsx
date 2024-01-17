@@ -1,8 +1,8 @@
 import '/src/css/Budget.css';
 import {
-    BudgetItemEntity, ExpenseFormVisibility, ExpenseItemEntity,
+    BudgetItemEntity, ExpenseFormVisibility, ExpenseItemEntity, ExpenseModalVisibility,
     formatNumberWithCommas,
-    handleExpenseDeletion, PreviousExpenseBeingEdited
+    PreviousExpenseBeingEdited
 } from "../../util.ts";
 import React, {Dispatch, SetStateAction} from "react";
 
@@ -19,19 +19,22 @@ interface BudgetItemProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
+    setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
+
     setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
+    setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 }
 
 export default function ExpenseItem( { expenseId,
                                          category,
                                          amount,
-                                         setExpenseArray,
-                                         setBudgetArray,
                                          iconPath,
                                          groupName,
                                          groupColour,
                                          setExpenseFormVisibility,
-                                         setOldExpenseBeingEdited }: BudgetItemProps) {
+                                         setExpenseModalVisibility,
+                                         setOldExpenseBeingEdited,
+                                         setExpenseIdToDelete}: BudgetItemProps) {
 
     function handleEditClick(e: React.MouseEvent<HTMLDivElement>) {
         e.stopPropagation();
@@ -44,9 +47,8 @@ export default function ExpenseItem( { expenseId,
     }
 
     function handleDeleteClick() {
-        handleExpenseDeletion(expenseId, setExpenseArray, setBudgetArray)
-            .then(() => console.log("Deletion successful"))
-            .catch(() => console.log("Deletion unsuccessful"));
+        setExpenseIdToDelete(expenseId);
+        setExpenseModalVisibility(current => ({...current, isConfirmExpenseDestructionModalVisible: true}))
     }
 
     return (

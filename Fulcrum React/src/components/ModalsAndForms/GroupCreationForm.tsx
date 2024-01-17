@@ -1,16 +1,16 @@
-import FulcrumButton from "../../Other/FulcrumButton.tsx";
+import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addColourSelectionFunctionality,
-    BasicGroupData, BudgetFormVisibilityState, capitalizeFirstLetter,
+    BasicGroupData, BudgetFormVisibility, capitalizeFirstLetter,
     handleGroupCreation, GroupItemEntity, getRandomColour
-} from "../../../util.ts";
-import "../../../css/Budget.css"
-import GroupColourSelector from "../Selectors/GroupColourSelector.tsx";
+} from "../../util.ts";
+import "../../css/Budget.css"
+import GroupColourSelector from "../Budget/Selectors/GroupColourSelector.tsx";
 
 interface GroupCreationFormProps {
     setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>
-    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
 }
 
 export default function GroupCreationForm(this: any, { setGroupArray, setBudgetFormVisibility }: GroupCreationFormProps) {

@@ -1,20 +1,20 @@
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addColourSelectionFunctionality,
-    BasicGroupData, BudgetFormVisibilityState,
+    BasicGroupData, BudgetFormVisibility,
     BudgetItemEntity,
     getBudgetList, GroupItemEntity,
     handleGroupUpdating
-} from "../../../util.ts";
-import FulcrumButton from "../../Other/FulcrumButton.tsx";
-import GroupColourSelector from "../Selectors/GroupColourSelector.tsx";
+} from "../../util.ts";
+import FulcrumButton from "../Other/FulcrumButton.tsx";
+import GroupColourSelector from "../Budget/Selectors/GroupColourSelector.tsx";
 
 interface GroupUpdatingFormProps {
     oldGroupBeingEdited: { oldColour: string, oldGroupName: string };
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
     groupArray: GroupItemEntity[]
-    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
 }
 
 export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited, setGroupArray, groupArray, setBudgetFormVisibility }: GroupUpdatingFormProps) {

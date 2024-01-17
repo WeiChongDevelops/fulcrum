@@ -63,14 +63,14 @@ export interface BudgetUpdatingFormData {
     iconPath: string;
 }
 
-export interface BudgetFormVisibilityState {
+export interface BudgetFormVisibility {
     isCreateBudgetVisible: boolean,
     isUpdateBudgetVisible: boolean,
     isCreateGroupVisible: boolean,
     isUpdateGroupVisible: boolean,
 }
 
-export interface BudgetModalVisibilityState {
+export interface BudgetModalVisibility {
     isDeleteOptionsModalVisible: boolean;
     isConfirmGroupDestructionModalVisible: boolean;
     isConfirmCategoryDestructionModalVisible: boolean;
@@ -90,10 +90,6 @@ export interface BasicGroupData {
     colour: string | null;
 }
 
-export interface GroupColourAndCategories {
-    group: string
-    categories: BudgetItemEntity[]
-}
 export interface PreviousGroupBeingEdited  {
     oldColour: string;
     oldGroupName: string;

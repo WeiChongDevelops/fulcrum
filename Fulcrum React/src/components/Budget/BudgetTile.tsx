@@ -1,7 +1,7 @@
 import '/src/css/Budget.css';
 import {
-    BudgetFormVisibilityState,
-    BudgetModalVisibilityState,
+    BudgetFormVisibility,
+    BudgetModalVisibility,
     formatNumberWithCommas,
     PreviousBudgetBeingEdited
 } from "../../util.ts";
@@ -15,8 +15,8 @@ interface BudgetTileProps {
 
     setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>
 
-    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
-    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibilityState>>;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
+    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibility>>;
 
     setCategoryToDelete: Dispatch<SetStateAction<string>>;
 

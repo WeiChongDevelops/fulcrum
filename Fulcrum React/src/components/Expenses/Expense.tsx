@@ -6,9 +6,8 @@ import {
     getBudgetList,
     getExpenseList,
     getGroupList,
-    GroupColourAndCategories,
     GroupItemEntity,
-    groupListAsOptions,
+    groupListAsOptions, handleExpenseDeletion,
     implementDynamicBackgroundHeight,
     PreviousExpenseBeingEdited,
 } from "../../util.ts";
@@ -16,6 +15,7 @@ import ExpenseList from "./ExpenseList.tsx";
 import AddNewExpenseButton from "./AddNewExpenseButton.tsx";
 import ExpenseCreationForm from "./ExpenseCreationForm.tsx";
 import ExpenseUpdatingForm from "./ExpenseUpdatingForm.tsx";
+import TwoOptionModal from "../ModalsAndForms/TwoOptionModal.tsx";
 
 
 export default function Expense() {
@@ -23,7 +23,6 @@ export default function Expense() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]); // We need to maintain this state because each time it changes we use it to update groupColourAndCategoriesArray
 
     const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
-    const [groupColourAndCategoriesArray, setGroupColourAndCategoriesArray] = useState<GroupColourAndCategories[]>([]);
 
     const [expenseFormVisibility, setExpenseFormVisibility] = useState({
         isCreateExpenseVisible: false,
@@ -36,6 +35,7 @@ export default function Expense() {
 
     // const [expenseIdToDelete, setExpenseIdToDelete] = useState<string>("");
     const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({ expenseId: "", oldCategory: "", oldAmount: 0 });
+    const [expenseIdToDelete, setExpenseIdToDelete] = useState("");
 
     useEffect(() => {
         getBudgetList()
@@ -51,12 +51,6 @@ export default function Expense() {
             .then(() => {
                 getGroupList()
                     .then((groupList: GroupItemEntity[]) => {
-                        groupList.forEach(groupEntity => {
-                            setGroupColourAndCategoriesArray(current => ([...current, {
-                                group: groupEntity.group,
-                                categories: budgetArray.filter(budgetItem => budgetItem.group === groupEntity.group)
-                            }]))
-                        })
                         setGroupArray(groupList)
                     })
             })
@@ -68,6 +62,12 @@ export default function Expense() {
         document.getElementById("category")?.focus()
         console.log(expenseFormVisibility);
     }, [expenseFormVisibility])
+
+    function runExpenseDeletion() {
+        handleExpenseDeletion(expenseIdToDelete, setExpenseArray, setBudgetArray)
+            .then(() => console.log("Deletion successful"))
+            .catch(() => console.log("Deletion unsuccessful"));
+    }
 
     return (
         <div className="flex flex-row justify-center items-center">
@@ -84,7 +84,9 @@ export default function Expense() {
                     setBudgetArray={setBudgetArray}
                     groupArray={groupArray}
                     setExpenseFormVisibility={setExpenseFormVisibility}
-                    setOldExpenseBeingEdited={setOldExpenseBeingEdited}/>}
+                    setExpenseModalVisibility={setExpenseModalVisibility}
+                    setOldExpenseBeingEdited={setOldExpenseBeingEdited}
+                    setExpenseIdToDelete={setExpenseIdToDelete}/>}
             </div>
 
             {expenseFormVisibility.isCreateExpenseVisible && <ExpenseCreationForm
@@ -98,6 +100,21 @@ export default function Expense() {
                                      setExpenseArray={setExpenseArray} setBudgetArray={setBudgetArray}
                                      categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
                                      oldExpenseBeingEdited={oldExpenseBeingEdited}/>}
+
+            {expenseModalVisibility.isConfirmExpenseDestructionModalVisible &&
+                <TwoOptionModal optionOneText="Cancel" optionOneFunction={() => setExpenseModalVisibility(current => ({
+                    ...current,
+                    isConfirmExpenseDestructionModalVisible: false
+                }))} optionTwoText="Confirm" optionTwoFunction={() => {
+                    runExpenseDeletion()
+                    setExpenseModalVisibility(current => ({
+                        ...current,
+                        isConfirmExpenseDestructionModalVisible: false
+                    }));
+                }}
+                                setModalFormVisibility={setExpenseModalVisibility}
+                                setVisible="isConfirmExpenseDestructionModalVisible"
+                                title="Are you sure you want to delete this expense?"/>}
 
             {/*<ExpenseModalsAndForms setModalFormVisibility={setModalFormVisibility}*/}
             {/*                      setBudgetArray={setBudgetArray}*/}

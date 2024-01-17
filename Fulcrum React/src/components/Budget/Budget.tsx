@@ -1,7 +1,7 @@
 import {
-    BudgetFormVisibilityState,
+    BudgetFormVisibility,
     BudgetItemEntity,
-    BudgetModalVisibilityState,
+    BudgetModalVisibility,
     dynamicallySizeBudgetNameDisplays,
     getAmountBudgeted,
     getBudgetList,
@@ -16,20 +16,20 @@ import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
 import AddNewGroupButton from "./AddNewGroupButton.tsx";
-import BudgetModalsAndForms from "./ModalsAndForms/BudgetModalsAndForms.tsx";
+import BudgetModalsAndForms from "../ModalsAndForms/BudgetModalsAndForms.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
     const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
 
-    const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibilityState>({
+    const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
         isCreateBudgetVisible: false,
         isUpdateBudgetVisible: false,
         isCreateGroupVisible: false,
         isUpdateGroupVisible: false,
     });
 
-    const [budgetModalVisibility, setBudgetModalVisibility] = useState<BudgetModalVisibilityState>( {
+    const [budgetModalVisibility, setBudgetModalVisibility] = useState<BudgetModalVisibility>( {
         isDeleteOptionsModalVisible: false,
         isConfirmGroupDestructionModalVisible: false,
         isConfirmCategoryDestructionModalVisible: false

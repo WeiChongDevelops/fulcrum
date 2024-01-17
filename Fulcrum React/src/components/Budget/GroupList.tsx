@@ -1,6 +1,6 @@
 import {
-    BudgetFormVisibilityState,
-    BudgetItemEntity, BudgetModalVisibilityState,
+    BudgetFormVisibility,
+    BudgetItemEntity, BudgetModalVisibility,
     GroupItemEntity, PreviousBudgetBeingEdited, PreviousGroupBeingEdited
 } from "../../util.ts";
 import Group from "./Group.tsx";
@@ -13,8 +13,8 @@ interface GroupListProps {
     groupArray: GroupItemEntity[];
     setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
 
-    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
-    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibilityState>>;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
+    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibility>>;
 
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
 

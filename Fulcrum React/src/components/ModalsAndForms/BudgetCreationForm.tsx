@@ -1,20 +1,20 @@
-import FulcrumButton from "../../Other/FulcrumButton.tsx";
+import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addIconSelectionFunctionality,
-    BudgetFormVisibilityState,
+    BudgetFormVisibility,
     BudgetItemEntity, capitalizeFirstLetter, colourStyles, getColourOfGroup, groupListAsOptions,
     handleBudgetCreation, GroupItemEntity
-} from "../../../util.ts";
+} from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
-import "../../../css/Budget.css"
-import BudgetIconSelector from "../Selectors/BudgetIconSelector.tsx";
+import "../../css/Budget.css"
+import BudgetIconSelector from "../Budget/Selectors/BudgetIconSelector.tsx";
 
 interface BudgetCreationFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     groupArray: GroupItemEntity[];
     groupNameOfNewItem: string;
-    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
+    setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
 }
 
 export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNameOfNewItem, setBudgetFormVisibility }: BudgetCreationFormProps) {
