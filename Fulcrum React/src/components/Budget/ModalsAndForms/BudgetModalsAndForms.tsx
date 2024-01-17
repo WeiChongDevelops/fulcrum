@@ -8,7 +8,7 @@ import {
     BudgetItemEntity,
     BudgetModalVisibilityState,
     GroupItemEntity,
-    handleBudgetDeletion
+    handleBudgetDeletion, PreviousBudgetBeingEdited, PreviousGroupBeingEdited
 } from "../../../util.ts";
 
 import { Dispatch, SetStateAction } from 'react';
@@ -23,9 +23,9 @@ interface ModalsAndFormsProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     groupArray: GroupItemEntity[];
     groupNameOfNewItem: string;
-    oldBudgetBeingEdited: { oldAmount: number; oldCategory: string; oldGroup: string };
+    oldBudgetBeingEdited: PreviousBudgetBeingEdited;
     setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
-    oldGroupBeingEdited: { oldColour: string; oldGroupName: string };
+    oldGroupBeingEdited: PreviousGroupBeingEdited;
     groupToDelete: string;
     categoryToDelete: string;
     runGroupDeletionWithUserPreference: (keepContainedBudgets: boolean) => void;

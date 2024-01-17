@@ -1,8 +1,8 @@
 import {
-    BudgetItemEntity,
+    BudgetItemEntity, ExpenseFormVisibility,
     ExpenseItemEntity, getColourOfGroup,
     getGroupOfCategory,
-    GroupItemEntity
+    GroupItemEntity, PreviousExpenseBeingEdited
 } from "../../util.ts";
 import ExpenseItem from "./ExpenseItem.tsx";
 import { Dispatch, SetStateAction } from "react";
@@ -16,11 +16,8 @@ interface ExpenseListProps {
 
     groupArray: GroupItemEntity[];
 
-    setExpenseFormVisibility: Dispatch<SetStateAction<{
-        isCreateExpenseVisible: boolean,
-        isUpdateExpenseVisible: boolean,
-    }>>;
-    setOldExpenseBeingEdited: Dispatch<SetStateAction<{ expenseId: string, oldCategory: string, oldAmount: number }>>;
+    setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
+    setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
 }
 
 export default function ExpenseList({ expenseArray, setExpenseArray, budgetArray, setBudgetArray, groupArray, setExpenseFormVisibility, setOldExpenseBeingEdited }: ExpenseListProps) {

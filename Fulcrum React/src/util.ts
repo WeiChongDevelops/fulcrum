@@ -1,5 +1,7 @@
 import {Dispatch, SetStateAction} from "react";
 
+
+//  EXPENSE ENTITIES //
 export interface ExpenseItemEntity {
     expenseId: string
     category: string
@@ -12,21 +14,33 @@ export interface ExpenseCreationFormData {
     amount: number
 }
 
+export interface ExpenseFormVisibility {
+    isCreateExpenseVisible: boolean;
+    isUpdateExpenseVisible: boolean;
+}
+
+export interface ExpenseModalVisibility {
+    isConfirmExpenseDestructionModalVisible: boolean;
+}
+
 export interface ExpenseUpdatingFormData {
-    category: string,
-    amount: number
+    category: string;
+    amount: number;
 }
 
-export interface BudgetCreationFormData {
-    category: string,
-    amount: number,
-    iconPath: string,
-    group: string
+
+export interface PreviousExpenseBeingEdited {
+    expenseId: string;
+    oldCategory: string;
+    oldAmount: number;
 }
 
-export interface GroupColourAndCategories {
-    group: string
-    categories: BudgetItemEntity[]
+// BUDGET ENTITIES //
+
+export interface PreviousBudgetBeingEdited {
+    oldAmount: number;
+    oldCategory: string;
+    oldGroup: string;
 }
 
 export interface BudgetItemEntity {
@@ -36,28 +50,18 @@ export interface BudgetItemEntity {
     group: string
 }
 
+export interface BudgetCreationFormData {
+    category: string,
+    amount: number,
+    iconPath: string,
+    group: string
+}
+
 export interface BudgetUpdatingFormData {
     category: string;
     amount: number;
     group: string;
     iconPath: string;
-}
-
-export interface BasicGroupData {
-    group: string;
-    colour: string | null;
-}
-
-export interface GroupItemEntity {
-    group: string;
-    colour: string;
-    timestamp: Date;
-}
-
-export interface SelectorOptionsFormattedData {
-    value: string;
-    label: string;
-    colour: string | null;
 }
 
 export interface BudgetFormVisibilityState {
@@ -71,6 +75,37 @@ export interface BudgetModalVisibilityState {
     isDeleteOptionsModalVisible: boolean;
     isConfirmGroupDestructionModalVisible: boolean;
     isConfirmCategoryDestructionModalVisible: boolean;
+}
+
+
+// GROUP ENTITIES
+
+export interface GroupItemEntity {
+    group: string;
+    colour: string;
+    timestamp: Date;
+}
+
+export interface BasicGroupData {
+    group: string;
+    colour: string | null;
+}
+
+export interface GroupColourAndCategories {
+    group: string
+    categories: BudgetItemEntity[]
+}
+export interface PreviousGroupBeingEdited  {
+    oldColour: string;
+    oldGroupName: string;
+}
+
+// MISCELLANEOUS ENTITIES //
+
+export interface SelectorOptionsFormattedData {
+    value: string;
+    label: string;
+    colour: string | null;
 }
 
 
@@ -152,7 +187,7 @@ export async function handleExpenseCreation(setBudgetArray: Dispatch<SetStateAct
             console.error(`HTTP error - status: ${response.status}`);
             window.alert("Expense entry invalid.")
             setExpenseArray(current => {
-                const indexOfInvalidItem = current.map(item => item.category).lastIndexOf(newExpenseItem.category);
+                const indexOfInvalidItem = current.map(item => item.expenseId).lastIndexOf(newExpenseItem.expenseId)
                 if (indexOfInvalidItem !== -1) {
                     return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)]
                 }
@@ -601,7 +636,9 @@ export function implementDynamicBackgroundHeight() {
     function adjustBackgroundHeight() {
         const bodyHeight = document.body.scrollHeight;
         const backgroundDiv: HTMLDivElement = document.querySelector('.background')!;
-        backgroundDiv!.style.height = bodyHeight + 'px';
+        if (bodyHeight > window.innerHeight) {
+            backgroundDiv!.style.height = bodyHeight + 'px';
+        }
     }
 
 // Select the node to be observed

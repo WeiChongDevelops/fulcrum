@@ -1,6 +1,11 @@
 import {
     BudgetFormVisibilityState,
-    BudgetItemEntity, BudgetModalVisibilityState, GroupItemEntity, handleGroupDeletion
+    BudgetItemEntity,
+    BudgetModalVisibilityState,
+    GroupItemEntity,
+    handleGroupDeletion,
+    PreviousBudgetBeingEdited,
+    PreviousGroupBeingEdited
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
 import BudgetTile from "./BudgetTile.tsx";
@@ -20,8 +25,8 @@ interface GroupProps {
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
     setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibilityState>>;
 
-    setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>;
-    setOldGroupBeingEdited: Dispatch<SetStateAction<{ oldGroupName: string, oldColour: string }>>
+    setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>
+    setOldGroupBeingEdited: Dispatch<SetStateAction<PreviousGroupBeingEdited>>
 
     setGroupToDelete: Dispatch<SetStateAction<string>>;
 

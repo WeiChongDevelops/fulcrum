@@ -1,5 +1,10 @@
 import '/src/css/Budget.css';
-import {BudgetFormVisibilityState, BudgetModalVisibilityState, formatNumberWithCommas} from "../../util.ts";
+import {
+    BudgetFormVisibilityState,
+    BudgetModalVisibilityState,
+    formatNumberWithCommas,
+    PreviousBudgetBeingEdited
+} from "../../util.ts";
 import React, {Dispatch, SetStateAction} from "react";
 
 interface BudgetTileProps {
@@ -8,7 +13,7 @@ interface BudgetTileProps {
     group: string;
     icon: string;
 
-    setOldBudgetBeingEdited: Dispatch<SetStateAction<{ oldAmount: number, oldCategory: string, oldGroup: string }>>;
+    setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>
 
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibilityState>>;
     setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibilityState>>;

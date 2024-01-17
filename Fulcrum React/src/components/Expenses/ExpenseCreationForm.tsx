@@ -53,7 +53,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
             timestamp: new Date()
         }
 
-        setExpenseArray(current => [...current, newExpenseItem])
+        setExpenseArray(current => [newExpenseItem, ...current])
         setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
 
         await handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItem);
@@ -105,19 +105,6 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                        min={0.01}
                        step={0.01}
                        required/>
-
-                <div id="icon-selector">
-                    <button type="button" className="category-icon-selectable" data-value="category-bank-icon.svg">
-                        <img src="/src/assets/category-icons/category-bank-icon.svg" alt="Bank"/>
-                    </button>
-                    <button type="button" className="category-icon-selectable" data-value="category-water-icon.svg">
-                        <img src="/src/assets/category-icons/category-water-icon.svg" alt="Water"/>
-                    </button>
-                    <button type="button" className="category-icon-selectable" data-value="category-pig-icon.svg">
-                        <img src="/src/assets/category-icons/category-pig-icon.svg" alt="Piggy Bank"/>
-                    </button>
-                </div>
-                <input type="hidden" id="iconPath" name="iconPath" value="test"/>
 
                 <FulcrumButton displayText="Insert Expense"/>
             </form>

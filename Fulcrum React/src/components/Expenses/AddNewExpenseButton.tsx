@@ -14,7 +14,7 @@ export default function AddNewExpenseButton({setExpenseFormVisibility}: AddNewBu
     }
 
     return (
-        <button onClick={handleClick}>
+        <button onClick={handleClick} className="mt-3">
             <b>Create Expense</b>
         </button>
     )

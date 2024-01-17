@@ -1,8 +1,8 @@
 import '/src/css/Budget.css';
 import {
-    BudgetItemEntity, ExpenseItemEntity,
+    BudgetItemEntity, ExpenseFormVisibility, ExpenseItemEntity,
     formatNumberWithCommas,
-    handleExpenseDeletion
+    handleExpenseDeletion, PreviousExpenseBeingEdited
 } from "../../util.ts";
 import React, {Dispatch, SetStateAction} from "react";
 
@@ -18,11 +18,8 @@ interface BudgetItemProps {
     setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
-    setExpenseFormVisibility: Dispatch<SetStateAction<{
-        isCreateExpenseVisible: boolean,
-        isUpdateExpenseVisible: boolean,
-    }>>;
-    setOldExpenseBeingEdited: Dispatch<SetStateAction<{ expenseId: string, oldCategory: string, oldAmount: number }>>;
+    setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
+    setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
 }
 
 export default function ExpenseItem( { expenseId,

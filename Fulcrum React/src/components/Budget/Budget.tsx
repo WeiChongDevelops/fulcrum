@@ -1,7 +1,15 @@
 import {
-    BudgetItemEntity, dynamicallySizeBudgetNameDisplays,
+    BudgetFormVisibilityState,
+    BudgetItemEntity,
+    BudgetModalVisibilityState,
+    dynamicallySizeBudgetNameDisplays,
     getAmountBudgeted,
-    getBudgetList, getGroupList, GroupItemEntity, handleGroupDeletion, implementDynamicBackgroundHeight,
+    getBudgetList,
+    getGroupList,
+    GroupItemEntity,
+    handleGroupDeletion,
+    implementDynamicBackgroundHeight,
+    PreviousBudgetBeingEdited, PreviousGroupBeingEdited,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
 import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
@@ -14,14 +22,14 @@ export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
     const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
 
-    const [budgetFormVisibility, setBudgetFormVisibility] = useState({
+    const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibilityState>({
         isCreateBudgetVisible: false,
         isUpdateBudgetVisible: false,
         isCreateGroupVisible: false,
         isUpdateGroupVisible: false,
     });
 
-    const [modalFormVisibility, setModalFormVisibility] = useState( {
+    const [budgetModalVisibility, setBudgetModalVisibility] = useState<BudgetModalVisibilityState>( {
         isDeleteOptionsModalVisible: false,
         isConfirmGroupDestructionModalVisible: false,
         isConfirmCategoryDestructionModalVisible: false
@@ -30,8 +38,8 @@ export default function Budget() {
     const [groupToDelete, setGroupToDelete] = useState<string>("");
     const [categoryToDelete, setCategoryToDelete] = useState<string>("");
 
-    const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState({ oldAmount: 0, oldCategory: "", oldGroup: ""});
-    const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState({ oldColour: "", oldGroupName: "" });
+    const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState<PreviousBudgetBeingEdited>({ oldAmount: 0, oldCategory: "", oldGroup: ""});
+    const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState<PreviousGroupBeingEdited>({ oldColour: "", oldGroupName: "" });
 
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
@@ -45,6 +53,7 @@ export default function Budget() {
             })
         getGroupList()
             .then( results => setGroupArray(results))
+            .then(implementDynamicBackgroundHeight)
     }, []);
 
     useEffect( () => {
@@ -65,7 +74,7 @@ export default function Budget() {
     }, [budgetFormVisibility])
 
     function runGroupDeletionWithUserPreference(keepContainedBudgets: boolean) {
-        setModalFormVisibility(current => ({...current,
+        setBudgetModalVisibility(current => ({...current,
             isDeleteOptionsModalVisible: false,
             isConfirmGroupDestructionModalVisible: false
         }))
@@ -83,13 +92,11 @@ export default function Budget() {
         functionalPercentageIncomeRemaining === 100 ? -14.5 :
             functionalPercentageIncomeRemaining / (100/14.5);
 
-    implementDynamicBackgroundHeight();
-
     return (
         <div className="flex flex-row justify-center items-center">
             <div className={`flex flex-col elementsBelowPopUpForm z-2
             ${((Object.values(budgetFormVisibility).includes(true)) 
-                || Object.values(modalFormVisibility).includes(true)) && "blur"} px-16`}>
+                || Object.values(budgetModalVisibility).includes(true)) && "blur"} px-16`}>
                 <TotalIncomeDisplay
                     totalIncome={totalIncome}
                     setTotalIncome={setTotalIncome}
@@ -108,7 +115,7 @@ export default function Budget() {
                     setBudgetFormVisibility={setBudgetFormVisibility}
                     setGroupToDelete={setGroupToDelete}
                     setCategoryToDelete={setCategoryToDelete}
-                    setModalFormVisibility={setModalFormVisibility}/>}
+                    setModalFormVisibility={setBudgetModalVisibility}/>}
 
                 <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
             </div>
@@ -124,8 +131,8 @@ export default function Budget() {
                                   groupToDelete={groupToDelete}
                                   categoryToDelete={categoryToDelete}
                                   runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
-                                  modalFormVisibility={modalFormVisibility}
-                                  setModalFormVisibility={setModalFormVisibility}/>
+                                  modalFormVisibility={budgetModalVisibility}
+                                  setModalFormVisibility={setBudgetModalVisibility}/>
 
         </div>
     );

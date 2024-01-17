@@ -1,9 +1,16 @@
 import {useEffect, useState} from "react";
 import {
-    BudgetItemEntity, categoryListAsOptions,
-    ExpenseItemEntity, getBudgetList,
-    getExpenseList, getGroupList,
-    GroupColourAndCategories, GroupItemEntity, groupListAsOptions, implementDynamicBackgroundHeight,
+    BudgetItemEntity,
+    categoryListAsOptions,
+    ExpenseItemEntity, ExpenseModalVisibility,
+    getBudgetList,
+    getExpenseList,
+    getGroupList,
+    GroupColourAndCategories,
+    GroupItemEntity,
+    groupListAsOptions,
+    implementDynamicBackgroundHeight,
+    PreviousExpenseBeingEdited,
 } from "../../util.ts";
 import ExpenseList from "./ExpenseList.tsx";
 import AddNewExpenseButton from "./AddNewExpenseButton.tsx";
@@ -23,12 +30,12 @@ export default function Expense() {
         isUpdateExpenseVisible: false,
     });
 
-    const [modalFormVisibility, setModalFormVisibility] = useState( {
+    const [expenseModalVisibility, setExpenseModalVisibility] = useState<ExpenseModalVisibility>( {
         isConfirmExpenseDestructionModalVisible: false,
     })
 
     // const [expenseIdToDelete, setExpenseIdToDelete] = useState<string>("");
-    const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState({ expenseId: "", oldCategory: "", oldAmount: 0 });
+    const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({ expenseId: "", oldCategory: "", oldAmount: 0 });
 
     useEffect(() => {
         getBudgetList()
@@ -53,6 +60,7 @@ export default function Expense() {
                         setGroupArray(groupList)
                     })
             })
+            .then(implementDynamicBackgroundHeight)
             .catch(error => console.log(`Unsuccessful expense page data retrieval - error: ${error}`))
     }, []);
 
@@ -61,13 +69,11 @@ export default function Expense() {
         console.log(expenseFormVisibility);
     }, [expenseFormVisibility])
 
-    implementDynamicBackgroundHeight();
-
     return (
         <div className="flex flex-row justify-center items-center">
             <div className={`flex flex-col elementsBelowPopUpForm z-2
             ${((Object.values(expenseFormVisibility).includes(true))
-                || Object.values(modalFormVisibility).includes(true)) && "blur"} px-16`}>
+                || Object.values(expenseModalVisibility).includes(true)) && "blur"} px-16`}>
 
                 <AddNewExpenseButton setExpenseFormVisibility={setExpenseFormVisibility}/>
 
