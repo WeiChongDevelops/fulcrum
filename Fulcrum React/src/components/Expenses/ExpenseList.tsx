@@ -5,7 +5,7 @@ import {
     GroupItemEntity, PreviousExpenseBeingEdited
 } from "../../util.ts";
 import ExpenseItem from "./ExpenseItem.tsx";
-import { Dispatch, SetStateAction } from "react";
+import {Dispatch, SetStateAction} from "react";
 
 interface ExpenseListProps {
     expenseArray: ExpenseItemEntity[];

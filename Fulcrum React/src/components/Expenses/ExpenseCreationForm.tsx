@@ -18,10 +18,12 @@ interface ExpenseCreationFormProps {
     setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
+    budgetArray: BudgetItemEntity[];
+
     categoryOptions: SelectorOptionsFormattedData[];
 }
 
-export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, categoryOptions }: ExpenseCreationFormProps) {
+export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, budgetArray, categoryOptions }: ExpenseCreationFormProps) {
 
     const [formData, setFormData] = useState<ExpenseCreationFormData>({ category: "", amount: 0 });
     const formRef = useRef<HTMLDivElement>(null);
@@ -53,7 +55,19 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
             timestamp: new Date()
         }
 
-        setExpenseArray(current => [newExpenseItem, ...current])
+        if (budgetArray.map(budgetItem => budgetItem.category).includes(newExpenseItem.category)) {
+            setExpenseArray(current => [newExpenseItem, ...current])
+        } else {
+            const newDefaultBudgetItem: BudgetItemEntity = {
+                category: formData.category,
+                amount: 0,
+                iconPath: "/src/assets/category-icons/category-default-icon.svg",
+                group: "Miscellaneous"
+            }
+
+            setBudgetArray(current => [...current, newDefaultBudgetItem])
+            setExpenseArray(current => [newExpenseItem, ...current])
+        }
         setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
 
         await handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItem);

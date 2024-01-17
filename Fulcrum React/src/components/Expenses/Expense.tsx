@@ -91,6 +91,7 @@ export default function Expense() {
                 setExpenseFormVisibility={setExpenseFormVisibility}
                 setExpenseArray={setExpenseArray}
                 setBudgetArray={setBudgetArray}
+                budgetArray={budgetArray}
                 categoryOptions={categoryListAsOptions(budgetArray, groupArray)}/>}
             {expenseFormVisibility.isUpdateExpenseVisible &&
                 <ExpenseUpdatingForm setExpenseFormVisibility={setExpenseFormVisibility}

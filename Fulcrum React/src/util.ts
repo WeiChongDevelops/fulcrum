@@ -37,12 +37,6 @@ export interface PreviousExpenseBeingEdited {
 
 // BUDGET ENTITIES //
 
-export interface PreviousBudgetBeingEdited {
-    oldAmount: number;
-    oldCategory: string;
-    oldGroup: string;
-}
-
 export interface BudgetItemEntity {
     category: string
     amount: number
@@ -50,6 +44,11 @@ export interface BudgetItemEntity {
     group: string
 }
 
+export interface PreviousBudgetBeingEdited {
+    oldAmount: number;
+    oldCategory: string;
+    oldGroup: string;
+}
 export interface BudgetCreationFormData {
     category: string,
     amount: number,
@@ -127,7 +126,7 @@ const dot = (color = 'transparent') => ({
 export const colourStyles = {
     control: (styles: any) => ({ ...styles, backgroundColor: "white" }),
     option: (styles: any, {data}: any) => {
-        return { ...styles, color: data.colour || "red" };
+        return { ...styles, color: data.colour || "#52cc85" };
     },
     input: (styles: any) => ({ ...styles, ...dot() }),
     placeholder: (styles: any) => ({ ...styles, ...dot('#ccc') }),
@@ -665,5 +664,5 @@ export function implementDynamicBackgroundHeight() {
 }
 
 export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string) {
-    return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group
+    return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group;
 }
