@@ -6,21 +6,23 @@ import {
     getBudgetList,
     getExpenseList,
     getGroupList,
-    GroupItemEntity,
-    groupListAsOptions, handleExpenseDeletion,
+    GroupItemEntity, handleExpenseDeletion,
     implementDynamicBackgroundHeight,
     PreviousExpenseBeingEdited,
 } from "../../util.ts";
-import ExpenseList from "./ExpenseList.tsx";
 import AddNewExpenseButton from "./AddNewExpenseButton.tsx";
 import ExpenseCreationForm from "./ExpenseCreationForm.tsx";
 import ExpenseUpdatingForm from "./ExpenseUpdatingForm.tsx";
 import TwoOptionModal from "../ModalsAndForms/TwoOptionModal.tsx";
+import ExpenseDayGroup from "./ExpenseDayGroup.tsx";
 
 
 export default function Expense() {
     const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
-    const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]); // We need to maintain this state because each time it changes we use it to update groupColourAndCategoriesArray
+    const [expenseMatrix, setExpenseMatrix] = useState<ExpenseItemEntity[][]>(
+        []
+    )
+    const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
 
     const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
 
@@ -44,8 +46,20 @@ export default function Expense() {
             })
             .then(() => {
                 getExpenseList()
-                    .then(expenseList => {
+                    .then((expenseList: ExpenseItemEntity[]) => {
                         setExpenseArray(expenseList)
+                        const uniqueDates = new Set(expenseList.map(expenseItem => new Date(expenseItem.timestamp).toLocaleDateString()))
+                        let updatedMatrix: ExpenseItemEntity[][] = []
+                        uniqueDates.forEach(date => {
+                            let constituentExpenseArray: ExpenseItemEntity[] = []
+                            expenseList.forEach(expenseItem => {
+                                if (new Date(expenseItem.timestamp).toLocaleDateString() === date) {
+                                    constituentExpenseArray = [...constituentExpenseArray, expenseItem];
+                                }
+                            })
+                            updatedMatrix = [...updatedMatrix, constituentExpenseArray]
+                        })
+                        setExpenseMatrix(updatedMatrix)
                     })
             })
             .then(() => {
@@ -77,16 +91,20 @@ export default function Expense() {
 
                 <AddNewExpenseButton setExpenseFormVisibility={setExpenseFormVisibility}/>
 
-                {expenseArray?.length > 0 && <ExpenseList
-                    expenseArray={expenseArray}
-                    setExpenseArray={setExpenseArray}
-                    budgetArray={budgetArray}
-                    setBudgetArray={setBudgetArray}
-                    groupArray={groupArray}
-                    setExpenseFormVisibility={setExpenseFormVisibility}
-                    setExpenseModalVisibility={setExpenseModalVisibility}
-                    setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-                    setExpenseIdToDelete={setExpenseIdToDelete}/>}
+                {expenseArray?.length > 0 && expenseMatrix.map((filteredExpenseArray, key) => (
+                    <ExpenseDayGroup
+                        date={new Date(filteredExpenseArray[0].timestamp).toLocaleDateString()}
+                        filteredExpenseArray={filteredExpenseArray}
+                        setExpenseArray={setExpenseArray}
+                        budgetArray={budgetArray}
+                        setBudgetArray={setBudgetArray}
+                        groupArray={groupArray}
+                        setExpenseFormVisibility={setExpenseFormVisibility}
+                        setExpenseModalVisibility={setExpenseModalVisibility}
+                        setOldExpenseBeingEdited={setOldExpenseBeingEdited}
+                        setExpenseIdToDelete={setExpenseIdToDelete}
+                        key={key}/>
+                ))}
             </div>
 
             {expenseFormVisibility.isCreateExpenseVisible && <ExpenseCreationForm
@@ -132,78 +150,136 @@ export default function Expense() {
         </div>
     );
 }
-
-// import BudgetList from "./BudgetList.tsx";
-// import BudgetCreationForm from "./BudgetCreationForm.tsx";
+// import {useEffect, useState} from "react";
 // import {
 //     BudgetItemEntity,
-//     getAmountBudgeted,
+//     categoryListAsOptions,
+//     ExpenseItemEntity, ExpenseModalVisibility,
 //     getBudgetList,
-//     BasicGroupData
+//     getExpenseList,
+//     getGroupList,
+//     GroupItemEntity, handleExpenseDeletion,
+//     implementDynamicBackgroundHeight,
+//     PreviousExpenseBeingEdited,
 // } from "../../util.ts";
-// import { useEffect, useState } from "react";
-// import AddNewBudgetButton from "./AddNewBudgetButton.tsx";
-// import BudgetUpdatingForm from "./BudgetUpdatingForm.tsx";
-// import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
+// import ExpenseList from "./ExpenseList.tsx";
+// import AddNewExpenseButton from "./AddNewExpenseButton.tsx";
+// import ExpenseCreationForm from "./ExpenseCreationForm.tsx";
+// import ExpenseUpdatingForm from "./ExpenseUpdatingForm.tsx";
+// import TwoOptionModal from "../ModalsAndForms/TwoOptionModal.tsx";
+//
 //
 // export default function Expense() {
-//     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
-//     const [isCreateBudgetVisible, setIsCreateBudgetVisible] = useState<boolean>(false);
-//     const [isUpdateBudgetVisible, setIsUpdateBudgetVisible] = useState<boolean>(false);
-//     const [editingCategory, setEditingCategory] = useState<string | null>(null);
-//     const [editingOldAmount, setEditingOldAmount] = useState<number>(0);
-//     const [totalIncome, setTotalIncome] = useState<number>(1000);
-//     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
-//     const [initialGroupOptions, setInitialGroupOptions] = useState<BasicGroupData[] | undefined> ();
+//     const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
+//     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]); // We need to maintain this state because each time it changes we use it to update groupColourAndCategoriesArray
+//
+//     const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
+//
+//     const [expenseFormVisibility, setExpenseFormVisibility] = useState({
+//         isCreateExpenseVisible: false,
+//         isUpdateExpenseVisible: false,
+//     });
+//
+//     const [expenseModalVisibility, setExpenseModalVisibility] = useState<ExpenseModalVisibility>( {
+//         isConfirmExpenseDestructionModalVisible: false,
+//     })
+//
+//     // const [expenseIdToDelete, setExpenseIdToDelete] = useState<string>("");
+//     const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({ expenseId: "", oldCategory: "", oldAmount: 0 });
+//     const [expenseIdToDelete, setExpenseIdToDelete] = useState("");
 //
 //     useEffect(() => {
 //         getBudgetList()
 //             .then(budgetList => {
 //                 setBudgetArray(budgetList)
 //             })
-//         getGroupListAsOptions()
-//             .then( results => setInitialGroupOptions(results))
+//             .then(() => {
+//                 getExpenseList()
+//                     .then(expenseList => {
+//                         setExpenseArray(expenseList)
+//                     })
+//             })
+//             .then(() => {
+//                 getGroupList()
+//                     .then((groupList: GroupItemEntity[]) => {
+//                         setGroupArray(groupList)
+//                     })
+//             })
+//             .then(implementDynamicBackgroundHeight)
+//             .catch(error => console.log(`Unsuccessful expense page data retrieval - error: ${error}`))
 //     }, []);
 //
 //     useEffect( () => {
-//         setAmountLeftToBudget(totalIncome - getAmountBudgeted(budgetArray))
-//     },[budgetArray, totalIncome])
+//         document.getElementById("category")?.focus()
+//         console.log(expenseFormVisibility);
+//     }, [expenseFormVisibility])
 //
-//     useEffect( () => {
-//         document.getElementById("category")?.focus();
-//     }, [isCreateBudgetVisible, isUpdateBudgetVisible])
+//     function runExpenseDeletion() {
+//         handleExpenseDeletion(expenseIdToDelete, setExpenseArray, setBudgetArray)
+//             .then(() => console.log("Deletion successful"))
+//             .catch(() => console.log("Deletion unsuccessful"));
+//     }
 //
 //     return (
-//         <div>
-//             <h1 className="my-6">Budget</h1>
-//             <TotalIncomeDisplay totalIncome={totalIncome} setTotalIncome={setTotalIncome} amountLeftToBudget={amountLeftToBudget}/>
+//         <div className="flex flex-row justify-center items-center">
+//             <div className={`flex flex-col elementsBelowPopUpForm z-2
+//             ${((Object.values(expenseFormVisibility).includes(true))
+//                 || Object.values(expenseModalVisibility).includes(true)) && "blur"} px-16`}>
 //
+//                 <AddNewExpenseButton setExpenseFormVisibility={setExpenseFormVisibility}/>
 //
-//             <div className={`elementsBelowPopUpForm ${(isCreateBudgetVisible || isUpdateBudgetVisible) && "blur"}
-//
-//
-//             px-16`}>
-//
-//                 <FulcrumAnimation amountLeftToBudget={amountLeftToBudget} totalIncome={totalIncome}/>
-//                 <BudgetList
+//                 {expenseArray?.length > 0 && <ExpenseList
+//                     expenseArray={expenseArray}
+//                     setExpenseArray={setExpenseArray}
 //                     budgetArray={budgetArray}
 //                     setBudgetArray={setBudgetArray}
-//                     setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
-//                     setEditingCategory={setEditingCategory}
-//                     setEditingOldAmount={setEditingOldAmount}
-//                 />
-//
+//                     groupArray={groupArray}
+//                     setExpenseFormVisibility={setExpenseFormVisibility}
+//                     setExpenseModalVisibility={setExpenseModalVisibility}
+//                     setOldExpenseBeingEdited={setOldExpenseBeingEdited}
+//                     setExpenseIdToDelete={setExpenseIdToDelete}/>}
 //             </div>
-//             {isCreateBudgetVisible && <BudgetCreationForm setIsCreateBudgetVisible={setIsCreateBudgetVisible}
-//                                                           setBudgetArray={setBudgetArray}
-//                                                           initialGroupOptions={initialGroupOptions}/>}
-//             {isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray}
-//                                                           category={editingCategory}
-//                                                           setIsUpdateBudgetVisible={setIsUpdateBudgetVisible}
-//                                                           oldAmount={editingOldAmount}
-//                                                           initialGroupOptions={initialGroupOptions}/>}
 //
-//             <AddNewBudgetButton setIsFormVisible={setIsCreateBudgetVisible} />
+//             {expenseFormVisibility.isCreateExpenseVisible && <ExpenseCreationForm
+//                 setExpenseFormVisibility={setExpenseFormVisibility}
+//                 setExpenseArray={setExpenseArray}
+//                 setBudgetArray={setBudgetArray}
+//                 budgetArray={budgetArray}
+//                 categoryOptions={categoryListAsOptions(budgetArray, groupArray)}/>}
+//             {expenseFormVisibility.isUpdateExpenseVisible &&
+//                 <ExpenseUpdatingForm setExpenseFormVisibility={setExpenseFormVisibility}
+//                                      setExpenseArray={setExpenseArray} setBudgetArray={setBudgetArray}
+//                                      categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
+//                                      oldExpenseBeingEdited={oldExpenseBeingEdited}/>}
+//
+//             {expenseModalVisibility.isConfirmExpenseDestructionModalVisible &&
+//                 <TwoOptionModal optionOneText="Cancel" optionOneFunction={() => setExpenseModalVisibility(current => ({
+//                     ...current,
+//                     isConfirmExpenseDestructionModalVisible: false
+//                 }))} optionTwoText="Confirm" optionTwoFunction={() => {
+//                     runExpenseDeletion()
+//                     setExpenseModalVisibility(current => ({
+//                         ...current,
+//                         isConfirmExpenseDestructionModalVisible: false
+//                     }));
+//                 }}
+//                                 setModalFormVisibility={setExpenseModalVisibility}
+//                                 setVisible="isConfirmExpenseDestructionModalVisible"
+//                                 title="Are you sure you want to delete this expense?"/>}
+//
+//             {/*<ExpenseModalsAndForms setModalFormVisibility={setModalFormVisibility}*/}
+//             {/*                      setBudgetArray={setBudgetArray}*/}
+//             {/*                      groupArray={groupArray}*/}
+//             {/*                      groupNameOfNewItem={groupNameOfNewItem}*/}
+//             {/*                      setBudgetFormVisibility={setBudgetFormVisibility}*/}
+//             {/*                      oldBudgetBeingEdited={oldBudgetBeingEdited}*/}
+//             {/*                      setGroupArray={setGroupArray}*/}
+//             {/*                      oldGroupBeingEdited={oldGroupBeingEdited}*/}
+//             {/*                      groupToDelete={groupToDelete}*/}
+//             {/*                      categoryToDelete={categoryToDelete}*/}
+//             {/*                      runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}*/}
+//             {/*                      modalFormVisibility={modalFormVisibility}*/}
+//             {/*                      setModalFormVisibility={setModalFormVisibility}/>*/}
 //         </div>
 //     );
 // }

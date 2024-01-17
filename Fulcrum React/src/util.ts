@@ -14,14 +14,6 @@ export interface ExpenseCreationFormData {
     amount: number
 }
 
-export interface ExpenseFormVisibility {
-    isCreateExpenseVisible: boolean;
-    isUpdateExpenseVisible: boolean;
-}
-
-export interface ExpenseModalVisibility {
-    isConfirmExpenseDestructionModalVisible: boolean;
-}
 
 export interface ExpenseUpdatingFormData {
     category: string;
@@ -63,19 +55,6 @@ export interface BudgetUpdatingFormData {
     iconPath: string;
 }
 
-export interface BudgetFormVisibility {
-    isCreateBudgetVisible: boolean,
-    isUpdateBudgetVisible: boolean,
-    isCreateGroupVisible: boolean,
-    isUpdateGroupVisible: boolean,
-}
-
-export interface BudgetModalVisibility {
-    isDeleteOptionsModalVisible: boolean;
-    isConfirmGroupDestructionModalVisible: boolean;
-    isConfirmCategoryDestructionModalVisible: boolean;
-}
-
 
 // GROUP ENTITIES
 
@@ -93,6 +72,31 @@ export interface BasicGroupData {
 export interface PreviousGroupBeingEdited  {
     oldColour: string;
     oldGroupName: string;
+}
+
+// FORM AND MODAL VISIBILITY ENTITIES //
+
+export interface BudgetFormVisibility {
+    isCreateBudgetVisible: boolean,
+    isUpdateBudgetVisible: boolean,
+    isCreateGroupVisible: boolean,
+    isUpdateGroupVisible: boolean,
+}
+
+export interface BudgetModalVisibility {
+    isDeleteOptionsModalVisible: boolean;
+    isConfirmGroupDestructionModalVisible: boolean;
+    isConfirmCategoryDestructionModalVisible: boolean;
+}
+
+
+export interface ExpenseFormVisibility {
+    isCreateExpenseVisible: boolean;
+    isUpdateExpenseVisible: boolean;
+}
+
+export interface ExpenseModalVisibility {
+    isConfirmExpenseDestructionModalVisible: boolean;
 }
 
 // MISCELLANEOUS ENTITIES //
