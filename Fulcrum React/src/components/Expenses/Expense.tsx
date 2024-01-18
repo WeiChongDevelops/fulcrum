@@ -70,7 +70,7 @@ export default function Expense() {
             })
             .then(implementDynamicBackgroundHeight)
             .catch(error => console.log(`Unsuccessful expense page data retrieval - error: ${error}`))
-    }, []);
+    }, [expenseArray]);
 
     useEffect( () => {
         document.getElementById("category")?.focus()

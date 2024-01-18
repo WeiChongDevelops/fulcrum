@@ -37,9 +37,10 @@ export default function ExpenseDayGroup({ date,
                                         setOldExpenseBeingEdited,
                                         setExpenseIdToDelete}: ExpenseDayGroupProps) {
 
+
     return (
         <div className="my-4">
-            <h1>{date}</h1>
+            <h1 className="text-black">{date}</h1>
             {filteredExpenseArray.length > 0 && <ExpenseList
                 filteredExpenseArray={filteredExpenseArray}
                 setExpenseArray={setExpenseArray}
