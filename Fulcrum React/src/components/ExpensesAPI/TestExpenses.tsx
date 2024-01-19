@@ -1,6 +1,5 @@
 import TestExpenseList from "./TestExpenseList.tsx";
 import TestExpenseCreationForm from "./TestExpenseCreationForm.tsx";
-import TestExpenseDeletionForm from "./TestExpenseDeletionForm.tsx";
 import TestExpenseUpdatingForm from "./TestExpenseUpdatingForm.tsx";
 import {ExpenseItemEntity, getExpenseList} from "../../util.ts";
 import {useEffect, useState} from "react";
@@ -21,7 +20,6 @@ export default function TestExpenses() {
         <div>
             <TestExpenseList expenseArray={expenseArray}/>
             <TestExpenseCreationForm setExpenseArray={setExpenseArray}/>
-            <TestExpenseDeletionForm setExpenseArray={setExpenseArray}/>
             <TestExpenseUpdatingForm setExpenseArray={setExpenseArray}/>
         </div>
     )

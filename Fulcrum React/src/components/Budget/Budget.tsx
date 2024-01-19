@@ -1,7 +1,7 @@
 import {
     BudgetFormVisibility,
     BudgetItemEntity,
-    BudgetModalVisibility,
+    BudgetModalVisibility, checkForUser,
     dynamicallySizeBudgetNameDisplays,
     getAmountBudgeted,
     getBudgetList,
@@ -47,6 +47,15 @@ export default function Budget() {
     const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
 
     useEffect(() => {
+        checkForUser()
+            .then(userStatus => {
+                if (userStatus["loggedIn"]) {
+                    console.log("User logged in.");
+                } else {
+                    console.log("User not logged in, login redirect initiated.");
+                    window.location.href = "/login";
+                }
+            })
         getBudgetList()
             .then(budgetList => {
                 setBudgetArray(budgetList.sort())

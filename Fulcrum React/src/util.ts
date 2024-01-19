@@ -666,3 +666,43 @@ export function implementDynamicBackgroundHeight() {
 export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string) {
     return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group;
 }
+
+export async function logoutOnClick() {
+    try {
+        await fetch("http://localhost:8080/api/logout", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({jwt: localStorage.getItem("jwt")})
+        })
+            .then( () => window.location.href = "/login")
+            .catch( error => console.error(error))
+    } catch {
+        console.error("Error: Logout failed")
+    }
+}
+
+export async function checkForUser() {
+    try {
+        const response = await fetch("http://localhost:8080/api/checkForUser", {
+            method: "GET",
+        });
+        if (response.status === 400) {
+            console.error("Failed to check for user status.")
+        } else if (response.status === 401) {
+            console.error("JWT token expiry detected. Logging out.")
+            logoutOnClick()
+                .then(() => {
+                    window.location.href === "/login" && (window.location.href = "/login")
+                } )
+        }
+        else {
+            const userStatus = await response.json();
+            console.log(userStatus)
+            return userStatus;
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}

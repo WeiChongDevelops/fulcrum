@@ -1,32 +1,23 @@
 import {FormEvent, useEffect, useState} from "react";
+import {checkForUser} from "../../util.ts";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    async function checkForUser() {
-        try {
-            const response = await fetch("http://localhost:8080/api/checkForUser", {
-                method: "GET",
-            });
-            if (!response.ok) {
-                console.error("Failed to check for user status.")
-            } else {
-                const userStatus = await response.json();
-                console.log(userStatus)
+
+
+    useEffect(() => {
+        checkForUser()
+            .then(userStatus => {
                 if (userStatus["loggedIn"]) {
                     console.log("User already logged in.");
                     window.location.href = "/budget";
                 } else {
                     console.log("User not logged in, login page access greenlighted.");
                 }
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    }
-
-    useEffect(() => {checkForUser()}, []);
+            })
+    }, []);
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();

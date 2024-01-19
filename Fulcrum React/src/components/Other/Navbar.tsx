@@ -1,26 +1,12 @@
 import FulcrumButton from "./FulcrumButton.tsx";
 import {useEffect, useState} from "react";
 import {Outlet} from "react-router-dom";
+import {logoutOnClick} from "../../util.ts";
 
 
 export default function Navbar() {
     const [email, setEmail] = useState<string>("");
 
-    async function logoutOnClick() {
-        try {
-            await fetch("http://localhost:8080/api/logout", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({jwt: localStorage.getItem("jwt")})
-            })
-                .then( () => window.location.href = "/login")
-                .catch( error => console.error(error))
-        } catch {
-            console.error("Error: Logout failed")
-        }
-    }
 
     async function getSessionEmail() {
         try {
