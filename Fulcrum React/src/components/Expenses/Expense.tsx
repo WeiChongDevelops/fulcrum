@@ -104,7 +104,7 @@ export default function Expense() {
 
                 {expenseArray?.length > 0 && expenseMatrix.map((filteredExpenseArray, key) => (
                     <ExpenseDayGroup
-                        date={new Date(filteredExpenseArray[0].timestamp).toLocaleDateString()}
+                        date={new Date(filteredExpenseArray[0].timestamp)}
                         filteredExpenseArray={filteredExpenseArray}
                         setExpenseArray={setExpenseArray}
                         budgetArray={budgetArray}

@@ -1,19 +1,12 @@
-.dashed-expense-day-group {
-    position: relative;
-}
-
-.dashed-expense-day-group::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    border-bottom: 1px dotted #000;
-    z-index: 1;
-}
-
-.dashed-expense-day-group > h1 {
-    background: #fff;
-    z-index: 2;
+.dotted-line {
+    flex-grow: 1;
+    margin: 0 25px 0 10px; /* Spacing around the line */
+    height: 6px; /* Height of the dotted line */
+    background: repeating-linear-gradient(
+            to right,
+            #000,
+            #000 16px, /* Width of each dot */
+            transparent 2px,
+            transparent 30px /* Space between dots, increase for more space */
+    );
 }

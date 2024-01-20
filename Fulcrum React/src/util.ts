@@ -657,6 +657,27 @@ export function formatDollarAmount(number: number) {
     }).format(number);
 }
 
+function getOrdinalSuffix(day: number) {
+    if (day > 3 && day < 21) return 'th';
+    switch (day % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+    }
+}
+
+export function formatDate(date: Date) {
+    const formattedDayOfWeek = new Intl.DateTimeFormat('en-AU', { weekday: "long" }).format(date);
+    const formattedDayOfMonth = date.getDate();
+    const formattedMonth = new Intl.DateTimeFormat('en-AU', { month: "long" }).format(date);
+    const formattedYear = new Intl.DateTimeFormat('en-AU', { year: "numeric" }).format(date);
+
+    const ordinalSuffix = getOrdinalSuffix(formattedDayOfMonth);
+
+    return `${formattedDayOfWeek}, ${formattedDayOfMonth}${ordinalSuffix} ${formattedMonth} ${formattedYear}`
+}
+
 export function implementDynamicBackgroundHeight() {
     function adjustBackgroundHeight() {
         const bodyHeight = document.body.scrollHeight;

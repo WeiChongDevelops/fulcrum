@@ -1,14 +1,15 @@
 import {
     BudgetItemEntity, ExpenseFormVisibility,
-    ExpenseItemEntity, ExpenseModalVisibility, formatDollarAmount,
+    ExpenseItemEntity, ExpenseModalVisibility, formatDate, formatDollarAmount,
     GroupItemEntity, PreviousExpenseBeingEdited
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
 import ExpenseList from "./ExpenseList.tsx";
+import "../../css/Expense.css"
 
 interface ExpenseDayGroupProps {
 
-    date: string;
+    date: Date;
     filteredExpenseArray: ExpenseItemEntity[];
 
     setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
@@ -37,6 +38,7 @@ export default function ExpenseDayGroup({ date,
                                             setOldExpenseBeingEdited,
                                             setExpenseIdToDelete}: ExpenseDayGroupProps) {
 
+    const expenseDayGroupDate = date.toLocaleDateString();
     const dateStringToday = new Date().toLocaleDateString();
     let dateObjectYesterday = new Date();
     dateObjectYesterday.setDate(new Date().getDate() - 1);
@@ -46,10 +48,10 @@ export default function ExpenseDayGroup({ date,
 
     return (
         <div className="my-4">
-            <div className="dashed-expense-day-group flex flex-row justify-between items-center text-black">
-                <h1>{date === dateStringToday ? "Today" : date === dateString ? "Yesterday" : date}</h1>
-                <div className="border-dashed left-0 right-0 w"></div>
-                <h1>${formatDollarAmount(dayTotal)}</h1>
+            <div className="flex flex-row justify-between items-center text-black relative">
+                <p className="text-4xl font-bold">{expenseDayGroupDate === dateStringToday ? "Today" : expenseDayGroupDate === dateString ? "Yesterday" : formatDate(new Date(date))}</p>
+                <div className="dotted-line"></div>
+                <p className="text-4xl font-bold">${formatDollarAmount(dayTotal)}</p>
             </div>
             {filteredExpenseArray.length > 0 && <ExpenseList
                 filteredExpenseArray={filteredExpenseArray}
