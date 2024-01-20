@@ -37,10 +37,14 @@ export default function ExpenseDayGroup({ date,
                                         setOldExpenseBeingEdited,
                                         setExpenseIdToDelete}: ExpenseDayGroupProps) {
 
+    const dateStringToday = new Date().toLocaleDateString();
+    let dateObjectYesterday = new Date();
+    dateObjectYesterday.setDate(new Date().getDate() - 1);
+    const dateString = dateObjectYesterday.toLocaleDateString();
 
     return (
         <div className="my-4">
-            <h1 className="text-black">{date}</h1>
+            <h1 className="text-black">{date === dateStringToday ? "Today" : date === dateString ? "Yesterday" : date}</h1>
             {filteredExpenseArray.length > 0 && <ExpenseList
                 filteredExpenseArray={filteredExpenseArray}
                 setExpenseArray={setExpenseArray}

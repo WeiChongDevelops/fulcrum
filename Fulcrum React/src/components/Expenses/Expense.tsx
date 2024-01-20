@@ -77,6 +77,21 @@ export default function Expense() {
         })
         .then(implementDynamicBackgroundHeight)
         .catch(error => console.log(`Unsuccessful expense page data retrieval - error: ${error}`))
+    }, []);
+
+    useEffect(() => {
+        const uniqueDates = new Set(expenseArray.map(expenseItem => new Date(expenseItem.timestamp).toLocaleDateString()))
+        let updatedMatrix: ExpenseItemEntity[][] = []
+        uniqueDates.forEach(date => {
+            let constituentExpenseArray: ExpenseItemEntity[] = []
+            expenseArray.forEach(expenseItem => {
+                if (new Date(expenseItem.timestamp).toLocaleDateString() === date) {
+                    constituentExpenseArray = [...constituentExpenseArray, expenseItem];
+                }
+            })
+            updatedMatrix = [...updatedMatrix, constituentExpenseArray]
+        })
+        setExpenseMatrix(updatedMatrix)
     }, [expenseArray]);
 
     useEffect( () => {
