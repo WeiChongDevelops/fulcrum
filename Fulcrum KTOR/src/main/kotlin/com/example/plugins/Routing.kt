@@ -7,6 +7,7 @@ import com.example.entities.successFeedback.SuccessResponseSent
 import com.example.entities.user.UserEmail
 import com.example.entities.user.UserStatusCheck
 import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.exceptions.UnauthorizedRestException
 import io.github.jan.supabase.gotrue.GoTrue
 import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.gotrue.providers.builtin.Email
@@ -165,7 +166,8 @@ fun Application.configureRouting() {
                     .decodeList<ExpenseItemResponse>()
 
                 call.respond(HttpStatusCode.OK, expenseList)
-
+            } catch (e: UnauthorizedRestException) {
+                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading expenses", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expenses not read."))
@@ -273,7 +275,8 @@ fun Application.configureRouting() {
                 }
                     .decodeList<BudgetItemResponse>()
                 call.respond(HttpStatusCode.OK, budgetList)
-
+            } catch (e: UnauthorizedRestException) {
+                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading budget", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not read."))
@@ -287,6 +290,8 @@ fun Application.configureRouting() {
                 }
                     .decodeList<GroupResponse>()
                 call.respond(HttpStatusCode.OK, groupList)
+            } catch (e: UnauthorizedRestException) {
+                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading group list", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group list not read."))
