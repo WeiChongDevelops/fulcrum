@@ -5,6 +5,7 @@ import com.example.entities.expense.*
 import com.example.entities.successFeedback.ErrorResponseSent
 import com.example.entities.successFeedback.SuccessResponseSent
 import com.example.entities.user.UserEmail
+import com.example.entities.user.UserInfo
 import com.example.entities.user.UserStatusCheck
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
@@ -54,39 +55,9 @@ fun Application.configureRouting() {
             }
         }
 
-//    val listItems = supabase.postgrest["expenses"].select(columns = Columns.list("category, categoryId, amount")).decodeList<GenericListItem>()
-//    if (listItems.isNotEmpty()) {
-//        val listItem = listItems.first()
-//        println(listItem.category)
-//    } else {
-//        println("No items found")
-//    }
-
-
-//    val itemToInsert = GenericListItem(category = "InsertedValue3", categoryId = 9426, amount = 1)
-//    val test = supabase.postgrest["expenses"].insert(itemToInsert, returning = Returning.REPRESENTATION) //returning defaults to Returning.REPRESENTATION
-//    println(test.body)
-
-//    val itemToInsert = GenericListItem(category = "InsertedValue3", categoryId = 9426, amount = 1)
-//    val test = supabase.postgrest["expenses"].insert(itemToInsert, returning = Returning.MINIMAL) //returning defaults to Returning.REPRESENTATION
-//    println(test.body)
-
-
-//    val updatedItem = supabase.postgrest["expenses"].update(
-//        {
-//            set("categoryId", "942")
-//        }
-//    ) {
-//        eq("categoryId", "379817289189")
-//    }.decodeSingle<GenericListItem>()
-//    println(updatedItem.categoryId)
-
-//    supabase.postgrest["expenses"].delete {
-//        eq("categoryId", "942")
-//    }
-
-
     routing {
+
+        // EXPENSE API //
 
         post("/api/createExpense") {
             try {
@@ -114,22 +85,19 @@ fun Application.configureRouting() {
             }
         }
 
-        delete("/api/deleteExpense") {
+        get("/api/getExpenses") {
             try {
-                val expenseDeleteRequest = call.receive<ExpenseDeleteRequestReceived>()
-                val deletedExpense = supabase.postgrest["expenses"].delete {
-                    eq("expenseId", expenseDeleteRequest.expenseId)
+                val expenseList = supabase.postgrest["expenses"].select() {
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                 }
+                    .decodeList<ExpenseItemResponse>()
 
-                if (deletedExpense.body == null) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not deleted."))
-                } else {
-                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Expense deleted successfully."))
-                }
+                call.respond(HttpStatusCode.OK, expenseList)
+            } catch (e: UnauthorizedRestException) {
+                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
             } catch (e: Exception) {
-                call.application.log.error("Error while deleting expense", e)
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not deleted."))
+                call.application.log.error("Error while reading expenses", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expenses not read."))
             }
         }
 
@@ -158,21 +126,27 @@ fun Application.configureRouting() {
             }
         }
 
-        get("/api/getExpenses") {
+        delete("/api/deleteExpense") {
             try {
-                val expenseList = supabase.postgrest["expenses"].select() {
+                val expenseDeleteRequest = call.receive<ExpenseDeleteRequestReceived>()
+                val deletedExpense = supabase.postgrest["expenses"].delete {
+                    eq("expenseId", expenseDeleteRequest.expenseId)
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                 }
-                    .decodeList<ExpenseItemResponse>()
 
-                call.respond(HttpStatusCode.OK, expenseList)
-            } catch (e: UnauthorizedRestException) {
-                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
+                if (deletedExpense.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not deleted."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Expense deleted successfully."))
+                }
             } catch (e: Exception) {
-                call.application.log.error("Error while reading expenses", e)
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expenses not read."))
+                call.application.log.error("Error while deleting expense", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not deleted."))
             }
         }
+
+        // BUDGET API //
+
         post("/api/createBudget") {
             try {
                 val budgetCreateRequest = call.receive<BudgetCreateRequestReceived>()
@@ -200,22 +174,19 @@ fun Application.configureRouting() {
             }
         }
 
-        delete("/api/deleteBudget") {
+        get("/api/getBudget") {
             try {
-                val budgetDeleteRequest = call.receive<BudgetDeleteRequestReceived>()
-                val deletedBudget = supabase.postgrest["budgets"].delete {
-                    eq("category", budgetDeleteRequest.category)
+                val budgetList = supabase.postgrest["budgets"].select() {
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+//                    eq("userId", supabase.gotrue.currentSessionOrNull()?.user?.id!!)
                 }
-
-                if (deletedBudget.body == null) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not deleted."))
-                } else {
-                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget deleted successfully."))
-                }
+                    .decodeList<BudgetItemResponse>()
+                call.respond(HttpStatusCode.OK, budgetList)
+            } catch (e: UnauthorizedRestException) {
+                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
             } catch (e: Exception) {
-                call.application.log.error("Error while deleting budget", e)
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not deleted."))
+                call.application.log.error("Error while reading budget", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not read."))
             }
         }
 
@@ -267,36 +238,26 @@ fun Application.configureRouting() {
             }
         }
 
-        get("/api/getBudget") {
+        delete("/api/deleteBudget") {
             try {
-                val budgetList = supabase.postgrest["budgets"].select() {
+                val budgetDeleteRequest = call.receive<BudgetDeleteRequestReceived>()
+                val deletedBudget = supabase.postgrest["budgets"].delete {
+                    eq("category", budgetDeleteRequest.category)
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
-//                    eq("userId", supabase.gotrue.currentSessionOrNull()?.user?.id!!)
                 }
-                    .decodeList<BudgetItemResponse>()
-                call.respond(HttpStatusCode.OK, budgetList)
-            } catch (e: UnauthorizedRestException) {
-                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
+
+                if (deletedBudget.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not deleted."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget deleted successfully."))
+                }
             } catch (e: Exception) {
-                call.application.log.error("Error while reading budget", e)
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not read."))
+                call.application.log.error("Error while deleting budget", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not deleted."))
             }
         }
 
-        get("/api/getGroups") {
-            try {
-                val groupList = supabase.postgrest["groups"].select(columns = Columns.list("group, colour, dateCreated")) {
-                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
-                }
-                    .decodeList<GroupResponse>()
-                call.respond(HttpStatusCode.OK, groupList)
-            } catch (e: UnauthorizedRestException) {
-                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
-            } catch (e: Exception) {
-                call.application.log.error("Error while reading group list", e)
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group list not read."))
-            }
-        }
+        // GROUP API //
 
         post("/api/createGroup") {
             try {
@@ -323,43 +284,18 @@ fun Application.configureRouting() {
             }
         }
 
-        delete("/api/deleteGroup") {
-            val groupDeleteRequest = call.receive<GroupDeleteRequestReceived>()
-            // First we reassign any groups with this name to miscellaneous. If we want to have an alternate behaviour, that data needs to be included in the above entity, chosen in react and sent to ktor API as part of body.
-            // Actually, if this block below runs and renames groups, the cascade behaviour would make no difference - there would be nothing to cascade deletes to.
-            // So if the property of the request 'moveCategoriesToMisc' is true, we run this.
-            // Now, in React, we need a way for the user to pick between two options.
-            if (groupDeleteRequest.keepContainedBudgets) {
-                try {
-                    supabase.postgrest["budgets"].update(
-                        {
-                            set("group", "Miscellaneous")
-                        }
-                    ) {
-                        eq("group", groupDeleteRequest.group)
-                        eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
-                    }
-                } catch (e: Exception) {
-                    call.application.log.error("Error while reassigning budgets to Misc", e)
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group deletion failed at reassignment."))
-                }
-            }
-
-            // Then we delete the group from the groups table
+        get("/api/getGroups") {
             try {
-                val deletedGroup = supabase.postgrest["groups"].delete {
-                    eq("group", groupDeleteRequest.group)
+                val groupList = supabase.postgrest["groups"].select(columns = Columns.list("group, colour, dateCreated")) {
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                 }
-
-                if (deletedGroup.body == null) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not deleted."))
-                } else {
-                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Group deleted successfully."))
-                }
+                    .decodeList<GroupResponse>()
+                call.respond(HttpStatusCode.OK, groupList)
+            } catch (e: UnauthorizedRestException) {
+                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
             } catch (e: Exception) {
-                call.application.log.error("Error while deleting group", e)
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not deleted."))
+                call.application.log.error("Error while reading group list", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group list not read."))
             }
         }
 
@@ -409,6 +345,47 @@ fun Application.configureRouting() {
             }
         }
 
+        delete("/api/deleteGroup") {
+            val groupDeleteRequest = call.receive<GroupDeleteRequestReceived>()
+            // First we reassign any groups with this name to miscellaneous. If we want to have an alternate behaviour, that data needs to be included in the above entity, chosen in react and sent to ktor API as part of body.
+            // Actually, if this block below runs and renames groups, the cascade behaviour would make no difference - there would be nothing to cascade deletes to.
+            // So if the property of the request 'moveCategoriesToMisc' is true, we run this.
+            // Now, in React, we need a way for the user to pick between two options.
+            if (groupDeleteRequest.keepContainedBudgets) {
+                try {
+                    supabase.postgrest["budgets"].update(
+                        {
+                            set("group", "Miscellaneous")
+                        }
+                    ) {
+                        eq("group", groupDeleteRequest.group)
+                        eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                    }
+                } catch (e: Exception) {
+                    call.application.log.error("Error while reassigning budgets to Misc", e)
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group deletion failed at reassignment."))
+                }
+            }
+
+            // Then we delete the group from the groups table
+            try {
+                val deletedGroup = supabase.postgrest["groups"].delete {
+                    eq("group", groupDeleteRequest.group)
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+
+                if (deletedGroup.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not deleted."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Group deleted successfully."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while deleting group", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not deleted."))
+            }
+        }
+
+        // USER AUTHENTICATION //
 
         post("/api/register") {
             try {
@@ -474,7 +451,6 @@ fun Application.configureRouting() {
 
                 call.respond(HttpStatusCode.OK, SuccessResponseSent("User added successfully."))
             } catch (e: Exception) {
-//                call.application.log.error("Error while creating user", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("User not added."))
             }
         }
@@ -495,6 +471,16 @@ fun Application.configureRouting() {
             }
         }
 
+        post("/api/logout") {
+            val currentUser = supabase.gotrue.currentSessionOrNull()
+            if (currentUser != null) {
+                supabase.gotrue.logout()
+                call.respond(HttpStatusCode.OK, SuccessResponseSent(currentUser.user?.email!!))
+            } else {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("No user logged in."))
+            }
+        }
+
         get("/api/getUserEmailIfLoggedIn") {
             try {
                 val currentUser = supabase.gotrue.currentSessionOrNull()
@@ -504,7 +490,6 @@ fun Application.configureRouting() {
                     call.respond(HttpStatusCode.OK, SuccessResponseSent("No user logged in."))
                 }
             } catch (e: Exception) {
-//                call.application.log.error("Error while checking for user", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while checking for user."))
             }
         }
@@ -520,17 +505,6 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.OK, statusJSON)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while checking for user."))
-            }
-        }
-
-
-        post("/api/logout") {
-            val currentUser = supabase.gotrue.currentSessionOrNull()
-            if (currentUser != null) {
-                supabase.gotrue.logout()
-                call.respond(HttpStatusCode.OK, SuccessResponseSent(currentUser.user?.email!!))
-            } else {
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("No user logged in."))
             }
         }
 
@@ -582,8 +556,35 @@ fun Application.configureRouting() {
     }
 }
 
-@Serializable
-data class UserInfo (
-    val email: String,
-    val password: String
-)
+// BASIC POSTGREST API DOCUMENTATION //
+
+//    val listItems = supabase.postgrest["expenses"].select(columns = Columns.list("category, categoryId, amount")).decodeList<GenericListItem>()
+//    if (listItems.isNotEmpty()) {
+//        val listItem = listItems.first()
+//        println(listItem.category)
+//    } else {
+//        println("No items found")
+//    }
+
+
+//    val itemToInsert = GenericListItem(category = "InsertedValue3", categoryId = 9426, amount = 1)
+//    val test = supabase.postgrest["expenses"].insert(itemToInsert, returning = Returning.REPRESENTATION) //returning defaults to Returning.REPRESENTATION
+//    println(test.body)
+
+//    val itemToInsert = GenericListItem(category = "InsertedValue3", categoryId = 9426, amount = 1)
+//    val test = supabase.postgrest["expenses"].insert(itemToInsert, returning = Returning.MINIMAL) //returning defaults to Returning.REPRESENTATION
+//    println(test.body)
+
+
+//    val updatedItem = supabase.postgrest["expenses"].update(
+//        {
+//            set("categoryId", "942")
+//        }
+//    ) {
+//        eq("categoryId", "379817289189")
+//    }.decodeSingle<GenericListItem>()
+//    println(updatedItem.categoryId)
+
+//    supabase.postgrest["expenses"].delete {
+//        eq("categoryId", "942")
+//    }
