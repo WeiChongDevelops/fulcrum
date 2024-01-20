@@ -15,6 +15,7 @@ import ExpenseCreationForm from "./ExpenseCreationForm.tsx";
 import ExpenseUpdatingForm from "./ExpenseUpdatingForm.tsx";
 import TwoOptionModal from "../ModalsAndForms/TwoOptionModal.tsx";
 import ExpenseDayGroup from "./ExpenseDayGroup.tsx";
+import "../../css/Expense.css"
 
 
 export default function Expense() {
