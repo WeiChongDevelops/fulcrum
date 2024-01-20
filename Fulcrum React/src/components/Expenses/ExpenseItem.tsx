@@ -1,7 +1,6 @@
 import '/src/css/Budget.css';
 import {
-    BudgetItemEntity, ExpenseFormVisibility, ExpenseItemEntity, ExpenseModalVisibility,
-    formatNumberWithCommas,
+    BudgetItemEntity, ExpenseFormVisibility, ExpenseItemEntity, ExpenseModalVisibility, formatDollarAmount,
     PreviousExpenseBeingEdited
 } from "../../util.ts";
 import React, {Dispatch, SetStateAction} from "react";
@@ -65,7 +64,7 @@ export default function ExpenseItem( { expenseId,
                 </div>
             </div>
             <div className="flex flex-row items-center">
-                <b>${formatNumberWithCommas(amount.toFixed(2))}</b>
+                <b>${formatDollarAmount(amount)}</b>
                 <div className="flex flex-row items-center ml-2">
                     <div className="circle-button rounded-full p-1" onClick={handleEditClick}>
                         <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-6 h-6" />

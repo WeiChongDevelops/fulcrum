@@ -1,0 +1,19 @@
+.dashed-expense-day-group {
+    position: relative;
+}
+
+.dashed-expense-day-group::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border-bottom: 1px dotted #000;
+    z-index: 1;
+}
+
+.dashed-expense-day-group > h1 {
+    background: #fff;
+    z-index: 2;
+}

@@ -15,7 +15,6 @@ interface ExpenseListProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
     groupArray: GroupItemEntity[];
-
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
     setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
 
@@ -33,11 +32,13 @@ export default function ExpenseList({ filteredExpenseArray,
                                         setOldExpenseBeingEdited,
                                         setExpenseIdToDelete}: ExpenseListProps) {
 
+
     return (
         <div>
             <div>
                 {filteredExpenseArray.map((expenseElement, key) => {
                     const groupName = getGroupOfCategory(budgetArray, expenseElement.category)
+
                     const groupColour = getColourOfGroup(groupName, groupArray)!
 
                     const iconPath = budgetArray.filter(budgetItem => budgetItem.category === expenseElement.category)[0].iconPath

@@ -35,7 +35,6 @@ export default function Expense() {
         isConfirmExpenseDestructionModalVisible: false,
     })
 
-    // const [expenseIdToDelete, setExpenseIdToDelete] = useState<string>("");
     const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({ expenseId: "", oldCategory: "", oldAmount: 0 });
     const [expenseIdToDelete, setExpenseIdToDelete] = useState("");
 
@@ -56,30 +55,20 @@ export default function Expense() {
         getExpenseList()
             .then((expenseList: ExpenseItemEntity[]) => {
                 setExpenseArray(expenseList)
-                const uniqueDates = new Set(expenseList.map(expenseItem => new Date(expenseItem.timestamp).toLocaleDateString()))
-                let updatedMatrix: ExpenseItemEntity[][] = []
-                uniqueDates.forEach(date => {
-                    let constituentExpenseArray: ExpenseItemEntity[] = []
-                    expenseList.forEach(expenseItem => {
-                        if (new Date(expenseItem.timestamp).toLocaleDateString() === date) {
-                            constituentExpenseArray = [...constituentExpenseArray, expenseItem];
-                        }
-                    })
-                    updatedMatrix = [...updatedMatrix, constituentExpenseArray]
-                })
-                setExpenseMatrix(updatedMatrix)
             })
-        .then(() => {
-            getGroupList()
-                .then((groupList: GroupItemEntity[]) => {
-                    setGroupArray(groupList)
-                })
-        })
+        getGroupList()
+            .then((groupList: GroupItemEntity[]) => {
+                setGroupArray(groupList)
+            })
         .then(implementDynamicBackgroundHeight)
         .catch(error => console.log(`Unsuccessful expense page data retrieval - error: ${error}`))
     }, []);
 
     useEffect(() => {
+        getGroupList()
+            .then((groupList: GroupItemEntity[]) => {
+                setGroupArray(groupList)
+            })
         const uniqueDates = new Set(expenseArray.map(expenseItem => new Date(expenseItem.timestamp).toLocaleDateString()))
         let updatedMatrix: ExpenseItemEntity[][] = []
         uniqueDates.forEach(date => {

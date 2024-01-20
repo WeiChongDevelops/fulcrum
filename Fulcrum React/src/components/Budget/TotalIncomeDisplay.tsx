@@ -1,4 +1,4 @@
-import {formatNumberWithCommas} from "../../util.ts";
+import {formatDollarAmount} from "../../util.ts";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useState} from "react";
 
 interface TotalIncomeDisplayProps {
@@ -45,11 +45,11 @@ export default function TotalIncomeDisplay({ totalIncome, setTotalIncome, amount
                         min={0.01}
                         step={0.01}
                     />
-                </form>: <span className="text-4xl" onClick={handleEditClick}>${formatNumberWithCommas(totalIncome.toFixed(2))}</span>}
+                </form>: <span className="text-4xl" onClick={handleEditClick}>${formatDollarAmount(totalIncome)}</span>}
             </div>
             <div className="flex-1 text-center py1.5 px-2.5 rounded-xl my-3 mx-6 font-bold text-white p-5 remaining-income" style={{backgroundColor: `${amountLeftToBudget === 0 ? "#4CCC86" : "#FF3F3F"}`}}>
                 <span className="text-4xl">REMAINING INCOME: </span>
-                <span className="text-4xl">${formatNumberWithCommas(amountLeftToBudget.toFixed(2))}</span>
+                <span className="text-4xl">${formatDollarAmount(amountLeftToBudget)}</span>
             </div>
         </div>
     );

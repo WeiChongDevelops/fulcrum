@@ -649,10 +649,13 @@ export function getAmountBudgeted(budgetArray: BudgetItemEntity[]) {
     ), 0)
 }
 
-
-export function formatNumberWithCommas(numberString: string) {
-    return numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
+export function formatDollarAmount(number: number) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'decimal',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(number);
+}
 
 export function implementDynamicBackgroundHeight() {
     function adjustBackgroundHeight() {
