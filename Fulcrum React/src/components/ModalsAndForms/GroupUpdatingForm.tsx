@@ -68,7 +68,7 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
                 setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}))
             }}>Close</button>
 
-            <h1 className="mb-6">Updating Group {oldGroupBeingEdited.oldGroupName}</h1>
+            <p className="mb-6 font-bold text-4xl">Updating Group {oldGroupBeingEdited.oldGroupName}</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="groupName">Group Name</label>
                 <input type="text"

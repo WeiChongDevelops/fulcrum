@@ -32,7 +32,7 @@ export default function TotalIncomeDisplay({ totalIncome, setTotalIncome, amount
 
     return (
         <div className="flex flex-row w-full items-center mt-1">
-            <div className="flex-1 flex-row text-center font-bold bg-[#17423F] py px-2.5 rounded-xl my-3 mx-6 text-white p-5 monthly-income">
+            <div className="flex-1 flex-row text-center font-bold bg-[#3f4540] py px-2.5 rounded-xl my-3 mx-6 text-white p-5 monthly-income">
                 <span className="text-4xl">MONTHLY INCOME: </span>
                 {isEditing ? <form className="inline" onSubmit={handleSubmit}>
                     <input

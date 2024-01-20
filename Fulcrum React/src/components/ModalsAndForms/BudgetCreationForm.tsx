@@ -70,7 +70,7 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
                 setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}))
             }}>Close</button>
 
-            <h1 className="mb-6">New Budget Item</h1>
+            <p className="mb-6 font-bold text-4xl">New Budget Item</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="category">Category</label>
                 <input type="text"
@@ -79,7 +79,7 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
                        name="category"
                        id="category"
                        className="mb-3"
-                       maxLength={22}
+                       maxLength={18}
                        required/>
                 <label htmlFor="amount">Amount</label>
                 <input type="number"

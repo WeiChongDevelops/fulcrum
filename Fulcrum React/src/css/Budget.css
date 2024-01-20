@@ -1,36 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
-/* GLOBAL */
-
-input::placeholder {
-    text-align: center;
-}
-
-body {
-    font-family: 'Quicksand', sans-serif;
-}
-
-.background {
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    position: absolute;
-    background-image:
-            linear-gradient(90deg, rgba(199, 199, 199, 0.4) 1px, transparent 1px),
-            linear-gradient(180deg, rgba(199, 199, 199, 0.4) 1px, transparent 1px);
-    background-size: 42px 42px;
-    filter: drop-shadow(1px 1px 2px grey) invert(0.1);
-    overflow: hidden;
-}
-
-.background::after {
-    content: '';
-    position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
-    box-shadow:
-        inset -40px 0 40px -15px rgba(141, 141, 141, 0.3),
-        inset 40px 0 40px -15px rgba(141, 141, 141, 0.3);
-}
 
 /* EDIT-DELETE BUTTONS */
 
@@ -68,7 +37,7 @@ body {
     padding: 2%;
     transform: translate(-50%, -50%);
     background-color: rgba(0,0,0,0.8);
-    @apply rounded-3xl text-white
+    @apply rounded-3xl
 }
 
 
@@ -95,8 +64,12 @@ body {
     box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 1);
 }
 
-.budget-name {
-    margin: 3px;
+.budget-name-container {
+    text-align: center;
+    line-height: 1.1;
+    padding: 5px 40px 0 40px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* ADD NEW BUDGET BUTTON */

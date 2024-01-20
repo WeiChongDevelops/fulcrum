@@ -402,7 +402,7 @@ fun Application.configureRouting() {
                 val miscGroupCreated = GroupCreateRequestSent(
                     userId = uid,
                     group = "Miscellaneous",
-                    colour = "#455259"
+                    colour = "#3f4540"
                 )
                 val miscGroupInserted = supabase.postgrest["groups"].insert(
                     miscGroupCreated,

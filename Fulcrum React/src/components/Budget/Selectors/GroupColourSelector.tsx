@@ -48,10 +48,10 @@ export default function GroupColourSelector( { oldColour }:GroupColourSelectorPr
                 <div className="group-colour-triangle bg-[#c6e2ba]" data-value="#c6e2ba"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#ccd7c6]" data-value="#ccd7c6"></div>
+                <div className="group-colour-triangle bg-[#a6c7ea]" data-value="#a6c7ea"></div>
             </div>
             <div className="group-colour-selectable-container">
-                <div className="group-colour-triangle bg-[#a6c7ea]" data-value="#a6c7ea"></div>
+                <div className="group-colour-triangle bg-[#7c86bf]" data-value="#7c86bf"></div>
             </div>
             <div className="group-colour-selectable-container">
                 <div className="group-colour-triangle bg-[#b2b4da]" data-value="#b2b4da"></div>

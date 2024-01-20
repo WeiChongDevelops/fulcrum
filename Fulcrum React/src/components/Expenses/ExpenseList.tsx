@@ -15,6 +15,7 @@ interface ExpenseListProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
     groupArray: GroupItemEntity[];
+
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
     setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
 
@@ -31,6 +32,7 @@ export default function ExpenseList({ filteredExpenseArray,
                                         setExpenseModalVisibility,
                                         setOldExpenseBeingEdited,
                                         setExpenseIdToDelete}: ExpenseListProps) {
+
 
 
     return (

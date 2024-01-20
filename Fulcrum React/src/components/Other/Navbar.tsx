@@ -35,7 +35,7 @@ export default function Navbar() {
 
     return (
         <div>
-            <nav className="bg-[#455259] text-white p-4 font-bold z-10">
+            <nav className="bg-[#17423F] text-white p-4 font-bold z-10 h-[6vh]">
                 <div className="flex justify-between items-center mx-auto">
 
                     <div className="flex-1 flex-row text-left">

@@ -53,7 +53,7 @@ export default function ExpenseItem( { expenseId,
     return (
         <div className="box-shadow flex flex-row justify-between items-center w-[95vw] py-1.5 px-2.5 rounded-3xl my-3 text-black" style={{backgroundColor: groupColour}}>
             <div className="flex flex-row items-center">
-                <div className="rounded-full bg-green-950 p-2">
+                <div className="rounded-full bg-[#1b1c1c] p-2">
                     <img src={iconPath} alt="" />
                 </div>
                 <div className="flex flex-col items-start ml-2" style={{

@@ -53,7 +53,9 @@ export default function BudgetTile({ category,
             <div className="flex justify-center items-center rounded-full bg-green-950 p-3 w-14 h-14">
                 <img className="budget-icon" src={icon} alt="" />
             </div>
-            <b className="budget-name">{category}</b>
+            <div className="budget-name-container">
+                <b className="budget-name">{category}</b>
+            </div>
             <b>${formatDollarAmount(amount)}</b>
             <div className="flex flex-row">
                 <div className="circle-button rounded-full p-1" onClick={handleEditClick}>

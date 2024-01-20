@@ -124,9 +124,9 @@ const dot = (color = 'transparent') => ({
 });
 
 export const colourStyles = {
-    control: (styles: any) => ({ ...styles, backgroundColor: "white" }),
+    control: (styles: any) => ({ ...styles, fontWeight: "bold", backgroundColor: "white" }),
     option: (styles: any, {data}: any) => {
-        return { ...styles, color: data.colour || "#52cc85" };
+        return { ...styles, color: (data.value !== "Other" || data.value !== "Miscellaneous") && data.colour || "white", backgroundColor: "#1b1c1c", fontWeight: "bold" };
     },
     input: (styles: any) => ({ ...styles, ...dot() }),
     placeholder: (styles: any) => ({ ...styles, ...dot('#ccc') }),
@@ -569,8 +569,8 @@ export function getRandomColour() {
         '#9dc7b9',
         '#acbfa1',
         '#c6e2ba',
-        '#ccd7c6',
         '#a6c7ea',
+        '#7c86bf',
         '#b2b4da',
         '#dfcde3',
         '#ceb4d9'
@@ -630,9 +630,7 @@ export function dynamicallySizeBudgetNameDisplays() {
         } else if (budgetNameLength <= 14) {
             dynamicFontSize = "14px";
         } else if (budgetNameLength <= 18) {
-            dynamicFontSize = "12px";
-        } else if (budgetNameLength <= 22) {
-            dynamicFontSize = "10px";
+            dynamicFontSize = "11px";
         }
         // console.log(`The size of ${budgetNameElement.innerText} (${budgetNameLength} characters) is ${dynamicFontSize}`);
         budgetNameElement.style.fontSize = dynamicFontSize;

@@ -66,7 +66,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
                 setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}))
             }}>Close</button>
 
-            <h1 className="mb-6">New Group</h1>
+            <p className="mb-6 font-bold text-4xl">New Group</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="Group Name">Group Name</label>
                 <input type="text"

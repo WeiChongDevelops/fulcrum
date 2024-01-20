@@ -86,7 +86,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
             }}>Close</button>
 
-            <h1 className="mb-6">New Expense Item</h1>
+            <p className="mb-6 font-bold text-4xl">New Expense Item</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="category">Category</label>
                 <CreatableSelect
@@ -107,6 +107,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                             primary: "black"
                         },
                     })}
+                    placeholder="Select from dropdown/start typing to create..."
                     required
                 />
                 <label htmlFor="amount">Amount</label>
@@ -115,7 +116,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                        value={formData.amount === 0 ? "" : formData.amount}
                        name="amount"
                        id="amount"
-                       className="mb-3"
+                       className="mb-3 text-black"
                        min={0.01}
                        step={0.01}
                        required/>

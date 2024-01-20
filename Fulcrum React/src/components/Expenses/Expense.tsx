@@ -110,6 +110,7 @@ export default function Expense() {
                         budgetArray={budgetArray}
                         setBudgetArray={setBudgetArray}
                         groupArray={groupArray}
+                        setGroupArray={setGroupArray}
                         setExpenseFormVisibility={setExpenseFormVisibility}
                         setExpenseModalVisibility={setExpenseModalVisibility}
                         setOldExpenseBeingEdited={setOldExpenseBeingEdited}

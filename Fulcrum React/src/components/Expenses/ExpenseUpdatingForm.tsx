@@ -71,7 +71,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
                 setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}))
             }}>Close</button>
 
-            <h1 className="mb-6">Updating Expense</h1>
+            <p className="mb-6 font-bold text-4xl">Updating Expense</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="category">Category</label>
                 <CreatableSelect

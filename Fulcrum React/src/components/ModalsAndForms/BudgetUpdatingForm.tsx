@@ -65,7 +65,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
                 setBudgetFormVisibility(current => ({...current, isUpdateBudgetVisible: false}))
             }}>Close</button>
 
-            <h1 className="mb-6">Updating Budget for {oldBudgetBeingEdited.oldCategory}</h1>
+            <p className="mb-6 font-bold text-4xl">Updating Budget for {oldBudgetBeingEdited.oldCategory}</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="category">Category Name</label>
                 <input type="text"
@@ -73,7 +73,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
                        value={formData.category}
                        name="category"
                        id="category"
-                       maxLength={22}/>
+                       maxLength={18}/>
 
                 <label htmlFor="amount">Amount</label>
                 <input type="number"
