@@ -717,6 +717,11 @@ export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: st
     }
 }
 
+export function getWindowLocation() {
+    const urlArray = window.location.href.split("/");
+    return urlArray[urlArray.length - 1];
+}
+
 export async function logoutOnClick() {
     try {
         await fetch("http://localhost:8080/api/logout", {

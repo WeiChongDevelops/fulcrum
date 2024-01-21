@@ -42,7 +42,7 @@ export default function GroupList( { budgetArray,
     // 1. Make an array containing unique group in the budgetArray
     // const groupOptions = groupListAsOptions(groupArray);
     return (
-        <div>
+        <div className="flex flex-col items-center">
             {
                 // 2. For each unique group, create a filtered version of the budgetArray with only budgetItems with that group
                 groupArray.map( (groupDataItem: GroupItemEntity, key) => {

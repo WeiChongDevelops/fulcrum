@@ -32,7 +32,7 @@ export default function TotalIncomeDisplay({ totalIncome, setTotalIncome, amount
 
     return (
         <div className="flex flex-row w-full items-center mt-1">
-            <div className="flex-1 flex-row text-center font-bold bg-[#17423f] py px-2.5 rounded-xl my-3 mx-6 text-white p-5 monthly-income">
+            <div className="flex-1 flex-row text-center font-bold bg-[#17423f] p-5 rounded-xl my-3 mx-6 text-white monthly-income">
                 <span className="text-4xl">MONTHLY INCOME: </span>
                 {isEditing ? <form className="inline" onSubmit={handleSubmit}>
                     <input
@@ -47,8 +47,8 @@ export default function TotalIncomeDisplay({ totalIncome, setTotalIncome, amount
                     />
                 </form>: <span className="text-4xl" onClick={handleEditClick}>${formatDollarAmount(totalIncome)}</span>}
             </div>
-            <div className="flex-1 text-center py1.5 px-2.5 rounded-xl my-3 mx-6 font-bold text-white p-5 remaining-income" style={{backgroundColor: `${amountLeftToBudget === 0 ? "#4CCC86" : "#FF3F3F"}`}}>
-                <span className="text-4xl">REMAINING INCOME: </span>
+            <div className="flex-1 text-center p-5 rounded-xl my-3 mx-6 font-bold text-white remaining-income" style={{backgroundColor: `${amountLeftToBudget === 0 ? "#4CCC86" : "#FF3F3F"}`}}>
+                <span className="text-4xl">REMAINING INCOME TO BUDGET: </span>
                 <span className="text-4xl">${formatDollarAmount(amountLeftToBudget)}</span>
             </div>
         </div>
