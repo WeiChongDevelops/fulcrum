@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {Outlet} from "react-router-dom";
 import {logoutOnClick} from "../../util.ts";
+import FulcrumButton from "./FulcrumButton.tsx";
 
 
 export default function Navbar() {
@@ -35,38 +36,30 @@ export default function Navbar() {
 
     return (
         <div>
-            <h1 className="text-black font-bold text-7xl bg-[#efefef] py-2">FULCRUM</h1>
-            <nav className="bg-[#17423F] text-white p-4 font-bold z-10">
-                <div className="flex justify-between items-center mx-auto">
+            <nav className="flex flex-row justify-between items-center bg-[#efefef] py-2">
+                <div className="flex-1"></div>
+                <h1 className="flex-1 text-black font-bold text-7xl ">FULCRUM</h1>
 
-                    <div className="flex-1 flex-row text-left"></div>
+                <div className="flex-1 text-right">
+                    <div className="flex justify-end items-center">
+                        <p className="mx-2 text-black ">{email}</p>
+                        {email != "" && <FulcrumButton displayText="Log Out" onClick={logoutOnClick}/>}
+                    </div>
+                </div>
+            </nav>
+            <nav className="text-white font-bold z-10">
+                <div className="flex flex-row justify-center items-center">
 
                     <div className="flex-1 hidden sm:flex justify-around ">
-                        {/*<div className={`w-[33.33%] py-4 ${window.location.href.includes("/expenses") ? "bg-[#17423F]" : "bg-black"} rounded-l-xl`}>*/}
-                        {/*    <a href="/expenses" className="hover:text-gray-300">Expenses</a>*/}
-                        {/*</div>*/}
-                        {/*<div className={`w-[33.33%] py-4 ${window.location.href.includes("/budget") ? "bg-[#17423F]" : "bg-black"}`}>*/}
-                        {/*    <a href="/budget" className="hover:text-gray-300">Budget</a>*/}
-                        {/*</div>*/}
-                        {/*<div className={`w-[33.33%] py-4 ${window.location.href.includes("/tools") ? "bg-[#17423F]" : "bg-black"} rounded-r-xl`}>*/}
-                        {/*    <a href="/tools" className="hover:text-gray-300">Tools</a>*/}
-                        {/*</div>*/}
-                        <button className={`w-[33.33%] py-4 ${window.location.href.includes("/expenses") ? "bg-[#17423F] font-bold" : "bg-black font-medium"} border-4 border-black rounded-l-xl hover:bg-[#efefef] hover:text-black transition-colors duration-400 ease-in-out`} onClick={() => window.location.href = "/expenses"}>
+                        <button className={`w-[33.33%] py-4 ${window.location.href.includes("/expenses") ? "bg-[#17423F] font-bold" : "bg-black font-medium"} border-4 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-400 ease-in-out`} onClick={() => window.location.href = "/expenses"}>
                             Expenses
                         </button>
                         <button className={`w-[33.33%] py-4 ${window.location.href.includes("/budget") ? "bg-[#17423F] font-bold" : "bg-black font-medium"} border-y-4 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-400 ease-in-out`} onClick={() => window.location.href = "/budget"}>
                             Budget
                         </button>
-                        <button className={`w-[33.33%] py-4 ${window.location.href.includes("/tools") ? "bg-[#17423F] font-bold" : "bg-black font-medium"} border-4 border-black rounded-r-xl hover:bg-[#efefef] hover:text-black transition-colors duration-400 ease-in-out`} onClick={() => window.location.href = "/tools"}>
+                        <button className={`w-[33.33%] py-4 ${window.location.href.includes("/tools") ? "bg-[#17423F] font-bold" : "bg-black font-medium"} border-4 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-400 ease-in-out`} onClick={() => window.location.href = "/tools"}>
                             Tools
                         </button>
-                    </div>
-
-                    <div className="flex-1 text-right">
-                        <div className="flex justify-end items-center">
-                            <p className="mx-4">{email}</p>
-                            {email != "" && <button onClick={logoutOnClick} className="bg-[#dee1de] text-black py-2 px-4">Log Out</button>}
-                        </div>
                     </div>
                 </div>
             </nav>
