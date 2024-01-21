@@ -1,6 +1,6 @@
 .dotted-line {
     flex-grow: 1;
-    margin: 0 25px 0 10px; /* Spacing around the line */
+    margin: 0 25px 0 15px; /* Spacing around the line */
     height: 6px; /* Height of the dotted line */
     background: repeating-linear-gradient(
             to right,
@@ -17,7 +17,7 @@
 
 .create-expense-button {
     width: 100%;
-    padding: 20px 0 20px 0;
+    padding: 18px 0 18px 0;
     background: transparent;
     border: black 2px dashed;
     color: black;

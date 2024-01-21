@@ -1,4 +1,3 @@
-import FulcrumButton from "./FulcrumButton.tsx";
 import {useEffect, useState} from "react";
 import {Outlet} from "react-router-dom";
 import {logoutOnClick} from "../../util.ts";
@@ -35,12 +34,11 @@ export default function Navbar() {
 
     return (
         <div>
-            <nav className="bg-[#17423F] text-white p-4 font-bold z-10 h-[6vh]">
+            <h1 className="text-black font-bold text-7xl bg-[#dee1de] py-2">FULCRUM</h1>
+            <nav className="bg-[#17423F] text-white p-4 font-bold z-10">
                 <div className="flex justify-between items-center mx-auto">
 
-                    <div className="flex-1 flex-row text-left">
-                        <p className="mx-8">Fulcrum</p>
-                    </div>
+                    <div className="flex-1 flex-row text-left"></div>
 
                     <ul className="flex-1 justify-center hidden sm:flex">
                         <li className="mx-2">
@@ -60,7 +58,7 @@ export default function Navbar() {
                     <div className="flex-1 text-right">
                         <div className="flex justify-end items-center">
                             <p className="mx-4">{email}</p>
-                            {email != "" && <FulcrumButton displayText="Log Out" onClick={logoutOnClick}/>}
+                            {email != "" && <button onClick={logoutOnClick} className="bg-[#dee1de] text-black py-2 px-4">Log Out</button>}
                         </div>
                     </div>
                 </div>

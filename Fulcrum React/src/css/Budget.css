@@ -34,7 +34,7 @@
     z-index: 3;
     top: 50%;
     left: 50%;
-    padding: 2%;
+    padding: 1%;
     transform: translate(-50%, -50%);
     background-color: rgba(0,0,0,0.8);
     @apply rounded-3xl
@@ -121,8 +121,8 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    margin: 10px;
-    padding: 60px;
+    margin: 5px;
+    padding: 25px;
 }
 
 .category-icon-selectable {

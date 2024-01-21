@@ -14,7 +14,7 @@ export default function AddNewExpenseButton({setExpenseFormVisibility}: AddNewBu
     }
 
     return (
-        <button className="create-expense-button rounded-2xl mt-3" onClick={handleClick}>
+        <button className="create-expense-button rounded-2xl mt-4" onClick={handleClick}>
             <p className="text-2xl font-bold">+</p>
         </button>
     )

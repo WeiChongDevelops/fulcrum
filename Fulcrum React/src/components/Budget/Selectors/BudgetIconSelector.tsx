@@ -55,6 +55,42 @@ export default function BudgetIconSelector() {
             <button type="button" className="category-icon-selectable" data-value="category-train-icon.svg">
                 <img src="/src/assets/category-icons/category-train-icon.svg" alt="Train"/>
             </button>
+            <button type="button" className="category-icon-selectable" data-value="category-apple-icon.svg">
+                <img src="/src/assets/category-icons/category-apple-icon.svg" alt="Apple"/>
+            </button>
+            <button type="button" className="category-icon-selectable" data-value="category-cart-icon.svg">
+                <img src="/src/assets/category-icons/category-cart-icon.svg" alt="Cart"/>
+            </button>
+            <button type="button" className="category-icon-selectable" data-value="category-emergency-icon.svg">
+                <img src="/src/assets/category-icons/category-emergency-icon.svg" alt="Emergency"/>
+            </button>
+            <button type="button" className="category-icon-selectable" data-value="category-fastfood-icon.svg">
+                <img src="/src/assets/category-icons/category-fastfood-icon.svg" alt="Fastfood"/>
+            </button>
+            <button type="button" className="category-icon-selectable" data-value="category-gym-icon.svg">
+                <img src="/src/assets/category-icons/category-gym-icon.svg" alt="Gym"/>
+            </button>
+            <button type="button" className="category-icon-selectable" data-value="category-meds-icon.svg">
+                <img src="/src/assets/category-icons/category-meds-icon.svg" alt="Meds"/>
+            </button>
+            <button type="button" className="category-icon-selectable" data-value="category-people-icon.svg">
+                <img src="/src/assets/category-icons/category-people-icon.svg" alt="People"/>
+            </button>
+            <button type="button" className="category-icon-selectable" data-value="category-phone-icon.svg">
+                <img src="/src/assets/category-icons/category-phone-icon.svg" alt="Phone"/>
+            </button>
+            <button type="button" className="category-icon-selectable" data-value="category-soccer-icon.svg">
+                <img src="/src/assets/category-icons/category-soccer-icon.svg" alt="Soccer"/>
+            </button>
+            <button type="button" className="category-icon-selectable" data-value="category-tv-icon.svg">
+                <img src="/src/assets/category-icons/category-tv-icon.svg" alt="TV"/>
+            </button>
+            <button type="button" className="category-icon-selectable" data-value="category-utencils-icon.svg">
+                <img src="/src/assets/category-icons/category-utencils-icon.svg" alt="Utencils"/>
+            </button>
+            <button type="button" className="category-icon-selectable" data-value="category-wifi-icon.svg">
+                <img src="/src/assets/category-icons/category-wifi-icon.svg" alt="Wifi"/>
+            </button>
         </div>
     );
 }
