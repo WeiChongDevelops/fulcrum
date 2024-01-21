@@ -709,7 +709,12 @@ export function implementDynamicBackgroundHeight() {
 }
 
 export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string) {
-    return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group;
+    try {
+        return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group
+    } catch (e) {
+        console.log(`Failed to retrieve the group of category ${category}. Temporarily assuming Miscellaneous.`)
+        return null;
+    }
 }
 
 export async function logoutOnClick() {

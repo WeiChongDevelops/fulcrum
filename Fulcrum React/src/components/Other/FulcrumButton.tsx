@@ -5,6 +5,6 @@ interface FulcrumButtonProps {
 }
 export default function FulcrumButton({displayText, onClick}: FulcrumButtonProps) {
     return (
-        <button onClick={onClick} className="bg-[#17423f] font-bold">{displayText}</button>
+        <button onClick={onClick} className="bg-[#efefef] font-bold">{displayText}</button>
     )
 }

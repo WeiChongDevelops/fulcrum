@@ -41,7 +41,7 @@ export default function ExpenseList({ filteredExpenseArray,
                 {filteredExpenseArray.map((expenseElement, key) => {
                     const groupName = getGroupOfCategory(budgetArray, expenseElement.category)
 
-                    const groupColour = getColourOfGroup(groupName, groupArray)!
+                    const groupColour = getColourOfGroup(groupName ? groupName : "Miscellaneous" , groupArray)!
 
                     const iconPath = budgetArray.filter(budgetItem => budgetItem.category === expenseElement.category)[0].iconPath
 
@@ -50,7 +50,7 @@ export default function ExpenseList({ filteredExpenseArray,
                         category={expenseElement.category}
                         amount={expenseElement.amount}
                         iconPath={iconPath}
-                        groupName={groupName}
+                        groupName={groupName ? groupName : "Miscellaneous" }
                         groupColour={groupColour}
                         setExpenseArray={setExpenseArray}
                         setBudgetArray={setBudgetArray}
