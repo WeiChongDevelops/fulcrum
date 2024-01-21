@@ -33,8 +33,6 @@ export default function ExpenseList({ filteredExpenseArray,
                                         setOldExpenseBeingEdited,
                                         setExpenseIdToDelete}: ExpenseListProps) {
 
-
-
     return (
         <div>
             <div>

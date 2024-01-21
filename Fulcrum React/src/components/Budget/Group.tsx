@@ -81,7 +81,7 @@ export default function Group({ groupName,
 
             </div>
             <div className="flex flex-row flex-wrap flex-shrink-0 basis-0 justify-start">
-                {filteredBudgetArray.length > 0 && filteredBudgetArray.sort().map((budgetElement, key) => (
+                {filteredBudgetArray.length > 0 && filteredBudgetArray.map((budgetElement, key) => (
                     <BudgetTile
                         category={budgetElement.category}
                         amount={budgetElement.amount}

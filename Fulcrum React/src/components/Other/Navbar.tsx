@@ -50,14 +50,14 @@ export default function Navbar() {
             <nav className="text-white font-bold z-10">
                 <div className="flex flex-row justify-center items-center">
 
-                    <div className="flex-1 hidden sm:flex justify-around ">
-                        <button className={`w-[33.33%] py-4 ${window.location.href.includes("/expenses") ? "bg-[#17423F] font-bold" : "bg-black font-medium"} border-4 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-400 ease-in-out`} onClick={() => window.location.href = "/expenses"}>
+                    <div className="flex-1 hidden sm:flex justify-around border-4 border-black bg-black">
+                        <button className={`w-[33.33%] rounded-lg font-bold py-4 ${window.location.href.includes("/expenses") ? "bg-[#17423F]" : "bg-black"} border-2 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-400 ease-in-out`} onClick={() => window.location.href = "/expenses"}>
                             Expenses
                         </button>
-                        <button className={`w-[33.33%] py-4 ${window.location.href.includes("/budget") ? "bg-[#17423F] font-bold" : "bg-black font-medium"} border-y-4 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-400 ease-in-out`} onClick={() => window.location.href = "/budget"}>
+                        <button className={`w-[33.33%] rounded-lg font-bold py-4 ${window.location.href.includes("/budget") ? "bg-[#17423F]" : "bg-black"} border-y-2 border-x-4 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-400 ease-in-out`} onClick={() => window.location.href = "/budget"}>
                             Budget
                         </button>
-                        <button className={`w-[33.33%] py-4 ${window.location.href.includes("/tools") ? "bg-[#17423F] font-bold" : "bg-black font-medium"} border-4 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-400 ease-in-out`} onClick={() => window.location.href = "/tools"}>
+                        <button className={`w-[33.33%] rounded-lg font-bold py-4 ${window.location.href.includes("/tools") ? "bg-[#17423F]" : "bg-black"} border-2 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-400 ease-in-out`} onClick={() => window.location.href = "/tools"}>
                             Tools
                         </button>
                     </div>
