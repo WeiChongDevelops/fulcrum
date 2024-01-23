@@ -776,3 +776,11 @@ function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity
         console.log(budgetItemB);
     }
 }
+
+
+export function getLineAngle(percentageIncomeRemaining: number) {
+    const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
+    return functionalPercentageIncomeRemaining <= -100 ? 14.5 :
+        functionalPercentageIncomeRemaining === 100 ? -14.5 :
+            functionalPercentageIncomeRemaining / (100 / 14.5);
+}

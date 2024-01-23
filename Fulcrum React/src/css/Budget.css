@@ -213,6 +213,19 @@
     transition: all ease-out 500ms;
 }
 
+@keyframes textFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.rotating-text-label-container {
+    animation: textFadeIn 1400ms ease forwards;
+}
+
 .fulcrum-bowl-left {
     position: absolute;
     top: 275%;

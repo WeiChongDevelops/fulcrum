@@ -5,7 +5,7 @@ import {
     ExpenseItemEntity, ExpenseModalVisibility,
     getBudgetList,
     getExpenseList,
-    getGroupList,
+    getGroupList, getLineAngle,
     GroupItemEntity, handleExpenseDeletion,
     implementDynamicBackgroundHeight,
     PreviousExpenseBeingEdited,
@@ -16,6 +16,7 @@ import ExpenseUpdatingForm from "../ModalsAndForms/ExpenseUpdatingForm.tsx";
 import TwoOptionModal from "../ModalsAndForms/TwoOptionModal.tsx";
 import ExpenseDayGroup from "./ExpenseDayGroup.tsx";
 import "../../css/Expense.css"
+import Loader from "../Other/Loader.tsx";
 
 
 export default function Expense() {
@@ -158,7 +159,7 @@ export default function Expense() {
                             }));
                         }}
                                         setModalFormVisibility={setExpenseModalVisibility}
-                                        setVisible="isConfirmExpenseDestructionModalVisible"
+                                        isVisible="isConfirmExpenseDestructionModalVisible"
                                         title="Are you sure you want to delete this expense?"/>}
                 </div>
 
@@ -175,7 +176,7 @@ export default function Expense() {
                 {/*                      runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}*/}
                 {/*                      modalFormVisibility={modalFormVisibility}*/}
                 {/*                      setModalFormVisibility={setModalFormVisibility}/>*/}
-            </div>: <h1 className="text-black">Loading</h1>}
+            </div>: <Loader isLoading={isLoading}/>}
         </>
     );
 }
