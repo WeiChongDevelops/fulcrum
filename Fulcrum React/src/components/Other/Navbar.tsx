@@ -44,7 +44,7 @@ export default function Navbar() {
 
     return (
         <div>
-            <nav className="flex flex-row justify-between items-center bg-[#efefef] py-2">
+            <nav className="flex flex-row justify-between items-center bg-white py-2">
                 <div className="flex-1"></div>
                 <h1 className="flex-1 text-black font-bold text-7xl ">FULCRUM</h1>
 
