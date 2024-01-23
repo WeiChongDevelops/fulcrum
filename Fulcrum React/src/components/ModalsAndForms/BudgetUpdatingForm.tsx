@@ -59,7 +59,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
     return (
         <div ref={formRef} className="budget-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
 
-            <button className="ml-auto mb-auto" onClick={(e) => {
+            <button className="close-form-or-modal-button ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 setBudgetFormVisibility(current => ({...current, isUpdateBudgetVisible: false}))

@@ -31,7 +31,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
             setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
         }
-    };
+    }
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -81,7 +81,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
     return (
         <div ref={formRef}  className="budget-form fixed flex flex-col justify-center items-center rounded-3xl">
 
-            <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
+            <button className="close-form-or-modal-button mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault()
                 setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
             }}>Close</button>

@@ -1,7 +1,7 @@
 import {
     BudgetFormVisibility,
     BudgetItemEntity,
-    BudgetModalVisibility, checkForUser,
+    BudgetModalVisibility, checkForOpenBudgetModalOrForm, checkForUser,
     dynamicallySizeBudgetNameDisplays,
     getAmountBudgeted,
     getBudgetList,
@@ -46,6 +46,8 @@ export default function Budget() {
 
     const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
 
+    const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
+
     useEffect(() => {
         checkForUser()
             .then(userStatus => {
@@ -80,7 +82,8 @@ export default function Budget() {
         const formGroupInput = document.getElementById("group")
         formCategoryInput ? formCategoryInput.focus() : formGroupInput?.focus();
         console.log(budgetFormVisibility);
-    }, [budgetFormVisibility])
+        setIsBudgetFormOrModalOpen(checkForOpenBudgetModalOrForm(budgetFormVisibility, budgetModalVisibility))
+    }, [budgetFormVisibility, budgetModalVisibility])
 
     function runGroupDeletionWithUserPreference(keepContainedBudgets: boolean) {
         setBudgetModalVisibility(current => ({...current,
@@ -129,6 +132,9 @@ export default function Budget() {
                 <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
             </div>
 
+            {isBudgetFormOrModalOpen && <div className="absolute w-screen h-screen bg-transparent z-3"></div>}
+
+            <div className="z-4">
             <BudgetModalsAndForms budgetFormVisibility={budgetFormVisibility}
                                   setBudgetArray={setBudgetArray}
                                   groupArray={groupArray}
@@ -142,7 +148,7 @@ export default function Budget() {
                                   runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
                                   modalFormVisibility={budgetModalVisibility}
                                   setModalFormVisibility={setBudgetModalVisibility}/>
-
+            </div>
         </div>
     );
 }

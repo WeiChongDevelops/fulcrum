@@ -30,7 +30,7 @@ export default function TwoOptionModal( { optionOneText, optionOneFunction, opti
 
     return (
         <div className="budget-modal" ref={formRef}>
-            <button className="ml-auto mb-auto" onClick={(e) => {
+            <button className="close-form-or-modal-button ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
                 setModalFormVisibility((current: any) => ({...current, [`${setVisible}`]: false}))
             }}>Cancel</button>

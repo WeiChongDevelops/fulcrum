@@ -1,6 +1,6 @@
 import {
     BudgetItemEntity, ExpenseFormVisibility,
-    ExpenseItemEntity, ExpenseModalVisibility, formatDate, formatDollarAmount, getGroupList,
+    ExpenseItemEntity, ExpenseModalVisibility, formatDate, formatDollarAmount, getBudgetList,
     GroupItemEntity, PreviousExpenseBeingEdited
 } from "../../util.ts";
 import {Dispatch, SetStateAction, useEffect} from "react";
@@ -18,7 +18,6 @@ interface ExpenseDayGroupProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
     groupArray: GroupItemEntity[];
-    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
 
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
     setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
@@ -34,16 +33,15 @@ export default function ExpenseDayGroup({ date,
                                             budgetArray,
                                             setBudgetArray,
                                             groupArray,
-                                            setGroupArray,
                                             setExpenseFormVisibility,
                                             setExpenseModalVisibility,
                                             setOldExpenseBeingEdited,
                                             setExpenseIdToDelete}: ExpenseDayGroupProps) {
 
     useEffect(() => {
-        getGroupList()
-            .then((groupList: GroupItemEntity[]) => {
-                setGroupArray(groupList)
+        getBudgetList()
+            .then((budgetList: BudgetItemEntity[]) => {
+                setBudgetArray(budgetList)
             })
     }, []);
 

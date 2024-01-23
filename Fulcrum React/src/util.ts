@@ -134,11 +134,8 @@ export const colourStyles = {
 };
 
 export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]) {
-    const groupOption = groupArray.find(groupItemEntity => groupItemEntity.group === groupName);
-    if (groupOption) {
-        return groupOption.colour;
-    }
-    return null;
+    const groupOption = groupArray.filter(groupItemEntity => groupItemEntity.group === groupName)[0];
+    return groupOption.colour ? groupOption.colour : null;
 }
 
 export function capitalizeFirstLetter(string: string) {
@@ -676,7 +673,7 @@ export function formatDate(date: Date) {
     return `${formattedDayOfWeek}, ${formattedDayOfMonth}${ordinalSuffix} ${formattedMonth} ${formattedYear}`
 }
 
-export function implementDynamicBackgroundHeight() {
+export async function implementDynamicBackgroundHeight() {
     function adjustBackgroundHeight() {
         const bodyHeight = document.body.scrollHeight;
         const backgroundDiv: HTMLDivElement = document.querySelector('.background')!;
@@ -713,6 +710,10 @@ export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: st
         return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group
     } catch (e) {
         console.log(`Failed to retrieve the group of category ${category}. Temporarily assuming Miscellaneous.`)
+        console.log("Below is index 0:")
+        console.log(budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0])
+        console.log("Below is the budgetArray:")
+        console.log(budgetArray)
         return null;
     }
 }
@@ -761,4 +762,12 @@ export async function checkForUser() {
     } catch (error) {
         console.error("Error:", error);
     }
+}
+
+export function checkForOpenExpenseModalOrForm(expenseFormVisibility: ExpenseFormVisibility, expenseModalVisibility: ExpenseModalVisibility) {
+    return Object.values(expenseFormVisibility).includes(true) || Object.values(expenseModalVisibility).includes(true)
+}
+
+export function checkForOpenBudgetModalOrForm(budgetFormVisibility: BudgetFormVisibility, budgetModalVisibility: BudgetModalVisibility) {
+    return Object.values(budgetFormVisibility).includes(true) || Object.values(budgetModalVisibility).includes(true)
 }

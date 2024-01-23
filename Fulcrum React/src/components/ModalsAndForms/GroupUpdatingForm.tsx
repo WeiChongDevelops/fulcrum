@@ -62,7 +62,7 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
 
     return (
         <div ref={formRef} className="budget-form">
-            <button className="ml-auto mb-auto" onClick={(e) => {
+            <button className="close-form-or-modal-button ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}))
