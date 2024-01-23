@@ -61,12 +61,10 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
     }
 
     return (
-        <div ref={formRef} className="budget-form">
-            <button className="close-form-or-modal-button ml-auto mb-auto" onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
+        <div ref={formRef} className="fulcrum-form">
+            <FulcrumButton onClick={() => {
                 setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}))
-            }}>Close</button>
+            }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="mb-6 font-bold text-4xl">Updating Group {oldGroupBeingEdited.oldGroupName}</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">

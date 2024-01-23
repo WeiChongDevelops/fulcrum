@@ -62,7 +62,8 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 category: formData.category,
                 amount: 0,
                 iconPath: "/src/assets/category-icons/category-default-icon.svg",
-                group: "Miscellaneous"
+                group: "Miscellaneous",
+                timestamp: new Date()
             }
 
             setBudgetArray(current => [...current, newDefaultBudgetItem])
@@ -79,12 +80,10 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
     }
 
     return (
-        <div ref={formRef}  className="budget-form fixed flex flex-col justify-center items-center rounded-3xl">
-
-            <button className="close-form-or-modal-button mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
-                e.preventDefault()
+        <div ref={formRef}  className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
+            <FulcrumButton onClick={() => {
                 setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
-            }}>Close</button>
+            }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="mb-6 font-bold text-4xl">New Expense Item</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">

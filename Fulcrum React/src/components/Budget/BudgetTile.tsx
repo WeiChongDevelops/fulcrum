@@ -4,7 +4,7 @@ import {
     BudgetModalVisibility, formatDollarAmount,
     PreviousBudgetBeingEdited
 } from "../../util.ts";
-import React, {Dispatch, SetStateAction} from "react";
+import {Dispatch, SetStateAction} from "react";
 
 interface BudgetTileProps {
     category: string;
@@ -30,8 +30,7 @@ export default function BudgetTile({ category,
                                        setModalFormVisibility,
                                        setCategoryToDelete}: BudgetTileProps) {
 
-    function handleEditClick(e: React.MouseEvent<HTMLDivElement>) {
-        e.stopPropagation();
+    function handleEditClick() {
         setOldBudgetBeingEdited({
             oldCategory: category,
             oldAmount: amount,
@@ -58,12 +57,12 @@ export default function BudgetTile({ category,
             </div>
             <b>${formatDollarAmount(amount)}</b>
             <div className="flex flex-row">
-                <div className="circle-button rounded-full p-1" onClick={handleEditClick}>
+                <button className="circle-button rounded-full p-1" onClick={handleEditClick}>
                     <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-5 h-5" />
-                </div>
-                <div className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
+                </button>
+                <button className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
                     <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="mx-1 w-5 h-5" />
-                </div>
+                </button>
             </div>
         </div>
     );

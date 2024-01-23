@@ -82,6 +82,7 @@ export default function Budget() {
         const formGroupInput = document.getElementById("group")
         formCategoryInput ? formCategoryInput.focus() : formGroupInput?.focus();
         console.log(budgetFormVisibility);
+        console.log(budgetModalVisibility);
         setIsBudgetFormOrModalOpen(checkForOpenBudgetModalOrForm(budgetFormVisibility, budgetModalVisibility))
     }, [budgetFormVisibility, budgetModalVisibility])
 

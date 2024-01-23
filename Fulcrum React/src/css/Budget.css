@@ -12,39 +12,6 @@
     filter: blur(5px);
 }
 
-
-/* BUDGET FORMS */
-
-.budget-form {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    z-index: 3;
-    top: 50%;
-    left: 50%;
-    padding: 1%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0,0,0,0.8);
-    @apply rounded-3xl
-}
-
-
-.budget-modal {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    top: 50%;
-    left: 50%;
-    padding: 1%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0,0,0,0.8);
-    @apply rounded-3xl text-white
-}
-
 /* BUDGET TILE AND BOX SHADOW EFFECT */
 
 .budget-tile {

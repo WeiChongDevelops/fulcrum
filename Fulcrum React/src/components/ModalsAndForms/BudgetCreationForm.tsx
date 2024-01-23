@@ -64,7 +64,7 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
     }
 
     return (
-        <div ref={formRef}  className="budget-form fixed flex flex-col justify-center items-center rounded-3xl">
+        <div ref={formRef}  className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
 
             <button className="close-form-or-modal-button ml-auto mb-auto" onClick={(e) => {
                 e.preventDefault()

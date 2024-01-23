@@ -81,8 +81,38 @@ body label {
   height: 7px;
 }
 
-.close-form-or-modal-button {
-  background-color: #3f4240;
-  padding: 0.6em 1.2em;
-  @apply rounded-xl
+.circle-button:hover {
+  cursor: pointer;
+}
+
+/* FORMS AND MODALS */
+
+.fulcrum-form {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  padding: 1%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0,0,0,0.8);
+  min-width: 600px;
+  @apply rounded-3xl
+}
+
+.fulcrum-modal {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  padding: 1%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0,0,0,0.8);
+  @apply rounded-3xl text-white
 }

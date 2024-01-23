@@ -57,13 +57,10 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
     }
 
     return (
-        <div ref={formRef} className="budget-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
-
-            <button className="close-form-or-modal-button ml-auto mb-auto" onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
+        <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
+            <FulcrumButton onClick={() => {
                 setBudgetFormVisibility(current => ({...current, isUpdateBudgetVisible: false}))
-            }}>Close</button>
+            }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="mb-6 font-bold text-4xl">Updating Budget for {oldBudgetBeingEdited.oldCategory}</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
