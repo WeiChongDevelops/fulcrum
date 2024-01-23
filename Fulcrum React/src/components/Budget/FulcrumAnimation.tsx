@@ -23,7 +23,7 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
         }
     })
 
-    function recalculateShadowDimensions() {
+    async function recalculateShadowDimensions() {
         setBowlWidth(window.innerWidth * 0.07)
         console.log(`Line angle is ${lineAngle}`)
         console.log(`X offset: ${-Math.abs(lineAngle)}`)
@@ -37,8 +37,8 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
         }
     }
 
-     function refreshShadows() {
-        recalculateShadowDimensions();
+     async function refreshShadows() {
+        await recalculateShadowDimensions();
         setShadowDimensions();
     }
 
@@ -66,7 +66,7 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
 
     useLayoutEffect(() => {
         refreshShadows();
-    }, [lineAngle]);
+    }, [lineAngle, bowlWidth]);
 
 
     useEffect( () => {
