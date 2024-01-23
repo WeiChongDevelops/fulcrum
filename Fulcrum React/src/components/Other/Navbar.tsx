@@ -51,7 +51,8 @@ export default function Navbar() {
                 <div className="flex-1 text-right">
                     <div className="flex justify-end items-center">
                         <p className="mx-2 text-black ">{email}</p>
-                        {email != "" && <FulcrumButton displayText="Log Out" onClick={logoutOnClick}/>}
+                        {email != "" ? <FulcrumButton displayText="Log Out" onClick={logoutOnClick}/>
+                            : <FulcrumButton displayText="Register" onClick={() => window.location.href = "/register"}/> }
                     </div>
                 </div>
             </nav>
