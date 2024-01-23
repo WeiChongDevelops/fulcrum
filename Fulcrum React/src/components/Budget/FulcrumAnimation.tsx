@@ -1,4 +1,4 @@
-import {useEffect, useLayoutEffect, useState} from "react";
+import {useEffect, useState} from "react";
 
 interface FulcrumAnimationProps {
     lineAngle: number;
@@ -23,8 +23,8 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
         }
     })
 
-    async function recalculateShadowDimensions() {
-        setBowlWidth(window.innerWidth * 0.07)
+    function recalculateShadowDimensions() {
+        setBowlWidth(window.innerWidth * 0.07);
         console.log(`Line angle is ${lineAngle}`)
         console.log(`X offset: ${-Math.abs(lineAngle)}`)
 
@@ -35,11 +35,6 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
         if (newOffset.leftEnd !== leverEndXOffset.leftEnd || newOffset.rightEnd !== leverEndXOffset.rightEnd) {
             setLeverEndXOffset(newOffset);
         }
-    }
-
-     async function refreshShadows() {
-        await recalculateShadowDimensions();
-        setShadowDimensions();
     }
 
     function setShadowDimensions() {
@@ -60,13 +55,21 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
     }
 
     useEffect( () => {
-        window.addEventListener("resize", refreshShadows)
-        return (() => window.removeEventListener("resize", refreshShadows))
-    },[])
+        function recalculateAnimationStyling() {
+            recalculateShadowDimensions();
+            setShadowDimensions();
+        }
+        window.addEventListener("resize", recalculateAnimationStyling)
+        return (() => window.removeEventListener("resize", recalculateAnimationStyling))
+    })
 
-    useLayoutEffect(() => {
-        refreshShadows();
-    }, [lineAngle, bowlWidth]);
+    useEffect(() => {
+        recalculateShadowDimensions();
+    }, [lineAngle]);
+
+    useEffect(() => {
+        setShadowDimensions();
+    }, [lineAngle, leverEndXOffset, bowlWidth]);
 
 
     useEffect( () => {
@@ -78,28 +81,22 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
     },[lineAngle]);
 
     return (
-            <div className="fulcrum-animation-container">
-                <div className="fulcrum-triangle-container">
-                    <img src={activeTriangleFulcrum} alt="Triangle fulcrum"/>
-                    <div className="contact-shadow"></div>
-                    <div className="bowl-shadow-right" style={bowlShadowDimensions.right}></div>
-                    <div className="bowl-shadow-left" style={bowlShadowDimensions.left}></div>
-                </div>
-                <div className="rotating-container" style={{transform: `rotate(${-lineAngle}deg) translateX(-50%)`}}>
-                    <div className={`rotating-text-label-container absolute flex flex-row justify-between w-[100%] text-[1.5em] bottom-8`}>
-                        <b className="text-black">Budget</b>
-                        <b className="text-black">Income</b>
-                    </div>
-
-                    <img src="/src/assets/fulcrum-animation/fulcrum-rectangle.png" className="fulcrum-rectangle"
-                         alt="Fulcrum lever"/>
-                    <img src="/src/assets/fulcrum-animation/fulcrum-basket.webp" alt="Fulcrum bowl"
-                         className="fulcrum-bowl-left"
-                         style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg)`}}/>
-                    <img src="/src/assets/fulcrum-animation/fulcrum-basket.webp" alt="Fulcrum bowl"
-                         className="fulcrum-bowl-right"
-                         style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg) `}}/>
-                </div>
+        <div className="fulcrum-animation-container">
+            <div className="fulcrum-triangle-container">
+                <img src={activeTriangleFulcrum} alt="Triangle fulcrum"/>
+                <div className="contact-shadow"></div>
+                <div className="bowl-shadow-right" style={bowlShadowDimensions.right}></div>
+                <div className="bowl-shadow-left" style={bowlShadowDimensions.left}></div>
             </div>
+            <div className="rotating-container" style={{transform: `rotate(${-lineAngle}deg) translateX(-50%)`}}>
+                <div className="rotating-text-label-container absolute flex flex-row justify-between w-[100%] text-[1.5em] bottom-8 ">
+                    <b className="text-black">Budget</b>
+                    <b className="text-black">Income</b>
+                </div>
+                <img src="/src/assets/fulcrum-animation/fulcrum-rectangle.png" className="fulcrum-rectangle" alt="Fulcrum lever"/>
+                <img src="/src/assets/fulcrum-animation/fulcrum-basket.webp" alt="Fulcrum bowl" className="fulcrum-bowl-left" style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg)`}}/>
+                <img src="/src/assets/fulcrum-animation/fulcrum-basket.webp" alt="Fulcrum bowl" className="fulcrum-bowl-right" style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg) `}}/>
+            </div>
+        </div>
     );
 }
