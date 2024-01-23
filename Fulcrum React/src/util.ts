@@ -777,10 +777,52 @@ function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity
     }
 }
 
-
 export function getLineAngle(percentageIncomeRemaining: number) {
     const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
     return functionalPercentageIncomeRemaining <= -100 ? 14.5 :
         functionalPercentageIncomeRemaining === 100 ? -14.5 :
             functionalPercentageIncomeRemaining / (100 / 14.5);
+}
+
+export async function handleTotalIncomeUpdating(newTotalIncome: number) {
+    try {
+        const response = await fetch("http://localhost:8080/api/updateTotalIncome", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                totalIncome: newTotalIncome
+            })
+        })
+        if (!response.ok) {
+            console.error(`HTTP error when updating total income - ${response.status}`)
+        } else {
+            console.log(await response.json());
+        }
+    } catch (e) {
+        console.error(`Failed to execute total income update - ${e}`)
+    }
+}
+
+export async function getTotalIncome() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getTotalIncome",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        )
+        if (!response.ok) {
+            console.error(`HTTP error when getting total income - ${response.status}`)
+        } else {
+            const totalIncome = await response.json();
+            console.log(totalIncome);
+            return(totalIncome.totalIncome);
+        }
+    } catch (e) {
+        console.error(`Failed to execute total income retrieval - ${e}`)
+    }
 }

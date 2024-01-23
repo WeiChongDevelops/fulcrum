@@ -5,7 +5,7 @@ import {
     dynamicallySizeBudgetNameDisplays,
     getAmountBudgeted,
     getBudgetList,
-    getGroupList, getLineAngle,
+    getGroupList, getLineAngle, getTotalIncome,
     GroupItemEntity,
     handleGroupDeletion,
     implementDynamicBackgroundHeight,
@@ -59,6 +59,7 @@ export default function Budget() {
             !userStatus["loggedIn"] && (window.location.href = "/login");
             setBudgetArray(await getBudgetList());
             setGroupArray(await getGroupList());
+            setTotalIncome(await getTotalIncome());
             await implementDynamicBackgroundHeight();
         }
         retrieveInitialData()
@@ -75,7 +76,6 @@ export default function Budget() {
 
     useEffect( () => {
         setAmountLeftToBudget(totalIncome - getAmountBudgeted(budgetArray))
-        console.log(`amountLeftToBudget: ${amountLeftToBudget}, totalIncome: ${totalIncome}`)
         setLineAngle(getLineAngle(amountLeftToBudget/totalIncome * 100))
     },[budgetArray, totalIncome])
 
@@ -99,19 +99,11 @@ export default function Budget() {
             .catch((error) => console.log("Deletion unsuccessful", error));
     }
 
-    // const percentageIncomeRemaining = amountLeftToBudget/totalIncome * 100;
-    // // Any disproportionately small or large numbers pulled into normal ranges for the animation
-    // const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
-    //
-    // const lineAngle = functionalPercentageIncomeRemaining <= -100 ? 14.5 :
-    //     functionalPercentageIncomeRemaining === 100 ? -14.5 :
-    //         functionalPercentageIncomeRemaining / (100/14.5);
-
 
     return (
         <>
             {!isLoading ?<div className="flex flex-row justify-center items-center">
-             <div className={`flex flex-col elementsBelowPopUpForm z-2
+             <div className={`flex flex-col items-center justify-center elementsBelowPopUpForm z-2
             ${((Object.values(budgetFormVisibility).includes(true))
                 || Object.values(budgetModalVisibility).includes(true)) && "blur"} px-16`}>
                 <TotalIncomeDisplay

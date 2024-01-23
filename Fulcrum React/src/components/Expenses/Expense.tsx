@@ -5,7 +5,7 @@ import {
     ExpenseItemEntity, ExpenseModalVisibility,
     getBudgetList,
     getExpenseList,
-    getGroupList, getLineAngle,
+    getGroupList,
     GroupItemEntity, handleExpenseDeletion,
     implementDynamicBackgroundHeight,
     PreviousExpenseBeingEdited,

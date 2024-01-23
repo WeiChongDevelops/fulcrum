@@ -1,8 +1,6 @@
 import {FormEvent, useEffect, useState} from "react";
 import {checkForUser} from "../../util.ts";
 import FulcrumButton from "../Other/FulcrumButton.tsx";
-import {Simulate} from "react-dom/test-utils";
-import submit = Simulate.submit;
 
 export default function Login() {
     const [email, setEmail] = useState("");

@@ -1,4 +1,4 @@
-import {formatDollarAmount} from "../../util.ts";
+import {formatDollarAmount, handleTotalIncomeUpdating} from "../../util.ts";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useState} from "react";
 
 interface TotalIncomeDisplayProps {
@@ -23,10 +23,11 @@ export default function TotalIncomeDisplay({ totalIncome, setTotalIncome, amount
         setIsEditing(false)
     }
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Needs to be stored in database as well - not implemented yet.
-        setTotalIncome(incomeFormData.income)
+        const newTotalIncomeData = incomeFormData.income;
+        setTotalIncome(newTotalIncomeData)
+        await handleTotalIncomeUpdating(newTotalIncomeData)
         setIsEditing(false);
     }
 

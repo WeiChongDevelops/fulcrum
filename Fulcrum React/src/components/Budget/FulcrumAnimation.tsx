@@ -65,8 +65,8 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
     },[])
 
     useLayoutEffect(() => {
-        refreshShadows()
-    }, [lineAngle, leverEndXOffset, bowlWidth]);
+        refreshShadows();
+    }, [lineAngle]);
 
 
     useEffect( () => {
