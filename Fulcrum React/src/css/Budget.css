@@ -50,7 +50,7 @@
 .budget-tile {
     width: 120px;
     height: 160px;
-    margin: 0 10px 5px 5px;
+    margin: 0 10px 10px 5px;
     box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 1);
 }
 
@@ -70,7 +70,7 @@
     background: transparent;
     border: black 2px dashed;
     color: black;
-    margin: 0 10px 5px 5px;
+    margin: 0 10px 10px 5px;
 }
 
 
@@ -82,7 +82,7 @@
 
 .group {
     width: 95vw;
-    box-shadow: 12px 10px 0 0 rgba(0, 0, 0, 1);
+    box-shadow: 12px 9px 0 0 rgba(0, 0, 0, 1);
 }
 
 /* ADD NEW GROUP BUTTON */
@@ -122,6 +122,7 @@
     border: none;
     background-color: transparent;
     cursor: pointer;
+    @apply rounded-3xl
 }
 
 .category-icon-selectable img {

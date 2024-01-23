@@ -34,6 +34,7 @@ export interface BudgetItemEntity {
     amount: number
     iconPath: string
     group: string
+    timestamp: Date | null;
 }
 
 export interface PreviousBudgetBeingEdited {
@@ -259,8 +260,8 @@ export async function getBudgetList() {
             console.error(`HTTP error - status: ${response.status}`);
         }
         const responseData = await response.json();
-        console.log(responseData);
-        return responseData
+        console.log(responseData.sort(budgetSort));
+        return responseData.sort(budgetSort)
 
     } catch (error) {
         console.error("Error:", error);
@@ -329,13 +330,6 @@ export async function handleBudgetCreation(setBudgetArray: Dispatch<SetStateActi
 }
 
 export async function handleBudgetUpdating(category: string | null, formData: BudgetUpdatingFormData) {
-    console.log({
-        "category": category,
-        "newCategoryName": formData.category,
-        "amount": formData.amount,
-        "group": formData.group,
-        "iconPath": formData.iconPath
-    })
     try {
         const response = await fetch("http://localhost:8080/api/updateBudget", {
             method: "PUT",
@@ -432,10 +426,11 @@ export function groupListAsOptions(groupArray: GroupItemEntity[]): SelectorOptio
 
 export function categoryListAsOptions(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
     return budgetArray.map( budgetItemEntity => {
+        const groupOfCategory = getGroupOfCategory(budgetArray, budgetItemEntity.category)
         return {
             value: budgetItemEntity.category,
             label: budgetItemEntity.category,
-            colour: getColourOfGroup(getGroupOfCategory(budgetArray, budgetItemEntity.category), groupArray)
+            colour: groupOfCategory ? getColourOfGroup(groupOfCategory, groupArray) : "#17423f"
         }
     })
 }
@@ -770,4 +765,14 @@ export function checkForOpenExpenseModalOrForm(expenseFormVisibility: ExpenseFor
 
 export function checkForOpenBudgetModalOrForm(budgetFormVisibility: BudgetFormVisibility, budgetModalVisibility: BudgetModalVisibility) {
     return Object.values(budgetFormVisibility).includes(true) || Object.values(budgetModalVisibility).includes(true)
+}
+
+function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) {
+    try {
+        return new Date(budgetItemA.timestamp!).getTime() - new Date(budgetItemB.timestamp!).getTime();
+    } catch (e) {
+        console.error("Failed to perform budget sort. Below is budgetItemA and B.")
+        console.log(budgetItemA);
+        console.log(budgetItemB);
+    }
 }

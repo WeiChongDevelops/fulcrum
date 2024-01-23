@@ -25,7 +25,7 @@ h1 {
 
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto #17423f;
 }
 
 @media (prefers-color-scheme: light) {
