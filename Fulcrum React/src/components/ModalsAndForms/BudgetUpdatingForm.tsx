@@ -5,7 +5,7 @@ import {
     BudgetItemEntity,
     BudgetUpdatingFormData, colourStyles,
     getBudgetList, getColourOfGroup, groupListAsOptions,
-    handleBudgetUpdating, GroupItemEntity,
+    handleBudgetUpdating, GroupItemEntity, handleInputChangeOnFormWithAmount,
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import BudgetIconSelector from "../Budget/Selectors/BudgetIconSelector.tsx";
@@ -38,7 +38,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
     };
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-        setFormData(currentFormData => ({ ...currentFormData, [e.target.name]: e.target.value }));
+        handleInputChangeOnFormWithAmount(e, setFormData);
     }
 
     function handleGroupInputChange(e: any) {
@@ -70,18 +70,21 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
                        value={formData.category}
                        name="category"
                        id="category"
-                       maxLength={18}/>
+                       maxLength={18}
+                       required/>
 
                 <label htmlFor="amount">Amount</label>
-                <input type="number"
-                       onChange={handleInputChange}
-                       value={formData.amount ?? ""}
-                       name="amount"
-                       id="amount"
-                       className="mb-3"
-                       min={0.01}
-                       step={0.01}
-                />
+                <div>
+                    <b className="relative left-6 text-black">$</b>
+                    <input type="text"
+                           onChange={handleInputChange}
+                           value={formData.amount ?? ""}
+                           name="amount"
+                           id="amount"
+                           className="mb-3"
+                           required
+                    />
+                </div>
 
                 <label htmlFor="group">Group</label>
                 <CreatableSelect

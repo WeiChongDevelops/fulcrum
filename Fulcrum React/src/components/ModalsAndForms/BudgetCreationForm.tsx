@@ -3,8 +3,15 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addIconSelectionFunctionality,
     BudgetFormVisibility,
-    BudgetItemEntity, capitalizeFirstLetter, colourStyles, getColourOfGroup, groupListAsOptions,
-    handleBudgetCreation, GroupItemEntity, BudgetCreationFormData
+    BudgetItemEntity,
+    capitalizeFirstLetter,
+    colourStyles,
+    getColourOfGroup,
+    groupListAsOptions,
+    handleBudgetCreation,
+    GroupItemEntity,
+    BudgetCreationFormData,
+    handleInputChangeOnFormWithAmount
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import "../../css/Budget.css"
@@ -37,9 +44,7 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
     }, []);
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-        setFormData( (currentFormData: BudgetCreationFormData) => {
-            return {...currentFormData, [e.target.name]: e.target.value}
-        });
+        handleInputChangeOnFormWithAmount(e, setFormData);
     }
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -66,13 +71,12 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
     return (
         <div ref={formRef}  className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
 
-            <button className="close-form-or-modal-button ml-auto mb-auto" onClick={(e) => {
-                e.preventDefault()
+            <FulcrumButton displayText={"Close"} backgroundColour={"grey"} optionalTailwind={"ml-auto mb-auto"} onClick={() => {
                 setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}))
-            }}>Close</button>
+            }}/>
 
             <p className="mb-6 font-bold text-4xl">New Budget Item</p>
-            <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
+            <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto ">
                 <label htmlFor="category">Category</label>
                 <input type="text"
                        onChange={handleInputChange}
@@ -83,17 +87,18 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
                        maxLength={18}
                        required/>
                 <label htmlFor="amount">Amount</label>
-                <input type="number"
-                       onChange={handleInputChange}
-                       value={formData.amount === 0 ? "" : formData.amount}
-                       name="amount"
-                       id="amount"
-                       className="mb-3"
-                       min={0.01}
-                       step={0.01}
-                       required/>
-                <label htmlFor="group">Group</label>
+                <div>
+                    <b className="relative left-6 text-black">$</b>
+                    <input type="text"
+                           onChange={handleInputChange}
+                           value={formData.amount === 0 ? "" : formData.amount}
+                           name="amount"
+                           id="amount"
+                           className="mb-3"
+                           required/>
+                </div>
 
+                <label htmlFor="group">Group</label>
                 <CreatableSelect
                     id="group"
                     name="group"

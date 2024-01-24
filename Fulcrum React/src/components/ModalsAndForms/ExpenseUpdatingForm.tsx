@@ -6,7 +6,7 @@ import {
     ExpenseItemEntity,
     SelectorOptionsFormattedData,
     colourStyles,
-    ExpenseUpdatingFormData, handleExpenseUpdating, getExpenseList
+    ExpenseUpdatingFormData, handleExpenseUpdating, getExpenseList, handleInputChangeOnFormWithAmount
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 
@@ -41,7 +41,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
     };
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-        setFormData(currentFormData => ({ ...currentFormData, [e.target.name]: e.target.value }));
+        handleInputChangeOnFormWithAmount(e, setFormData);
     }
 
     function handleCategoryInputChange(e: any) {
@@ -100,15 +100,18 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
                 />
 
                 <label htmlFor="amount">Amount</label>
-                <input type="number"
-                       onChange={handleInputChange}
-                       value={formData.amount ?? ""}
-                       name="amount"
-                       id="amount"
-                       className="mb-3"
-                       min={0.01}
-                       step={0.01}
-                />
+                <div>
+                    <b className="relative left-6 text-black">$</b>
+                    <input type="text"
+                           onChange={handleInputChange}
+                           value={formData.amount ?? ""}
+                           name="amount"
+                           id="amount"
+                           className="mb-3"
+                           required
+                    />
+                </div>
+
                 <FulcrumButton displayText="Update Budget" />
             </form>
         </div>

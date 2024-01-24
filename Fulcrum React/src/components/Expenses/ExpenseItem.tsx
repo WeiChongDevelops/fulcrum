@@ -4,7 +4,7 @@ import {
     ExpenseFormVisibility,
     ExpenseItemEntity,
     ExpenseModalVisibility,
-    formatDollarAmount,
+    formatDollarAmountStatic,
     PreviousExpenseBeingEdited
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
@@ -67,7 +67,7 @@ export default function ExpenseItem( { expenseId,
                 </div>
             </div>
             <div className="flex flex-row items-center">
-                <b className="text-xl">${formatDollarAmount(amount)}</b>
+                <b className="text-xl">${formatDollarAmountStatic(amount)}</b>
                 <div className="flex flex-row items-center ml-2">
                     <button className="circle-button rounded-full p-1" onClick={handleEditClick}>
                         <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-6 h-6" />

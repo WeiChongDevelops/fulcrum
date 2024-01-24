@@ -1,6 +1,6 @@
 import {
     BudgetItemEntity, ExpenseFormVisibility,
-    ExpenseItemEntity, ExpenseModalVisibility, formatDate, formatDollarAmount, getGroupList,
+    ExpenseItemEntity, ExpenseModalVisibility, formatDate, formatDollarAmountStatic, getGroupList,
     GroupItemEntity, PreviousExpenseBeingEdited
 } from "../../util.ts";
 import {Dispatch, SetStateAction, useEffect} from "react";
@@ -60,7 +60,7 @@ export default function ExpenseMonthGroup({ date,
             <div className="flex flex-row justify-between items-center text-black relative">
                 <p className="text-4xl font-bold">{expenseDayGroupDate === dateStringToday ? "Today" : expenseDayGroupDate === dateString ? "Yesterday" : formatDate(new Date(date))}</p>
                 <div className="dotted-line"></div>
-                <p className="text-4xl font-bold">${formatDollarAmount(dayTotal)}</p>
+                <p className="text-4xl font-bold">${formatDollarAmountStatic(dayTotal)}</p>
             </div>
             {filteredExpenseArray.length > 0 && <ExpenseList
                 filteredExpenseArray={filteredExpenseArray}

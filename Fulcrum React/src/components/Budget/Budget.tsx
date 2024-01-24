@@ -12,7 +12,7 @@ import {
     PreviousBudgetBeingEdited, PreviousGroupBeingEdited,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
-import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
+import IncomeDisplay from "./IncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
 import AddNewGroupButton from "./AddNewGroupButton.tsx";
@@ -106,7 +106,7 @@ export default function Budget() {
              <div className={`flex flex-col items-center elementsBelowPopUpForm z-2
             ${((Object.values(budgetFormVisibility).includes(true))
                 || Object.values(budgetModalVisibility).includes(true)) && "blur"} px-16`}>
-                <TotalIncomeDisplay
+                <IncomeDisplay
                     totalIncome={totalIncome}
                     setTotalIncome={setTotalIncome}
                     amountLeftToBudget={amountLeftToBudget}/>

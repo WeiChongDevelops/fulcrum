@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction} from "react";
+import {ChangeEvent, Dispatch, SetStateAction} from "react";
 
 
 //  EXPENSE ENTITIES //
@@ -639,12 +639,21 @@ export function getAmountBudgeted(budgetArray: BudgetItemEntity[]) {
     ), 0)
 }
 
-export function formatDollarAmount(number: number) {
+export function formatDollarAmountStatic(amount: number) {
     return new Intl.NumberFormat('en-US', {
         style: 'decimal',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
-    }).format(number);
+    }).format(amount);
+}
+
+export function formatDollarAmountDynamic(amount: string) {
+    const cleanedValue = amount.replace(/[^\d.]/g, "");
+    const splitValue = cleanedValue.split(".");
+    if (splitValue.length >= 2 && splitValue[1].length > 2) {
+        splitValue[1] = splitValue[1].substring(0, 2);
+    }
+    return splitValue.join(".");
 }
 
 function getOrdinalSuffix(day: number) {
@@ -824,5 +833,25 @@ export async function getTotalIncome() {
         }
     } catch (e) {
         console.error(`Failed to execute total income retrieval - ${e}`)
+    }
+}
+
+export function handleInputChangeOnFormWithAmount(e: ChangeEvent<HTMLInputElement>, setFormData: Dispatch<SetStateAction<any>>) {
+    let newFormValue: string;
+    if (e.target.name === "amount") {
+        if (e.target.value === "") {
+            newFormValue = "";
+        } else {
+            console.log("passed")
+            newFormValue = formatDollarAmountDynamic(e.target.value);
+        }
+    } else {
+        console.log("not amount")
+        newFormValue = e.target.value;
+    }
+    if (e.target.name != "amount" || (e.target.name === "amount" && parseInt(e.target.value) >=0 && parseInt(e.target.value) <= 9999999.99)) {
+        setFormData((currentFormData: BudgetCreationFormData | BudgetUpdatingFormData | ExpenseCreationFormData | ExpenseUpdatingFormData) => {
+            return {...currentFormData, [e.target.name]: newFormValue}
+        });
     }
 }

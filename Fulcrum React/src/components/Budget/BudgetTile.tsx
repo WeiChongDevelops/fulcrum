@@ -1,7 +1,7 @@
 import '/src/css/Budget.css';
 import {
     BudgetFormVisibility,
-    BudgetModalVisibility, formatDollarAmount,
+    BudgetModalVisibility, formatDollarAmountStatic,
     PreviousBudgetBeingEdited
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
@@ -55,7 +55,7 @@ export default function BudgetTile({ category,
             <div className="budget-name-container">
                 <b className="budget-name">{category}</b>
             </div>
-            <b>${formatDollarAmount(amount)}</b>
+            <b>${formatDollarAmountStatic(amount)}</b>
             <div className="flex flex-row">
                 <button className="circle-button rounded-full p-1" onClick={handleEditClick}>
                     <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-5 h-5" />

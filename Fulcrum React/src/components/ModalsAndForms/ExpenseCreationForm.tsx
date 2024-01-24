@@ -5,7 +5,7 @@ import {
     ExpenseCreationFormData,
     ExpenseItemEntity,
     SelectorOptionsFormattedData,
-    handleExpenseCreation, colourStyles
+    handleExpenseCreation, colourStyles, handleInputChangeOnFormWithAmount
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import { v4 as uuid } from "uuid";
@@ -41,9 +41,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
     }, []);
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-        setFormData( (currentFormData: ExpenseCreationFormData) => {
-            return {...currentFormData, [e.target.name]: e.target.value}
-        });
+        handleInputChangeOnFormWithAmount(e, setFormData);
     }
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -110,15 +108,16 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                     required
                 />
                 <label htmlFor="amount">Amount</label>
-                <input type="number"
-                       onChange={handleInputChange}
-                       value={formData.amount === 0 ? "" : formData.amount}
-                       name="amount"
-                       id="amount"
-                       className="mb-3 text-black"
-                       min={0.01}
-                       step={0.01}
-                       required/>
+                <div>
+                    <b className="relative left-6 text-black">$</b>
+                    <input type="text"
+                           onChange={handleInputChange}
+                           value={formData.amount === 0 ? "" : formData.amount}
+                           name="amount"
+                           id="amount"
+                           className="mb-3 text-black"
+                           required/>
+                </div>
 
                 <FulcrumButton displayText="Insert Expense"/>
             </form>

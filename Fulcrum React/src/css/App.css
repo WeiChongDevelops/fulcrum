@@ -103,6 +103,10 @@ body label {
   @apply rounded-3xl
 }
 
+.fulcrum-form input {
+  text-align: center;
+}
+
 .fulcrum-modal {
   position: fixed;
   display: flex;
