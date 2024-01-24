@@ -61,7 +61,7 @@ export default function BudgetModalsAndForms({ budgetFormVisibility,
                                                                          setGroupArray={setGroupArray}
                                                                          setBudgetFormVisibility={setBudgetFormVisibility}/>}
         {modalFormVisibility.isDeleteOptionsModalVisible && <TwoOptionModal
-            title={`Deleting Group '${groupToDelete}'`}
+            title={`Would you like to keep the categories inside group '${groupToDelete}'?`}
             setModalFormVisibility={setModalFormVisibility}
             optionOneText="Keep Categories (Move to Miscellaneous)"
             optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
@@ -71,7 +71,7 @@ export default function BudgetModalsAndForms({ budgetFormVisibility,
                     {...current, isDeleteOptionsModalVisible: false, isConfirmGroupDestructionModalVisible: true}
                 ));
             }}
-            setVisible="setIsDeleteOptionsModalVisible"
+            isVisible="isDeleteOptionsModalVisible"
         />}
         {modalFormVisibility.isConfirmGroupDestructionModalVisible && <TwoOptionModal
             title="Are you sure? This will delete all expense entries for this budget category."
@@ -80,7 +80,7 @@ export default function BudgetModalsAndForms({ budgetFormVisibility,
             optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
             optionTwoText="Confirm"
             optionTwoFunction={() => runGroupDeletionWithUserPreference(false)}
-            setVisible="setIsConfirmGroupDestructionModalVisible"/>
+            isVisible="isConfirmGroupDestructionModalVisible"/>
         }
         {modalFormVisibility.isConfirmCategoryDestructionModalVisible && <TwoOptionModal
             title="Are you sure? This will delete all expense entries for this budget category."
@@ -100,7 +100,7 @@ export default function BudgetModalsAndForms({ budgetFormVisibility,
                     .then((response) => console.log("Deletion successful", response))
                     .catch((error) => console.log("Deletion unsuccessful", error));
             }}
-            setVisible="setIsConfirmCategoryDestructionModalVisible"/>
+            isVisible="isConfirmCategoryDestructionModalVisible"/>
         }
     </div>);
 }

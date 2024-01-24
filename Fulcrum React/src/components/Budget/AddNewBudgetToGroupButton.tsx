@@ -16,7 +16,7 @@ export default function AddNewBudgetToGroupButton({ setGroupNameOfNewItem, group
     }
 
     return (
-        <button className="create-budget-button" onClick={handleClick}>
+        <button className="create-budget-button rounded-xl" onClick={handleClick}>
             <b>+</b>
         </button>
     )

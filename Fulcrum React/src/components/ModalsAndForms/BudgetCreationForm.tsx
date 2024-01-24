@@ -3,8 +3,15 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addIconSelectionFunctionality,
     BudgetFormVisibility,
-    BudgetItemEntity, capitalizeFirstLetter, colourStyles, getColourOfGroup, groupListAsOptions,
-    handleBudgetCreation, GroupItemEntity
+    BudgetItemEntity,
+    capitalizeFirstLetter,
+    colourStyles,
+    getColourOfGroup,
+    groupListAsOptions,
+    handleBudgetCreation,
+    GroupItemEntity,
+    BudgetCreationFormData,
+    handleInputChangeOnFormWithAmount
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import "../../css/Budget.css"
@@ -19,7 +26,7 @@ interface BudgetCreationFormProps {
 
 export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNameOfNewItem, setBudgetFormVisibility }: BudgetCreationFormProps) {
 
-    const [formData, setFormData] = useState<BudgetItemEntity>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
+    const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     const formRef = useRef<HTMLDivElement>(null);
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
@@ -37,9 +44,7 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
     }, []);
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-        setFormData( (currentFormData: BudgetItemEntity) => {
-            return {...currentFormData, [e.target.name]: e.target.value}
-        });
+        handleInputChangeOnFormWithAmount(e, setFormData);
     }
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -48,7 +53,8 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
             category: formData.category,
             amount: formData.amount ? parseFloat(String(formData.amount)) : 0,
             iconPath: formData.iconPath != "" ? formData.iconPath : "/src/assets/category-icons/category-default-icon.svg",
-            group: formData.group ? formData.group : "Miscellaneous"
+            group: formData.group ? formData.group : "Miscellaneous",
+            timestamp: new Date()
         }
 
         setBudgetArray(current => [...current, newBudgetItem])
@@ -59,19 +65,18 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
     }
 
     function handleGroupInputChange(e: any) {
-        setFormData((currentFormData: BudgetItemEntity) => ({ ...currentFormData, group: e.value }));
+        setFormData((currentFormData: BudgetCreationFormData) => ({ ...currentFormData, group: e.value }));
     }
 
     return (
-        <div ref={formRef}  className="budget-form fixed flex flex-col justify-center items-center rounded-3xl">
+        <div ref={formRef}  className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
 
-            <button className="ml-auto mb-auto" onClick={(e) => {
-                e.preventDefault()
+            <FulcrumButton displayText={"Close"} backgroundColour={"grey"} optionalTailwind={"ml-auto mb-auto"} onClick={() => {
                 setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}))
-            }}>Close</button>
+            }}/>
 
             <p className="mb-6 font-bold text-4xl">New Budget Item</p>
-            <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
+            <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto ">
                 <label htmlFor="category">Category</label>
                 <input type="text"
                        onChange={handleInputChange}
@@ -82,17 +87,18 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
                        maxLength={18}
                        required/>
                 <label htmlFor="amount">Amount</label>
-                <input type="number"
-                       onChange={handleInputChange}
-                       value={formData.amount === 0 ? "" : formData.amount}
-                       name="amount"
-                       id="amount"
-                       className="mb-3"
-                       min={0.01}
-                       step={0.01}
-                       required/>
-                <label htmlFor="group">Group</label>
+                <div>
+                    <b className="relative left-6 text-black">$</b>
+                    <input type="text"
+                           onChange={handleInputChange}
+                           value={formData.amount === 0 ? "" : formData.amount}
+                           name="amount"
+                           id="amount"
+                           className="mb-3"
+                           required/>
+                </div>
 
+                <label htmlFor="group">Group</label>
                 <CreatableSelect
                     id="group"
                     name="group"

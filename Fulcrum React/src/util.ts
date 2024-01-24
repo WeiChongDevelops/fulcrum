@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction} from "react";
+import {ChangeEvent, Dispatch, SetStateAction} from "react";
 
 
 //  EXPENSE ENTITIES //
@@ -34,6 +34,7 @@ export interface BudgetItemEntity {
     amount: number
     iconPath: string
     group: string
+    timestamp: Date | null;
 }
 
 export interface PreviousBudgetBeingEdited {
@@ -134,11 +135,8 @@ export const colourStyles = {
 };
 
 export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]) {
-    const groupOption = groupArray.find(groupItemEntity => groupItemEntity.group === groupName);
-    if (groupOption) {
-        return groupOption.colour;
-    }
-    return null;
+    const groupOption = groupArray.filter(groupItemEntity => groupItemEntity.group === groupName)[0];
+    return groupOption.colour ? groupOption.colour : null;
 }
 
 export function capitalizeFirstLetter(string: string) {
@@ -262,8 +260,8 @@ export async function getBudgetList() {
             console.error(`HTTP error - status: ${response.status}`);
         }
         const responseData = await response.json();
-        console.log(responseData);
-        return responseData
+        console.log(responseData.sort(budgetSort));
+        return responseData.sort(budgetSort)
 
     } catch (error) {
         console.error("Error:", error);
@@ -332,13 +330,6 @@ export async function handleBudgetCreation(setBudgetArray: Dispatch<SetStateActi
 }
 
 export async function handleBudgetUpdating(category: string | null, formData: BudgetUpdatingFormData) {
-    console.log({
-        "category": category,
-        "newCategoryName": formData.category,
-        "amount": formData.amount,
-        "group": formData.group,
-        "iconPath": formData.iconPath
-    })
     try {
         const response = await fetch("http://localhost:8080/api/updateBudget", {
             method: "PUT",
@@ -435,10 +426,11 @@ export function groupListAsOptions(groupArray: GroupItemEntity[]): SelectorOptio
 
 export function categoryListAsOptions(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
     return budgetArray.map( budgetItemEntity => {
+        const groupOfCategory = getGroupOfCategory(budgetArray, budgetItemEntity.category)
         return {
             value: budgetItemEntity.category,
             label: budgetItemEntity.category,
-            colour: getColourOfGroup(getGroupOfCategory(budgetArray, budgetItemEntity.category), groupArray)
+            colour: groupOfCategory ? getColourOfGroup(groupOfCategory, groupArray) : "#17423f"
         }
     })
 }
@@ -647,12 +639,21 @@ export function getAmountBudgeted(budgetArray: BudgetItemEntity[]) {
     ), 0)
 }
 
-export function formatDollarAmount(number: number) {
+export function formatDollarAmountStatic(amount: number) {
     return new Intl.NumberFormat('en-US', {
         style: 'decimal',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
-    }).format(number);
+    }).format(amount);
+}
+
+export function formatDollarAmountDynamic(amount: string) {
+    const cleanedValue = amount.replace(/[^\d.]/g, "");
+    const splitValue = cleanedValue.split(".");
+    if (splitValue.length >= 2 && splitValue[1].length > 2) {
+        splitValue[1] = splitValue[1].substring(0, 2);
+    }
+    return splitValue.join(".");
 }
 
 function getOrdinalSuffix(day: number) {
@@ -676,7 +677,7 @@ export function formatDate(date: Date) {
     return `${formattedDayOfWeek}, ${formattedDayOfMonth}${ordinalSuffix} ${formattedMonth} ${formattedYear}`
 }
 
-export function implementDynamicBackgroundHeight() {
+export async function implementDynamicBackgroundHeight() {
     function adjustBackgroundHeight() {
         const bodyHeight = document.body.scrollHeight;
         const backgroundDiv: HTMLDivElement = document.querySelector('.background')!;
@@ -713,6 +714,10 @@ export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: st
         return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group
     } catch (e) {
         console.log(`Failed to retrieve the group of category ${category}. Temporarily assuming Miscellaneous.`)
+        console.log("Below is index 0:")
+        console.log(budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0])
+        console.log("Below is the budgetArray:")
+        console.log(budgetArray)
         return null;
     }
 }
@@ -760,5 +765,95 @@ export async function checkForUser() {
         }
     } catch (error) {
         console.error("Error:", error);
+    }
+}
+
+export function checkForOpenExpenseModalOrForm(expenseFormVisibility: ExpenseFormVisibility, expenseModalVisibility: ExpenseModalVisibility) {
+    return Object.values(expenseFormVisibility).includes(true) || Object.values(expenseModalVisibility).includes(true)
+}
+
+export function checkForOpenBudgetModalOrForm(budgetFormVisibility: BudgetFormVisibility, budgetModalVisibility: BudgetModalVisibility) {
+    return Object.values(budgetFormVisibility).includes(true) || Object.values(budgetModalVisibility).includes(true)
+}
+
+function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) {
+    try {
+        return new Date(budgetItemA.timestamp!).getTime() - new Date(budgetItemB.timestamp!).getTime();
+    } catch (e) {
+        console.error("Failed to perform budget sort. Below is budgetItemA and B.")
+        console.log(budgetItemA);
+        console.log(budgetItemB);
+    }
+}
+
+export function getLineAngle(percentageIncomeRemaining: number) {
+    console.log(`Received percentageIncomeRemaining: ${percentageIncomeRemaining}`)
+    const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
+    console.log(`Received functionalPercentageIncomeRemaining: ${functionalPercentageIncomeRemaining}`)
+    return functionalPercentageIncomeRemaining <= -100 ? 14.5 :
+        functionalPercentageIncomeRemaining === 100 ? -14.5 :
+            functionalPercentageIncomeRemaining / (-100 / 14.5);
+}
+
+export async function handleTotalIncomeUpdating(newTotalIncome: number) {
+    try {
+        const response = await fetch("http://localhost:8080/api/updateTotalIncome", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                totalIncome: newTotalIncome
+            })
+        })
+        if (!response.ok) {
+            console.error(`HTTP error when updating total income - ${response.status}`)
+        } else {
+            console.log(await response.json());
+        }
+    } catch (e) {
+        console.error(`Failed to execute total income update - ${e}`)
+    }
+}
+
+export async function getTotalIncome() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getTotalIncome",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        )
+        if (!response.ok) {
+            console.error(`HTTP error when getting total income - ${response.status}`)
+        } else {
+            const totalIncome = await response.json();
+            console.log(totalIncome);
+            return(totalIncome.totalIncome);
+        }
+    } catch (e) {
+        console.error(`Failed to execute total income retrieval - ${e}`)
+    }
+}
+
+export function handleInputChangeOnFormWithAmount(e: ChangeEvent<HTMLInputElement>, setFormData: Dispatch<SetStateAction<any>>) {
+    let newFormValue: string;
+    if (e.target.name === "amount") {
+        if (e.target.value === "") {
+            newFormValue = "";
+        } else {
+            console.log("passed")
+            newFormValue = formatDollarAmountDynamic(e.target.value);
+        }
+    } else {
+        console.log("not amount")
+        newFormValue = e.target.value;
+    }
+    if (e.target.name != "amount" || (e.target.name === "amount" && parseInt(e.target.value) >=0 && parseInt(e.target.value) <= 9999999.99)) {
+        setFormData((currentFormData: BudgetCreationFormData | BudgetUpdatingFormData | ExpenseCreationFormData | ExpenseUpdatingFormData) => {
+            return {...currentFormData, [e.target.name]: newFormValue}
+        });
     }
 }

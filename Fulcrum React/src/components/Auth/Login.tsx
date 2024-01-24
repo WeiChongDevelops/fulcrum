@@ -1,5 +1,6 @@
 import {FormEvent, useEffect, useState} from "react";
 import {checkForUser} from "../../util.ts";
+import FulcrumButton from "../Other/FulcrumButton.tsx";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -59,16 +60,16 @@ export default function Login() {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
-            <form onSubmit={handleSubmit} className="p-8 bg-white rounded shadow-md">
-                <h2 className="text-lg text-black font-bold mb-6">Log Into Fulcrum</h2>
+        <div className="flex flex-col items-center justify-center h-screen relative bottom-36">
+            <form onSubmit={handleSubmit} className="auth-form w-96 p-8 bg-white rounded shadow-md">
+                <h2 className="text-lg text-black font-bold mb-6">Sign In.</h2>
                 <div className="mb-4">
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
                     <input
                         type="email"
                         id="email"
-                        className="mt-1 block w-full px-3 py-2 text-black bg-white border border-gray-300 rounded-md text-lg shadow-sm placeholder-gray-400
-            focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                        className="mt-1 block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md text-lg shadow-sm placeholder-gray-400
+            focus:outline-none focus:border-[#17423f] focus:ring-1 focus:ring-[#17423f]"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -79,16 +80,14 @@ export default function Login() {
                     <input
                         type="password"
                         id="password"
-                        className="mt-1 block w-full px-3 py-2 text-black bg-white border border-gray-300 rounded-md text-lg shadow-sm placeholder-gray-400
-            focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                        className="mt-1 block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md text-lg shadow-sm placeholder-gray-400
+            focus:outline-none focus:border-[#17423f] focus:ring-1 focus:ring-[#17423f]"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
                 </div>
-                <button type="submit" className="w-full px-4 py-2 text-lg font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700">
-                    Login
-                </button>
+                <FulcrumButton displayText="Login" onClick={()=>{}}/>
             </form>
             <a href="/register" className="mt-6 text-black underline">Don't have an account? Register here.</a>
         </div>

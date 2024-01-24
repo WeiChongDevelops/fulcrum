@@ -59,14 +59,12 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
     }
 
     return (
-        <div ref={formRef} className="budget-form fixed flex flex-col justify-center items-center rounded-3xl">
-
-            <button className="ml-auto mb-auto" onClick={(e) => {
-                e.preventDefault();
+        <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
+            <FulcrumButton onClick={() => {
                 setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}))
-            }}>Close</button>
+            }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
-            <p className="mb-6 font-bold text-4xl">New Group</p>
+            <p className="close-form-or-modal-button mb-6 font-bold text-4xl">New Group</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="Group Name">Group Name</label>
                 <input type="text"

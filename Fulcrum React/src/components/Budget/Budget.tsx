@@ -1,22 +1,23 @@
 import {
     BudgetFormVisibility,
     BudgetItemEntity,
-    BudgetModalVisibility, checkForUser,
+    BudgetModalVisibility, checkForOpenBudgetModalOrForm, checkForUser,
     dynamicallySizeBudgetNameDisplays,
     getAmountBudgeted,
     getBudgetList,
-    getGroupList,
+    getGroupList, getLineAngle, getTotalIncome,
     GroupItemEntity,
     handleGroupDeletion,
     implementDynamicBackgroundHeight,
     PreviousBudgetBeingEdited, PreviousGroupBeingEdited,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
-import TotalIncomeDisplay from "./TotalIncomeDisplay.tsx";
+import IncomeDisplay from "./IncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
 import AddNewGroupButton from "./AddNewGroupButton.tsx";
 import BudgetModalsAndForms from "../ModalsAndForms/BudgetModalsAndForms.tsx";
+import Loader from "../Other/Loader.tsx";
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -46,23 +47,25 @@ export default function Budget() {
 
     const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
 
+    const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [lineAngle, setLineAngle] = useState(0);
+
     useEffect(() => {
-        checkForUser()
-            .then(userStatus => {
-                if (userStatus["loggedIn"]) {
-                    console.log("User logged in.");
-                } else {
-                    console.log("User not logged in, login redirect initiated.");
-                    window.location.href = "/login";
-                }
+        async function retrieveInitialData() {
+            const userStatus = await checkForUser();
+            !userStatus["loggedIn"] && (window.location.href = "/login");
+            setBudgetArray(await getBudgetList());
+            setGroupArray(await getGroupList());
+            setTotalIncome(await getTotalIncome());
+            await implementDynamicBackgroundHeight();
+        }
+        retrieveInitialData()
+            .then(() => {
+                setIsLoading(false)
             })
-        getBudgetList()
-            .then(budgetList => {
-                setBudgetArray(budgetList.sort())
-            })
-        getGroupList()
-            .then( results => setGroupArray(results))
-            .then(implementDynamicBackgroundHeight)
     }, []);
 
     useEffect( () => {
@@ -75,12 +78,18 @@ export default function Budget() {
         setAmountLeftToBudget(totalIncome - getAmountBudgeted(budgetArray))
     },[budgetArray, totalIncome])
 
+    useEffect(() => {
+        setLineAngle(getLineAngle(amountLeftToBudget/totalIncome * 100))
+    }, [amountLeftToBudget, totalIncome]);
+
     useEffect( () => {
         const formCategoryInput = document.getElementById("category")
         const formGroupInput = document.getElementById("group")
         formCategoryInput ? formCategoryInput.focus() : formGroupInput?.focus();
         console.log(budgetFormVisibility);
-    }, [budgetFormVisibility])
+        console.log(budgetModalVisibility);
+        setIsBudgetFormOrModalOpen(checkForOpenBudgetModalOrForm(budgetFormVisibility, budgetModalVisibility))
+    }, [budgetFormVisibility, budgetModalVisibility])
 
     function runGroupDeletionWithUserPreference(keepContainedBudgets: boolean) {
         setBudgetModalVisibility(current => ({...current,
@@ -93,20 +102,14 @@ export default function Budget() {
             .catch((error) => console.log("Deletion unsuccessful", error));
     }
 
-    const percentageIncomeRemaining = amountLeftToBudget/totalIncome * 100;
-    // Any disproportionately small or large numbers pulled into normal ranges for the animation
-    const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
-
-    const lineAngle = functionalPercentageIncomeRemaining <= -100 ? 14.5 :
-        functionalPercentageIncomeRemaining === 100 ? -14.5 :
-            functionalPercentageIncomeRemaining / (100/14.5);
 
     return (
-        <div className="flex flex-row justify-center items-center">
-            <div className={`flex flex-col elementsBelowPopUpForm z-2
-            ${((Object.values(budgetFormVisibility).includes(true)) 
+        <>
+            {!isLoading ?<div className="flex flex-row justify-center items-center">
+             <div className={`flex flex-col items-center elementsBelowPopUpForm z-2
+            ${((Object.values(budgetFormVisibility).includes(true))
                 || Object.values(budgetModalVisibility).includes(true)) && "blur"} px-16`}>
-                <TotalIncomeDisplay
+                <IncomeDisplay
                     totalIncome={totalIncome}
                     setTotalIncome={setTotalIncome}
                     amountLeftToBudget={amountLeftToBudget}/>
@@ -129,20 +132,24 @@ export default function Budget() {
                 <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
             </div>
 
-            <BudgetModalsAndForms budgetFormVisibility={budgetFormVisibility}
-                                  setBudgetArray={setBudgetArray}
-                                  groupArray={groupArray}
-                                  groupNameOfNewItem={groupNameOfNewItem}
-                                  setBudgetFormVisibility={setBudgetFormVisibility}
-                                  oldBudgetBeingEdited={oldBudgetBeingEdited}
-                                  setGroupArray={setGroupArray}
-                                  oldGroupBeingEdited={oldGroupBeingEdited}
-                                  groupToDelete={groupToDelete}
-                                  categoryToDelete={categoryToDelete}
-                                  runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
-                                  modalFormVisibility={budgetModalVisibility}
-                                  setModalFormVisibility={setBudgetModalVisibility}/>
+            {isBudgetFormOrModalOpen && <div className="absolute w-screen h-screen bg-transparent z-3"></div>}
 
-        </div>
+                <div className="z-4">
+                <BudgetModalsAndForms budgetFormVisibility={budgetFormVisibility}
+            setBudgetArray={setBudgetArray}
+            groupArray={groupArray}
+            groupNameOfNewItem={groupNameOfNewItem}
+            setBudgetFormVisibility={setBudgetFormVisibility}
+            oldBudgetBeingEdited={oldBudgetBeingEdited}
+            setGroupArray={setGroupArray}
+            oldGroupBeingEdited={oldGroupBeingEdited}
+            groupToDelete={groupToDelete}
+            categoryToDelete={categoryToDelete}
+            runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
+            modalFormVisibility={budgetModalVisibility}
+            setModalFormVisibility={setBudgetModalVisibility}/>
+            </div>
+            </div> : <Loader isLoading={isLoading}/>}
+        </>
     );
 }

@@ -61,3 +61,62 @@ body input {
 body label {
   @apply font-bold;
 }
+
+.auth-form {
+  position: relative;
+}
+
+.auth-form::before,
+.auth-form::after {
+  position: absolute;
+  content: "";
+  background-color: #17423f;
+  z-index: 200;
+}
+
+.auth-form::before {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 7px;
+}
+
+.circle-button:hover {
+  cursor: pointer;
+}
+
+/* FORMS AND MODALS */
+
+.fulcrum-form {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  padding: 1%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0,0,0,0.8);
+  min-width: 600px;
+  @apply rounded-3xl
+}
+
+.fulcrum-form input {
+  text-align: center;
+}
+
+.fulcrum-modal {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  padding: 1%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0,0,0,0.8);
+  @apply rounded-3xl text-white
+}

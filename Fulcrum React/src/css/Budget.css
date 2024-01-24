@@ -1,16 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 
-/* EDIT-DELETE BUTTONS */
-
-.circle-button {
-    transition: background-color 0.3s ease;
-}
-
-.circle-button:hover {
-    background-color: #E8E8E8;
-    cursor: pointer;
-}
 
 /* BACKGROUND BLUR FOCUS EFFECT*/
 
@@ -22,45 +12,12 @@
     filter: blur(5px);
 }
 
-
-/* BUDGET FORMS */
-
-.budget-form {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    z-index: 3;
-    top: 50%;
-    left: 50%;
-    padding: 1%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0,0,0,0.8);
-    @apply rounded-3xl
-}
-
-
-.budget-modal {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    top: 50%;
-    left: 50%;
-    padding: 1%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0,0,0,0.8);
-    @apply rounded-3xl text-white
-}
-
 /* BUDGET TILE AND BOX SHADOW EFFECT */
 
 .budget-tile {
     width: 120px;
     height: 160px;
-    margin: 0 10px 5px 5px;
+    margin: 0 10px 10px 5px;
     box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 1);
 }
 
@@ -80,7 +37,7 @@
     background: transparent;
     border: black 2px dashed;
     color: black;
-    margin: 0 10px 5px 5px;
+    margin: 0 10px 10px 5px;
 }
 
 
@@ -92,7 +49,7 @@
 
 .group {
     width: 95vw;
-    box-shadow: 12px 10px 0 0 rgba(0, 0, 0, 1);
+    box-shadow: 12px 9px 0 0 rgba(0, 0, 0, 1);
 }
 
 /* ADD NEW GROUP BUTTON */
@@ -132,6 +89,7 @@
     border: none;
     background-color: transparent;
     cursor: pointer;
+    @apply rounded-3xl
 }
 
 .category-icon-selectable img {
@@ -253,6 +211,19 @@
     left: 50%;
     transform-origin: 0 50%;
     transition: all ease-out 500ms;
+}
+
+@keyframes textFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.rotating-text-label-container {
+    animation: textFadeIn 1350ms ease forwards;
 }
 
 .fulcrum-bowl-left {

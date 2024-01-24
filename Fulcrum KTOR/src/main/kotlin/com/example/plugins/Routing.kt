@@ -25,6 +25,7 @@ import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.Identity.decode
 import kotlinx.serialization.Serializable
 import org.apache.hc.core5.http.HttpHost
 
@@ -257,6 +258,37 @@ fun Application.configureRouting() {
             }
         }
 
+        // TOTAL INCOME API //
+
+        get("/api/getTotalIncome") {
+            try {
+                val totalIncome = supabase.postgrest["total_income"].select(columns = Columns.list("totalIncome")) {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }.decodeSingle<TotalIncomeResponse>()
+                call.respond(HttpStatusCode.OK, totalIncome)
+            } catch (e: UnauthorizedRestException) {
+                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
+            } catch (e: Exception) {
+                call.application.log.error("Error while reading total income", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Failed to retrieve total income."))
+            }
+        }
+
+        put("/api/updateTotalIncome") {
+            val incomeUpdateRequest = call.receive<TotalIncomeUpdateRequestReceived>()
+            try {
+                val incomeUpdateRequestSent = supabase.postgrest["total_income"].update ({
+                    set("totalIncome", incomeUpdateRequest.totalIncome)
+                }
+                ){
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                call.respond(HttpStatusCode.OK, SuccessResponseSent("Updated total income to " + incomeUpdateRequest.totalIncome.toString()))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Failed to update total income."))
+            }
+        }
+
         // GROUP API //
 
         post("/api/createGroup") {
@@ -402,7 +434,7 @@ fun Application.configureRouting() {
                 val miscGroupCreated = GroupCreateRequestSent(
                     userId = uid,
                     group = "Miscellaneous",
-                    colour = "#3f4240"
+                    colour = "#455259"
                 )
                 val miscGroupInserted = supabase.postgrest["groups"].insert(
                     miscGroupCreated,
@@ -444,9 +476,25 @@ fun Application.configureRouting() {
                 )
 
                 if (otherCategoryInserted.body == null) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default 'other' category not added."))
                 } else {
-                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default 'other' category added successfully."))
+                }
+
+
+                // Total Income Initialised
+                val initialisedTotalIncome = IncomeCreateRequestSent(
+                    userId = uid,
+                    totalIncome = 2000.00
+                )
+                val initialisedTotalIncomeInserted = supabase.postgrest["total_income"].insert(
+                    initialisedTotalIncome,
+                    returning = Returning.REPRESENTATION
+                )
+                if (initialisedTotalIncomeInserted.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default total income not inserted."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default total income inserted successfully."))
                 }
 
                 call.respond(HttpStatusCode.OK, SuccessResponseSent("User added successfully."))

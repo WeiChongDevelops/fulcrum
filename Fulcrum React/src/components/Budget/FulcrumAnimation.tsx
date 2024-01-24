@@ -5,28 +5,27 @@ interface FulcrumAnimationProps {
 }
 
 export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps) {
-    const getBowlWidth = () => {
-        const bowlElement = document.querySelector(".fulcrum-bowl-right")
-        return bowlElement ? bowlElement.clientWidth : 135;
-    }
+    console.log(`lineAngle: ${lineAngle}`)
 
     const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-tri-red.webp");
     const [leverEndXOffset, setLeverEndXOffset] = useState({leftEnd: 0, rightEnd: 0});
-    const [bowlWidth, setBowlWidth] = useState(getBowlWidth);
-    const [rightBowlShadowDimensions, setRightBowlShadowDimensions] = useState( {
-        width: `${bowlWidth}px`,
-        height: `${bowlWidth / 12}px`,
-        transform: `translate(-50%, -50%) translateX(${leverEndXOffset.rightEnd}px)`,
-    })
-    const [leftBowlShadowDimensions, setLeftBowlShadowDimensions] = useState( {
-        width: `${bowlWidth}px`,
-        height: `${bowlWidth / 12}px`,
-        transform: `translate(50%, -50%) translateX(${leverEndXOffset.leftEnd}px)`,
+    const [bowlWidth, setBowlWidth] = useState(window.innerWidth * 0.07);
+
+    const [bowlShadowDimensions, setBowlShadowDimensions] = useState({
+        right: {
+            width: `${bowlWidth}px`,
+            height: `${bowlWidth / 12}px`,
+            transform: `translate(-50%, -50%) translateX(${leverEndXOffset.rightEnd}px)`,
+        },
+        left: {
+            width: `${bowlWidth}px`,
+            height: `${bowlWidth / 12}px`,
+            transform: `translate(50%, -50%) translateX(${leverEndXOffset.leftEnd}px)`,
+        }
     })
 
     function recalculateShadowDimensions() {
-        const bowlElement = document.querySelector(".fulcrum-bowl-right")
-        setBowlWidth(bowlElement ? bowlElement.clientWidth : 135);
+        setBowlWidth(window.innerWidth * 0.07);
         console.log(`Line angle is ${lineAngle}`)
         console.log(`X offset: ${-Math.abs(lineAngle)}`)
 
@@ -40,16 +39,20 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
     }
 
     function setShadowDimensions() {
-        setRightBowlShadowDimensions({
-            width: `${bowlWidth + lineAngle * 2.7}px`,
-            height: `${(bowlWidth + lineAngle * 1.4) / 10}px`,
-            transform: `translate(-50%, -50%) translateX(${leverEndXOffset.rightEnd}px)`,
-        });
-        setLeftBowlShadowDimensions({
-            width: `${bowlWidth - lineAngle * 2.7}px`,
-            height: `${(bowlWidth - lineAngle * 1.4) / 10}px`,
-            transform: `translate(50%, -50%) translateX(${leverEndXOffset.leftEnd}px)`,
-        });
+        setBowlShadowDimensions(
+            {
+                right: {
+                    width: `${bowlWidth + lineAngle * 2.7}px`,
+                    height: `${(bowlWidth + lineAngle * 1.4) / 10}px`,
+                    transform: `translate(-50%, -50%) translateX(${leverEndXOffset.rightEnd}px)`,
+                },
+                left: {
+                    width: `${bowlWidth - lineAngle * 2.7}px`,
+                    height: `${(bowlWidth - lineAngle * 1.4) / 10}px`,
+                    transform: `translate(50%, -50%) translateX(${leverEndXOffset.leftEnd}px)`,
+                }
+            }
+        )
     }
 
     useEffect( () => {
@@ -83,8 +86,8 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
             <div className="fulcrum-triangle-container">
                 <img src={activeTriangleFulcrum} alt="Triangle fulcrum"/>
                 <div className="contact-shadow"></div>
-                <div className="bowl-shadow-right" style={rightBowlShadowDimensions}></div>
-                <div className="bowl-shadow-left" style={leftBowlShadowDimensions}></div>
+                <div className="bowl-shadow-right" style={bowlShadowDimensions.right}></div>
+                <div className="bowl-shadow-left" style={bowlShadowDimensions.left}></div>
             </div>
             <div className="rotating-container" style={{transform: `rotate(${-lineAngle}deg) translateX(-50%)`}}>
                 <div className="rotating-text-label-container absolute flex flex-row justify-between w-[100%] text-[1.5em] bottom-8 ">

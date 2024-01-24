@@ -41,7 +41,12 @@ export default function ExpenseList({ filteredExpenseArray,
 
                     const groupColour = getColourOfGroup(groupName ? groupName : "Miscellaneous" , groupArray)!
 
-                    const iconPath = budgetArray.filter(budgetItem => budgetItem.category === expenseElement.category)[0].iconPath
+                    let iconPath = "/src/assets/category-icons/category-default-icon.svg"
+                    try {
+                        iconPath = budgetArray.filter(budgetItem => budgetItem.category === expenseElement.category)[0].iconPath
+                    } catch (e) {
+                        console.error(`iconPath retrieval for category ${expenseElement.category} failed. Temporarily assuming default.`)
+                    }
 
                     return <ExpenseItem
                         expenseId={expenseElement.expenseId}

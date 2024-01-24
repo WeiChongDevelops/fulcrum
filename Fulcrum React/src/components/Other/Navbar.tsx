@@ -44,14 +44,15 @@ export default function Navbar() {
 
     return (
         <div>
-            <nav className="flex flex-row justify-between items-center bg-[#efefef] py-2">
+            <nav className="flex flex-row justify-between items-center bg-white py-1">
                 <div className="flex-1"></div>
-                <h1 className="flex-1 text-black font-bold text-7xl ">FULCRUM</h1>
+                <img src="/src/assets/fulcrum-logos/fulcrum-long.webp" alt="Fulcrum logo in navbar" className="w-80 mr-4"></img>
 
                 <div className="flex-1 text-right">
                     <div className="flex justify-end items-center">
                         <p className="mx-2 text-black ">{email}</p>
-                        {email != "" && <FulcrumButton displayText="Log Out" onClick={logoutOnClick}/>}
+                        {email != "" ? <FulcrumButton displayText="Log Out" onClick={logoutOnClick}/>
+                            : <FulcrumButton displayText="Register" onClick={() => window.location.href = "/register"}/> }
                     </div>
                 </div>
             </nav>

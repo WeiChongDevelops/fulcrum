@@ -10,5 +10,6 @@ data class BudgetItemResponse(
     val category: String,
     val amount: Double,
     val iconPath: String,
-    val group: String
+    val group: String,
+    @Contextual val timestamp: Instant
 )

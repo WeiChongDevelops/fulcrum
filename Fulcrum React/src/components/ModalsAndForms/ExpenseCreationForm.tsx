@@ -5,7 +5,7 @@ import {
     ExpenseCreationFormData,
     ExpenseItemEntity,
     SelectorOptionsFormattedData,
-    handleExpenseCreation, colourStyles
+    handleExpenseCreation, colourStyles, handleInputChangeOnFormWithAmount
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import { v4 as uuid } from "uuid";
@@ -31,7 +31,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
             setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
         }
-    };
+    }
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -41,9 +41,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
     }, []);
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-        setFormData( (currentFormData: ExpenseCreationFormData) => {
-            return {...currentFormData, [e.target.name]: e.target.value}
-        });
+        handleInputChangeOnFormWithAmount(e, setFormData);
     }
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -62,7 +60,8 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 category: formData.category,
                 amount: 0,
                 iconPath: "/src/assets/category-icons/category-default-icon.svg",
-                group: "Miscellaneous"
+                group: "Miscellaneous",
+                timestamp: new Date()
             }
 
             setBudgetArray(current => [...current, newDefaultBudgetItem])
@@ -79,12 +78,10 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
     }
 
     return (
-        <div ref={formRef}  className="budget-form fixed flex flex-col justify-center items-center rounded-3xl">
-
-            <button className="mt-2.5 mr-2.5 ml-auto mb-auto" onClick={(e) => {
-                e.preventDefault()
+        <div ref={formRef}  className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
+            <FulcrumButton onClick={() => {
                 setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
-            }}>Close</button>
+            }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="mb-6 font-bold text-4xl">New Expense Item</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
@@ -111,15 +108,16 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                     required
                 />
                 <label htmlFor="amount">Amount</label>
-                <input type="number"
-                       onChange={handleInputChange}
-                       value={formData.amount === 0 ? "" : formData.amount}
-                       name="amount"
-                       id="amount"
-                       className="mb-3 text-black"
-                       min={0.01}
-                       step={0.01}
-                       required/>
+                <div>
+                    <b className="relative left-6 text-black">$</b>
+                    <input type="text"
+                           onChange={handleInputChange}
+                           value={formData.amount === 0 ? "" : formData.amount}
+                           name="amount"
+                           id="amount"
+                           className="mb-3 text-black"
+                           required/>
+                </div>
 
                 <FulcrumButton displayText="Insert Expense"/>
             </form>

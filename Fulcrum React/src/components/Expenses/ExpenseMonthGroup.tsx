@@ -1,13 +1,13 @@
 import {
     BudgetItemEntity, ExpenseFormVisibility,
-    ExpenseItemEntity, ExpenseModalVisibility, formatDate, formatDollarAmountStatic, getBudgetList,
+    ExpenseItemEntity, ExpenseModalVisibility, formatDate, formatDollarAmountStatic, getGroupList,
     GroupItemEntity, PreviousExpenseBeingEdited
 } from "../../util.ts";
 import {Dispatch, SetStateAction, useEffect} from "react";
 import ExpenseList from "./ExpenseList.tsx";
 import "../../css/Expense.css"
 
-interface ExpenseDayGroupProps {
+interface ExpenseMonthGroupProps {
 
     date: Date;
     filteredExpenseArray: ExpenseItemEntity[];
@@ -18,6 +18,7 @@ interface ExpenseDayGroupProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
     groupArray: GroupItemEntity[];
+    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
 
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
     setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
@@ -27,21 +28,22 @@ interface ExpenseDayGroupProps {
 
 }
 
-export default function ExpenseDayGroup({ date,
+export default function ExpenseMonthGroup({ date,
                                             filteredExpenseArray,
                                             setExpenseArray,
                                             budgetArray,
                                             setBudgetArray,
                                             groupArray,
+                                            setGroupArray,
                                             setExpenseFormVisibility,
                                             setExpenseModalVisibility,
                                             setOldExpenseBeingEdited,
-                                            setExpenseIdToDelete}: ExpenseDayGroupProps) {
+                                            setExpenseIdToDelete}: ExpenseMonthGroupProps) {
 
     useEffect(() => {
-        getBudgetList()
-            .then((budgetList: BudgetItemEntity[]) => {
-                setBudgetArray(budgetList)
+        getGroupList()
+            .then((groupList: GroupItemEntity[]) => {
+                setGroupArray(groupList)
             })
     }, []);
 
