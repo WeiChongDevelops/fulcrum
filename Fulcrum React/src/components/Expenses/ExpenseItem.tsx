@@ -56,8 +56,8 @@ export default function ExpenseItem( { expenseId,
     return (
         <div className="expense-item flex flex-row justify-between items-center w-[95vw] py-1.5 px-2.5 rounded-2xl my-3 text-black" style={{backgroundColor: groupColour}}>
             <div className="flex flex-row items-center">
-                <div className="rounded-full bg-[#1b1c1c] p-2">
-                    <img src={iconPath} alt="" className="w-12 h-auto"/>
+                <div className="rounded-full bg-[#1b1c1c] p-3">
+                    <img src={iconPath} alt="" className="w-8 h-auto"/>
                 </div>
                 <div className="flex flex-col items-start ml-2" style={{
                     color: groupName === "Miscellaneous" ? "white" : "black"
@@ -66,14 +66,16 @@ export default function ExpenseItem( { expenseId,
                     <p className="text-sm font-medium">{groupName}</p>
                 </div>
             </div>
-            <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center" style={{
+                color: groupName === "Miscellaneous" ? "white" : "black"
+            }}>
                 <b className="text-xl">${formatDollarAmountStatic(amount)}</b>
                 <div className="flex flex-row items-center ml-2">
                     <button className="circle-button rounded-full p-1" onClick={handleEditClick}>
-                        <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-6 h-6" />
+                        <img src={`/src/assets/UI-icons/edit-pencil-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="" className="mx-1 w-6 h-6" />
                     </button>
                     <button className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
-                        <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="mx-1 w-6 h-6" />
+                        <img src={`/src/assets/UI-icons/delete-trash-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="" className="mx-1 w-6 h-6" />
                     </button>
                 </div>
             </div>

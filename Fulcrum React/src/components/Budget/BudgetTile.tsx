@@ -74,10 +74,10 @@ export default function BudgetTile({ category,
             </div>
             <div className="flex flex-row mb-2">
                 <button className="circle-button rounded-full p-1" onClick={handleEditClick}>
-                    <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-5 h-5" />
+                    <img src="/src/assets/UI-icons/edit-pencil-white-icon.svg" alt="" className="mx-1 w-5 h-5" />
                 </button>
                 <button className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
-                    <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="mx-1 w-5 h-5" />
+                    <img src="/src/assets/UI-icons/delete-trash-white-icon.svg" alt="" className="mx-1 w-5 h-5" />
                 </button>
             </div>
         </div>

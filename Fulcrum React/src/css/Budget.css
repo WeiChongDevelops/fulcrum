@@ -16,8 +16,8 @@
 
 .budget-tile {
     width: 200px;
-    height: 225px;
-    margin: 0 10px 10px 10px;
+    height: 230px;
+    margin: 0 10px 15px 10px;
     box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 1);
 }
 
@@ -54,9 +54,9 @@
 /* ADD NEW BUDGET BUTTON */
 
 .create-budget-button {
-    width: 185px;
-    height: 225px;
-    margin: 0 10px 10px 10px;
+    width: 200px;
+    height: 230px;
+    margin: 0 10px 15px 10px;
     background: transparent;
     border: black 2px dashed;
     color: black;
