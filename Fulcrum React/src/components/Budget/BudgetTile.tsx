@@ -51,6 +51,7 @@ export default function BudgetTile({ category,
         setBudgetExceeded(spent > amount);
     }, [amount, perCategoryTotalExpenseArray]);
 
+
     function handleDeleteClick() {
         setCategoryToDelete(category);
         setModalFormVisibility(current => ({...current, isConfirmCategoryDestructionModalVisible: true}))

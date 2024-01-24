@@ -15,7 +15,7 @@
 /* BUDGET TILE */
 
 .budget-tile {
-    width: 185px;
+    width: 200px;
     height: 225px;
     margin: 0 10px 10px 10px;
     box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 1);
@@ -201,7 +201,7 @@
 .contact-shadow {
     position: absolute;
     left: 50%;
-    top: 525%;
+    top: 505%;
     transform: translate(-50%, -50%);
     width: 20%;
     height: 18%;
@@ -211,7 +211,7 @@
 
 .bowl-shadow-right {
     position: absolute;
-    left: 255%;
+    left: 256%;
     top: 525%;
     transform: translate(-50%, -50%);
     background-color: black;
@@ -221,7 +221,7 @@
 
 .bowl-shadow-left {
     position: absolute;
-    right: 255.5%;
+    right: 254.5%;
     top: 525%;
     transform: translate(50%, -50%);
     background-color: black;

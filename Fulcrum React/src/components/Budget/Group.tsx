@@ -1,13 +1,13 @@
 import {
     BudgetFormVisibility,
     BudgetItemEntity,
-    BudgetModalVisibility,
+    BudgetModalVisibility, dynamicallySizeBudgetNameDisplays,
     GroupItemEntity,
     handleGroupDeletion,
     PreviousBudgetBeingEdited,
     PreviousGroupBeingEdited
 } from "../../util.ts";
-import {Dispatch, SetStateAction} from "react";
+import {Dispatch, SetStateAction, useEffect} from "react";
 import BudgetTile from "./BudgetTile.tsx";
 import AddNewBudgetToGroupButton from "./AddNewBudgetToGroupButton.tsx";
 
@@ -64,6 +64,10 @@ export default function Group({ groupName,
                 .catch((error) => console.log("Deletion unsuccessful", error));
         }
     }
+
+    useEffect(() => {
+        dynamicallySizeBudgetNameDisplays()
+    }, [filteredBudgetArray]);
 
     return (
         <div className="group flex flex-col rounded-xl p-2 mb-5" style={{backgroundColor: `${groupColour}`}}>

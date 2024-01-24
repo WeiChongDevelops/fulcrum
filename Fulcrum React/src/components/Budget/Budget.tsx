@@ -2,7 +2,7 @@ import {
     BudgetFormVisibility,
     BudgetItemEntity,
     BudgetModalVisibility, checkForOpenBudgetModalOrForm, checkForUser,
-    dynamicallySizeBudgetNameDisplays, ExpenseItemEntity,
+    ExpenseItemEntity,
     getAmountBudgeted,
     getBudgetList, getExpenseList,
     getGroupList, getLineAngle, getTotalIncome,
@@ -73,7 +73,6 @@ export default function Budget() {
     }, []);
 
     useEffect( () => {
-        dynamicallySizeBudgetNameDisplays()
         getGroupList()
             .then( results => setGroupArray(results))
     }, [budgetArray])
