@@ -4,7 +4,7 @@ import {
     BudgetModalVisibility, formatDollarAmountStatic,
     PreviousBudgetBeingEdited
 } from "../../util.ts";
-import {Dispatch, SetStateAction} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 
 interface BudgetTileProps {
     category: string;
@@ -17,6 +17,8 @@ interface BudgetTileProps {
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
     setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibility>>;
 
+    perCategoryTotalExpenseArray: Map<string, number>
+
     setCategoryToDelete: Dispatch<SetStateAction<string>>;
 
 }
@@ -28,7 +30,13 @@ export default function BudgetTile({ category,
                                        setOldBudgetBeingEdited,
                                        setBudgetFormVisibility,
                                        setModalFormVisibility,
-                                       setCategoryToDelete}: BudgetTileProps) {
+                                       setCategoryToDelete,
+                                       perCategoryTotalExpenseArray}: BudgetTileProps) {
+
+
+    const spent = perCategoryTotalExpenseArray.get(category)!
+
+    const [budgetExceeded, setBudgetExceeded] = useState(spent > amount);
 
     function handleEditClick() {
         setOldBudgetBeingEdited({
@@ -39,24 +47,30 @@ export default function BudgetTile({ category,
         setBudgetFormVisibility( current => ({...current, isUpdateBudgetVisible: true}))
     }
 
-    const tempHardCodedColour = "red"
+    useEffect(() => {
+        setBudgetExceeded(spent > amount);
+    }, [amount, perCategoryTotalExpenseArray]);
 
     function handleDeleteClick() {
         setCategoryToDelete(category);
         setModalFormVisibility(current => ({...current, isConfirmCategoryDestructionModalVisible: true}))
     }
 
+
     return (
-        <div className="budget-tile flex flex-col justify-center items-center rounded-2xl"
-             style={{backgroundColor: `${tempHardCodedColour}`}}>
-            <div className="flex justify-center items-center rounded-full bg-green-950 p-3 w-14 h-14">
-                <img className="budget-icon" src={icon} alt="" />
+        <div className="budget-tile flex flex-col justify-around items-center rounded-2xl"
+             style={{backgroundColor: `${budgetExceeded ? "#ff3f3f" : "#44b775"}`}}>
+            <div className="tile-icon-container flex justify-center items-center p-2 w-12 h-16 mt-2">
+                <img className="budget-tile-icon" src={icon} alt="" />
             </div>
-            <div className="budget-name-container">
-                <b className="budget-name">{category}</b>
+            <div className="budget-name-container h-12 font-bold flex flex-col justify-center">
+                <p className="budget-name">{category.toUpperCase()}</p>
             </div>
-            <b>${formatDollarAmountStatic(amount)}</b>
-            <div className="flex flex-row">
+            <div className="budgeting-values-container flex flex-col break-words break-all text-sm font-semibold">
+                <p>Spent: ${formatDollarAmountStatic(spent)} of ${formatDollarAmountStatic(amount)}</p>
+                <p>Left: ${formatDollarAmountStatic(amount - spent)}</p>
+            </div>
+            <div className="flex flex-row mb-2">
                 <button className="circle-button rounded-full p-1" onClick={handleEditClick}>
                     <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="mx-1 w-5 h-5" />
                 </button>

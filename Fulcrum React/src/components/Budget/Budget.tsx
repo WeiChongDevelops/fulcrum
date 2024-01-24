@@ -2,9 +2,9 @@ import {
     BudgetFormVisibility,
     BudgetItemEntity,
     BudgetModalVisibility, checkForOpenBudgetModalOrForm, checkForUser,
-    dynamicallySizeBudgetNameDisplays,
+    dynamicallySizeBudgetNameDisplays, ExpenseItemEntity,
     getAmountBudgeted,
-    getBudgetList,
+    getBudgetList, getExpenseList,
     getGroupList, getLineAngle, getTotalIncome,
     GroupItemEntity,
     handleGroupDeletion,
@@ -22,6 +22,7 @@ import Loader from "../Other/Loader.tsx";
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
     const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
+    const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
 
     const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
         isCreateBudgetVisible: false,
@@ -53,6 +54,8 @@ export default function Budget() {
 
     const [lineAngle, setLineAngle] = useState(0);
 
+    const [perCategoryExpenditureMap, setPerCategoryExpenditureMap] = useState<Map<string, number>>(new Map())
+
     useEffect(() => {
         async function retrieveInitialData() {
             const userStatus = await checkForUser();
@@ -60,6 +63,7 @@ export default function Budget() {
             setBudgetArray(await getBudgetList());
             setGroupArray(await getGroupList());
             setTotalIncome(await getTotalIncome());
+            setExpenseArray(await getExpenseList());
             await implementDynamicBackgroundHeight();
         }
         retrieveInitialData()
@@ -73,6 +77,20 @@ export default function Budget() {
         getGroupList()
             .then( results => setGroupArray(results))
     }, [budgetArray])
+
+    useEffect( () => {
+        const categoryArray = budgetArray.map(budgetItem => budgetItem.category);
+        categoryArray.forEach(category => {
+            const thisCategoryExpenseArray = expenseArray.filter(expenseItem => expenseItem.category === category)
+            const totalExpenses = thisCategoryExpenseArray.reduce((acc, expenseItem) => (acc + expenseItem.amount), 0)
+
+            setPerCategoryExpenditureMap(currentMap => {
+                const updatedMap = new Map(currentMap);
+                updatedMap.set(category, totalExpenses);
+                return updatedMap;
+            })
+        })
+    },[budgetArray, expenseArray])
 
     useEffect( () => {
         setAmountLeftToBudget(totalIncome - getAmountBudgeted(budgetArray))
@@ -127,7 +145,8 @@ export default function Budget() {
                     setBudgetFormVisibility={setBudgetFormVisibility}
                     setGroupToDelete={setGroupToDelete}
                     setCategoryToDelete={setCategoryToDelete}
-                    setModalFormVisibility={setBudgetModalVisibility}/>}
+                    setModalFormVisibility={setBudgetModalVisibility}
+                    perCategoryTotalExpenseArray={perCategoryExpenditureMap}/>}
 
                 <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
             </div>

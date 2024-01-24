@@ -32,6 +32,7 @@ interface GroupProps {
 
     setCategoryToDelete: Dispatch<SetStateAction<string>>;
 
+    perCategoryTotalExpenseArray: Map<string, number>;
 }
 
 export default function Group({ groupName,
@@ -45,7 +46,8 @@ export default function Group({ groupName,
                                   setBudgetFormVisibility,
                                   setGroupToDelete,
                                   setCategoryToDelete,
-                                  setModalFormVisibility}: GroupProps) {
+                                  setModalFormVisibility,
+                                  perCategoryTotalExpenseArray}: GroupProps) {
 
     function handleEditClick() {
         setOldGroupBeingEdited( { oldGroupName: groupName, oldColour: groupColour });
@@ -91,6 +93,7 @@ export default function Group({ groupName,
                         setBudgetFormVisibility={setBudgetFormVisibility}
                         setModalFormVisibility={setModalFormVisibility}
                         setCategoryToDelete={setCategoryToDelete}
+                        perCategoryTotalExpenseArray={perCategoryTotalExpenseArray}
                         key={key}
                     />
                 ))}

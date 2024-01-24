@@ -12,14 +12,27 @@
     filter: blur(5px);
 }
 
-/* BUDGET TILE AND BOX SHADOW EFFECT */
+/* BUDGET TILE */
 
 .budget-tile {
-    width: 120px;
-    height: 160px;
-    margin: 0 10px 10px 5px;
+    width: 185px;
+    height: 225px;
+    margin: 0 10px 10px 10px;
     box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 1);
 }
+
+.tile-icon-container {
+    background: url("../assets/UI-icons/budget-triangle-background.webp") center / contain no-repeat;
+    min-width: 140px;
+    min-height: 80px;
+}
+
+.budget-tile-icon {
+    width: 35%;
+    position: relative;
+    bottom: 10px;
+}
+
 
 .budget-name-container {
     text-align: center;
@@ -27,17 +40,26 @@
     padding: 5px 40px 0 40px;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    max-width: 125%;
+    margin-top: 5px;
+    letter-spacing: 0.4em;
 }
+
+.budgeting-values-container {
+    line-height: 1;
+    margin-top: 10px;
+}
+
 
 /* ADD NEW BUDGET BUTTON */
 
 .create-budget-button {
-    width: 120px;
-    height: 160px;
+    width: 185px;
+    height: 225px;
+    margin: 0 10px 10px 10px;
     background: transparent;
     border: black 2px dashed;
     color: black;
-    margin: 0 10px 10px 5px;
 }
 
 
@@ -85,6 +107,7 @@
 .category-icon-selectable {
     display: flex;
     flex: 0 0 15%;
+    margin: 8px 0;
     justify-content: center;
     border: none;
     background-color: transparent;
@@ -125,9 +148,10 @@
 
 .group-colour-triangle {
     transition: all 0.1s ease;
-    width: 50px;
+    width: 52px;
     height: 43px;
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+    filter: blur(2px);
 }
 
 .selectedColour {
@@ -140,7 +164,7 @@
 /* MEDIA QUERIES */
 
 @media (max-width: 1560px) {
-    .category-icon-selectable {
+    .category-icon-selectable + .group-colour-selectable-container {
         flex-basis: auto;
     }
 }

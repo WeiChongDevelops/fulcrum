@@ -25,6 +25,7 @@ interface GroupListProps {
 
     setCategoryToDelete: Dispatch<SetStateAction<string>>;
 
+    perCategoryTotalExpenseArray: Map<string, number>
 }
 
 export default function GroupList( { budgetArray,
@@ -37,7 +38,9 @@ export default function GroupList( { budgetArray,
                                        setBudgetFormVisibility,
                                        setGroupToDelete,
                                        setModalFormVisibility,
-                                       setCategoryToDelete}: GroupListProps ) {
+                                       setCategoryToDelete,
+                                       perCategoryTotalExpenseArray}: GroupListProps ) {
+
 
     // 1. Make an array containing unique group in the budgetArray
     // const groupOptions = groupListAsOptions(groupArray);
@@ -64,6 +67,7 @@ export default function GroupList( { budgetArray,
                                   setGroupToDelete={setGroupToDelete}
                                   setCategoryToDelete={setCategoryToDelete}
                                   setModalFormVisibility={setModalFormVisibility}
+                                  perCategoryTotalExpenseArray={perCategoryTotalExpenseArray}
                                   key={key}/>
                 })
             }

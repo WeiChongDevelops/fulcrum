@@ -617,12 +617,14 @@ export function dynamicallySizeBudgetNameDisplays() {
     budgetNameElements.forEach(budgetNameElement => {
         let dynamicFontSize = ""
         const budgetNameLength = budgetNameElement.textContent?.length!;
-        if (budgetNameLength <= 10) {
-            dynamicFontSize = "18px";
+        if (budgetNameLength <= 5) {
+            dynamicFontSize = "26px";
+        } else if (budgetNameLength <= 10) {
+            dynamicFontSize = "20px";
         } else if (budgetNameLength <= 14) {
-            dynamicFontSize = "14px";
+            dynamicFontSize = "18px";
         } else if (budgetNameLength <= 18) {
-            dynamicFontSize = "11px";
+            dynamicFontSize = "16px";
         }
         // console.log(`The size of ${budgetNameElement.innerText} (${budgetNameLength} characters) is ${dynamicFontSize}`);
         budgetNameElement.style.fontSize = dynamicFontSize;

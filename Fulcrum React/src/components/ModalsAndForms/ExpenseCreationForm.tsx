@@ -1,5 +1,13 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
-import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
+import {
+    ChangeEvent,
+    Dispatch,
+    FormEvent,
+    SetStateAction,
+    useEffect,
+    useRef,
+    useState
+} from "react";
 import {
     BudgetItemEntity,
     ExpenseCreationFormData,
@@ -9,6 +17,9 @@ import {
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import { v4 as uuid } from "uuid";
+import { components } from "react-select";
+import { InputProps } from "react-select";
+
 
 interface ExpenseCreationFormProps {
     setExpenseFormVisibility: Dispatch<SetStateAction<{
@@ -41,7 +52,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
     }, []);
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-        handleInputChangeOnFormWithAmount(e, setFormData);
+            handleInputChangeOnFormWithAmount(e, setFormData);
     }
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -76,6 +87,10 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
     function handleCategoryInputChange(e: any) {
         setFormData((currentFormData: ExpenseCreationFormData) => ({ ...currentFormData, category: e.value }));
     }
+    const MaxLengthInput: any = (props: InputProps) => {
+        return <components.Input {...props} maxLength={18} />;
+    };
+
 
     return (
         <div ref={formRef}  className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
@@ -92,6 +107,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                     options={categoryOptions.map(option => {
                         return {label: option.label, value: option.value, colour: option.colour!!}
                     })}
+                    components={{Input: MaxLengthInput}}
                     onChange={handleCategoryInputChange}
                     styles={colourStyles}
                     className="mb-3"
@@ -105,6 +121,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                         },
                     })}
                     placeholder="Select from dropdown/start typing to create..."
+
                     required
                 />
                 <label htmlFor="amount">Amount</label>
