@@ -615,7 +615,7 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
 export function dynamicallySizeBudgetNameDisplays() {
     const budgetNameElements = document.querySelectorAll(".budget-name") as NodeListOf<HTMLElement>;
     budgetNameElements.forEach(budgetNameElement => {
-        let dynamicFontSize = ""
+        let dynamicFontSize = "";
         const budgetNameLength = budgetNameElement.textContent?.length!;
         if (budgetNameLength <= 5) {
             dynamicFontSize = "26px";
@@ -626,8 +626,25 @@ export function dynamicallySizeBudgetNameDisplays() {
         } else if (budgetNameLength <= 18) {
             dynamicFontSize = "16px";
         }
-        // console.log(`The size of ${budgetNameElement.innerText} (${budgetNameLength} characters) is ${dynamicFontSize}`);
         budgetNameElement.style.fontSize = dynamicFontSize;
+    })
+}
+
+export function dynamicallySizeBudgetNumberDisplays() {
+    const budgetNumberElements = document.querySelectorAll(".budgeting-values-container") as NodeListOf<HTMLElement>;
+    budgetNumberElements.forEach(budgetNumberElement => {
+        let dynamicFontSize = "";
+        const budgetNumberFirstLine = budgetNumberElement.firstChild! as HTMLElement
+        const budgetNumberLength = budgetNumberFirstLine.innerText.length;
+        console.log(`budgetNumberLength found: ${budgetNumberLength}`)
+        if (budgetNumberLength <= 28) {
+            dynamicFontSize = "0.875rem"
+        } else if (budgetNumberLength <= 32) {
+            dynamicFontSize = "0.78rem"
+        } else if (budgetNumberLength <= 40) {
+            dynamicFontSize = "0.68rem"
+        }
+        budgetNumberElement.style.fontSize = dynamicFontSize;
     })
 }
 

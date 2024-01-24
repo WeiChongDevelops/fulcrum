@@ -1,7 +1,7 @@
 import '/src/css/Budget.css';
 import {
     BudgetFormVisibility,
-    BudgetModalVisibility, formatDollarAmountStatic,
+    BudgetModalVisibility, dynamicallySizeBudgetNumberDisplays, formatDollarAmountStatic,
     PreviousBudgetBeingEdited
 } from "../../util.ts";
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
@@ -49,6 +49,7 @@ export default function BudgetTile({ category,
 
     useEffect(() => {
         setBudgetExceeded(spent > amount);
+        dynamicallySizeBudgetNumberDisplays();
     }, [amount, perCategoryTotalExpenseArray]);
 
 
