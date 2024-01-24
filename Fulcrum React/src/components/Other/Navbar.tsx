@@ -46,7 +46,7 @@ export default function Navbar() {
         <div>
             <nav className="flex flex-row justify-between items-center bg-white py-1">
                 <div className="flex-1"></div>
-                <img src="/src/assets/fulcrum-logos/fulcrum-long.webp" alt="Fulcrum logo in navbar" className="w-80 mr-5"></img>
+                <img src="/src/assets/fulcrum-logos/fulcrum-long.webp" alt="Fulcrum logo in navbar" className="w-80 mr-4"></img>
 
                 <div className="flex-1 text-right">
                     <div className="flex justify-end items-center">
