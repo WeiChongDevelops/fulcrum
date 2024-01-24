@@ -5,6 +5,7 @@ interface FulcrumAnimationProps {
 }
 
 export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps) {
+    console.log(`lineAngle: ${lineAngle}`)
 
     const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-tri-red.webp");
     const [leverEndXOffset, setLeverEndXOffset] = useState({leftEnd: 0, rightEnd: 0});

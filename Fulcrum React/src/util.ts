@@ -787,10 +787,12 @@ function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity
 }
 
 export function getLineAngle(percentageIncomeRemaining: number) {
+    console.log(`Received percentageIncomeRemaining: ${percentageIncomeRemaining}`)
     const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
+    console.log(`Received functionalPercentageIncomeRemaining: ${functionalPercentageIncomeRemaining}`)
     return functionalPercentageIncomeRemaining <= -100 ? 14.5 :
         functionalPercentageIncomeRemaining === 100 ? -14.5 :
-            functionalPercentageIncomeRemaining / (100 / 14.5);
+            functionalPercentageIncomeRemaining / (-100 / 14.5);
 }
 
 export async function handleTotalIncomeUpdating(newTotalIncome: number) {

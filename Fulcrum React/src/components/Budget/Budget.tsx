@@ -76,8 +76,11 @@ export default function Budget() {
 
     useEffect( () => {
         setAmountLeftToBudget(totalIncome - getAmountBudgeted(budgetArray))
-        setLineAngle(getLineAngle(amountLeftToBudget/totalIncome * 100))
     },[budgetArray, totalIncome])
+
+    useEffect(() => {
+        setLineAngle(getLineAngle(amountLeftToBudget/totalIncome * 100))
+    }, [amountLeftToBudget, totalIncome]);
 
     useEffect( () => {
         const formCategoryInput = document.getElementById("category")
