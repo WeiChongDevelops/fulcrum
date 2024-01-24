@@ -107,6 +107,12 @@ body label {
   text-align: center;
 }
 
+#react-select-3-input {
+  text-align: left;
+}
+
+
+
 .fulcrum-modal {
   position: fixed;
   display: flex;

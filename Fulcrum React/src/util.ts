@@ -127,7 +127,7 @@ const dot = (color = 'transparent') => ({
 export const colourStyles = {
     control: (styles: any) => ({ ...styles, fontWeight: "bold", backgroundColor: "white" }),
     option: (styles: any, {data}: any) => {
-        return { ...styles, color: (data.value !== "Other" || data.value !== "Miscellaneous") && data.colour || "white", backgroundColor: "#1b1c1c", fontWeight: "bold" };
+        return { ...styles, color: (data.label !== "Other" || data.label !== "Miscellaneous") ? data.colour : "red", fontWeight: "bold" };
     },
     input: (styles: any) => ({ ...styles, ...dot() }),
     placeholder: (styles: any) => ({ ...styles, ...dot('#ccc') }),
@@ -875,4 +875,21 @@ export function handleInputChangeOnFormWithAmount(e: ChangeEvent<HTMLInputElemen
             return {...currentFormData, [e.target.name]: newFormValue}
         });
     }
+}
+
+export function getGroupBudgetTotal(filteredBudgetArray: BudgetItemEntity[]) {
+    return filteredBudgetArray.map(budgetItem => budgetItem.amount)
+        .reduce( (acc, amountSpent) => acc + amountSpent, 0)
+}
+
+// export function getGroupExpenditureTotal(expenseArray: ExpenseItemEntity[], budgetArray: BudgetItemEntity[], groupName: string) {
+//     const filteredExpenseArray = expenseArray.filter(expenseItem => getGroupOfCategory(budgetArray, expenseItem.category) == groupName)
+//     return filteredExpenseArray.map(expenseItem => expenseItem.amount)
+//         .reduce( (acc, amountSpent) => acc + amountSpent, 0)
+// }
+
+export function getGroupExpenditureTotal(expenseArray: ExpenseItemEntity[], filteredBudgetArray: BudgetItemEntity[]) {
+    const categoriesInGroup = filteredBudgetArray.map(expenseItem => expenseItem.category)
+    const filteredExpenseArray = expenseArray.filter(expenseItem => categoriesInGroup.includes(expenseItem.category));
+    return filteredExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
 }

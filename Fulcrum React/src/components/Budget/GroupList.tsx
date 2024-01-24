@@ -1,6 +1,6 @@
 import {
     BudgetFormVisibility,
-    BudgetItemEntity, BudgetModalVisibility,
+    BudgetItemEntity, BudgetModalVisibility, ExpenseItemEntity,
     GroupItemEntity, PreviousBudgetBeingEdited, PreviousGroupBeingEdited
 } from "../../util.ts";
 import Group from "./Group.tsx";
@@ -12,6 +12,8 @@ interface GroupListProps {
 
     groupArray: GroupItemEntity[];
     setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
+
+    expenseArray: ExpenseItemEntity[];
 
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
     setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibility>>;
@@ -33,6 +35,7 @@ export default function GroupList( { budgetArray,
                                        groupArray,
                                        setGroupArray,
                                        setGroupNameOfNewItem,
+                                       expenseArray,
                                        setOldBudgetBeingEdited,
                                        setOldGroupBeingEdited,
                                        setBudgetFormVisibility,
@@ -59,6 +62,7 @@ export default function GroupList( { budgetArray,
                                   filteredBudgetArray={filteredBudgetArray}
                                   setBudgetArray={setBudgetArray}
                                   setGroupArray={setGroupArray}
+                                  expenseArray={expenseArray}
                                   setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                                   setOldGroupBeingEdited={setOldGroupBeingEdited}
                                   groupColour={groupDataItem.colour}

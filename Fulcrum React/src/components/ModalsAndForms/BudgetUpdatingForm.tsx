@@ -105,8 +105,8 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
                         borderRadius: 0,
                         colors: {
                             ...theme.colors,
-                            primary25: '#262925',
-                            primary: "black"
+                            primary25: "#f1f3f1",
+                            primary: "#808080"
                         },
                     })}
                 />

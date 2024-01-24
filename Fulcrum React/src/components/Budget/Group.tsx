@@ -1,13 +1,17 @@
 import {
     BudgetFormVisibility,
     BudgetItemEntity,
-    BudgetModalVisibility, dynamicallySizeBudgetNameDisplays,
+    BudgetModalVisibility,
+    dynamicallySizeBudgetNameDisplays,
+    ExpenseItemEntity, formatDollarAmountStatic,
+    getGroupBudgetTotal,
+    getGroupExpenditureTotal,
     GroupItemEntity,
     handleGroupDeletion,
     PreviousBudgetBeingEdited,
     PreviousGroupBeingEdited
 } from "../../util.ts";
-import {Dispatch, SetStateAction, useEffect} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import BudgetTile from "./BudgetTile.tsx";
 import AddNewBudgetToGroupButton from "./AddNewBudgetToGroupButton.tsx";
 
@@ -19,6 +23,8 @@ interface GroupProps {
     groupColour: string;
 
     filteredBudgetArray: BudgetItemEntity[];
+
+    expenseArray: ExpenseItemEntity[];
 
     setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
 
@@ -40,6 +46,7 @@ export default function Group({ groupName,
                                   setBudgetArray,
                                   setGroupArray,
                                   groupColour,
+                                  expenseArray,
                                   setGroupNameOfNewItem,
                                   setOldBudgetBeingEdited,
                                   setOldGroupBeingEdited,
@@ -48,6 +55,9 @@ export default function Group({ groupName,
                                   setCategoryToDelete,
                                   setModalFormVisibility,
                                   perCategoryTotalExpenseArray}: GroupProps) {
+
+    const [groupBudgetTotal, setGroupBudgetTotal] = useState(getGroupBudgetTotal(filteredBudgetArray));
+    const [groupExpenditureTotal, setGroupExpenditureTotal] = useState(getGroupBudgetTotal(filteredBudgetArray));
 
     function handleEditClick() {
         setOldGroupBeingEdited( { oldGroupName: groupName, oldColour: groupColour });
@@ -66,24 +76,30 @@ export default function Group({ groupName,
     }
 
     useEffect(() => {
-        dynamicallySizeBudgetNameDisplays()
-    }, [filteredBudgetArray]);
+        dynamicallySizeBudgetNameDisplays();
+
+        setGroupBudgetTotal(getGroupBudgetTotal(filteredBudgetArray));
+        setGroupExpenditureTotal(getGroupExpenditureTotal(expenseArray, filteredBudgetArray));
+
+    }, [filteredBudgetArray, expenseArray]);
 
     return (
         <div className="group flex flex-col rounded-xl p-2 mb-5" style={{backgroundColor: `${groupColour}`}}>
-            <div className="flex flex-row justify-center items-center mb-4">
-                <b className={`mt - 2 text-xl ${groupName !== "Miscellaneous" ? "text-black" : "text-white"}`}>{groupName}</b>
-
-                {groupName !== "Miscellaneous" &&
-                    <div className="flex flex-row justify-center items-center ml-1">
-                        <div className="circle-button rounded-full p-1" onClick={handleEditClick}>
-                            <img src="/src/assets/UI-icons/edit-pencil-icon.svg" alt="" className="w-4 h-4" />
+            <div className="flex flex-row justify-between items-center mb-4">
+                <div className="flex flex-row ml-4 mt-1">
+                    <p className={`mt - 2 text-3xl font-bold ${groupName !== "Miscellaneous" ? "text-black" : "text-white"}`}>{groupName}</p>
+                    {groupName !== "Miscellaneous" &&
+                        <div className="flex flex-row justify-center items-center ml-2 relative top-0.5">
+                            <div className="circle-button rounded-full p-1" onClick={handleEditClick}>
+                                <img src="/src/assets/UI-icons/edit-pencil-black-icon.svg" alt="" className="w-5 h-5" />
+                            </div>
+                            <div className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
+                                <img src="/src/assets/UI-icons/delete-trash-black-icon.svg" alt="" className="w-5 h-5" />
+                            </div>
                         </div>
-                        <div className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
-                            <img src="/src/assets/UI-icons/delete-trash-icon.svg" alt="" className="w-4 h-4" />
-                        </div>
-                    </div>
-                }
+                    }
+                </div>
+                <p className={`${groupName !== "Miscellaneous" ? "text-black" : "text-white"} font-bold mr-4 text-3xl`}>Spent: ${formatDollarAmountStatic(groupExpenditureTotal)} of ${formatDollarAmountStatic(groupBudgetTotal)}</p>
 
             </div>
             <div className="flex flex-row flex-wrap flex-shrink-0 basis-0 justify-start">

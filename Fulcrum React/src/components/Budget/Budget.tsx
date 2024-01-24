@@ -136,6 +136,7 @@ export default function Budget() {
                 {groupArray?.length > 0 && <GroupList
                     budgetArray={budgetArray}
                     setBudgetArray={setBudgetArray}
+                    expenseArray={expenseArray}
                     setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                     setOldGroupBeingEdited={setOldGroupBeingEdited}
                     groupArray={groupArray}
