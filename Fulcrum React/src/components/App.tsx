@@ -5,6 +5,7 @@ import Login from "./Auth/Login.tsx";
 import Budget from "./Budget/Budget.tsx";
 import Navbar from "./Other/Navbar.tsx";
 import Expense from "./Expenses/Expense.tsx";
+import Tools from "./Tools/Tools.tsx";
 
 export default function App() {
 
@@ -16,6 +17,7 @@ export default function App() {
                     <Route path="register" element={<Register/>} />
                     <Route path="expenses" element={<Expense/>} />
                     <Route path="budget" element={<Budget/>} />
+                    <Route path="tools" element={<Tools/>} />
                 </Route>
             </Routes>
         </Router>
