@@ -1,5 +1,5 @@
 import {Dispatch, SetStateAction, useEffect, useRef} from "react";
-import {BudgetModalVisibility, ExpenseModalVisibility} from "../../util.ts";
+import {BudgetModalVisibility, ExpenseModalVisibility, RecurringExpenseModalVisibility} from "../../util.ts";
 import FulcrumButton from "../Other/FulcrumButton.tsx";
 
 interface TwoOptionModalProps {
@@ -7,7 +7,7 @@ interface TwoOptionModalProps {
     optionOneFunction: ()=>void;
     optionTwoText: string;
     optionTwoFunction: ()=>void;
-    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibility>> | Dispatch<SetStateAction<ExpenseModalVisibility>>
+    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibility>> | Dispatch<SetStateAction<ExpenseModalVisibility>>  | Dispatch<SetStateAction<RecurringExpenseModalVisibility>>
     isVisible: string;
     title: string;
 }

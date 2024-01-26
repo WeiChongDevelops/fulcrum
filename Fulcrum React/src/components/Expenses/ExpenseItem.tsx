@@ -1,8 +1,6 @@
 import '/src/css/Budget.css';
 import {
-    BudgetItemEntity,
     ExpenseFormVisibility,
-    ExpenseItemEntity,
     ExpenseModalVisibility,
     formatDollarAmountStatic,
     PreviousExpenseBeingEdited
@@ -17,9 +15,6 @@ interface BudgetItemProps {
 
     groupName: string;
     groupColour: string;
-
-    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
     setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;

@@ -2,6 +2,7 @@ import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {logoutOnClick, OpenToolsSection} from "../../util.ts";
 import "../../css/Tools.css"
 import {useState} from "react";
+import RecurringExpenses from "./RecurringExpenses.tsx";
 
 export default function Tools() {
 
@@ -55,10 +56,12 @@ export default function Tools() {
                 <h1 className="text-black">Settings</h1>
                 <FulcrumButton displayText={"Go Back"} backgroundColour={"white"} onClick={returnToToolsHome}/>
             </div> :
-            <div className="w-full h-full bg-purple-700">
-                <h1 className="text-black">Recurring Expenses</h1>
-                <FulcrumButton displayText={"Go Back"} backgroundColour={"white"} onClick={returnToToolsHome}/>
-            </div>}
+            // <div className="w-full h-full bg-purple-700">
+            //     <h1 className="text-black">Recurring Expenses</h1>
+            //     <FulcrumButton displayText={"Go Back"} backgroundColour={"white"} onClick={returnToToolsHome}/>
+            // </div>
+            <RecurringExpenses/>
+        }
         </>
     );
 }

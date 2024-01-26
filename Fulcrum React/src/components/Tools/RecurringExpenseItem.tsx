@@ -1,16 +1,14 @@
 import '/src/css/Budget.css';
 import {
-    BudgetItemEntity,
-    ExpenseFormVisibility,
-    ExpenseItemEntity,
-    ExpenseModalVisibility,
     formatDollarAmountStatic,
-    PreviousExpenseBeingEdited
+    PreviousRecurringExpenseBeingEdited,
+    RecurringExpenseFormVisibility,
+    RecurringExpenseModalVisibility
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
 
-interface BudgetItemProps {
-    expenseId: string;
+interface RecurringExpenseItemProps {
+    recurringExpenseId: string;
     category: string;
     amount: number;
     iconPath: string;
@@ -18,39 +16,36 @@ interface BudgetItemProps {
     groupName: string;
     groupColour: string;
 
-    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+    setRecurringExpenseFormVisibility: Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
+    setRecurringExpenseModalVisibility: Dispatch<SetStateAction<RecurringExpenseModalVisibility>>;
 
-    setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
-    setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
-
-    setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-    setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
+    setOldRecurringExpenseBeingEdited: Dispatch<SetStateAction<PreviousRecurringExpenseBeingEdited>>;
+    setRecurringExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 }
 
-export default function ExpenseItem( { expenseId,
-                                         category,
-                                         amount,
-                                         iconPath,
-                                         groupName,
-                                         groupColour,
-                                         setExpenseFormVisibility,
-                                         setExpenseModalVisibility,
-                                         setOldExpenseBeingEdited,
-                                         setExpenseIdToDelete}: BudgetItemProps) {
+export default function RecurringExpenseItem( { recurringExpenseId,
+                                                  category,
+                                                  amount,
+                                                  iconPath,
+                                                  groupName,
+                                                  groupColour,
+                                                  setRecurringExpenseFormVisibility,
+                                                  setRecurringExpenseModalVisibility,
+                                                  setOldRecurringExpenseBeingEdited,
+                                                  setRecurringExpenseIdToDelete}: RecurringExpenseItemProps) {
 
     function handleEditClick() {
-        setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: true}))
-        setOldExpenseBeingEdited({
-            expenseId: expenseId,
+        setRecurringExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: true}))
+        setOldRecurringExpenseBeingEdited({
+            recurringExpenseId: recurringExpenseId,
             oldCategory: category,
             oldAmount: amount
         })
     }
 
     function handleDeleteClick() {
-        setExpenseIdToDelete(expenseId);
-        setExpenseModalVisibility(current => ({...current, isConfirmExpenseDestructionModalVisible: true}))
+        setRecurringExpenseIdToDelete(recurringExpenseId);
+        setRecurringExpenseModalVisibility(current => ({...current, isConfirmExpenseDestructionModalVisible: true}))
     }
 
     return (

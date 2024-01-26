@@ -107,10 +107,32 @@ export type OpenToolsSection = "home" | "settings" | "recurring"
 type RecurringExpenseFrequency = "daily" | "weekly" | "fortnightly" | "monthly" | "annually"
 
 export interface RecurringExpenseItemEntity {
-    expenseId: string
+    recurringExpenseId: string
     category: string
     amount: number
     timestamp: Date
+    frequency: RecurringExpenseFrequency;
+}
+
+export interface RecurringExpenseModalVisibility {
+    isConfirmRecurringExpenseDestructionModalVisible: boolean;
+}
+
+export interface RecurringExpenseFormVisibility {
+    isUpdateRecurringExpenseVisible: boolean;
+}
+
+
+export interface PreviousRecurringExpenseBeingEdited {
+    recurringExpenseId: string;
+    oldCategory: string;
+    oldAmount: number;
+    oldFrequency: RecurringExpenseFrequency;
+}
+
+export interface RecurringExpenseUpdatingFormData {
+    category: string;
+    amount: number;
     frequency: RecurringExpenseFrequency;
 }
 
@@ -906,4 +928,63 @@ export function getGroupExpenditureTotal(expenseArray: ExpenseItemEntity[], filt
     const categoriesInGroup = filteredBudgetArray.map(expenseItem => expenseItem.category)
     const filteredExpenseArray = expenseArray.filter(expenseItem => categoriesInGroup.includes(expenseItem.category));
     return filteredExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
+}
+
+export async function getRecurringExpenseList() {
+    const recurringExpenseItems: RecurringExpenseItemEntity[] = [
+        {
+            recurringExpenseId: "exp001",
+            category: "Utilities",
+            amount: 150,
+            timestamp: new Date('2024-01-26T09:00:00'),
+            frequency: "monthly"
+        },
+        {
+            recurringExpenseId: "exp002",
+            category: "Groceries",
+            amount: 200,
+            timestamp: new Date('2024-01-26T10:00:00'),
+            frequency: "weekly"
+        },
+        {
+            recurringExpenseId: "exp003",
+            category: "Subscription",
+            amount: 20,
+            timestamp: new Date('2024-01-26T11:00:00'),
+            frequency: "annually"
+        }
+    ];
+
+    return recurringExpenseItems;
+}
+
+export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
+                                            setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>,
+                                            setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
+    setRecurringExpenseArray(recurringExpenseArray => recurringExpenseArray.filter( recurringExpenseItem => {
+            return recurringExpenseItem.recurringExpenseId !== recurringExpenseId
+        }
+    ))
+    try {
+        const response = await fetch("http://localhost:8080/api/deleteRecurringExpense", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "recurringExpenseId": recurringExpenseId,
+            })
+        })
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch(error) {
+        console.error("Error:", error);
+    }
+    getRecurringExpenseList().then(recurringExpenseList => setRecurringExpenseArray(recurringExpenseList))
+    getBudgetList().then( budgetList => setBudgetArray(budgetList))
 }

@@ -3,32 +3,31 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     BudgetItemEntity,
     getBudgetList,
-    ExpenseItemEntity,
     SelectorOptionsFormattedData,
     colourStyles,
-    ExpenseUpdatingFormData,
     handleExpenseUpdating,
     getExpenseList,
     handleInputChangeOnFormWithAmount,
-    PreviousExpenseBeingEdited
+    RecurringExpenseItemEntity, PreviousRecurringExpenseBeingEdited, RecurringExpenseUpdatingFormData
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 
-interface ExpenseUpdatingFormProps {
-    setExpenseFormVisibility: Dispatch<SetStateAction<{
-        isCreateExpenseVisible: boolean,
-        isUpdateExpenseVisible: boolean,
+interface RecurringExpenseUpdatingFormProps {
+    setRecurringExpenseFormVisibility: Dispatch<SetStateAction<{
+        isUpdateRecurringExpenseVisible: boolean,
     }>>;
-    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
+    setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     categoryOptions: SelectorOptionsFormattedData[];
-    oldExpenseBeingEdited: PreviousExpenseBeingEdited;
+    oldRecurringExpenseBeingEdited: PreviousRecurringExpenseBeingEdited;
 }
 
-export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpenseArray, setBudgetArray, categoryOptions, oldExpenseBeingEdited }: ExpenseUpdatingFormProps) {
+export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVisibility, setRecurringExpenseArray, setBudgetArray, categoryOptions, oldRecurringExpenseBeingEdited }: RecurringExpenseUpdatingFormProps) {
 
 
-    const [formData, setFormData] = useState<ExpenseUpdatingFormData>({ category: oldExpenseBeingEdited.oldCategory, amount: oldExpenseBeingEdited.oldAmount });
+    const [formData, setFormData] = useState<RecurringExpenseUpdatingFormData>({
+        category: oldRecurringExpenseBeingEdited.oldCategory, amount: oldRecurringExpenseBeingEdited.oldAmount, frequency: oldRecurringExpenseBeingEdited.oldFrequency
+    });
     const formRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -40,7 +39,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
 
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}))
+            setRecurringExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseVisible: false}))
         }
     };
 
@@ -55,12 +54,14 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}))
+        setRecurringExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseVisible: false}))
 
-        await handleExpenseUpdating(oldExpenseBeingEdited.expenseId, formData);
+        await handleExpenseUpdating(oldRecurringExpenseBeingEdited.recurringExpenseId, formData);
 
-        setFormData({ category: oldExpenseBeingEdited.oldCategory, amount: oldExpenseBeingEdited.oldAmount });
-        getExpenseList().then(expenseList => setExpenseArray(expenseList));
+        setFormData({
+            category: oldRecurringExpenseBeingEdited.oldCategory, amount: oldRecurringExpenseBeingEdited.oldAmount, frequency: oldRecurringExpenseBeingEdited.oldFrequency
+        });
+        getExpenseList().then(expenseList => setRecurringExpenseArray(expenseList));
 
         // To update budgetArray if new category is made:
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
@@ -69,7 +70,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
     return (
         <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
             <FulcrumButton onClick={() => {
-                setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}))
+                setRecurringExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseVisible: false}))
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="mb-6 font-bold text-4xl">Updating Expense</p>
@@ -79,10 +80,10 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
                     id="category"
                     name="category"
                     defaultValue={{
-                        label: oldExpenseBeingEdited.oldCategory,
-                        value: oldExpenseBeingEdited.oldCategory,
+                        label: oldRecurringExpenseBeingEdited.oldCategory,
+                        value: oldRecurringExpenseBeingEdited.oldCategory,
                         colour: categoryOptions.filter(categoryOption => (
-                            categoryOption.label === oldExpenseBeingEdited.oldCategory
+                            categoryOption.label === oldRecurringExpenseBeingEdited.oldCategory
                         ))[0].colour
                     }}
                     options={categoryOptions.map(option => {
