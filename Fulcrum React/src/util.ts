@@ -100,6 +100,20 @@ export interface ExpenseModalVisibility {
     isConfirmExpenseDestructionModalVisible: boolean;
 }
 
+// TOOLS ENTITIES //
+
+export type OpenToolsSection = "home" | "settings" | "recurring"
+
+type RecurringExpenseFrequency = "daily" | "weekly" | "fortnightly" | "monthly" | "annually"
+
+export interface RecurringExpenseItemEntity {
+    expenseId: string
+    category: string
+    amount: number
+    timestamp: Date
+    frequency: RecurringExpenseFrequency;
+}
+
 // MISCELLANEOUS ENTITIES //
 
 export interface SelectorOptionsFormattedData {
