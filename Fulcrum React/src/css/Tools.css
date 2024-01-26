@@ -1,3 +1,7 @@
+.tools {
+    min-height: 100vh;
+}
+
 .profile-icon-display {
     background: url("../assets/UI-icons/green-triangle-background-inverted.webp") bottom / contain no-repeat;
     @apply w-80 h-80 flex justify-center items-center
@@ -7,16 +11,20 @@
     @apply w-36 h-36 relative top-14
 }
 
+.tools-tile-container {
+    @apply flex-row
+}
+
 .tools-tile {
     box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 1);
     width: 18vw;
     height: 18vw;
-    @apply rounded-2xl flex flex-col items-center justify-center
+    @apply rounded-2xl flex flex-col items-center justify-center mb-4
 }
 
 .tools-tile img {
-    width: 75%;
-    height: 75%;
+    width: 70%;
+    height: 70%;
 }
 
 .tools-tile p {
@@ -27,4 +35,15 @@
     width: 80%;
     height: 15%;
     @apply flex justify-center items-center pb-1
+}
+
+@media (max-width: 1056px) {
+    .tools-tile-container {
+        @apply flex-col
+    }
+
+    .tools-tile  {
+        width: 54vw;
+        height: 54vw;
+    }
 }

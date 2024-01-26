@@ -77,7 +77,7 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav>
-            <div className="background"></div>
+            {!window.location.href.includes("tools") && <div id="background-grid" className="background"></div>}
             <Outlet/>
         </div>
     );
