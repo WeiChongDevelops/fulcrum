@@ -35,12 +35,12 @@ export default function ExpenseItem( { expenseId,
                                          setExpenseIdToDelete}: BudgetItemProps) {
 
     function handleEditClick() {
-        setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: true}))
         setOldExpenseBeingEdited({
             expenseId: expenseId,
             oldCategory: category,
             oldAmount: amount
         })
+        setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: true}))
     }
 
     function handleDeleteClick() {

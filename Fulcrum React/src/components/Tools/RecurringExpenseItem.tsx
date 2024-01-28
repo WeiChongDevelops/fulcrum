@@ -1,8 +1,9 @@
 import '/src/css/Budget.css';
 import {
+    capitaliseFirstLetter,
     formatDollarAmountStatic,
     PreviousRecurringExpenseBeingEdited,
-    RecurringExpenseFormVisibility,
+    RecurringExpenseFormVisibility, RecurringExpenseFrequency,
     RecurringExpenseModalVisibility
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
@@ -12,6 +13,7 @@ interface RecurringExpenseItemProps {
     category: string;
     amount: number;
     iconPath: string;
+    frequency: RecurringExpenseFrequency;
 
     groupName: string;
     groupColour: string;
@@ -27,6 +29,7 @@ export default function RecurringExpenseItem( { recurringExpenseId,
                                                   category,
                                                   amount,
                                                   iconPath,
+                                                  frequency,
                                                   groupName,
                                                   groupColour,
                                                   setRecurringExpenseFormVisibility,
@@ -35,17 +38,18 @@ export default function RecurringExpenseItem( { recurringExpenseId,
                                                   setRecurringExpenseIdToDelete}: RecurringExpenseItemProps) {
 
     function handleEditClick() {
-        setRecurringExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: true}))
         setOldRecurringExpenseBeingEdited({
             recurringExpenseId: recurringExpenseId,
             oldCategory: category,
-            oldAmount: amount
+            oldAmount: amount,
+            oldFrequency: frequency
         })
+        setRecurringExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseVisible: true}))
     }
 
     function handleDeleteClick() {
         setRecurringExpenseIdToDelete(recurringExpenseId);
-        setRecurringExpenseModalVisibility(current => ({...current, isConfirmExpenseDestructionModalVisible: true}))
+        setRecurringExpenseModalVisibility(current => ({...current, isConfirmRecurringExpenseDestructionModalVisible: true}))
     }
 
     return (
@@ -64,6 +68,11 @@ export default function RecurringExpenseItem( { recurringExpenseId,
             <div className="flex flex-row items-center" style={{
                 color: groupName === "Miscellaneous" ? "white" : "black"
             }}>
+                <div className="flex flex-row w-44 items-center">
+                    <img src={`/src/assets/UI-icons/tools-recurring-icon-${groupName === "Miscellaneous" ? "white" : "black"}.svg`} alt="Cycle icon" className={"w-8 h-8"}/>
+                    <p className={"text-xl ml-3 mr-8 font-bold"}>{capitaliseFirstLetter(frequency)}</p>
+                </div>
+
                 <b className="text-xl">${formatDollarAmountStatic(amount)}</b>
                 <div className="flex flex-row items-center ml-2">
                     <button className="circle-button rounded-full p-1" onClick={handleEditClick}>

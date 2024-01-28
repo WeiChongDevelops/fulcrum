@@ -4,7 +4,7 @@ import {
     addIconSelectionFunctionality,
     BudgetFormVisibility,
     BudgetItemEntity,
-    capitalizeFirstLetter,
+    capitaliseFirstLetter,
     colourStyles,
     getColourOfGroup,
     groupListAsOptions,
@@ -80,7 +80,7 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
                 <label htmlFor="category">Category</label>
                 <input type="text"
                        onChange={handleInputChange}
-                       value={capitalizeFirstLetter(formData.category)}
+                       value={capitaliseFirstLetter(formData.category)}
                        name="category"
                        id="category"
                        className="mb-3"

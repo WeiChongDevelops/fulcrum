@@ -2,6 +2,7 @@ package com.example.plugins
 
 import com.example.entities.budget.*
 import com.example.entities.expense.*
+import com.example.entities.recurringExpense.*
 import com.example.entities.successFeedback.ErrorResponseSent
 import com.example.entities.successFeedback.SuccessResponseSent
 import com.example.entities.user.UserEmail
@@ -16,7 +17,6 @@ import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
-import io.github.jan.supabase.postgrest.rpc
 import io.ktor.client.*
 import io.ktor.client.engine.apache5.*
 import io.ktor.http.*
@@ -25,8 +25,6 @@ import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.util.Identity.decode
-import kotlinx.serialization.Serializable
 import org.apache.hc.core5.http.HttpHost
 
 fun Application.staticResources() {
@@ -143,6 +141,96 @@ fun Application.configureRouting() {
             } catch (e: Exception) {
                 call.application.log.error("Error while deleting expense", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not deleted."))
+            }
+        }
+
+        // RECURRING EXPENSE API //
+
+        post("/api/createRecurringExpense") {
+            try {
+                val recurringExpenseCreateRequest = call.receive<RecurringExpenseCreateRequestReceived>()
+
+                val itemToInsert = RecurringExpenseCreateRequestSent(
+                    userId = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id,
+                    category = recurringExpenseCreateRequest.category,
+                    amount = recurringExpenseCreateRequest.amount,
+                    timestamp = recurringExpenseCreateRequest.timestamp,
+                    frequency = recurringExpenseCreateRequest.frequency
+                )
+                val insertedItem = supabase.postgrest["recurring_expenses"].insert(
+                    itemToInsert,
+                    returning = Returning.REPRESENTATION
+                )
+
+                if (insertedItem.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring expense not added."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Recurring expense added successfully."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while creating recurring expense", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring expense not added."))
+            }
+        }
+
+        get("/api/getRecurringExpenses") {
+            try {
+                val recurringExpenseList = supabase.postgrest["recurring_expenses"].select() {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                    .decodeList<RecurringExpenseItemResponse>()
+
+                call.respond(HttpStatusCode.OK, recurringExpenseList)
+            } catch (e: UnauthorizedRestException) {
+                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
+            } catch (e: Exception) {
+                call.application.log.error("Error while reading recurring expenses", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring xpenses not read."))
+            }
+        }
+
+        put("/api/updateRecurringExpense") {
+            try {
+                val recurringExpenseUpdateRequest = call.receive<RecurringExpenseUpdateRequestReceived>()
+
+                val updatedItem = supabase.postgrest["recurring_expenses"].update(
+                    {
+                        set("category", recurringExpenseUpdateRequest.category)
+                        set("amount", recurringExpenseUpdateRequest.amount)
+                        set("frequency", recurringExpenseUpdateRequest.frequency)
+                    }
+                ) {
+                    eq("recurringExpenseId", recurringExpenseUpdateRequest.recurringExpenseId)
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+
+                if (updatedItem.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not updated"))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Expense updated."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while updating expense", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not updated."))
+            }
+        }
+
+        delete("/api/deleteRecurringExpense") {
+            try {
+                val expenseDeleteRequest = call.receive<RecurringExpenseDeleteRequestReceived>()
+                val deletedExpense = supabase.postgrest["recurring_expenses"].delete {
+                    eq("recurringExpenseId", expenseDeleteRequest.recurringExpenseId)
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+
+                if (deletedExpense.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring expense not deleted."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Recurring expense deleted successfully."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while deleting recurring expense", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring expense not deleted."))
             }
         }
 
@@ -416,6 +504,7 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Group not deleted."))
             }
         }
+
 
         // USER AUTHENTICATION //
 

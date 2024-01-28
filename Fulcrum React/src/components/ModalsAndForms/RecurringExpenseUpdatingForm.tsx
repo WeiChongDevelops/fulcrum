@@ -5,12 +5,14 @@ import {
     getBudgetList,
     SelectorOptionsFormattedData,
     colourStyles,
-    handleExpenseUpdating,
-    getExpenseList,
     handleInputChangeOnFormWithAmount,
-    RecurringExpenseItemEntity, PreviousRecurringExpenseBeingEdited, RecurringExpenseUpdatingFormData
+    RecurringExpenseItemEntity,
+    PreviousRecurringExpenseBeingEdited,
+    RecurringExpenseUpdatingFormData,
+    recurringFrequencyOptions, capitaliseFirstLetter, handleRecurringExpenseUpdating, getRecurringExpenseList,
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
+import Select from 'react-select/creatable';
 
 interface RecurringExpenseUpdatingFormProps {
     setRecurringExpenseFormVisibility: Dispatch<SetStateAction<{
@@ -51,17 +53,21 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
         setFormData(currentFormData => ({ ...currentFormData, category: e.value }));
     }
 
+    function handleFrequencyInputChange(e: any) {
+        setFormData(currentFormData => ({ ...currentFormData, frequency: e.value }));
+    }
+
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         setRecurringExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseVisible: false}))
 
-        await handleExpenseUpdating(oldRecurringExpenseBeingEdited.recurringExpenseId, formData);
+        await handleRecurringExpenseUpdating(oldRecurringExpenseBeingEdited.recurringExpenseId, formData);
 
         setFormData({
             category: oldRecurringExpenseBeingEdited.oldCategory, amount: oldRecurringExpenseBeingEdited.oldAmount, frequency: oldRecurringExpenseBeingEdited.oldFrequency
         });
-        getExpenseList().then(expenseList => setRecurringExpenseArray(expenseList));
+        getRecurringExpenseList().then(expenseList => setRecurringExpenseArray(expenseList));
 
         // To update budgetArray if new category is made:
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
@@ -69,6 +75,7 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
 
     return (
         <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
+
             <FulcrumButton onClick={() => {
                 setRecurringExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseVisible: false}))
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
@@ -90,6 +97,31 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
                         return {label: option.label, value: option.value, colour: option.colour!!}
                     })}
                     onChange={handleCategoryInputChange}
+                    styles={colourStyles}
+                    className="mb-3"
+                    theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                            ...theme.colors,
+                            primary25: "#f1f3f1",
+                            primary: "#808080"
+                        },
+                    })}
+                    required
+                />
+
+                <label htmlFor="amount">Frequency</label>
+                <Select
+                    id="category"
+                    name="category"
+                    defaultValue={{
+                        label: capitaliseFirstLetter(oldRecurringExpenseBeingEdited.oldFrequency),
+                        value: oldRecurringExpenseBeingEdited.oldFrequency as String,
+                        colour: "black"
+                    }}
+                    options={recurringFrequencyOptions}
+                    onChange={handleFrequencyInputChange}
                     styles={colourStyles}
                     className="mb-3"
                     theme={(theme) => ({

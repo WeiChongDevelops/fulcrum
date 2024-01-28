@@ -104,7 +104,7 @@ export interface ExpenseModalVisibility {
 
 export type OpenToolsSection = "home" | "settings" | "recurring"
 
-type RecurringExpenseFrequency = "daily" | "weekly" | "fortnightly" | "monthly" | "annually"
+export type RecurringExpenseFrequency = "never" | "daily" | "weekly" | "fortnightly" | "monthly" | "annually"
 
 export interface RecurringExpenseItemEntity {
     recurringExpenseId: string
@@ -144,6 +144,42 @@ export interface SelectorOptionsFormattedData {
     colour: string | null;
 }
 
+export type CategoryToIconGroupAndColourMap = Map<string, {iconPath: string, group: string, colour:string}>;
+
+// export type RecurringExpenseFrequency = "never" | "daily" | "weekly" | "fortnightly" | "monthly" | "annually"
+export const recurringFrequencyOptions = [
+    {
+        value: "never",
+        label: "Never",
+        colour: "black"
+    },
+    {
+        value: "daily",
+        label: "Daily",
+        colour: "black"
+    },
+    {
+        value: "weekly",
+        label: "Weekly",
+        colour: "black"
+    },
+    {
+        value: "fortnightly",
+        label: "Fortnightly",
+        colour: "black"
+    },
+    {
+        value: "monthly",
+        label: "Monthly",
+        colour: "black"
+    },
+    {
+        value: "annually",
+        label: "Annually",
+        colour: "black"
+    }
+]
+
 
 const dot = (color = 'transparent') => ({
     alignItems: 'center',
@@ -170,13 +206,8 @@ export const colourStyles = {
     singleValue: (styles: any, {data}: any) => ({ ...styles, ...dot(data.colour) }),
 };
 
-export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]) {
-    const groupOption = groupArray.filter(groupItemEntity => groupItemEntity.group === groupName)[0];
-    return groupOption.colour ? groupOption.colour : null;
-}
-
-export function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+export function capitaliseFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export async function getExpenseList() {
@@ -404,6 +435,31 @@ export async function handleExpenseUpdating(expenseId: string, formData: Expense
                 "expenseId": expenseId,
                 "category": formData.category,
                 "amount": formData.amount
+            })
+        })
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+export async function handleRecurringExpenseUpdating(recurringExpenseId: string, formData: RecurringExpenseUpdatingFormData) {
+    try {
+        const response = await fetch("http://localhost:8080/api/updateRecurringExpense", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "recurringExpenseId": recurringExpenseId,
+                "category": formData.category,
+                "amount": formData.amount,
+                "frequency": formData.frequency
             })
         })
         if (!response.ok) {
@@ -764,19 +820,6 @@ export async function implementDynamicBackgroundHeight() {
     observer.observe(targetNode, config);
 }
 
-export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string) {
-    try {
-        return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group
-    } catch (e) {
-        console.log(`Failed to retrieve the group of category ${category}. Temporarily assuming Miscellaneous.`)
-        console.log("Below is index 0:")
-        console.log(budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0])
-        console.log("Below is the budgetArray:")
-        console.log(budgetArray)
-        return null;
-    }
-}
-
 export function getWindowLocation() {
     const urlArray = window.location.href.split("/");
     return urlArray[urlArray.length - 1];
@@ -823,12 +866,8 @@ export async function checkForUser() {
     }
 }
 
-export function checkForOpenExpenseModalOrForm(expenseFormVisibility: ExpenseFormVisibility, expenseModalVisibility: ExpenseModalVisibility) {
+export function checkForOpenModalOrForm(expenseFormVisibility: ExpenseFormVisibility | BudgetFormVisibility | RecurringExpenseFormVisibility, expenseModalVisibility: ExpenseModalVisibility | BudgetModalVisibility | RecurringExpenseModalVisibility) {
     return Object.values(expenseFormVisibility).includes(true) || Object.values(expenseModalVisibility).includes(true)
-}
-
-export function checkForOpenBudgetModalOrForm(budgetFormVisibility: BudgetFormVisibility, budgetModalVisibility: BudgetModalVisibility) {
-    return Object.values(budgetFormVisibility).includes(true) || Object.values(budgetModalVisibility).includes(true)
 }
 
 function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) {
@@ -918,44 +957,82 @@ export function getGroupBudgetTotal(filteredBudgetArray: BudgetItemEntity[]) {
         .reduce( (acc, amountSpent) => acc + amountSpent, 0)
 }
 
-// export function getGroupExpenditureTotal(expenseArray: ExpenseItemEntity[], budgetArray: BudgetItemEntity[], groupName: string) {
-//     const filteredExpenseArray = expenseArray.filter(expenseItem => getGroupOfCategory(budgetArray, expenseItem.category) == groupName)
-//     return filteredExpenseArray.map(expenseItem => expenseItem.amount)
-//         .reduce( (acc, amountSpent) => acc + amountSpent, 0)
-// }
-
 export function getGroupExpenditureTotal(expenseArray: ExpenseItemEntity[], filteredBudgetArray: BudgetItemEntity[]) {
     const categoriesInGroup = filteredBudgetArray.map(expenseItem => expenseItem.category)
     const filteredExpenseArray = expenseArray.filter(expenseItem => categoriesInGroup.includes(expenseItem.category));
     return filteredExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
 }
 
-export async function getRecurringExpenseList() {
-    const recurringExpenseItems: RecurringExpenseItemEntity[] = [
-        {
-            recurringExpenseId: "exp001",
-            category: "Emergency Funds",
-            amount: 150,
-            timestamp: new Date('2024-01-26T09:00:00'),
-            frequency: "monthly"
-        },
-        {
-            recurringExpenseId: "exp002",
-            category: "Water",
-            amount: 200,
-            timestamp: new Date('2024-01-26T10:00:00'),
-            frequency: "weekly"
-        },
-        {
-            recurringExpenseId: "exp003",
-            category: "Other",
-            amount: 20,
-            timestamp: new Date('2024-01-26T11:00:00'),
-            frequency: "annually"
-        }
-    ];
+// export async function getRecurringExpenseList() {
+//     // const recurringExpenseItems: RecurringExpenseItemEntity[] = [
+//     //     {
+//     //         recurringExpenseId: "exp001",
+//     //         category: "Emergency Funds",
+//     //         amount: 150,
+//     //         timestamp: new Date('2024-01-26T09:00:00'),
+//     //         frequency: "monthly"
+//     //     },
+//     //     {
+//     //         recurringExpenseId: "exp002",
+//     //         category: "Water",
+//     //         amount: 200,
+//     //         timestamp: new Date('2024-01-26T10:00:00'),
+//     //         frequency: "weekly"
+//     //     },
+//     //     {
+//     //         recurringExpenseId: "exp003",
+//     //         category: "Other",
+//     //         amount: 20,
+//     //         timestamp: new Date('2024-01-26T11:00:00'),
+//     //         frequency: "annually"
+//     //     }
+//     // ];
+//     //
+//     // return recurringExpenseItems;
+//     try {
+//         const response = await fetch("http://localhost:8080/api/getRecurringExpenses", {
+//             method: "GET",
+//             headers: {
+//                 "Content-Type": "application/json"
+//             }
+//         })
+//         if (!response.ok) {
+//             console.error(`HTTP error - status: ${response.status}`);
+//         }
+//         const responseData = await response.json();
+//         console.log(responseData);
+//         return responseData;
+//     } catch (error) {
+//         console.error("Error:", error);
+//     }
+// }
 
-    return recurringExpenseItems;
+export async function getRecurringExpenseList() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getRecurringExpenses", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.status === 401) {
+            console.error("JWT token expiry detected. Logging out.")
+            window.alert("Login expired. Please log in again.")
+            logoutOnClick()
+                .then(() => {
+                    window.location.href === "/login" && (window.location.href = "/login")
+                } )
+        }
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+        return responseData.sort(expenseSort)
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
 }
 
 export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
@@ -987,4 +1064,35 @@ export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
     }
     getRecurringExpenseList().then(recurringExpenseList => setRecurringExpenseArray(recurringExpenseList))
     getBudgetList().then( budgetList => setBudgetArray(budgetList))
+}
+
+export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string) {
+    try {
+        return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group
+    } catch (e) {
+        console.log(`Failed to retrieve the group of category ${category}. Temporarily assuming Miscellaneous.`)
+        console.log("Below is index 0:")
+        console.log(budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0])
+        console.log("Below is the budgetArray:")
+        console.log(budgetArray)
+        return null;
+    }
+}
+
+export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]) {
+    const groupOption = groupArray.filter(groupItemEntity => groupItemEntity.group === groupName)[0];
+    return groupOption.colour ? groupOption.colour : null;
+}
+
+export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
+    const categoryToGroupAndColourMap: CategoryToIconGroupAndColourMap = new Map();
+
+    budgetArray.forEach( budgetItem => {
+        categoryToGroupAndColourMap.set(budgetItem.category, {
+            iconPath: budgetItem.iconPath,
+            group: budgetItem.group,
+            colour: groupArray.find(groupItem => groupItem.group === budgetItem.group)!.colour
+        })
+    })
+    return categoryToGroupAndColourMap;
 }

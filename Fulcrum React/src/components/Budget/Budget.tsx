@@ -1,7 +1,7 @@
 import {
     BudgetFormVisibility,
     BudgetItemEntity,
-    BudgetModalVisibility, checkForOpenBudgetModalOrForm, checkForUser,
+    BudgetModalVisibility, checkForOpenModalOrForm, checkForUser,
     ExpenseItemEntity,
     getAmountBudgeted,
     getBudgetList, getExpenseList,
@@ -60,10 +60,18 @@ export default function Budget() {
         async function retrieveInitialData() {
             const userStatus = await checkForUser();
             !userStatus["loggedIn"] && (window.location.href = "/login");
-            setBudgetArray(await getBudgetList());
-            setGroupArray(await getGroupList());
-            setTotalIncome(await getTotalIncome());
-            setExpenseArray(await getExpenseList());
+
+            const [budgetArray, groupArray, expenseArray, totalIncome] = await Promise.all([
+                getBudgetList(),
+                getGroupList(),
+                getExpenseList(),
+                getTotalIncome()
+            ])
+
+            setBudgetArray(budgetArray);
+            setGroupArray(groupArray);
+            setExpenseArray(expenseArray);
+            setTotalIncome(totalIncome);
             await implementDynamicBackgroundHeight();
         }
         retrieveInitialData()
@@ -105,7 +113,7 @@ export default function Budget() {
         formCategoryInput ? formCategoryInput.focus() : formGroupInput?.focus();
         console.log(budgetFormVisibility);
         console.log(budgetModalVisibility);
-        setIsBudgetFormOrModalOpen(checkForOpenBudgetModalOrForm(budgetFormVisibility, budgetModalVisibility))
+        setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility))
     }, [budgetFormVisibility, budgetModalVisibility])
 
     function runGroupDeletionWithUserPreference(keepContainedBudgets: boolean) {

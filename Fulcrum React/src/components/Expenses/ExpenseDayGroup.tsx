@@ -1,9 +1,9 @@
 import {
-    BudgetItemEntity, ExpenseFormVisibility,
-    ExpenseItemEntity, ExpenseModalVisibility, formatDate, formatDollarAmountStatic, getBudgetList,
-    GroupItemEntity, PreviousExpenseBeingEdited
+    CategoryToIconGroupAndColourMap, ExpenseFormVisibility,
+    ExpenseItemEntity, ExpenseModalVisibility, formatDate, formatDollarAmountStatic,
+    PreviousExpenseBeingEdited
 } from "../../util.ts";
-import {Dispatch, SetStateAction, useEffect} from "react";
+import {Dispatch, SetStateAction} from "react";
 import ExpenseList from "./ExpenseList.tsx";
 import "../../css/Expense.css"
 
@@ -12,38 +12,22 @@ interface ExpenseDayGroupProps {
     date: Date;
     filteredExpenseArray: ExpenseItemEntity[];
 
-    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-
-    budgetArray: BudgetItemEntity[];
-    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-
-    groupArray: GroupItemEntity[];
-
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
     setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
 
     setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
     setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 
+    categoryDataMap: CategoryToIconGroupAndColourMap;
 }
 
 export default function ExpenseDayGroup({ date,
                                             filteredExpenseArray,
-                                            setExpenseArray,
-                                            budgetArray,
-                                            setBudgetArray,
-                                            groupArray,
                                             setExpenseFormVisibility,
                                             setExpenseModalVisibility,
                                             setOldExpenseBeingEdited,
-                                            setExpenseIdToDelete}: ExpenseDayGroupProps) {
-
-    useEffect(() => {
-        getBudgetList()
-            .then((budgetList: BudgetItemEntity[]) => {
-                setBudgetArray(budgetList)
-            })
-    }, []);
+                                            setExpenseIdToDelete,
+                                            categoryDataMap}: ExpenseDayGroupProps) {
 
     const expenseDayGroupDate = date.toLocaleDateString();
     const dateStringToday = new Date().toLocaleDateString();
@@ -62,14 +46,11 @@ export default function ExpenseDayGroup({ date,
             </div>
             {filteredExpenseArray.length > 0 && <ExpenseList
                 filteredExpenseArray={filteredExpenseArray}
-                setExpenseArray={setExpenseArray}
-                budgetArray={budgetArray}
-                setBudgetArray={setBudgetArray}
-                groupArray={groupArray}
                 setExpenseFormVisibility={setExpenseFormVisibility}
                 setExpenseModalVisibility={setExpenseModalVisibility}
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-                setExpenseIdToDelete={setExpenseIdToDelete}/>}
+                setExpenseIdToDelete={setExpenseIdToDelete}
+                categoryDataMap={categoryDataMap}/>}
         </div>
     );
 }

@@ -2,7 +2,7 @@ import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
     addColourSelectionFunctionality,
-    BasicGroupData, BudgetFormVisibility, capitalizeFirstLetter,
+    BasicGroupData, BudgetFormVisibility, capitaliseFirstLetter,
     handleGroupCreation, GroupItemEntity, getRandomColour
 } from "../../util.ts";
 import "../../css/Budget.css"
@@ -69,7 +69,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
                 <label htmlFor="Group Name">Group Name</label>
                 <input type="text"
                        onChange={handleInputChange}
-                       value={capitalizeFirstLetter(formData.group)}
+                       value={capitaliseFirstLetter(formData.group)}
                        name="group"
                        id="group"
                        className="mb-3"

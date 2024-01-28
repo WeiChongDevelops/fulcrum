@@ -22,7 +22,7 @@ export default function Tools() {
 
     return (
         <>
-        {openToolsSection === "home" ? <div className="tools flex flex-col justify-start items-center bg-[#455259] ">
+        {openToolsSection === "home" ? <div className="tools flex flex-col justify-start items-center bg-[#455259]">
             <div className="profile-icon-display my-4">
                 <img src="/src/assets/profile-icons/profile-icon-default.svg" alt="Profile image"/>
             </div>
@@ -42,7 +42,7 @@ export default function Tools() {
                     <div className="tools-text-container">
                         <p>Recurring Expenses</p>
                     </div>
-                    <img src="/src/assets/UI-icons/tools-recurring-icon.svg" alt=""/>
+                    <img src="/src/assets/UI-icons/tools-recurring-icon-black.svg" alt=""/>
                 </div>
                 <div className="tools-tile bg-[#B1C5D1] text-black text-2xl leading-7">
                     <div className="tools-text-container">
@@ -60,7 +60,7 @@ export default function Tools() {
             //     <h1 className="text-black">Recurring Expenses</h1>
             //     <FulcrumButton displayText={"Go Back"} backgroundColour={"white"} onClick={returnToToolsHome}/>
             // </div>
-            <RecurringExpenses/>
+            <RecurringExpenses setOpenToolsSection={setOpenToolsSection}/>
         }
         </>
     );
