@@ -1,7 +1,7 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {logoutOnClick, OpenToolsSection} from "../../util.ts";
 import "../../css/Tools.css"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import RecurringExpenses from "./RecurringExpenses.tsx";
 
 export default function Tools() {
@@ -19,6 +19,21 @@ export default function Tools() {
     function openRecurringExpenses() {
         setOpenToolsSection("recurring");
     }
+
+    useEffect(() => {
+        const savedOpenToolsSection = sessionStorage.getItem("openToolsSection") as OpenToolsSection;
+        savedOpenToolsSection && setOpenToolsSection(savedOpenToolsSection);
+    }, []);
+
+    useEffect(() => {
+        async function updateToolsSectionState() {
+            await new Promise(resolve => setTimeout(resolve, 0));
+            sessionStorage.setItem("openToolsSection", openToolsSection);
+        }
+        updateToolsSectionState()
+            .then(() => console.log("Retrieved tools page state from session storage."))
+            .catch(() => console.error("Failed retrieval of tools page state from session storage."))
+    }, [openToolsSection]);
 
     return (
         <>
