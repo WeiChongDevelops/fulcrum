@@ -338,10 +338,10 @@ export async function handleBudgetCreation(setBudgetArray: Dispatch<SetStateActi
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                category: newBudgetItem.category,
+                category: newBudgetItem.category.trim(),
                 amount: newBudgetItem.amount ? newBudgetItem.amount : 0,
                 iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : "/src/assets/category-icons/category-default-icon.svg",
-                group: newBudgetItem.group ? newBudgetItem.group : "Miscellaneous"
+                group: newBudgetItem.group ? newBudgetItem.group.trim() : "Miscellaneous"
             })
         });
 
@@ -374,9 +374,9 @@ export async function handleBudgetUpdating(category: string | null, formData: Bu
             },
             body: JSON.stringify({
                 "category": category,
-                "newCategoryName": formData.category,
+                "newCategoryName": formData.category.trim(),
                 "amount": formData.amount,
-                "group": formData.group,
+                "group": formData.group.trim(),
                 "iconPath": formData.iconPath
             })
         })
@@ -479,8 +479,8 @@ export async function handleGroupCreation(group: string, colour: string, setGrou
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                group: group,
-                colour: colour
+                group: group.trim(),
+                colour: colour.trim()
             })
         });
         if (!response.ok) {
@@ -551,7 +551,7 @@ export async function handleGroupUpdating(originalGroupName: string, originalCol
                 },
                 body: JSON.stringify( {
                     originalGroupName: originalGroupName,
-                    newGroupName: formData.group,
+                    newGroupName: formData.group.trim(),
                     newColour: formData.colour ? formData.colour : ""
                 })
             });
@@ -934,21 +934,21 @@ export async function getRecurringExpenseList() {
     const recurringExpenseItems: RecurringExpenseItemEntity[] = [
         {
             recurringExpenseId: "exp001",
-            category: "Utilities",
+            category: "Emergency Funds",
             amount: 150,
             timestamp: new Date('2024-01-26T09:00:00'),
             frequency: "monthly"
         },
         {
             recurringExpenseId: "exp002",
-            category: "Groceries",
+            category: "Water",
             amount: 200,
             timestamp: new Date('2024-01-26T10:00:00'),
             frequency: "weekly"
         },
         {
             recurringExpenseId: "exp003",
-            category: "Subscription",
+            category: "Other",
             amount: 20,
             timestamp: new Date('2024-01-26T11:00:00'),
             frequency: "annually"
