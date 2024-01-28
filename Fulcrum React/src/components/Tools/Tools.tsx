@@ -3,14 +3,11 @@ import {logoutOnClick, OpenToolsSection} from "../../util.ts";
 import "../../css/Tools.css"
 import {useEffect, useState} from "react";
 import RecurringExpenses from "./RecurringExpenses.tsx";
+import Settings from "./Settings.tsx";
 
 export default function Tools() {
 
     const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
-
-    function returnToToolsHome() {
-        setOpenToolsSection("home");
-    }
 
     function openSettings() {
         setOpenToolsSection("settings");
@@ -51,7 +48,7 @@ export default function Tools() {
                     <div className="tools-text-container">
                         <p>Settings</p>
                     </div>
-                    <img src="/src/assets/UI-icons/tools-settings-icon.svg" alt=""/>
+                    <img src="/src/assets/UI-icons/tools-settings-icon-black.svg" alt=""/>
                 </div>
                 <div className="tools-tile bg-[#B1D1CF] text-black text-xl leading-5 hover:cursor-pointer" onClick={openRecurringExpenses}>
                     <div className="tools-text-container">
@@ -67,14 +64,7 @@ export default function Tools() {
                 </div>
              </div>
         </div> : openToolsSection === "settings" ?
-            <div className="w-full h-full bg-red-500">
-                <h1 className="text-black">Settings</h1>
-                <FulcrumButton displayText={"Go Back"} backgroundColour={"white"} onClick={returnToToolsHome}/>
-            </div> :
-            // <div className="w-full h-full bg-purple-700">
-            //     <h1 className="text-black">Recurring Expenses</h1>
-            //     <FulcrumButton displayText={"Go Back"} backgroundColour={"white"} onClick={returnToToolsHome}/>
-            // </div>
+            <Settings setOpenToolsSection={setOpenToolsSection}/> :
             <RecurringExpenses setOpenToolsSection={setOpenToolsSection}/>
         }
         </>

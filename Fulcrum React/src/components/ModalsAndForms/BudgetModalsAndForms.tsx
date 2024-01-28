@@ -62,7 +62,7 @@ export default function BudgetModalsAndForms({ budgetFormVisibility,
                                                                          setBudgetFormVisibility={setBudgetFormVisibility}/>}
         {modalFormVisibility.isDeleteOptionsModalVisible && <TwoOptionModal
             title={`Would you like to keep the categories inside group '${groupToDelete}'?`}
-            setModalFormVisibility={setModalFormVisibility}
+            setModalVisibility={setModalFormVisibility}
             optionOneText="Keep Categories (Move to Miscellaneous)"
             optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
             optionTwoText="Delete Categories"
@@ -75,7 +75,7 @@ export default function BudgetModalsAndForms({ budgetFormVisibility,
         />}
         {modalFormVisibility.isConfirmGroupDestructionModalVisible && <TwoOptionModal
             title="Are you sure? This will delete all expense entries for this budget category."
-            setModalFormVisibility={setModalFormVisibility}
+            setModalVisibility={setModalFormVisibility}
             optionOneText="Keep Categories (Move to Miscellaneous)"
             optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
             optionTwoText="Confirm"
@@ -84,7 +84,7 @@ export default function BudgetModalsAndForms({ budgetFormVisibility,
         }
         {modalFormVisibility.isConfirmCategoryDestructionModalVisible && <TwoOptionModal
             title="Are you sure? This will delete all expense entries for this budget category."
-            setModalFormVisibility={setModalFormVisibility}
+            setModalVisibility={setModalFormVisibility}
             optionOneText="Cancel"
             optionOneFunction={() => {
                 setModalFormVisibility(current => (

@@ -136,6 +136,20 @@ export interface RecurringExpenseUpdatingFormData {
     frequency: RecurringExpenseFrequency;
 }
 
+export interface SettingsModalVisibility {
+    isConfirmExpenseWipeModalVisible: boolean;
+    isConfirmBudgetWipeModalVisible: boolean;
+    isConfirmAllDataWipeModalVisible: boolean;
+    isConfirmDeleteAccountModalVisible: boolean;
+}
+
+export interface SettingsFormVisibility {
+    typeDeleteMyExpensesForm: boolean;
+    typeDeleteMyBudgetForm: boolean;
+    typeDeleteMyDataForm: boolean;
+    typeDeleteMyAccountForm: boolean;
+}
+
 // MISCELLANEOUS ENTITIES //
 
 export interface SelectorOptionsFormattedData {
@@ -866,7 +880,14 @@ export async function checkForUser() {
     }
 }
 
-export function checkForOpenModalOrForm(expenseFormVisibility: ExpenseFormVisibility | BudgetFormVisibility | RecurringExpenseFormVisibility, expenseModalVisibility: ExpenseModalVisibility | BudgetModalVisibility | RecurringExpenseModalVisibility) {
+export function checkForOpenModalOrForm(expenseFormVisibility: ExpenseFormVisibility
+    | BudgetFormVisibility
+    | RecurringExpenseFormVisibility
+    | SettingsFormVisibility,
+                                        expenseModalVisibility: ExpenseModalVisibility
+                                            | BudgetModalVisibility
+                                            | RecurringExpenseModalVisibility
+                                            | SettingsModalVisibility) {
     return Object.values(expenseFormVisibility).includes(true) || Object.values(expenseModalVisibility).includes(true)
 }
 
@@ -1095,4 +1116,20 @@ export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], grou
         })
     })
     return categoryToGroupAndColourMap;
+}
+
+export async function runExpenseWipe() {
+
+}
+
+export async function runBudgetWipe() {
+
+}
+
+export async function runFullDataWipe() {
+
+}
+
+export async function runAccountDeletion() {
+
 }

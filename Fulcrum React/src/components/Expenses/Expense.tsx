@@ -123,7 +123,7 @@ export default function Expense() {
         <>
             {!isLoading ? <div className="flex flex-col justify-center items-center">
                 <div className={`flex flex-col elementsBelowPopUpForm z-2
-            ${checkForOpenModalOrForm(expenseFormVisibility, expenseModalVisibility) && "blur"} px-16`}>
+            ${isExpenseFormOrModalOpen && "blur"} px-16`}>
 
                     <AddNewExpenseButton setExpenseFormVisibility={setExpenseFormVisibility}/>
 
@@ -167,7 +167,7 @@ export default function Expense() {
                                 isConfirmExpenseDestructionModalVisible: false
                             }));
                         }}
-                                        setModalFormVisibility={setExpenseModalVisibility}
+                                        setModalVisibility={setExpenseModalVisibility}
                                         isVisible="isConfirmExpenseDestructionModalVisible"
                                         title="Are you sure you want to delete this expense?"/>}
                 </div>

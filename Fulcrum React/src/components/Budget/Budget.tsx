@@ -132,8 +132,7 @@ export default function Budget() {
         <>
             {!isLoading ?<div className="flex flex-row justify-center items-center">
              <div className={`flex flex-col items-center elementsBelowPopUpForm z-2
-            ${((Object.values(budgetFormVisibility).includes(true))
-                || Object.values(budgetModalVisibility).includes(true)) && "blur"} px-16`}>
+            ${isBudgetFormOrModalOpen && "blur"} px-16`}>
                 <IncomeDisplay
                     totalIncome={totalIncome}
                     setTotalIncome={setTotalIncome}
