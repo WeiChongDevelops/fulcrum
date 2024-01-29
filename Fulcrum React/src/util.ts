@@ -160,7 +160,716 @@ export interface SelectorOptionsFormattedData {
 
 export type CategoryToIconGroupAndColourMap = Map<string, {iconPath: string, group: string, colour:string}>;
 
-// export type RecurringExpenseFrequency = "never" | "daily" | "weekly" | "fortnightly" | "monthly" | "annually"
+
+// FORMATTING FUNCTIONS //
+
+export function capitaliseFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+
+export function formatDollarAmountStatic(amount: number) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'decimal',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(amount);
+}
+
+export function formatDollarAmountDynamic(amount: string) {
+    const cleanedValue = amount.replace(/[^\d.]/g, "");
+    const splitValue = cleanedValue.split(".");
+    if (splitValue.length >= 2 && splitValue[1].length > 2) {
+        splitValue[1] = splitValue[1].substring(0, 2);
+    }
+    return splitValue.join(".");
+}
+
+function getOrdinalSuffix(day: number) {
+    if (day > 3 && day < 21) return 'th';
+    switch (day % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+    }
+}
+
+export function formatDate(date: Date) {
+    const formattedDayOfWeek = new Intl.DateTimeFormat('en-AU', { weekday: "long" }).format(date);
+    const formattedDayOfMonth = date.getDate();
+    const formattedMonth = new Intl.DateTimeFormat('en-AU', { month: "long" }).format(date);
+    const formattedYear = new Intl.DateTimeFormat('en-AU', { year: "numeric" }).format(date);
+
+    const ordinalSuffix = getOrdinalSuffix(formattedDayOfMonth);
+
+    return `${formattedDayOfWeek}, ${formattedDayOfMonth}${ordinalSuffix} ${formattedMonth} ${formattedYear}`
+}
+
+
+// EXPENSE API CALL FUNCTIONS //
+
+export async function handleExpenseCreation(setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
+                                            setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
+                                            newExpenseItem: ExpenseItemEntity) {
+    try {
+        const response = await fetch("http://localhost:8080/api/createExpense", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                expenseId: newExpenseItem.expenseId,
+                category: newExpenseItem.category,
+                amount: newExpenseItem.amount,
+                timestamp: newExpenseItem.timestamp
+            })
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+            window.alert("Expense entry invalid.")
+            setExpenseArray(current => {
+                const indexOfInvalidItem = current.map(item => item.expenseId).lastIndexOf(newExpenseItem.expenseId)
+                if (indexOfInvalidItem !== -1) {
+                    return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)]
+                }
+                return current;
+            })
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+        setExpenseArray(await getExpenseList());
+        setBudgetArray(await getBudgetList());
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+
+export async function getExpenseList() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getExpenses", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.status === 401) {
+            console.error("JWT token expiry detected. Logging out.")
+            window.alert("Login expired. Please log in again.")
+            logoutOnClick()
+                .then(() => {
+                    window.location.href === "/login" && (window.location.href = "/login")
+                } )
+        }
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+        return responseData.sort(expenseSort)
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+
+export async function handleExpenseUpdating(expenseId: string, formData: ExpenseUpdatingFormData) {
+    try {
+        const response = await fetch("http://localhost:8080/api/updateExpense", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "expenseId": expenseId,
+                "category": formData.category,
+                "amount": formData.amount
+            })
+        })
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+
+export async function handleExpenseDeletion(expenseId: string,
+                                            setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
+                                            setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
+    setExpenseArray(expenseArray => expenseArray.filter( expenseItem => {
+        return expenseItem.expenseId !== expenseId
+        }
+    ))
+    try {
+        const response = await fetch("http://localhost:8080/api/deleteExpense", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "expenseId": expenseId,
+            })
+        })
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch(error) {
+        console.error("Error:", error);
+    }
+    getExpenseList().then( expenseList => setExpenseArray(expenseList))
+    getBudgetList().then( budgetList => setBudgetArray(budgetList))
+}
+
+
+// BUDGET API CALL FUNCTIONS //
+
+export async function handleBudgetCreation(setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>, newBudgetItem: BudgetItemEntity) {
+    try {
+        const response = await fetch("http://localhost:8080/api/createBudget", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                category: newBudgetItem.category.trim(),
+                amount: newBudgetItem.amount ? newBudgetItem.amount : 0,
+                iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : "/src/assets/category-icons/category-default-icon.svg",
+                group: newBudgetItem.group ? newBudgetItem.group.trim() : "Miscellaneous"
+            })
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+            window.alert("Category name is invalid or already has assigned budget; or $999,999,999 limit exceeded.")
+            setBudgetArray(current => {
+                const indexOfInvalidItem = current.map(item => item.category).lastIndexOf(newBudgetItem.category);
+                if (indexOfInvalidItem !== -1) {
+                    return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)]
+                }
+                return current;
+            })
+        }
+        const responseData = await response.json()
+        console.log(responseData);
+        setBudgetArray(await getBudgetList());
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+
+export async function getBudgetList() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getBudget", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.status === 401) {
+            console.error("JWT token expiry detected. Logging out.")
+            window.alert("Login expired. Please log in again.")
+            logoutOnClick()
+                .then(() => {
+                    window.location.href === "/login" && (window.location.href = "/login")
+                } )
+        }
+        else if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData.sort(budgetSort));
+        return responseData.sort(budgetSort)
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+
+export async function handleBudgetUpdating(category: string | null, formData: BudgetUpdatingFormData) {
+    try {
+        const response = await fetch("http://localhost:8080/api/updateBudget", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "category": category,
+                "newCategoryName": formData.category.trim(),
+                "amount": formData.amount,
+                "group": formData.group.trim(),
+                "iconPath": formData.iconPath
+            })
+        })
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+            const responseData = await response.json();
+            console.log(responseData);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+
+export async function handleBudgetDeletion(category: string, setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
+    setBudgetArray(prevState => prevState.filter(budgetItem => budgetItem.category !== category))
+    try {
+        const response = await fetch("http://localhost:8080/api/deleteBudget", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "category": category,
+            })
+        })
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch(error) {
+        console.error("Error:", error);
+    }
+
+    getBudgetList().then( budgetList => setBudgetArray(budgetList))
+}
+
+
+// GROUP API CALL FUNCTIONS //
+
+export async function handleGroupCreation(group: string, colour: string, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, newGroupItem: GroupItemEntity) {
+    try {
+        const response = await fetch("http://localhost:8080/api/createGroup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                group: group.trim(),
+                colour: colour.trim()
+            })
+        });
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+            window.alert("Group name is invalid or already exists.")
+            setGroupArray((currentGroupArray) => {
+                const indexOfInvalidItem = currentGroupArray.map(item => item.group).lastIndexOf(newGroupItem.group);
+                if (indexOfInvalidItem !== -1) {
+                    return [...currentGroupArray.slice(0, indexOfInvalidItem), ...currentGroupArray.slice(indexOfInvalidItem + 1)]
+                }
+                return currentGroupArray;
+            })
+        }
+        const responseData = await response.json()
+        console.log(responseData);
+        setGroupArray(await getGroupList());
+    } catch (error) {
+        console.error("Failed to create group:", error);
+    }
+}
+
+
+export async function getGroupList() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getGroups", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if (response.status === 401) {
+            console.error("JWT token expiry detected. Logging out.")
+            window.alert("Login expired. Please log in again.")
+            logoutOnClick()
+                .then(() => {
+                    window.location.href === "/login" && (window.location.href = "/login")
+                } )
+        } else if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        } else {
+            const responseData = await response.json();
+            console.log(responseData)
+            return responseData.sort(groupSort);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+export async function handleGroupUpdating(originalGroupName: string, originalColour: string, formData: BasicGroupData, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, groupArray: GroupItemEntity[]) {
+    if (originalGroupName === formData.group || !groupArray.map(groupItem => groupItem.group).includes(formData.group)) {
+        setGroupArray(currentGroupArray => {
+            return currentGroupArray.map(groupItem => groupItem.group == originalGroupName ? {
+                colour: formData.colour ? formData.colour : groupItem.colour,
+                group: formData.group,
+                timestamp: groupItem.timestamp
+            } : groupItem)
+        })
+        try {
+            const response = await fetch("http://localhost:8080/api/updateGroup", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify( {
+                    originalGroupName: originalGroupName,
+                    newGroupName: formData.group.trim(),
+                    newColour: formData.colour ? formData.colour : ""
+                })
+            });
+            if (!response.ok) {
+                console.error(`HTTP error - status: ${response.status}`)
+                window.alert("Updated group is invalid.")
+                setGroupArray(currentGroupArray => {
+
+                    const revertedGroupOptions = [...currentGroupArray]
+                    const indexOfInvalidlyEditedOption = currentGroupArray.map(groupItem => groupItem.group).lastIndexOf(formData.group);
+                    if (indexOfInvalidlyEditedOption !== -1) {
+                        revertedGroupOptions[indexOfInvalidlyEditedOption] = {
+                            group: originalGroupName,
+                            colour: originalColour,
+                            timestamp: revertedGroupOptions[indexOfInvalidlyEditedOption].timestamp
+                        }
+                    }
+                    return revertedGroupOptions;
+                })
+            } else {
+                console.log("Group successfully updated.")
+                setGroupArray(await getGroupList());
+            }
+        } catch (error) {
+            console.error("Failed to update group:", error)
+        }
+    } else {
+        console.error("Selected group name already taken.")
+        window.alert("Selected group name already taken.")
+    }
+}
+
+export async function handleGroupDeletion(groupName: string,
+                                          setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
+                                          setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
+                                          keepContainedBudgets: boolean) {
+    setGroupArray(prevState => prevState.filter(groupItem => groupItem.group !== groupName))
+    try {
+        const response = await fetch("http://localhost:8080/api/deleteGroup", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                group: groupName,
+                keepContainedBudgets: keepContainedBudgets
+            })
+        })
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch(error) {
+        console.error("Error:", error);
+    }
+
+    await getGroupList()
+        .then( options => setGroupArray(options))
+        .then( () => getBudgetList().then( budgets => setBudgetArray(budgets)))
+}
+
+
+/// RECURRING EXPENSES API CALL FUNCTIONS //
+
+export async function handleRecurringExpenseCreation() {
+
+}
+
+export async function getRecurringExpenseList() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getRecurringExpenses", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.status === 401) {
+            console.error("JWT token expiry detected. Logging out.")
+            window.alert("Login expired. Please log in again.")
+            logoutOnClick()
+                .then(() => {
+                    window.location.href === "/login" && (window.location.href = "/login")
+                } )
+        }
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+        return responseData.sort(expenseSort)
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+export async function handleRecurringExpenseUpdating(recurringExpenseId: string, formData: RecurringExpenseUpdatingFormData) {
+    try {
+        const response = await fetch("http://localhost:8080/api/updateRecurringExpense", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "recurringExpenseId": recurringExpenseId,
+                "category": formData.category,
+                "amount": formData.amount,
+                "frequency": formData.frequency
+            })
+        })
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+
+export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
+                                                     setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>,
+                                                     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
+    setRecurringExpenseArray(recurringExpenseArray => recurringExpenseArray.filter( recurringExpenseItem => {
+            return recurringExpenseItem.recurringExpenseId !== recurringExpenseId
+        }
+    ))
+    try {
+        const response = await fetch("http://localhost:8080/api/deleteRecurringExpense", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "recurringExpenseId": recurringExpenseId,
+            })
+        })
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch(error) {
+        console.error("Error:", error);
+    }
+    getRecurringExpenseList().then(recurringExpenseList => setRecurringExpenseArray(recurringExpenseList))
+    getBudgetList().then( budgetList => setBudgetArray(budgetList))
+}
+
+
+// TOTAL INCOME API CALLS //
+
+export async function getTotalIncome() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getTotalIncome",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        )
+        if (!response.ok) {
+            console.error(`HTTP error when getting total income - ${response.status}`)
+        } else {
+            const totalIncome = await response.json();
+            console.log(totalIncome);
+            return(totalIncome.totalIncome);
+        }
+    } catch (e) {
+        console.error(`Failed to execute total income retrieval - ${e}`)
+    }
+}
+
+export async function handleTotalIncomeUpdating(newTotalIncome: number) {
+    try {
+        const response = await fetch("http://localhost:8080/api/updateTotalIncome", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                totalIncome: newTotalIncome
+            })
+        })
+        if (!response.ok) {
+            console.error(`HTTP error when updating total income - ${response.status}`)
+        } else {
+            console.log(await response.json());
+        }
+    } catch (e) {
+        console.error(`Failed to execute total income update - ${e}`)
+    }
+}
+
+
+// BROADER DESTRUCTIVE API CALL FUNCTIONS //
+
+export async function runExpenseWipe() {
+
+}
+
+export async function runBudgetWipe() {
+
+}
+
+export async function runFullDataWipe() {
+
+}
+
+export async function runAccountDeletion() {
+
+}
+
+
+// ICON AND COLOUR SELECTOR IMPLEMENTATIONS //
+
+export function addIconSelectionFunctionality(setFormData:
+                                                  Dispatch<SetStateAction<BudgetUpdatingFormData>>
+                                                  | Dispatch<SetStateAction<BudgetCreationFormData>>) {
+    const categoryIcons: NodeListOf<HTMLImageElement> = document.querySelectorAll(".category-icon-selectable");
+    categoryIcons.forEach((icon): void => {
+        icon.addEventListener("click", (e: MouseEvent) => {
+            e.preventDefault();
+            const iconPath = `/src/assets/category-icons/${icon.getAttribute("data-value")!}`;
+
+            setFormData((currentFormData: any) => {
+                return {...currentFormData, ["iconPath"]: iconPath}
+            });
+            console.log(`iconPath: ${iconPath}`)
+
+            document.querySelectorAll('.category-icon-selectable').forEach(btn => btn.classList.remove("selected-icon"));
+            icon.classList.add("selected-icon");
+        });
+    });
+}
+
+export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAction<BasicGroupData>>) {
+    const colourElementList: NodeListOf<HTMLImageElement> = document.querySelectorAll(".group-colour-selectable-container");
+    colourElementList.forEach(colourSelectable => {
+        colourSelectable.addEventListener("click", (e: MouseEvent) => {
+            const triangleElement = colourSelectable.firstChild as HTMLDivElement;
+
+            e.preventDefault();
+            setFormData((current: BasicGroupData) => {
+                return {...current, ["colour"]: triangleElement.getAttribute("data-value")}
+            });
+
+            colourElementList.forEach(colourSelectable => {
+                const triangle = colourSelectable.firstChild as HTMLDivElement;
+                triangle.classList.remove("selectedColour")
+            });
+            triangleElement.classList.add("selectedColour");
+        })
+    })
+}
+
+
+// AUTH API CALL FUNCTIONS //
+
+export async function logoutOnClick() {
+    try {
+        await fetch("http://localhost:8080/api/logout", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({jwt: localStorage.getItem("jwt")})
+        })
+            .then( () => window.location.href = "/login")
+            .catch( error => console.error(error))
+    } catch {
+        console.error("Error: Logout failed")
+    }
+}
+
+export async function checkForUser() {
+    try {
+        const response = await fetch("http://localhost:8080/api/checkForUser", {
+            method: "GET",
+        });
+        if (response.status === 400) {
+            console.error("Failed to check for user status.")
+        } else if (response.status === 401) {
+            console.error("JWT token expiry detected. Logging out.")
+            window.alert("Login expired. Please log in again.")
+            logoutOnClick()
+                .then(() => {
+                    window.location.href === "/login" && (window.location.href = "/login")
+                } )
+        }
+        else {
+            const userStatus = await response.json();
+            console.log(userStatus)
+            return userStatus;
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+
+// SORTING FUNCTIONS //
+
+function groupSort (a: GroupItemEntity, b: GroupItemEntity){
+    if (a.group === "Miscellaneous") return 1;
+    if (b.group === "Miscellaneous") return -1;
+    return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+}
+
+function expenseSort(a: ExpenseItemEntity, b: ExpenseItemEntity) {
+    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+}
+
+function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) {
+    try {
+        return new Date(budgetItemA.timestamp!).getTime() - new Date(budgetItemB.timestamp!).getTime();
+    } catch (e) {
+        console.error("Failed to perform budget sort. Below is budgetItemA and B.")
+        console.log(budgetItemA);
+        console.log(budgetItemB);
+    }
+}
+
+
+// REACT SELECTOR OPTIONS AND STYLING
+
 export const recurringFrequencyOptions = [
     {
         value: "never",
@@ -220,309 +929,6 @@ export const colourStyles = {
     singleValue: (styles: any, {data}: any) => ({ ...styles, ...dot(data.colour) }),
 };
 
-export function capitaliseFirstLetter(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-export async function getExpenseList() {
-    try {
-        const response = await fetch("http://localhost:8080/api/getExpenses", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        if (response.status === 401) {
-            console.error("JWT token expiry detected. Logging out.")
-            window.alert("Login expired. Please log in again.")
-            logoutOnClick()
-                .then(() => {
-                    window.location.href === "/login" && (window.location.href = "/login")
-                } )
-        }
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-        return responseData.sort(expenseSort)
-
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-export async function handleExpenseCreation(setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
-                                            setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
-                                            newExpenseItem: ExpenseItemEntity) {
-    try {
-        const response = await fetch("http://localhost:8080/api/createExpense", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                expenseId: newExpenseItem.expenseId,
-                category: newExpenseItem.category,
-                amount: newExpenseItem.amount,
-                timestamp: newExpenseItem.timestamp
-            })
-        });
-
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-            window.alert("Expense entry invalid.")
-            setExpenseArray(current => {
-                const indexOfInvalidItem = current.map(item => item.expenseId).lastIndexOf(newExpenseItem.expenseId)
-                if (indexOfInvalidItem !== -1) {
-                    return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)]
-                }
-                return current;
-            })
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-        setExpenseArray(await getExpenseList());
-        setBudgetArray(await getBudgetList());
-
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-export async function handleExpenseDeletion(expenseId: string,
-                                            setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
-                                            setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
-    setExpenseArray(expenseArray => expenseArray.filter( expenseItem => {
-        return expenseItem.expenseId !== expenseId
-        }
-    ))
-    try {
-        const response = await fetch("http://localhost:8080/api/deleteExpense", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "expenseId": expenseId,
-            })
-        })
-
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-
-    } catch(error) {
-        console.error("Error:", error);
-    }
-    getExpenseList().then( expenseList => setExpenseArray(expenseList))
-    getBudgetList().then( budgetList => setBudgetArray(budgetList))
-}
-
-export async function getBudgetList() {
-    try {
-        const response = await fetch("http://localhost:8080/api/getBudget", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        if (response.status === 401) {
-            console.error("JWT token expiry detected. Logging out.")
-            window.alert("Login expired. Please log in again.")
-            logoutOnClick()
-                .then(() => {
-                    window.location.href === "/login" && (window.location.href = "/login")
-                } )
-        }
-        else if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        console.log(responseData.sort(budgetSort));
-        return responseData.sort(budgetSort)
-
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-export async function handleBudgetDeletion(category: string, setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
-    setBudgetArray(prevState => prevState.filter(budgetItem => budgetItem.category !== category))
-    try {
-        const response = await fetch("http://localhost:8080/api/deleteBudget", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "category": category,
-            })
-        })
-
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-
-    } catch(error) {
-        console.error("Error:", error);
-    }
-
-    getBudgetList().then( budgetList => setBudgetArray(budgetList))
-}
-
-export async function handleBudgetCreation(setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>, newBudgetItem: BudgetItemEntity) {
-    try {
-        const response = await fetch("http://localhost:8080/api/createBudget", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                category: newBudgetItem.category.trim(),
-                amount: newBudgetItem.amount ? newBudgetItem.amount : 0,
-                iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : "/src/assets/category-icons/category-default-icon.svg",
-                group: newBudgetItem.group ? newBudgetItem.group.trim() : "Miscellaneous"
-            })
-        });
-
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-            window.alert("Category name is invalid or already has assigned budget; or $999,999,999 limit exceeded.")
-            setBudgetArray(current => {
-                const indexOfInvalidItem = current.map(item => item.category).lastIndexOf(newBudgetItem.category);
-                if (indexOfInvalidItem !== -1) {
-                    return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)]
-                }
-                return current;
-            })
-        }
-        const responseData = await response.json()
-        console.log(responseData);
-        setBudgetArray(await getBudgetList());
-
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-export async function handleBudgetUpdating(category: string | null, formData: BudgetUpdatingFormData) {
-    try {
-        const response = await fetch("http://localhost:8080/api/updateBudget", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "category": category,
-                "newCategoryName": formData.category.trim(),
-                "amount": formData.amount,
-                "group": formData.group.trim(),
-                "iconPath": formData.iconPath
-            })
-        })
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-            const responseData = await response.json();
-            console.log(responseData);
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-export async function handleExpenseUpdating(expenseId: string, formData: ExpenseUpdatingFormData) {
-    try {
-        const response = await fetch("http://localhost:8080/api/updateExpense", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "expenseId": expenseId,
-                "category": formData.category,
-                "amount": formData.amount
-            })
-        })
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-export async function handleRecurringExpenseUpdating(recurringExpenseId: string, formData: RecurringExpenseUpdatingFormData) {
-    try {
-        const response = await fetch("http://localhost:8080/api/updateRecurringExpense", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "recurringExpenseId": recurringExpenseId,
-                "category": formData.category,
-                "amount": formData.amount,
-                "frequency": formData.frequency
-            })
-        })
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-export async function getGroupList() {
-    try {
-        const response = await fetch("http://localhost:8080/api/getGroups", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        if (response.status === 401) {
-            console.error("JWT token expiry detected. Logging out.")
-            window.alert("Login expired. Please log in again.")
-            logoutOnClick()
-                .then(() => {
-                    window.location.href === "/login" && (window.location.href = "/login")
-                } )
-        } else if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        } else {
-            const responseData = await response.json();
-            console.log(responseData)
-            return responseData.sort(groupSort);
-        }
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-function groupSort (a: GroupItemEntity, b: GroupItemEntity){
-    if (a.group === "Miscellaneous") return 1;
-    if (b.group === "Miscellaneous") return -1;
-    return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-}
-
-function expenseSort(a: ExpenseItemEntity, b: ExpenseItemEntity) {
-    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-}
 
 export function groupListAsOptions(groupArray: GroupItemEntity[]): SelectorOptionsFormattedData[] {
     return groupArray.map( groupItemEntity => {
@@ -541,182 +947,8 @@ export function categoryListAsOptions(budgetArray: BudgetItemEntity[], groupArra
     })
 }
 
-export async function handleGroupCreation(group: string, colour: string, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, newGroupItem: GroupItemEntity) {
-    try {
-        const response = await fetch("http://localhost:8080/api/createGroup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                group: group.trim(),
-                colour: colour.trim()
-            })
-        });
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-            window.alert("Group name is invalid or already exists.")
-            setGroupArray((currentGroupArray) => {
-                const indexOfInvalidItem = currentGroupArray.map(item => item.group).lastIndexOf(newGroupItem.group);
-                if (indexOfInvalidItem !== -1) {
-                    return [...currentGroupArray.slice(0, indexOfInvalidItem), ...currentGroupArray.slice(indexOfInvalidItem + 1)]
-                }
-                return currentGroupArray;
-            })
-        }
-        const responseData = await response.json()
-        console.log(responseData);
-        setGroupArray(await getGroupList());
-    } catch (error) {
-        console.error("Failed to create group:", error);
-    }
-}
+// DYNAMIC SIZING FUNCTIONS //
 
-export async function handleGroupDeletion(groupName: string,
-                                          setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
-                                          setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
-                                          keepContainedBudgets: boolean) {
-    setGroupArray(prevState => prevState.filter(groupItem => groupItem.group !== groupName))
-    try {
-        const response = await fetch("http://localhost:8080/api/deleteGroup", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                group: groupName,
-                keepContainedBudgets: keepContainedBudgets
-            })
-        })
-
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-
-    } catch(error) {
-        console.error("Error:", error);
-    }
-
-    await getGroupList()
-        .then( options => setGroupArray(options))
-        .then( () => getBudgetList().then( budgets => setBudgetArray(budgets)))
-}
-
-export async function handleGroupUpdating(originalGroupName: string, originalColour: string, formData: BasicGroupData, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, groupArray: GroupItemEntity[]) {
-        if (originalGroupName === formData.group || !groupArray.map(groupItem => groupItem.group).includes(formData.group)) {
-        setGroupArray(currentGroupArray => {
-            return currentGroupArray.map(groupItem => groupItem.group == originalGroupName ? {
-                colour: formData.colour ? formData.colour : groupItem.colour,
-                group: formData.group,
-                timestamp: groupItem.timestamp
-            } : groupItem)
-        })
-        try {
-            const response = await fetch("http://localhost:8080/api/updateGroup", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify( {
-                    originalGroupName: originalGroupName,
-                    newGroupName: formData.group.trim(),
-                    newColour: formData.colour ? formData.colour : ""
-                })
-            });
-            if (!response.ok) {
-                console.error(`HTTP error - status: ${response.status}`)
-                window.alert("Updated group is invalid.")
-                setGroupArray(currentGroupArray => {
-
-                    const revertedGroupOptions = [...currentGroupArray]
-                    const indexOfInvalidlyEditedOption = currentGroupArray.map(groupItem => groupItem.group).lastIndexOf(formData.group);
-                    if (indexOfInvalidlyEditedOption !== -1) {
-                        revertedGroupOptions[indexOfInvalidlyEditedOption] = {
-                            group: originalGroupName,
-                            colour: originalColour,
-                            timestamp: revertedGroupOptions[indexOfInvalidlyEditedOption].timestamp
-                        }
-                    }
-                    return revertedGroupOptions;
-                })
-            } else {
-                console.log("Group successfully updated.")
-                setGroupArray(await getGroupList());
-            }
-        } catch (error) {
-            console.error("Failed to update group:", error)
-        }
-    } else {
-        console.error("Selected group name already taken.")
-        window.alert("Selected group name already taken.")
-    }
-}
-
-export function getRandomColour() {
-    const colourArray = [
-        '#fbb39a',
-        '#fbdee0',
-        '#f8b2bc',
-        '#f1afa1',
-        '#fbf5ab',
-        '#e6eda0',
-        '#9fd5be',
-        '#c3e6df',
-        '#9dc7b9',
-        '#acbfa1',
-        '#c6e2ba',
-        '#a6c7ea',
-        '#7c86bf',
-        '#b2b4da',
-        '#dfcde3',
-        '#ceb4d9'
-    ];
-
-    const randomColourIndex = Math.floor(Math.random() * colourArray.length);
-    return colourArray[randomColourIndex];
-}
-
-export function addIconSelectionFunctionality(setFormData:
-                                                  Dispatch<SetStateAction<BudgetUpdatingFormData>>
-                                                  | Dispatch<SetStateAction<BudgetCreationFormData>>) {
-    const categoryIcons: NodeListOf<HTMLImageElement> = document.querySelectorAll(".category-icon-selectable");
-    categoryIcons.forEach((icon): void => {
-        icon.addEventListener("click", (e: MouseEvent) => {
-            e.preventDefault();
-            const iconPath = `/src/assets/category-icons/${icon.getAttribute("data-value")!}`;
-
-            setFormData((currentFormData: any) => {
-                return {...currentFormData, ["iconPath"]: iconPath}
-            });
-            console.log(`iconPath: ${iconPath}`)
-
-            document.querySelectorAll('.category-icon-selectable').forEach(btn => btn.classList.remove("selected-icon"));
-            icon.classList.add("selected-icon");
-        });
-    });
-}
-
-export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAction<BasicGroupData>>) {
-    const colourElementList: NodeListOf<HTMLImageElement> = document.querySelectorAll(".group-colour-selectable-container");
-    colourElementList.forEach(colourSelectable => {
-        colourSelectable.addEventListener("click", (e: MouseEvent) => {
-            const triangleElement = colourSelectable.firstChild as HTMLDivElement;
-
-            e.preventDefault();
-            setFormData((current: BasicGroupData) => {
-                return {...current, ["colour"]: triangleElement.getAttribute("data-value")}
-            });
-
-            colourElementList.forEach(colourSelectable => {
-                const triangle = colourSelectable.firstChild as HTMLDivElement;
-                triangle.classList.remove("selectedColour")
-            });
-            triangleElement.classList.add("selectedColour");
-        })
-    })
-}
 
 export function dynamicallySizeBudgetNameDisplays() {
     const budgetNameElements = document.querySelectorAll(".budget-name") as NodeListOf<HTMLElement>;
@@ -754,53 +986,120 @@ export function dynamicallySizeBudgetNumberDisplays() {
     })
 }
 
-export function getAmountBudgeted(budgetArray: BudgetItemEntity[]) {
+
+// OTHER UTILITY FUNCTIONS //
+
+export function getRandomGroupColour() {
+    const colourArray = [
+        '#fbb39a',
+        '#fbdee0',
+        '#f8b2bc',
+        '#f1afa1',
+        '#fbf5ab',
+        '#e6eda0',
+        '#9fd5be',
+        '#c3e6df',
+        '#9dc7b9',
+        '#acbfa1',
+        '#c6e2ba',
+        '#a6c7ea',
+        '#7c86bf',
+        '#b2b4da',
+        '#dfcde3',
+        '#ceb4d9'
+    ];
+
+    const randomColourIndex = Math.floor(Math.random() * colourArray.length);
+    return colourArray[randomColourIndex];
+}
+
+export function getGroupBudgetTotal(filteredBudgetArray: BudgetItemEntity[]) {
+    return filteredBudgetArray.map(budgetItem => budgetItem.amount)
+        .reduce( (acc, amountSpent) => acc + amountSpent, 0)
+}
+
+export function getGroupExpenditureTotal(expenseArray: ExpenseItemEntity[], filteredBudgetArray: BudgetItemEntity[]) {
+    const categoriesInGroup = filteredBudgetArray.map(expenseItem => expenseItem.category)
+    const filteredExpenseArray = expenseArray.filter(expenseItem => categoriesInGroup.includes(expenseItem.category));
+    return filteredExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
+}
+
+export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string) {
+    try {
+        return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group
+    } catch (e) {
+        console.log(`Failed to retrieve the group of category ${category}. Temporarily assuming Miscellaneous.`)
+        return "Miscellaneous";
+    }
+}
+
+export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]) {
+    const groupOption = groupArray.filter(groupItemEntity => groupItemEntity.group === groupName)[0];
+    return groupOption.colour ? groupOption.colour : null;
+}
+
+export function getTotalAmountBudgeted(budgetArray: BudgetItemEntity[]) {
     const amountArray = budgetArray.map( budgetItem => (
         budgetItem.amount
     ))
-    // console.log(amountArray)
     return amountArray.reduce((accumulator, currentValue) => (
         accumulator + currentValue
     ), 0)
 }
 
-export function formatDollarAmountStatic(amount: number) {
-    return new Intl.NumberFormat('en-US', {
-        style: 'decimal',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }).format(amount);
+export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
+    const categoryToGroupAndColourMap: CategoryToIconGroupAndColourMap = new Map();
+
+    budgetArray.forEach( budgetItem => {
+        categoryToGroupAndColourMap.set(budgetItem.category, {
+            iconPath: budgetItem.iconPath,
+            group: budgetItem.group,
+            colour: groupArray.find(groupItem => groupItem.group === budgetItem.group)!.colour
+        })
+    })
+    return categoryToGroupAndColourMap;
 }
 
-export function formatDollarAmountDynamic(amount: string) {
-    const cleanedValue = amount.replace(/[^\d.]/g, "");
-    const splitValue = cleanedValue.split(".");
-    if (splitValue.length >= 2 && splitValue[1].length > 2) {
-        splitValue[1] = splitValue[1].substring(0, 2);
+export function getLineAngle(percentageIncomeRemaining: number) {
+    console.log(`Received percentageIncomeRemaining: ${percentageIncomeRemaining}`)
+    const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
+    console.log(`Received functionalPercentageIncomeRemaining: ${functionalPercentageIncomeRemaining}`)
+    return functionalPercentageIncomeRemaining <= -100 ? 14.5 :
+        functionalPercentageIncomeRemaining === 100 ? -14.5 :
+            functionalPercentageIncomeRemaining / (-100 / 14.5);
+}
+
+export function handleInputChangeOnFormWithAmount(e: ChangeEvent<HTMLInputElement>, setFormData: Dispatch<SetStateAction<any>>) {
+    let newFormValue: string;
+    if (e.target.name === "amount") {
+        if (e.target.value === "") {
+            newFormValue = "";
+        } else {
+            console.log("passed")
+            newFormValue = formatDollarAmountDynamic(e.target.value);
+        }
+    } else {
+        console.log("not amount")
+        newFormValue = e.target.value;
     }
-    return splitValue.join(".");
-}
-
-function getOrdinalSuffix(day: number) {
-    if (day > 3 && day < 21) return 'th';
-    switch (day % 10) {
-        case 1: return 'st';
-        case 2: return 'nd';
-        case 3: return 'rd';
-        default: return 'th';
+    if (e.target.name != "amount" || (e.target.name === "amount" && parseInt(e.target.value) >=0 && parseInt(e.target.value) <= 9999999.99)) {
+        setFormData((currentFormData: BudgetCreationFormData | BudgetUpdatingFormData | ExpenseCreationFormData | ExpenseUpdatingFormData) => {
+            return {...currentFormData, [e.target.name]: newFormValue}
+        });
     }
 }
 
-export function formatDate(date: Date) {
-    const formattedDayOfWeek = new Intl.DateTimeFormat('en-AU', { weekday: "long" }).format(date);
-    const formattedDayOfMonth = date.getDate();
-    const formattedMonth = new Intl.DateTimeFormat('en-AU', { month: "long" }).format(date);
-    const formattedYear = new Intl.DateTimeFormat('en-AU', { year: "numeric" }).format(date);
-
-    const ordinalSuffix = getOrdinalSuffix(formattedDayOfMonth);
-
-    return `${formattedDayOfWeek}, ${formattedDayOfMonth}${ordinalSuffix} ${formattedMonth} ${formattedYear}`
+export function checkForOpenModalOrForm(expenseFormVisibility: ExpenseFormVisibility
+                                            | BudgetFormVisibility
+                                            | RecurringExpenseFormVisibility
+                                            | SettingsFormVisibility,
+                                        expenseModalVisibility: ExpenseModalVisibility
+                                            | BudgetModalVisibility
+                                            | RecurringExpenseModalVisibility
+                                            | SettingsModalVisibility) {
+    return Object.values(expenseFormVisibility).includes(true) || Object.values(expenseModalVisibility).includes(true)
 }
+
 
 export async function implementDynamicBackgroundHeight() {
     function adjustBackgroundHeight() {
@@ -837,299 +1136,4 @@ export async function implementDynamicBackgroundHeight() {
 export function getWindowLocation() {
     const urlArray = window.location.href.split("/");
     return urlArray[urlArray.length - 1];
-}
-
-export async function logoutOnClick() {
-    try {
-        await fetch("http://localhost:8080/api/logout", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({jwt: localStorage.getItem("jwt")})
-        })
-            .then( () => window.location.href = "/login")
-            .catch( error => console.error(error))
-    } catch {
-        console.error("Error: Logout failed")
-    }
-}
-
-export async function checkForUser() {
-    try {
-        const response = await fetch("http://localhost:8080/api/checkForUser", {
-            method: "GET",
-        });
-        if (response.status === 400) {
-            console.error("Failed to check for user status.")
-        } else if (response.status === 401) {
-            console.error("JWT token expiry detected. Logging out.")
-            window.alert("Login expired. Please log in again.")
-            logoutOnClick()
-                .then(() => {
-                    window.location.href === "/login" && (window.location.href = "/login")
-                } )
-        }
-        else {
-            const userStatus = await response.json();
-            console.log(userStatus)
-            return userStatus;
-        }
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-export function checkForOpenModalOrForm(expenseFormVisibility: ExpenseFormVisibility
-    | BudgetFormVisibility
-    | RecurringExpenseFormVisibility
-    | SettingsFormVisibility,
-                                        expenseModalVisibility: ExpenseModalVisibility
-                                            | BudgetModalVisibility
-                                            | RecurringExpenseModalVisibility
-                                            | SettingsModalVisibility) {
-    return Object.values(expenseFormVisibility).includes(true) || Object.values(expenseModalVisibility).includes(true)
-}
-
-function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) {
-    try {
-        return new Date(budgetItemA.timestamp!).getTime() - new Date(budgetItemB.timestamp!).getTime();
-    } catch (e) {
-        console.error("Failed to perform budget sort. Below is budgetItemA and B.")
-        console.log(budgetItemA);
-        console.log(budgetItemB);
-    }
-}
-
-export function getLineAngle(percentageIncomeRemaining: number) {
-    console.log(`Received percentageIncomeRemaining: ${percentageIncomeRemaining}`)
-    const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
-    console.log(`Received functionalPercentageIncomeRemaining: ${functionalPercentageIncomeRemaining}`)
-    return functionalPercentageIncomeRemaining <= -100 ? 14.5 :
-        functionalPercentageIncomeRemaining === 100 ? -14.5 :
-            functionalPercentageIncomeRemaining / (-100 / 14.5);
-}
-
-export async function handleTotalIncomeUpdating(newTotalIncome: number) {
-    try {
-        const response = await fetch("http://localhost:8080/api/updateTotalIncome", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                totalIncome: newTotalIncome
-            })
-        })
-        if (!response.ok) {
-            console.error(`HTTP error when updating total income - ${response.status}`)
-        } else {
-            console.log(await response.json());
-        }
-    } catch (e) {
-        console.error(`Failed to execute total income update - ${e}`)
-    }
-}
-
-export async function getTotalIncome() {
-    try {
-        const response = await fetch("http://localhost:8080/api/getTotalIncome",
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }
-        )
-        if (!response.ok) {
-            console.error(`HTTP error when getting total income - ${response.status}`)
-        } else {
-            const totalIncome = await response.json();
-            console.log(totalIncome);
-            return(totalIncome.totalIncome);
-        }
-    } catch (e) {
-        console.error(`Failed to execute total income retrieval - ${e}`)
-    }
-}
-
-export function handleInputChangeOnFormWithAmount(e: ChangeEvent<HTMLInputElement>, setFormData: Dispatch<SetStateAction<any>>) {
-    let newFormValue: string;
-    if (e.target.name === "amount") {
-        if (e.target.value === "") {
-            newFormValue = "";
-        } else {
-            console.log("passed")
-            newFormValue = formatDollarAmountDynamic(e.target.value);
-        }
-    } else {
-        console.log("not amount")
-        newFormValue = e.target.value;
-    }
-    if (e.target.name != "amount" || (e.target.name === "amount" && parseInt(e.target.value) >=0 && parseInt(e.target.value) <= 9999999.99)) {
-        setFormData((currentFormData: BudgetCreationFormData | BudgetUpdatingFormData | ExpenseCreationFormData | ExpenseUpdatingFormData) => {
-            return {...currentFormData, [e.target.name]: newFormValue}
-        });
-    }
-}
-
-export function getGroupBudgetTotal(filteredBudgetArray: BudgetItemEntity[]) {
-    return filteredBudgetArray.map(budgetItem => budgetItem.amount)
-        .reduce( (acc, amountSpent) => acc + amountSpent, 0)
-}
-
-export function getGroupExpenditureTotal(expenseArray: ExpenseItemEntity[], filteredBudgetArray: BudgetItemEntity[]) {
-    const categoriesInGroup = filteredBudgetArray.map(expenseItem => expenseItem.category)
-    const filteredExpenseArray = expenseArray.filter(expenseItem => categoriesInGroup.includes(expenseItem.category));
-    return filteredExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
-}
-
-// export async function getRecurringExpenseList() {
-//     // const recurringExpenseItems: RecurringExpenseItemEntity[] = [
-//     //     {
-//     //         recurringExpenseId: "exp001",
-//     //         category: "Emergency Funds",
-//     //         amount: 150,
-//     //         timestamp: new Date('2024-01-26T09:00:00'),
-//     //         frequency: "monthly"
-//     //     },
-//     //     {
-//     //         recurringExpenseId: "exp002",
-//     //         category: "Water",
-//     //         amount: 200,
-//     //         timestamp: new Date('2024-01-26T10:00:00'),
-//     //         frequency: "weekly"
-//     //     },
-//     //     {
-//     //         recurringExpenseId: "exp003",
-//     //         category: "Other",
-//     //         amount: 20,
-//     //         timestamp: new Date('2024-01-26T11:00:00'),
-//     //         frequency: "annually"
-//     //     }
-//     // ];
-//     //
-//     // return recurringExpenseItems;
-//     try {
-//         const response = await fetch("http://localhost:8080/api/getRecurringExpenses", {
-//             method: "GET",
-//             headers: {
-//                 "Content-Type": "application/json"
-//             }
-//         })
-//         if (!response.ok) {
-//             console.error(`HTTP error - status: ${response.status}`);
-//         }
-//         const responseData = await response.json();
-//         console.log(responseData);
-//         return responseData;
-//     } catch (error) {
-//         console.error("Error:", error);
-//     }
-// }
-
-export async function getRecurringExpenseList() {
-    try {
-        const response = await fetch("http://localhost:8080/api/getRecurringExpenses", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        if (response.status === 401) {
-            console.error("JWT token expiry detected. Logging out.")
-            window.alert("Login expired. Please log in again.")
-            logoutOnClick()
-                .then(() => {
-                    window.location.href === "/login" && (window.location.href = "/login")
-                } )
-        }
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-        return responseData.sort(expenseSort)
-
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
-                                            setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>,
-                                            setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
-    setRecurringExpenseArray(recurringExpenseArray => recurringExpenseArray.filter( recurringExpenseItem => {
-            return recurringExpenseItem.recurringExpenseId !== recurringExpenseId
-        }
-    ))
-    try {
-        const response = await fetch("http://localhost:8080/api/deleteRecurringExpense", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "recurringExpenseId": recurringExpenseId,
-            })
-        })
-
-        if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        console.log(responseData);
-
-    } catch(error) {
-        console.error("Error:", error);
-    }
-    getRecurringExpenseList().then(recurringExpenseList => setRecurringExpenseArray(recurringExpenseList))
-    getBudgetList().then( budgetList => setBudgetArray(budgetList))
-}
-
-export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string) {
-    try {
-        return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group
-    } catch (e) {
-        console.log(`Failed to retrieve the group of category ${category}. Temporarily assuming Miscellaneous.`)
-        console.log("Below is index 0:")
-        console.log(budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0])
-        console.log("Below is the budgetArray:")
-        console.log(budgetArray)
-        return null;
-    }
-}
-
-export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]) {
-    const groupOption = groupArray.filter(groupItemEntity => groupItemEntity.group === groupName)[0];
-    return groupOption.colour ? groupOption.colour : null;
-}
-
-export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
-    const categoryToGroupAndColourMap: CategoryToIconGroupAndColourMap = new Map();
-
-    budgetArray.forEach( budgetItem => {
-        categoryToGroupAndColourMap.set(budgetItem.category, {
-            iconPath: budgetItem.iconPath,
-            group: budgetItem.group,
-            colour: groupArray.find(groupItem => groupItem.group === budgetItem.group)!.colour
-        })
-    })
-    return categoryToGroupAndColourMap;
-}
-
-export async function runExpenseWipe() {
-
-}
-
-export async function runBudgetWipe() {
-
-}
-
-export async function runFullDataWipe() {
-
-}
-
-export async function runAccountDeletion() {
-
 }

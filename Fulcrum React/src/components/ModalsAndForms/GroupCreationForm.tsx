@@ -3,7 +3,7 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addColourSelectionFunctionality,
     BasicGroupData, BudgetFormVisibility, capitaliseFirstLetter,
-    handleGroupCreation, GroupItemEntity, getRandomColour
+    handleGroupCreation, GroupItemEntity, getRandomGroupColour
 } from "../../util.ts";
 import "../../css/Budget.css"
 import GroupColourSelector from "../Budget/Selectors/GroupColourSelector.tsx";
@@ -41,7 +41,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const randomColour = getRandomColour();
+        const randomColour = getRandomGroupColour();
 
         const newGroupItem: GroupItemEntity = {
             group: formData.group,

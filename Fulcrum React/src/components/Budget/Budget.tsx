@@ -3,7 +3,7 @@ import {
     BudgetItemEntity,
     BudgetModalVisibility, checkForOpenModalOrForm, checkForUser,
     ExpenseItemEntity,
-    getAmountBudgeted,
+    getTotalAmountBudgeted,
     getBudgetList, getExpenseList,
     getGroupList, getLineAngle, getTotalIncome,
     GroupItemEntity,
@@ -100,7 +100,7 @@ export default function Budget() {
     },[budgetArray, expenseArray])
 
     useEffect( () => {
-        setAmountLeftToBudget(totalIncome - getAmountBudgeted(budgetArray))
+        setAmountLeftToBudget(totalIncome - getTotalAmountBudgeted(budgetArray))
     },[budgetArray, totalIncome])
 
     useEffect(() => {
