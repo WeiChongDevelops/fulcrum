@@ -17,9 +17,14 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
 
     const [formData, setFormData] = useState<BasicGroupData>({ group: "", colour: "" })
     const formRef = useRef<HTMLDivElement>(null);
+
+    function hideForm() {
+        setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}));
+    }
+
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}))
+            hideForm();
         }
     };
 
@@ -41,6 +46,8 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
+        hideForm();
+
         const randomColour = getRandomGroupColour();
 
         const newGroupItem: GroupItemEntity = {
@@ -52,7 +59,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
         setGroupArray( (oldGroupArray) => {
             return [...oldGroupArray, newGroupItem]
         })
-        setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}))
+
         await handleGroupCreation(formData.group, formData.colour ? formData.colour : randomColour, setGroupArray, newGroupItem);
         setFormData({ group: "", colour: "" });
 
@@ -61,7 +68,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
     return (
         <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
             <FulcrumButton onClick={() => {
-                setBudgetFormVisibility(current => ({...current, isCreateGroupVisible: false}))
+                hideForm();
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="close-form-or-modal-button mb-6 font-bold text-4xl">New Group</p>

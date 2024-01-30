@@ -38,9 +38,14 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
 
     const [formData, setFormData] = useState<ExpenseCreationFormData>({ category: "", amount: 0 });
     const formRef = useRef<HTMLDivElement>(null);
+
+    function hideForm() {
+        setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
+    }
+
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
+            hideForm();
         }
     }
 
@@ -78,7 +83,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
             setBudgetArray(current => [...current, newDefaultBudgetItem])
             setExpenseArray(current => [newExpenseItem, ...current])
         }
-        setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
+        hideForm();
 
         await handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItem);
         setFormData({ category: "", amount: 0 });
@@ -95,7 +100,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
     return (
         <div ref={formRef}  className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
             <FulcrumButton onClick={() => {
-                setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
+                hideForm();
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="mb-6 font-bold text-4xl">New Expense Item</p>

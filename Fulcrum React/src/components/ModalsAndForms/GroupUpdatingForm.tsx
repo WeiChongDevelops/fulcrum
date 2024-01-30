@@ -34,9 +34,13 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
         };
     }, []);
 
+    function hideForm() {
+        setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}));
+    }
+
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}))
+            hideForm();
         }
     };
 
@@ -48,7 +52,7 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}))
+        hideForm();
 
         await handleGroupUpdating(oldGroupBeingEdited.oldGroupName, oldGroupBeingEdited.oldColour, formData, setGroupArray, groupArray)
 
@@ -63,7 +67,7 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
     return (
         <div ref={formRef} className="fulcrum-form">
             <FulcrumButton onClick={() => {
-                setBudgetFormVisibility(current => ({...current, isUpdateGroupVisible: false}))
+                hideForm();
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="mb-6 font-bold text-4xl">Updating Group {oldGroupBeingEdited.oldGroupName}</p>

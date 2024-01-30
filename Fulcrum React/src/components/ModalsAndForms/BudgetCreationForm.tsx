@@ -28,9 +28,13 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
 
     const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     const formRef = useRef<HTMLDivElement>(null);
+
+    function hideForm() {
+        setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}));
+    }
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}))
+            hideForm();
         }
     };
 
@@ -59,7 +63,7 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
 
         setBudgetArray(current => [...current, newBudgetItem])
 
-        setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}))
+        hideForm();
         await handleBudgetCreation(setBudgetArray, newBudgetItem);
         setFormData({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     }
@@ -72,7 +76,7 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
         <div ref={formRef}  className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
 
             <FulcrumButton displayText={"Close"} backgroundColour={"grey"} optionalTailwind={"ml-auto mb-auto"} onClick={() => {
-                setBudgetFormVisibility(current => ({...current, isCreateBudgetVisible: false}))
+                hideForm();
             }}/>
 
             <p className="mb-6 font-bold text-4xl">New Budget Item</p>

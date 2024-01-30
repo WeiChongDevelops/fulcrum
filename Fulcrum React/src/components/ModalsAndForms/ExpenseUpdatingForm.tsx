@@ -38,9 +38,13 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
         };
     }, []);
 
+    function hideForm() {
+        setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}));
+    }
+
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}))
+            hideForm();
         }
     };
 
@@ -55,7 +59,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}))
+        hideForm();
 
         await handleExpenseUpdating(oldExpenseBeingEdited.expenseId, formData);
 
@@ -69,7 +73,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
     return (
         <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
             <FulcrumButton onClick={() => {
-                setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}))
+                hideForm();
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="mb-6 font-bold text-4xl">Updating Expense</p>

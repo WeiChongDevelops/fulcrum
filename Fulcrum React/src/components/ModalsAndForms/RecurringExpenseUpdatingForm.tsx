@@ -39,9 +39,13 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
         };
     }, []);
 
+    function hideForm() {
+        setRecurringExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseVisible: false}))
+    }
+
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setRecurringExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseVisible: false}))
+            hideForm();
         }
     };
 
@@ -60,7 +64,7 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        setRecurringExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseVisible: false}))
+        hideForm();
 
         await handleRecurringExpenseUpdating(oldRecurringExpenseBeingEdited.recurringExpenseId, formData);
 
@@ -77,7 +81,7 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
         <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
 
             <FulcrumButton onClick={() => {
-                setRecurringExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseVisible: false}))
+                hideForm();
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="mb-6 font-bold text-4xl">Updating Expense</p>

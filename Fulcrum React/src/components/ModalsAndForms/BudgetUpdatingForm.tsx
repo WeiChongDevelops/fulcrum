@@ -31,9 +31,13 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
         };
     }, []);
 
+    function hideForm() {
+        setBudgetFormVisibility(current => ({...current, isUpdateBudgetVisible: false}));
+    }
+
     const handleClickOutside = (e: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(e.target as Node)) {
-            setBudgetFormVisibility(current => ({...current, isUpdateBudgetVisible: false}))
+            hideForm();
         }
     };
 
@@ -48,7 +52,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        setBudgetFormVisibility(current => ({...current, isUpdateBudgetVisible: false}))
+        hideForm();
 
         await handleBudgetUpdating(oldBudgetBeingEdited.oldCategory, formData);
 
@@ -59,7 +63,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
     return (
         <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
             <FulcrumButton onClick={() => {
-                setBudgetFormVisibility(current => ({...current, isUpdateBudgetVisible: false}))
+                hideForm();
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="mb-6 font-bold text-4xl">Updating Budget for {oldBudgetBeingEdited.oldCategory}</p>
