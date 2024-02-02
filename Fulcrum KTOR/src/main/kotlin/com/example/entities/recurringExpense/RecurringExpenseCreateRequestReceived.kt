@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RecurringExpenseCreateRequestReceived(
+    val recurringExpenseId: String,
     val category: String,
     val amount: Double,
     @Contextual val timestamp: Instant,

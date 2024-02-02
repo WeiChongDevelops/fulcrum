@@ -115,10 +115,10 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
                     required
                 />
 
-                <label htmlFor="amount">Frequency</label>
+                <label htmlFor="frequency">Frequency</label>
                 <Select
-                    id="category"
-                    name="category"
+                    id="frequency"
+                    name="frequency"
                     defaultValue={{
                         label: capitaliseFirstLetter(oldRecurringExpenseBeingEdited.oldFrequency),
                         value: oldRecurringExpenseBeingEdited.oldFrequency as String,

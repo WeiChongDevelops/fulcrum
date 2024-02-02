@@ -12,6 +12,7 @@ export interface ExpenseItemEntity {
 export interface ExpenseCreationFormData {
     category: string,
     amount: number
+    frequency: RecurringExpenseFrequency
 }
 
 
@@ -603,8 +604,32 @@ export async function handleGroupDeletion(groupName: string,
 
 /// RECURRING EXPENSES API CALL FUNCTIONS //
 
-export async function handleRecurringExpenseCreation() {
+export async function handleRecurringExpenseCreation(newRecurringExpenseItem: RecurringExpenseItemEntity) {
+    try {
+        const response = await fetch("http://localhost:8080/api/createRecurringExpense", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                recurringExpenseId: newRecurringExpenseItem.recurringExpenseId,
+                category: newRecurringExpenseItem.category,
+                amount: newRecurringExpenseItem.amount,
+                timestamp: newRecurringExpenseItem.timestamp,
+                frequency: newRecurringExpenseItem.frequency
+            })
+        });
 
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+            window.alert("Expense entry invalid.")
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
 }
 
 export async function getRecurringExpenseList() {
@@ -1082,7 +1107,7 @@ export function handleInputChangeOnFormWithAmount(e: ChangeEvent<HTMLInputElemen
         console.log("not amount")
         newFormValue = e.target.value;
     }
-    if (e.target.name != "amount" || (e.target.name === "amount" && parseInt(e.target.value) >=0 && parseInt(e.target.value) <= 9999999.99)) {
+    if (e.target.name != "amount" || e.target.value == "" || (e.target.name === "amount" && parseFloat(e.target.value) >= 0 && parseFloat(e.target.value) <= 9999999.99)) {
         setFormData((currentFormData: BudgetCreationFormData | BudgetUpdatingFormData | ExpenseCreationFormData | ExpenseUpdatingFormData) => {
             return {...currentFormData, [e.target.name]: newFormValue}
         });
