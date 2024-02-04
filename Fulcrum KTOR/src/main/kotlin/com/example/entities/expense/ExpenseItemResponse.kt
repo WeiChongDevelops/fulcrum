@@ -11,4 +11,5 @@ data class ExpenseItemResponse(
     val category: String,
     val amount: Double,
     @Contextual val timestamp: Instant,
+    val recurringExpenseId: String?
 )

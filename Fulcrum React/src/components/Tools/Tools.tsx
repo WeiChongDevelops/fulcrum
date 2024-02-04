@@ -1,5 +1,5 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
-import {logoutOnClick, OpenToolsSection} from "../../util.ts";
+import {getPublicUserData, logoutOnClick, OpenToolsSection} from "../../util.ts";
 import "../../css/Tools.css"
 import {useEffect, useState} from "react";
 import RecurringExpenses from "./RecurringExpenses.tsx";

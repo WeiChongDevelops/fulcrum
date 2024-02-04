@@ -9,5 +9,6 @@ data class ExpenseCreateRequestReceived(
     val expenseId: String,
     val category: String,
     val amount: Double,
-    @Contextual val timestamp: Instant
+    @Contextual val timestamp: Instant,
+    val recurringExpenseId: String?
 )

@@ -25,12 +25,6 @@ import kotlinx.coroutines.launch
 //    }
 //}
 
-fun main() {
-    embeddedServer(Netty, port = 8080, host = "localhost") {
-        serverConfig()
-    }.start(wait = true)
-}
-
 private fun Application.serverConfig() {
     install(ContentNegotiation) {
         json()
@@ -61,3 +55,9 @@ private fun Application.serverConfig() {
     }
 }
 
+
+fun main() {
+    embeddedServer(Netty, port = 8080, host = "localhost") {
+        serverConfig()
+    }.start(wait = true)
+}

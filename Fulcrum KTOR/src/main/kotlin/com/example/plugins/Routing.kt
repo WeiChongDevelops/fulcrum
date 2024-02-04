@@ -5,9 +5,7 @@ import com.example.entities.expense.*
 import com.example.entities.recurringExpense.*
 import com.example.entities.successFeedback.ErrorResponseSent
 import com.example.entities.successFeedback.SuccessResponseSent
-import com.example.entities.user.UserEmail
-import com.example.entities.user.UserInfo
-import com.example.entities.user.UserStatusCheck
+import com.example.entities.user.*
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
 import io.github.jan.supabase.gotrue.GoTrue
@@ -66,7 +64,8 @@ fun Application.configureRouting() {
                     userId = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id,
                     category = expenseCreateRequest.category,
                     amount = expenseCreateRequest.amount,
-                    timestamp = expenseCreateRequest.timestamp
+                    timestamp = expenseCreateRequest.timestamp,
+                    recurringExpenseId = expenseCreateRequest.recurringExpenseId
                 )
                 val insertedItem = supabase.postgrest["expenses"].insert(
                     itemToInsert,
@@ -233,6 +232,50 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring expense not deleted."))
             }
         }
+
+        post("/api/createRemovedRecurringExpense") {
+            try {
+                val removedRecurringExpenseRequest = call.receive<RemovedRecurringExpenseCreateRequestReceived>()
+
+                val userId = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id
+                val itemToInsert = RemovedRecurringExpenseCreateRequestSent (
+                    recurringExpenseId = removedRecurringExpenseRequest.recurringExpenseId,
+                    timestampOfRemovedInstance = removedRecurringExpenseRequest.timestampOfRemovedInstance
+                )
+
+                val insertedItem = supabase.postgrest["removed_recurring_expenses"].insert(
+                    itemToInsert,
+                    returning = Returning.REPRESENTATION
+                )
+
+                if (insertedItem.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Removed recurring expense instance not added."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Removed recurring expense instance added successfully."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while creating removed recurring expense instance", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Removed recurring expense instance not added."))
+            }
+        }
+
+
+        get("/api/getRemovedRecurringExpenses") {
+            try {
+                val userId = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id
+                val removedRecurringExpensesList = supabase.postgrest["removed_recurring_expenses"].select(columns = Columns.list("recurringExpenseId", "timestampOfRemovedInstance")) {
+                    eq("userId", userId)
+                }.decodeList<RemovedRecurringExpenseItemResponse>()
+
+                call.respond(HttpStatusCode.OK, removedRecurringExpensesList)
+            } catch (e: UnauthorizedRestException) {
+                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
+            } catch (e: Exception) {
+                call.application.log.error("Error while reading removed recurring expenses", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Removed recurring expenses not read."))
+            }
+        }
+
 
         // BUDGET API //
 
@@ -508,6 +551,18 @@ fun Application.configureRouting() {
 
         // USER AUTHENTICATION //
 
+        get("/api/getPublicUserData") {
+            try {
+                val userData = supabase.postgrest["public_user_data"].select(columns = Columns.list("createdAt, darkModeEnabled, accessibilityEnabled")) {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                    .decodeSingle<PublicUserDataResponse>()
+                call.respond(HttpStatusCode.OK, userData)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Public user data retrieval failed."))
+            }
+        }
+
         post("/api/register") {
             try {
                 val userCreds = call.receive<UserInfo>()
@@ -516,7 +571,23 @@ fun Application.configureRouting() {
                     password = userCreds.password
                 }
 
+
                 val uid = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id
+
+                val newUserInfo = PublicUserDataCreateRequestSent (
+                    userId = uid
+                )
+
+                val userInfoInserted = supabase.postgrest["public_user_data"].insert(
+                    newUserInfo
+                )
+
+                if (userInfoInserted.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("New row not added to public user data."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("New row not added to public user data."))
+                }
+
 
                 // Call writes for default groups and categories.
                 // Misc Group
@@ -531,7 +602,7 @@ fun Application.configureRouting() {
                 )
 
                 if (miscGroupInserted.body == null) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default misc group not added."))
                 } else {
                     call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
                 }

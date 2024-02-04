@@ -74,7 +74,8 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 expenseId: uuid(),
                 category: formData.category,
                 amount: formData.amount ? parseFloat(String(formData.amount)) : 0,
-                timestamp: new Date()
+                timestamp: new Date(),
+                recurringExpenseId: null
             }
 
             if (budgetArray.map(budgetItem => budgetItem.category).includes(newExpenseItem.category)) {

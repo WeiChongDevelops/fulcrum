@@ -1,6 +1,7 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {checkForOpenModalOrForm,
-    OpenToolsSection, runAccountDeletion, runBudgetWipe, runExpenseWipe, runFullDataWipe,
+import {
+    checkForOpenModalOrForm, getPublicUserData,
+    OpenToolsSection, PublicUserData, runAccountDeletion, runBudgetWipe, runExpenseWipe, runFullDataWipe,
     SettingsFormVisibility,
     SettingsModalVisibility
 } from "../../util.ts";
@@ -30,9 +31,20 @@ export default function Settings({ setOpenToolsSection }: SettingsProps) {
 
     const [isSettingsFormOrModalOpen, setIsSettingsFormOrModalOpen] = useState<boolean>(false);
 
+    const [publicUserData, setPublicUserData] = useState<PublicUserData>({
+        createdAt: new Date(),
+        darkModeEnabled: false,
+        accessibilityEnabled: false
+    })
+
     useEffect(() => {
         setIsSettingsFormOrModalOpen(checkForOpenModalOrForm(settingsFormVisibility, settingsModalVisibility))
     }, [settingsFormVisibility, settingsModalVisibility]);
+
+    useEffect(() => {
+        getPublicUserData()
+            .then(results => setPublicUserData(results));
+    }, []);
 
     return (
         <>
@@ -55,8 +67,9 @@ export default function Settings({ setOpenToolsSection }: SettingsProps) {
                     </div>
 
 
-                    <div>
-                        <h1>Settings Here</h1>
+                    <div className={"flex flex-row justify-between mr-16 text-xl"}>
+                        <b>Account Created On:</b>
+                        <p>{new Date(publicUserData.createdAt).toLocaleDateString()}</p>
                     </div>
                 </div>
 

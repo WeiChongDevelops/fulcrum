@@ -1,4 +1,5 @@
 import {ChangeEvent, Dispatch, SetStateAction} from "react";
+import {v4 as uuid} from "uuid";
 
 
 //  EXPENSE ENTITIES //
@@ -7,6 +8,7 @@ export interface ExpenseItemEntity {
     category: string
     amount: number
     timestamp: Date
+    recurringExpenseId: string | null
 }
 
 export interface ExpenseCreationFormData {
@@ -151,12 +153,23 @@ export interface SettingsFormVisibility {
     typeDeleteMyAccountForm: boolean;
 }
 
+export interface RemovedRecurrenceExpenseItem {
+    recurringExpenseId: string,
+    timestampOfRemovedInstance: Date
+}
+
 // MISCELLANEOUS ENTITIES //
 
 export interface SelectorOptionsFormattedData {
     value: string;
     label: string;
     colour: string | null;
+}
+
+export interface PublicUserData {
+    createdAt: Date;
+    darkModeEnabled: boolean;
+    accessibilityEnabled: boolean;
 }
 
 export type CategoryToIconGroupAndColourMap = Map<string, {iconPath: string, group: string, colour:string}>;
@@ -223,7 +236,8 @@ export async function handleExpenseCreation(setBudgetArray: Dispatch<SetStateAct
                 expenseId: newExpenseItem.expenseId,
                 category: newExpenseItem.category,
                 amount: newExpenseItem.amount,
-                timestamp: newExpenseItem.timestamp
+                timestamp: newExpenseItem.timestamp,
+                recurringExpenseId: newExpenseItem.recurringExpenseId
             })
         });
 
@@ -616,7 +630,7 @@ export async function handleRecurringExpenseCreation(newRecurringExpenseItem: Re
                 category: newRecurringExpenseItem.category,
                 amount: newRecurringExpenseItem.amount,
                 timestamp: newRecurringExpenseItem.timestamp,
-                frequency: newRecurringExpenseItem.frequency
+                frequency: newRecurringExpenseItem.frequency as String
             })
         });
 
@@ -715,6 +729,49 @@ export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
     }
     getRecurringExpenseList().then(recurringExpenseList => setRecurringExpenseArray(recurringExpenseList))
     getBudgetList().then( budgetList => setBudgetArray(budgetList))
+}
+
+export async function handleRemovedRecurringExpenseCreation(recurringExpenseId: string, timestampOfRemovedInstance: Date) {
+    try {
+        const response = await fetch("http://localhost:8080/api/createRemovedRecurringExpense", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                recurringExpenseId: recurringExpenseId,
+                timestampOfRemovedInstance: timestampOfRemovedInstance
+            })
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        } else {
+            console.log("Successfully created removed recurring expense.")
+        }
+    } catch (error) {
+        console.error("Error creating removed recurring expense:", error);
+    }
+}
+
+export async function getRemovedRecurringExpenses() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getRemovedRecurringExpenses", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const removedRecurringExpenses = await response.json();
+        console.log(removedRecurringExpenses);
+        return removedRecurringExpenses;
+    } catch (error) {
+        console.error("Error getting removed recurring expenses:", error);
+    }
 }
 
 
@@ -827,6 +884,26 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
 
 
 // AUTH API CALL FUNCTIONS //
+
+export async function getPublicUserData() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getPublicUserData", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if (!response.ok) {
+            console.error(`HTTP error when getting public user data - ${response.status}`)
+        } else {
+            const publicUserData = await response.json();
+            console.log(publicUserData);
+            return(publicUserData);
+        }
+    } catch (e) {
+        console.error(`Failed to execute public data retrieval - ${e}`)
+    }
+}
 
 export async function logoutOnClick() {
     try {
@@ -1014,6 +1091,35 @@ export function dynamicallySizeBudgetNumberDisplays() {
 
 // OTHER UTILITY FUNCTIONS //
 
+export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpenseItemEntity, dateToAnalyseForExpenseLanding: Date) {
+    return true;
+    // const creationDate = new Date(recurringExpenseItem.timestamp);
+    // const frequency = recurringExpenseItem.frequency;
+    //
+    // creationDate.setHours(0, 0, 0, 0);
+    // dateToAnalyseForExpenseLanding.setHours(0, 0, 0, 0);
+    //
+    // const diffTime = Math.abs(dateToAnalyseForExpenseLanding.getTime() - creationDate.getTime());
+    // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    //
+    // switch (frequency) {
+    //     case 'daily':
+    //         return true;
+    //     case 'weekly':
+    //         return diffDays % 7 === 0;
+    //     case 'fortnightly':
+    //         return diffDays % 14 === 0;
+    //     case 'monthly':
+    //         return creationDate.getDate() === dateToAnalyseForExpenseLanding.getDate();
+    //     case 'annually':
+    //         return creationDate.getDate() === dateToAnalyseForExpenseLanding.getDate() &&
+    //             creationDate.getMonth() === dateToAnalyseForExpenseLanding.getMonth();
+    //     default:
+    //         return false;
+    // }
+}
+
+
 export function getRandomGroupColour() {
     const colourArray = [
         '#fbb39a',
@@ -1100,7 +1206,6 @@ export function handleInputChangeOnFormWithAmount(e: ChangeEvent<HTMLInputElemen
         if (e.target.value === "") {
             newFormValue = "";
         } else {
-            console.log("passed")
             newFormValue = formatDollarAmountDynamic(e.target.value);
         }
     } else {
@@ -1162,3 +1267,4 @@ export function getWindowLocation() {
     const urlArray = window.location.href.split("/");
     return urlArray[urlArray.length - 1];
 }
+

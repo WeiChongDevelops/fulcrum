@@ -64,10 +64,6 @@ export default function ExpenseMonthGroup({ date,
             </div>
             {filteredExpenseArray.length > 0 && <ExpenseList
                 filteredExpenseArray={filteredExpenseArray}
-                setExpenseArray={setExpenseArray}
-                budgetArray={budgetArray}
-                setBudgetArray={setBudgetArray}
-                groupArray={groupArray}
                 setExpenseFormVisibility={setExpenseFormVisibility}
                 setExpenseModalVisibility={setExpenseModalVisibility}
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}

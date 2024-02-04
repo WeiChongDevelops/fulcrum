@@ -9,7 +9,7 @@ import {
     GroupItemEntity,
     handleGroupDeletion,
     implementDynamicBackgroundHeight,
-    PreviousBudgetBeingEdited, PreviousGroupBeingEdited,
+    PreviousBudgetBeingEdited, PreviousGroupBeingEdited, PublicUserData, getPublicUserData,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
@@ -23,6 +23,12 @@ export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
     const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
     const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
+
+    const [publicUserData, setPublicUserData] = useState<PublicUserData>({
+        createdAt: new Date(),
+        darkModeEnabled: false,
+        accessibilityEnabled: false
+    })
 
     const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
         isCreateBudgetVisible: false,
@@ -61,17 +67,20 @@ export default function Budget() {
             const userStatus = await checkForUser();
             !userStatus["loggedIn"] && (window.location.href = "/login");
 
-            const [budgetArray, groupArray, expenseArray, totalIncome] = await Promise.all([
+            const [budgetArray, groupArray, expenseArray, totalIncome, publicUserDataObject] = await Promise.all([
                 getBudgetList(),
                 getGroupList(),
                 getExpenseList(),
-                getTotalIncome()
+                getTotalIncome(),
+                getPublicUserData()
             ])
 
             setBudgetArray(budgetArray);
             setGroupArray(groupArray);
             setExpenseArray(expenseArray);
             setTotalIncome(totalIncome);
+            setPublicUserData(publicUserDataObject);
+
             await implementDynamicBackgroundHeight();
         }
         retrieveInitialData()
