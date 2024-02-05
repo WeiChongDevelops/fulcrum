@@ -7,11 +7,13 @@ import {
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
 
-interface BudgetItemProps {
+interface ExpenseItemProps {
     expenseId: string;
     category: string;
     amount: number;
     iconPath: string;
+
+    isRecurringExpenseInstance: boolean;
 
     groupName: string;
     groupColour: string;
@@ -27,12 +29,13 @@ export default function ExpenseItem( { expenseId,
                                          category,
                                          amount,
                                          iconPath,
+                                         isRecurringExpenseInstance,
                                          groupName,
                                          groupColour,
                                          setExpenseFormVisibility,
                                          setExpenseModalVisibility,
                                          setOldExpenseBeingEdited,
-                                         setExpenseIdToDelete}: BudgetItemProps) {
+                                         setExpenseIdToDelete}: ExpenseItemProps) {
 
     function handleEditClick() {
         setOldExpenseBeingEdited({
@@ -64,6 +67,7 @@ export default function ExpenseItem( { expenseId,
             <div className="flex flex-row items-center" style={{
                 color: groupName === "Miscellaneous" ? "white" : "black"
             }}>
+                {isRecurringExpenseInstance && <img src={`/src/assets/UI-icons/tools-recurring-icon-${groupName === "Miscellaneous" ? "white" : "black"}.svg`} alt="Cycle icon" className={"w-8 h-8 mr-6"}/>}
                 <b className="text-xl">${formatDollarAmountStatic(amount)}</b>
                 <div className="flex flex-row items-center ml-2">
                     <button className="circle-button rounded-full p-1" onClick={handleEditClick}>

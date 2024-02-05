@@ -34,13 +34,14 @@ interface ExpenseCreationFormProps {
     }>>;
     setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+    setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>
 
     budgetArray: BudgetItemEntity[];
 
     categoryOptions: SelectorOptionsFormattedData[];
 }
 
-export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, budgetArray, categoryOptions }: ExpenseCreationFormProps) {
+export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, setRecurringExpenseArray, budgetArray, categoryOptions }: ExpenseCreationFormProps) {
 
     const [formData, setFormData] = useState<ExpenseCreationFormData>({ category: "", amount: 0, frequency: "never" });
     const formRef = useRef<HTMLDivElement>(null);
@@ -101,7 +102,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 frequency: formData.frequency
             }
 
-            await handleRecurringExpenseCreation(newRecurringExpenseItem);
+            await handleRecurringExpenseCreation(newRecurringExpenseItem, setRecurringExpenseArray);
         }
         setFormData({ category: "", amount: 0, frequency: "never" });
     }

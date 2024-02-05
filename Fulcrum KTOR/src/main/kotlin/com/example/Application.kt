@@ -10,21 +10,6 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import kotlinx.coroutines.launch
 
-
-//fun main() {
-//    embeddedServer(Netty, port=8080, host="localhost") {
-//        install(Routing) {
-//            homeRoute()
-//        }
-//    }.start(wait = true)
-//}
-//
-//fun Routing.homeRoute() {
-//    get("/") {
-//        call.respond("Hello Ktor.")
-//    }
-//}
-
 private fun Application.serverConfig() {
     install(ContentNegotiation) {
         json()
@@ -35,17 +20,14 @@ private fun Application.serverConfig() {
         allowMethod(HttpMethod.Post)
         allowMethod(HttpMethod.Delete)
         allowMethod(HttpMethod.Put)
-        // Add other methods as needed
 
         allowHeader(HttpHeaders.Authorization)
         allowHeader(HttpHeaders.ContentType)
-        // Add other headers as needed
 
         allowCredentials = true
         allowNonSimpleContentTypes = true
 
         allowHost("localhost:5173", schemes = listOf("http"))
-        // Add other hosts as needed
     }
 
     staticResources()

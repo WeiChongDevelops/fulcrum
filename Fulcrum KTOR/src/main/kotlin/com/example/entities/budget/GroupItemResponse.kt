@@ -5,7 +5,7 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GroupResponse(
+data class GroupItemResponse(
     val group: String,
     val colour: String,
     @Contextual val dateCreated: Instant

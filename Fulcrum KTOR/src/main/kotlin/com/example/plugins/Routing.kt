@@ -452,7 +452,7 @@ fun Application.configureRouting() {
                 val groupList = supabase.postgrest["groups"].select(columns = Columns.list("group, colour, dateCreated")) {
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                 }
-                    .decodeList<GroupResponse>()
+                    .decodeList<GroupItemResponse>()
                 call.respond(HttpStatusCode.OK, groupList)
             } catch (e: UnauthorizedRestException) {
                 call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
@@ -594,7 +594,7 @@ fun Application.configureRouting() {
                 val miscGroupCreated = GroupCreateRequestSent(
                     userId = uid,
                     group = "Miscellaneous",
-                    colour = "#455259"
+                    colour = "#3f4240"
                 )
                 val miscGroupInserted = supabase.postgrest["groups"].insert(
                     miscGroupCreated,

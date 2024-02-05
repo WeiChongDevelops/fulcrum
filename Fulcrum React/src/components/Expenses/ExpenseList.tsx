@@ -36,6 +36,7 @@ export default function ExpenseList({ filteredExpenseArray,
                         iconPath={categoryDataMap.get(expenseElement.category)!.iconPath}
                         groupName={categoryDataMap.get(expenseElement.category)!.group}
                         groupColour={categoryDataMap.get(expenseElement.category)!.colour}
+                        isRecurringExpenseInstance={expenseElement.recurringExpenseId != null}
                         setExpenseFormVisibility={setExpenseFormVisibility}
                         setExpenseModalVisibility={setExpenseModalVisibility}
                         setOldExpenseBeingEdited={setOldExpenseBeingEdited}

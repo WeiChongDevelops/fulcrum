@@ -101,7 +101,7 @@ export default function Expense() {
 
 
                 // Await next render after state updates, before populating map; to avoid undefined errors.
-                await new Promise(resolve => setTimeout(resolve, 0));
+                // await new Promise(resolve => setTimeout(resolve, 0));
                 setCategoryDataMap(await getGroupAndColourMap(budgetList, groupList));
             } catch (error) {
                 console.log(`Unsuccessful expense page data retrieval - error: ${error}`);
@@ -140,7 +140,7 @@ export default function Expense() {
 
     useEffect(() => {
         populateWithRecurringExpenses();
-    }, [expenseArray]);
+    }, [expenseArray, recurringExpenseArray]);
 
     function runExpenseDeletion() {
         const expenseItemToDelete = expenseArray.find(expenseItem => expenseItem.expenseId === expenseIdToDelete);
@@ -176,11 +176,13 @@ export default function Expense() {
                 // })
                 // console.log("newting");
                 // console.log(newTing);
+                console.log("below is removedRecurringExpenseInstances")
+                console.log(removedRecurringExpenseInstances)
 
                 if (recurringExpenseLandsOnDay(recurringExpenseItem, date) && removedRecurringExpenseInstances.filter(removedRecurringExpenseItem => {
                     return removedRecurringExpenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
-                        && removedRecurringExpenseItem.timestampOfRemovedInstance === recurringExpenseItem.timestamp
-                }).length !== 0) {
+                        && new Date(removedRecurringExpenseItem.timestampOfRemovedInstance).toLocaleDateString() === new Date(recurringExpenseItem.timestamp).toLocaleDateString()
+                }).length === 0) {
                     const newExpenseItemLanded: ExpenseItemEntity = {
                         expenseId: uuid(),
                         category: recurringExpenseItem.category,
@@ -204,6 +206,8 @@ export default function Expense() {
                     } else {
                         console.log(`Conditions not met. NOT adding entry on date ${date.toLocaleDateString()}`)
                     }
+                } else {
+                    console.log(`Conditions not met. NOT adding entry on date ${date.toLocaleDateString()}`)
                 }
             }
         })
@@ -237,6 +241,7 @@ export default function Expense() {
                         setExpenseFormVisibility={setExpenseFormVisibility}
                         setExpenseArray={setExpenseArray}
                         setBudgetArray={setBudgetArray}
+                        setRecurringExpenseArray={setRecurringExpenseArray}
                         budgetArray={budgetArray}
                         categoryOptions={categoryListAsOptions(budgetArray, groupArray)}/>}
                     {expenseFormVisibility.isUpdateExpenseVisible &&

@@ -618,7 +618,7 @@ export async function handleGroupDeletion(groupName: string,
 
 /// RECURRING EXPENSES API CALL FUNCTIONS //
 
-export async function handleRecurringExpenseCreation(newRecurringExpenseItem: RecurringExpenseItemEntity) {
+export async function handleRecurringExpenseCreation(newRecurringExpenseItem: RecurringExpenseItemEntity, setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>) {
     try {
         const response = await fetch("http://localhost:8080/api/createRecurringExpense", {
             method: "POST",
@@ -639,6 +639,7 @@ export async function handleRecurringExpenseCreation(newRecurringExpenseItem: Re
             window.alert("Expense entry invalid.")
         }
         const responseData = await response.json();
+        setRecurringExpenseArray(await getRecurringExpenseList());
         console.log(responseData);
 
     } catch (error) {
@@ -1092,31 +1093,30 @@ export function dynamicallySizeBudgetNumberDisplays() {
 // OTHER UTILITY FUNCTIONS //
 
 export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpenseItemEntity, dateToAnalyseForExpenseLanding: Date) {
-    return true;
-    // const creationDate = new Date(recurringExpenseItem.timestamp);
-    // const frequency = recurringExpenseItem.frequency;
-    //
-    // creationDate.setHours(0, 0, 0, 0);
-    // dateToAnalyseForExpenseLanding.setHours(0, 0, 0, 0);
-    //
-    // const diffTime = Math.abs(dateToAnalyseForExpenseLanding.getTime() - creationDate.getTime());
-    // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    //
-    // switch (frequency) {
-    //     case 'daily':
-    //         return true;
-    //     case 'weekly':
-    //         return diffDays % 7 === 0;
-    //     case 'fortnightly':
-    //         return diffDays % 14 === 0;
-    //     case 'monthly':
-    //         return creationDate.getDate() === dateToAnalyseForExpenseLanding.getDate();
-    //     case 'annually':
-    //         return creationDate.getDate() === dateToAnalyseForExpenseLanding.getDate() &&
-    //             creationDate.getMonth() === dateToAnalyseForExpenseLanding.getMonth();
-    //     default:
-    //         return false;
-    // }
+    const creationDate = new Date(recurringExpenseItem.timestamp);
+    const frequency = recurringExpenseItem.frequency;
+
+    creationDate.setHours(0, 0, 0, 0);
+    dateToAnalyseForExpenseLanding.setHours(0, 0, 0, 0);
+
+    const diffTime = Math.abs(dateToAnalyseForExpenseLanding.getTime() - creationDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    switch (frequency) {
+        case 'daily':
+            return true;
+        case 'weekly':
+            return diffDays % 7 === 0;
+        case 'fortnightly':
+            return diffDays % 14 === 0;
+        case 'monthly':
+            return creationDate.getDate() === dateToAnalyseForExpenseLanding.getDate();
+        case 'annually':
+            return creationDate.getDate() === dateToAnalyseForExpenseLanding.getDate() &&
+                creationDate.getMonth() === dateToAnalyseForExpenseLanding.getMonth();
+        default:
+            return false;
+    }
 }
 
 
