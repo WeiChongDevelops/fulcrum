@@ -77,6 +77,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className="mb-6 font-bold text-4xl">Updating Expense</p>
+
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="category">Category</label>
                 <CreatableSelect
@@ -120,7 +121,9 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
                     />
                 </div>
 
-                <FulcrumButton displayText="Update Budget" />
+                <p className={"mt-2 text-sm"}>To manage your recurring expenses, please see the Tools section.</p>
+
+                <FulcrumButton displayText="Update Budget" optionalTailwind={"mt-4"} />
             </form>
         </div>
     );
