@@ -21,3 +21,16 @@
     border: black 2px dashed;
     color: black;
 }
+
+/*.react-date-picker__inputGroup__input {*/
+/*    color: white;*/
+/*}*/
+
+/*.react-date-picker__inputGroup__divider {*/
+/*    color: white;*/
+/*}*/
+
+.react-date-picker__wrapper {
+    color: black;
+    background-color: white;
+}

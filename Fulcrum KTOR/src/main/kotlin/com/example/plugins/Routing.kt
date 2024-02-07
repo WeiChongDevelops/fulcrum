@@ -24,6 +24,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.hc.core5.http.HttpHost
+import kotlinx.datetime.Instant
 
 fun Application.staticResources() {
     routing {
@@ -107,6 +108,7 @@ fun Application.configureRouting() {
                     {
                         set("category", expenseUpdateRequest.category)
                         set("amount", expenseUpdateRequest.amount)
+                        set("timestamp", expenseUpdateRequest.timestamp)
                     }
                 ) {
                     eq("expenseId", expenseUpdateRequest.expenseId)
@@ -233,26 +235,44 @@ fun Application.configureRouting() {
             }
         }
 
+        suspend fun checkIfRemovedRecurringExpenseExists(recurringExpenseId: String, timestampOfRemovedInstance: Instant): Boolean {
+            val response = supabase.postgrest["removed_recurring_expenses"].select(columns = Columns.list("recurringExpenseId", "timestampOfRemovedInstance")) {
+                eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                eq("recurringExpenseId", recurringExpenseId)
+                eq("timestampOfRemovedInstance", timestampOfRemovedInstance)
+            }.decodeList<RemovedRecurringExpenseItemResponse>()
+            println(response)
+            return response.isNotEmpty();
+        }
+
         post("/api/createRemovedRecurringExpense") {
             try {
                 val removedRecurringExpenseRequest = call.receive<RemovedRecurringExpenseCreateRequestReceived>()
 
-                val userId = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id
-                val itemToInsert = RemovedRecurringExpenseCreateRequestSent (
-                    recurringExpenseId = removedRecurringExpenseRequest.recurringExpenseId,
-                    timestampOfRemovedInstance = removedRecurringExpenseRequest.timestampOfRemovedInstance
-                )
+                val recurringExpenseId = removedRecurringExpenseRequest.recurringExpenseId
+                val timestampOfRemovedInstance = removedRecurringExpenseRequest.timestampOfRemovedInstance
 
-                val insertedItem = supabase.postgrest["removed_recurring_expenses"].insert(
-                    itemToInsert,
-                    returning = Returning.REPRESENTATION
-                )
+                if (!checkIfRemovedRecurringExpenseExists(recurringExpenseId, timestampOfRemovedInstance)) {
+                    val userId = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id
+                    val itemToInsert = RemovedRecurringExpenseCreateRequestSent (
+                        recurringExpenseId = recurringExpenseId,
+                        timestampOfRemovedInstance = timestampOfRemovedInstance
+                    )
 
-                if (insertedItem.body == null) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Removed recurring expense instance not added."))
+                    val insertedItem = supabase.postgrest["removed_recurring_expenses"].insert(
+                        itemToInsert,
+                        returning = Returning.REPRESENTATION
+                    )
+
+                    if (insertedItem.body == null) {
+                        call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Removed recurring expense instance not added."))
+                    } else {
+                        call.respond(HttpStatusCode.OK, SuccessResponseSent("Removed recurring expense instance added successfully."))
+                    }
                 } else {
-                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Removed recurring expense instance added successfully."))
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Entry already exists."))
                 }
+
             } catch (e: Exception) {
                 call.application.log.error("Error while creating removed recurring expense instance", e)
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Removed recurring expense instance not added."))

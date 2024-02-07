@@ -17,7 +17,7 @@ import {
     colourStyles,
     handleInputChangeOnFormWithAmount,
     handleRecurringExpenseCreation,
-    RecurringExpenseItemEntity, recurringFrequencyOptions
+    RecurringExpenseItemEntity, recurringFrequencyOptions, Value
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import { v4 as uuid } from "uuid";
@@ -25,6 +25,9 @@ import { components } from "react-select";
 import { InputProps } from "react-select";
 
 import Select from 'react-select/creatable';
+import DatePicker from 'react-date-picker';
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
 
 
 interface ExpenseCreationFormProps {
@@ -41,9 +44,10 @@ interface ExpenseCreationFormProps {
     categoryOptions: SelectorOptionsFormattedData[];
 }
 
+
 export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, setRecurringExpenseArray, budgetArray, categoryOptions }: ExpenseCreationFormProps) {
 
-    const [formData, setFormData] = useState<ExpenseCreationFormData>({ category: "", amount: 0, frequency: "never" });
+    const [formData, setFormData] = useState<ExpenseCreationFormData>({ category: "", amount: 0, timestamp: new Date(), frequency: "never" });
     const formRef = useRef<HTMLDivElement>(null);
 
     function hideForm() {
@@ -63,9 +67,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
         };
     }, []);
 
-    function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-            handleInputChangeOnFormWithAmount(e, setFormData);
-    }
+
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         hideForm();
@@ -75,7 +77,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 expenseId: uuid(),
                 category: formData.category,
                 amount: formData.amount ? parseFloat(String(formData.amount)) : 0,
-                timestamp: new Date(),
+                timestamp: formData.timestamp as Date,
                 recurringExpenseId: null
             }
 
@@ -87,8 +89,9 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                     amount: 0,
                     iconPath: "/src/assets/category-icons/category-default-icon.svg",
                     group: "Miscellaneous",
-                    timestamp: new Date()
+                    timestamp: new Date(),
                 }
+                console.log("new ")
                 setBudgetArray(current => [...current, newDefaultBudgetItem])
                 setExpenseArray(current => [newExpenseItem, ...current])
             }
@@ -98,13 +101,13 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 recurringExpenseId: uuid(),
                 category: formData.category,
                 amount: formData.amount ? parseFloat(String(formData.amount)): 0,
-                timestamp: new Date(),
+                timestamp: formData.timestamp as Date,
                 frequency: formData.frequency
             }
 
             await handleRecurringExpenseCreation(newRecurringExpenseItem, setRecurringExpenseArray);
         }
-        setFormData({ category: "", amount: 0, frequency: "never" });
+        setFormData({ category: "", amount: 0, timestamp: new Date(), frequency: "never" });
     }
 
     function handleCategoryInputChange(e: any) {
@@ -113,6 +116,15 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
 
     function handleFrequencyInputChange(e: any) {
         setFormData(currentFormData => ({ ...currentFormData, frequency: e.value }));
+    }
+
+    function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+        handleInputChangeOnFormWithAmount(e, setFormData);
+    }
+
+    function onDateInputChange(newValue: Value) {
+        console.log(new Date(newValue as Date).toLocaleDateString())
+        setFormData(curr => ({ ...curr, timestamp: newValue }));
     }
 
     const MaxLengthInput: any = (props: InputProps) => {
@@ -163,6 +175,10 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                            required/>
                 </div>
 
+                <label htmlFor="timestamp">Date</label>
+                <div className={"text-black"}>
+                    <DatePicker onChange={onDateInputChange} value={formData.timestamp}/>
+                </div>
 
                 <label htmlFor="frequency">Repeat Frequency</label>
                 <Select

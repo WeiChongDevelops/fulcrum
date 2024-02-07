@@ -17,12 +17,12 @@ import {
     handleExpenseCreation,
     handleExpenseDeletion,
     handleRemovedRecurringExpenseCreation,
-    implementDynamicBackgroundHeight,
+    implementDynamicBackgroundHeight, matchingRemovedRecurringExpenseFound,
     PreviousExpenseBeingEdited,
     PublicUserData,
     RecurringExpenseItemEntity,
     recurringExpenseLandsOnDay,
-    RemovedRecurrenceExpenseItem,
+    RemovedRecurringExpenseItem,
 } from "../../util.ts";
 import AddNewExpenseButton from "./AddNewExpenseButton.tsx";
 import ExpenseCreationForm from "../ModalsAndForms/ExpenseCreationForm.tsx";
@@ -69,7 +69,7 @@ export default function Expense() {
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const [removedRecurringExpenseInstances, setRemovedRecurringExpenseInstances] = useState<RemovedRecurrenceExpenseItem[]>([]);
+    const [removedRecurringExpenseInstances, setRemovedRecurringExpenseInstances] = useState<RemovedRecurringExpenseItem[]>([]);
 
     useEffect(() => {
         async function retrieveInitialData() {
@@ -103,6 +103,7 @@ export default function Expense() {
                 // Await next render after state updates, before populating map; to avoid undefined errors.
                 // await new Promise(resolve => setTimeout(resolve, 0));
                 setCategoryDataMap(await getGroupAndColourMap(budgetList, groupList));
+                populateWithRecurringExpenses();
             } catch (error) {
                 console.log(`Unsuccessful expense page data retrieval - error: ${error}`);
             }
@@ -145,69 +146,64 @@ export default function Expense() {
     function runExpenseDeletion() {
         const expenseItemToDelete = expenseArray.find(expenseItem => expenseItem.expenseId === expenseIdToDelete);
         if (expenseItemToDelete) {
-            if (expenseItemToDelete.recurringExpenseId) {
-                handleRemovedRecurringExpenseCreation(expenseItemToDelete.recurringExpenseId, expenseItemToDelete.timestamp)
-                    .then(() => console.log("Logged recurrence removal successful"))
+            if (expenseItemToDelete.recurringExpenseId !== null) {
+                // const newRemovedRecurringExpense: RemovedRecurringExpenseItem = {
+                //     recurringExpenseId: expenseItemToDelete.recurringExpenseId,
+                //     timestampOfRemovedInstance: expenseItemToDelete.timestamp
+                // }
+                //
+                // setRemovedRecurringExpenseInstances(curr => [...curr, newRemovedRecurringExpense]);
+                handleRemovedRecurringExpenseCreation(expenseItemToDelete.recurringExpenseId, expenseItemToDelete.timestamp, setRemovedRecurringExpenseInstances)
+                    .then(() => {
+                        console.log("Logged recurrence removal successful")
+                        handleExpenseDeletion(expenseIdToDelete, setExpenseArray, setBudgetArray)
+                            .then(() => console.log("Deletion successful"))
+                            .catch(() => console.log("Deletion unsuccessful"));
+                    })
                     .catch(() => console.log("Logged recurrence removal unsuccessful"));
             }
         }
-        handleExpenseDeletion(expenseIdToDelete, setExpenseArray, setBudgetArray)
-            .then(() => console.log("Deletion successful"))
-            .catch(() => console.log("Deletion unsuccessful"));
     }
 
     function populateWithRecurringExpenses() {
         const today = new Date();
 
         recurringExpenseArray.forEach((recurringExpenseItem: RecurringExpenseItemEntity) => {
-            console.log(`Looking at the below recurringExpenseItem`)
-            console.log(recurringExpenseItem)
+            // console.log(`Looking at the below recurringExpenseItem`)
+            // console.log(recurringExpenseItem)
 
             for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
                 console.log(`Looking at date: ${date}`)
+                //
+                // console.log("below now");
+                // console.log(removedRecurringExpenseInstances);
 
-                // removedRecurringExpenseInstances.filter(removedRecurringExpenseItem => {
-                //     return removedRecurringExpenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
-                //         && removedRecurringExpenseItem.timestampOfRemovedInstance === recurringExpenseItem.timestamp
-                // })
-                // const newTing = removedRecurringExpenseInstances.filter(removedRecurringExpenseItem => {
-                //     return removedRecurringExpenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
-                //         && removedRecurringExpenseItem.timestampOfRemovedInstance === recurringExpenseItem.timestamp
-                // })
-                // console.log("newting");
-                // console.log(newTing);
-                console.log("below is removedRecurringExpenseInstances")
-                console.log(removedRecurringExpenseInstances)
+                if (removedRecurringExpenseInstances) {
+                    // Make sure there isn't a match in the blacklist, to prevent user-removed instances from returning
+                    if (recurringExpenseLandsOnDay(recurringExpenseItem, date) && !matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date)) {
+                        console.log("DIDN'T FIND A MATCHING BLACKLIST ENTRY - GOING AHEAD WITH ADDING IT BACK IN")
 
-                if (recurringExpenseLandsOnDay(recurringExpenseItem, date) && removedRecurringExpenseInstances.filter(removedRecurringExpenseItem => {
-                    return removedRecurringExpenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
-                        && new Date(removedRecurringExpenseItem.timestampOfRemovedInstance).toLocaleDateString() === new Date(recurringExpenseItem.timestamp).toLocaleDateString()
-                }).length === 0) {
-                    const newExpenseItemLanded: ExpenseItemEntity = {
-                        expenseId: uuid(),
-                        category: recurringExpenseItem.category,
-                        amount: recurringExpenseItem.amount,
-                        timestamp: date,
-                        recurringExpenseId: recurringExpenseItem.recurringExpenseId
+                        // Check if expense array contains an expenseItem that is an instance of this recurring expense
+                        // If so, don't add it in; avoids duplicates
+                        if (!expenseArray.find((expenseItem: ExpenseItemEntity) => {
+                            return (expenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
+                                && new Date(expenseItem.timestamp).getTime() === new Date(date).getTime())
+                        })) {
+                            console.log("IT'S NOT ON THE BLACKLIST AND NOT IN THE EXPENSE ARRAY - ADDING IT")
+
+                            const newExpenseItemLanded: ExpenseItemEntity = {
+                                expenseId: uuid(),
+                                category: recurringExpenseItem.category,
+                                amount: recurringExpenseItem.amount,
+                                timestamp: date,
+                                recurringExpenseId: recurringExpenseItem.recurringExpenseId
+                            }
+
+                            handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItemLanded)
+                        } else {
+                            console.log("IT'S NOT ON THE BLACKLIST BUT IT'S ALREADY IN THE EXPENSE ARRAY")
+                        }
                     }
-
-                    // If it's not already been loaded in, add it in.
-                    if (expenseArray.filter((expenseItem: ExpenseItemEntity) => {
-                        console.log(`For the expenseItem below....`)
-                        console.log(expenseItem)
-                        console.log("...")
-                        console.log(`First condition is ${expenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId}`) //false
-                        console.log(`Second condition is ${new Date(expenseItem.timestamp).toLocaleDateString() === date.toLocaleDateString()}`) //true
-                        return (expenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
-                            && new Date(expenseItem.timestamp).toLocaleDateString() === new Date(date).toLocaleDateString())
-                    }).length === 0) {
-                        console.log(`Conditions met. Adding entry on date ${new Date(date).toLocaleDateString()}.`)
-                        handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItemLanded)
-                    } else {
-                        console.log(`Conditions not met. NOT adding entry on date ${date.toLocaleDateString()}`)
-                    }
-                } else {
-                    console.log(`Conditions not met. NOT adding entry on date ${date.toLocaleDateString()}`)
                 }
             }
         })

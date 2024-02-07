@@ -66,6 +66,7 @@ export default function RecurringExpenses({ setOpenToolsSection }: RecurringExpe
 
     useEffect( () => {
         document.getElementById("frequency")?.focus()
+        document.getElementById("right-button")?.focus()
         setIsRecurringExpenseFormOrModalOpen(checkForOpenModalOrForm(recurringExpenseFormVisibility, recurringExpenseModalVisibility))
     }, [recurringExpenseFormVisibility, recurringExpenseModalVisibility])
 

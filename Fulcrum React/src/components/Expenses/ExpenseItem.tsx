@@ -12,8 +12,9 @@ interface ExpenseItemProps {
     category: string;
     amount: number;
     iconPath: string;
+    timestamp: Date;
 
-    isRecurringExpenseInstance: boolean;
+    recurringExpenseId: string | null;
 
     groupName: string;
     groupColour: string;
@@ -29,7 +30,8 @@ export default function ExpenseItem( { expenseId,
                                          category,
                                          amount,
                                          iconPath,
-                                         isRecurringExpenseInstance,
+                                         timestamp,
+                                         recurringExpenseId,
                                          groupName,
                                          groupColour,
                                          setExpenseFormVisibility,
@@ -40,8 +42,10 @@ export default function ExpenseItem( { expenseId,
     function handleEditClick() {
         setOldExpenseBeingEdited({
             expenseId: expenseId,
+            recurringExpenseId: recurringExpenseId,
             oldCategory: category,
-            oldAmount: amount
+            oldAmount: amount,
+            oldTimestamp: timestamp
         })
         setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: true}))
     }
@@ -67,7 +71,7 @@ export default function ExpenseItem( { expenseId,
             <div className="flex flex-row items-center" style={{
                 color: groupName === "Miscellaneous" ? "white" : "black"
             }}>
-                {isRecurringExpenseInstance && <img src={`/src/assets/UI-icons/tools-recurring-icon-${groupName === "Miscellaneous" ? "white" : "black"}.svg`} alt="Cycle icon" className={"w-8 h-8 mr-6"}/>}
+                {recurringExpenseId && <img src={`/src/assets/UI-icons/tools-recurring-icon-${groupName === "Miscellaneous" ? "white" : "black"}.svg`} alt="Cycle icon" className={"w-8 h-8 mr-6"}/>}
                 <b className="text-xl">${formatDollarAmountStatic(amount)}</b>
                 <div className="flex flex-row items-center ml-2">
                     <button className="circle-button rounded-full p-1" onClick={handleEditClick}>

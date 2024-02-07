@@ -10,9 +10,12 @@ import {
     handleExpenseUpdating,
     getExpenseList,
     handleInputChangeOnFormWithAmount,
-    PreviousExpenseBeingEdited
+    PreviousExpenseBeingEdited, Value
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
+import DatePicker from 'react-date-picker';
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
 
 interface ExpenseUpdatingFormProps {
     setExpenseFormVisibility: Dispatch<SetStateAction<{
@@ -28,7 +31,11 @@ interface ExpenseUpdatingFormProps {
 export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpenseArray, setBudgetArray, categoryOptions, oldExpenseBeingEdited }: ExpenseUpdatingFormProps) {
 
 
-    const [formData, setFormData] = useState<ExpenseUpdatingFormData>({ category: oldExpenseBeingEdited.oldCategory, amount: oldExpenseBeingEdited.oldAmount });
+    const [formData, setFormData] = useState<ExpenseUpdatingFormData>({
+        category: oldExpenseBeingEdited.oldCategory,
+        amount: oldExpenseBeingEdited.oldAmount,
+        timestamp: oldExpenseBeingEdited.oldTimestamp
+    });
     const formRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -55,6 +62,10 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
     function handleCategoryInputChange(e: any) {
         setFormData(currentFormData => ({ ...currentFormData, category: e.value }));
     }
+    function onDateInputChange(newValue: Value) {
+        console.log(new Date(newValue as Date).toLocaleDateString())
+        setFormData(curr => ({ ...curr, timestamp: newValue }));
+    }
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -63,7 +74,11 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
 
         await handleExpenseUpdating(oldExpenseBeingEdited.expenseId, formData);
 
-        setFormData({ category: oldExpenseBeingEdited.oldCategory, amount: oldExpenseBeingEdited.oldAmount });
+        setFormData({
+            category: oldExpenseBeingEdited.oldCategory,
+            amount: oldExpenseBeingEdited.oldAmount,
+            timestamp: oldExpenseBeingEdited.oldTimestamp
+        });
         getExpenseList().then(expenseList => setExpenseArray(expenseList));
 
         // To update budgetArray if new category is made:
@@ -121,7 +136,14 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
                     />
                 </div>
 
-                <p className={"mt-2 text-sm"}>To manage your recurring expenses, please see the Tools section.</p>
+                {oldExpenseBeingEdited.recurringExpenseId ? <p className={"mt-2 text-sm"}>To manage your recurring expenses, please see the Tools section.</p> :
+                    <div>
+                        <label htmlFor="timestamp">Date</label>
+                        <div className={"text-black"}>
+                            <DatePicker onChange={onDateInputChange} value={formData.timestamp}/>
+                        </div>
+                    </div>
+                }
 
                 <FulcrumButton displayText="Update Budget" optionalTailwind={"mt-4"} />
             </form>

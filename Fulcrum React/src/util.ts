@@ -11,9 +11,14 @@ export interface ExpenseItemEntity {
     recurringExpenseId: string | null
 }
 
+
+type ValuePiece = Date | null;
+export type Value = ValuePiece | [ValuePiece, ValuePiece];
+
 export interface ExpenseCreationFormData {
     category: string,
     amount: number
+    timestamp: Value,
     frequency: RecurringExpenseFrequency
 }
 
@@ -21,13 +26,16 @@ export interface ExpenseCreationFormData {
 export interface ExpenseUpdatingFormData {
     category: string;
     amount: number;
+    timestamp: Value;
 }
 
 
 export interface PreviousExpenseBeingEdited {
     expenseId: string;
+    recurringExpenseId: string | null;
     oldCategory: string;
     oldAmount: number;
+    oldTimestamp: Date;
 }
 
 // BUDGET ENTITIES //
@@ -153,7 +161,7 @@ export interface SettingsFormVisibility {
     typeDeleteMyAccountForm: boolean;
 }
 
-export interface RemovedRecurrenceExpenseItem {
+export interface RemovedRecurringExpenseItem {
     recurringExpenseId: string,
     timestampOfRemovedInstance: Date
 }
@@ -302,7 +310,8 @@ export async function handleExpenseUpdating(expenseId: string, formData: Expense
             body: JSON.stringify({
                 "expenseId": expenseId,
                 "category": formData.category,
-                "amount": formData.amount
+                "amount": formData.amount,
+                "timestamp": formData.timestamp
             })
         })
         if (!response.ok) {
@@ -732,7 +741,9 @@ export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
     getBudgetList().then( budgetList => setBudgetArray(budgetList))
 }
 
-export async function handleRemovedRecurringExpenseCreation(recurringExpenseId: string, timestampOfRemovedInstance: Date) {
+export async function handleRemovedRecurringExpenseCreation(recurringExpenseId: string,
+                                                            timestampOfRemovedInstance: Date,
+                                                            setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItem[]>>) {
     try {
         const response = await fetch("http://localhost:8080/api/createRemovedRecurringExpense", {
             method: "POST",
@@ -748,7 +759,9 @@ export async function handleRemovedRecurringExpenseCreation(recurringExpenseId: 
         if (!response.ok) {
             console.error(`HTTP error - status: ${response.status}`);
         } else {
-            console.log("Successfully created removed recurring expense.")
+            const responseData = await response.json();
+            console.log(responseData);
+            setRemovedRecurringExpenseInstances(await getRemovedRecurringExpenses());
         }
     } catch (error) {
         console.error("Error creating removed recurring expense:", error);
@@ -768,6 +781,7 @@ export async function getRemovedRecurringExpenses() {
             console.error(`HTTP error - status: ${response.status}`);
         }
         const removedRecurringExpenses = await response.json();
+        console.log("Below, removedRecurringExpenses")
         console.log(removedRecurringExpenses);
         return removedRecurringExpenses;
     } catch (error) {
@@ -1268,3 +1282,34 @@ export function getWindowLocation() {
     return urlArray[urlArray.length - 1];
 }
 
+export function matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances: RemovedRecurringExpenseItem[], recurringExpenseItem: RecurringExpenseItemEntity, date: Date) {
+    console.log("BELOW IS OUR BLACKLIST")
+    console.log(removedRecurringExpenseInstances)
+
+    const checkResult = removedRecurringExpenseInstances.find(removedRecurringExpenseItem => {
+        console.log(new Date(removedRecurringExpenseItem.timestampOfRemovedInstance).toLocaleDateString())
+        console.log(new Date(date).toLocaleDateString())
+        return removedRecurringExpenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
+            && new Date(removedRecurringExpenseItem.timestampOfRemovedInstance).toLocaleDateString() === new Date(date).toLocaleDateString()
+    })
+
+    // if (checkResult !== undefined) {
+    //     console.log("FOUND A BLACKLIST ENTRY")
+    // } else {
+    //     console.log("DID NOT FIND A BLACKLIST ENTRY")
+    //     console.log("SEE BELOW THE BLACKLIST")
+    //     console.log(removedRecurringExpenseInstances)
+    //     console.log("AND SEE BELOW THE RECURRING EXPENSE ITEM")
+    //     console.log(recurringExpenseItem)
+    //     console.log("SEE BELOW UNFORMATTED DATES")
+    //     console.log(date)
+    //     console.log(removedRecurringExpenseInstances[0].timestampOfRemovedInstance)
+    //     console.log("SEE BELOW FORMATTED DATES")
+    //     console.log(new Date(date).toLocaleDateString())
+    //     console.log(new Date(removedRecurringExpenseInstances[0].timestampOfRemovedInstance).toLocaleDateString())
+    // }
+    // console.log("See below the checkResult")
+    // console.log(checkResult)
+
+    return checkResult !== undefined;
+}
