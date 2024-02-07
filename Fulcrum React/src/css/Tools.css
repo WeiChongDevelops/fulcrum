@@ -1,5 +1,5 @@
 .tools {
-    min-height: 100vh;
+    min-height: 83vh;
 }
 
 .profile-icon-display {
@@ -17,8 +17,8 @@
 
 .tools-tile {
     box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 1);
-    width: 18vw;
-    height: 18vw;
+    width: 16vw;
+    height: 16vw;
     @apply rounded-2xl flex flex-col items-center justify-center mb-4
 }
 
