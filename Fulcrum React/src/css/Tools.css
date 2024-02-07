@@ -55,3 +55,11 @@
         height: 54vw;
     }
 }
+
+.settings-row {
+    @apply flex flex-row justify-between items-center text-xl rounded-xl h-16 p-8 mb-8;
+}
+
+.settings-box-shadow {
+    box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 1);
+}

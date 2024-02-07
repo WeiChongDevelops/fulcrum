@@ -62,7 +62,7 @@ export default function Expense() {
     })
     const [isExpenseFormOrModalOpen, setIsExpenseFormOrModalOpen] = useState(false);
 
-    const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({ expenseId: "", oldCategory: "", oldAmount: 0 });
+    const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({ expenseId: "", recurringExpenseId: "", oldCategory: "", oldTimestamp: new Date(), oldAmount: 0 });
     const [expenseIdToDelete, setExpenseIdToDelete] = useState("");
 
     const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());

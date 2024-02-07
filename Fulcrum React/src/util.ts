@@ -1,6 +1,4 @@
 import {ChangeEvent, Dispatch, SetStateAction} from "react";
-import {v4 as uuid} from "uuid";
-
 
 //  EXPENSE ENTITIES //
 export interface ExpenseItemEntity {
@@ -151,14 +149,12 @@ export interface SettingsModalVisibility {
     isConfirmExpenseWipeModalVisible: boolean;
     isConfirmBudgetWipeModalVisible: boolean;
     isConfirmAllDataWipeModalVisible: boolean;
-    isConfirmDeleteAccountModalVisible: boolean;
 }
 
 export interface SettingsFormVisibility {
     typeDeleteMyExpensesForm: boolean;
     typeDeleteMyBudgetForm: boolean;
     typeDeleteMyDataForm: boolean;
-    typeDeleteMyAccountForm: boolean;
 }
 
 export interface RemovedRecurringExpenseItem {
@@ -838,20 +834,58 @@ export async function handleTotalIncomeUpdating(newTotalIncome: number) {
 
 // BROADER DESTRUCTIVE API CALL FUNCTIONS //
 
-export async function runExpenseWipe() {
-
+export async function handleWipeExpenses() {
+    try {
+        const response = await fetch("http://localhost:8080/api/wipeExpenses", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if (!response.ok) {
+            console.error(`HTTP error when wiping expenses - status: ${response.status}`);
+        } else {
+            console.log(await response.json());
+        }
+    } catch (e) {
+        console.error(`Failed to wipe expenses - ${e}`);
+    }
 }
 
-export async function runBudgetWipe() {
-
+export async function handleWipeBudget() {
+    try {
+        const response = await fetch("http://localhost:8080/api/wipeBudget", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if (!response.ok) {
+            console.error(`HTTP error when wiping budget - status: ${response.status}`);
+        } else {
+            console.log(await response.json());
+        }
+    } catch (e) {
+        console.error(`Failed to wipe budget - ${e}`);
+    }
 }
 
-export async function runFullDataWipe() {
-
-}
-
-export async function runAccountDeletion() {
-
+export async function handleWipeData() {
+    try {
+        const response = await fetch("http://localhost:8080/api/wipeData", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if (!response.ok) {
+            console.error(`HTTP error when wiping data - status: ${response.status}`);
+        } else {
+            console.log(await response.json());
+        }
+    } catch (e) {
+        console.error(`Failed to wipe data - ${e}`);
+    }
 }
 
 

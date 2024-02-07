@@ -735,6 +735,64 @@ fun Application.configureRouting() {
             }
         }
 
+        // BROADER DESTRUCTIVE API //
+
+        delete("/api/wipeExpenses"){
+            try {
+                val expenseWipeRequestSent = supabase.postgrest["expenses"].delete() {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                val recurringExpenseWipeRequestSent = supabase.postgrest["recurring_expenses"].delete() {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                if (expenseWipeRequestSent.body == null || recurringExpenseWipeRequestSent.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expenses not wiped."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Expenses wiped successfully."))
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while wiping expenses."))
+            }
+        }
+
+        delete("/api/wipeBudget"){
+            try {
+                val budgetWipeRequestSent = supabase.postgrest["budgets"].delete() {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                if (budgetWipeRequestSent.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Budget not wiped."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Budget wiped successfully."))
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while wiping budget."))
+            }
+        }
+
+        delete("/api/wipeData"){
+            try {
+                val recurringExpenseWipeRequestSent = supabase.postgrest["recurring_expenses"].delete() {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                val expenseWipeRequestSent = supabase.postgrest["expenses"].delete() {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                val budgetWipeRequestSent = supabase.postgrest["budget"].delete() {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                if (expenseWipeRequestSent.body == null ||
+                    budgetWipeRequestSent.body == null ||
+                    recurringExpenseWipeRequestSent.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Data not wiped."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Data wiped successfully."))
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while wiping data."))
+            }
+        }
+
 //        get("/blog/{page}") {
 //            val pageNumber = call.parameters["page"]
 //            call.respondText("You are on page $pageNumber")

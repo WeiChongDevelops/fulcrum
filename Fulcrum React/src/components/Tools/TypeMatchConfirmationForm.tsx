@@ -7,10 +7,11 @@ interface TypeMatchConfirmationFormProps {
     typeMatchString: string;
     setFormVisibility: Dispatch<SetStateAction<SettingsFormVisibility>>;
     setModalVisibility: Dispatch<SetStateAction<SettingsModalVisibility>>;
+    formVisibility: string;
     lastChanceModalVisibility: string;
 }
 
-export function TypeMatchConfirmationForm( { areYouSureMessage, typeMatchString, setFormVisibility, setModalVisibility, lastChanceModalVisibility }: TypeMatchConfirmationFormProps) {
+export function TypeMatchConfirmationForm( { areYouSureMessage, typeMatchString, setFormVisibility, formVisibility, setModalVisibility, lastChanceModalVisibility }: TypeMatchConfirmationFormProps) {
 
     const [typeMatchInput, setTypeMatchInput] = useState("");
 
@@ -21,7 +22,10 @@ export function TypeMatchConfirmationForm( { areYouSureMessage, typeMatchString,
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (typeMatchInput === typeMatchString) {
+            setFormVisibility(current => ({...current, [formVisibility]: false}))
             setModalVisibility(current => ({...current, [lastChanceModalVisibility]: true}))
+        } else {
+            console.log("Input text not matching.");
         }
     }
 
@@ -31,11 +35,12 @@ export function TypeMatchConfirmationForm( { areYouSureMessage, typeMatchString,
                 setFormVisibility((current: any) => ({...current, [`${lastChanceModalVisibility}`]: false}))
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
-            <p>{areYouSureMessage}</p>
+            <p className={"mt-6"}>{areYouSureMessage}</p>
 
             <p>Enter {typeMatchString} below to proceed.</p>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name={"typeMatch"} placeholder={typeMatchString} onChange={handleChange} value={typeMatchInput}/>
+            <form className={"flex flex-col"} onSubmit={handleSubmit}>
+                <input type="text" name={"typeMatch"} placeholder={typeMatchString} onChange={handleChange} value={typeMatchInput} className={"my-6"}/>
+                <FulcrumButton displayText={"Confirm"} backgroundColour={"red"}/>
             </form>
         </div>
     );
