@@ -172,6 +172,13 @@ export interface SelectorOptionsFormattedData {
 
 export interface PublicUserData {
     createdAt: Date;
+    currency: string;
+    darkModeEnabled: boolean;
+    accessibilityEnabled: boolean;
+}
+
+export interface PublicUserDataUpdate {
+    currency: string;
     darkModeEnabled: boolean;
     accessibilityEnabled: boolean;
 }
@@ -934,26 +941,6 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
 
 // AUTH API CALL FUNCTIONS //
 
-export async function getPublicUserData() {
-    try {
-        const response = await fetch("http://localhost:8080/api/getPublicUserData", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        if (!response.ok) {
-            console.error(`HTTP error when getting public user data - ${response.status}`)
-        } else {
-            const publicUserData = await response.json();
-            console.log(publicUserData);
-            return(publicUserData);
-        }
-    } catch (e) {
-        console.error(`Failed to execute public data retrieval - ${e}`)
-    }
-}
-
 export async function logoutOnClick() {
     try {
         await fetch("http://localhost:8080/api/logout", {
@@ -1015,6 +1002,55 @@ function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity
         console.error("Failed to perform budget sort. Below is budgetItemA and B.")
         console.log(budgetItemA);
         console.log(budgetItemB);
+    }
+}
+
+// PUBLIC USER DATA API CALLS //
+
+
+export async function getPublicUserData() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getPublicUserData", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if (!response.ok) {
+            console.error(`HTTP error when getting public user data - ${response.status}`)
+        } else {
+            const publicUserData = await response.json();
+            console.log("!!!!!! public user data")
+            console.log(publicUserData);
+            return(publicUserData);
+        }
+    } catch (e) {
+        console.error(`Failed to execute public data retrieval - ${e}`)
+    }
+}
+
+export async function handlePublicUserDataUpdating(updatedPublicUserData: PublicUserDataUpdate){
+    try {
+        const response = await fetch("http://localhost:8080/api/updatePublicUserData", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify ({
+                currency: updatedPublicUserData.currency,
+                darkModeEnabled: updatedPublicUserData.darkModeEnabled,
+                accessibilityEnabled: updatedPublicUserData.accessibilityEnabled
+            })
+        })
+        if (!response.ok) {
+            console.error(`HTTP error when updating public user data - ${response.status}`)
+        } else {
+            const publicUserData = await response.json();
+            console.log(publicUserData);
+            return(publicUserData);
+        }
+    } catch (e) {
+        console.error(`Failed to execute public user data update - ${e}`)
     }
 }
 
@@ -1097,6 +1133,17 @@ export function categoryListAsOptions(budgetArray: BudgetItemEntity[], groupArra
         }
     })
 }
+
+// CURRENCY //
+
+export const currencyOptions = [
+    { symbol: '$AUD', code: 'AUD' },
+    { symbol: '$USD', code: 'USD' },
+    { symbol: '£GBP', code: 'GBP' },
+    { symbol: '₩KRW', code: 'KRW' },
+    { symbol: '¥JPY', code: 'JPY' },
+    { symbol: '¥CNY', code: 'CNY' },
+];
 
 // DYNAMIC SIZING FUNCTIONS //
 

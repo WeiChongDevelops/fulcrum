@@ -570,18 +570,6 @@ fun Application.configureRouting() {
 
         // USER AUTHENTICATION //
 
-        get("/api/getPublicUserData") {
-            try {
-                val userData = supabase.postgrest["public_user_data"].select(columns = Columns.list("createdAt, darkModeEnabled, accessibilityEnabled")) {
-                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
-                }
-                    .decodeSingle<PublicUserDataResponse>()
-                call.respond(HttpStatusCode.OK, userData)
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Public user data retrieval failed."))
-            }
-        }
-
         post("/api/register") {
             try {
                 val userCreds = call.receive<UserInfo>()
@@ -790,6 +778,45 @@ fun Application.configureRouting() {
                 }
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while wiping data."))
+            }
+        }
+
+
+        // PUBLIC USER DATA //
+
+        get("/api/getPublicUserData") {
+            try {
+                val userData = supabase.postgrest["public_user_data"].select(columns = Columns.list("currency, createdAt, darkModeEnabled, accessibilityEnabled")) {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+                    .decodeSingle<PublicUserDataResponse>()
+                call.respond(HttpStatusCode.OK, userData)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Public user data retrieval failed."))
+            }
+        }
+
+        put("/api/updatePublicUserData") {
+            try {
+                val publicUserDataUpdateRequest = call.receive<PublicUserDataUpdateRequestReceived>()
+
+                val updatedItem = supabase.postgrest["public_user_data"].update(
+                    {
+                        set("currency", publicUserDataUpdateRequest.currency)
+                        set("darkModeEnabled", publicUserDataUpdateRequest.darkModeEnabled)
+                        set("accessibilityEnabled", publicUserDataUpdateRequest.accessibilityEnabled)
+                    }
+                ) {
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+
+                if (updatedItem.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Public user data not updated"))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Public user data updated."))
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Failed to update public user data."))
             }
         }
 

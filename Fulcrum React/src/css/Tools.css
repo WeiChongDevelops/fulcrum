@@ -4,7 +4,7 @@
 
 .profile-icon-display {
     background: url("../assets/UI-icons/green-triangle-background-inverted.webp") bottom / contain no-repeat;
-    @apply w-80 h-80 flex justify-center items-center
+    @apply w-72 h-72 flex justify-center items-center
 }
 
 .profile-icon-display img {
@@ -62,4 +62,8 @@
 
 .settings-box-shadow {
     box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 1);
+}
+
+.currency-selection {
+    @apply hover:cursor-pointer
 }

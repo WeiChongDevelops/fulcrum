@@ -44,6 +44,7 @@ export default function Expense() {
 
     const [publicUserData, setPublicUserData] = useState<PublicUserData>({
         createdAt: new Date(),
+        currency: "AUD",
         darkModeEnabled: false,
         accessibilityEnabled: false
     })

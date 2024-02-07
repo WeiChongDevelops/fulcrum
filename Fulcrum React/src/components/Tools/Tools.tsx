@@ -20,10 +20,9 @@ export default function Tools() {
     return (
         <>
         {openToolsSection === "home" ? <div className="tools flex flex-col justify-start items-center bg-[#455259]">
-            <div className="profile-icon-display my-4">
+            <div className="profile-icon-display mb-4">
                 <img src="/src/assets/profile-icons/profile-icon-default.svg" alt="Profile image"/>
             </div>
-            <h1 className="font-bold text-white mb-4">Profile</h1>
             <div>
                 <FulcrumButton displayText={"Sign Out"} backgroundColour={"white"} onClick={logoutOnClick}/>
             </div>

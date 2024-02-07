@@ -1,12 +1,12 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {
-    checkForOpenModalOrForm,
-    getPublicUserData,
+    checkForOpenModalOrForm, currencyOptions,
+    getPublicUserData, handlePublicUserDataUpdating,
     handleWipeBudget,
     handleWipeData,
     handleWipeExpenses,
     OpenToolsSection,
-    PublicUserData,
+    PublicUserData, PublicUserDataUpdate,
     SettingsFormVisibility,
     SettingsModalVisibility
 } from "../../util.ts";
@@ -36,6 +36,7 @@ export default function Settings({ setOpenToolsSection }: SettingsProps) {
 
     const [publicUserData, setPublicUserData] = useState<PublicUserData>({
         createdAt: new Date(),
+        currency: "",
         darkModeEnabled: false,
         accessibilityEnabled: false
     })
@@ -49,6 +50,20 @@ export default function Settings({ setOpenToolsSection }: SettingsProps) {
         getPublicUserData()
             .then(results => setPublicUserData(results));
     }, []);
+
+    function handleCurrencySelection(e: React.MouseEvent) {
+        const target = e.target as HTMLDivElement;
+        const newCurrencySetting = target.innerText.slice(1)
+        setPublicUserData(curr => ({...curr, currency: newCurrencySetting}))
+
+        const updatedPublicUserData: PublicUserDataUpdate = {
+            currency: newCurrencySetting,
+            darkModeEnabled: publicUserData.darkModeEnabled,
+            accessibilityEnabled: publicUserData.accessibilityEnabled
+        }
+
+        handlePublicUserDataUpdating(updatedPublicUserData)
+    }
 
     return (
         <>
@@ -71,12 +86,22 @@ export default function Settings({ setOpenToolsSection }: SettingsProps) {
                     </div>
 
 
-                    <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
-                        <b>Select Currency</b>
+                    <div className={"settings-row bg-[#17423f] settings-box-shadow flex-col h-auto"}>
+                        <b className={"flex flex-row justify-start mr-auto"}>Select Currency</b>
+                        <div className={"flex flex-row justify-around font-bold text-3xl w-full mt-6 flex-wrap"}>
+                            {currencyOptions.map(currencyOption => {
+                                return <FulcrumButton
+                                    displayText={currencyOption.symbol}
+                                    backgroundColour={publicUserData.currency === currencyOption.code ? "grey" : "white"}
+                                    onClick={handleCurrencySelection}
+                                    optionalTailwind={`w-36 mb-4 ${publicUserData.currency === currencyOption.code && "outline"}`}/>
+                            })}
+                        </div>
                     </div>
 
-                    <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
+                    <div className={"settings-row bg-[#17423f] settings-box-shadow pr-3"}>
                         <b>Public License</b>
+                        <FulcrumButton displayText={"See Public License"} backgroundColour={"white"} optionalTailwind={"m-0"} onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}/>
                     </div>
 
                     <div className={"settings-row bg-[#17423f] settings-box-shadow"}>

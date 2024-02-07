@@ -18,9 +18,6 @@
   }
 }
 
-
-/* GLOBAL */
-
 input::placeholder {
   text-align: center;
 }
@@ -112,8 +109,6 @@ body label {
 #react-select-3-input {
   text-align: left;
 }
-
-
 
 .fulcrum-modal {
   position: fixed;
