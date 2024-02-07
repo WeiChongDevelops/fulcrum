@@ -241,7 +241,6 @@ fun Application.configureRouting() {
                 eq("recurringExpenseId", recurringExpenseId)
                 eq("timestampOfRemovedInstance", timestampOfRemovedInstance)
             }.decodeList<RemovedRecurringExpenseItemResponse>()
-            println(response)
             return response.isNotEmpty();
         }
 
