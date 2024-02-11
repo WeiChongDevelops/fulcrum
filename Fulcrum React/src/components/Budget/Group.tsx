@@ -9,7 +9,7 @@ import {
     GroupItemEntity,
     handleGroupDeletion,
     PreviousBudgetBeingEdited,
-    PreviousGroupBeingEdited
+    PreviousGroupBeingEdited, PublicUserData
 } from "../../util.ts";
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import BudgetTile from "./BudgetTile.tsx";
@@ -39,6 +39,8 @@ interface GroupProps {
     setCategoryToDelete: Dispatch<SetStateAction<string>>;
 
     perCategoryTotalExpenseArray: Map<string, number>;
+
+    publicUserData: PublicUserData;
 }
 
 export default function Group({ groupName,
@@ -54,7 +56,8 @@ export default function Group({ groupName,
                                   setGroupToDelete,
                                   setCategoryToDelete,
                                   setModalFormVisibility,
-                                  perCategoryTotalExpenseArray}: GroupProps) {
+                                  perCategoryTotalExpenseArray,
+                                  publicUserData}: GroupProps) {
 
     const [groupBudgetTotal, setGroupBudgetTotal] = useState(getGroupBudgetTotal(filteredBudgetArray));
     const [groupExpenditureTotal, setGroupExpenditureTotal] = useState(getGroupBudgetTotal(filteredBudgetArray));
@@ -83,6 +86,8 @@ export default function Group({ groupName,
 
     }, [filteredBudgetArray, expenseArray]);
 
+    const currency = publicUserData.currency;
+
     return (
         <div className="group flex flex-col rounded-xl p-2 mb-5" style={{backgroundColor: `${groupColour}`}}>
             <div className="flex flex-row justify-between items-center mb-4">
@@ -99,7 +104,7 @@ export default function Group({ groupName,
                         </div>
                     }
                 </div>
-                <p className={`${groupName !== "Miscellaneous" ? "text-black" : "text-white"} font-bold mr-4 text-3xl`}>Spent: ${formatDollarAmountStatic(groupExpenditureTotal)} of ${formatDollarAmountStatic(groupBudgetTotal)}</p>
+                <p className={`${groupName !== "Miscellaneous" ? "text-black" : "text-white"} font-bold mr-4 text-3xl`}>Spent: {formatDollarAmountStatic(groupExpenditureTotal, currency)} of {formatDollarAmountStatic(groupBudgetTotal, currency)}</p>
 
             </div>
             <div className="flex flex-row flex-wrap flex-shrink-0 basis-0 justify-start">
@@ -114,6 +119,7 @@ export default function Group({ groupName,
                         setModalFormVisibility={setModalFormVisibility}
                         setCategoryToDelete={setCategoryToDelete}
                         perCategoryTotalExpenseArray={perCategoryTotalExpenseArray}
+                        publicUserData={publicUserData}
                         key={key}
                     />
                 ))}

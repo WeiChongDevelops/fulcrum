@@ -15,9 +15,10 @@ interface DBUpdatingFormProps {
     oldBudgetBeingEdited: { oldAmount: number, oldCategory: string, oldGroup: string }
     groupArray: GroupItemEntity[];
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
+    currencySymbol: string;
 }
 
-export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudgetBeingEdited, setBudgetFormVisibility }: DBUpdatingFormProps) {
+export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudgetBeingEdited, setBudgetFormVisibility, currencySymbol }: DBUpdatingFormProps) {
 
 
     const [formData, setFormData] = useState<BudgetUpdatingFormData>({ category: oldBudgetBeingEdited.oldCategory, amount: oldBudgetBeingEdited.oldAmount, iconPath: "", group: oldBudgetBeingEdited.oldGroup });
@@ -79,7 +80,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
 
                 <label htmlFor="amount">Amount</label>
                 <div>
-                    <b className="relative left-6 text-black">$</b>
+                    <b className="relative left-6 text-black">{currencySymbol}</b>
                     <input type="text"
                            onChange={handleInputChange}
                            value={formData.amount ?? ""}

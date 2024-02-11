@@ -7,7 +7,7 @@ import {
     checkForUser,
     ExpenseItemEntity,
     ExpenseModalVisibility,
-    getBudgetList,
+    getBudgetList, getCurrencySymbol,
     getExpenseList,
     getGroupAndColourMap,
     getGroupList,
@@ -227,6 +227,7 @@ export default function Expense() {
                             setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                             setExpenseIdToDelete={setExpenseIdToDelete}
                             categoryDataMap={categoryDataMap}
+                            publicUserData={publicUserData}
                             key={key}/>
                     )): <p className={"text-2xl mt-48"}>No expenses added yet.</p>}
                 </div>
@@ -240,12 +241,14 @@ export default function Expense() {
                         setBudgetArray={setBudgetArray}
                         setRecurringExpenseArray={setRecurringExpenseArray}
                         budgetArray={budgetArray}
-                        categoryOptions={categoryListAsOptions(budgetArray, groupArray)}/>}
+                        categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
+                        currencySymbol={getCurrencySymbol(publicUserData.currency)}/>}
                     {expenseFormVisibility.isUpdateExpenseVisible &&
                         <ExpenseUpdatingForm setExpenseFormVisibility={setExpenseFormVisibility}
                                              setExpenseArray={setExpenseArray} setBudgetArray={setBudgetArray}
                                              categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
-                                             oldExpenseBeingEdited={oldExpenseBeingEdited}/>}
+                                             oldExpenseBeingEdited={oldExpenseBeingEdited}
+                                             currencySymbol={getCurrencySymbol(publicUserData.currency)}/>}
 
                     {expenseModalVisibility.isConfirmExpenseDestructionModalVisible &&
                         <TwoOptionModal optionOneText="Cancel"

@@ -22,9 +22,10 @@ interface BudgetCreationFormProps {
     groupArray: GroupItemEntity[];
     groupNameOfNewItem: string;
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
+    currencySymbol: string;
 }
 
-export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNameOfNewItem, setBudgetFormVisibility }: BudgetCreationFormProps) {
+export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNameOfNewItem, setBudgetFormVisibility, currencySymbol }: BudgetCreationFormProps) {
 
     const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});
     const formRef = useRef<HTMLDivElement>(null);
@@ -92,7 +93,7 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
                        required/>
                 <label htmlFor="amount">Amount</label>
                 <div>
-                    <b className="relative left-6 text-black">$</b>
+                    <b className="relative left-6 text-black">{currencySymbol}</b>
                     <input type="text"
                            onChange={handleInputChange}
                            value={formData.amount === 0 ? "" : formData.amount}

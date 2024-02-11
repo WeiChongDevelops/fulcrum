@@ -29,30 +29,35 @@ interface ModalsAndFormsProps {
     groupToDelete: string;
     categoryToDelete: string;
     runGroupDeletionWithUserPreference: (keepContainedBudgets: boolean) => void;
+
+    currencySymbol: string;
 }
 
 export default function BudgetModalsAndForms({ budgetFormVisibility,
-                                            setBudgetArray,
-                                            groupArray,
-                                            groupNameOfNewItem,
-                                            setBudgetFormVisibility,
-                                            modalFormVisibility,
-                                            setModalFormVisibility,
-                                            oldBudgetBeingEdited,
-                                            setGroupArray,
-                                            oldGroupBeingEdited,
-                                            groupToDelete,
-                                            categoryToDelete,
-                                            runGroupDeletionWithUserPreference,}:ModalsAndFormsProps ) {
+                                                 setBudgetArray,
+                                                 groupArray,
+                                                 groupNameOfNewItem,
+                                                 setBudgetFormVisibility,
+                                                 modalFormVisibility,
+                                                 setModalFormVisibility,
+                                                 oldBudgetBeingEdited,
+                                                 setGroupArray,
+                                                 oldGroupBeingEdited,
+                                                 groupToDelete,
+                                                 categoryToDelete,
+                                                 runGroupDeletionWithUserPreference,
+                                                 currencySymbol}:ModalsAndFormsProps ) {
     return(<div>
         {budgetFormVisibility.isCreateBudgetVisible && <BudgetCreationForm setBudgetArray={setBudgetArray}
                                                                            groupArray={groupArray}
                                                                            groupNameOfNewItem={groupNameOfNewItem}
-                                                                           setBudgetFormVisibility={setBudgetFormVisibility}/>}
+                                                                           setBudgetFormVisibility={setBudgetFormVisibility}
+                                                                           currencySymbol={currencySymbol}/>}
         {budgetFormVisibility.isUpdateBudgetVisible && <BudgetUpdatingForm setBudgetArray={setBudgetArray}
                                                                            oldBudgetBeingEdited={oldBudgetBeingEdited}
                                                                            groupArray={groupArray}
-                                                                           setBudgetFormVisibility={setBudgetFormVisibility}/>}
+                                                                           setBudgetFormVisibility={setBudgetFormVisibility}
+                                                                           currencySymbol={currencySymbol}/>}
         {budgetFormVisibility.isCreateGroupVisible && <GroupCreationForm setGroupArray={setGroupArray}
                                                                          setBudgetFormVisibility={setBudgetFormVisibility}/>}
         {budgetFormVisibility.isUpdateGroupVisible && <GroupUpdatingForm oldGroupBeingEdited={oldGroupBeingEdited}

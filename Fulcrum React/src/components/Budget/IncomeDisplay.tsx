@@ -1,16 +1,25 @@
-import {formatDollarAmountDynamic, formatDollarAmountStatic, handleTotalIncomeUpdating} from "../../util.ts";
+import {
+    formatDollarAmountDynamic,
+    formatDollarAmountStatic,
+    handleTotalIncomeUpdating,
+    PublicUserData
+} from "../../util.ts";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState} from "react";
 
 interface IncomeDisplayProps {
     totalIncome: number;
     setTotalIncome: Dispatch<SetStateAction<number>>;
     amountLeftToBudget: number;
+    publicUserData: PublicUserData;
 }
 
-export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftToBudget }: IncomeDisplayProps) {
+export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftToBudget, publicUserData}: IncomeDisplayProps) {
+
+    const currency = publicUserData.currency;
 
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [incomeFormData, setIncomeFormData] = useState({ income: formatDollarAmountStatic(totalIncome)});
+    const [incomeFormData, setIncomeFormData] = useState({ income: formatDollarAmountStatic(totalIncome, currency)});
+
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -26,7 +35,7 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
         }
     }
     const handleInputBlur = () => {
-        setIncomeFormData({ income: formatDollarAmountStatic(totalIncome) });
+        setIncomeFormData({ income: formatDollarAmountStatic(totalIncome, currency) });
         setIsEditing(false);
     }
 
@@ -40,7 +49,7 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
     }
 
     useEffect(() => {
-        setIncomeFormData({ income: formatDollarAmountStatic(totalIncome) });
+        setIncomeFormData({ income: formatDollarAmountStatic(totalIncome, currency) });
     }, [totalIncome]);
 
     return (
@@ -58,11 +67,11 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
                         value={incomeFormData.income}
                         autoFocus
                     />
-                </form>: <span className="text-4xl" onClick={handleEditClick}>${formatDollarAmountStatic(totalIncome)}</span>}
+                </form>: <span className="text-4xl" onClick={handleEditClick}>{formatDollarAmountStatic(totalIncome, currency)}</span>}
             </div>
             <div className="flex-1 text-center p-5 rounded-xl my-3 mx-6 font-bold text-white remaining-income" style={{backgroundColor: `${amountLeftToBudget === 0 ? "#4CCC86" : "#FF3F3F"}`}}>
                 <span className="text-4xl">REMAINING INCOME TO BUDGET: </span>
-                <span className="text-4xl">${formatDollarAmountStatic(amountLeftToBudget)}</span>
+                <span className="text-4xl">{formatDollarAmountStatic(amountLeftToBudget, currency)}</span>
             </div>
         </div>
     );

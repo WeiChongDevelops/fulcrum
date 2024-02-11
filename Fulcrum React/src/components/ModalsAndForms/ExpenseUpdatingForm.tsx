@@ -26,9 +26,10 @@ interface ExpenseUpdatingFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     categoryOptions: SelectorOptionsFormattedData[];
     oldExpenseBeingEdited: PreviousExpenseBeingEdited;
+    currencySymbol: string;
 }
 
-export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpenseArray, setBudgetArray, categoryOptions, oldExpenseBeingEdited }: ExpenseUpdatingFormProps) {
+export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpenseArray, setBudgetArray, categoryOptions, oldExpenseBeingEdited, currencySymbol }: ExpenseUpdatingFormProps) {
 
 
     const [formData, setFormData] = useState<ExpenseUpdatingFormData>({
@@ -125,7 +126,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
 
                 <label htmlFor="amount">Amount</label>
                 <div>
-                    <b className="relative left-6 text-black">$</b>
+                    <b className="relative left-6 text-black">{currencySymbol}</b>
                     <input type="text"
                            onChange={handleInputChange}
                            value={formData.amount ?? ""}

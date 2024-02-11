@@ -1,7 +1,6 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {
-    checkForOpenModalOrForm, currencyOptions,
-    getPublicUserData, handlePublicUserDataUpdating,
+    checkForOpenModalOrForm, currencyOptions, handlePublicUserDataUpdating,
     handleWipeBudget,
     handleWipeData,
     handleWipeExpenses,
@@ -16,9 +15,11 @@ import {TypeMatchConfirmationForm} from "./TypeMatchConfirmationForm.tsx";
 
 interface SettingsProps {
     setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
+    publicUserData: PublicUserData;
+    setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
 }
 
-export default function Settings({ setOpenToolsSection }: SettingsProps) {
+export default function Settings({ setOpenToolsSection, publicUserData, setPublicUserData }: SettingsProps) {
 
     const [settingsFormVisibility, setSettingsFormVisibility] = useState<SettingsFormVisibility>({
         typeDeleteMyExpensesForm: false,
@@ -34,22 +35,12 @@ export default function Settings({ setOpenToolsSection }: SettingsProps) {
 
     const [isSettingsFormOrModalOpen, setIsSettingsFormOrModalOpen] = useState<boolean>(false);
 
-    const [publicUserData, setPublicUserData] = useState<PublicUserData>({
-        createdAt: new Date(),
-        currency: "",
-        darkModeEnabled: false,
-        accessibilityEnabled: false
-    })
 
     useEffect(() => {
         setIsSettingsFormOrModalOpen(checkForOpenModalOrForm(settingsFormVisibility, settingsModalVisibility))
         document.getElementById("right-button")?.focus()
     }, [settingsFormVisibility, settingsModalVisibility]);
 
-    useEffect(() => {
-        getPublicUserData()
-            .then(results => setPublicUserData(results));
-    }, []);
 
     function handleCurrencySelection(e: React.MouseEvent) {
         const target = e.target as HTMLDivElement;

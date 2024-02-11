@@ -42,10 +42,12 @@ interface ExpenseCreationFormProps {
     budgetArray: BudgetItemEntity[];
 
     categoryOptions: SelectorOptionsFormattedData[];
+
+    currencySymbol: string;
 }
 
 
-export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, setRecurringExpenseArray, budgetArray, categoryOptions }: ExpenseCreationFormProps) {
+export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, setRecurringExpenseArray, budgetArray, categoryOptions, currencySymbol }: ExpenseCreationFormProps) {
 
     const [formData, setFormData] = useState<ExpenseCreationFormData>({ category: "", amount: 0, timestamp: new Date(), frequency: "never" });
     const formRef = useRef<HTMLDivElement>(null);
@@ -165,7 +167,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 />
                 <label htmlFor="amount">Amount</label>
                 <div>
-                    <b className="relative left-6 text-black">$</b>
+                    <b className="relative left-6 text-black">{currencySymbol}</b>
                     <input type="text"
                            onChange={handleInputChange}
                            value={formData.amount === 0 ? "" : formData.amount}

@@ -3,7 +3,7 @@ import {
     ExpenseFormVisibility,
     ExpenseModalVisibility,
     formatDollarAmountStatic,
-    PreviousExpenseBeingEdited
+    PreviousExpenseBeingEdited, PublicUserData
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
 
@@ -24,6 +24,8 @@ interface ExpenseItemProps {
 
     setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
     setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
+
+    publicUserData: PublicUserData;
 }
 
 export default function ExpenseItem( { expenseId,
@@ -37,7 +39,8 @@ export default function ExpenseItem( { expenseId,
                                          setExpenseFormVisibility,
                                          setExpenseModalVisibility,
                                          setOldExpenseBeingEdited,
-                                         setExpenseIdToDelete}: ExpenseItemProps) {
+                                         setExpenseIdToDelete,
+                                         publicUserData}: ExpenseItemProps) {
 
     function handleEditClick() {
         setOldExpenseBeingEdited({
@@ -72,7 +75,7 @@ export default function ExpenseItem( { expenseId,
                 color: groupName === "Miscellaneous" ? "white" : "black"
             }}>
                 {recurringExpenseId && <img src={`/src/assets/UI-icons/tools-recurring-icon-${groupName === "Miscellaneous" ? "white" : "black"}.svg`} alt="Cycle icon" className={"w-8 h-8 mr-6"}/>}
-                <b className="text-xl">${formatDollarAmountStatic(amount)}</b>
+                <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
                 <div className="flex flex-row items-center ml-2">
                     <button className="circle-button rounded-full p-1" onClick={handleEditClick}>
                         <img src={`/src/assets/UI-icons/edit-pencil-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="" className="mx-1 w-6 h-6" />

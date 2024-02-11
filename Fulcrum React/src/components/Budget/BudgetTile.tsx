@@ -2,7 +2,7 @@ import '/src/css/Budget.css';
 import {
     BudgetFormVisibility,
     BudgetModalVisibility, dynamicallySizeBudgetNumberDisplays, formatDollarAmountStatic,
-    PreviousBudgetBeingEdited
+    PreviousBudgetBeingEdited, PublicUserData
 } from "../../util.ts";
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 
@@ -21,6 +21,7 @@ interface BudgetTileProps {
 
     setCategoryToDelete: Dispatch<SetStateAction<string>>;
 
+    publicUserData: PublicUserData;
 }
 
 export default function BudgetTile({ category,
@@ -31,7 +32,8 @@ export default function BudgetTile({ category,
                                        setBudgetFormVisibility,
                                        setModalFormVisibility,
                                        setCategoryToDelete,
-                                       perCategoryTotalExpenseArray}: BudgetTileProps) {
+                                       perCategoryTotalExpenseArray,
+                                       publicUserData}: BudgetTileProps) {
 
 
     const spent = perCategoryTotalExpenseArray.get(category)!
@@ -58,6 +60,7 @@ export default function BudgetTile({ category,
         setModalFormVisibility(current => ({...current, isConfirmCategoryDestructionModalVisible: true}))
     }
 
+    const currency = publicUserData.currency;
 
     return (
         <div className="budget-tile flex flex-col justify-around items-center rounded-2xl"
@@ -69,8 +72,8 @@ export default function BudgetTile({ category,
                 <p className="budget-name">{category.toUpperCase()}</p>
             </div>
             <div className="budgeting-values-container flex flex-col break-words break-all text-sm font-semibold">
-                <p>Spent: ${formatDollarAmountStatic(spent)} of ${formatDollarAmountStatic(amount)}</p>
-                <p>Left: ${formatDollarAmountStatic(amount - spent)}</p>
+                <p>Spent: {formatDollarAmountStatic(spent, currency)} of {formatDollarAmountStatic(amount, currency)}</p>
+                <p>Left: {formatDollarAmountStatic(amount - spent, currency)}</p>
             </div>
             <div className="flex flex-row mb-2">
                 <button className="circle-button rounded-full p-1" onClick={handleEditClick}>

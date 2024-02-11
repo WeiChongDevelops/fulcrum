@@ -1,13 +1,20 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
-import {logoutOnClick, OpenToolsSection} from "../../util.ts";
+import {getPublicUserData, logoutOnClick, OpenToolsSection, PublicUserData} from "../../util.ts";
 import "../../css/Tools.css"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import RecurringExpenses from "./RecurringExpenses.tsx";
 import Settings from "./Settings.tsx";
 
 export default function Tools() {
 
     const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
+
+    const [publicUserData, setPublicUserData] = useState<PublicUserData>({
+        createdAt: new Date(),
+        currency: "",
+        darkModeEnabled: false,
+        accessibilityEnabled: false
+    })
 
     function openSettings() {
         setOpenToolsSection("settings");
@@ -16,6 +23,11 @@ export default function Tools() {
     function openRecurringExpenses() {
         setOpenToolsSection("recurring");
     }
+
+    useEffect(() => {
+        getPublicUserData()
+            .then(results => setPublicUserData(results));
+    }, []);
 
     return (
         <>
@@ -32,6 +44,7 @@ export default function Tools() {
                     <div className="tools-text-container">
                         <p>Settings</p>
                     </div>
+
                     <img src="/src/assets/UI-icons/tools-settings-icon-black.svg" alt=""/>
                 </div>
                 <div className="tools-tile bg-[#B1D1CF] text-black text-lg leading-5 hover:cursor-pointer" onClick={openRecurringExpenses}>
@@ -48,8 +61,8 @@ export default function Tools() {
                 </div>
              </div>
         </div> : openToolsSection === "settings" ?
-            <Settings setOpenToolsSection={setOpenToolsSection}/> :
-            <RecurringExpenses setOpenToolsSection={setOpenToolsSection}/>
+            <Settings setOpenToolsSection={setOpenToolsSection} publicUserData={publicUserData} setPublicUserData={setPublicUserData}/> :
+            <RecurringExpenses setOpenToolsSection={setOpenToolsSection} publicUserData={publicUserData}/>
         }
         </>
     );

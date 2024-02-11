@@ -1,7 +1,7 @@
 import {
     CategoryToIconGroupAndColourMap, ExpenseFormVisibility,
     ExpenseItemEntity, ExpenseModalVisibility, formatDate, formatDollarAmountStatic,
-    PreviousExpenseBeingEdited
+    PreviousExpenseBeingEdited, PublicUserData
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
 import ExpenseList from "./ExpenseList.tsx";
@@ -19,6 +19,8 @@ interface ExpenseDayGroupProps {
     setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 
     categoryDataMap: CategoryToIconGroupAndColourMap;
+
+    publicUserData: PublicUserData;
 }
 
 export default function ExpenseDayGroup({ date,
@@ -27,7 +29,8 @@ export default function ExpenseDayGroup({ date,
                                             setExpenseModalVisibility,
                                             setOldExpenseBeingEdited,
                                             setExpenseIdToDelete,
-                                            categoryDataMap}: ExpenseDayGroupProps) {
+                                            categoryDataMap,
+                                            publicUserData}: ExpenseDayGroupProps) {
 
     const expenseDayGroupDate = date.toLocaleDateString();
     const dateStringToday = new Date().toLocaleDateString();
@@ -42,7 +45,7 @@ export default function ExpenseDayGroup({ date,
             <div className="flex flex-row justify-between items-center text-black relative">
                 <p className="text-4xl font-bold">{expenseDayGroupDate === dateStringToday ? "Today" : expenseDayGroupDate === dateString ? "Yesterday" : formatDate(new Date(date))}</p>
                 <div className="dotted-line"></div>
-                <p className="text-4xl font-bold">${formatDollarAmountStatic(dayTotal)}</p>
+                <p className="text-4xl font-bold">{formatDollarAmountStatic(dayTotal, publicUserData.currency)}</p>
             </div>
             {filteredExpenseArray.length > 0 && <ExpenseList
                 filteredExpenseArray={filteredExpenseArray}
@@ -50,7 +53,8 @@ export default function ExpenseDayGroup({ date,
                 setExpenseModalVisibility={setExpenseModalVisibility}
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                 setExpenseIdToDelete={setExpenseIdToDelete}
-                categoryDataMap={categoryDataMap}/>}
+                categoryDataMap={categoryDataMap}
+                publicUserData={publicUserData}/>}
         </div>
     );
 }

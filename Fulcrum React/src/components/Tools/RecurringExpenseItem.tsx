@@ -2,7 +2,7 @@ import '/src/css/Budget.css';
 import {
     capitaliseFirstLetter,
     formatDollarAmountStatic,
-    PreviousRecurringExpenseBeingEdited,
+    PreviousRecurringExpenseBeingEdited, PublicUserData,
     RecurringExpenseFormVisibility, RecurringExpenseFrequency,
     RecurringExpenseModalVisibility
 } from "../../util.ts";
@@ -23,6 +23,8 @@ interface RecurringExpenseItemProps {
 
     setOldRecurringExpenseBeingEdited: Dispatch<SetStateAction<PreviousRecurringExpenseBeingEdited>>;
     setRecurringExpenseIdToDelete: Dispatch<SetStateAction<string>>;
+
+    publicUserData: PublicUserData;
 }
 
 export default function RecurringExpenseItem( { recurringExpenseId,
@@ -35,7 +37,8 @@ export default function RecurringExpenseItem( { recurringExpenseId,
                                                   setRecurringExpenseFormVisibility,
                                                   setRecurringExpenseModalVisibility,
                                                   setOldRecurringExpenseBeingEdited,
-                                                  setRecurringExpenseIdToDelete}: RecurringExpenseItemProps) {
+                                                  setRecurringExpenseIdToDelete,
+                                                  publicUserData}: RecurringExpenseItemProps) {
 
     function handleEditClick() {
         setOldRecurringExpenseBeingEdited({
@@ -73,7 +76,7 @@ export default function RecurringExpenseItem( { recurringExpenseId,
                     <p className={"text-xl ml-3 mr-8 font-bold"}>{capitaliseFirstLetter(frequency)}</p>
                 </div>
 
-                <b className="text-xl">${formatDollarAmountStatic(amount)}</b>
+                <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
                 <div className="flex flex-row items-center ml-2">
                     <button className="circle-button rounded-full p-1" onClick={handleEditClick}>
                         <img src={`/src/assets/UI-icons/edit-pencil-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="" className="mx-1 w-6 h-6" />

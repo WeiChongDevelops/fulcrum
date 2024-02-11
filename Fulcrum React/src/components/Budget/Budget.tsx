@@ -9,7 +9,7 @@ import {
     GroupItemEntity,
     handleGroupDeletion,
     implementDynamicBackgroundHeight,
-    PreviousBudgetBeingEdited, PreviousGroupBeingEdited, PublicUserData, getPublicUserData,
+    PreviousBudgetBeingEdited, PreviousGroupBeingEdited, PublicUserData, getPublicUserData, getCurrencySymbol,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
@@ -26,6 +26,7 @@ export default function Budget() {
 
     const [publicUserData, setPublicUserData] = useState<PublicUserData>({
         createdAt: new Date(),
+        currency: "AUD",
         darkModeEnabled: false,
         accessibilityEnabled: false
     })
@@ -80,6 +81,8 @@ export default function Budget() {
             setExpenseArray(expenseArray);
             setTotalIncome(totalIncome);
             setPublicUserData(publicUserDataObject);
+            console.log("below, 10th feb")
+            console.log(publicUserDataObject)
 
             await implementDynamicBackgroundHeight();
         }
@@ -145,7 +148,8 @@ export default function Budget() {
                 <IncomeDisplay
                     totalIncome={totalIncome}
                     setTotalIncome={setTotalIncome}
-                    amountLeftToBudget={amountLeftToBudget}/>
+                    amountLeftToBudget={amountLeftToBudget}
+                    publicUserData={publicUserData}/>
 
                 <FulcrumAnimation lineAngle={lineAngle}/>
 
@@ -162,7 +166,8 @@ export default function Budget() {
                     setGroupToDelete={setGroupToDelete}
                     setCategoryToDelete={setCategoryToDelete}
                     setModalFormVisibility={setBudgetModalVisibility}
-                    perCategoryTotalExpenseArray={perCategoryExpenditureMap}/>}
+                    perCategoryTotalExpenseArray={perCategoryExpenditureMap}
+                    publicUserData={publicUserData}/>}
 
                 <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
             </div>
@@ -182,7 +187,7 @@ export default function Budget() {
             categoryToDelete={categoryToDelete}
             runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
             modalFormVisibility={budgetModalVisibility}
-            setModalFormVisibility={setBudgetModalVisibility}/>
+            setModalFormVisibility={setBudgetModalVisibility} currencySymbol={getCurrencySymbol(publicUserData.currency)}/>
             </div>
             </div> : <Loader isLoading={isLoading}/>}
         </>

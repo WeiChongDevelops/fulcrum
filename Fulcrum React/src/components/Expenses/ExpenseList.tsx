@@ -1,7 +1,7 @@
 import {
     CategoryToIconGroupAndColourMap, ExpenseFormVisibility,
     ExpenseItemEntity, ExpenseModalVisibility,
-    PreviousExpenseBeingEdited
+    PreviousExpenseBeingEdited, PublicUserData
 } from "../../util.ts";
 import ExpenseItem from "./ExpenseItem.tsx";
 import {Dispatch, SetStateAction} from "react";
@@ -16,6 +16,8 @@ interface ExpenseListProps {
     setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 
     categoryDataMap: CategoryToIconGroupAndColourMap;
+
+    publicUserData: PublicUserData;
 }
 
 export default function ExpenseList({ filteredExpenseArray,
@@ -23,7 +25,8 @@ export default function ExpenseList({ filteredExpenseArray,
                                         setExpenseModalVisibility,
                                         setOldExpenseBeingEdited,
                                         setExpenseIdToDelete,
-                                        categoryDataMap}: ExpenseListProps) {
+                                        categoryDataMap,
+                                        publicUserData}: ExpenseListProps) {
 
     return (
         <div>
@@ -42,6 +45,7 @@ export default function ExpenseList({ filteredExpenseArray,
                         setExpenseModalVisibility={setExpenseModalVisibility}
                         setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                         setExpenseIdToDelete={setExpenseIdToDelete}
+                        publicUserData={publicUserData}
                         key={key}
                     />
                 })}
@@ -49,67 +53,3 @@ export default function ExpenseList({ filteredExpenseArray,
         </div>
     );
 }
-// import {
-//     BudgetItemEntity, ExpenseFormVisibility,
-//     ExpenseItemEntity, ExpenseModalVisibility, getColourOfGroup,
-//     getGroupOfCategory,
-//     GroupItemEntity, PreviousExpenseBeingEdited
-// } from "../../util.ts";
-// import ExpenseItem from "./ExpenseItem.tsx";
-// import {Dispatch, SetStateAction} from "react";
-//
-// interface ExpenseListProps {
-//     expenseArray: ExpenseItemEntity[];
-//     setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-//
-//     budgetArray: BudgetItemEntity[];
-//     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-//
-//     groupArray: GroupItemEntity[];
-//
-//     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
-//     setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
-//
-//     setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-//     setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
-// }
-//
-// export default function ExpenseList({ expenseArray,
-//                                         setExpenseArray,
-//                                         budgetArray,
-//                                         setBudgetArray,
-//                                         groupArray,
-//                                         setExpenseFormVisibility,
-//                                         setExpenseModalVisibility,
-//                                         setOldExpenseBeingEdited,
-//                                         setExpenseIdToDelete}: ExpenseListProps) {
-//
-//     return (
-//         <div>
-//             <div>
-//                 {expenseArray.map((expenseElement, key) => {
-//                     const groupName = getGroupOfCategory(budgetArray, expenseElement.category)
-//                     const groupColour = getColourOfGroup(groupName, groupArray)!
-//
-//                     const iconPath = budgetArray.filter(budgetItem => budgetItem.category === expenseElement.category)[0].iconPath
-//
-//                     return <ExpenseItem
-//                         expenseId={expenseElement.expenseId}
-//                         category={expenseElement.category}
-//                         amount={expenseElement.amount}
-//                         iconPath={iconPath}
-//                         groupName={groupName}
-//                         groupColour={groupColour}
-//                         setExpenseArray={setExpenseArray}
-//                         setBudgetArray={setBudgetArray}
-//                         setExpenseFormVisibility={setExpenseFormVisibility}
-//                         setExpenseModalVisibility={setExpenseModalVisibility}
-//                         setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-//                         setExpenseIdToDelete={setExpenseIdToDelete}
-//                         key={key}
-//                     />
-//                 })}
-//             </div>
-//         </div>
-//     );
-// }

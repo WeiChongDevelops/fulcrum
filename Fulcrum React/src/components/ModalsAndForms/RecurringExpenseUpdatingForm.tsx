@@ -22,9 +22,11 @@ interface RecurringExpenseUpdatingFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     categoryOptions: SelectorOptionsFormattedData[];
     oldRecurringExpenseBeingEdited: PreviousRecurringExpenseBeingEdited;
+
+    currencySymbol: string;
 }
 
-export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVisibility, setRecurringExpenseArray, setBudgetArray, categoryOptions, oldRecurringExpenseBeingEdited }: RecurringExpenseUpdatingFormProps) {
+export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVisibility, setRecurringExpenseArray, setBudgetArray, categoryOptions, oldRecurringExpenseBeingEdited, currencySymbol }: RecurringExpenseUpdatingFormProps) {
 
 
     const [formData, setFormData] = useState<RecurringExpenseUpdatingFormData>({
@@ -142,7 +144,7 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
 
                 <label htmlFor="amount">Amount</label>
                 <div>
-                    <b className="relative left-6 text-black">$</b>
+                    <b className="relative left-6 text-black">{currencySymbol}</b>
                     <input type="text"
                            onChange={handleInputChange}
                            value={formData.amount ?? ""}

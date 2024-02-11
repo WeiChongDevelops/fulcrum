@@ -1,12 +1,12 @@
 import {
     BudgetItemEntity,
     categoryListAsOptions, CategoryToIconGroupAndColourMap, checkForOpenModalOrForm,
-    getBudgetList,
+    getBudgetList, getCurrencySymbol,
     getGroupAndColourMap,
     getGroupList,
     getRecurringExpenseList,
     GroupItemEntity, handleRecurringExpenseDeletion, OpenToolsSection,
-    PreviousRecurringExpenseBeingEdited,
+    PreviousRecurringExpenseBeingEdited, PublicUserData,
     RecurringExpenseFormVisibility,
     RecurringExpenseItemEntity,
     RecurringExpenseModalVisibility
@@ -20,9 +20,11 @@ import FulcrumButton from "../Other/FulcrumButton.tsx";
 
 interface RecurringExpensesProps {
     setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
+
+    publicUserData: PublicUserData;
 }
 
-export default function RecurringExpenses({ setOpenToolsSection }: RecurringExpensesProps) {
+export default function RecurringExpenses({ setOpenToolsSection, publicUserData }: RecurringExpensesProps) {
 
     const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -110,6 +112,7 @@ export default function RecurringExpenses({ setOpenToolsSection }: RecurringExpe
                             setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
                             setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}
                             setRecurringExpenseIdToDelete={setRecurringExpenseIdToDelete}
+                            publicUserData={publicUserData}
                             key={key}
                         />
                     }): <p className={"text-2xl mt-48"}>Your recurring expenses will appear here.</p>}
@@ -122,7 +125,8 @@ export default function RecurringExpenses({ setOpenToolsSection }: RecurringExpe
                         <RecurringExpenseUpdatingForm setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
                                                       setRecurringExpenseArray={setRecurringExpenseArray} setBudgetArray={setBudgetArray}
                                                       categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
-                                                      oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}/>}
+                                                      oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
+                                                      currencySymbol={getCurrencySymbol(publicUserData.currency)}/>}
 
                     {recurringExpenseModalVisibility.isConfirmRecurringExpenseDestructionModalVisible &&
                         <TwoOptionModal optionOneText="Cancel"

@@ -1,7 +1,7 @@
 import {
     BudgetFormVisibility,
     BudgetItemEntity, BudgetModalVisibility, ExpenseItemEntity,
-    GroupItemEntity, PreviousBudgetBeingEdited, PreviousGroupBeingEdited
+    GroupItemEntity, PreviousBudgetBeingEdited, PreviousGroupBeingEdited, PublicUserData
 } from "../../util.ts";
 import Group from "./Group.tsx";
 import {Dispatch, SetStateAction} from "react";
@@ -28,6 +28,8 @@ interface GroupListProps {
     setCategoryToDelete: Dispatch<SetStateAction<string>>;
 
     perCategoryTotalExpenseArray: Map<string, number>
+
+    publicUserData: PublicUserData;
 }
 
 export default function GroupList( { budgetArray,
@@ -42,7 +44,8 @@ export default function GroupList( { budgetArray,
                                        setGroupToDelete,
                                        setModalFormVisibility,
                                        setCategoryToDelete,
-                                       perCategoryTotalExpenseArray}: GroupListProps ) {
+                                       perCategoryTotalExpenseArray,
+                                       publicUserData}: GroupListProps ) {
 
 
     // 1. Make an array containing unique group in the budgetArray
@@ -72,6 +75,7 @@ export default function GroupList( { budgetArray,
                                   setCategoryToDelete={setCategoryToDelete}
                                   setModalFormVisibility={setModalFormVisibility}
                                   perCategoryTotalExpenseArray={perCategoryTotalExpenseArray}
+                                  publicUserData={publicUserData}
                                   key={key}/>
                 })
             }

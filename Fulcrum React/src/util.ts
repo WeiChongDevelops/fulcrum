@@ -193,12 +193,43 @@ export function capitaliseFirstLetter(str: string) {
 }
 
 
-export function formatDollarAmountStatic(amount: number) {
-    return new Intl.NumberFormat('en-US', {
+export function getCurrencySymbol(currency: string) {
+    let currencySymbol;
+    switch (currency) {
+        case ("USD"):
+            currencySymbol = "$";
+            break;
+        case ("AUD"):
+            currencySymbol = "$";
+            break;
+        case ("GBP"):
+            currencySymbol = "£";
+            break;
+        case ("KRW"):
+            currencySymbol = "₩";
+            break;
+        case ("JPY"):
+            currencySymbol = "¥";
+            break;
+        case ("CNY"):
+            currencySymbol = "¥";
+            break;
+        default:
+            currencySymbol = "$"
+            break;
+    }
+    return currencySymbol;
+}
+
+export function formatDollarAmountStatic(amount: number, currency: string) {
+    const formattedNumber = new Intl.NumberFormat('en-US', {
         style: 'decimal',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     }).format(amount);
+    let currencySymbol = getCurrencySymbol(currency);
+    console.log(currencySymbol + formattedNumber)
+    return currencySymbol + formattedNumber;
 }
 
 export function formatDollarAmountDynamic(amount: string) {
