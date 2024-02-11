@@ -28,7 +28,8 @@ export default function Budget() {
         createdAt: new Date(),
         currency: "AUD",
         darkModeEnabled: false,
-        accessibilityEnabled: false
+        accessibilityEnabled: false,
+        profileIconFileName: "profile-icon-default.svg"
     })
 
     const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
@@ -81,8 +82,6 @@ export default function Budget() {
             setExpenseArray(expenseArray);
             setTotalIncome(totalIncome);
             setPublicUserData(publicUserDataObject);
-            console.log("below, 10th feb")
-            console.log(publicUserDataObject)
 
             await implementDynamicBackgroundHeight();
         }

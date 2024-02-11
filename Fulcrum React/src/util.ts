@@ -162,6 +162,14 @@ export interface RemovedRecurringExpenseItem {
     timestampOfRemovedInstance: Date
 }
 
+export interface ProfileIconUpdatingFormData {
+    iconPath: string
+}
+
+export interface ToolsFormVisibility {
+    isUpdateProfileIconFormVisible: boolean
+}
+
 // MISCELLANEOUS ENTITIES //
 
 export interface SelectorOptionsFormattedData {
@@ -175,23 +183,86 @@ export interface PublicUserData {
     currency: string;
     darkModeEnabled: boolean;
     accessibilityEnabled: boolean;
+    profileIconFileName: string;
 }
 
 export interface PublicUserDataUpdate {
     currency: string;
     darkModeEnabled: boolean;
     accessibilityEnabled: boolean;
+    profileIconFileName: string;
 }
 
 export type CategoryToIconGroupAndColourMap = Map<string, {iconPath: string, group: string, colour:string}>;
 
+// SELECTOR CONTENT ARRAYS //
+
+export const groupColourArray = [
+    '#fbb39a',
+    '#fbdee0',
+    '#f8b2bc',
+    '#f1afa1',
+    '#fbf5ab',
+    '#e6eda0',
+    '#9fd5be',
+    '#c3e6df',
+    '#9dc7b9',
+    '#acbfa1',
+    '#c6e2ba',
+    '#a6c7ea',
+    '#7c86bf',
+    '#b2b4da',
+    '#dfcde3',
+    '#ceb4d9'
+];
+
+export const categoryIconArray = [
+    "category-bank-icon.svg",
+    "category-water-icon.svg",
+    "category-pig-icon.svg",
+    "category-beer-icon.svg",
+    "category-car-icon.svg",
+    "category-cash-icon.svg",
+    "category-electricity-icon.svg",
+    "category-gift-icon.svg",
+    "category-health-icon.svg",
+    "category-house-icon.svg",
+    "category-movie-icon.svg",
+    "category-music-icon.svg",
+    "category-pet-icon.svg",
+    "category-petrol-icon.svg",
+    "category-plane-icon.svg",
+    "category-shirt-icon.svg",
+    "category-tool-icon.svg",
+    "category-train-icon.svg",
+    "category-apple-icon.svg",
+    "category-cart-icon.svg",
+    "category-emergency-icon.svg",
+    "category-fastfood-icon.svg",
+    "category-gym-icon.svg",
+    "category-meds-icon.svg",
+    "category-people-icon.svg",
+    "category-phone-icon.svg",
+    "category-soccer-icon.svg",
+    "category-tv-icon.svg",
+    "category-utencils-icon.svg",
+    "category-wifi-icon.svg"
+];
+
+export const profileIconArray = [
+    "profile-icon-default.svg",
+    "profile-icon-partners.svg",
+    "profile-icon-family.svg",
+    "profile-icon-household.svg",
+    "profile-icon-business.svg",
+    "profile-icon-country.svg",
+]
 
 // FORMATTING FUNCTIONS //
 
 export function capitaliseFirstLetter(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
 
 export function getCurrencySymbol(currency: string) {
     let currencySymbol;
@@ -931,19 +1002,21 @@ export async function handleWipeData() {
 
 export function addIconSelectionFunctionality(setFormData:
                                                   Dispatch<SetStateAction<BudgetUpdatingFormData>>
-                                                  | Dispatch<SetStateAction<BudgetCreationFormData>>) {
-    const categoryIcons: NodeListOf<HTMLImageElement> = document.querySelectorAll(".category-icon-selectable");
-    categoryIcons.forEach((icon): void => {
+                                                  | Dispatch<SetStateAction<BudgetCreationFormData>>
+                                                  | Dispatch<SetStateAction<ProfileIconUpdatingFormData>>,
+                                              selectorType: string) {
+    const icons: NodeListOf<HTMLImageElement> = document.querySelectorAll(`.${selectorType}-icon-selectable`);
+    icons.forEach((icon): void => {
         icon.addEventListener("click", (e: MouseEvent) => {
             e.preventDefault();
-            const iconPath = `/src/assets/category-icons/${icon.getAttribute("data-value")!}`;
+            const iconPath = icon.getAttribute("data-value")!;
 
             setFormData((currentFormData: any) => {
                 return {...currentFormData, ["iconPath"]: iconPath}
             });
             console.log(`iconPath: ${iconPath}`)
 
-            document.querySelectorAll('.category-icon-selectable').forEach(btn => btn.classList.remove("selected-icon"));
+            icons.forEach(icon2 => icon2.classList.remove("selected-icon"));
             icon.classList.add("selected-icon");
         });
     });
@@ -1014,6 +1087,27 @@ export async function checkForUser() {
 }
 
 
+export async function getSessionEmail() {
+    try {
+        const response = await fetch("http://localhost:8080/api/getUserEmailIfLoggedIn", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if (!response.ok) {
+            console.error(`Email retrieval failed - no user logged in.: ${response.status}`);
+        } else {
+            const responseData = await response.json();
+            console.log(responseData);
+            return responseData
+        }
+    } catch (error) {
+        console.error(`Email retrieval api query failed: ${error}`);
+    }
+}
+
+
 // SORTING FUNCTIONS //
 
 function groupSort (a: GroupItemEntity, b: GroupItemEntity){
@@ -1051,7 +1145,6 @@ export async function getPublicUserData() {
             console.error(`HTTP error when getting public user data - ${response.status}`)
         } else {
             const publicUserData = await response.json();
-            console.log("!!!!!! public user data")
             console.log(publicUserData);
             return(publicUserData);
         }
@@ -1070,7 +1163,8 @@ export async function handlePublicUserDataUpdating(updatedPublicUserData: Public
             body: JSON.stringify ({
                 currency: updatedPublicUserData.currency,
                 darkModeEnabled: updatedPublicUserData.darkModeEnabled,
-                accessibilityEnabled: updatedPublicUserData.accessibilityEnabled
+                accessibilityEnabled: updatedPublicUserData.accessibilityEnabled,
+                profileIconFileName: updatedPublicUserData.profileIconFileName
             })
         })
         if (!response.ok) {
@@ -1247,27 +1341,8 @@ export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpens
 
 
 export function getRandomGroupColour() {
-    const colourArray = [
-        '#fbb39a',
-        '#fbdee0',
-        '#f8b2bc',
-        '#f1afa1',
-        '#fbf5ab',
-        '#e6eda0',
-        '#9fd5be',
-        '#c3e6df',
-        '#9dc7b9',
-        '#acbfa1',
-        '#c6e2ba',
-        '#a6c7ea',
-        '#7c86bf',
-        '#b2b4da',
-        '#dfcde3',
-        '#ceb4d9'
-    ];
-
-    const randomColourIndex = Math.floor(Math.random() * colourArray.length);
-    return colourArray[randomColourIndex];
+    const randomColourIndex = Math.floor(Math.random() * groupColourArray.length);
+    return groupColourArray[randomColourIndex];
 }
 
 export function getGroupBudgetTotal(filteredBudgetArray: BudgetItemEntity[]) {

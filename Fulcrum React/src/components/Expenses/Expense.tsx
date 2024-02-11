@@ -46,7 +46,8 @@ export default function Expense() {
         createdAt: new Date(),
         currency: "AUD",
         darkModeEnabled: false,
-        accessibilityEnabled: false
+        accessibilityEnabled: false,
+        profileIconFileName: "profile-icon-default.svg"
     })
 
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);

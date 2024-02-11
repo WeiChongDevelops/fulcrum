@@ -25,7 +25,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
     const formRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        addIconSelectionFunctionality(setFormData);
+        addIconSelectionFunctionality(setFormData, "category");
         window.addEventListener("mousedown", handleClickOutside);
         return () => {
             window.removeEventListener("mousedown", handleClickOutside);

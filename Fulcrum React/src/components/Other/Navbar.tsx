@@ -1,37 +1,38 @@
 import {useEffect, useState} from "react";
 import {Outlet} from "react-router-dom";
-import {getWindowLocation, logoutOnClick} from "../../util.ts";
+import {getPublicUserData, getSessionEmail, getWindowLocation, logoutOnClick, PublicUserData} from "../../util.ts";
 import FulcrumButton from "./FulcrumButton.tsx";
 
 
 export default function Navbar() {
-    const [email, setEmail] = useState<string>("");
     const [hoveredButton, setHoveredButton] = useState("");
 
-    async function getSessionEmail() {
-        try {
-            const response = await fetch("http://localhost:8080/api/getUserEmailIfLoggedIn", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            if (!response.ok) {
-                console.error(`Email retrieval failed - no user logged in.: ${response.status}`);
-            } else {
-                const responseData = await response.json();
-                console.log(responseData);
-                return responseData
-            }
-        } catch (error) {
-            console.error(`Email retrieval api query failed: ${error}`);
-        }
-    }
+    const sessionStoredProfileIcon = sessionStorage.getItem("profileIcon");
+    const sessionStoredEmail = sessionStorage.getItem("email");
+
+    const [email, setEmail] = useState<string>(sessionStoredEmail!);
+    const [publicUserData, setPublicUserData] = useState<PublicUserData>({
+        createdAt: new Date(),
+        currency: "",
+        darkModeEnabled: false,
+        accessibilityEnabled: false,
+        profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "profile-icon-default.svg"
+    })
 
     useEffect(() => {
+        getPublicUserData()
+            .then(results => setPublicUserData(results));
         getSessionEmail()
             .then(response => response.email ? setEmail(response.email) : "")
     }, []);
+
+    useEffect(() => {
+        sessionStorage.setItem("profileIcon", publicUserData.profileIconFileName)
+    }, [publicUserData]);
+
+    useEffect(() => {
+        sessionStorage.setItem("email", email);
+    }, [email]);
 
     function handleMouseEnter(e: React.MouseEvent<HTMLButtonElement>) {
         const button = e.target as HTMLButtonElement;
@@ -46,10 +47,11 @@ export default function Navbar() {
         <div>
             <nav className="flex flex-row justify-between items-center bg-white py-1">
                 <div className="flex-1"></div>
-                <img src="/src/assets/fulcrum-logos/fulcrum-long.webp" alt="Fulcrum logo in navbar" className="w-80 mr-4 hover:cursor-pointer" onClick={() => window.location.href= "/budget"}></img>
+                <img src="/src/assets/fulcrum-logos/fulcrum-long.webp" alt="Fulcrum logo in navbar" className="navbar-fulcrum-logo mr-4 hover:cursor-pointer" onClick={() => window.location.href= "/budget"}></img>
                 <div className="flex-1 text-right">
                     <div className="flex justify-end items-center">
                         <p className="mx-2 text-black ">{email}</p>
+                        <img src={`/src/assets/profile-icons/${publicUserData.profileIconFileName.slice(0, -4)}-black.svg`} className="profile-icon h-12" alt="Profile icon"/>
                         {email != "" ? <FulcrumButton displayText="Log Out" onClick={logoutOnClick}/>
                             : <FulcrumButton displayText="Register" onClick={() => window.location.href = "/register"}/> }
                     </div>

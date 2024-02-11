@@ -1,1 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="#000000" fill-rule="evenodd" d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0m0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5z" clip-rule="evenodd" style="fill: rgb(255, 255, 255);"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485.7371 485.7371">
+  <defs>
+    <style>
+      .cls-1 {
+        fill-rule: evenodd;
+      }
+
+      .cls-1, .cls-2 {
+        fill: #fff;
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        opacity: 0;
+      }
+    </style>
+  </defs>
+  <g id="Layer_2-2" data-name="Layer 2">
+    <g>
+      <path class="cls-1" d="M159.6466,140.4114c0-45.9622,37.2598-83.222,83.222-83.222s83.222,37.2598,83.222,83.222-37.2598,83.222-83.222,83.222-83.222-37.2598-83.222-83.222"/>
+      <path class="cls-1" d="M160.2143,264.5686c-58.2368,0-105.2199,48.1832-103.2584,106.8592,1.1,32.904,29.4083,58.4494,62.3307,58.4494h247.1641c32.9224,0,61.2307-25.5454,62.3307-58.4494,1.9615-58.676-45.0216-106.8592-103.2584-106.8592h-165.3086Z"/>
+    </g>
+    <rect class="cls-2" width="485.7371" height="485.7371"/>
+  </g>
+</svg>

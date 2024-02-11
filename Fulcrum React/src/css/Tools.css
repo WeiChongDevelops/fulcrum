@@ -1,14 +1,19 @@
 .tools {
-    min-height: 95vh;
+    min-height: calc(100vh - 136px);
 }
 
 .profile-icon-display {
     background: url("../assets/UI-icons/green-triangle-background-inverted.webp") bottom / contain no-repeat;
-    @apply w-72 h-72 flex justify-center items-center
+    width: 13vw;
+    height: 13vw;
+    @apply flex justify-center items-center
 }
 
 .profile-icon-display img {
-    @apply w-36 h-36 relative top-14
+    width: 48%;
+    height: 48%;
+    top: 23%;
+    @apply relative
 }
 
 .tools-tile-container {
@@ -66,4 +71,39 @@
 
 .currency-selection {
     @apply hover:cursor-pointer
+}
+
+
+/* PROFILE ICON SELECTOR */
+
+.profile-icon {
+    width: 100px;
+}
+
+#icon-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    padding: 25px;
+}
+
+.profile-icon-selectable {
+    display: flex;
+    margin: 8px 0;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    @apply rounded-3xl mx-4
+}
+
+.profile-icon-selectable img {
+    width: 80px;
+    height: 80px;
+}
+
+.selected-icon {
+    outline: aquamarine solid 2px;
 }

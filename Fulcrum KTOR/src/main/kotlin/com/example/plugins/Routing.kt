@@ -786,7 +786,7 @@ fun Application.configureRouting() {
 
         get("/api/getPublicUserData") {
             try {
-                val userData = supabase.postgrest["public_user_data"].select(columns = Columns.list("currency, createdAt, darkModeEnabled, accessibilityEnabled")) {
+                val userData = supabase.postgrest["public_user_data"].select(columns = Columns.list("currency, createdAt, darkModeEnabled, accessibilityEnabled, profileIconFileName")) {
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
                 }
                     .decodeSingle<PublicUserDataResponse>()
@@ -805,6 +805,7 @@ fun Application.configureRouting() {
                         set("currency", publicUserDataUpdateRequest.currency)
                         set("darkModeEnabled", publicUserDataUpdateRequest.darkModeEnabled)
                         set("accessibilityEnabled", publicUserDataUpdateRequest.accessibilityEnabled)
+                        set("profileIconFileName", publicUserDataUpdateRequest.profileIconFileName)
                     }
                 ) {
                     eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)

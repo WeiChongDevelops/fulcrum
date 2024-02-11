@@ -123,3 +123,7 @@ body label {
   background-color: rgba(0,0,0,0.8);
   @apply rounded-3xl text-white
 }
+
+.navbar-fulcrum-logo {
+  height: 60px;
+}

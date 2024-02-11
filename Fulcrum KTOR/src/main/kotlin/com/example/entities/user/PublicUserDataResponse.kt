@@ -9,5 +9,6 @@ data class PublicUserDataResponse(
     @Contextual val createdAt: Instant,
     val currency: String,
     val darkModeEnabled: Boolean,
-    val accessibilityEnabled: Boolean
+    val accessibilityEnabled: Boolean,
+    val profileIconFileName: String
 )

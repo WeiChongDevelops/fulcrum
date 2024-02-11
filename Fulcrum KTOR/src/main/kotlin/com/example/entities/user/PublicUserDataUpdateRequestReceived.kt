@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class PublicUserDataUpdateRequestReceived(
     val currency: String,
     val darkModeEnabled: Boolean,
-    val accessibilityEnabled: Boolean
+    val accessibilityEnabled: Boolean,
+    val profileIconFileName: String
 )
