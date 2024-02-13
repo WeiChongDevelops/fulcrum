@@ -1253,7 +1253,13 @@ const dot = (color = 'transparent') => ({
 export const colourStyles = {
     control: (styles: any) => ({ ...styles, fontWeight: "bold", backgroundColor: "white" }),
     option: (styles: any, {data}: any) => {
-        return { ...styles, color: (data.label !== "Other" || data.label !== "Miscellaneous") ? data.colour : "red", fontWeight: "bold" };
+        return {
+            ...styles,
+            color: data.colour,
+            fontWeight: "bold",
+            textShadow: "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 #3f4240, 1px 1px 0 black",
+            letterSpacing: "1.5px"
+        };
     },
     input: (styles: any) => ({ ...styles, ...dot() }),
     placeholder: (styles: any) => ({ ...styles, ...dot('#ccc') }),

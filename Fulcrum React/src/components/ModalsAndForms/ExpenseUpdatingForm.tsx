@@ -112,7 +112,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
                     onChange={handleCategoryInputChange}
                     styles={colourStyles}
                     className="mb-3"
-                    theme={(theme) => ({
+                    theme={(theme: any) => ({
                         ...theme,
                         borderRadius: 0,
                         colors: {
