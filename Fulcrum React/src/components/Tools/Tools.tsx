@@ -1,6 +1,5 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {
-    getPublicUserData,
     getSessionEmail,
     logoutOnClick,
     OpenToolsSection,
@@ -8,28 +7,23 @@ import {
     ToolsFormVisibility
 } from "../../util.ts";
 import "../../css/Tools.css"
-import {useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import RecurringExpenses from "./RecurringExpenses.tsx";
 import Settings from "./Settings.tsx";
 import ProfileIconUpdatingForm from "../ModalsAndForms/ProfileIconUpdatingForm.tsx";
 
-export default function Tools() {
+interface ToolsProps {
+    publicUserData: PublicUserData;
+    setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
+}
+
+export default function Tools({ publicUserData, setPublicUserData }: ToolsProps) {
 
     const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
     const [email, setEmail] = useState("");
 
     const [toolsFormVisibility, setToolsFormVisibility] = useState<ToolsFormVisibility>({
         isUpdateProfileIconFormVisible: false
-    })
-
-    const sessionStoredProfileIcon = sessionStorage.getItem("profileIcon");
-
-    const [publicUserData, setPublicUserData] = useState<PublicUserData>({
-        createdAt: new Date(),
-        currency: "",
-        darkModeEnabled: false,
-        accessibilityEnabled: false,
-        profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "profile-icon-default.svg"
     })
 
     function openSettings() {
@@ -41,15 +35,9 @@ export default function Tools() {
     }
 
     useEffect(() => {
-        getPublicUserData()
-            .then(results => setPublicUserData(results));
         getSessionEmail()
             .then(response => response.email ? setEmail(response.email) : "")
     }, []);
-
-    useEffect(() => {
-        sessionStorage.setItem("profileIcon", publicUserData.profileIconFileName)
-    }, [publicUserData]);
 
     return (
         <div>

@@ -1339,6 +1339,13 @@ export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpens
     }
 }
 
+export function recurringExpenseInstanceAlreadyAdded(expenseArray, recurringExpenseItem, date) {
+    return (expenseArray.find((expenseItem: ExpenseItemEntity) => {
+        return (expenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
+            && new Date(expenseItem.timestamp).getTime() === new Date(date).getTime())
+    }))
+}
+
 
 export function getRandomGroupColour() {
     const randomColourIndex = Math.floor(Math.random() * groupColourArray.length);

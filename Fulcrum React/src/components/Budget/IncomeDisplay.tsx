@@ -70,7 +70,7 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
                 </form>: <span className="text-4xl" onClick={handleEditClick}>{formatDollarAmountStatic(totalIncome, currency)}</span>}
             </div>
             <div className="flex-1 text-center p-5 rounded-xl my-3 mx-6 font-bold text-white remaining-income" style={{backgroundColor: `${amountLeftToBudget === 0 ? "#4CCC86" : "#FF3F3F"}`}}>
-                <span className="text-4xl">REMAINING INCOME TO BUDGET: </span>
+                <span className="text-4xl">INCOME LEFT TO BUDGET: </span>
                 <span className="text-4xl">{formatDollarAmountStatic(amountLeftToBudget, currency)}</span>
             </div>
         </div>

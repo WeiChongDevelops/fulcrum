@@ -19,7 +19,7 @@ import {
     handleRemovedRecurringExpenseCreation,
     implementDynamicBackgroundHeight, matchingRemovedRecurringExpenseFound,
     PreviousExpenseBeingEdited,
-    PublicUserData,
+    PublicUserData, recurringExpenseInstanceAlreadyAdded,
     RecurringExpenseItemEntity,
     recurringExpenseLandsOnDay,
     RemovedRecurringExpenseItem,
@@ -176,23 +176,13 @@ export default function Expense() {
 
             for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
                 console.log(`Looking at date: ${date}`)
-                //
-                // console.log("below now");
-                // console.log(removedRecurringExpenseInstances);
 
                 if (removedRecurringExpenseInstances) {
-                    // Make sure there isn't a match in the blacklist, to prevent user-removed instances from returning
-                    if (recurringExpenseLandsOnDay(recurringExpenseItem, date) && !matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date)) {
-                        console.log("DIDN'T FIND A MATCHING BLACKLIST ENTRY - GOING AHEAD WITH ADDING IT BACK IN")
-
-                        // Check if expense array contains an expenseItem that is an instance of this recurring expense
-                        // If so, don't add it in; avoids duplicates
-                        if (!expenseArray.find((expenseItem: ExpenseItemEntity) => {
-                            return (expenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
-                                && new Date(expenseItem.timestamp).getTime() === new Date(date).getTime())
-                        })) {
-                            console.log("IT'S NOT ON THE BLACKLIST AND NOT IN THE EXPENSE ARRAY - ADDING IT")
-
+                    // Check if expense array contains an expenseItem that is an instance of this recurring expense
+                    // If so, don't add it in; avoids duplicates
+                    if (!recurringExpenseInstanceAlreadyAdded(expenseArray, recurringExpenseItem, date)) {
+                        // Make sure there isn't a match in the blacklist, to prevent user-removed instances from returning
+                        if (recurringExpenseLandsOnDay(recurringExpenseItem, date) && !matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date)) {
                             const newExpenseItemLanded: ExpenseItemEntity = {
                                 expenseId: uuid(),
                                 category: recurringExpenseItem.category,
@@ -203,7 +193,7 @@ export default function Expense() {
 
                             handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItemLanded)
                         } else {
-                            console.log("IT'S NOT ON THE BLACKLIST BUT IT'S ALREADY IN THE EXPENSE ARRAY")
+
                         }
                     }
                 }
