@@ -54,6 +54,7 @@ export default function ExpenseItem( { expenseId,
     }
 
     function handleDeleteClick() {
+        console.log("deleting")
         setExpenseIdToDelete(expenseId);
         setExpenseModalVisibility(current => ({...current, isConfirmExpenseDestructionModalVisible: true}))
     }

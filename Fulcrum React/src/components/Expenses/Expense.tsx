@@ -6,20 +6,20 @@ import {
     checkForOpenModalOrForm,
     checkForUser,
     ExpenseItemEntity,
-    ExpenseModalVisibility,
+    ExpenseModalVisibility, ExpenseUpdatingFormData,
     getBudgetList, getCurrencySymbol,
     getExpenseList,
     getGroupAndColourMap,
     getGroupList,
-    getPublicUserData,
+    getPublicUserData, getRecurringExpenseInstanceNull,
     getRecurringExpenseList, getRemovedRecurringExpenses,
-    GroupItemEntity,
+    GroupItemEntity, handleBatchExpenseDeletion,
     handleExpenseCreation,
-    handleExpenseDeletion,
+    handleExpenseDeletion, handleExpenseUpdating,
     handleRemovedRecurringExpenseCreation,
     implementDynamicBackgroundHeight, matchingRemovedRecurringExpenseFound,
     PreviousExpenseBeingEdited,
-    PublicUserData, recurringExpenseInstanceAlreadyAdded,
+    PublicUserData,
     RecurringExpenseItemEntity,
     recurringExpenseLandsOnDay,
     RemovedRecurringExpenseItem,
@@ -103,16 +103,16 @@ export default function Expense() {
 
 
                 // Await next render after state updates, before populating map; to avoid undefined errors.
-                // await new Promise(resolve => setTimeout(resolve, 0));
+                await new Promise(resolve => setTimeout(resolve, 0));
                 setCategoryDataMap(await getGroupAndColourMap(budgetList, groupList));
-                populateWithRecurringExpenses();
+                await updateRecurringExpenseInstances();
             } catch (error) {
                 console.log(`Unsuccessful expense page data retrieval - error: ${error}`);
             }
         }
         retrieveInitialData()
-            .then(() => implementDynamicBackgroundHeight())
             .then(() => setIsLoading(false))
+            .then(() => implementDynamicBackgroundHeight())
     }, []);
 
 
@@ -142,19 +142,13 @@ export default function Expense() {
     }, [expenseFormVisibility, expenseModalVisibility])
 
     useEffect(() => {
-        populateWithRecurringExpenses();
+        updateRecurringExpenseInstances();
     }, [expenseArray, recurringExpenseArray]);
 
-    function runExpenseDeletion() {
+    async function runExpenseDeletion() {
         const expenseItemToDelete = expenseArray.find(expenseItem => expenseItem.expenseId === expenseIdToDelete);
         if (expenseItemToDelete) {
             if (expenseItemToDelete.recurringExpenseId !== null) {
-                // const newRemovedRecurringExpense: RemovedRecurringExpenseItem = {
-                //     recurringExpenseId: expenseItemToDelete.recurringExpenseId,
-                //     timestampOfRemovedInstance: expenseItemToDelete.timestamp
-                // }
-                //
-                // setRemovedRecurringExpenseInstances(curr => [...curr, newRemovedRecurringExpense]);
                 handleRemovedRecurringExpenseCreation(expenseItemToDelete.recurringExpenseId, expenseItemToDelete.timestamp, setRemovedRecurringExpenseInstances)
                     .then(() => {
                         console.log("Logged recurrence removal successful")
@@ -163,42 +157,69 @@ export default function Expense() {
                             .catch(() => console.log("Deletion unsuccessful"));
                     })
                     .catch(() => console.log("Logged recurrence removal unsuccessful"));
+            } else {
+                handleExpenseDeletion(expenseIdToDelete, setExpenseArray, setBudgetArray)
+                    .then(() => console.log("Deletion successful"))
+                    .catch(() => console.log("Deletion unsuccessful"));
             }
         }
     }
 
-    function populateWithRecurringExpenses() {
+    async function updateRecurringExpenseInstances() {
         const today = new Date();
+        
+        let misplacedExpensesToRemove: string[] = [];
 
-        recurringExpenseArray.forEach((recurringExpenseItem: RecurringExpenseItemEntity) => {
+        for (const recurringExpenseItem of recurringExpenseArray) {
             // console.log(`Looking at the below recurringExpenseItem`)
             // console.log(recurringExpenseItem)
 
             for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
                 console.log(`Looking at date: ${date}`)
+                const expenseInstance = getRecurringExpenseInstanceNull(expenseArray, recurringExpenseItem, date);
+                const isFrequencyMatch = recurringExpenseLandsOnDay(recurringExpenseItem, date);
+                const expenseInstanceIsBlacklisted = removedRecurringExpenseInstances ? matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date) : false;
 
-                if (removedRecurringExpenseInstances) {
-                    // Check if expense array contains an expenseItem that is an instance of this recurring expense
-                    // If so, don't add it in; avoids duplicates
-                    if (!recurringExpenseInstanceAlreadyAdded(expenseArray, recurringExpenseItem, date)) {
-                        // Make sure there isn't a match in the blacklist, to prevent user-removed instances from returning
-                        if (recurringExpenseLandsOnDay(recurringExpenseItem, date) && !matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date)) {
-                            const newExpenseItemLanded: ExpenseItemEntity = {
-                                expenseId: uuid(),
-                                category: recurringExpenseItem.category,
-                                amount: recurringExpenseItem.amount,
-                                timestamp: date,
-                                recurringExpenseId: recurringExpenseItem.recurringExpenseId
-                            }
-
-                            handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItemLanded)
-                        } else {
-
+                if (expenseInstance) {
+                    if (expenseInstance.category !== recurringExpenseItem.category) {
+                        const updatedExpenseItem: ExpenseUpdatingFormData = {
+                            category: recurringExpenseItem.category,
+                            amount: expenseInstance.amount,
+                            timestamp: expenseInstance.timestamp
                         }
+
+                        await handleExpenseUpdating(expenseInstance.expenseId, updatedExpenseItem)
+                        setExpenseArray(await getExpenseList());
+                    } else {
+                        console.log(`${expenseInstance.category} | ${recurringExpenseItem.category}`)
+                    }
+
+
+                        if (!isFrequencyMatch && recurringExpenseItem.timestamp !== expenseInstance.timestamp) {
+                        misplacedExpensesToRemove = [...misplacedExpensesToRemove, expenseInstance.expenseId];
+                    }
+                } else {
+                    if (isFrequencyMatch && !expenseInstanceIsBlacklisted) {
+                        const newExpenseItemLanded: ExpenseItemEntity = {
+                            expenseId: uuid(),
+                            category: recurringExpenseItem.category,
+                            amount: recurringExpenseItem.amount,
+                            timestamp: date,
+                            recurringExpenseId: recurringExpenseItem.recurringExpenseId
+                        }
+
+                        await handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItemLanded)
                     }
                 }
             }
-        })
+        }
+        if (misplacedExpensesToRemove.length !== 0) {
+            console.log("see below to delete");
+            console.log(misplacedExpensesToRemove);
+            await handleBatchExpenseDeletion(misplacedExpensesToRemove);
+            getExpenseList()
+                .then(expenseList => setExpenseArray(expenseList));
+        }
     }
 
     return (

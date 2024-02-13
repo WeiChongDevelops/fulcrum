@@ -452,14 +452,33 @@ export async function handleExpenseDeletion(expenseId: string,
         if (!response.ok) {
             console.error(`HTTP error - status: ${response.status}`);
         }
-        const responseData = await response.json();
-        console.log(responseData);
+        console.log(await response.json());
 
     } catch(error) {
         console.error("Error:", error);
     }
     getExpenseList().then( expenseList => setExpenseArray(expenseList))
     getBudgetList().then( budgetList => setBudgetArray(budgetList))
+}
+
+export async function handleBatchExpenseDeletion(expenseIdArray: string[]) {
+    try {
+        const response = await fetch("http://localhost:8080/api/batchDeleteExpenses", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                expenseIdsToDelete: expenseIdArray
+            })
+        })
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        console.log(await response.json());
+    } catch (error) {
+        console.error("Error:", error);
+    }
 }
 
 
@@ -1339,11 +1358,12 @@ export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpens
     }
 }
 
-export function recurringExpenseInstanceAlreadyAdded(expenseArray, recurringExpenseItem, date) {
-    return (expenseArray.find((expenseItem: ExpenseItemEntity) => {
+export function getRecurringExpenseInstanceNull(expenseArray: ExpenseItemEntity[], recurringExpenseItem: RecurringExpenseItemEntity, date: Date) {
+    const expenseIdOfInstance = expenseArray.find((expenseItem: ExpenseItemEntity) => {
         return (expenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
             && new Date(expenseItem.timestamp).getTime() === new Date(date).getTime())
-    }))
+    })
+    return expenseIdOfInstance ? expenseIdOfInstance : null;
 }
 
 

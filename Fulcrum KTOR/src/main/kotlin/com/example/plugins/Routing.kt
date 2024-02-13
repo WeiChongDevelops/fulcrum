@@ -145,6 +145,25 @@ fun Application.configureRouting() {
             }
         }
 
+        delete("/api/batchDeleteExpenses") {
+            try {
+                val batchExpenseDeleteRequest = call.receive<BatchExpenseDeleteRequestReceived>()
+                for (expenseId in batchExpenseDeleteRequest.expenseIdsToDelete) {
+                    val deletedExpense = supabase.postgrest["expenses"].delete {
+                        eq("expenseId", expenseId)
+                    }
+                    if (deletedExpense.body == null) {
+                        call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("A batched expense deletion failed."))
+                    } else {
+                        call.respond(HttpStatusCode.OK, SuccessResponseSent("A batched expense deletion succeeded."))
+                    }
+                }
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Batch expense deletion unsuccessful."))
+            }
+        }
+
+
         // RECURRING EXPENSE API //
 
         post("/api/createRecurringExpense") {
@@ -186,7 +205,7 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading recurring expenses", e)
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring xpenses not read."))
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring expenses not read."))
             }
         }
 
@@ -206,13 +225,13 @@ fun Application.configureRouting() {
                 }
 
                 if (updatedItem.body == null) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not updated"))
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring expense not updated"))
                 } else {
-                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Expense updated."))
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Recurring expense updated."))
                 }
             } catch (e: Exception) {
-                call.application.log.error("Error while updating expense", e)
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Expense not updated."))
+                call.application.log.error("Error while updating recurring expense", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring expense not updated."))
             }
         }
 
