@@ -27,8 +27,6 @@ export default function FulcrumAnimation( { lineAngle, isDarkMode } : FulcrumAni
 
     function recalculateShadowDimensions() {
         setBowlWidth(window.innerWidth * 0.07);
-        console.log(`Line angle is ${lineAngle}`)
-        console.log(`X offset: ${-Math.abs(lineAngle)}`)
 
         const newOffset = {
             leftEnd: Math.abs(lineAngle / 2.1),

@@ -16,10 +16,8 @@ interface IncomeDisplayProps {
 export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftToBudget, publicUserData}: IncomeDisplayProps) {
 
     const currency = publicUserData.currency;
-
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [incomeFormData, setIncomeFormData] = useState({ income: formatDollarAmountStatic(totalIncome, currency)});
-
 
     const handleEditClick = () => {
         setIsEditing(true);

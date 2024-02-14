@@ -105,7 +105,6 @@ export default function Group({ groupName,
                     }
                 </div>
                 <p className={`${groupName !== "Miscellaneous" ? "text-black" : "text-white"} font-bold mr-4 text-3xl`}>Spent: {formatDollarAmountStatic(groupExpenditureTotal, currency)} of {formatDollarAmountStatic(groupBudgetTotal, currency)}</p>
-
             </div>
             <div className="flex flex-row flex-wrap flex-shrink-0 basis-0 justify-start">
                 {filteredBudgetArray.length > 0 && filteredBudgetArray.map((budgetElement, key) => (
@@ -127,7 +126,6 @@ export default function Group({ groupName,
                                            setGroupNameOfNewItem={setGroupNameOfNewItem}
                                            groupNameOfNewItem={groupName}/>
             </div>
-
         </div>
     );
 }

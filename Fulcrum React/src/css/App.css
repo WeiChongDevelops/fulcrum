@@ -22,6 +22,10 @@ input::placeholder {
   text-align: center;
 }
 
+.login-form input::placeholder {
+  text-align: left;
+}
+
 html, body {
   font-family: 'Quicksand', sans-serif;
   height: auto;
@@ -156,4 +160,32 @@ body label {
 
 .accessibility-enabled {
   filter: grayscale(100%) contrast(150%) brightness(140%) saturate(380%);
+}
+
+.auth-page-container {
+  position: relative;
+  overflow: hidden;
+}
+
+
+.register-page:before {
+  background-image: url("/src/assets/other-assets/register-bg-4.webp");
+}
+
+.login-page:before {
+  background-image: url("/src/assets/other-assets/login-bg.webp");
+}
+
+.auth-page-container::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  bottom: -20px;
+  left: -20px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: left;
+  filter: blur(8px) brightness(60%);
+  z-index: -1;
 }

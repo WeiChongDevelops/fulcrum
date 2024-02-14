@@ -8,7 +8,6 @@ import ExpenseList from "./ExpenseList.tsx";
 import "../../css/Expense.css"
 
 interface ExpenseDayGroupProps {
-
     date: Date;
     filteredExpenseArray: ExpenseItemEntity[];
 
@@ -37,7 +36,6 @@ export default function ExpenseDayGroup({ date,
     let dateObjectYesterday = new Date();
     dateObjectYesterday.setDate(new Date().getDate() - 1);
     const dateString = dateObjectYesterday.toLocaleDateString();
-
     const dayTotal = filteredExpenseArray.reduce((accumulator, currentValue) => accumulator + currentValue.amount, 0);
 
     return (

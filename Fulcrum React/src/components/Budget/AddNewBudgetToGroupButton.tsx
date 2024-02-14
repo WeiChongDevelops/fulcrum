@@ -10,7 +10,6 @@ interface AddNewBudgetToGroupButtonProps {
 export default function AddNewBudgetToGroupButton({ setGroupNameOfNewItem, groupNameOfNewItem, setBudgetFormVisibility }: AddNewBudgetToGroupButtonProps) {
 
     function handleClick() {
-        // setIsCreateBudgetVisible(true)
         setBudgetFormVisibility( current => ({...current, isCreateBudgetVisible: true}))
         setGroupNameOfNewItem(groupNameOfNewItem)
     }

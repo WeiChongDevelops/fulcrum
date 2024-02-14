@@ -40,33 +40,22 @@ interface ExpensesProps {
 
 export default function Expenses({ publicUserData, setPublicUserData }: ExpensesProps) {
     const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
-    const [expenseMatrix, setExpenseMatrix] = useState<ExpenseItemEntity[][]>(
-        []
-    )
-
+    const [expenseMatrix, setExpenseMatrix] = useState<ExpenseItemEntity[][]>([]);
     const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
-
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
-
     const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
-
     const [expenseFormVisibility, setExpenseFormVisibility] = useState({
         isCreateExpenseVisible: false,
         isUpdateExpenseVisible: false,
     });
-
     const [expenseModalVisibility, setExpenseModalVisibility] = useState<ExpenseModalVisibility>( {
         isConfirmExpenseDestructionModalVisible: false,
     })
     const [isExpenseFormOrModalOpen, setIsExpenseFormOrModalOpen] = useState(false);
-
     const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({ expenseId: "", recurringExpenseId: "", oldCategory: "", oldTimestamp: new Date(), oldAmount: 0 });
     const [expenseIdToDelete, setExpenseIdToDelete] = useState("");
-
     const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
-
     const [isLoading, setIsLoading] = useState(true);
-
     const [removedRecurringExpenseInstances, setRemovedRecurringExpenseInstances] = useState<RemovedRecurringExpenseItem[]>([]);
 
     useEffect(() => {
@@ -81,7 +70,6 @@ export default function Expenses({ publicUserData, setPublicUserData }: Expenses
                     }
                 });
 
-                // Fetch budget, expense, and group lists concurrently
                 const [budgetList, expenseList, groupList, recurringExpenseList, publicUserDataObject, removedRecurringExpenses] = await Promise.all([
                     getBudgetList(),
                     getExpenseList(),
@@ -97,9 +85,6 @@ export default function Expenses({ publicUserData, setPublicUserData }: Expenses
                 setPublicUserData(publicUserDataObject);
                 setRemovedRecurringExpenseInstances(removedRecurringExpenses);
 
-
-                // Await next render after state updates, before populating map; to avoid undefined errors.
-                await new Promise(resolve => setTimeout(resolve, 0));
                 setCategoryDataMap(await getGroupAndColourMap(budgetList, groupList));
                 await updateRecurringExpenseInstances();
             } catch (error) {
@@ -162,12 +147,8 @@ export default function Expenses({ publicUserData, setPublicUserData }: Expenses
 
     async function updateRecurringExpenseInstances() {
         const today = new Date();
-
         let misplacedExpensesToRemove: string[] = [];
-
-        // for (const recurringExpenseItem of recurringExpenseArray) {
         recurringExpenseArray.forEach(recurringExpenseItem => {
-
             for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
                 console.log(`Looking at date: ${date}`)
                 const expenseInstance = getRecurringExpenseInstanceNull(expenseArray, recurringExpenseItem, date);
@@ -185,9 +166,6 @@ export default function Expenses({ publicUserData, setPublicUserData }: Expenses
                         handleExpenseUpdating(expenseInstance.expenseId, updatedExpenseItem)
                             .then(() => getExpenseList()
                                 .then(results => setExpenseArray(results)))
-
-                        // await handleExpenseUpdating(expenseInstance.expenseId, updatedExpenseItem)
-                        // setExpenseArray(await getExpenseList());
                     }
                         if (!isFrequencyMatch && recurringExpenseItem.timestamp !== expenseInstance.timestamp) {
                         misplacedExpensesToRemove = [...misplacedExpensesToRemove, expenseInstance.expenseId];

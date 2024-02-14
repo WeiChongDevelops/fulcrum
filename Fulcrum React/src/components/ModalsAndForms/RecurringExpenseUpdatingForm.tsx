@@ -28,7 +28,6 @@ interface RecurringExpenseUpdatingFormProps {
 
 export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVisibility, setRecurringExpenseArray, setBudgetArray, categoryOptions, oldRecurringExpenseBeingEdited, currencySymbol }: RecurringExpenseUpdatingFormProps) {
 
-
     const [formData, setFormData] = useState<RecurringExpenseUpdatingFormData>({
         category: oldRecurringExpenseBeingEdited.oldCategory, amount: oldRecurringExpenseBeingEdited.oldAmount, frequency: oldRecurringExpenseBeingEdited.oldFrequency
     });

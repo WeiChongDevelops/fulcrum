@@ -1,5 +1,5 @@
-import {categoryIconArray} from "../../../util.ts";
-import "../../../css/Budget.css"
+import {categoryIconArray} from "../../util.ts";
+import "../../css/Budget.css"
 
 export default function BudgetIconSelector() {
     return (

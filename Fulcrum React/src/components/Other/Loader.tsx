@@ -1,10 +1,5 @@
 import RotateLoader from "react-spinners/RotateLoader";
-
-const override = {
-    display: "block",
-    margin: "0 auto",
-    borderColor: "red",
-};
+import {loaderCssOverride} from "../../util.ts";
 
 interface LoaderProps {
     isLoading: boolean;
@@ -18,7 +13,7 @@ export default function Loader({ isLoading, isDarkMode }: LoaderProps) {
             <RotateLoader
                 color={isDarkMode ? "#F1F5F9" : "black"}
                 loading={isLoading}
-                cssOverride={override}
+                cssOverride={loaderCssOverride}
                 size={15}
                 speedMultiplier={1}
             />

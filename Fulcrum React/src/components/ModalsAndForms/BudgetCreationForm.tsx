@@ -15,7 +15,7 @@ import {
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import "../../css/Budget.css"
-import BudgetIconSelector from "../Budget/Selectors/BudgetIconSelector.tsx";
+import BudgetIconSelector from "../Selectors/BudgetIconSelector.tsx";
 
 interface BudgetCreationFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
@@ -130,7 +130,6 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
 
                 <BudgetIconSelector/>
                 <input type="hidden" id="iconPath" name="iconPath" value="test"/>
-
                 <FulcrumButton displayText="Insert Budget"/>
             </form>
         </div>

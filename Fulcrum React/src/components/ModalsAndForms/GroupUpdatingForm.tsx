@@ -7,7 +7,7 @@ import {
     handleGroupUpdating
 } from "../../util.ts";
 import FulcrumButton from "../Other/FulcrumButton.tsx";
-import GroupColourSelector from "../Budget/Selectors/GroupColourSelector.tsx";
+import GroupColourSelector from "../Selectors/GroupColourSelector.tsx";
 
 interface GroupUpdatingFormProps {
     oldGroupBeingEdited: { oldColour: string, oldGroupName: string };

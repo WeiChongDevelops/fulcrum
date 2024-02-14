@@ -1,5 +1,5 @@
-import {profileIconArray} from "../../../util.ts";
-import "../../../css/Tools.css"
+import {profileIconArray} from "../../util.ts";
+import "../../css/Tools.css"
 
 export default function ProfileIconSelector() {
     return (

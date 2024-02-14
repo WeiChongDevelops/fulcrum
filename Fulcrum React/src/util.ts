@@ -195,6 +195,12 @@ export interface PublicUserDataUpdate {
 
 export type CategoryToIconGroupAndColourMap = Map<string, {iconPath: string, group: string, colour:string}>;
 
+export const loaderCssOverride = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+};
+
 // SELECTOR CONTENT ARRAYS //
 
 export const groupColourArray = [
@@ -1063,6 +1069,67 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
 
 // AUTH API CALL FUNCTIONS //
 
+export async function handleUserRegistration(email: string, password: string) {
+    try {
+        const response = await fetch("http://localhost:8080/api/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "email": email,
+                "password": password
+            })
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+            console.log(await response.json())
+            window.alert("Registration failed - user may already exist.")
+        } else {
+            console.log("Successful registration.");
+            console.log(await response.json());
+            window.location.href = "/login";
+        }
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+export async function handleUserLogin(email: string, password: string) {
+    try {
+        const response = await fetch("http://localhost:8080/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "email": email,
+                "password": password
+            })
+        });
+        if (response.status === 500) {
+            console.error(`HTTP error - status: ${response.status}`);
+            console.error("User not found.")
+            window.alert("User not found - please check your credentials.")
+        } else {
+            if (response.status === 400) {
+                console.error(`HTTP error - status: ${response.status}`);
+                console.error("User already logged in.")
+                window.location.href = "/budget"
+            } else {
+                console.log("Successful login.");
+                console.log(response.json());
+                window.location.href = "/budget";
+            }
+        }
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
 export async function logoutOnClick() {
     try {
         sessionStorage.removeItem("email");
@@ -1463,39 +1530,6 @@ export function checkForOpenModalOrForm(expenseFormVisibility: ExpenseFormVisibi
                                             | SettingsModalVisibility) {
     return Object.values(expenseFormVisibility).includes(true) || Object.values(expenseModalVisibility).includes(true)
 }
-
-
-// export async function implementDynamicBackgroundHeight() {
-//     function adjustBackgroundHeight() {
-//         const bodyHeight = document.body.scrollHeight;
-//         const backgroundDiv: HTMLDivElement = document.querySelector('.background')!;
-//         if (bodyHeight + 136 > window.innerHeight) {
-//             backgroundDiv!.style.height = bodyHeight + 'px';
-//         }
-//     }
-//
-// // Select the node to be observed
-//     const targetNode = document.body;
-//
-// // Set up the observer options
-//     const config = {
-//         childList: true,    // Detect direct children changes
-//         subtree: true,      // Detect all descendant changes
-//         attributes: true    // Detect changes in attributes
-//     };
-//
-// // Callback function to execute when changes are observed
-//     const callback = function() {
-//         adjustBackgroundHeight();
-//     };
-//
-//
-// // Create an instance of the observer
-//     const observer = new MutationObserver(callback);
-//
-// // Start observing the target node
-//     observer.observe(targetNode, config);
-// }
 
 export function getWindowLocation() {
     const urlArray = window.location.href.split("/");

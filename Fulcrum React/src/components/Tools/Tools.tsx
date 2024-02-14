@@ -20,12 +20,9 @@ interface ToolsProps {
 export default function Tools({ publicUserData, setPublicUserData }: ToolsProps) {
 
     const sessionStoredEmail = sessionStorage.getItem("email");
-
     const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
     const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
-
     const [isChangeIconMessageVisible, setIsChangeIconMessageVisible] = useState(false);
-
     const [toolsFormVisibility, setToolsFormVisibility] = useState<ToolsFormVisibility>({
         isUpdateProfileIconFormVisible: false
     })

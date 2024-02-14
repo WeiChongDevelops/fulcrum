@@ -28,21 +28,17 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
         typeDeleteMyBudgetForm: false,
         typeDeleteMyDataForm: false,
     })
-
     const [settingsModalVisibility, setSettingsModalVisibility] = useState<SettingsModalVisibility>({
         isConfirmExpenseWipeModalVisible: false,
         isConfirmBudgetWipeModalVisible: false,
         isConfirmAllDataWipeModalVisible: false,
     })
-
     const [isSettingsFormOrModalOpen, setIsSettingsFormOrModalOpen] = useState<boolean>(false);
-
 
     useEffect(() => {
         setIsSettingsFormOrModalOpen(checkForOpenModalOrForm(settingsFormVisibility, settingsModalVisibility))
         document.getElementById("right-button")?.focus()
     }, [settingsFormVisibility, settingsModalVisibility]);
-
 
     async function handleCurrencySelection(e: React.MouseEvent) {
         const target = e.target as HTMLDivElement;
@@ -208,7 +204,6 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
                                            setModalVisibility={setSettingsModalVisibility}
                                            isVisible={"isConfirmAllDataWipeModalVisible"}
                                            title={"Please confirm that you wish to permanently wipe all budget and expense data."}/>}
-
                 </div>
             </div>
         </>

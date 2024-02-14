@@ -1,6 +1,7 @@
-import {FormEvent, useEffect, useState} from "react";
-import {checkForUser} from "../../util.ts";
 import FulcrumButton from "../Other/FulcrumButton.tsx";
+import "../../css/App.css";
+import {FormEvent, useEffect, useState} from "react";
+import {checkForUser, handleUserLogin} from "../../util.ts";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -21,73 +22,56 @@ export default function Login() {
     async function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
 
-        try {
-            const response = await fetch("http://localhost:8080/api/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "email": email,
-                    "password": password
-                })
-            });
-            if (response.status === 500 ) {
-                console.error(`HTTP error - status: ${response.status}`);
-                console.error("User not found.")
-                window.alert("User not found - please check your credentials.")
-            } else {
-                if (response.status === 400) {
-                    console.error(`HTTP error - status: ${response.status}`);
-                    console.error("User already logged in.")
-                    window.location.href = "/budget"
-                }
-                else {
-                    console.log("Successful login.");
-                    console.log(response.json());
-                    window.location.href = "/budget";
-                }
-            }
-
-        } catch (error) {
-            console.error("Error:", error);
-        }
+        await handleUserLogin(email, password);
 
         setEmail("");
         setPassword("");
     }
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen relative bottom-36">
-            <form onSubmit={handleSubmit} className="auth-form w-96 p-8 bg-white rounded shadow-md">
-                <h2 className="text-lg text-black font-bold mb-6">Sign In.</h2>
-                <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        className="mt-1 block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md text-lg shadow-sm placeholder-gray-400
-            focus:outline-none focus:border-[#17423f] focus:ring-1 focus:ring-[#17423f]"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
+        <div className={"auth-page-container login-page flex flex-row justify-around items-center w-[100vw] h-[100vh]"}>
+            <div className={"flex flex-col justify-around items-start h-[75vh] pl-48 pb-52"}>
+                <div className={"flex-1"}>
+                    <img src="/src/assets/fulcrum-logos/fulcrum-long-white.webp" className={"select-none w-80 h-auto"} alt="Fulcrum logo"/>
                 </div>
-                <div className="mb-6">
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        className="mt-1 block w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-md text-lg shadow-sm placeholder-gray-400
-            focus:outline-none focus:border-[#17423f] focus:ring-1 focus:ring-[#17423f]"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
+                <div className={"flex flex-col justify-center items-start h-[100vh] w-[35vw] text-left"}>
+                    <b className={"text-8xl"}>Log into your account.</b>
+                    <p className={"text-xl ml-2 mt-8"}>Every dollar gets a job!</p>
                 </div>
-                <FulcrumButton displayText="Login" onClick={()=>{}}/>
-            </form>
-            <a href="/register" className="mt-6 text-black underline">Don't have an account? Register here.</a>
+            </div>
+            <div className={"flex flex-col justify-around items-center h-[75vh] mr-24"}>
+                <p className={"text-8xl flex-1"}></p>
+                <form className={"login-form flex flex-col justify-center items-center bg-white text-black px-12 pt-16 pb-8 w-[35vw] rounded-2xl"}
+                      onSubmit={handleSubmit}>
+                    <div className={"flex flex-col justify-center items-start w-full"}>
+                        <label htmlFor={"email"}>Email</label>
+                        <input type="email"
+                               className={"w-full py-2 px-4 rounded-md border border-gray-400 mt-2"}
+                               placeholder={"name@example.com"}
+                               value={email}
+                               onChange={e => setEmail(e.target.value)}
+                               required/>
+                    </div>
+                    <div className={"flex flex-col justify-center items-start w-full my-10"}>
+                        <label htmlFor={"password"}>Password</label>
+                        <input type="password"
+                               className={"w-full py-2 px-4 rounded-md border border-gray-400 mt-2"}
+                               placeholder={"Your password"}
+                               value={password}
+                               onChange={e => setPassword(e.target.value)}
+                               required/>
+                    </div>
+                    <div className={"flex flex-row justify-center items-center w-full"}>
+                        <div className={"mr-8"}>
+                            <span>Don't have an account? </span>
+                            <a href="/register"
+                               className={"underline text-[#17423F] font-semibold"}>Register Here</a>
+                        </div>
+                        <FulcrumButton displayText={"Log In"} backgroundColour={"green"}/>
+                    </div>
+                </form>
+                <p className={"text-8xl flex-1"}></p>
+            </div>
         </div>
     );
 }

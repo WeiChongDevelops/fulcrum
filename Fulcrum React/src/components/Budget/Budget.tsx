@@ -24,7 +24,6 @@ export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
     const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
     const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
-
     const [publicUserData, setPublicUserData] = useState<PublicUserData>({
         createdAt: new Date(),
         currency: "AUD",
@@ -32,37 +31,27 @@ export default function Budget() {
         accessibilityEnabled: false,
         profileIconFileName: "profile-icon-default.svg"
     })
-
     const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
         isCreateBudgetVisible: false,
         isUpdateBudgetVisible: false,
         isCreateGroupVisible: false,
         isUpdateGroupVisible: false,
     });
-
     const [budgetModalVisibility, setBudgetModalVisibility] = useState<BudgetModalVisibility>( {
         isDeleteOptionsModalVisible: false,
         isConfirmGroupDestructionModalVisible: false,
         isConfirmCategoryDestructionModalVisible: false
     })
-
     const [groupToDelete, setGroupToDelete] = useState<string>("");
     const [categoryToDelete, setCategoryToDelete] = useState<string>("");
-
     const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState<PreviousBudgetBeingEdited>({ oldAmount: 0, oldCategory: "", oldGroup: ""});
     const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState<PreviousGroupBeingEdited>({ oldColour: "", oldGroupName: "" });
-
     const [totalIncome, setTotalIncome] = useState<number>(1000);
     const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
-
     const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
-
     const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
-
     const [isLoading, setIsLoading] = useState(true);
-
     const [lineAngle, setLineAngle] = useState(0);
-
     const [perCategoryExpenditureMap, setPerCategoryExpenditureMap] = useState<Map<string, number>>(new Map())
 
     useEffect(() => {
@@ -137,56 +126,55 @@ export default function Budget() {
             .catch((error) => console.log("Deletion unsuccessful", error));
     }
 
-
     return (
         <>
             {!isLoading ?<div className="flex flex-row justify-center items-center">
-             <div className={`flex flex-col items-center elementsBelowPopUpForm z-2
-            ${isBudgetFormOrModalOpen && "blur"}`}>
-                <IncomeDisplay
-                    totalIncome={totalIncome}
-                    setTotalIncome={setTotalIncome}
-                    amountLeftToBudget={amountLeftToBudget}
-                    publicUserData={publicUserData}/>
+                 <div className={`flex flex-col items-center elementsBelowPopUpForm z-2
+                ${isBudgetFormOrModalOpen && "blur"}`}>
+                    <IncomeDisplay
+                        totalIncome={totalIncome}
+                        setTotalIncome={setTotalIncome}
+                        amountLeftToBudget={amountLeftToBudget}
+                        publicUserData={publicUserData}/>
 
-                <FulcrumAnimation lineAngle={lineAngle} isDarkMode={publicUserData.darkModeEnabled}/>
+                    <FulcrumAnimation lineAngle={lineAngle} isDarkMode={publicUserData.darkModeEnabled}/>
 
-                {groupArray?.length > 0 && <GroupList
-                    budgetArray={budgetArray}
-                    setBudgetArray={setBudgetArray}
-                    expenseArray={expenseArray}
-                    setOldBudgetBeingEdited={setOldBudgetBeingEdited}
-                    setOldGroupBeingEdited={setOldGroupBeingEdited}
-                    groupArray={groupArray}
-                    setGroupArray={setGroupArray}
-                    setGroupNameOfNewItem={setGroupNameOfNewItem}
-                    setBudgetFormVisibility={setBudgetFormVisibility}
-                    setGroupToDelete={setGroupToDelete}
-                    setCategoryToDelete={setCategoryToDelete}
-                    setModalFormVisibility={setBudgetModalVisibility}
-                    perCategoryTotalExpenseArray={perCategoryExpenditureMap}
-                    publicUserData={publicUserData}/>}
+                    {groupArray?.length > 0 && <GroupList
+                        budgetArray={budgetArray}
+                        setBudgetArray={setBudgetArray}
+                        expenseArray={expenseArray}
+                        setOldBudgetBeingEdited={setOldBudgetBeingEdited}
+                        setOldGroupBeingEdited={setOldGroupBeingEdited}
+                        groupArray={groupArray}
+                        setGroupArray={setGroupArray}
+                        setGroupNameOfNewItem={setGroupNameOfNewItem}
+                        setBudgetFormVisibility={setBudgetFormVisibility}
+                        setGroupToDelete={setGroupToDelete}
+                        setCategoryToDelete={setCategoryToDelete}
+                        setModalFormVisibility={setBudgetModalVisibility}
+                        perCategoryTotalExpenseArray={perCategoryExpenditureMap}
+                        publicUserData={publicUserData}/>}
 
-                <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility} isDarkMode={publicUserData.darkModeEnabled}/>
-            </div>
+                    <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility} isDarkMode={publicUserData.darkModeEnabled}/>
+                </div>
 
-            {isBudgetFormOrModalOpen && <div className="absolute w-screen h-screen bg-transparent z-3"></div>}
+                {isBudgetFormOrModalOpen && <div className="absolute w-screen h-screen bg-transparent z-3"></div>}
 
                 <div className="z-4">
-                <BudgetModalsAndForms budgetFormVisibility={budgetFormVisibility}
-            setBudgetArray={setBudgetArray}
-            groupArray={groupArray}
-            groupNameOfNewItem={groupNameOfNewItem}
-            setBudgetFormVisibility={setBudgetFormVisibility}
-            oldBudgetBeingEdited={oldBudgetBeingEdited}
-            setGroupArray={setGroupArray}
-            oldGroupBeingEdited={oldGroupBeingEdited}
-            groupToDelete={groupToDelete}
-            categoryToDelete={categoryToDelete}
-            runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
-            modalFormVisibility={budgetModalVisibility}
-            setModalFormVisibility={setBudgetModalVisibility} currencySymbol={getCurrencySymbol(publicUserData.currency)}/>
-            </div>
+                    <BudgetModalsAndForms budgetFormVisibility={budgetFormVisibility}
+                    setBudgetArray={setBudgetArray}
+                    groupArray={groupArray}
+                    groupNameOfNewItem={groupNameOfNewItem}
+                    setBudgetFormVisibility={setBudgetFormVisibility}
+                    oldBudgetBeingEdited={oldBudgetBeingEdited}
+                    setGroupArray={setGroupArray}
+                    oldGroupBeingEdited={oldGroupBeingEdited}
+                    groupToDelete={groupToDelete}
+                    categoryToDelete={categoryToDelete}
+                    runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
+                    modalFormVisibility={budgetModalVisibility}
+                    setModalFormVisibility={setBudgetModalVisibility} currencySymbol={getCurrencySymbol(publicUserData.currency)}/>
+                </div>
             </div> : <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled}/>}
         </>
     );

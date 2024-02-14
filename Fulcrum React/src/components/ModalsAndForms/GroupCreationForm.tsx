@@ -6,7 +6,7 @@ import {
     handleGroupCreation, GroupItemEntity, getRandomGroupColour
 } from "../../util.ts";
 import "../../css/Budget.css"
-import GroupColourSelector from "../Budget/Selectors/GroupColourSelector.tsx";
+import GroupColourSelector from "../Selectors/GroupColourSelector.tsx";
 
 interface GroupCreationFormProps {
     setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>

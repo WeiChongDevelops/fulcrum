@@ -7,7 +7,7 @@ import {
     ToolsFormVisibility
 } from "../../util.ts";
 import FulcrumButton from "../Other/FulcrumButton.tsx";
-import ProfileIconSelector from "../Budget/Selectors/ProfileIconSelector.tsx";
+import ProfileIconSelector from "../Selectors/ProfileIconSelector.tsx";
 interface ProfileIconUpdatingFormProps {
     oldIconFileName: string
     setToolsFormVisibility: Dispatch<SetStateAction<ToolsFormVisibility>>;

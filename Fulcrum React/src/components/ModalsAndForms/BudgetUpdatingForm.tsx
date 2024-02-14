@@ -8,7 +8,7 @@ import {
     handleBudgetUpdating, GroupItemEntity, handleInputChangeOnFormWithAmount,
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
-import BudgetIconSelector from "../Budget/Selectors/BudgetIconSelector.tsx";
+import BudgetIconSelector from "../Selectors/BudgetIconSelector.tsx";
 
 interface DBUpdatingFormProps {
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;

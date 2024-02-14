@@ -8,7 +8,6 @@ import Expenses from "./Expenses/Expenses.tsx";
 import Tools from "./Tools/Tools.tsx";
 import {useEffect, useState} from "react";
 import {getPublicUserData, PublicUserData} from "../util.ts";
-
 export default function App() {
 
     const sessionStoredProfileIcon = sessionStorage.getItem("profileIcon");

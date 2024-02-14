@@ -1,6 +1,6 @@
-import "../../../css/Budget.css"
+import "../../css/Budget.css"
 import {useEffect} from "react";
-import {groupColourArray} from "../../../util.ts";
+import {groupColourArray} from "../../util.ts";
 
 interface GroupColourSelectorProps {
     oldColour?: string
