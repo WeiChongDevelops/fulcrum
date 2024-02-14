@@ -32,6 +32,11 @@
     color: black;
 }
 
+.create-expense-button:hover {
+    background: rgba(155, 216, 182, 0.4);
+}
+
+
 .create-expense-button-dark {
     border: white 2px dashed;
     color: white;

@@ -211,7 +211,7 @@ export default function Expenses({ publicUserData, setPublicUserData }: Expenses
                             categoryDataMap={categoryDataMap}
                             publicUserData={publicUserData}
                             key={key}/>
-                    )): <p className={"text-2xl mt-48"}>No expenses added yet.</p>}
+                    )): <p className={`text-2xl mt-48 ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>No expenses added yet.</p>}
                 </div>
 
                 {isExpenseFormOrModalOpen && <div className="absolute w-full h-full bg-transparent z-3"></div>}

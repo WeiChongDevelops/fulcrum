@@ -86,7 +86,7 @@
 }
 
 .create-group-button:hover {
-    background: rgba(222, 222, 222, 0.5);
+    background: rgba(155, 216, 182, 0.4);
 }
 
 
@@ -185,8 +185,8 @@
 
 .fulcrum-animation-container {
     position: relative;
-    padding-top: 20%;
-    margin-bottom: 10%;
+    padding-top: 14%;
+    margin-bottom: 9%;
     width: 94vw;
 }
 
@@ -202,7 +202,7 @@
 .contact-shadow {
     position: absolute;
     left: 50%;
-    top: 505%;
+    top: 713%;
     transform: translate(-50%, -50%);
     width: 20%;
     height: 18%;
@@ -213,7 +213,7 @@
 .bowl-shadow-right {
     position: absolute;
     left: 256%;
-    top: 525%;
+    top: 713%;
     transform: translate(-50%, -50%);
     background-color: black;
     border-radius: 50%;
@@ -223,7 +223,7 @@
 .bowl-shadow-left {
     position: absolute;
     right: 254.5%;
-    top: 525%;
+    top: 713%;
     transform: translate(50%, -50%);
     background-color: black;
     border-radius: 50%;

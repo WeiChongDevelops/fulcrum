@@ -117,8 +117,8 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
                         borderRadius: 0,
                         colors: {
                             ...theme.colors,
-                            primary25: "#f1f3f1",
-                            primary: "#808080"
+                            primary25: "rgba(201,223,201,0.1)",
+                            primary: "rgba(34,237,34,0.18)"
                         },
                     })}
                     required

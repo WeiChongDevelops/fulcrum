@@ -1324,8 +1324,7 @@ export const colourStyles = {
             ...styles,
             color: data.colour,
             fontWeight: "bold",
-            textShadow: "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-            letterSpacing: "1.5px"
+            filter: "brightness(60%)"
         };
     },
     input: (styles: any) => ({ ...styles, ...dot() }),

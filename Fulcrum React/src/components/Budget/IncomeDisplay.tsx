@@ -17,7 +17,7 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
 
     const currency = publicUserData.currency;
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [incomeFormData, setIncomeFormData] = useState({ income: formatDollarAmountStatic(totalIncome, currency)});
+    const [incomeFormData, setIncomeFormData] = useState({ income: formatDollarAmountDynamic(totalIncome.toString())});
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -25,7 +25,7 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value === "") {
-            setIncomeFormData({ income: "0" })
+            setIncomeFormData({ income: formatDollarAmountDynamic(e.target.value) })
         }
         const numericalAmount = parseInt(e.target.value);
         if (numericalAmount >= 0 && numericalAmount <= 9999999.99) {
@@ -33,7 +33,7 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
         }
     }
     const handleInputBlur = () => {
-        setIncomeFormData({ income: formatDollarAmountStatic(totalIncome, currency) });
+        setIncomeFormData({ income: formatDollarAmountDynamic(totalIncome.toString()) });
         setIsEditing(false);
     }
 
@@ -47,7 +47,7 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
     }
 
     useEffect(() => {
-        setIncomeFormData({ income: formatDollarAmountStatic(totalIncome, currency) });
+        setIncomeFormData({ income: formatDollarAmountDynamic(totalIncome.toString()) });
     }, [totalIncome]);
 
     return (
