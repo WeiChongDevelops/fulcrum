@@ -59,7 +59,7 @@ export default function Tools({ publicUserData, setPublicUserData }: ToolsProps)
                     setToolsFormVisibility(curr => ({...curr, isUpdateProfileIconFormVisible: true}))
                 }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                     <img src={`/src/assets/profile-icons/${publicUserData.profileIconFileName.slice(0, -4)}-white.svg`} alt="Profile image"/>
-                    {isChangeIconMessageVisible && <b className={"absolute z-4 mt-24"} >Change Icon</b>}
+                    {isChangeIconMessageVisible && <b className={"absolute z-4 mt-[90%]"} >Change Icon</b>}
                 </div>
                 <p className={"font-bold text-2xl text-white mb-5"}>{email}</p>
                 <div>

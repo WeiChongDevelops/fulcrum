@@ -36,16 +36,16 @@ export default function Fulcrum({ publicUserData, setPublicUserData, email, setE
 
     return (
         <div className={`transition-filter duration-500 ease-in-out ${publicUserData.accessibilityEnabled && "accessibility-enabled"}`}>
-            <nav className={`flex flex-row justify-between items-center py-1 select-none ${publicUserData.darkModeEnabled ?  "bg-dark" : "bg-light"}`}>
+            <nav className={`flex flex-row justify-between items-center py-1 ${publicUserData.darkModeEnabled ?  "bg-dark" : "bg-light"}`}>
                 <div className="flex-1 ml-10">
                     <DarkModeToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
                 </div>
                 <img src={`/src/assets/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`} alt="Fulcrum logo in navbar"
-                     className="navbar-fulcrum-logo mr-4 hover:cursor-pointer "
+                     className="navbar-fulcrum-logo mr-12  select-none hover:cursor-pointer "
                      onClick={() => window.location.href = "/budget"}></img>
                 <div className="flex-1 text-right">
                     <div className="flex justify-end items-center mr-8">
-                        <p className={publicUserData.darkModeEnabled ? "text-white": "text-black"}>{email}</p>
+                        <p className={`select-none ${publicUserData.darkModeEnabled ? "text-white": "text-black"}`}>{email}</p>
                         <img
                             src={`/src/assets/profile-icons/${publicUserData.profileIconFileName.slice(0, -4)}-${publicUserData.darkModeEnabled ? "white" : "black"}.svg`}
                             className="profile-icon h-12" alt="Profile icon"/>

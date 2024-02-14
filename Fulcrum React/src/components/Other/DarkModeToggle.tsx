@@ -32,8 +32,8 @@ export default function DarkModeToggle({ publicUserData, setPublicUserData }: Da
     }
 
     return (
-        <div className={`flex flex-row justify-start w-16 rounded-3xl p-1 ${isDarkMode ? "bg-[#3f4240]" : "bg-[#17423F] sun-glow"}`} onClick={handleDarkModeToggle}>
-            <div className={`rounded-full w-6 h-6 p-1 select-none transition-all ease-in-out ${isDarkMode ? "toggle-right-shift bg-black" : "bg-white "}`}>
+        <div className={`flex flex-row justify-start w-20 rounded-3xl p-1 hover:cursor-pointer ${isDarkMode ? "bg-[#3f4240] moon-shadow" : "bg-[#17423F] sun-glow"}`} onClick={handleDarkModeToggle}>
+            <div className={`rounded-full w-7 h-7 p-1 select-none transition-all ease-in-out ${isDarkMode ? "toggle-right-shift bg-black" : "bg-white "}`}>
                 <img src={`/src/assets/UI-icons/${isDarkMode ? "dark-mode-moon" : "light-mode-sun"}.svg`} alt="Dark or light mode icon"/>
             </div>
         </div>

@@ -32,8 +32,8 @@ export default function AccessibilityToggle({ publicUserData, setPublicUserData 
     }
 
     return (
-        <div className={`flex flex-row justify-start w-16 rounded-3xl p-1 ${isAccessibilityMode ? "bg-[#3f4240] sun-glow" : "bg-[#17423F] rgb-glow"} `} onClick={handleAccessibilityToggle}>
-            <div className={`rounded-full w-6 h-6 p-1 select-none transition-all ease-in-out ${isAccessibilityMode ? "toggle-right-shift bg-black" : "bg-white "}`}>
+        <div className={`flex flex-row justify-start w-20 rounded-3xl p-1 hover:cursor-pointer ${isAccessibilityMode ? "bg-[#3f4240] sun-glow" : "bg-[#17423F] rgb-glow"} `} onClick={handleAccessibilityToggle}>
+            <div className={`rounded-full w-7 h-7 p-1 select-none transition-all ease-in-out ${isAccessibilityMode ? "toggle-right-shift bg-black" : "bg-white "}`}>
                 <img src={`/src/assets/UI-icons/${isAccessibilityMode ? "contrast-mode" : "colour-mode"}.svg`} alt="Accessibility mode icon"/>
             </div>
         </div>

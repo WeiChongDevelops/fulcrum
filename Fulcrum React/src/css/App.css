@@ -124,15 +124,19 @@ body label {
 }
 
 .navbar-fulcrum-logo {
-  height: 60px;
+  height: 50px;
 }
 
 .toggle-right-shift {
-  transform: translateX(30px);
+  transform: translateX(43px);
 }
 
 .sun-glow {
   box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.2);
+}
+
+.moon-shadow {
+  box-shadow: 0 0 15px 5px rgba(10, 10, 18, 0.2);
 }
 
 @keyframes rainbowGlow {

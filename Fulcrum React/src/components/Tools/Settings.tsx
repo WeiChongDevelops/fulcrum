@@ -94,19 +94,15 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
 
                     <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
                         <b>Appearance</b>
-                        <div className={`flex flex-row justify-center items-center w-20 rounded-3xl p-1`}>
-                            <DarkModeToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
-                        </div>
+                        <DarkModeToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
                     </div>
 
                     <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
                         <b>Accessibility Contrast</b>
-                        <div className={`flex flex-row justify-center items-center w-20 rounded-3xl p-1`}>
-                            <AccessibilityToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
-                        </div>
+                        <AccessibilityToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
                     </div>
 
-                    <div className={"settings-row bg-[#17423f] settings-box-shadow pr-3"}>
+                    <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
                         <b>Public License</b>
                         <FulcrumButton displayText={"See Public License"} backgroundColour={"white"} optionalTailwind={"m-0"} onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}/>
                     </div>
