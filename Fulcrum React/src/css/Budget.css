@@ -6,6 +6,7 @@
 
 .elementsBelowPopUpForm {
     transition: all 0.1s ease-out;
+    width: 100%;
 }
 
 .blur {

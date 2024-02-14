@@ -19,8 +19,12 @@ interface ToolsProps {
 
 export default function Tools({ publicUserData, setPublicUserData }: ToolsProps) {
 
+    const sessionStoredEmail = sessionStorage.getItem("email");
+
     const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
+
+    const [isChangeIconMessageVisible, setIsChangeIconMessageVisible] = useState(false);
 
     const [toolsFormVisibility, setToolsFormVisibility] = useState<ToolsFormVisibility>({
         isUpdateProfileIconFormVisible: false
@@ -34,6 +38,14 @@ export default function Tools({ publicUserData, setPublicUserData }: ToolsProps)
         setOpenToolsSection("recurring");
     }
 
+    function handleMouseEnter() {
+        setIsChangeIconMessageVisible(true);
+    }
+
+    function handleMouseLeave() {
+        setIsChangeIconMessageVisible(false);
+    }
+
     useEffect(() => {
         getSessionEmail()
             .then(response => response.email ? setEmail(response.email) : "")
@@ -41,32 +53,36 @@ export default function Tools({ publicUserData, setPublicUserData }: ToolsProps)
 
     return (
         <div>
-            {openToolsSection === "home" ? <div className="tools flex flex-col justify-start items-center bg-[#455259]">
-                <div className="profile-icon-display mb-4" onClick={() => {
+            {openToolsSection === "home" ? <div className="tools flex flex-col justify-center items-center bg-[#455259]">
+                <div className="profile-icon-display mb-2" onClick={() => {
+                    setIsChangeIconMessageVisible(false);
                     setToolsFormVisibility(curr => ({...curr, isUpdateProfileIconFormVisible: true}))
-                }}>
-                    <img src={`/src/assets/profile-icons/${publicUserData.profileIconFileName}`} alt="Profile image"/>
+                }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                    <img src={`/src/assets/profile-icons/${publicUserData.profileIconFileName.slice(0, -4)}-white.svg`} alt="Profile image"/>
+                    {isChangeIconMessageVisible && <b className={"absolute z-4 mt-24"} >Change Icon</b>}
                 </div>
                 <p className={"font-bold text-2xl text-white mb-5"}>{email}</p>
                 <div>
                     <FulcrumButton displayText={"Sign Out"} backgroundColour={"white"} onClick={logoutOnClick}/>
                 </div>
 
+                {toolsFormVisibility.isUpdateProfileIconFormVisible && <div className="absolute w-[80vw] h-[80vh] bg-transparent z-3"></div>}
+
                  <div className="tools-tile-container w-full h-auto flex justify-around items-center mt-16">
-                    <div className="tools-tile bg-[#D1B1B1] text-black text-3xl hover:cursor-pointer" onClick={openSettings}>
+                    <div className="tools-tile tools-tile-interactive bg-[#D1B1B1] text-black text-3xl hover:cursor-pointer" onClick={openSettings}>
                         <div className="tools-text-container">
                             <p>Settings</p>
                         </div>
 
                         <img src="/src/assets/UI-icons/tools-settings-icon-black.svg" alt=""/>
                     </div>
-                    <div className="tools-tile bg-[#B1D1CF] text-black text-lg leading-5 hover:cursor-pointer" onClick={openRecurringExpenses}>
+                    <div className="tools-tile tools-tile-interactive bg-[#B1D1CF] text-black text-lg leading-5 hover:cursor-pointer" onClick={openRecurringExpenses}>
                         <div className="tools-text-container">
                             <p>Recurring Expenses</p>
                         </div>
                         <img src="/src/assets/UI-icons/tools-recurring-icon-black.svg" alt=""/>
                     </div>
-                    <div className="tools-tile bg-[#B1C5D1] text-black text-xl leading-7">
+                    <div className="tools-tile bg-[#B1C5D1] text-black text-xl leading-7 hover:cursor-not-allowed">
                         <div className="tools-text-container">
                             <p>Coming Soon</p>
                         </div>

@@ -28,28 +28,27 @@ html, body {
   min-height: 100%;
 }
 
-#background-grid {
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  position: absolute;
-  top: 0;
-  background-image:
-          linear-gradient(90deg, rgba(0, 89, 255, 0.11) 1px, transparent 1px),
-          linear-gradient(180deg, rgba(0, 89, 255, 0.11) 1px, transparent 1px);
-  background-size: 42px 42px;
-  filter: drop-shadow(1px 1px 2px grey) invert(0.1);
-  overflow: hidden;
+.bg-light {
+  background-color: #F1F5F9;
 }
 
-#background-grid::after {
-  content: '';
-  position: absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
-  box-shadow:
-          inset -40px 0 40px -15px rgba(141, 141, 141, 0.3),
-          inset 40px 0 40px -15px rgba(141, 141, 141, 0.3);
+.bg-dark {
+  background-color: #1d1e23;
 }
+
+#background-grid {
+  transition: all ease-out 220ms;
+  width: 100%;
+  z-index: -1;
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  /*top: 136px;*/
+  /*background-size: 42px 42px;*/
+  /*filter: drop-shadow(1px 1px 2px grey) invert(0.1);*/
+  /*overflow: hidden;*/
+}
+
 
 body input {
   background-color: white;
@@ -126,4 +125,31 @@ body label {
 
 .navbar-fulcrum-logo {
   height: 60px;
+}
+
+.toggle-right-shift {
+  transform: translateX(30px);
+}
+
+.sun-glow {
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.2);
+}
+
+@keyframes rainbowGlow {
+  0% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.7); }
+  14% { box-shadow: 0 0 15px rgba(255, 165, 0, 0.7); }
+  28% { box-shadow: 0 0 15px rgba(255, 255, 0, 0.7); }
+  42% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.7); }
+  57% { box-shadow: 0 0 15px rgba(90, 90, 255, 0.7); }
+  71% { box-shadow: 0 0 15px rgba(173, 0, 255, 0.7); }
+  85% { box-shadow: 0 0 15px rgba(143, 0, 255, 0.7); }
+  100% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.7); }
+}
+
+.rgb-glow {
+  animation: rainbowGlow 9s infinite alternate;
+}
+
+.accessibility-enabled {
+  filter: grayscale(100%) contrast(150%) brightness(140%) saturate(380%);
 }

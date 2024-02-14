@@ -12,6 +12,8 @@ import {
 import FulcrumButton from "../Other/FulcrumButton.tsx";
 import TwoOptionModal from "../ModalsAndForms/TwoOptionModal.tsx";
 import {TypeMatchConfirmationForm} from "./TypeMatchConfirmationForm.tsx";
+import DarkModeToggle from "../Other/DarkModeToggle.tsx";
+import AccessibilityToggle from "../Other/AccessibilityToggle.tsx";
 
 interface SettingsProps {
     setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
@@ -42,18 +44,18 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
     }, [settingsFormVisibility, settingsModalVisibility]);
 
 
-    function handleCurrencySelection(e: React.MouseEvent) {
+    async function handleCurrencySelection(e: React.MouseEvent) {
         const target = e.target as HTMLDivElement;
         const newCurrencySetting = target.innerText.slice(1)
         setPublicUserData(curr => ({...curr, currency: newCurrencySetting}))
 
         const updatedPublicUserData: PublicUserDataUpdate = {
             currency: newCurrencySetting,
+            profileIconFileName: publicUserData.profileIconFileName,
             darkModeEnabled: publicUserData.darkModeEnabled,
             accessibilityEnabled: publicUserData.accessibilityEnabled
         }
-
-        handlePublicUserDataUpdating(updatedPublicUserData)
+        await handlePublicUserDataUpdating(updatedPublicUserData)
     }
 
     return (
@@ -76,17 +78,31 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
                         </div>
                     </div>
 
-
                     <div className={"settings-row bg-[#17423f] settings-box-shadow flex-col h-auto"}>
                         <b className={"flex flex-row justify-start mr-auto"}>Select Currency</b>
                         <div className={"flex flex-row justify-around font-bold text-3xl w-full mt-6 flex-wrap"}>
-                            {currencyOptions.map(currencyOption => {
+                            {currencyOptions.map((currencyOption, key) => {
                                 return <FulcrumButton
                                     displayText={currencyOption.symbol}
                                     backgroundColour={publicUserData.currency === currencyOption.code ? "grey" : "white"}
                                     onClick={handleCurrencySelection}
-                                    optionalTailwind={`w-36 mb-4 ${publicUserData.currency === currencyOption.code && "outline"}`}/>
+                                    optionalTailwind={`w-36 mb-4 ${publicUserData.currency === currencyOption.code && "outline"}`}
+                                    key={key}/>
                             })}
+                        </div>
+                    </div>
+
+                    <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
+                        <b>Appearance</b>
+                        <div className={`flex flex-row justify-center items-center w-20 rounded-3xl p-1`}>
+                            <DarkModeToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
+                        </div>
+                    </div>
+
+                    <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
+                        <b>Accessibility Contrast</b>
+                        <div className={`flex flex-row justify-center items-center w-20 rounded-3xl p-1`}>
+                            <AccessibilityToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
                         </div>
                     </div>
 
@@ -153,7 +169,7 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
                                            }}
                                            setModalVisibility={setSettingsModalVisibility}
                                            isVisible={"isConfirmExpenseWipeModalVisible"}
-                                           title={"Confirm You Wish to Permanently Wipe All Expense Data."}/>}
+                                           title={"Please confirm that you wish to permanently wipe all expense data."}/>}
 
                     {settingsModalVisibility.isConfirmBudgetWipeModalVisible
                         && <TwoOptionModal optionOneText={"Cancel"}
@@ -174,7 +190,7 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
                                            }}
                                            setModalVisibility={setSettingsModalVisibility}
                                            isVisible={"isConfirmBudgetWipeModalVisible"}
-                                           title={"Confirm You Wish to Permanently Wipe All Budget Data."}/>}
+                                           title={"Please confirm that you wish to permanently wipe all budget data."}/>}
 
                     {settingsModalVisibility.isConfirmAllDataWipeModalVisible
                         && <TwoOptionModal optionOneText={"Cancel"}
@@ -195,7 +211,7 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
                                            }}
                                            setModalVisibility={setSettingsModalVisibility}
                                            isVisible={"isConfirmAllDataWipeModalVisible"}
-                                           title={"Confirm You Wish to Permanently Wipe All Budget and Expense Data."}/>}
+                                           title={"Please confirm that you wish to permanently wipe all budget and expense data."}/>}
 
                 </div>
             </div>

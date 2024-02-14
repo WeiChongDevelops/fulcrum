@@ -179,8 +179,8 @@ export interface SelectorOptionsFormattedData {
 }
 
 export interface PublicUserData {
-    createdAt: Date;
     currency: string;
+    createdAt: Date;
     darkModeEnabled: boolean;
     accessibilityEnabled: boolean;
     profileIconFileName: string;
@@ -299,7 +299,6 @@ export function formatDollarAmountStatic(amount: number, currency: string) {
         maximumFractionDigits: 2
     }).format(amount);
     let currencySymbol = getCurrencySymbol(currency);
-    console.log(currencySymbol + formattedNumber)
     return currencySymbol + formattedNumber;
 }
 
@@ -1066,6 +1065,7 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
 
 export async function logoutOnClick() {
     try {
+        sessionStorage.removeItem("email");
         await fetch("http://localhost:8080/api/logout", {
             method: "POST",
             headers: {
@@ -1205,32 +1205,32 @@ export const recurringFrequencyOptions = [
     {
         value: "never",
         label: "Never",
-        colour: "black"
+        colour: "white"
     },
     {
         value: "daily",
         label: "Daily",
-        colour: "black"
+        colour: "white"
     },
     {
         value: "weekly",
         label: "Weekly",
-        colour: "black"
+        colour: "white"
     },
     {
         value: "fortnightly",
         label: "Fortnightly",
-        colour: "black"
+        colour: "white"
     },
     {
         value: "monthly",
         label: "Monthly",
-        colour: "black"
+        colour: "white"
     },
     {
         value: "annually",
         label: "Annually",
-        colour: "black"
+        colour: "white"
     }
 ]
 
@@ -1257,7 +1257,7 @@ export const colourStyles = {
             ...styles,
             color: data.colour,
             fontWeight: "bold",
-            textShadow: "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 #3f4240, 1px 1px 0 black",
+            textShadow: "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
             letterSpacing: "1.5px"
         };
     },
@@ -1465,37 +1465,37 @@ export function checkForOpenModalOrForm(expenseFormVisibility: ExpenseFormVisibi
 }
 
 
-export async function implementDynamicBackgroundHeight() {
-    function adjustBackgroundHeight() {
-        const bodyHeight = document.body.scrollHeight;
-        const backgroundDiv: HTMLDivElement = document.querySelector('.background')!;
-        if (bodyHeight > window.innerHeight) {
-            backgroundDiv!.style.height = bodyHeight + 'px';
-        }
-    }
-
-// Select the node to be observed
-    const targetNode = document.body;
-
-// Set up the observer options
-    const config = {
-        childList: true,    // Detect direct children changes
-        subtree: true,      // Detect all descendant changes
-        attributes: true    // Detect changes in attributes
-    };
-
-// Callback function to execute when changes are observed
-    const callback = function() {
-        adjustBackgroundHeight();
-    };
-
-
-// Create an instance of the observer
-    const observer = new MutationObserver(callback);
-
-// Start observing the target node
-    observer.observe(targetNode, config);
-}
+// export async function implementDynamicBackgroundHeight() {
+//     function adjustBackgroundHeight() {
+//         const bodyHeight = document.body.scrollHeight;
+//         const backgroundDiv: HTMLDivElement = document.querySelector('.background')!;
+//         if (bodyHeight + 136 > window.innerHeight) {
+//             backgroundDiv!.style.height = bodyHeight + 'px';
+//         }
+//     }
+//
+// // Select the node to be observed
+//     const targetNode = document.body;
+//
+// // Set up the observer options
+//     const config = {
+//         childList: true,    // Detect direct children changes
+//         subtree: true,      // Detect all descendant changes
+//         attributes: true    // Detect changes in attributes
+//     };
+//
+// // Callback function to execute when changes are observed
+//     const callback = function() {
+//         adjustBackgroundHeight();
+//     };
+//
+//
+// // Create an instance of the observer
+//     const observer = new MutationObserver(callback);
+//
+// // Start observing the target node
+//     observer.observe(targetNode, config);
+// }
 
 export function getWindowLocation() {
     const urlArray = window.location.href.split("/");
@@ -1503,33 +1503,10 @@ export function getWindowLocation() {
 }
 
 export function matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances: RemovedRecurringExpenseItem[], recurringExpenseItem: RecurringExpenseItemEntity, date: Date) {
-    console.log("BELOW IS OUR BLACKLIST")
-    console.log(removedRecurringExpenseInstances)
-
     const checkResult = removedRecurringExpenseInstances.find(removedRecurringExpenseItem => {
-        console.log(new Date(removedRecurringExpenseItem.timestampOfRemovedInstance).toLocaleDateString())
-        console.log(new Date(date).toLocaleDateString())
         return removedRecurringExpenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
             && new Date(removedRecurringExpenseItem.timestampOfRemovedInstance).toLocaleDateString() === new Date(date).toLocaleDateString()
     })
-
-    // if (checkResult !== undefined) {
-    //     console.log("FOUND A BLACKLIST ENTRY")
-    // } else {
-    //     console.log("DID NOT FIND A BLACKLIST ENTRY")
-    //     console.log("SEE BELOW THE BLACKLIST")
-    //     console.log(removedRecurringExpenseInstances)
-    //     console.log("AND SEE BELOW THE RECURRING EXPENSE ITEM")
-    //     console.log(recurringExpenseItem)
-    //     console.log("SEE BELOW UNFORMATTED DATES")
-    //     console.log(date)
-    //     console.log(removedRecurringExpenseInstances[0].timestampOfRemovedInstance)
-    //     console.log("SEE BELOW FORMATTED DATES")
-    //     console.log(new Date(date).toLocaleDateString())
-    //     console.log(new Date(removedRecurringExpenseInstances[0].timestampOfRemovedInstance).toLocaleDateString())
-    // }
-    // console.log("See below the checkResult")
-    // console.log(checkResult)
 
     return checkResult !== undefined;
 }

@@ -4,8 +4,18 @@
     height: 6px; /* Height of the dotted line */
     background: repeating-linear-gradient(
             to right,
-            #000,
-            #000 16px, /* Width of each dot */
+            black,
+            black 16px, /* Width of each dot */
+            transparent 2px,
+            transparent 30px /* Space between dots, increase for more space */
+    );
+}
+
+.dotted-line-dark {
+    background: repeating-linear-gradient(
+            to right,
+            white,
+            white 16px, /* Width of each dot */
             transparent 2px,
             transparent 30px /* Space between dots, increase for more space */
     );
@@ -22,13 +32,10 @@
     color: black;
 }
 
-/*.react-date-picker__inputGroup__input {*/
-/*    color: white;*/
-/*}*/
-
-/*.react-date-picker__inputGroup__divider {*/
-/*    color: white;*/
-/*}*/
+.create-expense-button-dark {
+    border: white 2px dashed;
+    color: white;
+}
 
 .react-date-picker__wrapper {
     color: black;

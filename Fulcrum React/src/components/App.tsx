@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Register from "./Auth/Register.tsx";
 import Login from "./Auth/Login.tsx";
 import Budget from "./Budget/Budget.tsx";
-import Navbar from "./Other/Navbar.tsx";
-import Expense from "./Expenses/Expense.tsx";
+import Fulcrum from "./Other/Fulcrum.tsx";
+import Expenses from "./Expenses/Expenses.tsx";
 import Tools from "./Tools/Tools.tsx";
 import {useEffect, useState} from "react";
 import {getPublicUserData, PublicUserData} from "../util.ts";
@@ -12,29 +12,36 @@ import {getPublicUserData, PublicUserData} from "../util.ts";
 export default function App() {
 
     const sessionStoredProfileIcon = sessionStorage.getItem("profileIcon");
+    const sessionStoredDarkMode = sessionStorage.getItem("darkMode");
+    const sessionStoredAccessibilityMode = sessionStorage.getItem("accessibilityMode");
+    const sessionStoredEmail = sessionStorage.getItem("email");
+
     const [publicUserData, setPublicUserData] = useState<PublicUserData>({
         createdAt: new Date(),
-        currency: "",
-        darkModeEnabled: false,
-        accessibilityEnabled: false,
+        currency: "AUD",
+        darkModeEnabled: sessionStoredDarkMode ? sessionStoredDarkMode === "true" : false,
+        accessibilityEnabled: sessionStoredAccessibilityMode ? sessionStoredAccessibilityMode === "true" : false,
         profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "profile-icon-default.svg"
     })
-    useEffect(() => {
+    const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
 
-        getPublicUserData()
-            .then(results => setPublicUserData(results));
-    }, []);
     useEffect(() => {
-        sessionStorage.setItem("profileIcon", publicUserData.profileIconFileName)
+        !!email && getPublicUserData()
+            .then(results => setPublicUserData(results))
+            .then(() => console.log(email))
+    }, []);
+
+    useEffect(() => {
+        publicUserData && sessionStorage.setItem("profileIcon", publicUserData.profileIconFileName)
     }, [publicUserData]);
 
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Navbar publicUserData={publicUserData}/>} >
-                    <Route path="login" element={<Login/>} />
-                    <Route path="register" element={<Register/>} />
-                    <Route path="expenses" element={<Expense/>} />
+                <Route path="/login" element={<Login/>} />
+                <Route path="/register" element={<Register/>} />
+                <Route path="/" element={<Fulcrum publicUserData={publicUserData} setPublicUserData={setPublicUserData} email={email} setEmail={setEmail}/>} >
+                    <Route path="expenses" element={<Expenses publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>} />
                     <Route path="budget" element={<Budget/>} />
                     <Route path="tools" element={<Tools publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>} />
                 </Route>

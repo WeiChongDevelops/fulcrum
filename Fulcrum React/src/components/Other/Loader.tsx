@@ -8,14 +8,15 @@ const override = {
 
 interface LoaderProps {
     isLoading: boolean;
+    isDarkMode: boolean;
 }
 
-export default function Loader({ isLoading }: LoaderProps) {
+export default function Loader({ isLoading, isDarkMode }: LoaderProps) {
 
     return (
-        <div className="absolute top-1/2 left-1/2">
+        <div className="absolute top-[50vh] left-[50vw]">
             <RotateLoader
-                color={"black"}
+                color={isDarkMode ? "#F1F5F9" : "black"}
                 loading={isLoading}
                 cssOverride={override}
                 size={15}

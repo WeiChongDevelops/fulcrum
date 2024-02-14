@@ -144,7 +144,7 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData 
                                         isVisible="isConfirmRecurringExpenseDestructionModalVisible"
                                         title="Are you sure you want to delete this recurring expense? Don't worry, this won't affect any past records."/>}
                 </div>
-            </div> : <Loader isLoading={isLoading}/>}
+            </div> : <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled}/>}
         </>
     );
 }

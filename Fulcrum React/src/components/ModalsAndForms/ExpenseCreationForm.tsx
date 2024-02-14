@@ -139,7 +139,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 hideForm();
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
-            <p className="mb-6 font-bold text-4xl">New Expense Item</p>
+            <p className="mb-6 font-bold text-4xl">New Expenses Item</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="category">Category</label>
                 <CreatableSelect
@@ -207,7 +207,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                     required
                 />
 
-                <FulcrumButton displayText="Insert Expense"/>
+                <FulcrumButton displayText="Insert Expenses"/>
             </form>
         </div>
     )

@@ -8,7 +8,6 @@ import {
     getGroupList, getLineAngle, getTotalIncome,
     GroupItemEntity,
     handleGroupDeletion,
-    implementDynamicBackgroundHeight,
     PreviousBudgetBeingEdited, PreviousGroupBeingEdited, PublicUserData, getPublicUserData, getCurrencySymbol,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
@@ -18,6 +17,8 @@ import GroupList from "./GroupList.tsx";
 import AddNewGroupButton from "./AddNewGroupButton.tsx";
 import BudgetModalsAndForms from "../ModalsAndForms/BudgetModalsAndForms.tsx";
 import Loader from "../Other/Loader.tsx";
+import '../../css/App.css'
+import '../../css/Budget.css'
 
 export default function Budget() {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
@@ -82,8 +83,6 @@ export default function Budget() {
             setExpenseArray(expenseArray);
             setTotalIncome(totalIncome);
             setPublicUserData(publicUserDataObject);
-
-            await implementDynamicBackgroundHeight();
         }
         retrieveInitialData()
             .then(() => {
@@ -143,14 +142,14 @@ export default function Budget() {
         <>
             {!isLoading ?<div className="flex flex-row justify-center items-center">
              <div className={`flex flex-col items-center elementsBelowPopUpForm z-2
-            ${isBudgetFormOrModalOpen && "blur"} px-16`}>
+            ${isBudgetFormOrModalOpen && "blur"}`}>
                 <IncomeDisplay
                     totalIncome={totalIncome}
                     setTotalIncome={setTotalIncome}
                     amountLeftToBudget={amountLeftToBudget}
                     publicUserData={publicUserData}/>
 
-                <FulcrumAnimation lineAngle={lineAngle}/>
+                <FulcrumAnimation lineAngle={lineAngle} isDarkMode={publicUserData.darkModeEnabled}/>
 
                 {groupArray?.length > 0 && <GroupList
                     budgetArray={budgetArray}
@@ -168,7 +167,7 @@ export default function Budget() {
                     perCategoryTotalExpenseArray={perCategoryExpenditureMap}
                     publicUserData={publicUserData}/>}
 
-                <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility}/>
+                <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility} isDarkMode={publicUserData.darkModeEnabled}/>
             </div>
 
             {isBudgetFormOrModalOpen && <div className="absolute w-screen h-screen bg-transparent z-3"></div>}
@@ -188,7 +187,7 @@ export default function Budget() {
             modalFormVisibility={budgetModalVisibility}
             setModalFormVisibility={setBudgetModalVisibility} currencySymbol={getCurrencySymbol(publicUserData.currency)}/>
             </div>
-            </div> : <Loader isLoading={isLoading}/>}
+            </div> : <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled}/>}
         </>
     );
 }

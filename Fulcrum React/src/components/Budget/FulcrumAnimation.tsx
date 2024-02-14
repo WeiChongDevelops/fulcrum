@@ -2,9 +2,10 @@ import {useEffect, useState} from "react";
 
 interface FulcrumAnimationProps {
     lineAngle: number;
+    isDarkMode: boolean;
 }
 
-export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps) {
+export default function FulcrumAnimation( { lineAngle, isDarkMode } : FulcrumAnimationProps) {
     console.log(`lineAngle: ${lineAngle}`)
 
     const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-tri-red.webp");
@@ -91,12 +92,12 @@ export default function FulcrumAnimation( { lineAngle } : FulcrumAnimationProps)
             </div>
             <div className="rotating-container" style={{transform: `rotate(${-lineAngle}deg) translateX(-50%)`}}>
                 <div className="rotating-text-label-container absolute flex flex-row justify-between w-[100%] text-[1.5em] bottom-8 ">
-                    <b className="text-black">Budget</b>
-                    <b className="text-black">Income</b>
+                    <b className={`${isDarkMode ? "text-white" : "text-black"}`}>BUDGET</b>
+                    <b className={`${isDarkMode ? "text-white" : "text-black"}`}>INCOME</b>
                 </div>
-                <img src="/src/assets/fulcrum-animation/fulcrum-rectangle.png" className="fulcrum-rectangle" alt="Fulcrum lever"/>
-                <img src="/src/assets/fulcrum-animation/fulcrum-basket.webp" alt="Fulcrum bowl" className="fulcrum-bowl-left" style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg)`}}/>
-                <img src="/src/assets/fulcrum-animation/fulcrum-basket.webp" alt="Fulcrum bowl" className="fulcrum-bowl-right" style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg) `}}/>
+                <img src={`/src/assets/fulcrum-animation/fulcrum-rectangle-${isDarkMode ? "grey" : "black"}.png`} className="fulcrum-rectangle" alt="Fulcrum lever"/>
+                <img src={`/src/assets/fulcrum-animation/fulcrum-basket-${isDarkMode ? "grey" : "black"}.webp`} alt="Fulcrum bowl" className="fulcrum-bowl-left" style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg)`}}/>
+                <img src={`/src/assets/fulcrum-animation/fulcrum-basket-${isDarkMode ? "grey" : "black"}.webp`} alt="Fulcrum bowl" className="fulcrum-bowl-right" style={{transform: `translate(-50%, -50%) rotate(${360 + lineAngle}deg) `}}/>
             </div>
         </div>
     );
