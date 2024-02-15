@@ -23,18 +23,18 @@ export default function Register() {
 
     return (
         <div className={"auth-page-container register-page flex flex-row justify-around items-center w-[100vw] h-[100vh]"}>
-            <div className={"flex flex-col justify-around items-start h-[75vh] pl-48 pb-52"}>
+            <div className={"flex flex-col justify-around items-start h-[75vh] pl-[10rem] pb-52"}>
                 <div className={"flex-1"}>
                     <img src="/src/assets/fulcrum-logos/fulcrum-long-white.webp" className={"select-none w-80 h-auto"} alt="Fulcrum logo"/>
                 </div>
                 <div className={"flex flex-col justify-center items-start h-[100vh] w-[35vw] text-left"}>
-                    <b className={"text-8xl"}>Register for an account.</b>
+                    <b className={"text-[4rem]"}>Register for an account.</b>
                     <p className={"text-xl ml-2 mt-8"}>Every dollar gets a job!</p>
                 </div>
             </div>
             <div className={"flex flex-col justify-around items-center h-[75vh] mr-24"}>
                 <p className={"text-8xl flex-1"}></p>
-                <form className={"login-form flex flex-col justify-center items-center bg-white text-black px-12 pt-12 mt-20 pb-8 w-[35vw] rounded-2xl"}
+                <form className={"login-form flex flex-col justify-center items-center bg-white text-black px-12 pt-14 mt-20 pb-8 w-[37vw] rounded-2xl"}
                       onSubmit={handleSubmit}>
                     <div className={"flex flex-col justify-center items-start w-full"}>
                         <label htmlFor={"email"}>Email</label>

@@ -394,7 +394,7 @@ export async function getExpenseList() {
             window.alert("Login expired. Please log in again.")
             logoutOnClick()
                 .then(() => {
-                    window.location.href === "/login" && (window.location.href = "/login")
+                    window.location.href !== "/login" && (window.location.href = "/login")
                 } )
         }
         if (!response.ok) {
@@ -538,7 +538,7 @@ export async function getBudgetList() {
             window.alert("Login expired. Please log in again.")
             logoutOnClick()
                 .then(() => {
-                    window.location.href === "/login" && (window.location.href = "/login")
+                    window.location.href !== "/login" && (window.location.href = "/login")
                 } )
         }
         else if (!response.ok) {
@@ -657,7 +657,7 @@ export async function getGroupList() {
             window.alert("Login expired. Please log in again.")
             logoutOnClick()
                 .then(() => {
-                    window.location.href === "/login" && (window.location.href = "/login")
+                    window.location.href !== "/login" && (window.location.href = "/login")
                 } )
         } else if (!response.ok) {
             console.error(`HTTP error - status: ${response.status}`);
@@ -798,7 +798,7 @@ export async function getRecurringExpenseList() {
             window.alert("Login expired. Please log in again.")
             logoutOnClick()
                 .then(() => {
-                    window.location.href === "/login" && (window.location.href = "/login")
+                    window.location.href !== "/login" && (window.location.href = "/login")
                 } )
         }
         if (!response.ok) {
@@ -1159,7 +1159,7 @@ export async function checkForUser() {
             window.alert("Login expired. Please log in again.")
             logoutOnClick()
                 .then(() => {
-                    window.location.href === "/login" && (window.location.href = "/login")
+                    window.location.href !== "/login" && (window.location.href = "/login")
                 } )
         }
         else {
