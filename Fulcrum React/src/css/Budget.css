@@ -167,6 +167,7 @@
 .fulcrum-animation-container {
     position: relative;
     padding-top: 14%;
+    margin-top: 25px;
     margin-bottom: 9%;
     width: 94vw;
 }

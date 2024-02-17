@@ -391,7 +391,6 @@ export async function getExpenseList() {
         });
         if (response.status === 401) {
             console.error("JWT token expiry detected. Logging out.")
-            window.alert("Login expired. Please log in again.")
             logoutOnClick()
                 .then(() => {
                     window.location.href !== "/login" && (window.location.href = "/login")
@@ -499,7 +498,7 @@ export async function handleBudgetCreation(setBudgetArray: Dispatch<SetStateActi
             body: JSON.stringify({
                 category: newBudgetItem.category.trim(),
                 amount: newBudgetItem.amount ? newBudgetItem.amount : 0,
-                iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : "/src/assets/category-icons/category-default-icon.svg",
+                iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : "category-default-icon.svg",
                 group: newBudgetItem.group ? newBudgetItem.group.trim() : "Miscellaneous"
             })
         });
@@ -535,7 +534,6 @@ export async function getBudgetList() {
         });
         if (response.status === 401) {
             console.error("JWT token expiry detected. Logging out.")
-            window.alert("Login expired. Please log in again.")
             logoutOnClick()
                 .then(() => {
                     window.location.href !== "/login" && (window.location.href = "/login")
@@ -654,7 +652,6 @@ export async function getGroupList() {
         })
         if (response.status === 401) {
             console.error("JWT token expiry detected. Logging out.")
-            window.alert("Login expired. Please log in again.")
             logoutOnClick()
                 .then(() => {
                     window.location.href !== "/login" && (window.location.href = "/login")
@@ -795,7 +792,6 @@ export async function getRecurringExpenseList() {
         });
         if (response.status === 401) {
             console.error("JWT token expiry detected. Logging out.")
-            window.alert("Login expired. Please log in again.")
             logoutOnClick()
                 .then(() => {
                     window.location.href !== "/login" && (window.location.href = "/login")
@@ -1155,14 +1151,15 @@ export async function checkForUser() {
         if (response.status === 400) {
             console.error("Failed to check for user status.")
         } else if (response.status === 401) {
-            console.error("JWT token expiry detected. Logging out.")
-            window.alert("Login expired. Please log in again.")
+            console.error("JWT token expiry detected. Logging out.");
+            window.alert("Login expired. Please login again.");
+            const userStatus = { loggedIn: "false"}
             logoutOnClick()
                 .then(() => {
                     window.location.href !== "/login" && (window.location.href = "/login")
                 } )
-        }
-        else {
+            return userStatus;
+        } else {
             const userStatus = await response.json();
             console.log(userStatus)
             return userStatus;
@@ -1227,7 +1224,13 @@ export async function getPublicUserData() {
                 "Content-Type": "application/json"
             }
         })
-        if (!response.ok) {
+        if (response.status === 401) {
+            console.error("JWT token expiry detected. Logging out.")
+            logoutOnClick()
+                .then(() => {
+                    window.location.href !== "/login" && (window.location.href = "/login")
+                } )
+        } else if (!response.ok) {
             console.error(`HTTP error when getting public user data - ${response.status}`)
         } else {
             const publicUserData = await response.json();

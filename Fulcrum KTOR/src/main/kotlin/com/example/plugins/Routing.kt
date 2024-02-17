@@ -737,6 +737,8 @@ fun Application.configureRouting() {
                     UserStatusCheck(loggedIn = true)
                 }
                 call.respond(HttpStatusCode.OK, statusJSON)
+            } catch (e: UnauthorizedRestException) {
+                call.respond(HttpStatusCode.Unauthorized, "Not authorised - JWT token likely expired.")
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Error while checking for user."))
             }

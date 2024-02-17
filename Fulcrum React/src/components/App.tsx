@@ -6,8 +6,8 @@ import Budget from "./Budget/Budget.tsx";
 import Fulcrum from "./Other/Fulcrum.tsx";
 import Expenses from "./Expenses/Expenses.tsx";
 import Tools from "./Tools/Tools.tsx";
-import {useEffect, useState} from "react";
-import {checkForUser, getPublicUserData, PublicUserData} from "../util.ts";
+import {useEffect, useLayoutEffect, useState} from "react";
+import {getPublicUserData, PublicUserData} from "../util.ts";
 import Home from "./Home/Home.tsx";
 export default function App() {
 
@@ -25,15 +25,11 @@ export default function App() {
     })
     const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
 
-    useEffect(() => {
-        checkForUser()
-            .then( () => {
-                    !!email && getPublicUserData()
-                        .then(results => setPublicUserData(results))
-                        .then(() => console.log(email))
-                }
-            )
-    }, []);
+    useLayoutEffect(() => {
+        !!email && getPublicUserData()
+            .then(results => setPublicUserData(results))
+            .then(() => console.log(email))
+    },[]);
 
     useEffect(() => {
         publicUserData && sessionStorage.setItem("profileIcon", publicUserData.profileIconFileName)
