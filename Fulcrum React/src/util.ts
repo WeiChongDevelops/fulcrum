@@ -1275,32 +1275,32 @@ export const recurringFrequencyOptions = [
     {
         value: "never",
         label: "Never",
-        colour: "white"
+        colour: "black"
     },
     {
         value: "daily",
         label: "Daily",
-        colour: "white"
+        colour: "black"
     },
     {
         value: "weekly",
         label: "Weekly",
-        colour: "white"
+        colour: "black"
     },
     {
         value: "fortnightly",
         label: "Fortnightly",
-        colour: "white"
+        colour: "black"
     },
     {
         value: "monthly",
         label: "Monthly",
-        colour: "white"
+        colour: "black"
     },
     {
         value: "annually",
         label: "Annually",
-        colour: "white"
+        colour: "black"
     }
 ]
 

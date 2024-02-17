@@ -55,7 +55,8 @@ export default function BudgetTile({ category,
     }, [amount, perCategoryTotalExpenseArray]);
 
 
-    function handleDeleteClick() {
+    function handleDeleteClick(e: React.MouseEvent) {
+        e.stopPropagation();
         setCategoryToDelete(category);
         setModalFormVisibility(current => ({...current, isConfirmCategoryDestructionModalVisible: true}))
     }
@@ -64,7 +65,8 @@ export default function BudgetTile({ category,
 
     return (
         <div className="budget-tile flex flex-col justify-around items-center rounded-2xl"
-             style={{backgroundColor: `${budgetExceeded ? "#ff3f3f" : "#44b775"}`}}>
+             style={{backgroundColor: `${budgetExceeded ? "#ff3f3f" : "#44b775"}`}}
+             onClick={handleEditClick}>
             <div className="tile-icon-container flex justify-center items-center p-2 w-12 h-16 mt-2">
                 <img className="budget-tile-icon" src={`/src/assets/category-icons/${icon}`} alt="" />
             </div>

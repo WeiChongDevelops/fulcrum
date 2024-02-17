@@ -53,13 +53,16 @@ export default function ExpenseItem( { expenseId,
         setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: true}))
     }
 
-    function handleDeleteClick() {
+    function handleDeleteClick(e: React.MouseEvent) {
+        e.stopPropagation();
         setExpenseIdToDelete(expenseId);
         setExpenseModalVisibility(current => ({...current, isConfirmExpenseDestructionModalVisible: true}))
     }
 
     return (
-        <div className="expense-item flex flex-row justify-between items-center w-[95vw] py-1.5 px-2.5 rounded-2xl my-3 text-black" style={{backgroundColor: groupColour}}>
+        <div className="expense-item flex flex-row justify-between items-center w-[95vw] py-1.5 px-2.5 rounded-2xl my-3 text-black"
+             style={{backgroundColor: groupColour}}
+             onClick={handleEditClick}>
             <div className="flex flex-row items-center">
                 <div className="rounded-full bg-[#1b1c1c] p-3">
                     <img src={`/src/assets/category-icons/${iconPath}`} alt="" className="w-8 h-auto"/>

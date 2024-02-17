@@ -137,8 +137,12 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
                     />
                 </div>
 
-                {oldExpenseBeingEdited.recurringExpenseId ? <p className={"mt-2 text-sm"}>To manage your recurring expenses, please see the Tools section.</p> :
-                    <div>
+                {oldExpenseBeingEdited.recurringExpenseId ?
+                    <div className={"mt-2 text-sm"}>
+                        <p>You are editing only this instance of your recurring expense.</p>
+                        <p>To manage your recurring expenses, please see the Tools section.</p>
+                    </div>
+                    : <div>
                         <label htmlFor="timestamp">Date</label>
                         <div className={"text-black"}>
                             <DatePicker onChange={onDateInputChange} value={formData.timestamp}/>

@@ -81,12 +81,15 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData 
     return (
         <>
             {!isLoading ? <div className="flex flex-col justify-start items-center bg-[#455259] min-h-screen">
-                <div className={`flex flex-col w-[100vw] elementsBelowPopUpForm z-2
-                    ${isRecurringExpenseFormOrModalOpen && "blur"} px-16`}>
+                <div className={`flex flex-col justify-center items-center w-[100vw] elementsBelowPopUpForm z-2
+                    ${isRecurringExpenseFormOrModalOpen && "blur"}`}>
 
-                    <div className="flex justify-between items-center my-8">
-                        <div className="flex-grow flex flex-row flex-start">
-                            <FulcrumButton displayText={"Go Back"} onClick={() => setOpenToolsSection("home")} backgroundColour={"white"}/>
+                    <div className="flex justify-between items-center my-8 w-full">
+                        <div className="flex-grow flex flex-row justify-start">
+                            <FulcrumButton displayText={"Go Back"}
+                                           onClick={() => setOpenToolsSection("home")}
+                                           backgroundColour={"white"}
+                                           optionalTailwind={"ml-[2.5vw]"}/>
                         </div>
 
                         <img src="/src/assets/UI-icons/tools-recurring-icon-white.svg" alt="Cycle icon"/>
@@ -94,7 +97,10 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData 
                         <img src="/src/assets/UI-icons/tools-recurring-icon-white.svg" alt="Cycle icon"/>
 
                         <div className="flex-grow flex flex-row justify-end">
-                            <FulcrumButton displayText={"Go Back"} onClick={() => setOpenToolsSection("home")} backgroundColour={"white"} optionalTailwind={"opacity-0"}/>
+                            <FulcrumButton displayText={"Go Back"}
+                                           onClick={() => setOpenToolsSection("home")}
+                                           backgroundColour={"white"}
+                                           optionalTailwind={"opacity-0"}/>
                         </div>
                     </div>
 

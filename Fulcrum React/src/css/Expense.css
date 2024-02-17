@@ -22,7 +22,14 @@
 }
 
 .expense-item {
+    transition: all ease-out 250ms;
     box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 1);
+}
+
+.expense-item:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0 0 rgba(0, 0, 0, 1);
+    cursor: pointer;
 }
 
 .create-expense-button {
