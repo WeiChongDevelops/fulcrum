@@ -52,12 +52,11 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
 
     return (
         <div className="flex flex-row w-full items-center mt-1">
-            <div className="flex-1 flex-row text-center justify-center font-bold bg-[#17423f] p-5 rounded-xl my-3 mx-6 text-white monthly-income">
-                <span className="text-4xl">MONTHLY INCOME: </span>
+            <div className="flex-1 text-[2rem] leading-8 flex-row text-center justify-center font-bold bg-[#17423f] p-5 rounded-xl my-3 mx-6 text-white monthly-income" onClick={handleEditClick}>
+                <span>MONTHLY INCOME: </span>
                 {isEditing ? <form className="inline relative bottom-1" onSubmit={handleSubmit}>
-                    <span className="relative left-6 text-black">$</span>
                     <input
-                        className="w-[17.5%] h-6 text-center text-xl"
+                        className="w-[20%] text-xl h-6 text-center"
                         type="text"
                         name="incomeDisplay"
                         onChange={handleInputChange}
@@ -65,11 +64,11 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
                         value={incomeFormData.income}
                         autoFocus
                     />
-                </form>: <span className="text-4xl" onClick={handleEditClick}>{formatDollarAmountStatic(totalIncome, currency)}</span>}
+                </form>: <span >{formatDollarAmountStatic(totalIncome, currency)}</span>}
             </div>
-            <div className="flex-1 text-center p-5 rounded-xl my-3 mx-6 font-bold text-white remaining-income" style={{backgroundColor: `${amountLeftToBudget === 0 ? "#4CCC86" : "#FF3F3F"}`}}>
-                <span className="text-4xl">INCOME LEFT TO BUDGET: </span>
-                <span className="text-4xl">{formatDollarAmountStatic(amountLeftToBudget, currency)}</span>
+            <div className="flex-1 text-center p-5 rounded-xl my-3 mx-6 font-bold text-white remaining-income  text-[2rem] leading-8 " style={{backgroundColor: `${amountLeftToBudget === 0 ? "#4CCC86" : "#FF3F3F"}`}}>
+                <span>INCOME LEFT TO BUDGET: </span>
+                <span>{formatDollarAmountStatic(amountLeftToBudget, currency)}</span>
             </div>
         </div>
     );

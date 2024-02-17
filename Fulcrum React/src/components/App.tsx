@@ -7,7 +7,8 @@ import Fulcrum from "./Other/Fulcrum.tsx";
 import Expenses from "./Expenses/Expenses.tsx";
 import Tools from "./Tools/Tools.tsx";
 import {useEffect, useState} from "react";
-import {getPublicUserData, PublicUserData} from "../util.ts";
+import {checkForUser, getPublicUserData, PublicUserData} from "../util.ts";
+import Home from "./Home/Home.tsx";
 export default function App() {
 
     const sessionStoredProfileIcon = sessionStorage.getItem("profileIcon");
@@ -25,9 +26,13 @@ export default function App() {
     const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
 
     useEffect(() => {
-        !!email && getPublicUserData()
-            .then(results => setPublicUserData(results))
-            .then(() => console.log(email))
+        checkForUser()
+            .then( () => {
+                    !!email && getPublicUserData()
+                        .then(results => setPublicUserData(results))
+                        .then(() => console.log(email))
+                }
+            )
     }, []);
 
     useEffect(() => {
@@ -37,6 +42,7 @@ export default function App() {
     return (
         <Router>
             <Routes>
+                <Route path="/home" element={<Home/>} />
                 <Route path="/login" element={<Login/>} />
                 <Route path="/register" element={<Register/>} />
                 <Route path="/" element={<Fulcrum publicUserData={publicUserData} setPublicUserData={setPublicUserData} email={email} setEmail={setEmail}/>} >
