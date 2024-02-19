@@ -8,7 +8,7 @@
     height: 18vw;
     position: relative;
     bottom: 3vh;
-    @apply flex justify-center items-center
+    @apply flex justify-center items-center mt-[-3%]
 }
 
 .profile-icon-display img {
@@ -109,10 +109,8 @@
     outline: aquamarine solid 2px;
 }
 
-.profile-icon-display:hover {
-    & img {
-        opacity: 0.70;
-        filter: brightness(50%);
-    }
+.profile-icon-display:hover img {
+    opacity: 0.70;
+    filter: brightness(50%);
     cursor: pointer;
 }
