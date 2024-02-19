@@ -110,6 +110,8 @@ export default function Budget() {
         const formCategoryInput = document.getElementById("category")
         const formGroupInput = document.getElementById("group")
         formCategoryInput ? formCategoryInput.focus() : formGroupInput?.focus();
+
+        document.getElementById("right-button")?.focus()
         console.log(budgetFormVisibility);
         console.log(budgetModalVisibility);
         setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility))

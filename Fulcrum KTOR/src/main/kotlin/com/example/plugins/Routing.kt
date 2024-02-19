@@ -614,59 +614,48 @@ fun Application.configureRouting() {
                     call.respond(HttpStatusCode.OK, SuccessResponseSent("New row not added to public user data."))
                 }
 
+                // Default Budget Groups Initialised
 
-                // Call writes for default groups and categories.
-                // Misc Group
-                val miscGroupCreated = GroupCreateRequestSent(
-                    userId = uid,
-                    group = "Miscellaneous",
-                    colour = "#3f4240"
-                )
-                val miscGroupInserted = supabase.postgrest["groups"].insert(
-                    miscGroupCreated,
-                    returning = Returning.REPRESENTATION
+                val defaultGroups = listOf(
+                    GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#9fd5be"),
+                    GroupCreateRequestSent(userId = uid, group = "Miscellaneous", colour = "#3f4240"),
+                    GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#f1afa1"),
+                    GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#7c86bf"),
+                    GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#dfcde3")
                 )
 
-                if (miscGroupInserted.body == null) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default misc group not added."))
+                val defaultGroupsInserted = supabase.postgrest["groups"].insert(defaultGroups)
+
+                if (defaultGroupsInserted.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default groups not added."))
                 } else {
-                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
-                }
-                // Savings Group
-                val savingsGroupCreated = GroupCreateRequestSent(
-                    userId = uid,
-                    group = "Savings",
-                    colour = "#9fd5be"
-                )
-                val savingsGroupInserted = supabase.postgrest["groups"].insert(
-                    savingsGroupCreated,
-                    returning = Returning.REPRESENTATION
-                )
-
-                if (savingsGroupInserted.body == null) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default mics group not added."))
-                } else {
-                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default misc group added successfully."))
-                }
-                // Other
-                val otherCategoryCreated = BudgetCreateRequestSent(
-                    userId = uid,
-                    category = "Other",
-                    amount = 0.00,
-                    iconPath = "/src/assets/category-icons/category-default-icon.svg",
-                    group = "Miscellaneous"
-                )
-                val otherCategoryInserted = supabase.postgrest["budgets"].insert(
-                    otherCategoryCreated,
-                    returning = Returning.REPRESENTATION
-                )
-
-                if (otherCategoryInserted.body == null) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default 'other' category not added."))
-                } else {
-                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default 'other' category added successfully."))
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default groups successfully added."))
                 }
 
+                // Default Categories Initialised
+
+                val defaultCategories = listOf(
+                    BudgetCreateRequestSent(userId = uid, category = "Other", amount = 0.00, iconPath = "category-default-icon.svg", group = "Miscellaneous"),
+                    BudgetCreateRequestSent(userId = uid, category = "Emergency Funds", amount = 0.00, iconPath = "category-emergency-icon.svg", group = "Savings"),
+                    BudgetCreateRequestSent(userId = uid, category = "Drinks", amount = 0.00, iconPath = "category-beer-icon.svg", group = "Food & Drink"),
+                    BudgetCreateRequestSent(userId = uid, category = "Groceries", amount = 0.00, iconPath = "category-cart-icon.svg", group = "Food & Drink"),
+                    BudgetCreateRequestSent(userId = uid, category = "Restaurant", amount = 0.00, iconPath = "category-utencils-icon.svg", group = "Food & Drink"),
+                    BudgetCreateRequestSent(userId = uid, category = "Rent", amount = 0.00, iconPath = "category-house-icon.svg", group = "Housing"),
+                    BudgetCreateRequestSent(userId = uid, category = "Water", amount = 0.00, iconPath = "category-water-icon.svg", group = "Housing"),
+                    BudgetCreateRequestSent(userId = uid, category = "Electricity", amount = 0.00, iconPath = "category-electricity-icon.svg", group = "Housing"),
+                    BudgetCreateRequestSent(userId = uid, category = "Internet", amount = 0.00, iconPath = "category-wifi-icon.svg", group = "Housing"),
+                    BudgetCreateRequestSent(userId = uid, category = "Petrol", amount = 0.00, iconPath = "category-petrol-icon.svg", group = "Transport"),
+                    BudgetCreateRequestSent(userId = uid, category = "Parking", amount = 0.00, iconPath = "category-car-icon.svg", group = "Transport"),
+                    BudgetCreateRequestSent(userId = uid, category = "Public Transport", amount = 0.00, iconPath = "category-train-icon.svg", group = "Transport")
+                )
+
+                val defaultCategoriesInserted = supabase.postgrest["budgets"].insert(defaultCategories)
+
+                if (defaultCategoriesInserted.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default categories not added."))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Default categories successfully added."))
+                }
 
                 // Total Income Initialised
                 val initialisedTotalIncome = IncomeCreateRequestSent(
@@ -674,8 +663,7 @@ fun Application.configureRouting() {
                     totalIncome = 2000.00
                 )
                 val initialisedTotalIncomeInserted = supabase.postgrest["total_income"].insert(
-                    initialisedTotalIncome,
-                    returning = Returning.REPRESENTATION
+                    initialisedTotalIncome
                 )
                 if (initialisedTotalIncomeInserted.body == null) {
                     call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Default total income not inserted."))

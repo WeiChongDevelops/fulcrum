@@ -1370,18 +1370,24 @@ export const currencyOptions = [
 export function dynamicallySizeBudgetNameDisplays() {
     const budgetNameElements = document.querySelectorAll(".budget-name") as NodeListOf<HTMLElement>;
     budgetNameElements.forEach(budgetNameElement => {
+        const budgetNameText = budgetNameElement.textContent;
+
         let dynamicFontSize = "";
-        const budgetNameLength = budgetNameElement.textContent?.length!;
+        const budgetNameLength = budgetNameText?.length!;
+
         if (budgetNameLength <= 5) {
             dynamicFontSize = "26px";
-        } else if (budgetNameLength <= 10) {
+        } else if (budgetNameLength <= 9) {
             dynamicFontSize = "20px";
         } else if (budgetNameLength <= 14) {
-            dynamicFontSize = "18px";
-        } else if (budgetNameLength <= 18) {
             dynamicFontSize = "16px";
+        } else if (budgetNameLength <= 18) {
         }
         budgetNameElement.style.fontSize = dynamicFontSize;
+
+        if (budgetNameText?.split(" ")[0].length!  >= 12) {
+            budgetNameElement.textContent = (budgetNameText!.slice(0,11) + "\n...")
+        }
     })
 }
 

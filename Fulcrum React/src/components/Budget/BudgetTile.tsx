@@ -73,7 +73,7 @@ export default function BudgetTile({ category,
             <div className="budget-name-container h-12 font-bold flex flex-col justify-center">
                 <p className="budget-name">{category.toUpperCase()}</p>
             </div>
-            <div className="budgeting-values-container flex flex-col break-words break-all text-sm font-semibold">
+            <div className="budgeting-values-container flex flex-col text-sm font-semibold">
                 <p>Spent: {formatDollarAmountStatic(spent, currency)} of {formatDollarAmountStatic(amount, currency)}</p>
                 <p>Left: {formatDollarAmountStatic(amount - spent, currency)}</p>
             </div>

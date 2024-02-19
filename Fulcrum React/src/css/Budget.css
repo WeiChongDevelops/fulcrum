@@ -50,13 +50,15 @@
     overflow-wrap: break-word;
     max-width: 125%;
     margin-top: 5px;
-    letter-spacing: 0.4em;
+    letter-spacing: 0.3rem;
 }
 
 .budgeting-values-container {
     line-height: 1;
     margin-top: 10px;
-}
+}.hyphens-auto {
+     hyphens: auto !important;
+ }
 
 
 /* ADD NEW BUDGET BUTTON */
