@@ -1,6 +1,6 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {Outlet} from "react-router-dom";
-import {getPublicUserData, getSessionEmail, getWindowLocation, logoutOnClick, PublicUserData} from "../../util.ts";
+import {getSessionEmail, getWindowLocation, logoutOnClick, PublicUserData} from "../../util.ts";
 import FulcrumButton from "./FulcrumButton.tsx";
 import DarkModeToggle from "./DarkModeToggle.tsx";
 
@@ -17,8 +17,6 @@ export default function Fulcrum({ publicUserData, setPublicUserData, email, setE
     useEffect(() => {
         getSessionEmail()
             .then(response => response.email ? setEmail(response.email) : "")
-        getPublicUserData()
-            .then(response => setPublicUserData(response));
     }, []);
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {
     BudgetItemEntity,
     categoryListAsOptions,
@@ -10,8 +10,7 @@ import {
     getBudgetList, getCurrencySymbol,
     getExpenseList,
     getGroupAndColourMap,
-    getGroupList,
-    getPublicUserData, getRecurringExpenseInstanceNull,
+    getGroupList,getRecurringExpenseInstanceNull,
     getRecurringExpenseList, getRemovedRecurringExpenses,
     GroupItemEntity, handleBatchExpenseDeletion,
     handleExpenseCreation,
@@ -35,10 +34,9 @@ import {v4 as uuid} from "uuid";
 
 interface ExpensesProps {
     publicUserData: PublicUserData;
-    setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
 }
 
-export default function Expenses({ publicUserData, setPublicUserData }: ExpensesProps) {
+export default function Expenses({ publicUserData }: ExpensesProps) {
     const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
     const [expenseMatrix, setExpenseMatrix] = useState<ExpenseItemEntity[][]>([]);
     const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
@@ -70,19 +68,17 @@ export default function Expenses({ publicUserData, setPublicUserData }: Expenses
                     }
                 });
 
-                const [budgetList, expenseList, groupList, recurringExpenseList, publicUserDataObject, removedRecurringExpenses] = await Promise.all([
+                const [budgetList, expenseList, groupList, recurringExpenseList, removedRecurringExpenses] = await Promise.all([
                     getBudgetList(),
                     getExpenseList(),
                     getGroupList(),
                     getRecurringExpenseList(),
-                    getPublicUserData(),
                     getRemovedRecurringExpenses()
                 ]);
                 setBudgetArray(budgetList);
                 setExpenseArray(expenseList);
                 setGroupArray(groupList);
                 setRecurringExpenseArray(recurringExpenseList);
-                setPublicUserData(publicUserDataObject);
                 setRemovedRecurringExpenseInstances(removedRecurringExpenses);
 
                 setCategoryDataMap(await getGroupAndColourMap(budgetList, groupList));

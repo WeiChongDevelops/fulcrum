@@ -8,7 +8,7 @@ import {
     getGroupList, getLineAngle, getTotalIncome,
     GroupItemEntity,
     handleGroupDeletion,
-    PreviousBudgetBeingEdited, PreviousGroupBeingEdited, PublicUserData, getPublicUserData, getCurrencySymbol,
+    PreviousBudgetBeingEdited, PreviousGroupBeingEdited, PublicUserData, getCurrencySymbol,
 } from "../../util.ts";
 import { useEffect, useState } from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
@@ -20,17 +20,15 @@ import Loader from "../Other/Loader.tsx";
 import '../../css/App.css'
 import '../../css/Budget.css'
 
-export default function Budget() {
+
+interface BudgetProps {
+    publicUserData: PublicUserData;
+}
+
+export default function Budget( { publicUserData }: BudgetProps) {
     const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
     const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
     const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
-    const [publicUserData, setPublicUserData] = useState<PublicUserData>({
-        createdAt: new Date(),
-        currency: "AUD",
-        darkModeEnabled: false,
-        accessibilityEnabled: false,
-        profileIconFileName: "profile-icon-default.svg"
-    })
     const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
         isCreateBudgetVisible: false,
         isUpdateBudgetVisible: false,
@@ -59,19 +57,17 @@ export default function Budget() {
             const userStatus = await checkForUser();
             !userStatus["loggedIn"] && (window.location.href = "/login");
 
-            const [budgetArray, groupArray, expenseArray, totalIncome, publicUserDataObject] = await Promise.all([
+            const [budgetArray, groupArray, expenseArray, totalIncome] = await Promise.all([
                 getBudgetList(),
                 getGroupList(),
                 getExpenseList(),
-                getTotalIncome(),
-                getPublicUserData()
+                getTotalIncome()
             ])
 
             setBudgetArray(budgetArray);
             setGroupArray(groupArray);
             setExpenseArray(expenseArray);
             setTotalIncome(totalIncome);
-            setPublicUserData(publicUserDataObject);
         }
         retrieveInitialData()
             .then(() => {

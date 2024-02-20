@@ -42,8 +42,8 @@ export default function App() {
                 <Route path="/login" element={<Login/>} />
                 <Route path="/register" element={<Register/>} />
                 <Route path="/" element={<Fulcrum publicUserData={publicUserData} setPublicUserData={setPublicUserData} email={email} setEmail={setEmail}/>} >
-                    <Route path="expenses" element={<Expenses publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>} />
-                    <Route path="budget" element={<Budget/>} />
+                    <Route path="expenses" element={<Expenses publicUserData={publicUserData}/>} />
+                    <Route path="budget" element={<Budget publicUserData={publicUserData}/> }/>
                     <Route path="tools" element={<Tools publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>} />
                 </Route>
             </Routes>
