@@ -4,13 +4,12 @@ import {
     BudgetModalVisibility, checkForOpenModalOrForm, checkForUser,
     ExpenseItemEntity,
     getTotalAmountBudgeted,
-    getBudgetList, getExpenseList,
     getGroupList, getLineAngle, getTotalIncome,
     GroupItemEntity,
     handleGroupDeletion,
     PreviousBudgetBeingEdited, PreviousGroupBeingEdited, PublicUserData, getCurrencySymbol,
 } from "../../util.ts";
-import { useEffect, useState } from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./GroupList.tsx";
@@ -23,12 +22,16 @@ import '../../css/Budget.css'
 
 interface BudgetProps {
     publicUserData: PublicUserData;
+
+    expenseArray: ExpenseItemEntity[];
+    budgetArray: BudgetItemEntity[];
+    groupArray: GroupItemEntity[];
+
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
+    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>
 }
 
-export default function Budget( { publicUserData }: BudgetProps) {
-    const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
-    const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
-    const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
+export default function Budget( { publicUserData, expenseArray, budgetArray, groupArray, setBudgetArray, setGroupArray }: BudgetProps) {
     const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
         isCreateBudgetVisible: false,
         isUpdateBudgetVisible: false,
@@ -57,16 +60,9 @@ export default function Budget( { publicUserData }: BudgetProps) {
             const userStatus = await checkForUser();
             !userStatus["loggedIn"] && (window.location.href = "/login");
 
-            const [budgetArray, groupArray, expenseArray, totalIncome] = await Promise.all([
-                getBudgetList(),
-                getGroupList(),
-                getExpenseList(),
+            const [totalIncome] = await Promise.all([
                 getTotalIncome()
             ])
-
-            setBudgetArray(budgetArray);
-            setGroupArray(groupArray);
-            setExpenseArray(expenseArray);
             setTotalIncome(totalIncome);
         }
         retrieveInitialData()

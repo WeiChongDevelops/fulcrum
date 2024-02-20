@@ -1,9 +1,6 @@
 import {
     BudgetItemEntity,
-    categoryListAsOptions, CategoryToIconGroupAndColourMap, checkForOpenModalOrForm,
-    getBudgetList, getCurrencySymbol,
-    getGroupAndColourMap,
-    getGroupList,
+    categoryListAsOptions, CategoryToIconGroupAndColourMap, checkForOpenModalOrForm, getCurrencySymbol,
     getRecurringExpenseList,
     GroupItemEntity, handleRecurringExpenseDeletion, OpenToolsSection,
     PreviousRecurringExpenseBeingEdited, PublicUserData,
@@ -22,13 +19,18 @@ interface RecurringExpensesProps {
     setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
 
     publicUserData: PublicUserData;
+
+    budgetArray: BudgetItemEntity[];
+    groupArray: GroupItemEntity[];
+
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
+
+    categoryDataMap: CategoryToIconGroupAndColourMap;
 }
 
-export default function RecurringExpenses({ setOpenToolsSection, publicUserData }: RecurringExpensesProps) {
+export default function RecurringExpenses({ setOpenToolsSection, publicUserData, budgetArray, groupArray, setBudgetArray, categoryDataMap }: RecurringExpensesProps) {
 
     const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
-    const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
-    const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
     const [recurringExpenseModalVisibility, setRecurringExpenseModalVisibility] = useState<RecurringExpenseModalVisibility>({
         isConfirmRecurringExpenseDestructionModalVisible: false,
     });
@@ -41,26 +43,19 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData 
     const [oldRecurringExpenseBeingEdited, setOldRecurringExpenseBeingEdited] = useState<PreviousRecurringExpenseBeingEdited>({ recurringExpenseId: "", oldCategory: "", oldAmount: 0, oldFrequency: "annually" });
     const [recurringExpenseIdToDelete, setRecurringExpenseIdToDelete] = useState("");
 
-    const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
-
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         async function retrieveData() {
 
-            const [recurringExpenseArray, budgetArray, groupArray] = await Promise.all([
+            const [recurringExpenseArray] = await Promise.all([
                 getRecurringExpenseList(),
-                getBudgetList(),
-                getGroupList(),
             ])
 
             setRecurringExpenseArray(recurringExpenseArray);
-            setBudgetArray(budgetArray);
-            setGroupArray(groupArray);
 
             await new Promise(resolve => setTimeout(resolve, 0));
 
-            setCategoryDataMap(await getGroupAndColourMap(budgetArray, groupArray));
         }
         retrieveData()
             .then(() => setIsLoading(false))
@@ -73,7 +68,7 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData 
     }, [recurringExpenseFormVisibility, recurringExpenseModalVisibility])
 
     function runRecurringExpenseDeletion() {
-        handleRecurringExpenseDeletion(recurringExpenseIdToDelete, setRecurringExpenseArray, setBudgetArray)
+        handleRecurringExpenseDeletion(recurringExpenseIdToDelete, setRecurringExpenseArray)
             .then(() => console.log("Deletion successful"))
             .catch(() => console.log("Deletion unsuccessful"));
     }
@@ -129,7 +124,8 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData 
                 <div className="z-4">
                     {recurringExpenseFormVisibility.isUpdateRecurringExpenseVisible &&
                         <RecurringExpenseUpdatingForm setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
-                                                      setRecurringExpenseArray={setRecurringExpenseArray} setBudgetArray={setBudgetArray}
+                                                      setRecurringExpenseArray={setRecurringExpenseArray}
+                                                      setBudgetArray={setBudgetArray}
                                                       categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
                                                       oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
                                                       currencySymbol={getCurrencySymbol(publicUserData.currency)}/>}

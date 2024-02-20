@@ -836,8 +836,7 @@ export async function handleRecurringExpenseUpdating(recurringExpenseId: string,
 
 
 export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
-                                                     setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>,
-                                                     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
+                                                     setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>) {
     setRecurringExpenseArray(recurringExpenseArray => recurringExpenseArray.filter( recurringExpenseItem => {
             return recurringExpenseItem.recurringExpenseId !== recurringExpenseId
         }
@@ -863,7 +862,6 @@ export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
         console.error("Error:", error);
     }
     getRecurringExpenseList().then(recurringExpenseList => setRecurringExpenseArray(recurringExpenseList))
-    getBudgetList().then( budgetList => setBudgetArray(budgetList))
 }
 
 export async function handleRemovedRecurringExpenseCreation(recurringExpenseId: string,

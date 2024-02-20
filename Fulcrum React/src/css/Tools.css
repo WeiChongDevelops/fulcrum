@@ -63,7 +63,7 @@
 }
 
 .settings-row {
-    @apply flex flex-row justify-between items-center text-xl rounded-xl h-16 p-8 mb-8;
+    @apply flex flex-row justify-between items-center text-xl rounded-xl h-16 px-8 py-12 mb-8;
 }
 
 .settings-box-shadow {

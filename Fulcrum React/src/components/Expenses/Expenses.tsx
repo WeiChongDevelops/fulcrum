@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {
     BudgetItemEntity,
     categoryListAsOptions,
@@ -6,11 +6,9 @@ import {
     checkForOpenModalOrForm,
     checkForUser,
     ExpenseItemEntity,
-    ExpenseModalVisibility, ExpenseUpdatingFormData,
-    getBudgetList, getCurrencySymbol,
+    ExpenseModalVisibility, ExpenseUpdatingFormData, getCurrencySymbol,
     getExpenseList,
-    getGroupAndColourMap,
-    getGroupList,getRecurringExpenseInstanceNull,
+    getGroupList, getRecurringExpenseInstanceNull,
     getRecurringExpenseList, getRemovedRecurringExpenses,
     GroupItemEntity, handleBatchExpenseDeletion,
     handleExpenseCreation,
@@ -34,14 +32,21 @@ import {v4 as uuid} from "uuid";
 
 interface ExpensesProps {
     publicUserData: PublicUserData;
+
+    expenseArray: ExpenseItemEntity[];
+    budgetArray: BudgetItemEntity[];
+    groupArray: GroupItemEntity[];
+
+    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
+    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>
+
+    categoryDataMap: CategoryToIconGroupAndColourMap;
 }
 
-export default function Expenses({ publicUserData }: ExpensesProps) {
-    const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
+export default function Expenses({ publicUserData, expenseArray, budgetArray, groupArray, setExpenseArray, setBudgetArray, setGroupArray, categoryDataMap }: ExpensesProps) {
     const [expenseMatrix, setExpenseMatrix] = useState<ExpenseItemEntity[][]>([]);
     const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
-    const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
-    const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
     const [expenseFormVisibility, setExpenseFormVisibility] = useState({
         isCreateExpenseVisible: false,
         isUpdateExpenseVisible: false,
@@ -52,7 +57,6 @@ export default function Expenses({ publicUserData }: ExpensesProps) {
     const [isExpenseFormOrModalOpen, setIsExpenseFormOrModalOpen] = useState(false);
     const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({ expenseId: "", recurringExpenseId: "", oldCategory: "", oldTimestamp: new Date(), oldAmount: 0 });
     const [expenseIdToDelete, setExpenseIdToDelete] = useState("");
-    const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
     const [isLoading, setIsLoading] = useState(true);
     const [removedRecurringExpenseInstances, setRemovedRecurringExpenseInstances] = useState<RemovedRecurringExpenseItem[]>([]);
 
@@ -68,20 +72,13 @@ export default function Expenses({ publicUserData }: ExpensesProps) {
                     }
                 });
 
-                const [budgetList, expenseList, groupList, recurringExpenseList, removedRecurringExpenses] = await Promise.all([
-                    getBudgetList(),
-                    getExpenseList(),
-                    getGroupList(),
+                const [recurringExpenseList, removedRecurringExpenses] = await Promise.all([
                     getRecurringExpenseList(),
                     getRemovedRecurringExpenses()
                 ]);
-                setBudgetArray(budgetList);
-                setExpenseArray(expenseList);
-                setGroupArray(groupList);
                 setRecurringExpenseArray(recurringExpenseList);
                 setRemovedRecurringExpenseInstances(removedRecurringExpenses);
 
-                setCategoryDataMap(await getGroupAndColourMap(budgetList, groupList));
                 await updateRecurringExpenseInstances();
             } catch (error) {
                 console.log(`Unsuccessful expense page data retrieval - error: ${error}`);

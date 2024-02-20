@@ -1,6 +1,7 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {
-    getSessionEmail,
+    BudgetItemEntity, CategoryToIconGroupAndColourMap,
+    getSessionEmail, GroupItemEntity,
     logoutOnClick,
     OpenToolsSection,
     PublicUserData,
@@ -15,9 +16,16 @@ import ProfileIconUpdatingForm from "../ModalsAndForms/ProfileIconUpdatingForm.t
 interface ToolsProps {
     publicUserData: PublicUserData;
     setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
+
+    budgetArray: BudgetItemEntity[];
+    groupArray: GroupItemEntity[];
+
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
+
+    categoryDataMap: CategoryToIconGroupAndColourMap;
 }
 
-export default function Tools({ publicUserData, setPublicUserData }: ToolsProps) {
+export default function Tools({ publicUserData, setPublicUserData, budgetArray, groupArray, setBudgetArray, categoryDataMap }: ToolsProps) {
 
     const sessionStoredEmail = sessionStorage.getItem("email");
     const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
@@ -88,7 +96,12 @@ export default function Tools({ publicUserData, setPublicUserData }: ToolsProps)
                  </div>
             </div> : openToolsSection === "settings" ?
                 <Settings setOpenToolsSection={setOpenToolsSection} publicUserData={publicUserData} setPublicUserData={setPublicUserData}/> :
-                <RecurringExpenses setOpenToolsSection={setOpenToolsSection} publicUserData={publicUserData}/>
+                <RecurringExpenses setOpenToolsSection={setOpenToolsSection}
+                                   publicUserData={publicUserData}
+                                   budgetArray={budgetArray}
+                                   groupArray={groupArray}
+                                   setBudgetArray={setBudgetArray}
+                                   categoryDataMap={categoryDataMap}/>
             }
             {toolsFormVisibility.isUpdateProfileIconFormVisible && <ProfileIconUpdatingForm oldIconFileName={publicUserData.profileIconFileName}
                                                                                             publicUserData={publicUserData}

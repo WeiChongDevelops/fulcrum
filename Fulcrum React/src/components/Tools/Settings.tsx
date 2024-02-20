@@ -74,9 +74,9 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
                         </div>
                     </div>
 
-                    <div className={"settings-row bg-[#17423f] settings-box-shadow flex-col h-auto"}>
+                    <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
                         <b>Select Currency</b>
-                        <div className={"flex flex-row justify-around font-bold text-3xl w-full mt-6 flex-wrap"}>
+                        <div className={"flex flex-row justify-around font-bold text-3xl w-[90%] mt-6 flex-wrap"}>
                             {currencyOptions.map((currencyOption, key) => {
                                 return <FulcrumButton
                                     displayText={currencyOption.symbol}
@@ -94,7 +94,7 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
                     </div>
 
                     <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
-                        <b>Accessibility Contrast</b>
+                        <b>Accessibility Mode</b>
                         <AccessibilityToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
                     </div>
 

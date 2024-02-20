@@ -7,7 +7,15 @@ import Fulcrum from "./Other/Fulcrum.tsx";
 import Expenses from "./Expenses/Expenses.tsx";
 import Tools from "./Tools/Tools.tsx";
 import {useEffect, useLayoutEffect, useState} from "react";
-import {getPublicUserData, PublicUserData} from "../util.ts";
+import {
+    BudgetItemEntity, CategoryToIconGroupAndColourMap,
+    ExpenseItemEntity,
+    getBudgetList,
+    getExpenseList, getGroupAndColourMap,
+    getGroupList,
+    getPublicUserData, GroupItemEntity,
+    PublicUserData
+} from "../util.ts";
 import Home from "./Home/Home.tsx";
 export default function App() {
 
@@ -16,6 +24,8 @@ export default function App() {
     const sessionStoredAccessibilityMode = sessionStorage.getItem("accessibilityMode");
     const sessionStoredEmail = sessionStorage.getItem("email");
 
+    const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
+
     const [publicUserData, setPublicUserData] = useState<PublicUserData>({
         createdAt: new Date(),
         currency: "AUD",
@@ -23,12 +33,34 @@ export default function App() {
         accessibilityEnabled: sessionStoredAccessibilityMode ? sessionStoredAccessibilityMode === "true" : false,
         profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "profile-icon-default.svg"
     })
-    const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
+    const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
+    const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
+    const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
+
+    const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
+
 
     useLayoutEffect(() => {
-        !!email && getPublicUserData()
-            .then(results => setPublicUserData(results))
-            .then(() => console.log(email))
+        async function retrieveGlobalAppData() {
+            if (!!email) {
+                const [publicUserDataRetrieved, expenseDataRetrieved, budgetDataRetrieved, groupDataRetrieved] = await Promise.all([
+                    getPublicUserData(),
+                    getExpenseList(),
+                    getBudgetList(),
+                    getGroupList()
+                ]);
+
+                setPublicUserData(publicUserDataRetrieved);
+                setExpenseArray(expenseDataRetrieved);
+                setBudgetArray(budgetDataRetrieved);
+                setGroupArray(groupDataRetrieved);
+
+                setCategoryDataMap(await getGroupAndColourMap(budgetDataRetrieved, groupDataRetrieved));
+            }
+        }
+        retrieveGlobalAppData()
+            .then(() => console.log("Global app data retrieval successful."))
+            .catch(() => console.error("Global app data retrieval failed."))
     },[]);
 
     useEffect(() => {
@@ -42,9 +74,26 @@ export default function App() {
                 <Route path="/login" element={<Login/>} />
                 <Route path="/register" element={<Register/>} />
                 <Route path="/" element={<Fulcrum publicUserData={publicUserData} setPublicUserData={setPublicUserData} email={email} setEmail={setEmail}/>} >
-                    <Route path="expenses" element={<Expenses publicUserData={publicUserData}/>} />
-                    <Route path="budget" element={<Budget publicUserData={publicUserData}/> }/>
-                    <Route path="tools" element={<Tools publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>} />
+                    <Route path="expenses" element={<Expenses publicUserData={publicUserData}
+                                                              expenseArray={expenseArray}
+                                                              budgetArray={budgetArray}
+                                                              groupArray={groupArray}
+                                                              setExpenseArray={setExpenseArray}
+                                                              setBudgetArray={setBudgetArray}
+                                                              setGroupArray={setGroupArray}
+                                                              categoryDataMap={categoryDataMap}/>} />
+                    <Route path="budget" element={<Budget publicUserData={publicUserData}
+                                                          expenseArray={expenseArray}
+                                                          budgetArray={budgetArray}
+                                                          groupArray={groupArray}
+                                                          setBudgetArray={setBudgetArray}
+                                                          setGroupArray={setGroupArray}/> }/>
+                    <Route path="tools" element={<Tools publicUserData={publicUserData}
+                                                        setPublicUserData={setPublicUserData}
+                                                        budgetArray={budgetArray}
+                                                        groupArray={groupArray}
+                                                        setBudgetArray={setBudgetArray}
+                                                        categoryDataMap={categoryDataMap}/>} />
                 </Route>
             </Routes>
         </Router>
