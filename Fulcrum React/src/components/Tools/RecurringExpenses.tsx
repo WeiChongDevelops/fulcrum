@@ -79,7 +79,7 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData,
                 <div className={`flex flex-col justify-center items-center w-[100vw] elementsBelowPopUpForm z-2
                     ${isRecurringExpenseFormOrModalOpen && "blur"}`}>
 
-                    <div className="flex justify-between items-center my-8 w-full">
+                    <div className="flex justify-between items-center mt-6 w-full">
                         <div className="flex-grow flex flex-row justify-start">
                             <FulcrumButton displayText={"Go Back"}
                                            onClick={() => setOpenToolsSection("home")}
@@ -98,6 +98,8 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData,
                                            optionalTailwind={"opacity-0"}/>
                         </div>
                     </div>
+
+                    <p className={"font-medium my-4"}>Add recurring expenses for transactions you expect to arise regularly.</p>
 
                     {recurringExpenseArray.length > 0 ? recurringExpenseArray.map((recurringExpenseItem, key) => {
 
