@@ -36,6 +36,17 @@ export interface PreviousExpenseBeingEdited {
     oldTimestamp: Date;
 }
 
+export interface MonthExpenseGroupEntity {
+    monthIndex: number,
+    year: number,
+    monthExpenseArray: DayExpenseGroupEntity[]
+}
+
+export interface DayExpenseGroupEntity {
+    calendarDate: string, // string formatted as Date.toLocaleDateString() - Date type not needed; that includes time
+    dayExpenseArray: ExpenseItemEntity[]
+}
+
 // BUDGET ENTITIES //
 
 export interface BudgetItemEntity {

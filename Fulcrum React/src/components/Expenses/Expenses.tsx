@@ -4,7 +4,7 @@ import {
     categoryListAsOptions,
     CategoryToIconGroupAndColourMap,
     checkForOpenModalOrForm,
-    checkForUser,
+    checkForUser, DayExpenseGroupEntity,
     ExpenseItemEntity,
     ExpenseModalVisibility, ExpenseUpdatingFormData, getCurrencySymbol,
     getExpenseList,
@@ -13,7 +13,7 @@ import {
     GroupItemEntity, handleBatchExpenseDeletion,
     handleExpenseCreation,
     handleExpenseDeletion, handleExpenseUpdating,
-    handleRemovedRecurringExpenseCreation, matchingRemovedRecurringExpenseFound,
+    handleRemovedRecurringExpenseCreation, matchingRemovedRecurringExpenseFound, MonthExpenseGroupEntity,
     PreviousExpenseBeingEdited,
     PublicUserData,
     RecurringExpenseItemEntity,
@@ -60,6 +60,8 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     const [isLoading, setIsLoading] = useState(true);
     const [removedRecurringExpenseInstances, setRemovedRecurringExpenseInstances] = useState<RemovedRecurringExpenseItem[]>([]);
 
+    const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>([]);
+
     useEffect(() => {
         async function retrieveInitialData() {
             try {
@@ -91,6 +93,65 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     useEffect(() => {
         console.log("RAW EXPENSE ARRAY BELOW")
         console.log(expenseArray);
+
+        // Declare new structure
+        let newStructuredExpenseData: MonthExpenseGroupEntity[] = [];
+
+        // Initialise structure using 12 months back and 12 months forward
+        // const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const dateToday = new Date();
+        let currentMonth = dateToday.getMonth();
+        let currentYear = dateToday.getFullYear();
+
+        for (let i = -12; i <= 12; i++) {
+            const monthIndex = (currentMonth + i + 12) % 12;
+            const yearAdjustment = Math.floor((currentMonth + i) / 12);
+            const year = currentYear + yearAdjustment;
+
+            const newMonthExpenseGroup: MonthExpenseGroupEntity = {
+                monthIndex: monthIndex,
+                year: year,
+                monthExpenseArray: []
+            }
+
+            newStructuredExpenseData = [...newStructuredExpenseData, newMonthExpenseGroup]
+        }
+        // After this loop our data structure has a month entry for all 25 months.
+        console.log("POST INITIALISATION EXPENSE STRUCTURE BELOW")
+        console.log(newStructuredExpenseData);
+
+        for (const expenseItem of expenseArray) {
+            for (let monthExpenseGroupItem of newStructuredExpenseData) {
+                if (monthExpenseGroupItem.monthIndex === new Date(expenseItem.timestamp).getMonth()
+                    && monthExpenseGroupItem.year === new Date(expenseItem.timestamp).getFullYear()) {
+                    // Execution here occurs where a monthExpenseGroupItem's month and year (day) match to this iteration's expenseItem's day.
+                    // Here, if a DayExpenseGroupEntity exists for the expenseItem's day, add the expenseItem in.
+                    let matchingDayGroupExists = false;
+                    for (let dayExpenseGroupItem of monthExpenseGroupItem.monthExpenseArray) {
+                        if (dayExpenseGroupItem.calendarDate === new Date(expenseItem.timestamp).toLocaleDateString()) {
+                            console.log(`Adding an expense item to existing group on ${dayExpenseGroupItem.calendarDate}`)
+                            dayExpenseGroupItem.dayExpenseArray = [...dayExpenseGroupItem.dayExpenseArray, expenseItem];
+                            break;
+                        }
+                    }
+                    if (matchingDayGroupExists) {
+                        break;
+                    }
+
+                    // Otherwise, make a new DayExpenseGroupEntity for the expenseItem's day and add it in.
+                    console.log(`Adding an expense item to newly created group on ${new Date(expenseItem.timestamp).toLocaleDateString()}`)
+                    const newDayExpenseGroup: DayExpenseGroupEntity = {
+                        calendarDate: new Date(expenseItem.timestamp).toLocaleDateString(),
+                        dayExpenseArray: [expenseItem]
+                    }
+                    monthExpenseGroupItem.monthExpenseArray = [...monthExpenseGroupItem.monthExpenseArray, newDayExpenseGroup];
+                }
+            }
+        }
+        console.log("POST POPULATION EXPENSE STRUCTURE BELOW")
+        console.log(newStructuredExpenseData);
+
+        setStructuredExpenseData(newStructuredExpenseData);
     }, [expenseArray]);
 
 
