@@ -88,6 +88,11 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
             .then(() => setIsLoading(false))
     }, []);
 
+    useEffect(() => {
+        console.log("RAW EXPENSE ARRAY BELOW")
+        console.log(expenseArray);
+    }, [expenseArray]);
+
 
     useEffect(() => {
         getGroupList()
@@ -143,7 +148,6 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
         let misplacedExpensesToRemove: string[] = [];
         recurringExpenseArray.forEach(recurringExpenseItem => {
             for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
-                console.log(`Looking at date: ${date}`)
                 const expenseInstance = getRecurringExpenseInstanceNull(expenseArray, recurringExpenseItem, date);
                 const isFrequencyMatch = recurringExpenseLandsOnDay(recurringExpenseItem, date);
                 const expenseInstanceIsBlacklisted = removedRecurringExpenseInstances ? matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date) : false;
