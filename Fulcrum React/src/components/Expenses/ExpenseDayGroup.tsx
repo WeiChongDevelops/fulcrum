@@ -1,6 +1,6 @@
 import {
     CategoryToIconGroupAndColourMap, DayExpenseGroupEntity, ExpenseFormVisibility,
-    ExpenseModalVisibility, formatDollarAmountStatic,
+    ExpenseModalVisibility, formatDate, formatDollarAmountStatic,
     PreviousExpenseBeingEdited, PublicUserData
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
@@ -29,7 +29,7 @@ export default function ExpenseDayGroup({ dayExpenseGroup,
                                             categoryDataMap,
                                             publicUserData}: ExpenseDayGroupProps) {
 
-    const expenseDayGroupCalendarDate = dayExpenseGroup.calendarDate;
+    const expenseDayGroupCalendarDate = new Date(dayExpenseGroup.calendarDate).toLocaleDateString();
     const dateStringToday = new Date().toLocaleDateString();
     let dateObjectYesterday = new Date();
     dateObjectYesterday.setDate(new Date().getDate() - 1);
@@ -39,7 +39,7 @@ export default function ExpenseDayGroup({ dayExpenseGroup,
     return (
         <div className="my-4">
             <div className={`flex flex-row justify-between items-center relative ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
-                <p className="text-4xl font-bold">{expenseDayGroupCalendarDate === dateStringToday ? "Today" : expenseDayGroupCalendarDate === dateString ? "Yesterday" : expenseDayGroupCalendarDate}</p>
+                <p className="text-4xl font-bold">{expenseDayGroupCalendarDate === dateStringToday ? "Today" : expenseDayGroupCalendarDate === dateString ? "Yesterday" : formatDate(dayExpenseGroup.calendarDate)}</p>
                 <div className={`dotted-line ${publicUserData.darkModeEnabled && "dotted-line-dark"}`}></div>
                 <p className="text-4xl font-bold">{formatDollarAmountStatic(dayTotal, publicUserData.currency)}</p>
             </div>

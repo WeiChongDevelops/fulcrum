@@ -29,7 +29,7 @@ export default function Register() {
                 </div>
                 <div className={"flex flex-col justify-center items-start h-[100vh] w-[35vw] text-left"}>
                     <b className={"text-[4rem]"}>Register for an account.</b>
-                    <p className={"text-xl ml-2 mt-8"}>Every dollar gets a job!</p>
+                    <p className={"text-xl ml-2 mt-8"}>Start saving today.</p>
                 </div>
             </div>
             <div className={"flex flex-col justify-around items-center h-[75vh] mr-24"}>

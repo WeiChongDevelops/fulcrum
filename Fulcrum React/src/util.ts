@@ -39,11 +39,12 @@ export interface PreviousExpenseBeingEdited {
 export interface MonthExpenseGroupEntity {
     monthIndex: number,
     year: number,
+    // monthsFromToday: number,
     monthExpenseArray: DayExpenseGroupEntity[]
 }
 
 export interface DayExpenseGroupEntity {
-    calendarDate: string, // string formatted as Date.toLocaleDateString() - Date type not needed; that includes time
+    calendarDate: Date,
     dayExpenseArray: ExpenseItemEntity[]
 }
 
@@ -1463,7 +1464,7 @@ export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpens
     }
 }
 
-export function getRecurringExpenseInstanceNull(expenseArray: ExpenseItemEntity[], recurringExpenseItem: RecurringExpenseItemEntity, date: Date) {
+export function getRecurringExpenseInstanceOrNull(expenseArray: ExpenseItemEntity[], recurringExpenseItem: RecurringExpenseItemEntity, date: Date) {
     const expenseIdOfInstance = expenseArray.find((expenseItem: ExpenseItemEntity) => {
         return (expenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
             && new Date(expenseItem.timestamp).getTime() === new Date(date).getTime())
@@ -1573,6 +1574,13 @@ export function matchingRemovedRecurringExpenseFound(removedRecurringExpenseInst
         return removedRecurringExpenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
             && new Date(removedRecurringExpenseItem.timestampOfRemovedInstance).toLocaleDateString() === new Date(date).toLocaleDateString()
     })
-
     return checkResult !== undefined;
+}
+
+
+export function getMonthsFromToday(month: number, year: number) {
+    const dateToday = new Date();
+    const currentMonth = dateToday.getMonth();
+    const currentYear = dateToday.getFullYear();
+    return 12 * (currentYear - year) + currentMonth - month;
 }

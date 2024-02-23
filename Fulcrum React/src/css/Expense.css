@@ -40,7 +40,7 @@
 }
 
 .create-expense-button:hover {
-    background: rgba(155, 216, 182, 0.4);
+    background: rgba(213, 220, 216, 0.4);
 }
 
 
@@ -52,4 +52,42 @@
 .react-date-picker__wrapper {
     color: black;
     background-color: white;
+}
+
+.month-navigator {
+    box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 1);
+}
+
+@keyframes bounceLeft {
+    0% {
+        transform: translateX(0px)
+    }
+    50% {
+        transform: translateX(-5px)
+    }
+    100% {
+        transform: translateX(0px)
+    }
+}
+
+@keyframes bounceRight {
+    0% {
+        transform: translateX(0px)
+    }
+    50% {
+        transform: translateX(5px)
+    }
+    100% {
+        transform: translateX(0px)
+    }
+}
+
+.navigate-left:hover {
+    outline: none;
+    animation: bounceLeft 1200ms ease-in-out infinite
+}
+
+.navigate-right:hover {
+    outline: none;
+    animation: bounceRight 1200ms ease-out infinite
 }

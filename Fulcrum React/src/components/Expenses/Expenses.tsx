@@ -8,7 +8,7 @@ import {
     ExpenseItemEntity,
     ExpenseModalVisibility, ExpenseUpdatingFormData, getCurrencySymbol,
     getExpenseList,
-    getGroupList, getRecurringExpenseInstanceNull,
+    getGroupList, getMonthsFromToday, getRecurringExpenseInstanceOrNull,
     getRecurringExpenseList, getRemovedRecurringExpenses,
     GroupItemEntity, handleBatchExpenseDeletion,
     handleExpenseCreation,
@@ -20,14 +20,13 @@ import {
     recurringExpenseLandsOnDay,
     RemovedRecurringExpenseItem,
 } from "../../util.ts";
-import AddNewExpenseButton from "./AddNewExpenseButton.tsx";
 import ExpenseCreationForm from "../ModalsAndForms/ExpenseCreationForm.tsx";
 import ExpenseUpdatingForm from "../ModalsAndForms/ExpenseUpdatingForm.tsx";
 import TwoOptionModal from "../ModalsAndForms/TwoOptionModal.tsx";
 import "../../css/Expense.css"
 import Loader from "../Other/Loader.tsx";
 import {v4 as uuid} from "uuid";
-import {ExpenseMonthGroup} from "./ExpenseMonthGroup.tsx";
+import MonthCarousel from "./MonthCarousel.tsx";
 
 
 interface ExpensesProps {
@@ -45,7 +44,7 @@ interface ExpensesProps {
 }
 
 export default function Expenses({ publicUserData, expenseArray, budgetArray, groupArray, setExpenseArray, setBudgetArray, setGroupArray, categoryDataMap }: ExpensesProps) {
-    // const [expenseMatrix, setExpenseMatrix] = useState<ExpenseItemEntity[][]>([]);
+
     const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
     const [expenseFormVisibility, setExpenseFormVisibility] = useState({
         isCreateExpenseVisible: false,
@@ -106,7 +105,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
         const y2KMonth = y2K.getMonth();
         const y2KYear = y2K.getFullYear();
 
-        const monthsFromY2KToNow = 12 * (currentYear - y2KYear) + currentMonth - y2KMonth;
+        const monthsFromY2KToNow = getMonthsFromToday(y2KMonth, y2KYear);
 
         for (let i = -monthsFromY2KToNow; i <= 12; i++) {
             const monthIndex = (currentMonth + i + 1200) % 12;
@@ -116,6 +115,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
             const newMonthExpenseGroup: MonthExpenseGroupEntity = {
                 monthIndex: monthIndex,
                 year: year,
+                // monthsFromToday: getMonthsFromToday(monthIndex, year),
                 monthExpenseArray: []
             }
 
@@ -133,7 +133,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                     // Here, if a DayExpenseGroupEntity exists for the expenseItem's day, add the expenseItem in.
                     let matchingDayGroupExists = false;
                     for (let dayExpenseGroupItem of monthExpenseGroupItem.monthExpenseArray) {
-                        if (dayExpenseGroupItem.calendarDate === new Date(expenseItem.timestamp).toLocaleDateString()) {
+                        if (new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString() === new Date(expenseItem.timestamp).toLocaleDateString()) {
                             console.log(`Adding an expense item to existing group on ${dayExpenseGroupItem.calendarDate}`)
                             dayExpenseGroupItem.dayExpenseArray = [...dayExpenseGroupItem.dayExpenseArray, expenseItem];
                             break;
@@ -145,8 +145,12 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
 
                     // Otherwise, make a new DayExpenseGroupEntity for the expenseItem's day and add it in.
                     console.log(`Adding an expense item to newly created group on ${new Date(expenseItem.timestamp).toLocaleDateString()}`)
+
+                    const startOfDayCalendarDate = new Date(expenseItem.timestamp);
+                    startOfDayCalendarDate.setHours(0,0,0,0);
+
                     const newDayExpenseGroup: DayExpenseGroupEntity = {
-                        calendarDate: new Date(expenseItem.timestamp).toLocaleDateString(),
+                        calendarDate: startOfDayCalendarDate,
                         dayExpenseArray: [expenseItem]
                     }
                     monthExpenseGroupItem.monthExpenseArray = [...monthExpenseGroupItem.monthExpenseArray, newDayExpenseGroup];
@@ -165,18 +169,6 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
             .then((groupList: GroupItemEntity[]) => {
                 setGroupArray(groupList)
             })
-        // const uniqueDates = new Set(expenseArray.map(expenseItem => new Date(expenseItem.timestamp).toLocaleDateString()))
-        // let updatedMatrix: ExpenseItemEntity[][] = []
-        // uniqueDates.forEach(date => {
-        //     let constituentExpenseArray: ExpenseItemEntity[] = [];
-        //     expenseArray.forEach(expenseItem => {
-        //         if (new Date(expenseItem.timestamp).toLocaleDateString() === date) {
-        //             constituentExpenseArray = [...constituentExpenseArray, expenseItem];
-        //         }
-        //     })
-        //     updatedMatrix = [...updatedMatrix, constituentExpenseArray]
-        // })
-        // setExpenseMatrix(updatedMatrix)
     }, [expenseArray]);
 
     useEffect( () => {
@@ -214,7 +206,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
         let misplacedExpensesToRemove: string[] = [];
         recurringExpenseArray.forEach(recurringExpenseItem => {
             for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
-                const expenseInstance = getRecurringExpenseInstanceNull(expenseArray, recurringExpenseItem, date);
+                const expenseInstance = getRecurringExpenseInstanceOrNull(expenseArray, recurringExpenseItem, date);
                 const isFrequencyMatch = recurringExpenseLandsOnDay(recurringExpenseItem, date);
                 const expenseInstanceIsBlacklisted = removedRecurringExpenseInstances ? matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date) : false;
 
@@ -261,31 +253,16 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                 <div className={`flex flex-col justify-center items-center elementsBelowPopUpForm z-2
             ${isExpenseFormOrModalOpen && "blur"}`}>
 
-                    <AddNewExpenseButton setExpenseFormVisibility={setExpenseFormVisibility} isDarkMode={publicUserData.darkModeEnabled}/>
+                    <MonthCarousel
+                        structuredExpenseData={structuredExpenseData}
+                        setExpenseFormVisibility={setExpenseFormVisibility}
+                        setExpenseModalVisibility={setExpenseModalVisibility}
+                        setOldExpenseBeingEdited={setOldExpenseBeingEdited}
+                        setExpenseIdToDelete={setExpenseIdToDelete}
+                        categoryDataMap={categoryDataMap}
+                        publicUserData={publicUserData}
+                    />
 
-                    {structuredExpenseData.map((monthExpenseGroupItem, key) => {
-                        return <ExpenseMonthGroup monthExpenseGroupItem={monthExpenseGroupItem}
-                                                  setExpenseFormVisibility={setExpenseFormVisibility}
-                                                  setExpenseModalVisibility={setExpenseModalVisibility}
-                                                  setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-                                                  setExpenseIdToDelete={setExpenseIdToDelete}
-                                                  categoryDataMap={categoryDataMap}
-                                                  publicUserData={publicUserData}
-                                                  key={key}/>
-                    })}
-
-                    {/*{expenseArray?.length > 0 ? expenseMatrix.map((filteredExpenseArray, key) => (*/}
-                    {/*    <ExpenseDayGroup*/}
-                    {/*        date={new Date(filteredExpenseArray[0].timestamp)}*/}
-                    {/*        filteredExpenseArray={filteredExpenseArray}*/}
-                    {/*        setExpenseFormVisibility={setExpenseFormVisibility}*/}
-                    {/*        setExpenseModalVisibility={setExpenseModalVisibility}*/}
-                    {/*        setOldExpenseBeingEdited={setOldExpenseBeingEdited}*/}
-                    {/*        setExpenseIdToDelete={setExpenseIdToDelete}*/}
-                    {/*        categoryDataMap={categoryDataMap}*/}
-                    {/*        publicUserData={publicUserData}*/}
-                    {/*        key={key}/>*/}
-                    {/*)): <p className={`text-2xl mt-48 ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>No expenses added yet.</p>}*/}
                 </div>
 
                 {isExpenseFormOrModalOpen && <div className="absolute w-full h-full bg-transparent z-3"></div>}
