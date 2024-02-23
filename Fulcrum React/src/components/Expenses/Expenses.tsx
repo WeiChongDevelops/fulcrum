@@ -99,11 +99,17 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
 
         // Initialise structure using 12 months back and 12 months forward
         const dateToday = new Date();
-        let currentMonth = dateToday.getMonth();
-        let currentYear = dateToday.getFullYear();
+        const currentMonth = dateToday.getMonth();
+        const currentYear = dateToday.getFullYear();
 
-        for (let i = -12; i <= 12; i++) {
-            const monthIndex = (currentMonth + i + 12) % 12;
+        const y2K = new Date('2000-01-01T00:00:00Z');
+        const y2KMonth = y2K.getMonth();
+        const y2KYear = y2K.getFullYear();
+
+        const monthsFromY2KToNow = 12 * (currentYear - y2KYear) + currentMonth - y2KMonth;
+
+        for (let i = -monthsFromY2KToNow; i <= 12; i++) {
+            const monthIndex = (currentMonth + i + 1200) % 12;
             const yearAdjustment = Math.floor((currentMonth + i) / 12);
             const year = currentYear + yearAdjustment;
 
