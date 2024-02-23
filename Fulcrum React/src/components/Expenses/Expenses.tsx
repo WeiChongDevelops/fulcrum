@@ -24,10 +24,10 @@ import AddNewExpenseButton from "./AddNewExpenseButton.tsx";
 import ExpenseCreationForm from "../ModalsAndForms/ExpenseCreationForm.tsx";
 import ExpenseUpdatingForm from "../ModalsAndForms/ExpenseUpdatingForm.tsx";
 import TwoOptionModal from "../ModalsAndForms/TwoOptionModal.tsx";
-import ExpenseDayGroup from "./ExpenseDayGroup.tsx";
 import "../../css/Expense.css"
 import Loader from "../Other/Loader.tsx";
 import {v4 as uuid} from "uuid";
+import {ExpenseMonthGroup} from "./ExpenseMonthGroup.tsx";
 
 
 interface ExpensesProps {
@@ -45,7 +45,7 @@ interface ExpensesProps {
 }
 
 export default function Expenses({ publicUserData, expenseArray, budgetArray, groupArray, setExpenseArray, setBudgetArray, setGroupArray, categoryDataMap }: ExpensesProps) {
-    const [expenseMatrix, setExpenseMatrix] = useState<ExpenseItemEntity[][]>([]);
+    // const [expenseMatrix, setExpenseMatrix] = useState<ExpenseItemEntity[][]>([]);
     const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
     const [expenseFormVisibility, setExpenseFormVisibility] = useState({
         isCreateExpenseVisible: false,
@@ -98,7 +98,6 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
         let newStructuredExpenseData: MonthExpenseGroupEntity[] = [];
 
         // Initialise structure using 12 months back and 12 months forward
-        // const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const dateToday = new Date();
         let currentMonth = dateToday.getMonth();
         let currentYear = dateToday.getFullYear();
@@ -160,18 +159,18 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
             .then((groupList: GroupItemEntity[]) => {
                 setGroupArray(groupList)
             })
-        const uniqueDates = new Set(expenseArray.map(expenseItem => new Date(expenseItem.timestamp).toLocaleDateString()))
-        let updatedMatrix: ExpenseItemEntity[][] = []
-        uniqueDates.forEach(date => {
-            let constituentExpenseArray: ExpenseItemEntity[] = [];
-            expenseArray.forEach(expenseItem => {
-                if (new Date(expenseItem.timestamp).toLocaleDateString() === date) {
-                    constituentExpenseArray = [...constituentExpenseArray, expenseItem];
-                }
-            })
-            updatedMatrix = [...updatedMatrix, constituentExpenseArray]
-        })
-        setExpenseMatrix(updatedMatrix)
+        // const uniqueDates = new Set(expenseArray.map(expenseItem => new Date(expenseItem.timestamp).toLocaleDateString()))
+        // let updatedMatrix: ExpenseItemEntity[][] = []
+        // uniqueDates.forEach(date => {
+        //     let constituentExpenseArray: ExpenseItemEntity[] = [];
+        //     expenseArray.forEach(expenseItem => {
+        //         if (new Date(expenseItem.timestamp).toLocaleDateString() === date) {
+        //             constituentExpenseArray = [...constituentExpenseArray, expenseItem];
+        //         }
+        //     })
+        //     updatedMatrix = [...updatedMatrix, constituentExpenseArray]
+        // })
+        // setExpenseMatrix(updatedMatrix)
     }, [expenseArray]);
 
     useEffect( () => {
@@ -258,18 +257,29 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
 
                     <AddNewExpenseButton setExpenseFormVisibility={setExpenseFormVisibility} isDarkMode={publicUserData.darkModeEnabled}/>
 
-                    {expenseArray?.length > 0 ? expenseMatrix.map((filteredExpenseArray, key) => (
-                        <ExpenseDayGroup
-                            date={new Date(filteredExpenseArray[0].timestamp)}
-                            filteredExpenseArray={filteredExpenseArray}
-                            setExpenseFormVisibility={setExpenseFormVisibility}
-                            setExpenseModalVisibility={setExpenseModalVisibility}
-                            setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-                            setExpenseIdToDelete={setExpenseIdToDelete}
-                            categoryDataMap={categoryDataMap}
-                            publicUserData={publicUserData}
-                            key={key}/>
-                    )): <p className={`text-2xl mt-48 ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>No expenses added yet.</p>}
+                    {structuredExpenseData.map((monthExpenseGroupItem, key) => {
+                        return <ExpenseMonthGroup monthExpenseGroupItem={monthExpenseGroupItem}
+                                                  setExpenseFormVisibility={setExpenseFormVisibility}
+                                                  setExpenseModalVisibility={setExpenseModalVisibility}
+                                                  setOldExpenseBeingEdited={setOldExpenseBeingEdited}
+                                                  setExpenseIdToDelete={setExpenseIdToDelete}
+                                                  categoryDataMap={categoryDataMap}
+                                                  publicUserData={publicUserData}
+                                                  key={key}/>
+                    })}
+
+                    {/*{expenseArray?.length > 0 ? expenseMatrix.map((filteredExpenseArray, key) => (*/}
+                    {/*    <ExpenseDayGroup*/}
+                    {/*        date={new Date(filteredExpenseArray[0].timestamp)}*/}
+                    {/*        filteredExpenseArray={filteredExpenseArray}*/}
+                    {/*        setExpenseFormVisibility={setExpenseFormVisibility}*/}
+                    {/*        setExpenseModalVisibility={setExpenseModalVisibility}*/}
+                    {/*        setOldExpenseBeingEdited={setOldExpenseBeingEdited}*/}
+                    {/*        setExpenseIdToDelete={setExpenseIdToDelete}*/}
+                    {/*        categoryDataMap={categoryDataMap}*/}
+                    {/*        publicUserData={publicUserData}*/}
+                    {/*        key={key}/>*/}
+                    {/*)): <p className={`text-2xl mt-48 ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>No expenses added yet.</p>}*/}
                 </div>
 
                 {isExpenseFormOrModalOpen && <div className="absolute w-full h-full bg-transparent z-3"></div>}

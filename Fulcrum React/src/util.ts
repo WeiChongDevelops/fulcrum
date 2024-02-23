@@ -1419,7 +1419,22 @@ export function dynamicallySizeBudgetNumberDisplays() {
 }
 
 
-// OTHER UTILITY FUNCTIONS //
+// OTHER UTILITY FUNCTIONS AND DATA //
+
+export const monthStringArray = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+];
 
 export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpenseItemEntity, dateToAnalyseForExpenseLanding: Date) {
     const creationDate = new Date(recurringExpenseItem.timestamp);

@@ -7,7 +7,7 @@ import ExpenseItem from "./ExpenseItem.tsx";
 import {Dispatch, SetStateAction} from "react";
 
 interface ExpenseListProps {
-    filteredExpenseArray: ExpenseItemEntity[];
+    dayExpenseArray: ExpenseItemEntity[];
 
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
     setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
@@ -20,7 +20,7 @@ interface ExpenseListProps {
     publicUserData: PublicUserData;
 }
 
-export default function ExpenseList({ filteredExpenseArray,
+export default function ExpenseList({ dayExpenseArray,
                                         setExpenseFormVisibility,
                                         setExpenseModalVisibility,
                                         setOldExpenseBeingEdited,
@@ -31,7 +31,7 @@ export default function ExpenseList({ filteredExpenseArray,
     return (
         <div>
             <div>
-                {filteredExpenseArray.map((expenseElement, key) => {
+                {dayExpenseArray.map((expenseElement, key) => {
                     return <ExpenseItem
                         expenseId={expenseElement.expenseId}
                         category={expenseElement.category}

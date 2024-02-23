@@ -1,6 +1,6 @@
 import {
-    CategoryToIconGroupAndColourMap, ExpenseFormVisibility,
-    ExpenseItemEntity, ExpenseModalVisibility, formatDate, formatDollarAmountStatic,
+    CategoryToIconGroupAndColourMap, DayExpenseGroupEntity, ExpenseFormVisibility,
+    ExpenseModalVisibility, formatDollarAmountStatic,
     PreviousExpenseBeingEdited, PublicUserData
 } from "../../util.ts";
 import {Dispatch, SetStateAction} from "react";
@@ -8,8 +8,7 @@ import ExpenseList from "./ExpenseList.tsx";
 import "../../css/Expense.css"
 
 interface ExpenseDayGroupProps {
-    date: Date;
-    filteredExpenseArray: ExpenseItemEntity[];
+    dayExpenseGroup: DayExpenseGroupEntity;
 
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
     setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
@@ -22,8 +21,7 @@ interface ExpenseDayGroupProps {
     publicUserData: PublicUserData;
 }
 
-export default function ExpenseDayGroup({ date,
-                                            filteredExpenseArray,
+export default function ExpenseDayGroup({ dayExpenseGroup,
                                             setExpenseFormVisibility,
                                             setExpenseModalVisibility,
                                             setOldExpenseBeingEdited,
@@ -31,22 +29,22 @@ export default function ExpenseDayGroup({ date,
                                             categoryDataMap,
                                             publicUserData}: ExpenseDayGroupProps) {
 
-    const expenseDayGroupDate = date.toLocaleDateString();
+    const expenseDayGroupCalendarDate = dayExpenseGroup.calendarDate;
     const dateStringToday = new Date().toLocaleDateString();
     let dateObjectYesterday = new Date();
     dateObjectYesterday.setDate(new Date().getDate() - 1);
     const dateString = dateObjectYesterday.toLocaleDateString();
-    const dayTotal = filteredExpenseArray.reduce((accumulator, currentValue) => accumulator + currentValue.amount, 0);
+    const dayTotal = dayExpenseGroup.dayExpenseArray.reduce((accumulator, currentValue) => accumulator + currentValue.amount, 0);
 
     return (
         <div className="my-4">
             <div className={`flex flex-row justify-between items-center relative ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
-                <p className="text-4xl font-bold">{expenseDayGroupDate === dateStringToday ? "Today" : expenseDayGroupDate === dateString ? "Yesterday" : formatDate(new Date(date))}</p>
+                <p className="text-4xl font-bold">{expenseDayGroupCalendarDate === dateStringToday ? "Today" : expenseDayGroupCalendarDate === dateString ? "Yesterday" : expenseDayGroupCalendarDate}</p>
                 <div className={`dotted-line ${publicUserData.darkModeEnabled && "dotted-line-dark"}`}></div>
                 <p className="text-4xl font-bold">{formatDollarAmountStatic(dayTotal, publicUserData.currency)}</p>
             </div>
-            {filteredExpenseArray.length > 0 && <ExpenseList
-                filteredExpenseArray={filteredExpenseArray}
+            {dayExpenseGroup.dayExpenseArray.length > 0 && <ExpenseList
+                dayExpenseArray={dayExpenseGroup.dayExpenseArray}
                 setExpenseFormVisibility={setExpenseFormVisibility}
                 setExpenseModalVisibility={setExpenseModalVisibility}
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}
