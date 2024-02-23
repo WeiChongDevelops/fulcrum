@@ -6,7 +6,6 @@ import {
     PublicUserData
 } from "../../util.ts";
 import {ExpenseMonthGroup} from "./ExpenseMonthGroup.tsx";
-import {Idk} from "../../remotion/Idk.tsx";
 
 
 interface MonthCarouselProps {
@@ -43,7 +42,6 @@ export default function MonthCarousel({structuredExpenseData,
 
     return (
         <div className={"relative"}>
-            <Idk/>
             {/*<div className={"expense-carousel absolute overflow-x-auto left-1/2"} style={{transform: `translateX(calc(-(100vw * ${monthsFromY2KToNow} - (100vw * ${monthPanelShowingIndex})))`}}>*/}
             {/*<div className={"expense-carousel absolute overflow-x-auto left-1/2"} style={{transform: `translateX(calc(-100% -(100vw * ${monthPanelShowingIndex})))`}}>*/}
             <div className={"expense-carousel absolute overflow-x-auto left-[-50vw]"} style={{transform: `translateX(calc(-100vw * (${monthsFromY2KToNow} + ${monthPanelShowingIndex})))`}}>

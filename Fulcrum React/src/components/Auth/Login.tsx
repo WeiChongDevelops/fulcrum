@@ -10,7 +10,7 @@ export default function Login() {
     useEffect(() => {
         checkForUser()
             .then(userStatus => {
-                if (userStatus["loggedIn"]) {
+                if (userStatus.loggedIn) {
                     console.log("User already logged in.");
                     window.location.href = "/budget";
                 } else {

@@ -1166,6 +1166,7 @@ export async function checkForUser() {
             const userStatus = { loggedIn: "false"}
             logoutOnClick()
                 .then(() => {
+                    console.log(`window.location.href: ${window.location.href}`)
                     window.location.href !== "/login" && (window.location.href = "/login")
                 } )
             return userStatus;
@@ -1407,7 +1408,6 @@ export function dynamicallySizeBudgetNumberDisplays() {
         let dynamicFontSize = "";
         const budgetNumberFirstLine = budgetNumberElement.firstChild! as HTMLElement
         const budgetNumberLength = budgetNumberFirstLine.innerText.length;
-        console.log(`budgetNumberLength found: ${budgetNumberLength}`)
         if (budgetNumberLength <= 28) {
             dynamicFontSize = "0.875rem"
         } else if (budgetNumberLength <= 32) {

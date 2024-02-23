@@ -694,12 +694,17 @@ fun Application.configureRouting() {
         }
 
         post("/api/logout") {
-            val currentUser = supabase.gotrue.currentSessionOrNull()
-            if (currentUser != null) {
+            try {
+                val currentUser = supabase.gotrue.currentSessionOrNull()
+                if (currentUser != null) {
+                    supabase.gotrue.logout()
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent(currentUser.user?.email!!))
+                } else {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("No user logged in."))
+                }
+            } catch (e: UnauthorizedRestException) {
                 supabase.gotrue.logout()
-                call.respond(HttpStatusCode.OK, SuccessResponseSent(currentUser.user?.email!!))
-            } else {
-                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("No user logged in."))
+                call.respond(HttpStatusCode.OK, SuccessResponseSent("Logout processed with expired JWT."))
             }
         }
 
