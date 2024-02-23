@@ -66,7 +66,7 @@ export function ExpenseMonthGroup( { monthExpenseGroupItem,
                     categoryDataMap={categoryDataMap}
                     publicUserData={publicUserData}
                     key={key}/>
-            }) : <p className={`text-2xl mt-48 ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>No expenses added this month.</p>}
+            }) : <p className={`text-2xl mt-48 select-none ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>No expenses added this month.</p>}
         </div>
     );
 }
