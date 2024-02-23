@@ -6,6 +6,8 @@ import {
     PublicUserData
 } from "../../util.ts";
 import {ExpenseMonthGroup} from "./ExpenseMonthGroup.tsx";
+import {Idk} from "../../remotion/Idk.tsx";
+
 
 interface MonthCarouselProps {
     structuredExpenseData: MonthExpenseGroupEntity[];
@@ -39,9 +41,9 @@ export default function MonthCarousel({structuredExpenseData,
         console.log(`Index is ${monthPanelShowingIndex}`)
     }, [monthPanelShowingIndex]);
 
-
     return (
         <div className={"relative"}>
+            <Idk/>
             {/*<div className={"expense-carousel absolute overflow-x-auto left-1/2"} style={{transform: `translateX(calc(-(100vw * ${monthsFromY2KToNow} - (100vw * ${monthPanelShowingIndex})))`}}>*/}
             {/*<div className={"expense-carousel absolute overflow-x-auto left-1/2"} style={{transform: `translateX(calc(-100% -(100vw * ${monthPanelShowingIndex})))`}}>*/}
             <div className={"expense-carousel absolute overflow-x-auto left-[-50vw]"} style={{transform: `translateX(calc(-100vw * (${monthsFromY2KToNow} + ${monthPanelShowingIndex})))`}}>
@@ -62,33 +64,6 @@ export default function MonthCarousel({structuredExpenseData,
                             </div>);
                     })}
                 </div>
-
-                {/*<div className={"flex flex-row"}>*/}
-                {/*    <div className={"flex flex-col items-center bg-red-500 w-screen min-h-screen"}>*/}
-                {/*        <div className={"flex flex-row justify-center items-center w-[35vw] h-[65px] bg-purple-700 rounded-2xl"}>*/}
-                {/*            {monthPanelShowingIndex !== -1 && <button onClick={scrollLeft} className={"bg-amber-300 px-4 h-1/2 rounded-xl"}>Prev</button>}*/}
-                {/*            <h1>Jan 23</h1>*/}
-                {/*            {monthPanelShowingIndex !== 1 && <button onClick={scrollRight} className={"bg-amber-300 px-4 h-1/2 rounded-xl"}>Next</button>}*/}
-                {/*        </div>*/}
-                {/*        <b>Expenses Here</b>*/}
-                {/*    </div>*/}
-                {/*    <div className={"flex flex-col items-center bg-green-500 w-screen min-h-screen"}>*/}
-                {/*        <div className={"flex flex-row justify-center items-center w-[35vw] h-[65px] bg-purple-700 rounded-2xl"}>*/}
-                {/*            {monthPanelShowingIndex !== -1 && <button onClick={scrollLeft} className={"bg-amber-300 px-4 h-1/2 rounded-xl"}>Prev</button>}*/}
-                {/*            <h1>Feb 23</h1>*/}
-                {/*            {monthPanelShowingIndex !== 1 && <button onClick={scrollRight} className={"bg-amber-300 px-4 h-1/2 rounded-xl"}>Next</button>}*/}
-                {/*        </div>*/}
-                {/*        <b>Expenses Here</b>*/}
-                {/*    </div>*/}
-                {/*    <div className={"flex flex-col items-center bg-blue-500 w-screen min-h-screen"}>*/}
-                {/*        <div className={"flex flex-row justify-center items-center w-[35vw] h-[65px] bg-purple-700 rounded-2xl"}>*/}
-                {/*            {monthPanelShowingIndex !== -1 && <button onClick={scrollLeft} className={"bg-amber-300 px-4 h-1/2 rounded-xl"}>Prev</button>}*/}
-                {/*            <h1>Mar 23</h1>*/}
-                {/*            {monthPanelShowingIndex !== 1 && <button onClick={scrollLeft} className={"bg-amber-300 px-4 h-1/2 rounded-xl"}>Prev</button>}*/}
-                {/*        </div>*/}
-                {/*        <b>Expenses Here</b>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
             </div>
         </div>
     );
