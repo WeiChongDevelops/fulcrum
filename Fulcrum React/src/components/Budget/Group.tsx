@@ -89,7 +89,7 @@ export default function Group({ groupName,
     const currency = publicUserData.currency;
 
     return (
-        <div className="group flex flex-col rounded-xl p-2 mb-5" style={{backgroundColor: `${groupColour}`}}>
+        <div className="group flex flex-col rounded-xl p-2 mb-5" style={{backgroundColor: groupColour, filter: publicUserData.darkModeEnabled ? "brightness(80%)" : "brightness(100%)"}}>
             <div className="flex flex-row justify-between items-center mb-4">
                 <div className="flex flex-row ml-4 mt-1">
                     <p className={`mt - 2 text-3xl font-bold ${groupName !== "Miscellaneous" ? "text-black" : "text-white"}`}>{groupName}</p>

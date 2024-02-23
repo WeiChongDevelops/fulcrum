@@ -1338,7 +1338,7 @@ export const colourStyles = {
             ...styles,
             color: data.colour,
             fontWeight: "bold",
-            filter: "brightness(60%)"
+            filter: "brightness(65%)"
         };
     },
     input: (styles: any) => ({ ...styles, ...dot() }),
