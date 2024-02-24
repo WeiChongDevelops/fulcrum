@@ -45,13 +45,13 @@ export function ExpenseMonthGroup( { monthExpenseGroupItem,
     return (
         <div className={"flex flex-col items-center"}>
             <div className={"month-navigator flex flex-row justify-around items-center w-[30vw] py-2 bg-[#17423f] rounded-3xl my-8 text-white select-none"}>
-                {monthPanelShowingIndex !== -monthsFromY2KToNow && <button onClick={scrollLeft} className={"navigate-left transition-all flex flex-row items-center px-4 h-1/2 rounded-xl font-black text-4xl"}>
+                <button onClick={scrollLeft} className={`navigate-left transition-all flex flex-row items-center px-4 h-1/2 ${monthPanelShowingIndex === -monthsFromY2KToNow && "opacity-0 pointer-events-none"}`}>
                     <img className={"w-[80%]"} src="/src/assets/UI-icons/left-navigation-arrow.svg" alt=""/>
-                </button>}
+                </button>
                 <p className={"text-4xl"}>{monthStringArray[monthExpenseGroupItem.monthIndex] + " " + monthExpenseGroupItem.year.toString()}</p>
-                {monthPanelShowingIndex !== 12 && <button onClick={scrollRight} className={"navigate-right transition-all flex flex-row items-center px-4 h-1/2 rounded-xl font-black text-4xl"}>
+                <button onClick={scrollRight} className={`navigate-right transition-all flex flex-row items-center px-4 h-1/2 ${monthPanelShowingIndex === 12 && "opacity-0 pointer-events-none"}`}>
                     <img className={"w-[80%]"} src="/src/assets/UI-icons/right-navigation-arrow.svg" alt=""/>
-                </button>}
+                </button>
             </div>
 
             <AddNewExpenseButton setExpenseFormVisibility={setExpenseFormVisibility} isDarkMode={publicUserData.darkModeEnabled}/>

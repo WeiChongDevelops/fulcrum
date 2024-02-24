@@ -1,7 +1,7 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
 import "../../css/App.css";
-import {FormEvent, useEffect, useState} from "react";
-import {checkForUser, handleUserLogin} from "../../util.ts";
+import {FormEvent, useState} from "react";
+import {handleUserLogin} from "../../util.ts";
 
 export default function Login() {
     const [email, setEmail] = useState("");
