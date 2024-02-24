@@ -26,7 +26,7 @@ import TwoOptionModal from "../ModalsAndForms/TwoOptionModal.tsx";
 import "../../css/Expense.css"
 import Loader from "../Other/Loader.tsx";
 import {v4 as uuid} from "uuid";
-import MonthCarousel from "./MonthCarousel.tsx";
+import ExpenseMonthCarousel from "./ExpenseMonthCarousel.tsx";
 
 
 interface ExpensesProps {
@@ -58,6 +58,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     const [expenseIdToDelete, setExpenseIdToDelete] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [removedRecurringExpenseInstances, setRemovedRecurringExpenseInstances] = useState<RemovedRecurringExpenseItem[]>([]);
+    const [defaultCalendarDate, setDefaultCalendarDate] = useState(new Date());
 
     const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>([]);
 
@@ -253,7 +254,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                 <div className={`flex flex-col justify-center items-center elementsBelowPopUpForm z-2
             ${isExpenseFormOrModalOpen && "blur"}`}>
 
-                    <MonthCarousel
+                    <ExpenseMonthCarousel
                         structuredExpenseData={structuredExpenseData}
                         setExpenseFormVisibility={setExpenseFormVisibility}
                         setExpenseModalVisibility={setExpenseModalVisibility}
@@ -261,6 +262,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                         setExpenseIdToDelete={setExpenseIdToDelete}
                         categoryDataMap={categoryDataMap}
                         publicUserData={publicUserData}
+                        setDefaultCalendarDate={setDefaultCalendarDate}
                     />
 
                 </div>
@@ -275,7 +277,8 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                         setRecurringExpenseArray={setRecurringExpenseArray}
                         budgetArray={budgetArray}
                         categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
-                        currencySymbol={getCurrencySymbol(publicUserData.currency)}/>}
+                        currencySymbol={getCurrencySymbol(publicUserData.currency)}
+                        defaultCalendarDate={defaultCalendarDate}/>}
                     {expenseFormVisibility.isUpdateExpenseVisible &&
                         <ExpenseUpdatingForm setExpenseFormVisibility={setExpenseFormVisibility}
                                              setExpenseArray={setExpenseArray} setBudgetArray={setBudgetArray}

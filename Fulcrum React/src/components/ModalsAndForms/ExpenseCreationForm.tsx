@@ -44,12 +44,14 @@ interface ExpenseCreationFormProps {
     categoryOptions: SelectorOptionsFormattedData[];
 
     currencySymbol: string;
+
+    defaultCalendarDate: Date;
 }
 
 
-export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, setRecurringExpenseArray, budgetArray, categoryOptions, currencySymbol }: ExpenseCreationFormProps) {
+export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, setRecurringExpenseArray, budgetArray, categoryOptions, currencySymbol, defaultCalendarDate }: ExpenseCreationFormProps) {
 
-    const [formData, setFormData] = useState<ExpenseCreationFormData>({ category: "", amount: 0, timestamp: new Date(), frequency: "never" });
+    const [formData, setFormData] = useState<ExpenseCreationFormData>({ category: "", amount: 0, timestamp: defaultCalendarDate, frequency: "never" });
     const formRef = useRef<HTMLDivElement>(null);
 
     function hideForm() {
@@ -109,7 +111,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
 
             await handleRecurringExpenseCreation(newRecurringExpenseItem, setRecurringExpenseArray);
         }
-        setFormData({ category: "", amount: 0, timestamp: new Date(), frequency: "never" });
+        setFormData({ category: "", amount: 0, timestamp: defaultCalendarDate, frequency: "never" });
     }
 
     function handleCategoryInputChange(e: any) {

@@ -8,7 +8,7 @@ import {
 import {ExpenseMonthGroup} from "./ExpenseMonthGroup.tsx";
 
 
-interface MonthCarouselProps {
+interface ExpenseMonthCarouselProps {
     structuredExpenseData: MonthExpenseGroupEntity[];
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
     setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
@@ -16,17 +16,19 @@ interface MonthCarouselProps {
     setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
     categoryDataMap: CategoryToIconGroupAndColourMap;
     publicUserData: PublicUserData;
+    setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
 }
 
 
-export default function MonthCarousel({structuredExpenseData,
-                                          setExpenseFormVisibility,
-                                          setExpenseModalVisibility,
-                                          setOldExpenseBeingEdited,
-                                          setExpenseIdToDelete,
-                                          categoryDataMap,
-                                          publicUserData,
-                                      }: MonthCarouselProps)  {
+export default function ExpenseMonthCarousel({structuredExpenseData,
+                                                 setExpenseFormVisibility,
+                                                 setExpenseModalVisibility,
+                                                 setOldExpenseBeingEdited,
+                                                 setExpenseIdToDelete,
+                                                 categoryDataMap,
+                                                 publicUserData,
+                                                 setDefaultCalendarDate,
+                                      }: ExpenseMonthCarouselProps)  {
 
     const y2K = new Date('2000-01-01T00:00:00Z');
     const y2KMonth = y2K.getMonth();
@@ -58,7 +60,8 @@ export default function MonthCarousel({structuredExpenseData,
                                                    publicUserData={publicUserData}
                                                    monthsFromY2KToNow={monthsFromY2KToNow}
                                                    monthPanelShowingIndex={monthPanelShowingIndex}
-                                                   setMonthPanelShowingIndex={setMonthPanelShowingIndex}/>
+                                                   setMonthPanelShowingIndex={setMonthPanelShowingIndex}
+                                                   setDefaultCalendarDate={setDefaultCalendarDate}/>
                             </div>);
                     })}
                 </div>

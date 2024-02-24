@@ -20,6 +20,7 @@ interface ExpenseMonthGroupProps {
     monthsFromY2KToNow: number;
     monthPanelShowingIndex: number;
     setMonthPanelShowingIndex: Dispatch<SetStateAction<number>>;
+    setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
 }
 
 export function ExpenseMonthGroup( { monthExpenseGroupItem,
@@ -31,7 +32,8 @@ export function ExpenseMonthGroup( { monthExpenseGroupItem,
                                        publicUserData,
                                        monthsFromY2KToNow,
                                        monthPanelShowingIndex,
-                                       setMonthPanelShowingIndex}: ExpenseMonthGroupProps) {
+                                       setMonthPanelShowingIndex,
+                                       setDefaultCalendarDate}: ExpenseMonthGroupProps) {
 
 
     function scrollLeft() {
@@ -54,7 +56,10 @@ export function ExpenseMonthGroup( { monthExpenseGroupItem,
                 </button>
             </div>
 
-            <AddNewExpenseButton setExpenseFormVisibility={setExpenseFormVisibility} isDarkMode={publicUserData.darkModeEnabled}/>
+            <AddNewExpenseButton setExpenseFormVisibility={setExpenseFormVisibility}
+                                 isDarkMode={publicUserData.darkModeEnabled}
+                                 setDefaultCalendarDate={setDefaultCalendarDate}
+                                 monthExpenseGroupItem={monthExpenseGroupItem}/>
 
             {monthExpenseGroupItem.monthExpenseArray.length > 0 ? monthExpenseGroupItem.monthExpenseArray.map((dayExpenseGroup, key) => {
                 return <ExpenseDayGroup
