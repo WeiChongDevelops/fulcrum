@@ -46,13 +46,13 @@ export function ExpenseMonthGroup( { monthExpenseGroupItem,
 
     return (
         <div className={"flex flex-col items-center"}>
-            <div className={"month-navigator flex flex-row justify-around items-center w-[30vw] py-2 bg-[#17423f] rounded-3xl my-8 text-white select-none"}>
+            <div className={"month-navigator flex flex-row justify-around items-center min-w-[25vw] py-2 my-4 bg-[#17423f] rounded-3xl text-white select-none"}>
                 <button onClick={scrollLeft} className={`navigate-left transition-all flex flex-row items-center px-4 h-1/2 ${monthPanelShowingIndex === -monthsFromY2KToNow && "opacity-0 pointer-events-none"}`}>
-                    <img className={"w-[80%]"} src="/src/assets/UI-icons/left-navigation-arrow.svg" alt=""/>
+                    <img className={"w-[2rem] select-none"} src="/src/assets/UI-icons/left-navigation-arrow.svg" alt=""/>
                 </button>
                 <p className={"text-4xl"}>{monthStringArray[monthExpenseGroupItem.monthIndex] + " " + monthExpenseGroupItem.year.toString()}</p>
                 <button onClick={scrollRight} className={`navigate-right transition-all flex flex-row items-center px-4 h-1/2 ${monthPanelShowingIndex === 12 && "opacity-0 pointer-events-none"}`}>
-                    <img className={"w-[80%]"} src="/src/assets/UI-icons/right-navigation-arrow.svg" alt=""/>
+                    <img className={"w-[2rem] select-none"} src="/src/assets/UI-icons/right-navigation-arrow.svg" alt=""/>
                 </button>
             </div>
 

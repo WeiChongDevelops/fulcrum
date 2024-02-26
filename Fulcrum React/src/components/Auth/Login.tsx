@@ -30,18 +30,18 @@ export default function Login() {
 
     return (
         <div className={"auth-page-container login-page flex flex-row justify-around items-center w-[100vw] h-[100vh]"}>
-            <div className={"flex flex-col justify-around items-start h-[75vh] pl-[10rem] pb-52"}>
+            <div className={"auth-page-left-column flex flex-col justify-around items-start h-[75vh] pl-[10rem] pb-52"}>
                 <div className={"flex-1"}>
                     <img src="/src/assets/fulcrum-logos/fulcrum-long-white.webp" className={"select-none w-80 h-auto"} alt="Fulcrum logo"/>
                 </div>
                 <div className={"flex flex-col justify-center items-start h-[100vh] w-[35vw] text-left"}>
-                    <b className={"text-[4rem]"}>Log into your account.</b>
+                    <b className={"auth-header text-[4rem]"}>Log into your account.</b>
                     <p className={"text-xl ml-2 mt-8"}>Every dollar deserves a job.</p>
                 </div>
             </div>
-            <div className={"flex flex-col justify-around items-center h-[75vh] mr-24"}>
+            <div className={"auth-page-right-column flex flex-col justify-around items-center h-[75vh] mr-24"}>
                 <p className={"flex-1"}></p>
-                <form className={"login-form flex flex-col justify-center items-center bg-white text-black px-12 pt-16 pb-8 w-[37vw] rounded-2xl"}
+                <form className={"auth-form flex flex-col justify-center items-center bg-white text-black px-12 pt-16 pb-8 w-[37vw] rounded-2xl"}
                       onSubmit={handleSubmit}>
                     <div className={"flex flex-col justify-center items-start w-full"}>
                         <label htmlFor={"email"}>Email</label>

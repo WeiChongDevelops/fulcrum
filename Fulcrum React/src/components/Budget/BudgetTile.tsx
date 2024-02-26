@@ -67,7 +67,7 @@ export default function BudgetTile({ category,
         <div className="budget-tile flex flex-col justify-around items-center rounded-2xl"
              style={{backgroundColor: `${budgetExceeded ? "#ff3f3f" : "#44b775"}`}}
              onClick={handleEditClick}>
-            <div className="tile-icon-container flex justify-center items-center p-2 w-12 h-16 mt-2">
+            <div className="tile-icon-container flex justify-center items-center p-2 w-40 h-36 mt-2">
                 <img className="budget-tile-icon" src={`/src/assets/category-icons/${icon}`} alt="" />
             </div>
             <div className="budget-name-container h-12 font-bold flex flex-col justify-center">

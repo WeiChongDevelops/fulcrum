@@ -34,7 +34,7 @@ export default function Fulcrum({ publicUserData, setPublicUserData, email, setE
 
     return (
         <div className={`transition-filter duration-500 ease-in-out ${publicUserData.accessibilityEnabled && "accessibility-enabled"}`}>
-            <nav className={`flex flex-row justify-between items-center py-1 ${publicUserData.darkModeEnabled ?  "bg-dark" : "bg-light"}`}>
+            <nav className={`flex flex-row flex-shrink justify-between items-center h-[55px] py-1 ${publicUserData.darkModeEnabled ?  "bg-dark" : "bg-light"}`}>
                 <div className="flex-1 ml-10">
                     <DarkModeToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
                 </div>
@@ -43,7 +43,7 @@ export default function Fulcrum({ publicUserData, setPublicUserData, email, setE
                      onClick={() => window.location.href = "/budget"}></img>
                 <div className="flex-1 text-right">
                     <div className="flex justify-end items-center mr-8">
-                        <p className={`select-none ${publicUserData.darkModeEnabled ? "text-white": "text-black"}`}>{email}</p>
+                        <p className={`navbar-email select-none ${publicUserData.darkModeEnabled ? "text-white": "text-black"}`}>{email}</p>
                         <img
                             src={`/src/assets/profile-icons/${publicUserData.profileIconFileName.slice(0, -4)}-${publicUserData.darkModeEnabled ? "white" : "black"}.svg`}
                             className="profile-icon h-12" alt="Profile icon"/>
@@ -55,7 +55,7 @@ export default function Fulcrum({ publicUserData, setPublicUserData, email, setE
             </nav>
             <nav className="text-white font-bold z-10">
                 <div className="flex flex-row justify-center items-center">
-                    <div className="flex-1 hidden sm:flex justify-around border-4 border-black bg-black">
+                    <div className="flex flex-1 justify-around border-4 border-black bg-black">
                         <button id="expenses" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
                                 className={`flex flex-row justify-center items-center w-[33.33%] rounded-xl font-bold py-4 ${getWindowLocation() === "expenses" ? "bg-[#17423F]" : "bg-black"} border-2 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-300 ease-in-out`}
                                 onClick={() => window.location.href = "/expenses"}>

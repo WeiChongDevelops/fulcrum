@@ -39,9 +39,9 @@ export default function ExpenseDayGroup({ dayExpenseGroup,
     return (
         <div className="my-4">
             <div className={`flex flex-row justify-between items-center relative ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
-                <p className="text-4xl font-bold">{expenseDayGroupCalendarDate === dateStringToday ? "Today" : expenseDayGroupCalendarDate === dateString ? "Yesterday" : formatDate(dayExpenseGroup.calendarDate)}</p>
+                <p className="text-3xl font-bold">{expenseDayGroupCalendarDate === dateStringToday ? "Today" : expenseDayGroupCalendarDate === dateString ? "Yesterday" : formatDate(dayExpenseGroup.calendarDate)}</p>
                 <div className={`dotted-line ${publicUserData.darkModeEnabled && "dotted-line-dark"}`}></div>
-                <p className="text-4xl font-bold">{formatDollarAmountStatic(dayTotal, publicUserData.currency)}</p>
+                <p className="text-3xl font-bold">{formatDollarAmountStatic(dayTotal, publicUserData.currency)}</p>
             </div>
             {dayExpenseGroup.dayExpenseArray.length > 0 && <ExpenseList
                 dayExpenseArray={dayExpenseGroup.dayExpenseArray}

@@ -43,7 +43,7 @@ export default function TwoOptionModal( { optionOneText, optionOneFunction, opti
                 setModalVisibility((current: any) => ({...current, [`${isVisible}`]: false}))
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
-            <h2 className="mt-8 mx-4">{title}</h2>
+            <h2 className="mt-8 mx-4 text-xl">{title}</h2>
 
             <div className="flex flex-row justify-between mt-12">
                 <FulcrumButton displayText={optionOneText} onClick={optionOneFunction} optionalTailwind={"mx-2"} backgroundColour={"green"} id={"left-button"}/>

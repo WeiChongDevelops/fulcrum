@@ -26,7 +26,7 @@ export default function AddNewExpenseButton({ setExpenseFormVisibility, isDarkMo
     }
 
     return (
-        <button className={`create-expense-button ${isDarkMode && "create-expense-button-dark"} rounded-2xl mt-4 w-[95vw]`} onClick={handleClick}>
+        <button className={`create-expense-button ${isDarkMode && "create-expense-button-dark"} rounded-2xl mt-4`} onClick={handleClick}>
             <p className="text-2xl font-bold">+</p>
         </button>
     )

@@ -58,7 +58,7 @@ export default function Tools({ publicUserData, setPublicUserData, budgetArray, 
 
     return (
         <div>
-            {openToolsSection === "home" ? <div className="tools flex flex-col justify-center items-center bg-[#455259] min-h-screen">
+            {openToolsSection === "home" ? <div className="tools flex flex-col justify-center items-center bg-[#455259] min-h-screen p-10">
                 <div className="profile-icon-display mb-2" onClick={() => {
                     setIsChangeIconMessageVisible(false);
                     setToolsFormVisibility(curr => ({...curr, isUpdateProfileIconFormVisible: true}))
@@ -73,7 +73,7 @@ export default function Tools({ publicUserData, setPublicUserData, budgetArray, 
 
                 {toolsFormVisibility.isUpdateProfileIconFormVisible && <div className="absolute w-[80vw] h-[80vh] bg-transparent z-3"></div>}
 
-                 <div className="tools-tile-container w-full h-auto flex justify-around items-center mt-[2%]">
+                 <div className="tools-tile-container w-full h-auto flex flex-row justify-around items-center mt-[4rem]">
                     <div className="tools-tile tools-tile-interactive bg-[#D1B1B1] text-black text-3xl hover:cursor-pointer" onClick={openSettings}>
                         <div className="tools-text-container">
                             <p>Settings</p>
@@ -81,7 +81,7 @@ export default function Tools({ publicUserData, setPublicUserData, budgetArray, 
 
                         <img src="/src/assets/UI-icons/tools-settings-icon-black.svg" alt=""/>
                     </div>
-                    <div className="tools-tile tools-tile-interactive bg-[#B1D1CF] text-black text-lg leading-5 hover:cursor-pointer" onClick={openRecurringExpenses}>
+                    <div className="tools-tile tools-tile-interactive bg-[#B1D1CF] text-black text-lg leading-[1] hover:cursor-pointer" onClick={openRecurringExpenses}>
                         <div className="tools-text-container">
                             <p>Recurring Expenses</p>
                         </div>

@@ -1,13 +1,13 @@
 .dotted-line {
     flex-grow: 1;
-    margin: 0 25px 0 15px; /* Spacing around the line */
-    height: 6px; /* Height of the dotted line */
+    margin: 0 25px 0 15px;
+    height: 5px;
     background: repeating-linear-gradient(
             to right,
             black,
-            black 16px, /* Width of each dot */
+            black 16px,
             transparent 2px,
-            transparent 30px /* Space between dots, increase for more space */
+            transparent 30px
     );
 }
 
@@ -24,6 +24,7 @@
 .expense-item {
     transition: all ease-out 250ms;
     box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 1);
+    @apply w-[94vw]
 }
 
 .expense-item:hover {
@@ -33,10 +34,10 @@
 }
 
 .create-expense-button {
-    padding: 18px 0 18px 0;
     background: transparent;
     border: black 2px dashed;
     color: black;
+    @apply py-4 w-[94vw]
 }
 
 .create-expense-button:hover {
@@ -95,4 +96,34 @@
 .expense-carousel {
     transition: transform 250ms ease-out;
     filter: motionBlur(200px);
+}
+
+@media (max-width: 800px) {
+    .create-expense-button {
+        @apply w-[92vw]
+    }
+    .expense-item {
+        @apply w-[92vw]
+    }
+}
+
+@media (max-width: 600px) {
+    .create-expense-button {
+        @apply w-[90vw]
+    }
+    .expense-item {
+        @apply w-[90vw]
+    }
+}
+
+@media (max-width: 460px) {
+    .dotted-line {
+        height: 3px;
+    }
+}
+
+@media (max-width: 325px) {
+    .dotted-line {
+        display: none;
+    }
 }

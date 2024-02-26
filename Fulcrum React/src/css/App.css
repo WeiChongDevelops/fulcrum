@@ -22,7 +22,7 @@ input::placeholder {
   text-align: center;
 }
 
-.login-form input::placeholder {
+.auth-form input::placeholder {
   text-align: left;
 }
 
@@ -47,10 +47,6 @@ html, body {
   position: fixed;
   height: 100vh;
   top: 0;
-  /*top: 136px;*/
-  /*background-size: 42px 42px;*/
-  /*filter: drop-shadow(1px 1px 2px grey) invert(0.1);*/
-  /*overflow: hidden;*/
 }
 
 
@@ -68,20 +64,6 @@ body label {
   position: relative;
 }
 
-.auth-form::before,
-.auth-form::after {
-  position: absolute;
-  content: "";
-  background-color: #17423f;
-  z-index: 200;
-}
-
-.auth-form::before {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 7px;
-}
 
 .circle-button:hover {
   cursor: pointer;
@@ -99,10 +81,10 @@ body label {
   z-index: 3;
   top: 50%;
   left: 50%;
-  padding: 1%;
+  padding: 1vw;
   transform: translate(-50%, -50%);
   background-color: rgba(0,0,0,0.8);
-  min-width: 600px;
+  width: 35rem;
   @apply rounded-3xl
 }
 
@@ -122,9 +104,10 @@ body label {
   align-items: center;
   top: 50%;
   left: 50%;
-  padding: 1%;
+  padding: 1vw;
   transform: translate(-50%, -50%);
   background-color: rgba(0,0,0,0.8);
+  width: 35rem;
   @apply rounded-3xl text-white
 }
 
@@ -133,7 +116,7 @@ body label {
 }
 
 .toggle-right-shift {
-  transform: translateX(43px);
+  transform: translateX(150%);
 }
 
 .sun-glow {
@@ -189,4 +172,32 @@ body label {
   background-position: left;
   filter: blur(8px) brightness(60%);
   z-index: -1;
+}
+
+@media (max-width: 890px) {
+  .auth-header {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 670px) {
+  .navbar-email {
+    display: none;
+  }
+  .navbar-fulcrum-logo {
+    width: 30vw;
+    height: auto;
+  }
+  .auth-page-container {
+    @apply flex flex-col
+  }
+  .auth-page-left-column {
+    display: none;
+  }
+  .auth-page-right-column {
+    margin: 0;
+  }
+  .auth-form {
+    width: 75vw;
+  }
 }

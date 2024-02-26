@@ -1,4 +1,4 @@
-import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useState} from "react";
+import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {SettingsFormVisibility, SettingsModalVisibility} from "../../util.ts";
 import FulcrumButton from "../Other/FulcrumButton.tsx";
 
@@ -14,7 +14,24 @@ interface TypeMatchConfirmationFormProps {
 export function TypeMatchConfirmationForm( { areYouSureMessage, typeMatchString, setFormVisibility, formVisibility, setModalVisibility, lastChanceModalVisibility }: TypeMatchConfirmationFormProps) {
 
     const [typeMatchInput, setTypeMatchInput] = useState("");
+    const formRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        window.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            window.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    function hideForm() {
+        setFormVisibility(current => ({...current, [formVisibility]: false}))
+    }
+
+    const handleClickOutside = (e: MouseEvent) => {
+        if (formRef.current && !formRef.current.contains(e.target as Node)) {
+            hideForm();
+        }
+    };
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         setTypeMatchInput(e.target.value);
     }
@@ -30,10 +47,8 @@ export function TypeMatchConfirmationForm( { areYouSureMessage, typeMatchString,
     }
 
     return (
-        <div className={"fulcrum-form"}>
-            <FulcrumButton onClick={() => {
-                setFormVisibility((current: any) => ({...current, [`${lastChanceModalVisibility}`]: false}))
-            }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
+        <div ref={formRef} className={"fulcrum-form"}>
+            <FulcrumButton onClick={hideForm} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
             <p className={"mt-6"}>{areYouSureMessage}</p>
 

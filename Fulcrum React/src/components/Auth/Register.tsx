@@ -23,18 +23,18 @@ export default function Register() {
 
     return (
         <div className={"auth-page-container register-page flex flex-row justify-around items-center w-[100vw] h-[100vh]"}>
-            <div className={"flex flex-col justify-around items-start h-[75vh] pl-[10rem] pb-52"}>
+            <div className={"auth-page-left-column flex flex-col justify-center items-start h-[65vh] pl-[10rem] pb-52"}>
                 <div className={"flex-1"}>
                     <img src="/src/assets/fulcrum-logos/fulcrum-long-white.webp" className={"select-none w-80 h-auto"} alt="Fulcrum logo"/>
                 </div>
                 <div className={"flex flex-col justify-center items-start h-[100vh] w-[35vw] text-left"}>
                     <b className={"text-[4rem]"}>Register for an account.</b>
-                    <p className={"text-xl ml-2 mt-8"}>Start saving today.</p>
+                    <p className={"text-xl ml-2 mt-8"}>Start saving for free today.</p>
                 </div>
             </div>
-            <div className={"flex flex-col justify-around items-center h-[75vh] mr-24"}>
+            <div className={"auth-page-right-column flex flex-col justify-around items-center h-[75vh] mr-24"}>
                 <p className={"text-8xl flex-1"}></p>
-                <form className={"login-form flex flex-col justify-center items-center bg-white text-black px-12 pt-14 mt-20 pb-8 w-[37vw] rounded-2xl"}
+                <form className={"auth-form flex flex-col justify-center items-center bg-white text-black px-12 pt-14 mt-20 pb-8 w-[37vw] rounded-2xl"}
                       onSubmit={handleSubmit}>
                     <div className={"flex flex-col justify-center items-start w-full"}>
                         <label htmlFor={"email"}>Email</label>
@@ -63,7 +63,7 @@ export default function Register() {
                     <div className={"flex flex-row justify-center items-center w-full"}>
                         <div className={"mr-8"}>
                             <span>Already have any account? </span>
-                            <a href="/login" className={"underline text-[#17423F] font-semibold"}>Login Here</a>
+                            <a href="/login" className={"underline text-[#17423F] font-semibold"}>Login</a>
                         </div>
                         <FulcrumButton displayText={"Register"} backgroundColour={"green"}/>
                     </div>

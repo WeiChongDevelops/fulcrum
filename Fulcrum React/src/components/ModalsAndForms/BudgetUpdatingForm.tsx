@@ -67,7 +67,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
                 hideForm();
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
-            <p className="mb-6 font-bold text-4xl">Updating Budget for {oldBudgetBeingEdited.oldCategory}</p>
+            <p className="mb-6 font-bold text-4xl">Updating Budget for '{oldBudgetBeingEdited.oldCategory}'</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="category">Category Name</label>
                 <input type="text"

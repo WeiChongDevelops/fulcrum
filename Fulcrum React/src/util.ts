@@ -1332,7 +1332,7 @@ const dot = (color = 'transparent') => ({
 });
 
 export const colourStyles = {
-    control: (styles: any) => ({ ...styles, fontWeight: "bold", backgroundColor: "white" }),
+    control: (styles: any) => ({ ...styles, fontWeight: "bold", backgroundColor: "white"}),
     option: (styles: any, {data}: any) => {
         return {
             ...styles,
@@ -1387,12 +1387,13 @@ export function dynamicallySizeBudgetNameDisplays() {
         const budgetNameLength = budgetNameText?.length!;
 
         if (budgetNameLength <= 5) {
-            dynamicFontSize = "26px";
+            dynamicFontSize = "1.4rem";
         } else if (budgetNameLength <= 9) {
-            dynamicFontSize = "20px";
+            dynamicFontSize = "1.2rem";
         } else if (budgetNameLength <= 14) {
-            dynamicFontSize = "16px";
+            dynamicFontSize = "1.1rem";
         } else if (budgetNameLength <= 18) {
+            dynamicFontSize = "1rem";
         }
         budgetNameElement.style.fontSize = dynamicFontSize;
 
