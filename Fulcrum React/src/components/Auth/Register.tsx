@@ -28,12 +28,14 @@ export default function Register() {
                     <img src="/src/assets/fulcrum-logos/fulcrum-long-white.webp" className={"select-none w-80 h-auto"} alt="Fulcrum logo"/>
                 </div>
                 <div className={"flex flex-col justify-center items-start h-[100vh] w-[35vw] text-left"}>
-                    <b className={"text-[4rem]"}>Register for an account.</b>
+                    <b className={"text-[3rem]"}>Register for an account.</b>
                     <p className={"text-xl ml-2 mt-8"}>Start saving for free today.</p>
                 </div>
             </div>
             <div className={"auth-page-right-column flex flex-col justify-around items-center h-[75vh] mr-24"}>
-                <p className={"text-8xl flex-1"}></p>
+                <div className={"flex-1"}>
+                    <img src="/src/assets/fulcrum-logos/fulcrum-long-white.webp" className={"select-none w-96 h-auto auth-mobile-fulcrum-logo"} alt="Fulcrum logo"/>
+                </div>
                 <form className={"auth-form flex flex-col justify-center items-center bg-white text-black px-12 pt-14 mt-20 pb-8 w-[37vw] rounded-2xl"}
                       onSubmit={handleSubmit}>
                     <div className={"flex flex-col justify-center items-start w-full"}>
@@ -42,6 +44,7 @@ export default function Register() {
                                placeholder={"name@example.com"}
                                value={email}
                                onChange={e => setEmail(e.target.value)}
+                               autoComplete={"email"}
                                required/>
                     </div>
                     <div className={"flex flex-col justify-center items-start w-full mt-10"}>
@@ -50,6 +53,7 @@ export default function Register() {
                                placeholder={"Your password"}
                                value={password}
                                onChange={e => setPassword(e.target.value)}
+                               autoComplete={"new-password"}
                                required/>
                     </div>
                     <div className={"flex flex-col justify-center items-start w-full my-10"}>
@@ -58,6 +62,7 @@ export default function Register() {
                                placeholder={"Confirm password"}
                                value={confirmPassword}
                                onChange={e => setConfirmPassword(e.target.value)}
+                               autoComplete={"new-password"}
                                required/>
                     </div>
                     <div className={"flex flex-row justify-center items-center w-full"}>
