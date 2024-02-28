@@ -1,6 +1,6 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {
-    BudgetItemEntity, CategoryToIconGroupAndColourMap,
+    BudgetItemEntity, CategoryToIconGroupAndColourMap, ExpenseItemEntity,
     getSessionEmail, GroupItemEntity,
     logoutOnClick,
     OpenToolsSection,
@@ -20,12 +20,13 @@ interface ToolsProps {
     budgetArray: BudgetItemEntity[];
     groupArray: GroupItemEntity[];
 
+    setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
 
     categoryDataMap: CategoryToIconGroupAndColourMap;
 }
 
-export default function Tools({ publicUserData, setPublicUserData, budgetArray, groupArray, setBudgetArray, categoryDataMap }: ToolsProps) {
+export default function Tools({ publicUserData, setPublicUserData, budgetArray, groupArray, setExpenseArray, setBudgetArray, categoryDataMap }: ToolsProps) {
 
     const sessionStoredEmail = sessionStorage.getItem("email");
     const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
@@ -100,6 +101,7 @@ export default function Tools({ publicUserData, setPublicUserData, budgetArray, 
                                    publicUserData={publicUserData}
                                    budgetArray={budgetArray}
                                    groupArray={groupArray}
+                                   setExpenseArray={setExpenseArray}
                                    setBudgetArray={setBudgetArray}
                                    categoryDataMap={categoryDataMap}/>
             }

@@ -1,14 +1,14 @@
 import {Dispatch, SetStateAction} from "react";
 import {ExpenseFormVisibility, MonthExpenseGroupEntity} from "../../util.ts";
 
-interface AddNewBudgetButtonProps {
+interface AddNewExpenseButtonProps {
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
     isDarkMode: boolean;
     setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
     monthExpenseGroupItem: MonthExpenseGroupEntity;
 }
 
-export default function AddNewExpenseButton({ setExpenseFormVisibility, isDarkMode, setDefaultCalendarDate, monthExpenseGroupItem }: AddNewBudgetButtonProps) {
+export default function AddNewExpenseButton({ setExpenseFormVisibility, isDarkMode, setDefaultCalendarDate, monthExpenseGroupItem }: AddNewExpenseButtonProps) {
 
     async function handleClick() {
         const currentMonth = new Date().getMonth();

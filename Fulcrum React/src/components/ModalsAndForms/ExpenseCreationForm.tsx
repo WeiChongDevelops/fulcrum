@@ -17,7 +17,7 @@ import {
     colourStyles,
     handleInputChangeOnFormWithAmount,
     handleRecurringExpenseCreation,
-    RecurringExpenseItemEntity, recurringFrequencyOptions, Value
+    RecurringExpenseItemEntity, recurringFrequencyOptions, Value, ExpenseFormVisibility, RecurringExpenseFormVisibility
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import { v4 as uuid } from "uuid";
@@ -31,10 +31,7 @@ import 'react-calendar/dist/Calendar.css';
 
 
 interface ExpenseCreationFormProps {
-    setExpenseFormVisibility: Dispatch<SetStateAction<{
-        isCreateExpenseVisible: boolean,
-        isUpdateExpenseVisible: boolean,
-    }>>;
+    setExpenseFormVisibility: (Dispatch<SetStateAction<ExpenseFormVisibility>> | Dispatch<SetStateAction<RecurringExpenseFormVisibility>>);
     setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>
@@ -46,16 +43,23 @@ interface ExpenseCreationFormProps {
     currencySymbol: string;
 
     defaultCalendarDate: Date;
+
+    mustBeRecurring: boolean;
 }
 
 
-export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, setRecurringExpenseArray, budgetArray, categoryOptions, currencySymbol, defaultCalendarDate }: ExpenseCreationFormProps) {
+export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, setRecurringExpenseArray, budgetArray, categoryOptions, currencySymbol, defaultCalendarDate, mustBeRecurring }: ExpenseCreationFormProps) {
 
-    const [formData, setFormData] = useState<ExpenseCreationFormData>({ category: "", amount: 0, timestamp: defaultCalendarDate, frequency: "never" });
+    const [formData, setFormData] = useState<ExpenseCreationFormData>({
+        category: "",
+        amount: 0,
+        timestamp: defaultCalendarDate,
+        frequency: mustBeRecurring ? "monthly" : "never"
+    });
     const formRef = useRef<HTMLDivElement>(null);
 
     function hideForm() {
-        setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: false}));
+        setExpenseFormVisibility((current: any) => ({...current, isCreateExpenseVisible: false}));
     }
 
     const handleClickOutside = (e: MouseEvent) => {
@@ -111,7 +115,12 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
 
             await handleRecurringExpenseCreation(newRecurringExpenseItem, setRecurringExpenseArray);
         }
-        setFormData({ category: "", amount: 0, timestamp: defaultCalendarDate, frequency: "never" });
+        setFormData({
+            category: "",
+            amount: 0,
+            timestamp: defaultCalendarDate,
+            frequency: mustBeRecurring ? "monthly" : "never"
+        });
     }
 
     function handleCategoryInputChange(e: any) {
@@ -189,11 +198,11 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                     id="frequency"
                     name="frequency"
                     defaultValue={{
-                        label: "Never",
-                        value: "never",
+                        label: mustBeRecurring ? "Monthly" : "Never",
+                        value: mustBeRecurring ? "monthly" : "never",
                         colour: "black"
                     }}
-                    options={recurringFrequencyOptions}
+                    options={mustBeRecurring ? recurringFrequencyOptions.slice(1) : recurringFrequencyOptions}
                     onChange={handleFrequencyInputChange}
                     styles={colourStyles}
                     className="mb-3"

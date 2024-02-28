@@ -60,7 +60,7 @@ export default function ExpenseItem( { expenseId,
     }
 
     return (
-        <div className="expense-item flex flex-row justify-between items-center py-1.5 px-2.5 rounded-2xl my-3 text-black"
+        <div className="expense-item flex flex-row justify-between items-center py-1.5 px-2.5 rounded-2xl my-3 text-black select-none"
              style={{backgroundColor: groupColour}}
              onClick={handleEditClick}>
             <div className="flex flex-row items-center">

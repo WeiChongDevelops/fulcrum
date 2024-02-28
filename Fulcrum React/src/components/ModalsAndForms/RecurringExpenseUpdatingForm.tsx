@@ -9,15 +9,20 @@ import {
     RecurringExpenseItemEntity,
     PreviousRecurringExpenseBeingEdited,
     RecurringExpenseUpdatingFormData,
-    recurringFrequencyOptions, capitaliseFirstLetter, handleRecurringExpenseUpdating, getRecurringExpenseList,
+    recurringFrequencyOptions,
+    capitaliseFirstLetter,
+    handleRecurringExpenseUpdating,
+    getRecurringExpenseList,
+    RecurringExpenseFormVisibility, Value,
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select/creatable';
+import DatePicker from 'react-date-picker';
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
 
 interface RecurringExpenseUpdatingFormProps {
-    setRecurringExpenseFormVisibility: Dispatch<SetStateAction<{
-        isUpdateRecurringExpenseVisible: boolean,
-    }>>;
+    setRecurringExpenseFormVisibility: Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
     setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     categoryOptions: SelectorOptionsFormattedData[];
@@ -29,7 +34,10 @@ interface RecurringExpenseUpdatingFormProps {
 export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVisibility, setRecurringExpenseArray, setBudgetArray, categoryOptions, oldRecurringExpenseBeingEdited, currencySymbol }: RecurringExpenseUpdatingFormProps) {
 
     const [formData, setFormData] = useState<RecurringExpenseUpdatingFormData>({
-        category: oldRecurringExpenseBeingEdited.oldCategory, amount: oldRecurringExpenseBeingEdited.oldAmount, frequency: oldRecurringExpenseBeingEdited.oldFrequency
+        category: oldRecurringExpenseBeingEdited.oldCategory,
+        amount: oldRecurringExpenseBeingEdited.oldAmount,
+        timestamp: oldRecurringExpenseBeingEdited.oldTimestamp,
+        frequency: oldRecurringExpenseBeingEdited.oldFrequency
     });
     const formRef = useRef<HTMLDivElement>(null);
 
@@ -70,12 +78,20 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
         await handleRecurringExpenseUpdating(oldRecurringExpenseBeingEdited.recurringExpenseId, formData);
 
         setFormData({
-            category: oldRecurringExpenseBeingEdited.oldCategory, amount: oldRecurringExpenseBeingEdited.oldAmount, frequency: oldRecurringExpenseBeingEdited.oldFrequency
+            category: oldRecurringExpenseBeingEdited.oldCategory,
+            amount: oldRecurringExpenseBeingEdited.oldAmount,
+            timestamp: oldRecurringExpenseBeingEdited.oldTimestamp,
+            frequency: oldRecurringExpenseBeingEdited.oldFrequency
         });
         getRecurringExpenseList().then(expenseList => setRecurringExpenseArray(expenseList));
 
         // To update budgetArray if new category is made:
         getBudgetList().then(budgetList => setBudgetArray(budgetList));
+    }
+
+    function onDateInputChange(newValue: Value) {
+        console.log(new Date(newValue as Date).toLocaleDateString())
+        setFormData(curr => ({ ...curr, timestamp: newValue }));
     }
 
     return (
@@ -115,6 +131,12 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
                     })}
                     required
                 />
+
+
+                <label htmlFor="timestamp">Date</label>
+                <div className={"text-black"}>
+                    <DatePicker onChange={onDateInputChange} value={formData.timestamp}/>
+                </div>
 
                 <label htmlFor="frequency">Frequency</label>
                 <Select

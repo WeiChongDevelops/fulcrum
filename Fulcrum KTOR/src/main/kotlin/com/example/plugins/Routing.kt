@@ -217,6 +217,7 @@ fun Application.configureRouting() {
                     {
                         set("category", recurringExpenseUpdateRequest.category)
                         set("amount", recurringExpenseUpdateRequest.amount)
+                        set("timestamp", recurringExpenseUpdateRequest.timestamp)
                         set("frequency", recurringExpenseUpdateRequest.frequency)
                     }
                 ) {

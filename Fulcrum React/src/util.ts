@@ -140,7 +140,8 @@ export interface RecurringExpenseModalVisibility {
 }
 
 export interface RecurringExpenseFormVisibility {
-    isUpdateRecurringExpenseVisible: boolean;
+    isCreateExpenseVisible: boolean,
+    isUpdateRecurringExpenseVisible: boolean
 }
 
 
@@ -148,12 +149,14 @@ export interface PreviousRecurringExpenseBeingEdited {
     recurringExpenseId: string;
     oldCategory: string;
     oldAmount: number;
+    oldTimestamp: Date;
     oldFrequency: RecurringExpenseFrequency;
 }
 
 export interface RecurringExpenseUpdatingFormData {
     category: string;
     amount: number;
+    timestamp: Value;
     frequency: RecurringExpenseFrequency;
 }
 
@@ -832,6 +835,7 @@ export async function handleRecurringExpenseUpdating(recurringExpenseId: string,
                 "recurringExpenseId": recurringExpenseId,
                 "category": formData.category,
                 "amount": formData.amount,
+                "timestamp": formData.timestamp,
                 "frequency": formData.frequency
             })
         })

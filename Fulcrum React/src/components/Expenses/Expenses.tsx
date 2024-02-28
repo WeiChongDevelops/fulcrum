@@ -278,7 +278,8 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                         budgetArray={budgetArray}
                         categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
                         currencySymbol={getCurrencySymbol(publicUserData.currency)}
-                        defaultCalendarDate={defaultCalendarDate}/>}
+                        defaultCalendarDate={defaultCalendarDate}
+                        mustBeRecurring={false}/>}
                     {expenseFormVisibility.isUpdateExpenseVisible &&
                         <ExpenseUpdatingForm setExpenseFormVisibility={setExpenseFormVisibility}
                                              setExpenseArray={setExpenseArray} setBudgetArray={setBudgetArray}

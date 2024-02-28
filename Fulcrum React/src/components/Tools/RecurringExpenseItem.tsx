@@ -13,6 +13,7 @@ interface RecurringExpenseItemProps {
     category: string;
     amount: number;
     iconPath: string;
+    timestamp: Date;
     frequency: RecurringExpenseFrequency;
 
     groupName: string;
@@ -31,6 +32,7 @@ export default function RecurringExpenseItem( { recurringExpenseId,
                                                   category,
                                                   amount,
                                                   iconPath,
+                                                  timestamp,
                                                   frequency,
                                                   groupName,
                                                   groupColour,
@@ -45,6 +47,7 @@ export default function RecurringExpenseItem( { recurringExpenseId,
             recurringExpenseId: recurringExpenseId,
             oldCategory: category,
             oldAmount: amount,
+            oldTimestamp: timestamp,
             oldFrequency: frequency
         })
         setRecurringExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseVisible: true}))
@@ -57,7 +60,7 @@ export default function RecurringExpenseItem( { recurringExpenseId,
     }
 
     return (
-        <div className="expense-item flex flex-row justify-between items-center w-[95vw] py-1.5 px-2.5 rounded-2xl my-3 text-black"
+        <div className="expense-item flex flex-row justify-between items-center w-[95vw] py-1.5 px-2.5 rounded-2xl my-3 text-black select-none"
              style={{backgroundColor: groupColour, opacity: frequency === "never" ? "40%" : "100%"}}
              onClick={handleEditClick}>
             <div className="flex flex-row items-center">

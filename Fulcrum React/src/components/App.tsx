@@ -92,6 +92,7 @@ export default function App() {
                                                         setPublicUserData={setPublicUserData}
                                                         budgetArray={budgetArray}
                                                         groupArray={groupArray}
+                                                        setExpenseArray={setExpenseArray}
                                                         setBudgetArray={setBudgetArray}
                                                         categoryDataMap={categoryDataMap}/>} />
                 </Route>
