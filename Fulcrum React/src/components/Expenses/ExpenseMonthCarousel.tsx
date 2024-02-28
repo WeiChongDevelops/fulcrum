@@ -44,8 +44,6 @@ export default function ExpenseMonthCarousel({structuredExpenseData,
 
     return (
         <div className={"relative"}>
-            {/*<div className={"expense-carousel absolute overflow-x-auto left-1/2"} style={{transform: `translateX(calc(-(100vw * ${monthsFromY2KToNow} - (100vw * ${monthPanelShowingIndex})))`}}>*/}
-            {/*<div className={"expense-carousel absolute overflow-x-auto left-1/2"} style={{transform: `translateX(calc(-100% -(100vw * ${monthPanelShowingIndex})))`}}>*/}
             <div className={"expense-carousel absolute overflow-x-auto left-[-50vw]"} style={{transform: `translateX(calc(-100vw * (${monthsFromY2KToNow} + ${monthPanelShowingIndex})))`}}>
                 <div className={"flex flex-row"}>
                     {structuredExpenseData.map((monthExpenseGroupItem, key) => {

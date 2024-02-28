@@ -251,7 +251,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     }
 
     return (
-        <div>
+        <div className={"h-[100vh] overflow-x-hidden"}>
             {!isLoading ? <div className="flex flex-col justify-center items-center">
                 <div className={`flex flex-col justify-center items-center elementsBelowPopUpForm z-2
             ${isExpenseFormOrModalOpen && "blur"}`}>
