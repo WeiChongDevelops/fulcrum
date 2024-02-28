@@ -1,38 +1,37 @@
 import FulcrumButton from "../Other/FulcrumButton.tsx";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import {
-    BudgetItemEntity,
-    getBudgetList,
     ExpenseItemEntity,
-    SelectorOptionsFormattedData,
-    colourStyles,
-    ExpenseUpdatingFormData,
-    handleExpenseUpdating,
     getExpenseList,
     handleInputChangeOnFormWithAmount,
-    PreviousExpenseBeingEdited, Value, ExpenseFormVisibility
+    PreviousExpenseBeingEdited,
+    RecurringExpenseInstanceUpdatingFormData,
+    handleRecurringExpenseInstanceUpdating,
+    ExpenseFormVisibility,
+    colourStyles,
+    SelectorOptionsFormattedData,
+    handleRemovedRecurringExpenseCreation,
+    RemovedRecurringExpenseItem
 } from "../../util.ts";
 import CreatableSelect from 'react-select/creatable';
-import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
 
-interface ExpenseUpdatingFormProps {
+interface RecurringExpenseInstanceUpdatingFormProps {
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
     setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     categoryOptions: SelectorOptionsFormattedData[];
     oldExpenseBeingEdited: PreviousExpenseBeingEdited;
     currencySymbol: string;
+    setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItem[]>>
 }
 
-export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpenseArray, setBudgetArray, categoryOptions, oldExpenseBeingEdited, currencySymbol }: ExpenseUpdatingFormProps) {
+export default function RecurringExpenseInstanceUpdatingForm({ setExpenseFormVisibility, setExpenseArray, categoryOptions, oldExpenseBeingEdited, currencySymbol, setRemovedRecurringExpenseInstances }: RecurringExpenseInstanceUpdatingFormProps) {
 
 
-    const [formData, setFormData] = useState<ExpenseUpdatingFormData>({
+    const [formData, setFormData] = useState<RecurringExpenseInstanceUpdatingFormData>({
         category: oldExpenseBeingEdited.oldCategory,
         amount: oldExpenseBeingEdited.oldAmount,
-        timestamp: oldExpenseBeingEdited.oldTimestamp
     });
     const formRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +43,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
     }, []);
 
     function hideForm() {
-        setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: false}));
+        setExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseInstanceVisible: false}));
     }
 
     const handleClickOutside = (e: MouseEvent) => {
@@ -60,27 +59,20 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
     function handleCategoryInputChange(e: any) {
         setFormData(currentFormData => ({ ...currentFormData, category: e.value }));
     }
-    function onDateInputChange(newValue: Value) {
-        console.log(new Date(newValue as Date).toLocaleDateString())
-        setFormData(curr => ({ ...curr, timestamp: newValue }));
-    }
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         hideForm();
 
-        await handleExpenseUpdating(oldExpenseBeingEdited.expenseId, formData);
+        await handleRecurringExpenseInstanceUpdating(oldExpenseBeingEdited.expenseId, formData);
+        await handleRemovedRecurringExpenseCreation(oldExpenseBeingEdited.recurringExpenseId, oldExpenseBeingEdited.oldTimestamp, setRemovedRecurringExpenseInstances)
 
         setFormData({
             category: oldExpenseBeingEdited.oldCategory,
             amount: oldExpenseBeingEdited.oldAmount,
-            timestamp: oldExpenseBeingEdited.oldTimestamp
         });
         getExpenseList().then(expenseList => setExpenseArray(expenseList));
-
-        // To update budgetArray if new category is made:
-        getBudgetList().then(budgetList => setBudgetArray(budgetList));
     }
 
     return (
@@ -134,11 +126,9 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
                     />
                 </div>
 
-                <div>
-                    <label htmlFor="timestamp">Date</label>
-                    <div className={"text-black"}>
-                        <DatePicker onChange={onDateInputChange} value={formData.timestamp}/>
-                    </div>
+                <div className={"mt-2 text-sm"}>
+                    <p>You are editing only this instance of your recurring expense.</p>
+                    <p>To manage your recurring expenses, please see the Tools section.</p>
                 </div>
 
                 <FulcrumButton displayText="Update Expense" optionalTailwind={"mt-8"} />

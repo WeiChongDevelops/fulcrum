@@ -150,7 +150,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 hideForm();
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>
 
-            <p className="mb-6 mt-4 font-bold text-4xl">New Expenses Item</p>
+            <p className="mb-6 mt-4 font-bold text-4xl">New {mustBeRecurring && "Recurring "}Expense</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="category">Category</label>
                 <CreatableSelect
@@ -218,7 +218,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                     required
                 />
 
-                <FulcrumButton displayText="Insert Expenses" optionalTailwind={"mt-6"}/>
+                <FulcrumButton displayText={`Insert ${mustBeRecurring && "Recurring "}Expense`} optionalTailwind={"mt-6"}/>
             </form>
         </div>
     )

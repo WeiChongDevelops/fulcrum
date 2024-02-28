@@ -27,6 +27,11 @@ export interface ExpenseUpdatingFormData {
     timestamp: Value;
 }
 
+export interface RecurringExpenseInstanceUpdatingFormData {
+    category: string,
+    amount: number
+}
+
 
 export interface PreviousExpenseBeingEdited {
     expenseId: string;
@@ -115,6 +120,7 @@ export interface BudgetModalVisibility {
 export interface ExpenseFormVisibility {
     isCreateExpenseVisible: boolean;
     isUpdateExpenseVisible: boolean;
+    isUpdateRecurringExpenseInstanceVisible: boolean
 }
 
 export interface ExpenseModalVisibility {
@@ -436,6 +442,31 @@ export async function handleExpenseUpdating(expenseId: string, formData: Expense
                 "category": formData.category,
                 "amount": formData.amount,
                 "timestamp": formData.timestamp
+            })
+        })
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+export async function handleRecurringExpenseInstanceUpdating(expenseId: string, formData: RecurringExpenseInstanceUpdatingFormData) {
+    try {
+        const response = await fetch("http://localhost:8080/api/updateRecurringExpenseInstance", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify( {
+                "expenseId": expenseId,
+                "amount": formData.amount,
+                "category": formData.category,
+                "recurringExpenseId": null
             })
         })
         if (!response.ok) {
@@ -880,7 +911,7 @@ export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
     getRecurringExpenseList().then(recurringExpenseList => setRecurringExpenseArray(recurringExpenseList))
 }
 
-export async function handleRemovedRecurringExpenseCreation(recurringExpenseId: string,
+export async function handleRemovedRecurringExpenseCreation(recurringExpenseId: string | null,
                                                             timestampOfRemovedInstance: Date,
                                                             setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItem[]>>) {
     try {
@@ -890,7 +921,7 @@ export async function handleRemovedRecurringExpenseCreation(recurringExpenseId: 
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                recurringExpenseId: recurringExpenseId,
+                recurringExpenseId: recurringExpenseId!,
                 timestampOfRemovedInstance: timestampOfRemovedInstance
             })
         });

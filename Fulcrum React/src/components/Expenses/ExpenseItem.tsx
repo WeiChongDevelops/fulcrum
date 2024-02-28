@@ -50,7 +50,11 @@ export default function ExpenseItem( { expenseId,
             oldAmount: amount,
             oldTimestamp: timestamp
         })
-        setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: true}))
+        if (recurringExpenseId === null) {
+            setExpenseFormVisibility(current => ({...current, isUpdateExpenseVisible: true}))
+        } else {
+            setExpenseFormVisibility(current => ({...current, isUpdateRecurringExpenseInstanceVisible: true}))
+        }
     }
 
     function handleDeleteClick(e: React.MouseEvent) {

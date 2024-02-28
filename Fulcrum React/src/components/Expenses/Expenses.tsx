@@ -27,6 +27,7 @@ import "../../css/Expense.css"
 import Loader from "../Other/Loader.tsx";
 import {v4 as uuid} from "uuid";
 import ExpenseMonthCarousel from "./ExpenseMonthCarousel.tsx";
+import RecurringExpenseInstanceUpdatingForm from "../ModalsAndForms/RecurringExpenseInstanceUpdatingForm.tsx";
 
 
 interface ExpensesProps {
@@ -49,6 +50,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     const [expenseFormVisibility, setExpenseFormVisibility] = useState({
         isCreateExpenseVisible: false,
         isUpdateExpenseVisible: false,
+        isUpdateRecurringExpenseInstanceVisible: false
     });
     const [expenseModalVisibility, setExpenseModalVisibility] = useState<ExpenseModalVisibility>( {
         isConfirmExpenseDestructionModalVisible: false,
@@ -286,6 +288,14 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                                              categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
                                              oldExpenseBeingEdited={oldExpenseBeingEdited}
                                              currencySymbol={getCurrencySymbol(publicUserData.currency)}/>}
+
+                    {expenseFormVisibility.isUpdateRecurringExpenseInstanceVisible &&
+                        <RecurringExpenseInstanceUpdatingForm setExpenseFormVisibility={setExpenseFormVisibility}
+                                                              setExpenseArray={setExpenseArray}
+                                                              categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
+                                                              oldExpenseBeingEdited={oldExpenseBeingEdited}
+                                                              currencySymbol={getCurrencySymbol(publicUserData.currency)}
+                                                              setRemovedRecurringExpenseInstances={setRemovedRecurringExpenseInstances}/>}
 
                     {expenseModalVisibility.isConfirmExpenseDestructionModalVisible &&
                         <TwoOptionModal optionOneText="Cancel"

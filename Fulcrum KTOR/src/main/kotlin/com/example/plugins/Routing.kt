@@ -126,6 +126,34 @@ fun Application.configureRouting() {
             }
         }
 
+
+        put("/api/updateRecurringExpenseInstance") {
+            try {
+                val expenseInstanceUpdateRequest = call.receive<RecurringExpenseInstanceUpdateRequestReceived>()
+
+                val updatedItem = supabase.postgrest["expenses"].update(
+                    {
+                        set("category", expenseInstanceUpdateRequest.category)
+                        set("amount", expenseInstanceUpdateRequest.amount)
+                        set("recurringExpenseId", expenseInstanceUpdateRequest.recurringExpenseId)
+                    }
+                ) {
+                    eq("expenseId", expenseInstanceUpdateRequest.expenseId)
+                    eq("userId", supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id)
+                }
+
+                if (updatedItem.body == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring expense instance not updated"))
+                } else {
+                    call.respond(HttpStatusCode.OK, SuccessResponseSent("Recurring expense instance updated."))
+                }
+            } catch (e: Exception) {
+                call.application.log.error("Error while updating recurring expense instance", e)
+                call.respond(HttpStatusCode.BadRequest, ErrorResponseSent("Recurring expense instance not updated."))
+            }
+        }
+
+
         delete("/api/deleteExpense") {
             try {
                 val expenseDeleteRequest = call.receive<ExpenseDeleteRequestReceived>()

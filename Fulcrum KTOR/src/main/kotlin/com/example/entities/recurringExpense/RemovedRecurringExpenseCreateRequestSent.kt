@@ -6,6 +6,6 @@ import kotlinx.datetime.Instant
 
 @Serializable
 data class RemovedRecurringExpenseCreateRequestSent (
-    val recurringExpenseId: String,
+    val recurringExpenseId: String?,
     @Contextual val timestampOfRemovedInstance: Instant
 )
