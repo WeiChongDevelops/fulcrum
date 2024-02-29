@@ -110,7 +110,6 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 timestamp: formData.timestamp as Date,
                 frequency: formData.frequency
             }
-            setRecurringExpenseArray(current => [...current, newRecurringExpenseItem]);
             await handleRecurringExpenseCreation(newRecurringExpenseItem, setRecurringExpenseArray);
         }
         setFormData({
@@ -216,7 +215,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                     required
                 />
 
-                <FulcrumButton displayText={`Insert ${mustBeRecurring && "Recurring "}Expense`} optionalTailwind={"mt-6"}/>
+                <FulcrumButton displayText={`Insert ${mustBeRecurring ? "Recurring " : ""}Expense`} optionalTailwind={"mt-6"}/>
             </form>
         </div>
     )

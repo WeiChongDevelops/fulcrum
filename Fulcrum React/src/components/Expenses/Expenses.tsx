@@ -278,9 +278,9 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     }
 
     return (
-        <div className={"h-[100vh] overflow-x-hidden"}>
+        <div className={"min-h-[100vh] overflow-x-hidden overflow-y-auto"}>
             {!isLoading ? <div className="flex flex-col justify-center items-center">
-                <div className={`flex flex-col justify-center items-center elementsBelowPopUpForm z-2
+                <div className={`flex flex-col  justify-center items-center elementsBelowPopUpForm z-2
             ${isExpenseFormOrModalOpen && "blur"}`}>
 
                     <ExpenseMonthCarousel

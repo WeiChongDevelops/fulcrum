@@ -115,6 +115,10 @@ body label {
   height: 50px;
 }
 
+.footer-fulcrum-logo {
+  height: 35px;
+}
+
 .toggle-right-shift {
   transform: translateX(150%);
 }

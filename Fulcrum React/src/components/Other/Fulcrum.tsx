@@ -40,7 +40,7 @@ export default function Fulcrum({ publicUserData, setPublicUserData, email, setE
                 </div>
                 <img src={`/src/assets/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`} alt="Fulcrum logo in navbar"
                      className="navbar-fulcrum-logo mr-12  select-none hover:cursor-pointer "
-                     onClick={() => window.location.href = "/budget"}></img>
+                     onClick={() => window.location.href = "/budget"}/>
                 <div className="flex-1 text-right">
                     <div className="flex justify-end items-center mr-8">
                         <p className={`navbar-email select-none ${publicUserData.darkModeEnabled ? "text-white": "text-black"}`}>{email}</p>
