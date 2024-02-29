@@ -4,16 +4,24 @@ import {
     categoryListAsOptions,
     CategoryToIconGroupAndColourMap,
     checkForOpenModalOrForm,
-    checkForUser, DayExpenseGroupEntity,
+    checkForUser,
+    DayExpenseGroupEntity,
     ExpenseItemEntity,
-    ExpenseModalVisibility, ExpenseUpdatingFormData, getCurrencySymbol,
+    ExpenseModalVisibility,
+    getCurrencySymbol,
     getExpenseList,
-    getGroupList, getMonthsFromToday, getRecurringExpenseInstanceOrNull,
-    getRecurringExpenseList, getRemovedRecurringExpenses,
-    GroupItemEntity, handleBatchExpenseDeletion,
+    getGroupList,
+    getMonthsFromToday,
+    getRecurringExpenseInstanceOrNull,
+    getRecurringExpenseList,
+    getRemovedRecurringExpenses,
+    GroupItemEntity,
+    handleBatchExpenseDeletion,
     handleExpenseCreation,
-    handleExpenseDeletion, handleExpenseUpdating,
-    handleRemovedRecurringExpenseCreation, matchingRemovedRecurringExpenseFound, MonthExpenseGroupEntity,
+    handleExpenseDeletion,
+    handleRemovedRecurringExpenseCreation,
+    matchingRemovedRecurringExpenseFound,
+    MonthExpenseGroupEntity,
     PreviousExpenseBeingEdited,
     PublicUserData,
     RecurringExpenseItemEntity,
@@ -137,8 +145,20 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                     let matchingDayGroupExists = false;
                     for (let dayExpenseGroupItem of monthExpenseGroupItem.monthExpenseArray) {
                         if (new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString() === new Date(expenseItem.timestamp).toLocaleDateString()) {
-                            console.log(`Adding an expense item to existing group on ${dayExpenseGroupItem.calendarDate}`)
+
+                            //
+                            // for (const expenseItem of dayExpenseGroupItem.dayExpenseArray) {
+                            //     const recurringExpenseIdSeenOnDay = new Set<string>();
+                            //     if (recurringExpenseIdSeenOnDay.has(expenseItem.recurringExpenseId)) {
+                            //         misplacedExpensesToRemove = [...misplacedExpensesToRemove, ]
+                            //     }
+                            //     recurringExpenseIdSeenOnDay.add(recurringExpenseItem.recurringExpenseId);
+                            //
+                            // }
+
+                            console.log(`Adding an expense item to existing group on ${new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString()}`)
                             dayExpenseGroupItem.dayExpenseArray = [...dayExpenseGroupItem.dayExpenseArray, expenseItem];
+                            matchingDayGroupExists = true;
                             break;
                         }
                     }
@@ -208,26 +228,35 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
         const today = new Date();
         let misplacedExpensesToRemove: string[] = [];
         recurringExpenseArray.forEach(recurringExpenseItem => {
+            const recurringExpenseIdSeenOnDay = new Map<Date, string>();
             for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
+
+
                 const expenseInstance = getRecurringExpenseInstanceOrNull(expenseArray, recurringExpenseItem, date);
                 const isFrequencyMatch = recurringExpenseLandsOnDay(recurringExpenseItem, date);
                 const expenseInstanceIsBlacklisted = removedRecurringExpenseInstances ? matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date) : false;
 
+                // If recurring instance already exists on this day
                 if (expenseInstance) {
-                    if (expenseInstance.category !== recurringExpenseItem.category) {
-                        const updatedExpenseItem: ExpenseUpdatingFormData = {
-                            category: recurringExpenseItem.category,
-                            amount: expenseInstance.amount,
-                            timestamp: expenseInstance.timestamp
-                        }
+                    // And it's either a duplicate or a now-incorrectly landed instance, queue it for removal
+                    if (recurringExpenseIdSeenOnDay.get(date) === expenseInstance.recurringExpenseId || !isFrequencyMatch) {
+                        misplacedExpensesToRemove = [...misplacedExpensesToRemove, expenseInstance.expenseId]
+                    } else {
+                        recurringExpenseIdSeenOnDay.set(date, expenseInstance.recurringExpenseId!)
+                    }
 
-                        handleExpenseUpdating(expenseInstance.expenseId, updatedExpenseItem)
-                            .then(() => getExpenseList()
-                                .then(results => setExpenseArray(results)))
-                    }
-                        if (!isFrequencyMatch && recurringExpenseItem.timestamp !== expenseInstance.timestamp) {
-                        misplacedExpensesToRemove = [...misplacedExpensesToRemove, expenseInstance.expenseId];
-                    }
+                    //
+                    // if (expenseInstance.category !== recurringExpenseItem.category) {
+                    //     const updatedExpenseItem: ExpenseUpdatingFormData = {
+                    //         category: recurringExpenseItem.category,
+                    //         amount: expenseInstance.amount,
+                    //         timestamp: expenseInstance.timestamp
+                    //     }
+                    //
+                    //     handleExpenseUpdating(expenseInstance.expenseId, updatedExpenseItem)
+                    //         .then(() => getExpenseList()
+                    //             .then(results => setExpenseArray(results)))
+                    // }
                 } else {
                     if (isFrequencyMatch && !expenseInstanceIsBlacklisted) {
                         const newExpenseItemLanded: ExpenseItemEntity = {

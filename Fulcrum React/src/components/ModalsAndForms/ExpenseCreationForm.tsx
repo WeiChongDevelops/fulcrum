@@ -80,15 +80,15 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
         e.preventDefault();
         hideForm();
 
-        if (formData.frequency === "never") {
-            const newExpenseItem: ExpenseItemEntity = {
-                expenseId: uuid(),
-                category: formData.category,
-                amount: formData.amount ? parseFloat(String(formData.amount)) : 0,
-                timestamp: formData.timestamp as Date,
-                recurringExpenseId: null
-            }
+        const newExpenseItem: ExpenseItemEntity = {
+            expenseId: uuid(),
+            category: formData.category,
+            amount: formData.amount ? parseFloat(String(formData.amount)) : 0,
+            timestamp: formData.timestamp as Date,
+            recurringExpenseId: null
+        }
 
+        if (formData.frequency === "never") {
             if (budgetArray.map(budgetItem => budgetItem.category).includes(newExpenseItem.category)) {
                 setExpenseArray(current => [newExpenseItem, ...current])
             } else {
@@ -99,9 +99,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                     group: "Miscellaneous",
                     timestamp: new Date(),
                 }
-                console.log("new ")
                 setBudgetArray(current => [...current, newDefaultBudgetItem])
-                setExpenseArray(current => [newExpenseItem, ...current])
             }
             await handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItem);
         } else {
@@ -112,7 +110,6 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 timestamp: formData.timestamp as Date,
                 frequency: formData.frequency
             }
-
             await handleRecurringExpenseCreation(newRecurringExpenseItem, setRecurringExpenseArray);
         }
         setFormData({
