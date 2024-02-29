@@ -511,7 +511,7 @@ export async function handleExpenseDeletion(expenseId: string,
     getBudgetList().then( budgetList => setBudgetArray(budgetList))
 }
 
-export async function handleBatchExpenseDeletion(expenseIdArray: string[]) {
+export async function handleBatchExpenseDeletion(expenseIdsToDelete: Set<string>) {
     try {
         const response = await fetch("http://localhost:8080/api/batchDeleteExpenses", {
             method: "DELETE",
@@ -519,7 +519,7 @@ export async function handleBatchExpenseDeletion(expenseIdArray: string[]) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                expenseIdsToDelete: expenseIdArray
+                expenseIdsToDelete: Array.from(expenseIdsToDelete)
             })
         })
         if (!response.ok) {
@@ -1501,11 +1501,11 @@ export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpens
 }
 
 export function getRecurringExpenseInstanceOrNull(expenseArray: ExpenseItemEntity[], recurringExpenseItem: RecurringExpenseItemEntity, date: Date) {
-    const expenseIdOfInstance = expenseArray.find((expenseItem: ExpenseItemEntity) => {
+    const recurringExpenseInstance = expenseArray.find((expenseItem: ExpenseItemEntity) => {
         return (expenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
             && new Date(expenseItem.timestamp).getTime() === new Date(date).getTime())
     })
-    return expenseIdOfInstance ? expenseIdOfInstance : null;
+    return recurringExpenseInstance ? recurringExpenseInstance : null;
 }
 
 

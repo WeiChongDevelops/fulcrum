@@ -199,6 +199,7 @@ fun Application.configureRouting() {
                 val recurringExpenseCreateRequest = call.receive<RecurringExpenseCreateRequestReceived>()
 
                 val itemToInsert = RecurringExpenseCreateRequestSent(
+                    recurringExpenseId = recurringExpenseCreateRequest.recurringExpenseId,
                     userId = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id,
                     category = recurringExpenseCreateRequest.category,
                     amount = recurringExpenseCreateRequest.amount,

@@ -184,7 +184,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
         console.log(newStructuredExpenseData);
 
         setStructuredExpenseData(newStructuredExpenseData);
-    }, [expenseArray]);
+    }, [expenseArray, recurringExpenseArray]);
 
 
     useEffect(() => {
@@ -226,11 +226,9 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
 
     async function updateRecurringExpenseInstances() {
         const today = new Date();
-        let misplacedExpensesToRemove: string[] = [];
+        const misplacedExpensesToRemove = new Set<string>();
         recurringExpenseArray.forEach(recurringExpenseItem => {
-            const recurringExpenseIdSeenOnDay = new Map<Date, string>();
             for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
-
 
                 const expenseInstance = getRecurringExpenseInstanceOrNull(expenseArray, recurringExpenseItem, date);
                 const isFrequencyMatch = recurringExpenseLandsOnDay(recurringExpenseItem, date);
@@ -238,12 +236,12 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
 
                 // If recurring instance already exists on this day
                 if (expenseInstance) {
-                    // And it's either a duplicate or a now-incorrectly landed instance, queue it for removal
-                    if (recurringExpenseIdSeenOnDay.get(date) === expenseInstance.recurringExpenseId || !isFrequencyMatch) {
-                        misplacedExpensesToRemove = [...misplacedExpensesToRemove, expenseInstance.expenseId]
-                    } else {
-                        recurringExpenseIdSeenOnDay.set(date, expenseInstance.recurringExpenseId!)
+
+                    // If this instance shouldn't have landed on this day (occurs when freq is changed), queue for removal
+                    if (!isFrequencyMatch) {
+                        misplacedExpensesToRemove.add(expenseInstance.expenseId);
                     }
+                    break;
 
                     //
                     // if (expenseInstance.category !== recurringExpenseItem.category) {
@@ -271,8 +269,8 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                 }
             }
         })
-        if (misplacedExpensesToRemove.length !== 0) {
-            console.log("see below to delete");
+        if (misplacedExpensesToRemove.size !== 0) {
+            console.log("See below; queued for deletion.");
             console.log(misplacedExpensesToRemove);
             await handleBatchExpenseDeletion(misplacedExpensesToRemove);
             setExpenseArray(await getExpenseList());
