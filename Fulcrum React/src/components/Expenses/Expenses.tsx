@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useMemo, useState} from "react";
 import {
     BudgetItemEntity,
     categoryListAsOptions,
@@ -100,7 +100,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
             .then(() => setIsLoading(false))
     }, []);
 
-    useEffect(() => {
+    useMemo(() => {
         console.log("RAW EXPENSE ARRAY BELOW")
         console.log(expenseArray);
 
