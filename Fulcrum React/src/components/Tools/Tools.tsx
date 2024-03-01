@@ -59,7 +59,7 @@ export default function Tools({ publicUserData, setPublicUserData, budgetArray, 
 
     return (
         <div>
-            {openToolsSection === "home" ? <div className="tools flex flex-col justify-center items-center bg-[#455259] min-h-screen p-10">
+            {openToolsSection === "home" ? <div className="tools flex flex-col justify-center items-center bg-[#455259] p-10">
                 <div className="profile-icon-display mb-2" onClick={() => {
                     setIsChangeIconMessageVisible(false);
                     setToolsFormVisibility(curr => ({...curr, isUpdateProfileIconFormVisible: true}))

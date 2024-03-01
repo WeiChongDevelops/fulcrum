@@ -54,7 +54,7 @@ export default function Fulcrum({ publicUserData, setPublicUserData, email, setE
                 </div>
             </nav>
             <nav className="text-white font-bold z-10">
-                <div className="flex flex-row justify-center items-center h-[80px]">
+                <div className="flex flex-row justify-center items-center">
                     <div className="flex flex-1 justify-around border-4 border-black bg-black">
                         <button id="expenses" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
                                 className={`flex flex-row justify-center items-center w-[33.33%] rounded-xl font-bold py-4 ${getWindowLocation() === "expenses" ? "bg-[#17423F]" : "bg-black"} border-2 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-300 ease-in-out`}

@@ -1501,11 +1501,11 @@ export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpens
 }
 
 export function getRecurringExpenseInstanceOrNull(expenseArray: ExpenseItemEntity[], recurringExpenseItem: RecurringExpenseItemEntity, date: Date) {
-    const recurringExpenseInstance = expenseArray.find((expenseItem: ExpenseItemEntity) => {
+    const recurringExpenseInstance = expenseArray.filter((expenseItem: ExpenseItemEntity) => {
         return (expenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
             && new Date(expenseItem.timestamp).getTime() === new Date(date).getTime())
     })
-    return recurringExpenseInstance ? recurringExpenseInstance : null;
+    return recurringExpenseInstance.length > 0 ? recurringExpenseInstance : null;
 }
 
 

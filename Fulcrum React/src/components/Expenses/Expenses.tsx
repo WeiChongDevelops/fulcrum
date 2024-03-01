@@ -227,34 +227,31 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     async function updateRecurringExpenseInstances() {
         const today = new Date();
         const misplacedExpensesToRemove = new Set<string>();
-        recurringExpenseArray.forEach(recurringExpenseItem => {
-            for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
 
-                const expenseInstance = getRecurringExpenseInstanceOrNull(expenseArray, recurringExpenseItem, date);
+
+        // For each recurring expense...
+        recurringExpenseArray.forEach(recurringExpenseItem => {
+
+            // We check each of the dates between when it was added and today.
+            for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
+                console.log(`Looking at date: ${date.toLocaleDateString()}`)
+
+                const expenseInstances = getRecurringExpenseInstanceOrNull(expenseArray, recurringExpenseItem, date);
                 const isFrequencyMatch = recurringExpenseLandsOnDay(recurringExpenseItem, date);
                 const expenseInstanceIsBlacklisted = removedRecurringExpenseInstances ? matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date) : false;
 
                 // If recurring instance already exists on this day
-                if (expenseInstance) {
+                if (expenseInstances != null) {
+                    let keepFirstInstance;
 
                     // If this instance shouldn't have landed on this day (occurs when freq is changed), queue for removal
                     if (!isFrequencyMatch) {
-                        misplacedExpensesToRemove.add(expenseInstance.expenseId);
+                        keepFirstInstance = false;
                     }
-                    break;
 
-                    //
-                    // if (expenseInstance.category !== recurringExpenseItem.category) {
-                    //     const updatedExpenseItem: ExpenseUpdatingFormData = {
-                    //         category: recurringExpenseItem.category,
-                    //         amount: expenseInstance.amount,
-                    //         timestamp: expenseInstance.timestamp
-                    //     }
-                    //
-                    //     handleExpenseUpdating(expenseInstance.expenseId, updatedExpenseItem)
-                    //         .then(() => getExpenseList()
-                    //             .then(results => setExpenseArray(results)))
-                    // }
+                    for (let i = keepFirstInstance ? 0 : 1; i < expenseInstances.length ; i++) {
+                        misplacedExpensesToRemove.add(expenseInstances[i].expenseId);
+                    }
                 } else {
                     if (isFrequencyMatch && !expenseInstanceIsBlacklisted) {
                         const newExpenseItemLanded: ExpenseItemEntity = {
@@ -274,6 +271,9 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
             console.log(misplacedExpensesToRemove);
             await handleBatchExpenseDeletion(misplacedExpensesToRemove);
             setExpenseArray(await getExpenseList());
+        } else {
+            console.log("SIZE IS ZERO, SEE BELOW:");
+            console.log(misplacedExpensesToRemove);
         }
     }
 
