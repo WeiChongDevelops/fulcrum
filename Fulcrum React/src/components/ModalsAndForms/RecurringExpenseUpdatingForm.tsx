@@ -15,11 +15,11 @@ import {
     getRecurringExpenseList,
     RecurringExpenseFormVisibility, Value,
 } from "../../util.ts";
-import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select/creatable';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
+import CategorySelector from "../Selectors/CategorySelector.tsx";
 
 interface RecurringExpenseUpdatingFormProps {
     setRecurringExpenseFormVisibility: Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
@@ -62,10 +62,6 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
         handleInputChangeOnFormWithAmount(e, setFormData);
     }
 
-    function handleCategoryInputChange(e: any) {
-        setFormData(currentFormData => ({ ...currentFormData, category: e.value }));
-    }
-
     function handleFrequencyInputChange(e: any) {
         setFormData(currentFormData => ({ ...currentFormData, frequency: e.value }));
     }
@@ -104,33 +100,7 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
             <p className="mb-6 mt-4 font-bold text-4xl">Updating Expense</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="category">Category</label>
-                <CreatableSelect
-                    id="category"
-                    name="category"
-                    defaultValue={{
-                        label: oldRecurringExpenseBeingEdited.oldCategory,
-                        value: oldRecurringExpenseBeingEdited.oldCategory,
-                        colour: categoryOptions.filter(categoryOption => (
-                            categoryOption.label === oldRecurringExpenseBeingEdited.oldCategory
-                        ))[0].colour
-                    }}
-                    options={categoryOptions.map(option => {
-                        return {label: option.label, value: option.value, colour: option.colour!!}
-                    })}
-                    onChange={handleCategoryInputChange}
-                    styles={colourStyles}
-                    className="mb-3"
-                    theme={(theme) => ({
-                        ...theme,
-                        borderRadius: 0,
-                        colors: {
-                            ...theme.colors,
-                            primary25: "rgba(201,223,201,0.32)",
-                            primary: "rgba(34,237,34,0.18)"
-                        },
-                    })}
-                    required
-                />
+                <CategorySelector categoryOptions={categoryOptions} oldExpenseBeingEdited={oldRecurringExpenseBeingEdited} setFormData={setFormData}/>
 
 
                 <label htmlFor="timestamp">Date</label>

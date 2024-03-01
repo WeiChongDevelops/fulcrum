@@ -19,15 +19,13 @@ import {
     handleRecurringExpenseCreation,
     RecurringExpenseItemEntity, recurringFrequencyOptions, Value, ExpenseFormVisibility, RecurringExpenseFormVisibility
 } from "../../util.ts";
-import CreatableSelect from 'react-select/creatable';
 import { v4 as uuid } from "uuid";
-import { components } from "react-select";
-import { InputProps } from "react-select";
 
 import Select from 'react-select/creatable';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
+import CategorySelector from "../Selectors/CategorySelector.tsx";
 
 
 interface ExpenseCreationFormProps {
@@ -120,10 +118,6 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
         });
     }
 
-    function handleCategoryInputChange(e: any) {
-        setFormData((currentFormData: ExpenseCreationFormData) => ({ ...currentFormData, category: e.value }));
-    }
-
     function handleFrequencyInputChange(e: any) {
         setFormData(currentFormData => ({ ...currentFormData, frequency: e.value }));
     }
@@ -137,10 +131,6 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
         setFormData(curr => ({ ...curr, timestamp: newValue }));
     }
 
-    const MaxLengthInput: any = (props: InputProps) => {
-        return <components.Input {...props} maxLength={18} />;
-    };
-
     return (
         <div ref={formRef}  className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
             <FulcrumButton onClick={() => {
@@ -150,29 +140,8 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
             <p className="mb-6 mt-4 font-bold text-4xl">New {mustBeRecurring && "Recurring "}Expense</p>
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="category">Category</label>
-                <CreatableSelect
-                    id="category"
-                    name="category"
-                    options={categoryOptions.map(option => {
-                        return {label: option.label, value: option.value, colour: option.colour!!}
-                    })}
-                    components={{Input: MaxLengthInput}}
-                    onChange={handleCategoryInputChange}
-                    styles={colourStyles}
-                    className="mb-3"
-                    theme={(theme) => ({
-                        ...theme,
-                        borderRadius: 0,
-                        colors: {
-                            ...theme.colors,
-                            primary25: "rgba(201,223,201,0.1)",
-                            primary: "rgba(34,237,34,0.18)"
-                        },
-                    })}
-                    placeholder="Select category or start typing to create..."
+                <CategorySelector categoryOptions={categoryOptions} setFormData={setFormData}/>
 
-                    required
-                />
                 <label htmlFor="amount">Amount</label>
                 <div>
                     <b className="relative left-6 text-black">{currencySymbol}</b>

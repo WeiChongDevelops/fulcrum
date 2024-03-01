@@ -5,17 +5,16 @@ import {
     getBudgetList,
     ExpenseItemEntity,
     SelectorOptionsFormattedData,
-    colourStyles,
     ExpenseUpdatingFormData,
     handleExpenseUpdating,
     getExpenseList,
     handleInputChangeOnFormWithAmount,
     PreviousExpenseBeingEdited, Value, ExpenseFormVisibility
 } from "../../util.ts";
-import CreatableSelect from 'react-select/creatable';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
+import CategorySelector from "../Selectors/CategorySelector.tsx";
 
 interface ExpenseUpdatingFormProps {
     setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
@@ -57,9 +56,6 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
         handleInputChangeOnFormWithAmount(e, setFormData);
     }
 
-    function handleCategoryInputChange(e: any) {
-        setFormData(currentFormData => ({ ...currentFormData, category: e.value }));
-    }
     function onDateInputChange(newValue: Value) {
         console.log(new Date(newValue as Date).toLocaleDateString())
         setFormData(curr => ({ ...curr, timestamp: newValue }));
@@ -93,33 +89,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
 
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <label htmlFor="category">Category</label>
-                <CreatableSelect
-                    id="category"
-                    name="category"
-                    defaultValue={{
-                        label: oldExpenseBeingEdited.oldCategory,
-                        value: oldExpenseBeingEdited.oldCategory,
-                        colour: categoryOptions.filter(categoryOption => (
-                            categoryOption.label === oldExpenseBeingEdited.oldCategory
-                        ))[0].colour
-                    }}
-                    options={categoryOptions.map(option => {
-                        return {label: option.label, value: option.value, colour: option.colour!!}
-                    })}
-                    onChange={handleCategoryInputChange}
-                    styles={colourStyles}
-                    className="mb-3"
-                    theme={(theme: any) => ({
-                        ...theme,
-                        borderRadius: 0,
-                        colors: {
-                            ...theme.colors,
-                            primary25: "rgba(201,223,201,0.1)",
-                            primary: "rgba(34,237,34,0.18)"
-                        },
-                    })}
-                    required
-                />
+                <CategorySelector categoryOptions={categoryOptions} oldExpenseBeingEdited={oldExpenseBeingEdited} setFormData={setFormData}/>
 
                 <label htmlFor="amount">Amount</label>
                 <div>
