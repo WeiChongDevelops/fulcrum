@@ -23,13 +23,13 @@
 
 .expense-item {
     transition: all ease-out 250ms;
-    box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 1);
+    box-shadow: 0.5rem 0.5rem 0 0 rgba(0, 0, 0, 1);
     @apply w-[94vw]
 }
 
 .expense-item:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 12px 12px 0 0 rgba(0, 0, 0, 1);
+    transform: translate(-0.3rem, -0.3rem);
+    box-shadow: 0.9rem 0.9rem 0 0 rgba(0, 0, 0, 1);
     cursor: pointer;
 }
 
