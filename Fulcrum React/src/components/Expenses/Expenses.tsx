@@ -278,11 +278,10 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     }
 
     return (
-        <div className={"min-h-[100vh] overflow-x-hidden overflow-y-auto"}>
+        <div className={""}>
             {!isLoading ? <div className="flex flex-col justify-center items-center">
-                <div className={`flex flex-col  justify-center items-center elementsBelowPopUpForm z-2
+                <div className={`flex flex-col justify-center items-center elementsBelowPopUpForm z-2
             ${isExpenseFormOrModalOpen && "blur"}`}>
-
                     <ExpenseMonthCarousel
                         structuredExpenseData={structuredExpenseData}
                         setExpenseFormVisibility={setExpenseFormVisibility}
@@ -293,7 +292,6 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                         publicUserData={publicUserData}
                         setDefaultCalendarDate={setDefaultCalendarDate}
                     />
-
                 </div>
 
                 {isExpenseFormOrModalOpen && <div className="absolute w-full h-full bg-transparent z-3"></div>}
