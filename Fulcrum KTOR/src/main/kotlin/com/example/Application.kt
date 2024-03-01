@@ -30,10 +30,11 @@ private fun Application.serverConfig() {
         allowHost("localhost:5173", schemes = listOf("http"))
     }
 
-    staticResources()
-    contactUsModule()
     launch {
-        configureRouting()
+        configureAuthRouting()
+        configureBudgetRouting()
+        configureExpenseRouting()
+        configureOtherRouting()
     }
 }
 

@@ -242,14 +242,14 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
 
                 // If recurring instance already exists on this day
                 if (expenseInstances != null) {
-                    let keepFirstInstance;
+                    let keepFirstInstance = true;
 
                     // If this instance shouldn't have landed on this day (occurs when freq is changed), queue for removal
                     if (!isFrequencyMatch) {
                         keepFirstInstance = false;
                     }
 
-                    for (let i = keepFirstInstance ? 0 : 1; i < expenseInstances.length ; i++) {
+                    for (let i = keepFirstInstance ? 1 : 0; i < expenseInstances.length ; i++) {
                         misplacedExpensesToRemove.add(expenseInstances[i].expenseId);
                     }
                 } else {
