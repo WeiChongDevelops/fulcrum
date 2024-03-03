@@ -84,27 +84,7 @@
 }
 
 
-@media (max-width: 880px){
-    .currency-selector {
-        @apply grid grid-cols-3 grid-rows-2 gap-y-2 gap-x-0 justify-items-center
-    }
-    .currency-selector-row {
-        @apply h-48
-    }
-}
-
-.currency-selection {
-    @apply hover:cursor-pointer
-}
-
-@media (max-width: 518px) {
-    .recurring-expenses-title {
-        font-size: 2rem;
-    }
-}
-
-
-    /* PROFILE ICON SELECTOR */
+/* PROFILE ICON SELECTOR */
 
 .profile-icon {
     width: 100px;
@@ -142,4 +122,25 @@
     opacity: 0.70;
     filter: brightness(50%);
     cursor: pointer;
+}
+
+/* MEDIA QUERIES */
+
+@media (max-width: 880px){
+    .currency-selector {
+        @apply grid grid-cols-3 grid-rows-2 gap-y-2 gap-x-0 justify-items-center
+    }
+    .currency-selector-row {
+        @apply h-48
+    }
+}
+
+.currency-selection {
+    @apply hover:cursor-pointer
+}
+
+@media (max-width: 518px) {
+    .recurring-expenses-title {
+        font-size: 2rem;
+    }
 }

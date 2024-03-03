@@ -26,7 +26,7 @@ export default function Fulcrum({ publicUserData, setPublicUserData, email, setE
         <div className={`transition-filter duration-500 ease-in-out min-h-screen ${publicUserData.accessibilityEnabled && "accessibility-enabled"}`}>
             <NavbarUpper publicUserData={publicUserData} setPublicUserData={setPublicUserData} email={email}/>
             <NavbarLower/>
-            {!window.location.href.includes("tools") && <div id="background-grid" className={`background ${publicUserData.darkModeEnabled ? "bg-dark" : "bg-light"}`}></div>}
+            {!window.location.href.includes("tools") && <div id="background" className={`${publicUserData.darkModeEnabled ? "bg-dark" : "bg-light"}`}></div>}
             <Outlet/>
         </div>
     );

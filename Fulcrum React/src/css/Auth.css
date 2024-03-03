@@ -4,6 +4,9 @@
 	overflow: hidden;
 }
 
+.auth-form {
+	position: relative;
+}
 
 .register-page:before {
 	background-image: url("/src/assets/other-assets/register-bg-4.webp");
@@ -29,6 +32,10 @@
 
 .auth-mobile-fulcrum-logo {
 	display: none;
+}
+
+.auth-form input::placeholder {
+	text-align: left;
 }
 
 @media (max-width: 890px) {

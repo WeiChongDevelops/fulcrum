@@ -1,33 +1,5 @@
 
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-input::placeholder {
-  text-align: center;
-}
-
-.auth-form input::placeholder {
-  text-align: left;
-}
-
-html, body {
-  font-family: 'Quicksand', sans-serif;
-  height: auto;
-  min-height: 100%;
-}
+/* GLOBAL STYLES */
 
 .bg-light {
   background-color: #F1F5F9;
@@ -37,7 +9,7 @@ html, body {
   background-color: #252528;
 }
 
-#background-grid {
+#background {
   transition: all ease-out 220ms;
   width: 100%;
   z-index: -1;
@@ -45,22 +17,6 @@ html, body {
   height: 100vh;
   top: 0;
 }
-
-
-body input {
-  background-color: white;
-  padding: 0 5px;
-  @apply text-black font-bold;
-}
-
-body label {
-  @apply font-bold;
-}
-
-.auth-form {
-  position: relative;
-}
-
 
 .circle-button:hover {
   cursor: pointer;
@@ -108,6 +64,8 @@ body label {
   @apply rounded-3xl text-white
 }
 
+/* LOGOS */
+
 .navbar-fulcrum-logo {
   height: 50px;
 }
@@ -115,6 +73,8 @@ body label {
 .footer-fulcrum-logo {
   height: 35px;
 }
+
+/* TOGGLES */
 
 .toggle-right-shift {
   transform: translateX(150%);
@@ -146,6 +106,8 @@ body label {
 .accessibility-enabled {
   filter: grayscale(100%) contrast(150%) brightness(140%) saturate(380%);
 }
+
+/* MEDIA QUERIES */
 
 @media (max-width: 670px) {
   .navbar-email {
