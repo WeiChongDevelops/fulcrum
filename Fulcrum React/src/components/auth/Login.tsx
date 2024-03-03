@@ -1,23 +1,12 @@
 import FulcrumButton from "../other/FulcrumButton.tsx";
 import "../../css/App.css";
+import "../../css/Auth.css";
 import {FormEvent, useState} from "react";
 import {handleUserLogin} from "../../util.ts";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-    // useEffect(() => {
-    //     checkForUser()
-    //         .then(userStatus => {
-    //             if (userStatus.loggedIn) {
-    //                 console.log("User already logged in.");
-    //                 window.location.href = "/budget";
-    //             } else {
-    //                 console.log("User not logged in, login page access greenlighted.");
-    //             }
-    //         })
-    // }, []);
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();

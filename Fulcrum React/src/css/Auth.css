@@ -1,0 +1,60 @@
+
+.auth-page-container {
+	position: relative;
+	overflow: hidden;
+}
+
+
+.register-page:before {
+	background-image: url("/src/assets/other-assets/register-bg-4.webp");
+}
+
+.login-page:before {
+	background-image: url("/src/assets/other-assets/login-bg.webp");
+}
+
+.auth-page-container::before {
+	content: '';
+	position: absolute;
+	top: -20px;
+	right: -20px;
+	bottom: -20px;
+	left: -20px;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: left;
+	filter: blur(8px) brightness(60%);
+	z-index: -1;
+}
+
+.auth-mobile-fulcrum-logo {
+	display: none;
+}
+
+@media (max-width: 890px) {
+	.auth-header {
+		font-size: 3rem;
+	}
+}
+
+@media (max-width: 670px) {
+	.auth-page-container {
+		@apply flex flex-col
+	}
+
+	.auth-page-left-column {
+		display: none;
+	}
+
+	.auth-page-right-column {
+		margin: 0;
+	}
+
+	.auth-form {
+		width: 75vw;
+	}
+
+	.auth-mobile-fulcrum-logo {
+		display: block;
+	}
+}

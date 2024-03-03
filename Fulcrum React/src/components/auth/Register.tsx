@@ -1,5 +1,6 @@
 import FulcrumButton from "../other/FulcrumButton.tsx";
 import "../../css/App.css";
+import "../../css/Auth.css";
 import {FormEvent, useState} from "react";
 import {handleUserRegistration} from "../../util.ts";
 
