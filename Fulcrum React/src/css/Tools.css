@@ -1,5 +1,6 @@
 .tools {
     min-height: calc(100vh - 128px);
+    overflow: hidden;
 }
 
 .profile-icon-display {

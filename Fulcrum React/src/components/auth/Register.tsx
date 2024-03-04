@@ -23,44 +23,44 @@ export default function Register() {
     }
 
     return (
-        <div className={"auth-page-container register-page flex flex-row justify-around items-center w-[100vw] h-[100vh]"}>
-            <div className={"auth-page-left-column flex flex-col justify-center items-start h-[65vh] pl-[10rem] pb-52"}>
+        <div className={"auth-page-container register-page"}>
+            <div className={"auth-page-left-column"}>
                 <div className={"flex-1"}>
-                    <img src="/src/assets/fulcrum-logos/fulcrum-long-white.webp" className={"select-none w-80 h-auto"} alt="Fulcrum logo"/>
+                    <img src="/src/assets/fulcrum-logos/fulcrum-long-white.webp" className={"auth-standard-fulcrum-logo"} alt="Fulcrum logo"/>
                 </div>
-                <div className={"flex flex-col justify-center items-start h-[100vh] w-[35vw] text-left"}>
-                    <b className={"text-[3rem]"}>Register for an account.</b>
+                <div className={"auth-text"}>
+                    <b className={"text-5xl"}>Register for an account.</b>
                     <p className={"text-xl ml-2 mt-8"}>Start saving for free today.</p>
                 </div>
             </div>
-            <div className={"auth-page-right-column flex flex-col justify-around items-center h-[75vh] mr-24"}>
+            <div className={"auth-page-right-column"}>
                 <div className={"flex-1"}>
-                    <img src="/src/assets/fulcrum-logos/fulcrum-long-white.webp" className={"select-none w-96 h-auto auth-mobile-fulcrum-logo"} alt="Fulcrum logo"/>
+                    <img src="/src/assets/fulcrum-logos/fulcrum-long-white.webp" className={"auth-mobile-fulcrum-logo"} alt="Fulcrum logo"/>
                 </div>
-                <form className={"auth-form flex flex-col justify-center items-center bg-white text-black px-12 pt-14 mt-20 pb-8 w-[37vw] rounded-2xl"}
+                <form className={"auth-form"}
                       onSubmit={handleSubmit}>
-                    <div className={"flex flex-col justify-center items-start w-full"}>
+                    <div className={"auth-label-input-pair"}>
                         <label htmlFor={"email"}>Email</label>
-                        <input type="email" className={"w-full py-2 px-4 rounded-md border border-gray-400 mt-2"}
+                        <input type="email"
                                placeholder={"name@example.com"}
                                value={email}
                                onChange={e => setEmail(e.target.value)}
                                autoComplete={"email"}
                                required/>
                     </div>
-                    <div className={"flex flex-col justify-center items-start w-full mt-10"}>
+                    <div className={"auth-label-input-pair mt-10"}>
                         <label htmlFor={"password"}>Password</label>
-                        <input type="password" className={"w-full py-2 px-4 rounded-md border border-gray-400 mt-2"}
+                        <input type="password"
                                placeholder={"Your password"}
                                value={password}
                                onChange={e => setPassword(e.target.value)}
                                autoComplete={"new-password"}
                                required/>
                     </div>
-                    <div className={"flex flex-col justify-center items-start w-full my-10"}>
+                    <div className={"auth-label-input-pair my-10"}>
                         <label htmlFor={"password"}>Confirm Password</label>
-                        <input type="password" className={"w-full py-2 px-4 rounded-md border border-gray-400 mt-2"}
-                               placeholder={"Confirm password"}
+                        <input type="password"
+                               placeholder={"Confirmed password"}
                                value={confirmPassword}
                                onChange={e => setConfirmPassword(e.target.value)}
                                autoComplete={"new-password"}
@@ -74,7 +74,6 @@ export default function Register() {
                         <FulcrumButton displayText={"Register"} backgroundColour={"green"}/>
                     </div>
                 </form>
-                <p className={"text-8xl flex-1"}></p>
             </div>
         </div>
     );
