@@ -64,7 +64,7 @@ export default function ExpenseItem( { expenseId,
     }
 
     return (
-        <div className="expense-item flex flex-row justify-between items-center py-1.5 px-2.5 rounded-2xl my-3 text-black select-none"
+        <div className="expense-item"
              style={{backgroundColor: groupColour}}
              onClick={handleEditClick}>
             <div className="flex flex-row items-center">
@@ -84,10 +84,10 @@ export default function ExpenseItem( { expenseId,
                 {recurringExpenseId && <img src={`/src/assets/UI-icons/tools-recurring-icon-${groupName === "Miscellaneous" ? "white" : "black"}.svg`} alt="Cycle icon" className={"w-8 h-8 mr-6"}/>}
                 <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
                 <div className="flex flex-row items-center ml-2">
-                    <button className="circle-button rounded-full p-1" onClick={handleEditClick}>
+                    <button className="circle-button" onClick={handleEditClick}>
                         <img src={`/src/assets/UI-icons/edit-pencil-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="" className="mx-1 w-6 h-6" />
                     </button>
-                    <button className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
+                    <button className="circle-button" onClick={handleDeleteClick}>
                         <img src={`/src/assets/UI-icons/delete-trash-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="" className="mx-1 w-6 h-6" />
                     </button>
                 </div>

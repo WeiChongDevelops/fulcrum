@@ -91,8 +91,7 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
     }
 
     return (
-        <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
-
+        <div ref={formRef} className="fulcrum-form justify-start items-center">
             <FulcrumButton onClick={() => {
                 hideForm();
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>

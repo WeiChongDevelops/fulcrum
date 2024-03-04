@@ -18,6 +18,7 @@ import Loader from "../other/Loader.tsx";
 import FulcrumButton from "../other/FulcrumButton.tsx";
 import AddNewRecurringExpenseButton from "./AddNewRecurringExpenseButton.tsx";
 import RecurringExpenseModalsAndForms from "./RecurringExpenseModalsAndForms.tsx";
+import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 
 interface RecurringExpensesProps {
     setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
@@ -83,8 +84,8 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData,
 
     return (
         <div>
-            {!isLoading ? <div className="flex flex-col justify-start items-center bg-[#455259] min-h-screen">
-                <div className={`flex flex-col justify-center items-center w-[100vw] elementsBelowPopUpForm z-2
+            {!isLoading ? <div className="justify-start items-center bg-[#455259] min-h-screen">
+                <div className={`justify-center items-center w-[100vw] elementsBelowPopUpForm
                     ${isRecurringExpenseFormOrModalOpen && "blur"}`}>
 
                     <div className="flex justify-between items-center mt-6 w-full">
@@ -132,22 +133,20 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData,
                     </div>
                 </div>
 
-                {isRecurringExpenseFormOrModalOpen && <div className="absolute w-screen h-screen bg-transparent z-3"></div>}
+                {isRecurringExpenseFormOrModalOpen && <ActiveFormClickShield/>}
 
-                <div className="z-4">
-                    <RecurringExpenseModalsAndForms recurringExpenseModalVisibility={recurringExpenseModalVisibility}
-                                                    recurringExpenseFormVisibility={recurringExpenseFormVisibility}
-                                                    setRecurringExpenseArray={setRecurringExpenseArray}
-                                                    setBudgetArray={setBudgetArray}
-                                                    groupArray={groupArray}
-                                                    setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
-                                                    setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
-                                                    recurringExpenseIdToDelete={recurringExpenseIdToDelete}
-                                                    publicUserData={publicUserData}
-                                                    setExpenseArray={setExpenseArray}
-                                                    budgetArray={budgetArray}
-                                                    oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}/>
-                </div>
+                <RecurringExpenseModalsAndForms recurringExpenseModalVisibility={recurringExpenseModalVisibility}
+                                                recurringExpenseFormVisibility={recurringExpenseFormVisibility}
+                                                setRecurringExpenseArray={setRecurringExpenseArray}
+                                                setBudgetArray={setBudgetArray}
+                                                groupArray={groupArray}
+                                                setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
+                                                setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
+                                                recurringExpenseIdToDelete={recurringExpenseIdToDelete}
+                                                publicUserData={publicUserData}
+                                                setExpenseArray={setExpenseArray}
+                                                budgetArray={budgetArray}
+                                                oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}/>
             </div> : <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled}/>}
         </div>
     );

@@ -38,11 +38,12 @@ h1 {
 body input {
   background-color: white;
   padding: 0 5px;
-  @apply text-black font-bold;
+  color: black;
+  font-weight: bold;
 }
 
 body label {
-  @apply font-bold;
+  font-weight: bold;
 }
 
 input::placeholder {

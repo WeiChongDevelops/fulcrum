@@ -1,18 +1,13 @@
 
-/* BACKGROUND BLUR FOCUS EFFECT*/
-
-.elementsBelowPopUpForm {
-    transition: all 0.1s ease-out;
-    width: 100%;
-}
-
-.blur {
-    filter: blur(5px);
-}
 
 /* BUDGET TILE */
 
 .budget-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 1rem;
     width: 17vw;
     height: 20vw;
     min-width: 120px;
@@ -34,6 +29,13 @@
     background: url("../assets/UI-icons/green-triangle-background.webp") center / contain no-repeat;
     min-width: 105px;
     min-height: 60px;
+    display: flex;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    width: 10rem;
+    height: 9rem;
 }
 
 .budget-tile-icon {
@@ -52,11 +54,20 @@
     max-width: 125%;
     margin-top: 5px;
     letter-spacing: 0.3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 3rem;
+    font-weight: bold;
 }
 
 .budgeting-values-container {
     line-height: 1;
     margin-top: 0.2rem;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.875rem;
+    font-weight: 600;
 }
 
 
@@ -73,6 +84,7 @@
     background: transparent;
     border: black 2px dashed;
     color: black;
+    border-radius: 0.75rem;
 }
 
 
@@ -94,6 +106,8 @@
     background: transparent;
     border: black 2px dashed;
     color: black;
+    margin-bottom: 2rem;
+    border-radius: 1.5rem;
 }
 
 .create-group-button:hover {
@@ -242,6 +256,14 @@
 
 .rotating-text-label-container {
     animation: textFadeIn 1350ms ease forwards;
+    display: flex;
+    position: absolute;
+    bottom: 2rem;
+    flex-direction: row;
+    justify-content: space-between;
+    user-select: none;
+    width: 100%;
+    font-size: 1.5em;
 }
 
 .fulcrum-bowl-left {

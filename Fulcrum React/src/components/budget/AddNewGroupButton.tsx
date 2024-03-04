@@ -13,7 +13,7 @@ export default function AddNewGroupButton({ setBudgetFormVisibility, isDarkMode 
     }
 
     return (
-        <button className={`create-group-button ${isDarkMode && "create-expense-button-dark"} rounded-3xl mb-8`} onClick={handleClick}>
+        <button className={`create-group-button ${isDarkMode && "create-expense-button-dark"}`} onClick={handleClick}>
             <p className="text-2xl font-bold">+</p>
         </button>
     )

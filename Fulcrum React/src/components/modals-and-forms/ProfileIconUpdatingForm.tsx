@@ -63,7 +63,6 @@ export default function ProfileIconUpdatingForm( { oldIconFileName, setToolsForm
 
     return (
         <div ref={formRef} className="fulcrum-form">
-
             <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
                 <ProfileIconSelector/>
                 <FulcrumButton displayText="Update Profile Icon" />

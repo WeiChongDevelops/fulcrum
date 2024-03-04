@@ -95,10 +95,10 @@ export default function Group({ groupName,
                     <p className={`mt - 2 text-3xl font-bold ${groupName !== "Miscellaneous" ? "text-black" : "text-white"}`}>{groupName}</p>
                     {groupName !== "Miscellaneous" &&
                         <div className="flex flex-row justify-center items-center ml-2 relative top-0.5">
-                            <div className="circle-button rounded-full p-1" onClick={handleEditClick}>
+                            <div className="circle-button" onClick={handleEditClick}>
                                 <img src="/src/assets/UI-icons/edit-pencil-black-icon.svg" alt="" className="w-5 h-5" />
                             </div>
-                            <div className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
+                            <div className="circle-button" onClick={handleDeleteClick}>
                                 <img src="/src/assets/UI-icons/delete-trash-black-icon.svg" alt="" className="w-5 h-5" />
                             </div>
                         </div>

@@ -29,6 +29,7 @@ import Loader from "../other/Loader.tsx";
 import {v4 as uuid} from "uuid";
 import ExpenseMonthCarousel from "./ExpenseMonthCarousel.tsx";
 import ExpenseModalsAndForms from "./ExpenseModalsAndForms.tsx";
+import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 
 
 interface ExpensesProps {
@@ -139,16 +140,6 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                     for (let dayExpenseGroupItem of monthExpenseGroupItem.monthExpenseArray) {
                         if (new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString() === new Date(expenseItem.timestamp).toLocaleDateString()) {
 
-                            //
-                            // for (const expenseItem of dayExpenseGroupItem.dayExpenseArray) {
-                            //     const recurringExpenseIdSeenOnDay = new Set<string>();
-                            //     if (recurringExpenseIdSeenOnDay.has(expenseItem.recurringExpenseId)) {
-                            //         misplacedExpensesToRemove = [...misplacedExpensesToRemove, ]
-                            //     }
-                            //     recurringExpenseIdSeenOnDay.add(recurringExpenseItem.recurringExpenseId);
-                            //
-                            // }
-
                             console.log(`Adding an expense item to existing group on ${new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString()}`)
                             dayExpenseGroupItem.dayExpenseArray = [...dayExpenseGroupItem.dayExpenseArray, expenseItem];
                             matchingDayGroupExists = true;
@@ -253,7 +244,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     return (
         <div className={""}>
             {!isLoading ? <div className="flex flex-col justify-center items-center">
-                <div className={`flex flex-col justify-center items-center elementsBelowPopUpForm z-2
+                <div className={`justify-center items-center elementsBelowPopUpForm
             ${isExpenseFormOrModalOpen && "blur"}`}>
                     <ExpenseMonthCarousel
                         structuredExpenseData={structuredExpenseData}
@@ -267,24 +258,22 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                     />
                 </div>
 
-                {isExpenseFormOrModalOpen && <div className="absolute w-full h-full bg-transparent z-3"></div>}
+                {isExpenseFormOrModalOpen && <ActiveFormClickShield/>}
 
-                <div className="z-4">
-                    <ExpenseModalsAndForms expenseFormVisibility={expenseFormVisibility}
-                                           setExpenseFormVisibility={setExpenseFormVisibility}
-                                           expenseModalVisibility={expenseModalVisibility}
-                                           setExpenseModalVisibility={setExpenseModalVisibility}
-                                           expenseArray={expenseArray}
-                                           budgetArray={budgetArray}
-                                           groupArray={groupArray}
-                                           setExpenseArray={setExpenseArray}
-                                           setBudgetArray={setBudgetArray}
-                                           setRecurringExpenseArray={setRecurringExpenseArray}
-                                           setRemovedRecurringExpenseInstances={setRemovedRecurringExpenseInstances}
-                                           publicUserData={publicUserData}
-                                           defaultCalendarDate={defaultCalendarDate}
-                                           oldExpenseBeingEdited={oldExpenseBeingEdited} expenseIdToDelete={expenseIdToDelete}/>
-                </div>
+                <ExpenseModalsAndForms expenseFormVisibility={expenseFormVisibility}
+                                       setExpenseFormVisibility={setExpenseFormVisibility}
+                                       expenseModalVisibility={expenseModalVisibility}
+                                       setExpenseModalVisibility={setExpenseModalVisibility}
+                                       expenseArray={expenseArray}
+                                       budgetArray={budgetArray}
+                                       groupArray={groupArray}
+                                       setExpenseArray={setExpenseArray}
+                                       setBudgetArray={setBudgetArray}
+                                       setRecurringExpenseArray={setRecurringExpenseArray}
+                                       setRemovedRecurringExpenseInstances={setRemovedRecurringExpenseInstances}
+                                       publicUserData={publicUserData}
+                                       defaultCalendarDate={defaultCalendarDate}
+                                       oldExpenseBeingEdited={oldExpenseBeingEdited} expenseIdToDelete={expenseIdToDelete}/>
             </div>: <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled}/>}
         </div>
     );

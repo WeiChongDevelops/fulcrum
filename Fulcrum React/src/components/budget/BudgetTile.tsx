@@ -64,24 +64,24 @@ export default function BudgetTile({ category,
     const currency = publicUserData.currency;
 
     return (
-        <div className="budget-tile flex flex-col justify-around items-center rounded-2xl"
+        <div className="budget-tile"
              style={{backgroundColor: `${budgetExceeded ? "#ff3f3f" : "#44b775"}`}}
              onClick={handleEditClick}>
-            <div className="tile-icon-container flex justify-center items-center p-2 w-40 h-36 mt-2">
+            <div className="tile-icon-container">
                 <img className="budget-tile-icon" src={`/src/assets/category-icons/${icon}`} alt="" />
             </div>
-            <div className="budget-name-container h-12 font-bold flex flex-col justify-center">
+            <div className="budget-name-container">
                 <p className="budget-name">{category.toUpperCase()}</p>
             </div>
-            <div className="budgeting-values-container flex flex-col text-sm font-semibold">
+            <div className="budgeting-values-container">
                 <p>Spent: {formatDollarAmountStatic(spent, currency)} of {formatDollarAmountStatic(amount, currency)}</p>
                 <p>Left: {formatDollarAmountStatic(amount - spent, currency)}</p>
             </div>
             <div className="flex flex-row mb-2">
-                <button className="circle-button rounded-full p-1" onClick={handleEditClick}>
+                <button className="circle-button" onClick={handleEditClick}>
                     <img src="/src/assets/UI-icons/edit-pencil-white-icon.svg" alt="" className="mx-1 w-5 h-5" />
                 </button>
-                <button className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
+                <button className="circle-button" onClick={handleDeleteClick}>
                     <img src="/src/assets/UI-icons/delete-trash-white-icon.svg" alt="" className="mx-1 w-5 h-5" />
                 </button>
             </div>

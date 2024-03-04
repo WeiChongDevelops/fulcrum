@@ -19,7 +19,7 @@ export default function NavbarLower() {
             <div className="flex flex-row justify-center items-center">
                 <div className="flex flex-1 justify-around border-4 border-black bg-black">
                     <button id="expenses" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
-                            className={`flex flex-row justify-center items-center w-[33.33%] rounded-xl font-bold py-4 ${getWindowLocation() === "expenses" ? "bg-[#17423F]" : "bg-black"} border-2 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-300 ease-in-out`}
+                            className={`lower-navbar-third ${getWindowLocation() === "expenses" ? "bg-[#17423F]" : "bg-black"} border-2`}
                             onClick={() => window.location.href = "/expenses"}>
                         <img
                             src={`/src/assets/navbar-icons/expenses-icon-${getWindowLocation() === "expenses" ? "white" : "black"}.svg`}
@@ -32,7 +32,7 @@ export default function NavbarLower() {
                             alt=""/>
                     </button>
                     <button id="budget" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
-                            className={`flex flex-row justify-center items-center w-[33.33%] rounded-xl font-bold py-4 ${getWindowLocation() === "budget" ? "bg-[#17423F]" : "bg-black"} border-y-2 border-x-4 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-300 ease-in-out`}
+                            className={`lower-navbar-third ${getWindowLocation() === "budget" ? "bg-[#17423F]" : "bg-black"} border-y-2 border-x-4`}
                             onClick={() => window.location.href = "/budget"}>
                         <img
                             src={`/src/assets/navbar-icons/budget-icon-${getWindowLocation() === "budget" ? "white" : "black"}.svg`}
@@ -45,7 +45,7 @@ export default function NavbarLower() {
                             alt=""/>
                     </button>
                     <button id="tools" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
-                            className={`flex flex-row justify-center items-center w-[33.33%] rounded-xl font-bold py-4 ${getWindowLocation() === "tools" ? "bg-[#17423F]" : "bg-black"} border-2 border-black hover:bg-[#efefef] hover:text-black transition-colors duration-300 ease-in-out`}
+                            className={`lower-navbar-third ${getWindowLocation() === "tools" ? "bg-[#17423F]" : "bg-black"} border-2 `}
                             onClick={() => window.location.href = "/tools"}>
                         <img
                             src={`/src/assets/navbar-icons/tools-icon-${getWindowLocation() === "tools" ? "white" : "black"}.svg`}

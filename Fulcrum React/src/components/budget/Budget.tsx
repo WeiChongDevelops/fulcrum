@@ -18,6 +18,7 @@ import BudgetModalsAndForms from "./BudgetModalsAndForms.tsx";
 import Loader from "../other/Loader.tsx";
 import '../../css/App.css'
 import '../../css/Budget.css'
+import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 
 
 interface BudgetProps {
@@ -123,7 +124,7 @@ export default function Budget( { publicUserData, expenseArray, budgetArray, gro
     return (
         <>
             {!isLoading ?<div className="flex flex-row justify-center items-center">
-                 <div className={`flex flex-col items-center elementsBelowPopUpForm z-2
+                 <div className={`justify-center items-center elementsBelowPopUpForm
                 ${isBudgetFormOrModalOpen && "blur"}`}>
                     <IncomeDisplay
                         totalIncome={totalIncome}
@@ -152,23 +153,21 @@ export default function Budget( { publicUserData, expenseArray, budgetArray, gro
                     <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility} isDarkMode={publicUserData.darkModeEnabled}/>
                 </div>
 
-                {isBudgetFormOrModalOpen && <div className="absolute w-screen h-screen bg-transparent z-3"></div>}
+                {isBudgetFormOrModalOpen && <ActiveFormClickShield/>}
 
-                <div className="z-4">
-                    <BudgetModalsAndForms budgetFormVisibility={budgetFormVisibility}
-                    setBudgetArray={setBudgetArray}
-                    groupArray={groupArray}
-                    groupNameOfNewItem={groupNameOfNewItem}
-                    setBudgetFormVisibility={setBudgetFormVisibility}
-                    oldBudgetBeingEdited={oldBudgetBeingEdited}
-                    setGroupArray={setGroupArray}
-                    oldGroupBeingEdited={oldGroupBeingEdited}
-                    groupToDelete={groupToDelete}
-                    categoryToDelete={categoryToDelete}
-                    runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
-                    modalFormVisibility={budgetModalVisibility}
-                    setModalFormVisibility={setBudgetModalVisibility} currencySymbol={getCurrencySymbol(publicUserData.currency)}/>
-                </div>
+                <BudgetModalsAndForms budgetFormVisibility={budgetFormVisibility}
+                setBudgetArray={setBudgetArray}
+                groupArray={groupArray}
+                groupNameOfNewItem={groupNameOfNewItem}
+                setBudgetFormVisibility={setBudgetFormVisibility}
+                oldBudgetBeingEdited={oldBudgetBeingEdited}
+                setGroupArray={setGroupArray}
+                oldGroupBeingEdited={oldGroupBeingEdited}
+                groupToDelete={groupToDelete}
+                categoryToDelete={categoryToDelete}
+                runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
+                modalFormVisibility={budgetModalVisibility}
+                setModalFormVisibility={setBudgetModalVisibility} currencySymbol={getCurrencySymbol(publicUserData.currency)}/>
             </div> : <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled}/>}
         </>
     );

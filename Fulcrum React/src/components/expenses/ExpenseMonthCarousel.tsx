@@ -43,9 +43,9 @@ export default function ExpenseMonthCarousel({structuredExpenseData,
     }, [monthPanelShowingIndex]);
 
     return (
-        <div className={"relative "}>
+        <div className={"relative"}>
             <div className={"expense-carousel overflow-x-auto absolute left-[-50vw]"} style={{transform: `translateX(calc(-100vw * (${monthsFromY2KToNow} + ${monthPanelShowingIndex})))`}}>
-                <div className={"flex flex-row "}>
+                <div className={"flex flex-row"}>
                     {structuredExpenseData.map((monthExpenseGroupItem, key) => {
                         return (
                             <div className={"flex flex-col items-center w-screen h-[calc(100vh-135px)]"} key={key}>
@@ -60,7 +60,8 @@ export default function ExpenseMonthCarousel({structuredExpenseData,
                                                    monthPanelShowingIndex={monthPanelShowingIndex}
                                                    setMonthPanelShowingIndex={setMonthPanelShowingIndex}
                                                    setDefaultCalendarDate={setDefaultCalendarDate}/>
-                            </div>);
+                            </div>
+                        );
                     })}
                 </div>
             </div>

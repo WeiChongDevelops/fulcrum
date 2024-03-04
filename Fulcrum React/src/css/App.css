@@ -18,6 +18,11 @@
   top: 0;
 }
 
+.circle-button {
+  border-radius: 100%;
+  padding: 0.25rem;
+}
+
 .circle-button:hover {
   cursor: pointer;
   opacity: 80%;
@@ -38,7 +43,8 @@
   transform: translate(-50%, -50%);
   background-color: rgba(0,0,0,0.8);
   width: 35rem;
-  @apply rounded-3xl
+  border-radius: 1.5rem;
+  color: white;
 }
 
 .fulcrum-form input {
@@ -61,17 +67,20 @@
   transform: translate(-50%, -50%);
   background-color: rgba(0,0,0,0.8);
   width: 35rem;
-  @apply rounded-3xl text-white
+  border-radius: 1.5rem;
+  color: white;
 }
 
 /* LOGOS */
 
 .navbar-fulcrum-logo {
   height: 50px;
+  user-select: none;
+  margin-right: 3rem;
 }
 
-.footer-fulcrum-logo {
-  height: 35px;
+.navbar-fulcrum-logo:hover {
+  cursor: pointer;
 }
 
 /* TOGGLES */
@@ -107,6 +116,20 @@
   filter: grayscale(100%) contrast(150%) brightness(140%) saturate(380%);
 }
 
+/* BACKGROUND BLUR FOCUS EFFECT*/
+
+.elementsBelowPopUpForm {
+  transition: all 0.1s ease-out;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.blur {
+  filter: blur(5px);
+}
+
 /* MEDIA QUERIES */
 
 @media (max-width: 670px) {
@@ -120,3 +143,23 @@
   }
 }
 
+/* OTHER */
+
+.lower-navbar-third {
+  display: flex;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  width: 33.33%;
+  border-color: black;
+  transition: all 300ms ease-out;
+}
+
+.lower-navbar-third:hover {
+  color: black;
+  background: white;
+}

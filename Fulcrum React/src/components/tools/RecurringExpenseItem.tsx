@@ -84,10 +84,10 @@ export default function RecurringExpenseItem( { recurringExpenseId,
 
                 <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
                 <div className="flex flex-row items-center ml-2">
-                    <button className="circle-button rounded-full p-1" onClick={handleEditClick}>
+                    <button className="circle-button" onClick={handleEditClick}>
                         <img src={`/src/assets/UI-icons/edit-pencil-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="" className="mx-1 w-6 h-6" />
                     </button>
-                    <button className="circle-button rounded-full p-1" onClick={handleDeleteClick}>
+                    <button className="circle-button" onClick={handleDeleteClick}>
                         <img src={`/src/assets/UI-icons/delete-trash-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="" className="mx-1 w-6 h-6" />
                     </button>
                 </div>

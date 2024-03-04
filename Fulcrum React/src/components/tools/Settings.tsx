@@ -1,20 +1,17 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {
     checkForOpenModalOrForm,
-    handleWipeBudget,
-    handleWipeData,
-    handleWipeExpenses,
     OpenToolsSection,
     PublicUserData,
     SettingsFormVisibility,
     SettingsModalVisibility
 } from "../../util.ts";
 import FulcrumButton from "../other/FulcrumButton.tsx";
-import TwoOptionModal from "../modals-and-forms/TwoOptionModal.tsx";
-import {TypeMatchConfirmationForm} from "./TypeMatchConfirmationForm.tsx";
 import DarkModeToggle from "../toggles/DarkModeToggle.tsx";
 import AccessibilityToggle from "../toggles/AccessibilityToggle.tsx";
 import CurrencySelector from "../selectors/CurrencySelector.tsx";
+import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
+import SettingsModalsAndForms from "./SettingsModalsAndForms.tsx";
 
 interface SettingsProps {
     setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
@@ -43,7 +40,7 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
 
     return (
         <div className="flex flex-col justify-start items-center bg-[#455259] min-h-screen">
-            <div className={`flex flex-col w-[100vw] px-8 elementsBelowPopUpForm z-2
+            <div className={`w-[100vw] px-8 elementsBelowPopUpForm
                 ${isSettingsFormOrModalOpen && "blur"}`}>
 
                 <div className="flex justify-between items-center my-8">
@@ -89,96 +86,9 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
                 </div>
             </div>
 
-            {isSettingsFormOrModalOpen && <div className="absolute w-screen h-screen bg-transparent z-3"></div>}
+            {isSettingsFormOrModalOpen && <ActiveFormClickShield/>}
 
-            <div className="z-4">
-                {settingsFormVisibility.typeDeleteMyExpensesForm &&
-                    <TypeMatchConfirmationForm areYouSureMessage={"Are you sure you would like to wipe your expense logs? This decision is irreversible."}
-                                               typeMatchString={"Wipe My Expenses"}
-                                               setFormVisibility={setSettingsFormVisibility}
-                                               setModalVisibility={setSettingsModalVisibility}
-                                               formVisibility={"typeDeleteMyExpensesForm"}
-                                               lastChanceModalVisibility={"isConfirmExpenseWipeModalVisible"}/>}
-
-                {settingsFormVisibility.typeDeleteMyBudgetForm &&
-                    <TypeMatchConfirmationForm areYouSureMessage={"Are you sure you would like to wipe your budget data? This decision is irreversible."}
-                                               typeMatchString={"Wipe My Budget"}
-                                               setFormVisibility={setSettingsFormVisibility}
-                                               setModalVisibility={setSettingsModalVisibility}
-                                               formVisibility={"typeDeleteMyBudgetForm"}
-                                               lastChanceModalVisibility={"isConfirmBudgetWipeModalVisible"}/>}
-
-                {settingsFormVisibility.typeDeleteMyDataForm &&
-                    <TypeMatchConfirmationForm areYouSureMessage={"Are you sure you would like to wipe your expense and budget data? This decision is irreversible."}
-                                               typeMatchString={"Wipe My Data"}
-                                               setFormVisibility={setSettingsFormVisibility}
-                                               setModalVisibility={setSettingsModalVisibility}
-                                               formVisibility={"typeDeleteMyDataForm"}
-                                               lastChanceModalVisibility={"isConfirmAllDataWipeModalVisible"}/>}
-
-                {settingsModalVisibility.isConfirmExpenseWipeModalVisible
-                    && <TwoOptionModal optionOneText={"Cancel"}
-                                       optionOneFunction={() => {
-                                           setSettingsModalVisibility(current => ({
-                                               ...current,
-                                               isConfirmExpenseWipeModalVisible: false
-                                           }));
-                                       }}
-                                       optionTwoText={"Delete"}
-                                       optionTwoFunction={() => {
-                                           handleWipeExpenses();
-                                           setSettingsModalVisibility(current => ({
-                                               ...current,
-                                               isConfirmExpenseWipeModalVisible: false
-                                           }));
-                                           console.log("Wiping all expenses.");
-                                       }}
-                                       setModalVisibility={setSettingsModalVisibility}
-                                       isVisible={"isConfirmExpenseWipeModalVisible"}
-                                       title={"Please confirm that you wish to permanently wipe all expense data."}/>}
-
-                {settingsModalVisibility.isConfirmBudgetWipeModalVisible
-                    && <TwoOptionModal optionOneText={"Cancel"}
-                                       optionOneFunction={() => {
-                                           setSettingsModalVisibility(current => ({
-                                               ...current,
-                                               isConfirmBudgetWipeModalVisible: false
-                                           }));
-                                       }}
-                                       optionTwoText={"Delete"}
-                                       optionTwoFunction={() => {
-                                           handleWipeBudget();
-                                           setSettingsModalVisibility(current => ({
-                                               ...current,
-                                               isConfirmBudgetWipeModalVisible: false
-                                           }));
-                                           console.log("Wiping all budgets.");
-                                       }}
-                                       setModalVisibility={setSettingsModalVisibility}
-                                       isVisible={"isConfirmBudgetWipeModalVisible"}
-                                       title={"Please confirm that you wish to permanently wipe all budget data."}/>}
-
-                {settingsModalVisibility.isConfirmAllDataWipeModalVisible
-                    && <TwoOptionModal optionOneText={"Cancel"}
-                                       optionOneFunction={() => {
-                                           setSettingsModalVisibility(current => ({
-                                               ...current,
-                                               isConfirmAllDataWipeModalVisible: false
-                                           }));
-                                       }}
-                                       optionTwoText={"Delete"}
-                                       optionTwoFunction={() => {
-                                           handleWipeData();
-                                           setSettingsModalVisibility(current => ({
-                                               ...current,
-                                               isConfirmAllDataWipeModalVisible: false
-                                           }));
-                                           console.log("Wiping all data.");
-                                       }}
-                                       setModalVisibility={setSettingsModalVisibility}
-                                       isVisible={"isConfirmAllDataWipeModalVisible"}
-                                       title={"Please confirm that you wish to permanently wipe all budget and expense data."}/>}
-            </div>
+            <SettingsModalsAndForms settingsModalVisibility={settingsModalVisibility} setSettingsModalVisibility={setSettingsModalVisibility} settingsFormVisibility={settingsFormVisibility} setSettingsFormVisibility={setSettingsFormVisibility}/>
         </div>
     )
 }

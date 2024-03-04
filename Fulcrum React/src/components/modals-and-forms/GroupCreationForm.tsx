@@ -66,7 +66,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
     }
 
     return (
-        <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
+        <div ref={formRef} className="fulcrum-form justify-center items-center">
             <FulcrumButton onClick={() => {
                 hideForm();
             }} displayText={"Cancel"} optionalTailwind={"ml-auto mb-auto"} backgroundColour="grey"></FulcrumButton>

@@ -89,7 +89,7 @@ export default function FulcrumAnimation( { lineAngle, isDarkMode } : FulcrumAni
                 <div className="bowl-shadow-left" style={bowlShadowDimensions.left}></div>
             </div>
             <div className="rotating-container" style={{transform: `rotate(${-lineAngle}deg) translateX(-50%)`}}>
-                <div className="rotating-text-label-container absolute flex flex-row justify-between w-[100%] text-[1.5em] bottom-8 select-none">
+                <div className="rotating-text-label-container">
                     <b className={`${isDarkMode ? "text-white" : "text-black"}`}>BUDGET</b>
                     <b className={`${isDarkMode ? "text-white" : "text-black"}`}>INCOME</b>
                 </div>

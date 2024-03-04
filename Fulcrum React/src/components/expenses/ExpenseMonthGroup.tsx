@@ -46,13 +46,13 @@ export function ExpenseMonthGroup( { monthExpenseGroupItem,
 
     return (
         <div className={"flex flex-col items-center"}>
-            <div className={"month-navigator flex flex-row justify-around items-center min-w-[25vw] py-2 my-4 bg-[#17423f] rounded-3xl text-white select-none"}>
-                <button onClick={scrollLeft} className={`navigate-left transition-all flex flex-row items-center px-4 h-1/2 ${monthPanelShowingIndex === -monthsFromY2KToNow && "opacity-0 pointer-events-none"}`}>
-                    <img className={"w-[2rem] select-none"} src="/src/assets/UI-icons/left-navigation-arrow.svg" alt=""/>
+            <div className={"flex flex-row justify-around items-center min-w-[25vw] py-2 my-4 bg-[#17423f] rounded-3xl text-white select-none"}>
+                <button onClick={scrollLeft} className={`month-navigation-option navigate-left ${monthPanelShowingIndex === -monthsFromY2KToNow && "opacity-0 pointer-events-none"}`}>
+                    <img src="/src/assets/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow"/>
                 </button>
                 <p className={"text-4xl"}>{monthStringArray[monthExpenseGroupItem.monthIndex] + " " + monthExpenseGroupItem.year.toString()}</p>
-                <button onClick={scrollRight} className={`navigate-right transition-all flex flex-row items-center px-4 h-1/2 ${monthPanelShowingIndex === 12 && "opacity-0 pointer-events-none"}`}>
-                    <img className={"w-[2rem] select-none"} src="/src/assets/UI-icons/right-navigation-arrow.svg" alt=""/>
+                <button onClick={scrollRight} className={`month-navigation-option navigate-right ${monthPanelShowingIndex === 12 && "opacity-0 pointer-events-none"}`}>
+                    <img src="/src/assets/UI-icons/right-navigation-arrow.svg" alt="Right navigation arrow"/>
                 </button>
             </div>
 
