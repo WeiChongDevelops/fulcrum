@@ -46,7 +46,7 @@ export default function Register() {
                                value={email}
                                onChange={e => setEmail(e.target.value)}
                                autoComplete={"email"}
-                               required/>
+                               required autoFocus/>
                     </div>
                     <div className={"auth-label-input-pair mt-10"}>
                         <label htmlFor={"password"}>Password</label>

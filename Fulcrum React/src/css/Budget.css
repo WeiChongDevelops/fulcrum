@@ -83,7 +83,6 @@
 /* GROUP */
 
 .group {
-    width: 96vw;
     box-shadow: 10px 7px 0 0 rgba(0, 0, 0, 1);
 }
 
@@ -125,7 +124,7 @@
     border: none;
     background-color: transparent;
     cursor: pointer;
-    @apply rounded-3xl
+    border-radius: 1.5rem;
 }
 
 .category-icon-selectable img {
@@ -268,15 +267,20 @@
 
 /* INCOME DISPLAY */
 
-.monthly-income {
-    box-shadow: 10px 8px 0 0 rgba(0, 0, 0, 1);
-    width: 47vw;
-}
-
-.remaining-income {
+.income-display {
     box-shadow: 10px 8px 0 0 rgba(0, 0, 0, 1);
     transition: background-color ease-out 650ms;
-    width: 47vw;
+    flex: 1 1 0;
+    font-size: 1.8rem;
+    padding: 1rem;
+    margin: 0.75rem 1.5rem;
+    flex-direction: row;
+    justify-content: center;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    line-height: 2rem;
+    color: white;
+
 }
 
 .monthly-income:hover {
@@ -286,7 +290,6 @@
     box-shadow: 16px 13px 0 0 rgba(0, 0, 0, 1);
     cursor: pointer;
 }
-
 
 
 /* MEDIA QUERIES */
@@ -306,9 +309,9 @@
     .fulcrum-animation-container {
         margin-top: 40px;
     }
-    .monthly-income, .remaining-income{
+    .income-display {
         font-size: 1.5rem;
-        @apply py-2;
+        padding: 0.5rem 0;
     }
     .group {
         width: 90vw;
@@ -316,13 +319,13 @@
 }
 
 @media (max-width: 490px) {
-    .monthly-income, .remaining-income{
+    .income-display {
         font-size: 1.2rem;
     }
 }
 
 @media (max-width: 490px) {
-    .monthly-income, .remaining-income{
+    .income-display {
         font-size: 1.1rem;
     }
 }

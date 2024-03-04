@@ -1,6 +1,13 @@
 
 .auth-page-container {
-	@apply flex flex-row justify-around items-center w-[100vw] h-[100vh] relative overflow-hidden
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	position: relative;
+	overflow: hidden;
 }
 
 .auth-page-container::before {
@@ -26,59 +33,101 @@
 }
 
 .auth-page-left-column {
-	@apply flex flex-col justify-center items-start h-[65vh] pl-[10rem] pb-52
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: start;
+	height: 65vh;
+	padding: 0 0 10rem 13rem;
 }
 
 .auth-page-right-column {
-	@apply flex flex-col justify-around items-center h-[35vh] mr-24
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	height: 35vh;
+	margin-right: 6rem;
 }
 
 .auth-form {
-	@apply flex flex-col justify-center items-center bg-white text-black px-12 pt-16 pb-8 w-[37vw] rounded-2xl
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+	color: black;
+	padding: 4rem 3rem 2rem 3rem;
+	width: 37vw;
+	border-radius: 1rem;
 }
 
 .auth-label-input-pair {
-	@apply flex flex-col justify-center items-start w-full
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: start;
+	width: 100%;
 }
 
 .auth-label-input-pair input {
-	@apply w-full py-2 px-4 rounded-md border border-gray-400 mt-2
+	width: 100%;
+	padding: 0.5rem 1rem 0.5rem 1rem;
+	border-radius: 0.4rem;
+	border: 1px solid #989ca2;
+	margin-top: 2px;
+
+}
+
+.auth-standard-fulcrum-logo, .auth-mobile-fulcrum-logo {
+	user-select: none;
+	height: auto;
+	margin-bottom: 4rem;
 }
 
 .auth-standard-fulcrum-logo {
-	@apply select-none w-80 h-auto
+	width: 20rem;
+	margin-bottom: 0;
 }
 
 .auth-mobile-fulcrum-logo {
-	@apply select-none w-96 h-auto mb-16 hidden
+	width: 24rem;
+	display: none;
 }
 
 .auth-form input::placeholder {
-	@apply text-left
+	text-align: left;
 }
 
 .auth-text {
-	@apply flex flex-col justify-center items-start h-[100vh] w-[35vw] text-left
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: start;
+	height: 100vh;
+	width: 35vw;
+	text-align: left;
 }
 
 @media (max-width: 670px) {
 	.auth-page-container {
-		@apply flex flex-col
+		display: flex;
+		flex-direction: column;
 	}
 
 	.auth-page-left-column {
-		@apply hidden
+		display: none;
 	}
 
 	.auth-page-right-column {
-		@apply mr-0
+		margin-right: 0;
 	}
 
 	.auth-form {
-		@apply w-[75vw]
+		width: 75vw;
 	}
 
 	.auth-mobile-fulcrum-logo {
-		@apply block
+		display: block;
 	}
 }

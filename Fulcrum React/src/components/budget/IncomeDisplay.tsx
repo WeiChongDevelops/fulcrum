@@ -52,7 +52,7 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
 
     return (
         <div className="flex flex-row w-full items-center mt-1">
-            <div className="flex-1 text-[1.8rem] leading-8 flex-row text-center justify-center font-bold bg-[#17423f] p-4 rounded-xl my-3 mx-6 text-white monthly-income" onClick={handleEditClick}>
+            <div className="income-display monthly-income bg-[#17423f]" onClick={handleEditClick}>
                 <span>MONTHLY INCOME: </span>
                 {isEditing ? <form className="inline relative bottom-1" onSubmit={handleSubmit}>
                     <input
@@ -66,7 +66,7 @@ export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftT
                     />
                 </form>: <span >{formatDollarAmountStatic(totalIncome, currency)}</span>}
             </div>
-            <div className="flex-1 text-center p-4 rounded-xl my-3 mx-6 font-bold text-white remaining-income text-[1.8rem] leading-8" style={{backgroundColor: `${amountLeftToBudget === 0 ? "#4CCC86" : "#FF3F3F"}`}}>
+            <div className="income-display" style={{backgroundColor: `${amountLeftToBudget === 0 ? "#4CCC86" : "#FF3F3F"}`}}>
                 <span>LEFT TO BUDGET: </span>
                 <span>{formatDollarAmountStatic(amountLeftToBudget, currency)}</span>
             </div>
