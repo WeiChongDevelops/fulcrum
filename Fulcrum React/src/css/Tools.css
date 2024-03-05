@@ -9,21 +9,29 @@
     height: 18vw;
     position: relative;
     bottom: 3vh;
-    @apply flex justify-center items-center mt-[-3%]
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -3%;
 }
 
 .profile-icon-display img {
     width: 48%;
     height: 48%;
     top: 23%;
-    @apply relative
+    position: relative;
 }
 
 .tools-tile {
     box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 1);
     width: 16rem;
     height: 16rem;
-    @apply rounded-2xl flex flex-col items-center justify-center mb-8
+    display: flex;
+    margin-bottom: 2rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
 }
 
 .tools-tile img {
@@ -32,7 +40,7 @@
 }
 
 .tools-tile p {
-    @apply font-bold;
+    font-weight: bold;
 }
 
 .tools-tile-interactive:hover {
@@ -45,12 +53,25 @@
 .tools-text-container {
     width: 80%;
     height: 15%;
-    @apply flex justify-center items-center pb-1
+    display: flex;
+    padding-bottom: 0.25rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.tools-tile-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    margin-top: 4rem;
 }
 
 @media (max-width: 1056px) {
     .tools-tile-container {
-        @apply flex-col
+        flex-direction: column;
     }
 
     .tools-tile  {
@@ -73,7 +94,17 @@
 }
 
 .settings-row {
-    @apply flex flex-row justify-between items-center text-xl rounded-xl h-16 px-8 py-12 mb-8 text-left;
+    display: flex;
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.75rem;
+    height: 4rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    text-align: left;
 }
 
 .settings-box-shadow {
@@ -81,7 +112,9 @@
 }
 
 .currency-selector {
-    @apply flex flex-row justify-around
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 
@@ -102,12 +135,12 @@
 
 .profile-icon-selectable {
     display: flex;
-    margin: 8px 0;
     justify-content: center;
     border: none;
     background-color: transparent;
     cursor: pointer;
-    @apply rounded-3xl mx-4
+    margin: 1rem 0;
+    border-radius: 1.5rem;
 }
 
 .profile-icon-selectable img {
@@ -129,15 +162,21 @@
 
 @media (max-width: 880px){
     .currency-selector {
-        @apply grid grid-cols-3 grid-rows-2 gap-y-2 gap-x-0 justify-items-center
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        column-gap: 0;
+        row-gap: 0.5rem;
+        justify-items: center;
+
     }
     .currency-selector-row {
-        @apply h-48
+        height: 12rem;
     }
 }
 
-.currency-selection {
-    @apply hover:cursor-pointer
+.currency-selection:hover {
+    cursor: pointer;
 }
 
 @media (max-width: 518px) {

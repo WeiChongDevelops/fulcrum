@@ -57,7 +57,10 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
                     </div>
                 </div>
 
-                <CurrencySelector publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
+                <div className={"settings-row bg-[#17423f] settings-box-shadow currency-selector-row"}>
+                    <b>Currency</b>
+                    <CurrencySelector publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
+                </div>
 
                 <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
                     <b>Appearance</b>

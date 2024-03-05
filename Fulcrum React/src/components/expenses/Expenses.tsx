@@ -95,13 +95,9 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     }, []);
 
     useMemo(() => {
-        console.log("RAW EXPENSE ARRAY BELOW")
-        console.log(expenseArray);
-
-        // Declare new structure
         let newStructuredExpenseData: MonthExpenseGroupEntity[] = [];
 
-        // Initialise structure using 12 months back and 12 months forward
+        // Initialise structure from the dawn of y2k to 12 months into the future from today
         const dateToday = new Date();
         const currentMonth = dateToday.getMonth();
         const currentYear = dateToday.getFullYear();
@@ -120,15 +116,11 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
             const newMonthExpenseGroup: MonthExpenseGroupEntity = {
                 monthIndex: monthIndex,
                 year: year,
-                // monthsFromToday: getMonthsFromToday(monthIndex, year),
                 monthExpenseArray: []
             }
 
             newStructuredExpenseData = [...newStructuredExpenseData, newMonthExpenseGroup]
         }
-        // After this loop our data structure has a month entry for all 25 months.
-        console.log("POST INITIALISATION EXPENSE STRUCTURE BELOW")
-        console.log(newStructuredExpenseData);
 
         for (const expenseItem of expenseArray) {
             for (let monthExpenseGroupItem of newStructuredExpenseData) {
@@ -164,9 +156,6 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                 }
             }
         }
-        console.log("POST POPULATION EXPENSE STRUCTURE BELOW")
-        console.log(newStructuredExpenseData);
-
         setStructuredExpenseData(newStructuredExpenseData);
     }, [expenseArray, recurringExpenseArray]);
 
@@ -204,19 +193,23 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                 const isFrequencyMatch = recurringExpenseLandsOnDay(recurringExpenseItem, date);
                 const expenseInstanceIsBlacklisted = removedRecurringExpenseInstances ? matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date) : false;
 
-                // If recurring instance already exists on this day
+                // If recurring instance already exists on a day
                 if (expenseInstances != null) {
                     let keepFirstInstance = true;
 
-                    // If this instance shouldn't have landed on this day (occurs when freq is changed), queue for removal
+                    // And this instance shouldn't have landed on this day (can happen when freq is changed),
+                    // Queue this and any duplicate instances on this day for removal
                     if (!isFrequencyMatch) {
                         keepFirstInstance = false;
                     }
 
+                    // Otherwise only queue the duplicate instances on this day for removal
                     for (let i = keepFirstInstance ? 1 : 0; i < expenseInstances.length ; i++) {
                         misplacedExpensesToRemove.add(expenseInstances[i].expenseId);
                     }
                 } else {
+                    // If: (1) There is no instance on this day, (2) It matches freq patterns, (3) not blacklisted,
+                    // Create an instance of this recurrence expense in the expense array
                     if (isFrequencyMatch && !expenseInstanceIsBlacklisted) {
                         const newExpenseItemLanded: ExpenseItemEntity = {
                             expenseId: uuid(),
@@ -231,13 +224,8 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
             }
         })
         if (misplacedExpensesToRemove.size !== 0) {
-            console.log("See below; queued for deletion.");
-            console.log(misplacedExpensesToRemove);
             await handleBatchExpenseDeletion(misplacedExpensesToRemove);
             setExpenseArray(await getExpenseList());
-        } else {
-            console.log("SIZE IS ZERO, SEE BELOW:");
-            console.log(misplacedExpensesToRemove);
         }
     }
 

@@ -78,6 +78,7 @@ export default function Budget( { publicUserData, expenseArray, budgetArray, gro
     }, [budgetArray])
 
     useEffect( () => {
+        // Map construction for each category's total expenditure
         const categoryArray = budgetArray.map(budgetItem => budgetItem.category);
         categoryArray.forEach(category => {
             const thisCategoryExpenseArray = expenseArray.filter(expenseItem => expenseItem.category === category)
@@ -96,6 +97,7 @@ export default function Budget( { publicUserData, expenseArray, budgetArray, gro
     },[budgetArray, totalIncome])
 
     useEffect(() => {
+        // Update scale animation line angle when either of its two factors change
         setLineAngle(getLineAngle(amountLeftToBudget/totalIncome * 100))
     }, [amountLeftToBudget, totalIncome]);
 
@@ -103,10 +105,7 @@ export default function Budget( { publicUserData, expenseArray, budgetArray, gro
         const formCategoryInput = document.getElementById("category")
         const formGroupInput = document.getElementById("group")
         formCategoryInput ? formCategoryInput.focus() : formGroupInput?.focus();
-
         document.getElementById("right-button")?.focus()
-        console.log(budgetFormVisibility);
-        console.log(budgetModalVisibility);
         setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility))
     }, [budgetFormVisibility, budgetModalVisibility])
 

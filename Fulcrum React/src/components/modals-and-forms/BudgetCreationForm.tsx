@@ -41,7 +41,6 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
-
         addIconSelectionFunctionality(setFormData, "category");
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);

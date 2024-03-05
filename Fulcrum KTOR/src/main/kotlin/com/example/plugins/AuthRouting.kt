@@ -8,6 +8,7 @@ import com.example.entities.successFeedback.ErrorResponseSent
 import com.example.entities.successFeedback.SuccessResponseSent
 import com.example.entities.user.*
 import com.example.getActiveUserId
+import com.example.respondAuthError
 import com.example.respondError
 import com.example.respondSuccess
 import io.github.jan.supabase.createSupabaseClient
@@ -29,6 +30,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.hc.core5.http.HttpHost
 import kotlinx.datetime.Instant
+import java.lang.IllegalStateException
 
 fun Application.configureAuthRouting() {
 
@@ -176,7 +178,9 @@ fun Application.configureAuthRouting() {
                 }
                 call.respond(HttpStatusCode.OK, statusJSON)
             } catch (e: UnauthorizedRestException) {
-                call.respondError("Not authorised - JWT token likely expired.")
+                call.respondAuthError("Not authorised - JWT token likely expired.")
+            } catch (e: IllegalStateException) {
+                call.respondAuthError("Session not found.")
             } catch (e: Exception) {
                 call.respondError("Error while checking for user.")
             }

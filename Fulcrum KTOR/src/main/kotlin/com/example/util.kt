@@ -44,3 +44,7 @@ suspend fun ApplicationCall.respondSuccess(message: String) {
 suspend fun ApplicationCall.respondError(message: String) {
     respond(HttpStatusCode.BadRequest, ErrorResponseSent(message))
 }
+
+suspend fun ApplicationCall.respondAuthError(message: String) {
+    respond(HttpStatusCode.Unauthorized, ErrorResponseSent(message))
+}

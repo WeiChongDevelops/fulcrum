@@ -6,7 +6,7 @@ import Budget from "../budget/Budget.tsx";
 import Fulcrum from "./Fulcrum.tsx";
 import Expenses from "../expenses/Expenses.tsx";
 import Tools from "../tools/Tools.tsx";
-import {useEffect, useLayoutEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {
     BudgetItemEntity, CategoryToIconGroupAndColourMap,
     ExpenseItemEntity,
@@ -39,8 +39,7 @@ export default function App() {
 
     const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
 
-
-    useLayoutEffect(() => {
+    useEffect(() => {
         async function retrieveGlobalAppData() {
             if (!!email) {
                 const [publicUserDataRetrieved, expenseDataRetrieved, budgetDataRetrieved, groupDataRetrieved] = await Promise.all([

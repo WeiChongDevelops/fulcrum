@@ -74,7 +74,7 @@ export default function Tools({ publicUserData, setPublicUserData, budgetArray, 
 
                 {toolsFormVisibility.isUpdateProfileIconFormVisible && <div className="absolute w-[80vw] h-[80vh] bg-transparent z-3"></div>}
 
-                 <div className="tools-tile-container w-full h-auto flex flex-row justify-around items-center mt-[4rem]">
+                 <div className="tools-tile-container">
                     <div className="tools-tile tools-tile-interactive bg-[#D1B1B1] text-black text-3xl hover:cursor-pointer" onClick={openSettings}>
                         <div className="tools-text-container">
                             <p>Settings</p>

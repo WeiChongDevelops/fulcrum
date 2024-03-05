@@ -60,7 +60,7 @@ export default function RecurringExpenseItem( { recurringExpenseId,
     }
 
     return (
-        <div className="expense-item flex flex-row justify-between items-center w-[95vw] py-1.5 px-2.5 rounded-2xl my-3 text-black select-none"
+        <div className="expense-item"
              style={{backgroundColor: groupColour, opacity: frequency === "never" ? "40%" : "100%"}}
              onClick={handleEditClick}>
             <div className="flex flex-row items-center">

@@ -6,12 +6,10 @@ interface FulcrumAnimationProps {
 }
 
 export default function FulcrumAnimation( { lineAngle, isDarkMode } : FulcrumAnimationProps) {
-    console.log(`lineAngle: ${lineAngle}`)
 
     const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-tri-red.webp");
     const [leverEndXOffset, setLeverEndXOffset] = useState({leftEnd: 0, rightEnd: 0});
     const [bowlWidth, setBowlWidth] = useState(window.innerWidth * 0.07);
-
     const [bowlShadowDimensions, setBowlShadowDimensions] = useState({
         right: {
             width: `${bowlWidth}px`,
@@ -73,11 +71,8 @@ export default function FulcrumAnimation( { lineAngle, isDarkMode } : FulcrumAni
 
 
     useEffect( () => {
-        setActiveTriangleFulcrum(
-            lineAngle === 0
-                ? "/src/assets/fulcrum-animation/fulcrum-tri-green.webp"
-                : "/src/assets/fulcrum-animation/fulcrum-tri-red.webp"
-        )
+        // Show green fulcrum if scale is balanced, red otherwise
+        setActiveTriangleFulcrum(`/src/assets/fulcrum-animation/fulcrum-tri-${lineAngle === 0 ? "green" : "red"}.webp`);
     },[lineAngle]);
 
     return (

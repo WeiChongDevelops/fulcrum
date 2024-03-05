@@ -7,7 +7,6 @@ interface LoaderProps {
 }
 
 export default function Loader({ isLoading, isDarkMode }: LoaderProps) {
-
     return (
         <div className="absolute top-[50vh] left-[50vw]">
             <RotateLoader

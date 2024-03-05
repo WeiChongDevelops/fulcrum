@@ -20,7 +20,6 @@ export interface ExpenseCreationFormData {
     frequency: RecurringExpenseFrequency
 }
 
-
 export interface ExpenseUpdatingFormData {
     category: string;
     amount: number;

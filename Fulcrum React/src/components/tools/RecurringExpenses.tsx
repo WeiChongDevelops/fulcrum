@@ -107,7 +107,7 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData,
                         </div>
                     </div>
 
-                    <p className={"font-medium my-4"}>Add recurring expenses for transactions you expect to arise regularly.</p>
+                    <p className={"my-4"}>Add recurring expenses for transactions you expect to arise regularly.</p>
 
                     <AddNewRecurringExpenseButton setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility} isDarkMode={true}/>
 

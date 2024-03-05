@@ -16,7 +16,9 @@ export default function Register() {
             alert("Passwords do not match!");
             return;
         }
+
         await handleUserRegistration(email, password);
+
         setEmail("");
         setPassword("");
         setConfirmPassword("");

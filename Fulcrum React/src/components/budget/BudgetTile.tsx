@@ -35,9 +35,7 @@ export default function BudgetTile({ category,
                                        perCategoryTotalExpenseArray,
                                        publicUserData}: BudgetTileProps) {
 
-
     const spent = perCategoryTotalExpenseArray.get(category)!
-
     const [budgetExceeded, setBudgetExceeded] = useState(spent > amount);
 
     function handleEditClick() {

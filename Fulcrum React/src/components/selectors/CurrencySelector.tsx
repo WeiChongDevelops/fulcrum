@@ -24,18 +24,15 @@ export default function CurrencySelector({ publicUserData, setPublicUserData }: 
     }
 
     return (
-        <div className={"settings-row bg-[#17423f] settings-box-shadow currency-selector-row"}>
-            <b>Currency</b>
-            <div className={"currency-selector font-bold text-3xl w-[80%] mt-6"}>
-                {currencyOptions.map((currencyOption, key) => {
-                    return <FulcrumButton
-                        displayText={currencyOption.symbol}
-                        backgroundColour={publicUserData.currency === currencyOption.code ? "grey" : "white"}
-                        onClick={handleCurrencySelection}
-                        optionalTailwind={`w-32 mb-4 p-2 text-md ${publicUserData.currency === currencyOption.code && "outline"}`}
-                        key={key}/>
-                })}
-            </div>
+        <div className={"currency-selector font-bold text-3xl w-[80%] mt-6"}>
+            {currencyOptions.map((currencyOption, key) => {
+                return <FulcrumButton
+                    displayText={currencyOption.symbol}
+                    backgroundColour={publicUserData.currency === currencyOption.code ? "grey" : "white"}
+                    onClick={handleCurrencySelection}
+                    optionalTailwind={`w-32 mb-4 p-2 text-md ${publicUserData.currency === currencyOption.code && "outline"}`}
+                    key={key}/>
+            })}
         </div>
     );
 }

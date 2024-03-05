@@ -68,6 +68,7 @@ export default function Group({ groupName,
     }
     function handleDeleteClick() {
         setGroupToDelete(groupName);
+
         // If there are categories inside this group, allow the user to choose between retaining them and deleting them.
         if (filteredBudgetArray.length > 0) {
             setModalFormVisibility(current => ({...current, isDeleteOptionsModalVisible: true}))

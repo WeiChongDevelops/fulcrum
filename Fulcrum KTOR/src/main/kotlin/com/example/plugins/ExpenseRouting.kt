@@ -1,31 +1,23 @@
 package com.example.plugins
 
 import com.example.SupabaseClient.supabase
-import com.example.entities.budget.*
 import com.example.entities.expense.*
 import com.example.entities.recurringExpense.*
 import com.example.entities.successFeedback.ErrorResponseSent
 import com.example.entities.successFeedback.SuccessResponseSent
-import com.example.entities.user.*
-import io.github.jan.supabase.createSupabaseClient
+import com.example.respondAuthError
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
-import io.github.jan.supabase.gotrue.GoTrue
 import io.github.jan.supabase.gotrue.gotrue
-import io.github.jan.supabase.gotrue.providers.builtin.Email
-import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
-import io.ktor.client.*
-import io.ktor.client.engine.apache5.*
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.apache.hc.core5.http.HttpHost
 import kotlinx.datetime.Instant
+import java.lang.IllegalStateException
 
 fun Application.configureExpenseRouting() {
 
@@ -81,7 +73,9 @@ fun Application.configureExpenseRouting() {
 
                 call.respond(HttpStatusCode.OK, expenseList)
             } catch (e: UnauthorizedRestException) {
-                call.respondError("Not authorised - JWT token likely expired.")
+                call.respondAuthError("Not authorised - JWT token likely expired.")
+            } catch (e: IllegalStateException) {
+                call.respondAuthError("Session not found.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading expenses", e)
                 call.respondError("Expenses not read.")
@@ -216,7 +210,9 @@ fun Application.configureExpenseRouting() {
 
                 call.respond(HttpStatusCode.OK, recurringExpenseList)
             } catch (e: UnauthorizedRestException) {
-                call.respondError("Not authorised - JWT token likely expired.")
+                call.respondAuthError("Not authorised - JWT token likely expired.")
+            } catch (e: IllegalStateException) {
+                call.respondAuthError("Session not found.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading recurring expenses", e)
                 call.respondError("Recurring expenses not read.")
@@ -318,7 +314,7 @@ fun Application.configureExpenseRouting() {
 
                 call.respond(HttpStatusCode.OK, removedRecurringExpensesList)
             } catch (e: UnauthorizedRestException) {
-                call.respondError("Not authorised - JWT token likely expired.")
+                call.respondAuthError("Not authorised - JWT token likely expired.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading removed recurring expenses", e)
                 call.respondError("Removed recurring expenses not read.")

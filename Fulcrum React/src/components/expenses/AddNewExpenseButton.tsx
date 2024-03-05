@@ -17,9 +17,10 @@ export default function AddNewExpenseButton({ setExpenseFormVisibility, isDarkMo
         const clickedMonth = monthExpenseGroupItem.monthIndex;
         const clickedYear = monthExpenseGroupItem.year;
 
+        // If the current calendar month is the one shown, default new expenses to today's date
         if (currentMonth === clickedMonth && currentYear === clickedYear) {
             setDefaultCalendarDate(new Date());
-        } else {
+        } else { // Otherwise default new expenses to the first of that month's date
             setDefaultCalendarDate(new Date(monthExpenseGroupItem.year, monthExpenseGroupItem.monthIndex, 1, 0, 0, 0))
         }
         setExpenseFormVisibility(current => ({...current, isCreateExpenseVisible: true}))
