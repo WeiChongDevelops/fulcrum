@@ -77,7 +77,6 @@ export default function ExpenseModalsAndForms( { expenseFormVisibility,
         }
     }
 
-
     return (
         <div className={"z-4"}>
             {expenseFormVisibility.isCreateExpenseVisible && <ExpenseCreationForm

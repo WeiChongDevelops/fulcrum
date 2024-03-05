@@ -86,7 +86,6 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
     }
 
     function onDateInputChange(newValue: Value) {
-        console.log(new Date(newValue as Date).toLocaleDateString())
         setFormData(curr => ({ ...curr, timestamp: newValue }));
     }
 

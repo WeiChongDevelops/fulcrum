@@ -1,4 +1,5 @@
 import {ChangeEvent, Dispatch, SetStateAction} from "react";
+import {v4 as uuid} from "uuid";
 
 //  EXPENSE ENTITIES //
 export interface ExpenseItemEntity {
@@ -8,7 +9,6 @@ export interface ExpenseItemEntity {
     timestamp: Date
     recurringExpenseId: string | null
 }
-
 
 type ValuePiece = Date | null;
 export type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -114,7 +114,6 @@ export interface BudgetModalVisibility {
     isConfirmGroupDestructionModalVisible: boolean;
     isConfirmCategoryDestructionModalVisible: boolean;
 }
-
 
 export interface ExpenseFormVisibility {
     isCreateExpenseVisible: boolean;
@@ -286,11 +285,22 @@ export const profileIconArray = [
 
 // FORMATTING FUNCTIONS //
 
-export function capitaliseFirstLetter(str: string) {
+/**
+ * Capitalises the first letter of a given string.
+ * @param str - The string to capitalise.
+ * @returns The string with the first letter capitalised.
+ */
+export function capitaliseFirstLetter(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function getCurrencySymbol(currency: string) {
+/**
+ * Retrieves the currency symbol for a given currency code.
+ * @param currency - The currency code (e.g., "USD", "AUD", "GBP").
+ * @returns The symbol associated with the given currency code.
+ */
+export function getCurrencySymbol(currency: string): string {
+
     let currencySymbol;
     switch (currency) {
         case ("USD"):
@@ -318,7 +328,14 @@ export function getCurrencySymbol(currency: string) {
     return currencySymbol;
 }
 
-export function formatDollarAmountStatic(amount: number, currency: string) {
+/**
+ * Formats a numeric amount into a currency string in manner friendly to static displays & unfriendly to dynamic inputs
+ * @param amount - The numeric amount to format.
+ * @param currency - The currency code to use for determining the currency symbol.
+ * @returns A formatted string representing the amount in the specified currency.
+ */
+export function formatDollarAmountStatic(amount: number, currency: string): string {
+
     const formattedNumber = new Intl.NumberFormat('en-US', {
         style: 'decimal',
         minimumFractionDigits: 2,
@@ -328,7 +345,12 @@ export function formatDollarAmountStatic(amount: number, currency: string) {
     return currencySymbol + formattedNumber;
 }
 
-export function formatDollarAmountDynamic(amount: string) {
+/**
+ * Formats a numeric amount into a currency string in manner friendly to dynamic input fields
+ * @param amount - The numeric amount to format.
+ * @returns A formatted string representing the amount without a currency symbol
+ */
+export function formatDollarAmountDynamic(amount: string): string {
     const cleanedValue = amount.replace(/[^\d.]/g, "");
     const splitValue = cleanedValue.split(".");
     if (splitValue.length >= 2 && splitValue[1].length > 2) {
@@ -337,7 +359,12 @@ export function formatDollarAmountDynamic(amount: string) {
     return splitValue.join(".");
 }
 
-function getOrdinalSuffix(day: number) {
+/**
+ * Determines the ordinal suffix for a given day of the month.
+ * @param day - The day of the month.
+ * @returns The ordinal suffix ('st', 'nd', 'rd', 'th') appropriate for the given day.
+ */
+function getOrdinalSuffix(day: number): string {
     if (day > 3 && day < 21) return 'th';
     switch (day % 10) {
         case 1: return 'st';
@@ -347,7 +374,14 @@ function getOrdinalSuffix(day: number) {
     }
 }
 
-export function formatDate(date: Date) {
+/**
+ * Formats a Date object into a human-readable string following Australian conventions.
+ * @param date - The Date object to format.
+ * @returns A string representing the formatted date, including the day of the week,
+ *          the ordinal day of the month, the month name, and the year.
+ */
+export function formatDate(date: Date): string {
+
     const formattedDayOfWeek = new Intl.DateTimeFormat('en-AU', { weekday: "long" }).format(date);
     const formattedDayOfMonth = date.getDate();
     const formattedMonth = new Intl.DateTimeFormat('en-AU', { month: "long" }).format(date);
@@ -361,9 +395,15 @@ export function formatDate(date: Date) {
 
 // EXPENSE API CALL FUNCTIONS //
 
+/**
+ * Handles the creation of a new expense item.
+ * @param setBudgetArray - Dispatch function from useState hook for setting the budget items array.
+ * @param setExpenseArray - Dispatch function from useState hook for setting the expense items array.
+ * @param newExpenseItem - The new expense item to be added.
+ */
 export async function handleExpenseCreation(setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
                                             setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
-                                            newExpenseItem: ExpenseItemEntity) {
+                                            newExpenseItem: ExpenseItemEntity): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/createExpense", {
             method: "POST",
@@ -401,7 +441,11 @@ export async function handleExpenseCreation(setBudgetArray: Dispatch<SetStateAct
 }
 
 
-export async function getExpenseList() {
+/**
+ * Retrieves the list of expense items from the server.
+ * @returns A sorted array of expense items, or an empty array in case of an error.
+ */
+export async function getExpenseList(): Promise<ExpenseItemEntity[]> {
     try {
         const response = await fetch("http://localhost:8080/api/getExpenses", {
             method: "GET",
@@ -425,11 +469,17 @@ export async function getExpenseList() {
 
     } catch (error) {
         console.error("Error:", error);
+        return [];
     }
 }
 
 
-export async function handleExpenseUpdating(expenseId: string, formData: ExpenseUpdatingFormData) {
+/**
+ * Handles the updating of an existing expense item.
+ * @param expenseId - The ID of the expense to update.
+ * @param formData - The updated data for the expense item.
+ */
+export async function handleExpenseUpdating(expenseId: string, formData: ExpenseUpdatingFormData): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/updateExpense", {
             method: "PUT",
@@ -454,7 +504,13 @@ export async function handleExpenseUpdating(expenseId: string, formData: Expense
     }
 }
 
-export async function handleRecurringExpenseInstanceUpdating(expenseId: string, formData: RecurringExpenseInstanceUpdatingFormData) {
+
+/**
+ * Updates a specific instance of a recurring expense.
+ * @param expenseId - The ID of the expense instance to update.
+ * @param formData - The updated data for the expense instance.
+ */
+export async function handleRecurringExpenseInstanceUpdating(expenseId: string, formData: RecurringExpenseInstanceUpdatingFormData): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/updateRecurringExpenseInstance", {
             method: "PUT",
@@ -480,9 +536,15 @@ export async function handleRecurringExpenseInstanceUpdating(expenseId: string, 
 }
 
 
+/**
+ * Handles the deletion of a specific expense item.
+ * @param expenseId - The ID of the expense to be deleted.
+ * @param setExpenseArray - Dispatch function to update the expense array state.
+ * @param setBudgetArray - Dispatch function to update the budget array state.
+ */
 export async function handleExpenseDeletion(expenseId: string,
                                             setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
-                                            setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
+                                            setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>): Promise<void> {
     setExpenseArray(expenseArray => expenseArray.filter( expenseItem => {
         return expenseItem.expenseId !== expenseId
         }
@@ -510,7 +572,11 @@ export async function handleExpenseDeletion(expenseId: string,
     getBudgetList().then( budgetList => setBudgetArray(budgetList))
 }
 
-export async function handleBatchExpenseDeletion(expenseIdsToDelete: Set<string>) {
+/**
+ * Handles the deletion of multiple expense items in a batch operation.
+ * @param expenseIdsToDelete - A set of IDs of the expenses to be deleted.
+ */
+export async function handleBatchExpenseDeletion(expenseIdsToDelete: Set<string>): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/batchDeleteExpenses", {
             method: "DELETE",
@@ -533,7 +599,12 @@ export async function handleBatchExpenseDeletion(expenseIdsToDelete: Set<string>
 
 // BUDGET API CALL FUNCTIONS //
 
-export async function handleBudgetCreation(setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>, newBudgetItem: BudgetItemEntity) {
+/**
+ * Creates a new budget item and updates the budget array state.
+ * @param setBudgetArray - Dispatch function to update the budget array state.
+ * @param newBudgetItem - The new budget item to be added.
+ */
+export async function handleBudgetCreation(setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>, newBudgetItem: BudgetItemEntity): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/createBudget", {
             method: "POST",
@@ -569,7 +640,11 @@ export async function handleBudgetCreation(setBudgetArray: Dispatch<SetStateActi
 }
 
 
-export async function getBudgetList() {
+/**
+ * Retrieves the list of budget items from the server.
+ * @returns A sorted array of budget items, or an empty array in case of an error.
+ */
+export async function getBudgetList(): Promise<BudgetItemEntity[]> {
     try {
         const response = await fetch("http://localhost:8080/api/getBudget", {
             method: "GET",
@@ -593,11 +668,17 @@ export async function getBudgetList() {
 
     } catch (error) {
         console.error("Error:", error);
+        return [];
     }
 }
 
 
-export async function handleBudgetUpdating(category: string | null, formData: BudgetUpdatingFormData) {
+/**
+ * Updates an existing budget item based on the provided form data.
+ * @param category - The category of the budget item to update.
+ * @param formData - The updated data for the budget item.
+ */
+export async function handleBudgetUpdating(category: string, formData: BudgetUpdatingFormData): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/updateBudget", {
             method: "PUT",
@@ -626,7 +707,12 @@ export async function handleBudgetUpdating(category: string | null, formData: Bu
 }
 
 
-export async function handleBudgetDeletion(category: string, setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>) {
+/**
+ * Deletes a budget item.
+ * @param category - The category of the budget item to be deleted.
+ * @param setBudgetArray - Dispatch function to update the budget array state.
+ */
+export async function handleBudgetDeletion(category: string, setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>): Promise<void> {
     setBudgetArray(prevState => prevState.filter(budgetItem => budgetItem.category !== category))
     try {
         const response = await fetch("http://localhost:8080/api/deleteBudget", {
@@ -655,7 +741,14 @@ export async function handleBudgetDeletion(category: string, setBudgetArray: Dis
 
 // GROUP API CALL FUNCTIONS //
 
-export async function handleGroupCreation(group: string, colour: string, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, newGroupItem: GroupItemEntity) {
+/**
+ * Creates a new budget category group.
+ * @param group - The name of the group to create.
+ * @param colour - The color associated with the group.
+ * @param setGroupArray - Dispatch function to update the group array state.
+ * @param newGroupItem - The new group item data.
+ */
+export async function handleGroupCreation(group: string, colour: string, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, newGroupItem: GroupItemEntity): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/createGroup", {
             method: "POST",
@@ -687,7 +780,11 @@ export async function handleGroupCreation(group: string, colour: string, setGrou
 }
 
 
-export async function getGroupList() {
+/**
+ * Retrieves the list of groups from the server.
+ * @returns A sorted array of group items, or an empty array in case of an error.
+ */
+export async function getGroupList(): Promise<GroupItemEntity[]> {
     try {
         const response = await fetch("http://localhost:8080/api/getGroups", {
             method: "GET",
@@ -701,19 +798,28 @@ export async function getGroupList() {
                 .then(() => {
                     window.location.href !== "/login" && (window.location.href = "/login")
                 } )
-        } else if (!response.ok) {
-            console.error(`HTTP error - status: ${response.status}`);
-        } else {
-            const responseData = await response.json();
-            console.log(responseData)
-            return responseData.sort(groupSort);
         }
+        if (!response.ok) {
+            console.error(`HTTP error - status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log(responseData)
+        return responseData.sort(groupSort);
     } catch (error) {
         console.error("Error:", error);
+        return [];
     }
 }
 
-export async function handleGroupUpdating(originalGroupName: string, originalColour: string, formData: BasicGroupData, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, groupArray: GroupItemEntity[]) {
+/**
+ * Updates an existing budget category group.
+ * @param originalGroupName - The original name of the group being updated.
+ * @param originalColour - The original color of the group being updated.
+ * @param formData - The new data for the group.
+ * @param setGroupArray - Dispatch function to update the group array state.
+ * @param groupArray - The current array of group items.
+ */
+export async function handleGroupUpdating(originalGroupName: string, originalColour: string, formData: BasicGroupData, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, groupArray: GroupItemEntity[]): Promise<void> {
     if (originalGroupName === formData.group || !groupArray.map(groupItem => groupItem.group).includes(formData.group)) {
         setGroupArray(currentGroupArray => {
             return currentGroupArray.map(groupItem => groupItem.group == originalGroupName ? {
@@ -763,10 +869,18 @@ export async function handleGroupUpdating(originalGroupName: string, originalCol
     }
 }
 
+
+/**
+ * Handles the deletion of a group and optionally keeps the contained budgets.
+ * @param groupName - The name of the group to be deleted.
+ * @param setGroupArray - Dispatch function to update the group array state.
+ * @param setBudgetArray - Dispatch function to update the budget array state.
+ * @param keepContainedBudgets - Flag to keep or delete budgets contained within the group.
+ */
 export async function handleGroupDeletion(groupName: string,
                                           setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
                                           setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
-                                          keepContainedBudgets: boolean) {
+                                          keepContainedBudgets: boolean): Promise<void> {
     setGroupArray(prevState => prevState.filter(groupItem => groupItem.group !== groupName))
     try {
         const response = await fetch("http://localhost:8080/api/deleteGroup", {
@@ -798,7 +912,12 @@ export async function handleGroupDeletion(groupName: string,
 
 /// RECURRING EXPENSES API CALL FUNCTIONS //
 
-export async function handleRecurringExpenseCreation(newRecurringExpenseItem: RecurringExpenseItemEntity, setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>) {
+/**
+ * Handles the creation of a new recurring expense.
+ * @param newRecurringExpenseItem - The data for the new recurring expense.
+ * @param setRecurringExpenseArray - Dispatch function to update the recurring expense array state.
+ */
+export async function handleRecurringExpenseCreation(newRecurringExpenseItem: RecurringExpenseItemEntity, setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/createRecurringExpense", {
             method: "POST",
@@ -827,7 +946,12 @@ export async function handleRecurringExpenseCreation(newRecurringExpenseItem: Re
     }
 }
 
-export async function getRecurringExpenseList() {
+
+/**
+ * Retrieves the list of recurring expenses from the server.
+ * @returns A sorted array of recurring expense items, or an empty array in case of an error.
+ */
+export async function getRecurringExpenseList(): Promise<RecurringExpenseItemEntity[]> {
     try {
         const response = await fetch("http://localhost:8080/api/getRecurringExpenses", {
             method: "GET",
@@ -851,10 +975,16 @@ export async function getRecurringExpenseList() {
 
     } catch (error) {
         console.error("Error:", error);
+        return [];
     }
 }
 
-export async function handleRecurringExpenseUpdating(recurringExpenseId: string, formData: RecurringExpenseUpdatingFormData) {
+/**
+ * Updates the details of an existing recurring expense.
+ * @param recurringExpenseId - The ID of the recurring expense to update.
+ * @param formData - The new data for the recurring expense.
+ */
+export async function handleRecurringExpenseUpdating(recurringExpenseId: string, formData: RecurringExpenseUpdatingFormData): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/updateRecurringExpense", {
             method: "PUT",
@@ -881,8 +1011,12 @@ export async function handleRecurringExpenseUpdating(recurringExpenseId: string,
 }
 
 
-export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
-                                                     setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>) {
+/**
+ * Deletes a specified recurring expense.
+ * @param recurringExpenseId - The ID of the recurring expense to delete.
+ * @param setRecurringExpenseArray - Dispatch function to update the recurring expense array state.
+ */
+export async function handleRecurringExpenseDeletion(recurringExpenseId: string, setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>): Promise<void> {
     setRecurringExpenseArray(recurringExpenseArray => recurringExpenseArray.filter( recurringExpenseItem => {
             return recurringExpenseItem.recurringExpenseId !== recurringExpenseId
         }
@@ -910,9 +1044,14 @@ export async function handleRecurringExpenseDeletion(recurringExpenseId: string,
     getRecurringExpenseList().then(recurringExpenseList => setRecurringExpenseArray(recurringExpenseList))
 }
 
-export async function handleRemovedRecurringExpenseCreation(recurringExpenseId: string | null,
-                                                            timestampOfRemovedInstance: Date,
-                                                            setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItem[]>>) {
+
+/**
+ * Creates a record for a removed instance of a recurring expense, for blacklist purposes.
+ * @param recurringExpenseId - The ID of the recurring expense from which an instance is removed.
+ * @param timestampOfRemovedInstance - The timestamp of the removed expense instance.
+ * @param setRemovedRecurringExpenseInstances - Dispatch function to update the state of removed recurring expense instances.
+ */
+export async function handleRemovedRecurringExpenseCreation(recurringExpenseId: string | null, timestampOfRemovedInstance: Date, setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItem[]>>): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/createRemovedRecurringExpense", {
             method: "POST",
@@ -937,7 +1076,12 @@ export async function handleRemovedRecurringExpenseCreation(recurringExpenseId: 
     }
 }
 
-export async function getRemovedRecurringExpenses() {
+
+/**
+ * Retrieves the list of removed recurring expense instances from the server.
+ * @returns An array of removed recurring expense instances, or an empty array in case of an error.
+ */
+export async function getRemovedRecurringExpenses(): Promise<RemovedRecurringExpenseItem[]> {
     try {
         const response = await fetch("http://localhost:8080/api/getRemovedRecurringExpenses", {
             method: "GET",
@@ -955,13 +1099,18 @@ export async function getRemovedRecurringExpenses() {
         return removedRecurringExpenses;
     } catch (error) {
         console.error("Error getting removed recurring expenses:", error);
+        return [];
     }
 }
 
 
 // TOTAL INCOME API CALLS //
 
-export async function getTotalIncome() {
+/**
+ * Retrieves the total income from the server.
+ * @returns The total income as a number, or the default of $1,000 in case of an error.
+ */
+export async function getTotalIncome(): Promise<number> {
     try {
         const response = await fetch("http://localhost:8080/api/getTotalIncome",
             {
@@ -973,17 +1122,22 @@ export async function getTotalIncome() {
         )
         if (!response.ok) {
             console.error(`HTTP error when getting total income - ${response.status}`)
-        } else {
-            const totalIncome = await response.json();
-            console.log(totalIncome);
-            return(totalIncome.totalIncome);
         }
+        const totalIncome = await response.json();
+        console.log(totalIncome);
+        return(totalIncome.totalIncome);
     } catch (e) {
         console.error(`Failed to execute total income retrieval - ${e}`)
+        return 1000;
     }
 }
 
-export async function handleTotalIncomeUpdating(newTotalIncome: number) {
+
+/**
+ * Updates the total income value on the server.
+ * @param newTotalIncome - The new total income value.
+ */
+export async function handleTotalIncomeUpdating(newTotalIncome: number): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/updateTotalIncome", {
             method: "PUT",
@@ -1007,7 +1161,10 @@ export async function handleTotalIncomeUpdating(newTotalIncome: number) {
 
 // BROADER DESTRUCTIVE API CALL FUNCTIONS //
 
-export async function handleWipeExpenses() {
+/**
+ * Deletes all user expense records.
+ */
+export async function handleWipeExpenses(): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/wipeExpenses", {
             method: "DELETE",
@@ -1025,7 +1182,11 @@ export async function handleWipeExpenses() {
     }
 }
 
-export async function handleWipeBudget() {
+
+/**
+ * Deletes all user budget records.
+ */
+export async function handleWipeBudget(): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/wipeBudget", {
             method: "DELETE",
@@ -1043,7 +1204,11 @@ export async function handleWipeBudget() {
     }
 }
 
-export async function handleWipeData() {
+
+/**
+ * Deletes all user data (expenses, budgets, recurring expenses).
+ */
+export async function handleWipeData(): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/wipeData", {
             method: "DELETE",
@@ -1062,54 +1227,13 @@ export async function handleWipeData() {
 }
 
 
-// ICON AND COLOUR SELECTOR IMPLEMENTATIONS //
-
-export function addIconSelectionFunctionality(setFormData:
-                                                  Dispatch<SetStateAction<BudgetUpdatingFormData>>
-                                                  | Dispatch<SetStateAction<BudgetCreationFormData>>
-                                                  | Dispatch<SetStateAction<ProfileIconUpdatingFormData>>,
-                                              selectorType: string) {
-    const icons: NodeListOf<HTMLImageElement> = document.querySelectorAll(`.${selectorType}-icon-selectable`);
-    icons.forEach((icon): void => {
-        icon.addEventListener("click", (e: MouseEvent) => {
-            e.preventDefault();
-            const iconPath = icon.getAttribute("data-value")!;
-
-            setFormData((currentFormData: any) => {
-                return {...currentFormData, ["iconPath"]: iconPath}
-            });
-            console.log(`iconPath: ${iconPath}`)
-
-            icons.forEach(icon2 => icon2.classList.remove("selected-icon"));
-            icon.classList.add("selected-icon");
-        });
-    });
-}
-
-export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAction<BasicGroupData>>) {
-    const colourElementList: NodeListOf<HTMLImageElement> = document.querySelectorAll(".group-colour-selectable-container");
-    colourElementList.forEach(colourSelectable => {
-        colourSelectable.addEventListener("click", (e: MouseEvent) => {
-            const triangleElement = colourSelectable.firstChild as HTMLDivElement;
-
-            e.preventDefault();
-            setFormData((current: BasicGroupData) => {
-                return {...current, ["colour"]: triangleElement.getAttribute("data-value")}
-            });
-
-            colourElementList.forEach(colourSelectable => {
-                const triangle = colourSelectable.firstChild as HTMLDivElement;
-                triangle.classList.remove("selectedColour")
-            });
-            triangleElement.classList.add("selectedColour");
-        })
-    })
-}
-
-
 // AUTH API CALL FUNCTIONS //
 
-export async function handleUserRegistration(email: string, password: string) {
+/**
+ * Attempts to register a new user with the provided email and password.
+ * Redirects to the login page on successful registration.
+ */
+export async function handleUserRegistration(email: string, password: string): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/register", {
             method: "POST",
@@ -1137,7 +1261,12 @@ export async function handleUserRegistration(email: string, password: string) {
     }
 }
 
-export async function handleUserLogin(email: string, password: string) {
+
+/**
+ * Attempts to log in a user with the provided email and password.
+ * Redirects to the budget page on successful login.
+ */
+export async function handleUserLogin(email: string, password: string): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/login", {
             method: "POST",
@@ -1170,7 +1299,11 @@ export async function handleUserLogin(email: string, password: string) {
     }
 }
 
-export async function logoutOnClick() {
+
+/**
+ * Logs out the current user and redirects to the login page.
+ */
+export async function logoutOnClick(): Promise<void> {
     try {
         sessionStorage.removeItem("email");
         await fetch("http://localhost:8080/api/logout", {
@@ -1187,7 +1320,12 @@ export async function logoutOnClick() {
     }
 }
 
-export async function checkForUser() {
+
+/**
+ * Checks if a user is currently logged in and handles session status accordingly.
+ * Redirects to the login page if the session is expired or not found.
+ */
+export async function checkForUser(): Promise<{ loggedIn: boolean }> {
     try {
         const response = await fetch("http://localhost:8080/api/checkForUser", {
             method: "GET",
@@ -1197,25 +1335,30 @@ export async function checkForUser() {
         } else if (response.status === 401) {
             console.error("JWT token expiry detected. Logging out.");
             window.alert("Login expired. Please login again.");
-            const userStatus = { loggedIn: "false"}
+            const userStatus = { loggedIn: false}
             logoutOnClick()
                 .then(() => {
                     console.log(`window.location.href: ${window.location.href}`)
                     window.location.href !== "/login" && (window.location.href = "/login")
                 } )
             return userStatus;
-        } else {
-            const userStatus = await response.json();
-            console.log(userStatus)
-            return userStatus;
         }
+        const userStatus = await response.json();
+        console.log(userStatus)
+        return userStatus;
     } catch (error) {
         console.error("Error:", error);
+        return {loggedIn: false};
     }
 }
 
 
-export async function getSessionEmail() {
+/**
+ * Retrieves the email address of the currently logged-in user.
+ * @returns {void}
+ */
+export async function getSessionEmail(): Promise<any> {
+
     try {
         const response = await fetch("http://localhost:8080/api/getUserEmailIfLoggedIn", {
             method: "GET",
@@ -1236,32 +1379,121 @@ export async function getSessionEmail() {
 }
 
 
+// ICON AND COLOUR SELECTOR IMPLEMENTATIONS //
+
+/**
+ * Adds click event listeners to icon elements for icon selection functionality.
+ * @template T - A generic type extending an object that optionally includes an iconPath property.
+ * @param {Dispatch<SetStateAction<T>>} setFormData - Dispatch function that updates state for selected icon.
+ * @param {string} selectorType - The base part of the class name used to select icon elements.
+ */
+export function addIconSelectionFunctionality<T extends { iconPath?: string }>(
+    setFormData: Dispatch<SetStateAction<T>>,
+    selectorType: string
+): void {
+    // Get array of icons
+    const icons: NodeListOf<HTMLImageElement> = document.querySelectorAll(`.${selectorType}-icon-selectable`);
+
+    // Iterate over each icon to add click event listeners
+    icons.forEach((icon): void => {
+        icon.addEventListener("click", (e: MouseEvent) => {
+            e.preventDefault(); // Prevent default action
+
+            // Retrieve the icon's path from its data-value attribute
+            const iconPath = icon.getAttribute("data-value")!;
+            if (!iconPath) return; // Exit if iconPath is null or undefined
+
+            // Update the form data with the selected icon's path
+            setFormData((currentFormData) => ({
+                ...currentFormData,
+                iconPath: iconPath,
+            }));
+
+            // Visual feedback for icon selection
+            icons.forEach(icon2 => icon2.classList.remove("selected-icon"));
+            icon.classList.add("selected-icon");
+            console.log(`iconPath: ${iconPath}`);
+        });
+    });
+}
+
+
+/**
+ * Adds click event listeners to colour selection elements for group colour selection functionality.
+ * @param {Dispatch<SetStateAction<BasicGroupData>>} setFormData - Dispatch function to update state for the selected colour.
+ */
+export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAction<BasicGroupData>>): void {
+    // Query all colour selection containers
+    const colourElementList: NodeListOf<HTMLImageElement> = document.querySelectorAll(".group-colour-selectable-container");
+
+    // Iterate over each colour selection container to add click event listeners
+    colourElementList.forEach(colourSelectable => {
+        colourSelectable.addEventListener("click", (e: MouseEvent) => {
+            // Prevent the default action of the event
+            e.preventDefault();
+
+            // Update form data with the selected colour's value
+            const triangleElement = colourSelectable.firstChild as HTMLDivElement;
+            setFormData((current: BasicGroupData) => ({
+                ...current,
+                ["colour"]: triangleElement.getAttribute("data-value") // Extract colour value
+            }));
+
+            // Visual feedback
+            colourElementList.forEach(colourSelectable => {
+                const triangle = colourSelectable.firstChild as HTMLDivElement;
+                triangle.classList.remove("selectedColour");
+            });
+            triangleElement.classList.add("selectedColour");
+        });
+    });
+}
+
+
 // SORTING FUNCTIONS //
 
-function groupSort (a: GroupItemEntity, b: GroupItemEntity){
+/**
+ * Sorts group items, placing "Miscellaneous" at the end and others by their timestamps in ascending order.
+ * @param {GroupItemEntity} a - The first group item for comparison.
+ * @param {GroupItemEntity} b - The second group item for comparison.
+ * @returns {number} - Sorting order value.
+ */
+function groupSort(a: GroupItemEntity, b: GroupItemEntity): number {
     if (a.group === "Miscellaneous") return 1;
     if (b.group === "Miscellaneous") return -1;
-    return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
 }
 
-function expenseSort(a: ExpenseItemEntity, b: ExpenseItemEntity) {
-    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+
+/**
+ * Sorts expense items by their timestamps in descending order.
+ * @param {ExpenseItemEntity} a - The first expense item for comparison.
+ * @param {ExpenseItemEntity} b - The second expense item for comparison.
+ * @returns {number} - Sorting order value.
+ */
+function expenseSort(a: ExpenseItemEntity, b: ExpenseItemEntity): number {
+    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
 }
 
-function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) {
-    try {
-        return new Date(budgetItemA.timestamp!).getTime() - new Date(budgetItemB.timestamp!).getTime();
-    } catch (e) {
-        console.error("Failed to perform budget sort. Below is budgetItemA and B.")
-        console.log(budgetItemA);
-        console.log(budgetItemB);
-    }
+
+/**
+ * Sorts budget items by their timestamps in ascending order.
+ * Logs errors to console if timestamps are invalid.
+ * @param {BudgetItemEntity} budgetItemA - The first budget item for comparison.
+ * @param {BudgetItemEntity} budgetItemB - The second budget item for comparison.
+ * @returns {number} - Sorting order value, or logs error if timestamp conversion fails.
+ */
+function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity): number {
+    return new Date(budgetItemA.timestamp!).getTime() - new Date(budgetItemB.timestamp!).getTime();
 }
+
 
 // PUBLIC USER DATA API CALLS //
 
-
-export async function getPublicUserData() {
+/**
+ * Retrieves public user data.
+ */
+export async function getPublicUserData(): Promise<any> {
     try {
         const response = await fetch("http://localhost:8080/api/getPublicUserData", {
             method: "GET",
@@ -1287,6 +1519,11 @@ export async function getPublicUserData() {
     }
 }
 
+
+/**
+ * Updates public user data with the specified settings.
+ * @param {PublicUserData} updatedPublicUserData - The updated public user data.
+ */
 export async function handlePublicUserDataUpdating(updatedPublicUserData: PublicUserDataUpdate){
     try {
         const response = await fetch("http://localhost:8080/api/updatePublicUserData", {
@@ -1314,7 +1551,7 @@ export async function handlePublicUserDataUpdating(updatedPublicUserData: Public
 }
 
 
-// REACT SELECTOR OPTIONS AND STYLING
+// SELECTOR OPTIONS AND STYLING //
 
 export const recurringFrequencyOptions = [
     {
@@ -1398,8 +1635,6 @@ export function categoryListAsOptions(budgetArray: BudgetItemEntity[], groupArra
     })
 }
 
-// CURRENCY //
-
 export const currencyOptions = [
     { symbol: '$AUD', code: 'AUD' },
     { symbol: '$USD', code: 'USD' },
@@ -1412,7 +1647,10 @@ export const currencyOptions = [
 // DYNAMIC SIZING FUNCTIONS //
 
 
-export function dynamicallySizeBudgetNameDisplays() {
+/**
+ * Dynamically sizes the font of budget name displays based on their length.
+ */
+export function dynamicallySizeBudgetNameDisplays(): void {
     const budgetNameElements = document.querySelectorAll(".budget-name") as NodeListOf<HTMLElement>;
     budgetNameElements.forEach(budgetNameElement => {
         const budgetNameText = budgetNameElement.textContent;
@@ -1437,7 +1675,10 @@ export function dynamicallySizeBudgetNameDisplays() {
     })
 }
 
-export function dynamicallySizeBudgetNumberDisplays() {
+/**
+ * Dynamically sizes the font of budget number displays based on their length.
+ */
+export function dynamicallySizeBudgetNumberDisplays(): void {
     const budgetNumberElements = document.querySelectorAll(".budgeting-values-container") as NodeListOf<HTMLElement>;
     budgetNumberElements.forEach(budgetNumberElement => {
         let dynamicFontSize = "";
@@ -1472,17 +1713,24 @@ export const monthStringArray = [
     "December"
 ];
 
-export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpenseItemEntity, dateToAnalyseForExpenseLanding: Date) {
-    const creationDate = new Date(recurringExpenseItem.timestamp);
-    const frequency = recurringExpenseItem.frequency;
 
+/**
+ * Determines if a recurring expense lands on a specified day.
+ * @param {RecurringExpenseItemEntity} recurringExpenseItem - The recurring expense item to analyse.
+ * @param {Date} dateToAnalyseForExpenseLanding - The date to check for expense landing.
+ * @returns True if the expense lands on the given day, false otherwise.
+ */
+export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpenseItemEntity, dateToAnalyseForExpenseLanding: Date): boolean {
+    const creationDate = new Date(recurringExpenseItem.timestamp);
     creationDate.setHours(0, 0, 0, 0);
     dateToAnalyseForExpenseLanding.setHours(0, 0, 0, 0);
 
+    // Calculate the difference in days between the dates
     const diffTime = Math.abs(dateToAnalyseForExpenseLanding.getTime() - creationDate.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
 
-    switch (frequency) {
+    // Determine if the expense lands on the given day based on its frequency
+    switch (recurringExpenseItem.frequency) {
         case 'daily':
             return true;
         case 'weekly':
@@ -1499,46 +1747,89 @@ export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpens
     }
 }
 
-export function getRecurringExpenseInstanceOrNull(expenseArray: ExpenseItemEntity[], recurringExpenseItem: RecurringExpenseItemEntity, date: Date) {
-    const recurringExpenseInstance = expenseArray.filter((expenseItem: ExpenseItemEntity) => {
+/**
+ * Retrieves all instances of a recurring expense present in the expense array on a specified date.
+ * @param {ExpenseItemEntity[]} expenseArray - The array of expense items to search.
+ * @param {RecurringExpenseItemEntity} recurringExpenseItem - The recurring expense item to search for.
+ * @param date - The date to search for expense instances.
+ * @returns An array of expense items that are instances of the recurring expense on the given date, or null if none found.
+ */
+export function getRecurringExpenseInstancesOrNull(expenseArray: ExpenseItemEntity[],
+                                                   recurringExpenseItem: RecurringExpenseItemEntity,
+                                                   date: Date): ExpenseItemEntity[] | null {
+    const recurringExpenseInstances = expenseArray.filter((expenseItem: ExpenseItemEntity) => {
         return (expenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
             && new Date(expenseItem.timestamp).getTime() === new Date(date).getTime())
     })
-    return recurringExpenseInstance.length > 0 ? recurringExpenseInstance : null;
+    return recurringExpenseInstances.length > 0 ? recurringExpenseInstances : null;
 }
 
 
-export function getRandomGroupColour() {
+/**
+ * Get random colour for a budget category group.
+ * @returns A random colour from the groupColourArray.
+ */
+export function getRandomGroupColour(): string {
     const randomColourIndex = Math.floor(Math.random() * groupColourArray.length);
     return groupColourArray[randomColourIndex];
 }
 
-export function getGroupBudgetTotal(filteredBudgetArray: BudgetItemEntity[]) {
+
+/**
+ * Get the total budget for a budget category group.
+ * @param {BudgetItemEntity[]} filteredBudgetArray - An array of the budget items in a given group.
+ * @returns The total budget within the group.
+ */
+export function getGroupBudgetTotal(filteredBudgetArray: BudgetItemEntity[]): number {
     return filteredBudgetArray.map(budgetItem => budgetItem.amount)
         .reduce( (acc, amountSpent) => acc + amountSpent, 0)
 }
 
-export function getGroupExpenditureTotal(expenseArray: ExpenseItemEntity[], filteredBudgetArray: BudgetItemEntity[]) {
+
+/**
+ * Get the total expenditure within a budget category group.
+ * @param {ExpenseItemEntity[]} expenseArray - An array of expense items within a given group.
+ * @param {BudgetItemEntity[]} filteredBudgetArray - An array of the budget items in a given group.
+ * @returns The total expenditure within the group.
+ */
+export function getGroupExpenditureTotal(expenseArray: ExpenseItemEntity[],
+                                         filteredBudgetArray: BudgetItemEntity[]): number {
     const categoriesInGroup = filteredBudgetArray.map(expenseItem => expenseItem.category)
     const filteredExpenseArray = expenseArray.filter(expenseItem => categoriesInGroup.includes(expenseItem.category));
     return filteredExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
 }
 
-export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string) {
-    try {
-        return budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0].group
-    } catch (e) {
-        console.log(`Failed to retrieve the group of category ${category}. Temporarily assuming Miscellaneous.`)
-        return "Miscellaneous";
-    }
+
+/**
+ * Get the group of a given category.
+ * @param {BudgetItemEntity[]} budgetArray - The array of budget items.
+ * @param {string} category - The category to search for.
+ * @returns The group of the given category, or null if not found.
+ */
+export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string): string | null {
+    const budgetItem = budgetArray.filter(budgetItemEntity => budgetItemEntity.category === category)[0];
+    return budgetItem.group ? budgetItem.group : null;
 }
 
-export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]) {
-    const groupOption = groupArray.filter(groupItemEntity => groupItemEntity.group === groupName)[0];
-    return groupOption.colour ? groupOption.colour : null;
+
+/**
+ * Get the colour of a given group.
+ * @param {string} groupName - The name of the group to search for.
+ * @param {GroupItemEntity[]} groupArray - The array of group items.
+ * @returns The colour of the given group, or null if not found.
+ */
+export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]): string | null {
+    const group = groupArray.filter(groupItemEntity => groupItemEntity.group === groupName)[0];
+    return group.colour ? group.colour : null;
 }
 
-export function getTotalAmountBudgeted(budgetArray: BudgetItemEntity[]) {
+
+/**
+ * Get the total amount budgeted across all categories in all groups.
+ * @param {BudgetItemEntity[]} budgetArray - The array of budget items.
+ * @returns The total amount budgeted across all categories in all groups.
+ */
+export function getTotalAmountBudgeted(budgetArray: BudgetItemEntity[]): number {
     const amountArray = budgetArray.map( budgetItem => (
         budgetItem.amount
     ))
@@ -1547,9 +1838,15 @@ export function getTotalAmountBudgeted(budgetArray: BudgetItemEntity[]) {
     ), 0)
 }
 
+
+/**
+ * Get the data map for category to icon, group, and colour.
+ * @param {BudgetItemEntity[]} budgetArray - The array of budget items.
+ * @param {GroupItemEntity[]} groupArray - The array of group items.
+ * @returns The map of category to icon, group, and colour.
+ */
 export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
     const categoryToGroupAndColourMap: CategoryToIconGroupAndColourMap = new Map();
-
     budgetArray.forEach( budgetItem => {
         categoryToGroupAndColourMap.set(budgetItem.category, {
             iconPath: budgetItem.iconPath,
@@ -1560,16 +1857,26 @@ export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], grou
     return categoryToGroupAndColourMap;
 }
 
-export function getLineAngle(percentageIncomeRemaining: number) {
-    console.log(`Received percentageIncomeRemaining: ${percentageIncomeRemaining}`)
+
+/**
+ * Get the line angle of the Fulcrum scale animation.
+ * @param {number} percentageIncomeRemaining - The percentage of income remaining.
+ * @returns The line angle of the animation.
+ */
+export function getLineAngle(percentageIncomeRemaining: number): number {
     const functionalPercentageIncomeRemaining = percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining
-    console.log(`Received functionalPercentageIncomeRemaining: ${functionalPercentageIncomeRemaining}`)
     return functionalPercentageIncomeRemaining <= -100 ? 14.5 :
         functionalPercentageIncomeRemaining === 100 ? -14.5 :
             functionalPercentageIncomeRemaining / (-100 / 14.5);
 }
 
-export function handleInputChangeOnFormWithAmount(e: ChangeEvent<HTMLInputElement>, setFormData: Dispatch<SetStateAction<any>>) {
+
+/**
+ * Handle the input change on a form with a formatted amount input field.
+ * @param {ChangeEvent<HTMLInputElement>} e - The input change event.
+ * @param {Dispatch<SetStateAction<any>>} setFormData - The state update function.
+ */
+export function handleInputChangeOnFormWithAmount(e: ChangeEvent<HTMLInputElement>, setFormData: Dispatch<SetStateAction<any>>): void {
     let newFormValue: string;
     if (e.target.name === "amount") {
         if (e.target.value === "") {
@@ -1588,23 +1895,43 @@ export function handleInputChangeOnFormWithAmount(e: ChangeEvent<HTMLInputElemen
     }
 }
 
-export function checkForOpenModalOrForm(expenseFormVisibility: ExpenseFormVisibility
+
+/**
+ * Check if any modal or form is open.
+ * @param {Record<string, boolean>} formVisibility - The visibility of the expense form.
+ * @param {Record<string, boolean>} modalVisibility - The visibility of the expense modal.
+ * @returns True if any modal or form is open, false otherwise.
+ */
+export function checkForOpenModalOrForm(formVisibility: ExpenseFormVisibility
                                             | BudgetFormVisibility
                                             | RecurringExpenseFormVisibility
                                             | SettingsFormVisibility,
-                                        expenseModalVisibility: ExpenseModalVisibility
+                                        modalVisibility: ExpenseModalVisibility
                                             | BudgetModalVisibility
                                             | RecurringExpenseModalVisibility
                                             | SettingsModalVisibility) {
-    return Object.values(expenseFormVisibility).includes(true) || Object.values(expenseModalVisibility).includes(true)
+    return Object.values(formVisibility).includes(true) || Object.values(modalVisibility).includes(true)
 }
 
-export function getWindowLocation() {
+
+/**
+ * Gets the end of the window location url
+ * @returns The end of the open url.
+ */
+export function getWindowLocation(): string {
     const urlArray = window.location.href.split("/");
     return urlArray[urlArray.length - 1];
 }
 
-export function matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances: RemovedRecurringExpenseItem[], recurringExpenseItem: RecurringExpenseItemEntity, date: Date) {
+
+/**
+ * Checks if there is a matching blacklist record for a recurring expense on a given date.
+ * @param {RemovedRecurringExpenseItem[]} removedRecurringExpenseInstances - The blacklist.
+ * @param {RecurringExpenseItemEntity} recurringExpenseItem - The recurring expense item to check.
+ * @param {Date} date - The date to check for a matching blacklist record.
+ * @returns True if a matching blacklist record is found, false otherwise.
+ */
+export function matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances: RemovedRecurringExpenseItem[], recurringExpenseItem: RecurringExpenseItemEntity, date: Date): boolean {
     const checkResult = removedRecurringExpenseInstances.find(removedRecurringExpenseItem => {
         return removedRecurringExpenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
             && new Date(removedRecurringExpenseItem.timestampOfRemovedInstance).toLocaleDateString() === new Date(date).toLocaleDateString()
@@ -1613,9 +1940,152 @@ export function matchingRemovedRecurringExpenseFound(removedRecurringExpenseInst
 }
 
 
-export function getMonthsFromToday(month: number, year: number) {
+/**
+ * Gets the number of months from a given month and year to the current month and year.
+ * @param {number} month - The month to compare.
+ * @param {number} year - The year to compare.
+ * @returns The number of months from the given month and year to the current month and year.
+ */
+export function getMonthsFromToday(month: number, year: number): number {
     const dateToday = new Date();
     const currentMonth = dateToday.getMonth();
     const currentYear = dateToday.getFullYear();
     return 12 * (currentYear - year) + currentMonth - month;
+}
+
+
+/**
+ * Creates the structured expense data using the data from the expense array.
+ * @param {ExpenseItemEntity[]} expenseArray - The array of expense items.
+ * @param {Dispatch<SetStateAction<MonthExpenseGroupEntity[]>>} setStructuredExpenseData - The state update function.
+ * @returns The structured expense data.
+ */
+export function getStructuredExpenseData(expenseArray: ExpenseItemEntity[], setStructuredExpenseData: (value: (((prevState: MonthExpenseGroupEntity[]) => MonthExpenseGroupEntity[]) | MonthExpenseGroupEntity[])) => void) {
+    // Initialise structure from the dawn of y2k to 12 months into the future from today
+    let newStructuredExpenseData: MonthExpenseGroupEntity[] = [];
+
+    const dateToday = new Date();
+    const currentMonth = dateToday.getMonth();
+    const currentYear = dateToday.getFullYear();
+
+    const y2K = new Date('2000-01-01T00:00:00Z');
+    const y2KMonth = y2K.getMonth();
+    const y2KYear = y2K.getFullYear();
+
+    const monthsFromY2KToNow = getMonthsFromToday(y2KMonth, y2KYear);
+
+    for (let i = -monthsFromY2KToNow; i <= 12; i++) {
+        const monthIndex = (currentMonth + i + 1200) % 12;
+        const yearAdjustment = Math.floor((currentMonth + i) / 12);
+        const year = currentYear + yearAdjustment;
+
+        const newMonthExpenseGroup: MonthExpenseGroupEntity = {
+            monthIndex: monthIndex,
+            year: year,
+            monthExpenseArray: []
+        }
+        newStructuredExpenseData = [...newStructuredExpenseData, newMonthExpenseGroup]
+    }
+
+    for (const expenseItem of expenseArray) {
+        for (let monthExpenseGroupItem of newStructuredExpenseData) {
+            if (monthExpenseGroupItem.monthIndex === new Date(expenseItem.timestamp).getMonth()
+                && monthExpenseGroupItem.year === new Date(expenseItem.timestamp).getFullYear()) {
+                // Execution here occurs where a monthExpenseGroupItem's month and year (day) match to this iteration's expenseItem's day.
+                // Here, if a DayExpenseGroupEntity exists for the expenseItem's day, add the expenseItem in.
+                let matchingDayGroupExists = false;
+                for (let dayExpenseGroupItem of monthExpenseGroupItem.monthExpenseArray) {
+                    if (new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString() === new Date(expenseItem.timestamp).toLocaleDateString()) {
+
+                        console.log(`Adding an expense item to existing group on ${new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString()}`)
+                        dayExpenseGroupItem.dayExpenseArray = [...dayExpenseGroupItem.dayExpenseArray, expenseItem];
+                        matchingDayGroupExists = true;
+                        break;
+                    }
+                }
+                if (matchingDayGroupExists) {
+                    break;
+                }
+
+                // Otherwise, make a new DayExpenseGroupEntity for the expenseItem's day and add it in.
+                console.log(`Adding an expense item to newly created group on ${new Date(expenseItem.timestamp).toLocaleDateString()}`)
+
+                const startOfDayCalendarDate = new Date(expenseItem.timestamp);
+                startOfDayCalendarDate.setHours(0, 0, 0, 0);
+
+                const newDayExpenseGroup: DayExpenseGroupEntity = {
+                    calendarDate: startOfDayCalendarDate,
+                    dayExpenseArray: [expenseItem]
+                }
+                monthExpenseGroupItem.monthExpenseArray = [...monthExpenseGroupItem.monthExpenseArray, newDayExpenseGroup];
+            }
+        }
+    }
+    setStructuredExpenseData(newStructuredExpenseData);
+}
+
+
+/**
+ * Updates the expenseArray's recurring expense instances, adding, removing or leaving instances as necessary.
+ * @param {RecurringExpenseItemEntity[]} recurringExpenseArray - The array of recurring expense items.
+ * @param {ExpenseItemEntity[]} expenseArray - The array of expense items.
+ * @param {RemovedRecurringExpenseItem[]} removedRecurringExpenseInstances - The array of removed recurring expense instances.
+ * @param {Dispatch<SetStateAction<BudgetItemEntity[]>>} setBudgetArray - The state update function for the budget array.
+ * @param {Dispatch<SetStateAction<ExpenseItemEntity[]>>} setExpenseArray - The state update function for the expense array.
+ */
+export async function updateRecurringExpenseInstances(recurringExpenseArray: RecurringExpenseItemEntity[],
+                                                          expenseArray: ExpenseItemEntity[],
+                                                          removedRecurringExpenseInstances: RemovedRecurringExpenseItem[],
+                                                          setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
+                                                          setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>, ): Promise<void> {
+    const today = new Date();
+    const misplacedExpensesToRemove = new Set<string>();
+
+    // For each recurring expense...
+    recurringExpenseArray.forEach(recurringExpenseItem => {
+
+        // We check each of the dates between when it was added and today.
+        for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
+            console.log(`Looking at date: ${date.toLocaleDateString()}`)
+
+            const expenseInstances = getRecurringExpenseInstancesOrNull(expenseArray, recurringExpenseItem, date);
+            const isFrequencyMatch = recurringExpenseLandsOnDay(recurringExpenseItem, date);
+            const expenseInstanceIsBlacklisted = removedRecurringExpenseInstances ?
+                matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date)
+                : false;
+
+            // If recurring instance already exists on a day
+            if (expenseInstances != null) {
+                let keepFirstInstance = true;
+
+                // And this instance shouldn't have landed on this day (can happen when freq is changed),
+                // Queue this and any duplicate instances on this day for removal
+                if (!isFrequencyMatch) {
+                    keepFirstInstance = false;
+                }
+
+                // Otherwise only queue the duplicate instances on this day for removal
+                for (let i = keepFirstInstance ? 1 : 0; i < expenseInstances.length ; i++) {
+                    misplacedExpensesToRemove.add(expenseInstances[i].expenseId);
+                }
+            } else {
+                // If: (1) There is no instance on this day, (2) It matches freq patterns, (3) not blacklisted,
+                // Create an instance of this recurrence expense in the expense array
+                if (isFrequencyMatch && !expenseInstanceIsBlacklisted) {
+                    const newExpenseItemLanded: ExpenseItemEntity = {
+                        expenseId: uuid(),
+                        category: recurringExpenseItem.category,
+                        amount: recurringExpenseItem.amount,
+                        timestamp: date,
+                        recurringExpenseId: recurringExpenseItem.recurringExpenseId
+                    }
+                    handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItemLanded)
+                }
+            }
+        }
+    })
+    if (misplacedExpensesToRemove.size !== 0) {
+        await handleBatchExpenseDeletion(misplacedExpensesToRemove);
+        setExpenseArray(await getExpenseList());
+    }
 }

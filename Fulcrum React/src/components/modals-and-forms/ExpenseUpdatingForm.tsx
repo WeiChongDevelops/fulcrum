@@ -57,7 +57,6 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
     }
 
     function onDateInputChange(newValue: Value) {
-        console.log(new Date(newValue as Date).toLocaleDateString())
         setFormData(curr => ({ ...curr, timestamp: newValue }));
     }
 

@@ -62,7 +62,6 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
 
         await handleGroupCreation(formData.group, formData.colour ? formData.colour : randomColour, setGroupArray, newGroupItem);
         setFormData({ group: "", colour: "" });
-
     }
 
     return (

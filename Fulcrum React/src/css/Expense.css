@@ -9,7 +9,11 @@
             transparent 2px,
             transparent 30px
     );
+    mask-image: linear-gradient(to right,
+    rgba(0, 0, 0, 1) 99%,
+    rgba(0, 0, 0, 0) 100%);
 }
+
 
 .dotted-line-dark {
     background: repeating-linear-gradient(

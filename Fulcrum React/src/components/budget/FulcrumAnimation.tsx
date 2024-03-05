@@ -57,20 +57,17 @@ export default function FulcrumAnimation( { lineAngle, isDarkMode } : FulcrumAni
             recalculateShadowDimensions();
             setShadowDimensions();
         }
+
         window.addEventListener("resize", recalculateAnimationStyling)
         return (() => window.removeEventListener("resize", recalculateAnimationStyling))
-    })
-
-    useEffect(() => {
-        recalculateShadowDimensions();
-    }, [lineAngle]);
+    }, [])
 
     useEffect(() => {
         setShadowDimensions();
     }, [lineAngle, leverEndXOffset, bowlWidth]);
 
-
     useEffect( () => {
+        recalculateShadowDimensions();
         // Show green fulcrum if scale is balanced, red otherwise
         setActiveTriangleFulcrum(`/src/assets/fulcrum-animation/fulcrum-tri-${lineAngle === 0 ? "green" : "red"}.webp`);
     },[lineAngle]);

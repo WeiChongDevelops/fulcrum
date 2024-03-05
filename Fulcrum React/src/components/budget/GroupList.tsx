@@ -9,10 +9,8 @@ import {Dispatch, SetStateAction} from "react";
 interface GroupListProps {
     budgetArray: BudgetItemEntity[]
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-
     groupArray: GroupItemEntity[];
     setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
-
     expenseArray: ExpenseItemEntity[];
 
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
@@ -24,7 +22,6 @@ interface GroupListProps {
     setOldGroupBeingEdited: Dispatch<SetStateAction<PreviousGroupBeingEdited>>
 
     setGroupToDelete: Dispatch<SetStateAction<string>>;
-
     setCategoryToDelete: Dispatch<SetStateAction<string>>;
 
     perCategoryTotalExpenseArray: Map<string, number>

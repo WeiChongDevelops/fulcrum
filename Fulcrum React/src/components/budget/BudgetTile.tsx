@@ -52,7 +52,6 @@ export default function BudgetTile({ category,
         dynamicallySizeBudgetNumberDisplays();
     }, [amount, perCategoryTotalExpenseArray]);
 
-
     function handleDeleteClick(e: React.MouseEvent) {
         e.stopPropagation();
         setCategoryToDelete(category);
