@@ -6,6 +6,9 @@ interface GroupColourSelectorProps {
     oldColour?: string
 }
 
+/**
+ * A visual selector for the user to choose a colour for a budget category group.
+ */
 export default function GroupColourSelector( { oldColour }:GroupColourSelectorProps) {
 
     useEffect (() => {

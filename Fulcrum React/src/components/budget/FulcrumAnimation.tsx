@@ -5,6 +5,9 @@ interface FulcrumAnimationProps {
     isDarkMode: boolean;
 }
 
+/**
+ * A budget-responsive visual representation of a scale, used to visualise the balance between budget and income.
+ */
 export default function FulcrumAnimation( { lineAngle, isDarkMode } : FulcrumAnimationProps) {
 
     const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-tri-red.webp");

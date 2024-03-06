@@ -15,6 +15,9 @@ interface ProfileIconUpdatingFormProps {
     publicUserData: PublicUserData;
 }
 
+/**
+ * A form for choosing a profile icon.
+ */
 export default function ProfileIconUpdatingForm( { oldIconFileName, setToolsFormVisibility, publicUserData, setPublicUserData }: ProfileIconUpdatingFormProps) {
     const [formData, setFormData] = useState<ProfileIconUpdatingFormData>({
         iconPath: oldIconFileName

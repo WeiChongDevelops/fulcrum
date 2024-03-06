@@ -31,6 +31,9 @@ interface RecurringExpenseUpdatingFormProps {
     currencySymbol: string;
 }
 
+/**
+ * A form for updating an existing recurring expense entry.
+ */
 export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVisibility, setRecurringExpenseArray, setBudgetArray, categoryOptions, oldRecurringExpenseBeingEdited, currencySymbol }: RecurringExpenseUpdatingFormProps) {
 
     const [formData, setFormData] = useState<RecurringExpenseUpdatingFormData>({

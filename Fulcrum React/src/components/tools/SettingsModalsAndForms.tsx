@@ -16,6 +16,9 @@ interface SettingsModalsAndFormsProps {
     setSettingsModalVisibility: Dispatch<SetStateAction<SettingsModalVisibility>>
 }
 
+/**
+ * Renders the modals and forms for the settings page.
+ */
 export default function SettingsModalsAndForms ( { settingsFormVisibility, setSettingsFormVisibility, settingsModalVisibility, setSettingsModalVisibility }: SettingsModalsAndFormsProps) {
     return (
         <div className="z-4">

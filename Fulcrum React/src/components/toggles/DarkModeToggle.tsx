@@ -7,6 +7,9 @@ interface DarkModeToggleProps {
     setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
 }
 
+/**
+ * A toggle for the user to choose between light and dark mode.
+ */
 export default function DarkModeToggle({ publicUserData, setPublicUserData }: DarkModeToggleProps) {
     const [isDarkMode, setIsDarkMode] = useState(publicUserData.darkModeEnabled);
 

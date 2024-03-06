@@ -17,6 +17,9 @@ interface GroupUpdatingFormProps {
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
 }
 
+/**
+ * A form for updating an existing budget category group.
+ */
 export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited, setGroupArray, groupArray, setBudgetFormVisibility }: GroupUpdatingFormProps) {
 
     const [formData, setFormData]

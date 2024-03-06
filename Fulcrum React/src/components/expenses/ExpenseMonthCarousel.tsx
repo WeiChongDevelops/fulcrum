@@ -19,7 +19,9 @@ interface ExpenseMonthCarouselProps {
     setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
 }
 
-
+/**
+ * Renders the horizontally traversable carousel of expenses, grouped by month.
+ */
 export default function ExpenseMonthCarousel({structuredExpenseData,
                                                  setExpenseFormVisibility,
                                                  setExpenseModalVisibility,

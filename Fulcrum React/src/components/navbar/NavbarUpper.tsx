@@ -9,6 +9,9 @@ interface NavbarUpperProps {
     email: string;
 }
 
+/**
+ * The upper navbar, which displays the dark-mode toggle, Fulcrum logo, user email, profile icon and sign-out button.
+ */
 export default function NavbarUpper( { publicUserData, setPublicUserData, email }: NavbarUpperProps) {
     return (
         <nav className={`flex flex-row flex-shrink justify-between items-center h-[55px] py-1 ${publicUserData.darkModeEnabled ?  "bg-dark" : "bg-light"}`}>

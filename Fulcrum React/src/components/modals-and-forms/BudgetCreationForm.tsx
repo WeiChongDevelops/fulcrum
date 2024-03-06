@@ -25,6 +25,9 @@ interface BudgetCreationFormProps {
     currencySymbol: string;
 }
 
+/**
+ * A form for creating a new budget item.
+ */
 export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNameOfNewItem, setBudgetFormVisibility, currencySymbol }: BudgetCreationFormProps) {
 
     const [formData, setFormData] = useState<BudgetCreationFormData>({ category: "", amount: 0, iconPath: "", group: groupNameOfNewItem});

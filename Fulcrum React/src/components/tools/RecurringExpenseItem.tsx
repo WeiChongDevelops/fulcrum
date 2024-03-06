@@ -28,6 +28,9 @@ interface RecurringExpenseItemProps {
     publicUserData: PublicUserData;
 }
 
+/**
+ * A single interactive recurring expense entry.
+ */
 export default function RecurringExpenseItem( { recurringExpenseId,
                                                   category,
                                                   amount,

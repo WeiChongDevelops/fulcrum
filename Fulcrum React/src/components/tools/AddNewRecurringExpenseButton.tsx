@@ -6,6 +6,9 @@ interface AddNewRecurringExpenseButtonProps {
     isDarkMode: boolean;
 }
 
+/**
+ * A button that creates a new recurring expense.
+ */
 export default function AddNewRecurringExpenseButton({ setRecurringExpenseFormVisibility, isDarkMode }: AddNewRecurringExpenseButtonProps) {
 
     async function handleClick() {

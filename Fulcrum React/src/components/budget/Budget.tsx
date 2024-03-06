@@ -32,6 +32,9 @@ interface BudgetProps {
     setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>
 }
 
+/**
+ * The root component for the budget page. It contains the income display, the Fulcrum animation and the user's budget.
+ */
 export default function Budget( { publicUserData, expenseArray, budgetArray, groupArray, setBudgetArray, setGroupArray }: BudgetProps) {
     const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
         isCreateBudgetVisible: false,

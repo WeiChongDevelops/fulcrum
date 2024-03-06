@@ -18,6 +18,9 @@ interface CategorySelectorProps {
         | Dispatch<SetStateAction<ExpenseCreationFormData>>);
 }
 
+/**
+ * A creatable selector for the user to select a category for an expense.
+ */
 export default function CategorySelector( { categoryOptions, oldExpenseBeingEdited, setFormData }: CategorySelectorProps) {
 
     const maxLengthInput: any = (props: InputProps) => {

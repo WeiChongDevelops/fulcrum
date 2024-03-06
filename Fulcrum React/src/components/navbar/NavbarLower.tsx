@@ -1,6 +1,9 @@
 import {getWindowLocation} from "../../util.ts";
 import {useState} from "react";
 
+/**
+ * The lower navbar, used for navigation between the budget pages (Expense, Budget and Tools).
+ */
 export default function NavbarLower() {
 
     const [hoveredNavButton, setHoveredNavButton] = useState("");

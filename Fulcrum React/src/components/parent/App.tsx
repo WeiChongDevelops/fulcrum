@@ -17,6 +17,10 @@ import {
     PublicUserData
 } from "../../util.ts";
 import Home from "../home/Home.tsx";
+
+/**
+ * The main application component, handling shared data retrieval, routing and rendering.
+ */
 export default function App() {
 
     const sessionStoredProfileIcon = sessionStorage.getItem("profileIcon");

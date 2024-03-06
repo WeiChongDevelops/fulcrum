@@ -25,6 +25,9 @@ interface ExpenseUpdatingFormProps {
     currencySymbol: string;
 }
 
+/**
+ * A form for updating an existing expense item.
+ */
 export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpenseArray, setBudgetArray, categoryOptions, oldExpenseBeingEdited, currencySymbol }: ExpenseUpdatingFormProps) {
 
 

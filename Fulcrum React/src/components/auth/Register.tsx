@@ -4,6 +4,9 @@ import "../../css/Auth.css";
 import {FormEvent, useState} from "react";
 import {handleUserRegistration} from "../../util.ts";
 
+/**
+ * The registration page for the Fulcrum application.
+ */
 export default function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

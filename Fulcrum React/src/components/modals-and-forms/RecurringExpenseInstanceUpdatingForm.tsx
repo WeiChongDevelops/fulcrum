@@ -25,6 +25,9 @@ interface RecurringExpenseInstanceUpdatingFormProps {
     setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItem[]>>
 }
 
+/**
+ * A form for updating an existing recurring expense instance in the expense database.
+ */
 export default function RecurringExpenseInstanceUpdatingForm({ setExpenseFormVisibility, setExpenseArray, categoryOptions, oldExpenseBeingEdited, currencySymbol, setRemovedRecurringExpenseInstances }: RecurringExpenseInstanceUpdatingFormProps) {
 
 

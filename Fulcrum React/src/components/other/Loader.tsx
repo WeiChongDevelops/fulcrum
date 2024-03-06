@@ -6,6 +6,9 @@ interface LoaderProps {
     isDarkMode: boolean;
 }
 
+/**
+ * A small animation that displays while the app is loading.
+ */
 export default function Loader({ isLoading, isDarkMode }: LoaderProps) {
     return (
         <div className="absolute top-[50vh] left-[50vw]">

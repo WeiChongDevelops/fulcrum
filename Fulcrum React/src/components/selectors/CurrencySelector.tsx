@@ -7,6 +7,9 @@ interface CurrencySelectorProps {
     setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
 }
 
+/**
+ * A visual selector for the user to choose the application's currency. Does not perform conversion.
+ */
 export default function CurrencySelector({ publicUserData, setPublicUserData }: CurrencySelectorProps) {
 
     async function handleCurrencySelection(e: React.MouseEvent) {

@@ -13,6 +13,9 @@ interface GroupCreationFormProps {
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
 }
 
+/**
+ * A form for creating a new budget category group.
+ */
 export default function GroupCreationForm(this: any, { setGroupArray, setBudgetFormVisibility }: GroupCreationFormProps) {
 
     const [formData, setFormData] = useState<BasicGroupData>({ group: "", colour: "" })

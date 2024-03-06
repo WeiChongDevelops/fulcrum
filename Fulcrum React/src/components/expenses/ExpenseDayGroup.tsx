@@ -21,6 +21,9 @@ interface ExpenseDayGroupProps {
     publicUserData: PublicUserData;
 }
 
+/**
+ * Displays a day-labelled group of expenses for a single calendar day.
+ */
 export default function ExpenseDayGroup({ dayExpenseGroup,
                                             setExpenseFormVisibility,
                                             setExpenseModalVisibility,

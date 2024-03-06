@@ -7,6 +7,9 @@ interface AccessibilityToggleProps {
     setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
 }
 
+/**
+ * A toggle for the user to choose between standard mode and accessibility mode (high contrast + greyscale).
+ */
 export default function AccessibilityToggle({ publicUserData, setPublicUserData }: AccessibilityToggleProps) {
     const [isAccessibilityMode, setIsAccessibilityMode] = useState(publicUserData.accessibilityEnabled);
 

@@ -20,6 +20,9 @@ interface TwoOptionModalProps {
     title: string;
 }
 
+/**
+ * A modal that allows the user to choose between two options.
+ */
 export default function TwoOptionModal( { optionOneText, optionOneFunction, optionTwoText, optionTwoFunction, setModalVisibility, isVisible, title }: TwoOptionModalProps) {
 
     const formRef = useRef<HTMLDivElement>(null);

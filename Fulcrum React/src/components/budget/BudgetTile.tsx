@@ -24,6 +24,9 @@ interface BudgetTileProps {
     publicUserData: PublicUserData;
 }
 
+/**
+ * An individual interactive budget infographic tile in a category group.
+ */
 export default function BudgetTile({ category,
                                        amount,
                                        group,

@@ -41,6 +41,9 @@ interface ExpenseModalsAndFormsProps {
     expenseIdToDelete: string;
 }
 
+/**
+ * Renders the modals and forms for the expenses page.
+ */
 export default function ExpenseModalsAndForms( { expenseFormVisibility,
                                                    setExpenseFormVisibility,
                                                    expenseModalVisibility,

@@ -28,6 +28,9 @@ interface ExpenseItemProps {
     publicUserData: PublicUserData;
 }
 
+/**
+ * A single interactive expense log.
+ */
 export default function ExpenseItem( { expenseId,
                                          category,
                                          amount,

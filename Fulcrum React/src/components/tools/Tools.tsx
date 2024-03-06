@@ -26,6 +26,9 @@ interface ToolsProps {
     categoryDataMap: CategoryToIconGroupAndColourMap;
 }
 
+/**
+ * The root component for the tools page.
+ */
 export default function Tools({ publicUserData, setPublicUserData, budgetArray, groupArray, setExpenseArray, setBudgetArray, categoryDataMap }: ToolsProps) {
 
     const sessionStoredEmail = sessionStorage.getItem("email");

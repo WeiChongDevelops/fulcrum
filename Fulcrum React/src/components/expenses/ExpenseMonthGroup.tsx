@@ -23,6 +23,9 @@ interface ExpenseMonthGroupProps {
     setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
 }
 
+/**
+ * Renders the expense logs for a given month.
+ */
 export function ExpenseMonthGroup( { monthExpenseGroupItem,
                                        setExpenseFormVisibility,
                                        setExpenseModalVisibility,

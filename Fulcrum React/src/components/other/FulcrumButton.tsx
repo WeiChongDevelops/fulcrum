@@ -6,8 +6,11 @@ interface FulcrumButtonProps {
     backgroundColour? : "red" | "green" | "grey" | "white";
     id? : string;
 }
-export default function FulcrumButton({ displayText, onClick, optionalTailwind, backgroundColour, id }: FulcrumButtonProps) {
 
+/**
+ * A customisable button used throughout Fulcrum.
+ */
+export default function FulcrumButton({ displayText, onClick, optionalTailwind, backgroundColour, id }: FulcrumButtonProps) {
     const backgroundStyles = (() => {
         switch (backgroundColour) {
             case("green"):

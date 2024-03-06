@@ -43,6 +43,9 @@ interface GroupProps {
     publicUserData: PublicUserData;
 }
 
+/**
+ * Displays the budget tiles for a given group and a button to add another tile to the group.
+ */
 export default function Group({ groupName,
                                   filteredBudgetArray,
                                   setBudgetArray,

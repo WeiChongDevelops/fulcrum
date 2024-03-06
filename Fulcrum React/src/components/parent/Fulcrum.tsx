@@ -11,6 +11,9 @@ interface FulcrumProps {
     setEmail: Dispatch<SetStateAction<string>>;
 }
 
+/**
+ * The Fulcrum component which renders the navigation bars and the active application section.
+ */
 export default function Fulcrum({ publicUserData, setPublicUserData, email, setEmail }: FulcrumProps) {
 
     useEffect(() => {

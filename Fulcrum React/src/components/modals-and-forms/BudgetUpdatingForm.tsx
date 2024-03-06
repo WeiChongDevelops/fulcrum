@@ -18,6 +18,9 @@ interface DBUpdatingFormProps {
     currencySymbol: string;
 }
 
+/**
+ * A form for updating an existing budget item.
+ */
 export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudgetBeingEdited, setBudgetFormVisibility, currencySymbol }: DBUpdatingFormProps) {
 
 

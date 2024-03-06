@@ -7,6 +7,9 @@ interface AddNewBudgetToGroupButtonProps {
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
 }
 
+/**
+ * Button to add a new budget to a category group.
+ */
 export default function AddNewBudgetToGroupButton({ setGroupNameOfNewItem, groupNameOfNewItem, setBudgetFormVisibility }: AddNewBudgetToGroupButtonProps) {
 
     function handleClick() {

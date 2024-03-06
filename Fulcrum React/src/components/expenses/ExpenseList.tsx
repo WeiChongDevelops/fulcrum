@@ -20,6 +20,9 @@ interface ExpenseListProps {
     publicUserData: PublicUserData;
 }
 
+/**
+ * Displays the expenses for a particular day.
+ */
 export default function ExpenseList({ dayExpenseArray,
                                         setExpenseFormVisibility,
                                         setExpenseModalVisibility,

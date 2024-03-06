@@ -29,6 +29,9 @@ interface GroupListProps {
     publicUserData: PublicUserData;
 }
 
+/**
+ * Renders all budget category groups.
+ */
 export default function GroupList( { budgetArray,
                                        setBudgetArray,
                                        groupArray,

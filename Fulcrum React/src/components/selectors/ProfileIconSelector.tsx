@@ -1,6 +1,9 @@
 import {profileIconArray} from "../../util.ts";
 import "../../css/Tools.css"
 
+/**
+ * A visual selector for the user to choose a profile icon.
+ */
 export default function ProfileIconSelector() {
     return (
         <div id="icon-selector" className="my-2">

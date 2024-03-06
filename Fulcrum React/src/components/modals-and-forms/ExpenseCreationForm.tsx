@@ -45,7 +45,9 @@ interface ExpenseCreationFormProps {
     mustBeRecurring: boolean;
 }
 
-
+/**
+ * A form for creating a new expense item.
+ */
 export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpenseArray, setBudgetArray, setRecurringExpenseArray, budgetArray, categoryOptions, currencySymbol, defaultCalendarDate, mustBeRecurring }: ExpenseCreationFormProps) {
 
     const [formData, setFormData] = useState<ExpenseCreationFormData>({

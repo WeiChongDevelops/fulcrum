@@ -8,6 +8,9 @@ interface AddNewExpenseButtonProps {
     monthExpenseGroupItem: MonthExpenseGroupEntity;
 }
 
+/**
+ * Button to add a new expense log.
+ */
 export default function AddNewExpenseButton({ setExpenseFormVisibility, isDarkMode, setDefaultCalendarDate, monthExpenseGroupItem }: AddNewExpenseButtonProps) {
 
     async function handleClick() {

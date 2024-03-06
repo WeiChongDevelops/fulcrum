@@ -33,6 +33,9 @@ interface ModalsAndFormsProps {
     currencySymbol: string;
 }
 
+/**
+ * The modals and forms for the budget page.
+ */
 export default function BudgetModalsAndForms({ budgetFormVisibility,
                                                  setBudgetArray,
                                                  groupArray,

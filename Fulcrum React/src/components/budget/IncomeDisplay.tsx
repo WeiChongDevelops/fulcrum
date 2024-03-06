@@ -13,6 +13,9 @@ interface IncomeDisplayProps {
     publicUserData: PublicUserData;
 }
 
+/**
+ * Displays the user's total income and the amount left to budget, also allowing users to edit their total income.
+ */
 export default function IncomeDisplay({ totalIncome, setTotalIncome, amountLeftToBudget, publicUserData}: IncomeDisplayProps) {
 
     const currency = publicUserData.currency;

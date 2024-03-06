@@ -4,6 +4,9 @@ import "../../css/Auth.css";
 import {FormEvent, useState} from "react";
 import {handleUserLogin} from "../../util.ts";
 
+/**
+ * The login page for the Fulcrum application.
+ */
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

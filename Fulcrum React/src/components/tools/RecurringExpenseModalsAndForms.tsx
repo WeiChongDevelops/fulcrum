@@ -35,6 +35,9 @@ interface RecurringExpenseModalsAndFormsProps {
     oldRecurringExpenseBeingEdited: PreviousRecurringExpenseBeingEdited;
 }
 
+/**
+ * Renders the modals and forms for the recurring expenses page.
+ */
 export default function RecurringExpenseModalsAndForms( { recurringExpenseFormVisibility,
                                                             setRecurringExpenseFormVisibility,
                                                             recurringExpenseModalVisibility,

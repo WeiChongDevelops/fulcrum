@@ -19,6 +19,9 @@ interface SettingsProps {
     setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
 }
 
+/**
+ * The root component for the settings page.
+ */
 export default function Settings({ setOpenToolsSection, publicUserData, setPublicUserData }: SettingsProps) {
 
     const [settingsFormVisibility, setSettingsFormVisibility] = useState<SettingsFormVisibility>({

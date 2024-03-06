@@ -6,6 +6,9 @@ interface AddNewGroupButtonProps {
     isDarkMode: boolean;
 }
 
+/**
+ * Button to create a new budget category group.
+ */
 export default function AddNewGroupButton({ setBudgetFormVisibility, isDarkMode }: AddNewGroupButtonProps) {
 
     async function handleClick() {

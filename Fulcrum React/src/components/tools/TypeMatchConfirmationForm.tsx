@@ -11,6 +11,9 @@ interface TypeMatchConfirmationFormProps {
     lastChanceModalVisibility: string;
 }
 
+/**
+ * A form that requires the user to type a specified string to confirm an action.
+ */
 export function TypeMatchConfirmationForm( { areYouSureMessage, typeMatchString, setFormVisibility, formVisibility, setModalVisibility, lastChanceModalVisibility }: TypeMatchConfirmationFormProps) {
 
     const [typeMatchInput, setTypeMatchInput] = useState("");

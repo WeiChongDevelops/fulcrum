@@ -35,6 +35,9 @@ interface RecurringExpensesProps {
     categoryDataMap: CategoryToIconGroupAndColourMap;
 }
 
+/**
+ * The root component for the recurring expense page.
+ */
 export default function RecurringExpenses({ setOpenToolsSection, publicUserData, budgetArray, groupArray, setExpenseArray, setBudgetArray, categoryDataMap }: RecurringExpensesProps) {
 
     const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
