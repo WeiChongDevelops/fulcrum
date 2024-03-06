@@ -105,10 +105,6 @@ export default function Budget( { publicUserData, expenseArray, budgetArray, gro
     }, [amountLeftToBudget, totalIncome]);
 
     useEffect( () => {
-        const formCategoryInput = document.getElementById("category")
-        const formGroupInput = document.getElementById("group")
-        formCategoryInput ? formCategoryInput.focus() : formGroupInput?.focus();
-        document.getElementById("right-button")?.focus()
         setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility))
     }, [budgetFormVisibility, budgetModalVisibility])
 

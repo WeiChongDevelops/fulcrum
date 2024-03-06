@@ -6,7 +6,6 @@ import {
     checkForUser,
     ExpenseItemEntity,
     ExpenseModalVisibility,
-    getGroupList,
     getRecurringExpenseList,
     getRemovedRecurringExpenses, getStructuredExpenseData,
     GroupItemEntity,
@@ -32,7 +31,6 @@ interface ExpensesProps {
 
     setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>
-    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>
 
     categoryDataMap: CategoryToIconGroupAndColourMap;
 }
@@ -40,7 +38,7 @@ interface ExpensesProps {
 /**
  * The root component for the expense page.
  */
-export default function Expenses({ publicUserData, expenseArray, budgetArray, groupArray, setExpenseArray, setBudgetArray, setGroupArray, categoryDataMap }: ExpensesProps) {
+export default function Expenses({ publicUserData, expenseArray, budgetArray, groupArray, setExpenseArray, setBudgetArray, categoryDataMap }: ExpensesProps) {
 
     const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
     const [expenseFormVisibility, setExpenseFormVisibility] = useState({
@@ -63,19 +61,18 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     useEffect(() => {
         async function retrieveInitialData() {
             try {
-                await checkForUser().then(userStatus => {
-                    if (userStatus["loggedIn"]) {
-                        console.log("User logged in.");
-                    } else {
-                        console.log("User not logged in, login redirect initiated.");
-                        window.location.href = "/login";
-                    }
-                });
+                const userStatus = await checkForUser();
+                if (userStatus["loggedIn"]) {
+                    console.log("User logged in.");
+                } else {
+                    console.log("User not logged in, login redirect initiated.");
+                    window.location.href = "/login";
+                }
 
                 const [recurringExpenseList, removedRecurringExpenses] = await Promise.all([
                     getRecurringExpenseList(),
                     getRemovedRecurringExpenses()
-                ]);
+                ])
                 setRecurringExpenseArray(recurringExpenseList);
                 setRemovedRecurringExpenseInstances(removedRecurringExpenses);
 
@@ -92,17 +89,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
         getStructuredExpenseData(expenseArray, setStructuredExpenseData);
     }, [expenseArray, recurringExpenseArray]);
 
-
-    useEffect(() => {
-        getGroupList()
-            .then((groupList: GroupItemEntity[]) => {
-                setGroupArray(groupList)
-            })
-    }, [expenseArray]);
-
     useEffect( () => {
-        document.getElementById("category")?.focus()
-        document.getElementById("right-button")?.focus()
         setIsExpenseFormOrModalOpen(checkForOpenModalOrForm(expenseFormVisibility, expenseModalVisibility))
     }, [expenseFormVisibility, expenseModalVisibility])
 

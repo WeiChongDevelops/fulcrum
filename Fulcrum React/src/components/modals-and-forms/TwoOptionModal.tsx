@@ -28,6 +28,7 @@ export default function TwoOptionModal( { optionOneText, optionOneFunction, opti
     const formRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        document.getElementById("right-button")?.focus()
         window.addEventListener("mousedown", handleClickOutside);
         return () => {
             window.removeEventListener("mousedown", handleClickOutside);

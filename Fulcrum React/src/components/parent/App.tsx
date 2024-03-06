@@ -83,7 +83,6 @@ export default function App() {
                                                               groupArray={groupArray}
                                                               setExpenseArray={setExpenseArray}
                                                               setBudgetArray={setBudgetArray}
-                                                              setGroupArray={setGroupArray}
                                                               categoryDataMap={categoryDataMap}/>} />
                     <Route path="budget" element={<Budget publicUserData={publicUserData}
                                                           expenseArray={expenseArray}

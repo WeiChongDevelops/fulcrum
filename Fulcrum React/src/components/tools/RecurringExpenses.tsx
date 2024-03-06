@@ -64,23 +64,18 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData,
 
     useEffect(() => {
         async function retrieveData() {
-
             const [recurringExpenseArray] = await Promise.all([
                 getRecurringExpenseList(),
             ])
-
             setRecurringExpenseArray(recurringExpenseArray);
 
             await new Promise(resolve => setTimeout(resolve, 0));
-
         }
         retrieveData()
             .then(() => setIsLoading(false))
     }, []);
 
     useEffect( () => {
-        document.getElementById("frequency")?.focus()
-        document.getElementById("right-button")?.focus()
         setIsRecurringExpenseFormOrModalOpen(checkForOpenModalOrForm(recurringExpenseFormVisibility, recurringExpenseModalVisibility))
     }, [recurringExpenseFormVisibility, recurringExpenseModalVisibility])
 
