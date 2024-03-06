@@ -1,0 +1,133 @@
+
+.auth-page-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	position: relative;
+	overflow: hidden;
+}
+
+.auth-page-container::before {
+	position: absolute;
+	z-index: -1;
+	top: -20px;
+	right: -20px;
+	bottom: -20px;
+	left: -20px;
+	content: "";
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: left;
+	filter: blur(8px) brightness(60%);
+}
+
+.register-page:before {
+	background-image: url("/src/assets/other-assets/register-bg-4.webp");
+}
+
+.login-page:before {
+	background-image: url("/src/assets/other-assets/login-bg.webp");
+}
+
+.auth-page-left-column {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: start;
+	height: 65vh;
+	padding: 0 0 10rem 13rem;
+}
+
+.auth-page-right-column {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	height: 35vh;
+	margin-right: 6rem;
+}
+
+.auth-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+	color: black;
+	padding: 4rem 3rem 2rem 3rem;
+	width: 37vw;
+	border-radius: 1rem;
+}
+
+.auth-label-input-pair {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: start;
+	width: 100%;
+}
+
+.auth-label-input-pair input {
+	width: 100%;
+	padding: 0.5rem 1rem 0.5rem 1rem;
+	border-radius: 0.4rem;
+	border: 1px solid #989ca2;
+	margin-top: 2px;
+
+}
+
+.auth-standard-fulcrum-logo, .auth-mobile-fulcrum-logo {
+	user-select: none;
+	height: auto;
+	margin-bottom: 4rem;
+}
+
+.auth-standard-fulcrum-logo {
+	width: 20rem;
+	margin-bottom: 0;
+}
+
+.auth-mobile-fulcrum-logo {
+	width: 24rem;
+	display: none;
+}
+
+.auth-form input::placeholder {
+	text-align: left;
+}
+
+.auth-text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: start;
+	height: 100vh;
+	width: 35vw;
+	text-align: left;
+}
+
+@media (max-width: 670px) {
+	.auth-page-container {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.auth-page-left-column {
+		display: none;
+	}
+
+	.auth-page-right-column {
+		margin-right: 0;
+	}
+
+	.auth-form {
+		width: 75vw;
+	}
+
+	.auth-mobile-fulcrum-logo {
+		display: block;
+	}
+}

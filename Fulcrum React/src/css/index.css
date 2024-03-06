@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Quicksand', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  margin: 0 auto;
+  text-align: center;
+
+  color-scheme: dark light;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #ffffff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  min-height: 100%;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+body input {
+  background-color: white;
+  padding: 0 5px;
+  color: black;
+  font-weight: bold;
+}
+
+body label {
+  font-weight: bold;
+}
+
+input::placeholder {
+  text-align: center;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto #ffffff;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+@media (max-width: 3200px) {
+  :root {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 1330px) {
+  :root {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1130px) {
+  :root {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 800px) {
+  :root {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 450px) {
+  :root {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  :root {
+    font-size: 7px;
+  }
+}

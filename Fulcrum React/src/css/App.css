@@ -1,0 +1,173 @@
+
+/* GLOBAL STYLES */
+
+.bg-light {
+  background-color: #F1F5F9;
+}
+
+.bg-dark {
+  background-color: #252528;
+}
+
+#background {
+  transition: all ease-out 220ms;
+  width: 100%;
+  z-index: -1;
+  position: fixed;
+  height: 100vh;
+  top: 0;
+}
+
+.circle-button {
+  border-radius: 100%;
+  padding: 0.25rem;
+}
+
+.circle-button:hover {
+  cursor: pointer;
+  opacity: 80%;
+}
+
+.error-message {
+  position: absolute;
+  font-size: 1.25rem;
+  font-weight: 500;
+  left: 50vw;
+  top: 45vh;
+}
+
+/* FORMS AND MODALS */
+
+.fulcrum-form {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  padding: 1vw;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0,0,0,0.8);
+  width: 35rem;
+  border-radius: 1.5rem;
+  color: white;
+}
+
+.fulcrum-form input {
+  text-align: center;
+}
+
+#react-select-3-input {
+  text-align: left;
+}
+
+.fulcrum-modal {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  padding: 1vw;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0,0,0,0.8);
+  width: 35rem;
+  border-radius: 1.5rem;
+  color: white;
+}
+
+/* LOGOS */
+
+.navbar-fulcrum-logo {
+  height: 50px;
+  user-select: none;
+  margin-right: 3rem;
+}
+
+.navbar-fulcrum-logo:hover {
+  cursor: pointer;
+}
+
+/* TOGGLES */
+
+.toggle-right-shift {
+  transform: translateX(150%);
+}
+
+.sun-glow {
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.2);
+}
+
+.moon-shadow {
+  box-shadow: 0 0 15px 5px rgba(10, 10, 18, 0.2);
+}
+
+@keyframes rainbowGlow {
+  0% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.7); }
+  14% { box-shadow: 0 0 15px rgba(255, 165, 0, 0.7); }
+  28% { box-shadow: 0 0 15px rgba(255, 255, 0, 0.7); }
+  42% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.7); }
+  57% { box-shadow: 0 0 15px rgba(90, 90, 255, 0.7); }
+  71% { box-shadow: 0 0 15px rgba(173, 0, 255, 0.7); }
+  85% { box-shadow: 0 0 15px rgba(143, 0, 255, 0.7); }
+  100% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.7); }
+}
+
+.rgb-glow {
+  animation: rainbowGlow 9s infinite alternate;
+}
+
+.accessibility-enabled {
+  filter: grayscale(100%) contrast(150%) brightness(140%) saturate(380%);
+}
+
+/* BACKGROUND BLUR FOCUS EFFECT*/
+
+.elementsBelowPopUpForm {
+  transition: all 0.1s ease-out;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.blur {
+  filter: blur(5px);
+}
+
+/* MEDIA QUERIES */
+
+@media (max-width: 670px) {
+  .navbar-email {
+    display: none;
+  }
+
+  .navbar-fulcrum-logo {
+    width: 30vw;
+    height: auto;
+  }
+}
+
+/* OTHER */
+
+.lower-navbar-third {
+  display: flex;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  width: 33.33%;
+  border-color: black;
+  transition: all 300ms ease-out;
+}
+
+.lower-navbar-third:hover {
+  color: black;
+  background: white;
+}
