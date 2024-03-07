@@ -109,6 +109,23 @@
 	text-align: left;
 }
 
+@keyframes shake {
+	0%, 100% {
+		transform: translateX(0);
+	}
+	15%, 45%, 75% {
+		transform: translateX(-8px);
+	}
+	30%, 60%, 90% {
+		transform: translateX(8px);
+	}
+}
+
+input.invalid {
+	animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+	border-color: red;
+}
+
 @media (max-width: 670px) {
 	.auth-page-container {
 		display: flex;

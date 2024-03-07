@@ -1,30 +1,79 @@
 import FulcrumButton from "../other/FulcrumButton.tsx";
 import "../../css/App.css";
 import "../../css/Auth.css";
-import {FormEvent, useState} from "react";
-import {handleUserRegistration} from "../../util.ts";
+import {ChangeEvent, FormEvent, useState} from "react";
+import {handleUserRegistration, RegisterFormData} from "../../util.ts";
 
 /**
  * The registration page for the Fulcrum application.
  */
 export default function Register() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [formData, setFormData] = useState<RegisterFormData>({
+        email: "",
+        password: "",
+        confirmPassword: ""
+    })
+    const [passwordValidation, setPasswordValidation] = useState({
+        feedback: "",
+        passwordAccepted: false,
+        attemptedIgnore: false
+    })
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
 
-        if (password !== confirmPassword) {
+        if (formData.password !== formData.confirmPassword) {
             alert("Passwords do not match!");
             return;
+        } else {
+            if (!getPasswordValidation(formData.password).passwordAccepted) {
+                setPasswordValidation(curr => ({...curr, attemptedIgnore: true}))
+                document.querySelector("#password")!.classList.add("invalid");
+                setTimeout(() => {
+                    document.querySelector("#password")!.classList.remove("invalid")
+                }, 500)
+            } else {
+                await handleUserRegistration(formData.email, formData.password);
+
+                setFormData({
+                    email: "",
+                    password: "",
+                    confirmPassword: ""
+                })
+            }
+        }
+    }
+
+    async function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        setFormData(curr => ({...curr, [e.target.id]: e.target.value}))
+        if (e.target.id == "password") {
+            setPasswordValidation(getPasswordValidation(e.target.value))
+        }
+    }
+
+    function getPasswordValidation(password: string) {
+        let feedback = "";
+        let passwordAccepted = false;
+
+        const uppercaseRegex = /[A-Z]/;
+        const lowercaseRegex = /[a-z]/;
+
+        if (password.length < 8) {
+            feedback = "Password must be at least 8 characters long."
+        } else if (!uppercaseRegex.test(password)) {
+            feedback = "Password must contain at least one uppercase letter."
+        } else if (!lowercaseRegex.test(password)) {
+            feedback = "Password must contain at least one lowercase letter."
+        } else {
+            feedback = "Great password!"
+            passwordAccepted = true;
         }
 
-        await handleUserRegistration(email, password);
-
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
+        return {
+            feedback: feedback,
+            passwordAccepted: passwordAccepted,
+            attemptedIgnore: false
+        }
     }
 
     return (
@@ -47,27 +96,33 @@ export default function Register() {
                     <div className={"auth-label-input-pair"}>
                         <label htmlFor={"email"}>Email</label>
                         <input type="email"
+                               id="email"
                                placeholder={"name@example.com"}
-                               value={email}
-                               onChange={e => setEmail(e.target.value)}
+                               value={formData.email}
+                               onChange={handleChange}
                                autoComplete={"email"}
                                required autoFocus/>
                     </div>
-                    <div className={"auth-label-input-pair mt-10"}>
+                    <div className={`auth-label-input-pair mt-10`}>
                         <label htmlFor={"password"}>Password</label>
                         <input type="password"
+                               id="password"
                                placeholder={"Your password"}
-                               value={password}
-                               onChange={e => setPassword(e.target.value)}
+                               value={formData.password}
+                               onChange={handleChange}
                                autoComplete={"new-password"}
                                required/>
                     </div>
+                    <b className={`mt-2 ${passwordValidation.passwordAccepted ? "text-green-500" : "text-red-500"} ${passwordValidation.attemptedIgnore && "underline"}`}>
+                        {passwordValidation.feedback}
+                    </b>
                     <div className={"auth-label-input-pair my-10"}>
                         <label htmlFor={"password"}>Confirm Password</label>
                         <input type="password"
+                               id="confirmPassword"
                                placeholder={"Confirmed password"}
-                               value={confirmPassword}
-                               onChange={e => setConfirmPassword(e.target.value)}
+                               value={formData.confirmPassword}
+                               onChange={handleChange}
                                autoComplete={"new-password"}
                                required/>
                     </div>
