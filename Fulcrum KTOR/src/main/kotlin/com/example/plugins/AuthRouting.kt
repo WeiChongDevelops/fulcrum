@@ -107,7 +107,7 @@ fun Application.configureAuthRouting() {
                 // Total Income Initialised
                 val initialisedTotalIncome = IncomeCreateRequestSent(
                     userId = uid,
-                    totalIncome = 2000.00
+                    totalIncome = 8000.00
                 )
                 val initialisedTotalIncomeInserted = supabase.postgrest["total_income"].insert(
                     initialisedTotalIncome
