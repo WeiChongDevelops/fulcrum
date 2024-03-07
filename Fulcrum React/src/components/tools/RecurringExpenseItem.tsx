@@ -1,12 +1,12 @@
 import '/src/css/Budget.css';
 import {
-    capitaliseFirstLetter,
-    formatDollarAmountStatic,
+    capitaliseFirstLetter, formatDate,
+    formatDollarAmountStatic, getNextRecurringInstance,
     PreviousRecurringExpenseBeingEdited, PublicUserData,
     RecurringExpenseFormVisibility, RecurringExpenseFrequency,
     RecurringExpenseModalVisibility
 } from "../../util.ts";
-import {Dispatch, SetStateAction} from "react";
+import {Dispatch, SetStateAction, useMemo} from "react";
 
 interface RecurringExpenseItemProps {
     recurringExpenseId: string;
@@ -62,6 +62,10 @@ export default function RecurringExpenseItem( { recurringExpenseId,
         setRecurringExpenseModalVisibility(current => ({...current, isConfirmRecurringExpenseDestructionModalVisible: true}))
     }
 
+    const nextRecurringInstance = useMemo(() => {
+        return getNextRecurringInstance(timestamp, frequency)
+    }, [timestamp, frequency]);
+
     return (
         <div className="expense-item"
              style={{backgroundColor: groupColour, opacity: frequency === "never" ? "40%" : "100%"}}
@@ -82,7 +86,12 @@ export default function RecurringExpenseItem( { recurringExpenseId,
             }}>
                 <div className="flex flex-row w-44 items-center">
                     <img src={`/src/assets/UI-icons/tools-recurring-icon-${groupName === "Miscellaneous" ? "white" : "black"}.svg`} alt="Cycle icon" className={"w-8 h-8"}/>
-                    <p className={"text-xl ml-3 mr-8 font-bold"}>{capitaliseFirstLetter(frequency)}</p>
+                    <p className={"text-xl ml-3 mr-4 font-bold"}>{capitaliseFirstLetter(frequency)}</p>
+                </div>
+
+                <div className="font-extrabold mr-12">
+                    <p>Next:</p>
+                    <p>{nextRecurringInstance && formatDate(nextRecurringInstance)}</p>
                 </div>
 
                 <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>

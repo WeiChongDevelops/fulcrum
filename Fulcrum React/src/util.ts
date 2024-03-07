@@ -1716,12 +1716,13 @@ export const monthStringArray = [
 
 /**
  * Determines if a recurring expense lands on a specified day.
- * @param {RecurringExpenseItemEntity} recurringExpenseItem - The recurring expense item to analyse.
+ * @param {Date} timestamp - The timestamp of the recurring expense.
+ * @param {RecurringExpenseFrequency} frequency - The frequency of the recurring expense.
  * @param {Date} dateToAnalyseForExpenseLanding - The date to check for expense landing.
  * @returns True if the expense lands on the given day, false otherwise.
  */
-export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpenseItemEntity, dateToAnalyseForExpenseLanding: Date): boolean {
-    const creationDate = new Date(recurringExpenseItem.timestamp);
+export function recurringExpenseLandsOnDay(timestamp: Date, frequency: RecurringExpenseFrequency, dateToAnalyseForExpenseLanding: Date): boolean {
+    const creationDate = new Date(timestamp);
     creationDate.setHours(0, 0, 0, 0);
     dateToAnalyseForExpenseLanding.setHours(0, 0, 0, 0);
 
@@ -1730,7 +1731,7 @@ export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpens
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
 
     // Determine if the expense lands on the given day based on its frequency
-    switch (recurringExpenseItem.frequency) {
+    switch (frequency) {
         case 'daily':
             return true;
         case 'weekly':
@@ -1746,6 +1747,26 @@ export function recurringExpenseLandsOnDay(recurringExpenseItem: RecurringExpens
             return false;
     }
 }
+
+
+/**
+ * Retrieves the next instance of a recurring expense.
+ * @param {Date} timestamp - The timestamp of the recurring expense.
+ * @param {RecurringExpenseFrequency} frequency - The frequency of the recurring expense.
+ */
+export function getNextRecurringInstance(timestamp: Date, frequency: RecurringExpenseFrequency): Date | null {
+    const [startDate, endDate] = [new Date(), new Date()];
+    startDate.setDate(startDate.getDate() + 1);
+    endDate.setDate(endDate.getDate() + 366);
+
+    for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
+        if (recurringExpenseLandsOnDay(timestamp, frequency, date)) {
+            return date;
+        }
+    }
+    return null;
+}
+
 
 /**
  * Retrieves all instances of a recurring expense present in the expense array on a specified date.
@@ -2045,11 +2066,11 @@ export async function updateRecurringExpenseInstances(recurringExpenseArray: Rec
     recurringExpenseArray.forEach(recurringExpenseItem => {
 
         // We check each of the dates between when it was added and today.
-        for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getTime() + (24 * 60 * 60 * 1000))) {
+        for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getDate() + 1)) {
             console.log(`Looking at date: ${date.toLocaleDateString()}`)
 
             const expenseInstances = getRecurringExpenseInstancesOrNull(expenseArray, recurringExpenseItem, date);
-            const isFrequencyMatch = recurringExpenseLandsOnDay(recurringExpenseItem, date);
+            const isFrequencyMatch = recurringExpenseLandsOnDay(recurringExpenseItem.timestamp, recurringExpenseItem.frequency, date);
             const expenseInstanceIsBlacklisted = removedRecurringExpenseInstances ?
                 matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date)
                 : false;

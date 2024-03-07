@@ -69,13 +69,14 @@ export default function Budget( { publicUserData, expenseArray, budgetArray, gro
 
             const [totalIncome] = await Promise.all([
                 getTotalIncome()
-            ]).catch(() => setError(curr => "We’re unable to load your data right now. Please try again later."))
+            ])
             setTotalIncome(totalIncome);
         }
         retrieveInitialData()
             .then(() => {
                 setIsLoading(false)
             })
+            .catch(() => setError("We’re unable to load your data right now. Please try again later."))
     }, []);
 
     useEffect( () => {

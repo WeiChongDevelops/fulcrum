@@ -65,7 +65,7 @@ export default function App() {
         }
         retrieveGlobalAppData()
             .then(() => console.log("Global app data retrieval successful."))
-            .catch(() => console.error("Global app data retrieval failed."))
+            .catch(() => setError("We’re unable to load your data right now. Please try again later."))
     },[]);
 
     useEffect(() => {

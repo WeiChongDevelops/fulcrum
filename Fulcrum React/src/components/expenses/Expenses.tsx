@@ -75,7 +75,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                 const [recurringExpenseList, removedRecurringExpenses] = await Promise.all([
                     getRecurringExpenseList(),
                     getRemovedRecurringExpenses()
-                ]).catch(() => setError(curr => "We’re unable to load your data right now. Please try again later."))
+                ])
                 setRecurringExpenseArray(recurringExpenseList);
                 setRemovedRecurringExpenseInstances(removedRecurringExpenses);
 
@@ -86,6 +86,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
         }
         retrieveInitialData()
             .then(() => setIsLoading(false))
+            .catch(() => setError("We’re unable to load your data right now. Please try again later."))
     }, []);
 
     useMemo(() => {

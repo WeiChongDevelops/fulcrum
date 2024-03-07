@@ -69,13 +69,14 @@ export default function RecurringExpenses({ setOpenToolsSection, publicUserData,
         async function retrieveData() {
             const [recurringExpenseArray] = await Promise.all([
                 getRecurringExpenseList(),
-            ]).catch(() => setError(curr => "We’re unable to load your data right now. Please try again later."))
+            ])
             setRecurringExpenseArray(recurringExpenseArray);
 
             await new Promise(resolve => setTimeout(resolve, 0));
         }
         retrieveData()
             .then(() => setIsLoading(false))
+            .catch(() => setError("We’re unable to load your data right now. Please try again later."))
     }, []);
 
     useEffect( () => {
