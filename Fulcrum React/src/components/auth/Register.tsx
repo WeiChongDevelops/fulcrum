@@ -131,7 +131,7 @@ export default function Register() {
                             <span>Already have any account? </span>
                             <a href="/login" className={"underline text-[#17423F] font-semibold"}>Login</a>
                         </div>
-                        <FulcrumButton displayText={"Register"} backgroundColour={"green"}/>
+                        <FulcrumButton displayText={"Create account"} backgroundColour={"green"}/>
                     </div>
                 </form>
             </div>
