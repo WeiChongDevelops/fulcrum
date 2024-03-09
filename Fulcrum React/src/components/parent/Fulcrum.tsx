@@ -1,8 +1,8 @@
 import {Dispatch, SetStateAction, useEffect} from "react";
 import {Outlet} from "react-router-dom";
 import {getSessionEmail, PublicUserData} from "../../util.ts";
-import NavbarUpper from "../navbar/NavbarUpper.tsx";
-import NavbarLower from "../navbar/NavbarLower.tsx";
+import NavbarUpper from "../child/navbar/NavbarUpper.tsx";
+import NavbarLower from "../child/navbar/NavbarLower.tsx";
 
 interface FulcrumProps {
     publicUserData: PublicUserData;

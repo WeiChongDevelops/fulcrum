@@ -1,11 +1,11 @@
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Register from "../auth/Register.tsx";
-import Login from "../auth/Login.tsx";
-import Budget from "../budget/Budget.tsx";
+import Register from "../child/auth/Register.tsx";
+import Login from "../child/auth/Login.tsx";
+import Budget from "../child/budget/Budget.tsx";
 import Fulcrum from "./Fulcrum.tsx";
-import Expenses from "../expenses/Expenses.tsx";
-import Tools from "../tools/tools-home/Tools.tsx";
+import Expenses from "../child/expenses/Expenses.tsx";
+import Tools from "../child/tools/tools-home/Tools.tsx";
 import {useEffect, useState} from "react";
 import {
     BudgetItemEntity, CategoryToIconGroupAndColourMap,
@@ -17,7 +17,9 @@ import {
     PublicUserData
 } from "../../util.ts";
 import '../../css/App.css'
-import Home from "../home/starting-page/Home.tsx";
+import About from "../child/home/about/About.tsx";
+import Contact from "../child/home/subpages/Contact.tsx";
+import Pricing from "../child/home/subpages/Pricing.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -75,7 +77,11 @@ export default function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/home" element={<Home/>} />
+                <Route path="/home" element={<About/>}>
+                    <Route path="/about" element={<About/>} />
+                    <Route path="/contact" element={<Contact/>} />
+                    <Route path="/pricing" element={<Pricing/>} />
+                </Route>
                 <Route path="/login" element={<Login/>} />
                 <Route path="/register" element={<Register/>} />
                 <Route path="/" element={<Fulcrum publicUserData={publicUserData} setPublicUserData={setPublicUserData} email={email} setEmail={setEmail}/>} >
