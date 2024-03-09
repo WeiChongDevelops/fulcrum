@@ -12,8 +12,8 @@ import {
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
-import GroupList from "./GroupList.tsx";
-import AddNewGroupButton from "./AddNewGroupButton.tsx";
+import GroupList from "./main-data-hierarchy/GroupList.tsx";
+import AddNewGroupButton from "./buttons/AddNewGroupButton.tsx";
 import BudgetModalsAndForms from "./BudgetModalsAndForms.tsx";
 import Loader from "../other/Loader.tsx";
 import '../../css/App.css'

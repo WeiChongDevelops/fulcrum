@@ -1,4 +1,4 @@
-import ExpenseCreationForm from "../modals-and-forms/ExpenseCreationForm.tsx";
+import ExpenseCreationForm from "./modals-and-forms/ExpenseCreationForm.tsx";
 import {
     BudgetItemEntity,
     categoryListAsOptions,
@@ -14,9 +14,9 @@ import {
     RecurringExpenseItemEntity,
     RemovedRecurringExpenseItem
 } from "../../util.ts";
-import ExpenseUpdatingForm from "../modals-and-forms/ExpenseUpdatingForm.tsx";
-import RecurringExpenseInstanceUpdatingForm from "../modals-and-forms/RecurringExpenseInstanceUpdatingForm.tsx";
-import TwoOptionModal from "../modals-and-forms/TwoOptionModal.tsx";
+import ExpenseUpdatingForm from "./modals-and-forms/ExpenseUpdatingForm.tsx";
+import RecurringExpenseInstanceUpdatingForm from "../tools/recurring-expenses/modals-and-forms/RecurringExpenseInstanceUpdatingForm.tsx";
+import TwoOptionModal from "../other/TwoOptionModal.tsx";
 import {Dispatch, SetStateAction} from "react";
 
 interface ExpenseModalsAndFormsProps {

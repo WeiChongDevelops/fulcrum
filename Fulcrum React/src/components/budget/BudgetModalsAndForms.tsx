@@ -1,8 +1,8 @@
-import BudgetCreationForm from "../modals-and-forms/BudgetCreationForm.tsx";
-import BudgetUpdatingForm from "../modals-and-forms/BudgetUpdatingForm.tsx";
-import GroupCreationForm from "../modals-and-forms/GroupCreationForm.tsx";
-import GroupUpdatingForm from "../modals-and-forms/GroupUpdatingForm.tsx";
-import TwoOptionModal from "../modals-and-forms/TwoOptionModal.tsx";
+import BudgetCreationForm from "./modals-and-forms/BudgetCreationForm.tsx";
+import BudgetUpdatingForm from "./modals-and-forms/BudgetUpdatingForm.tsx";
+import GroupCreationForm from "./modals-and-forms/GroupCreationForm.tsx";
+import GroupUpdatingForm from "./modals-and-forms/GroupUpdatingForm.tsx";
+import TwoOptionModal from "../other/TwoOptionModal.tsx";
 import {
     BudgetFormVisibility,
     BudgetItemEntity,

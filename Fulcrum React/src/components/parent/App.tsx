@@ -5,7 +5,7 @@ import Login from "../auth/Login.tsx";
 import Budget from "../budget/Budget.tsx";
 import Fulcrum from "./Fulcrum.tsx";
 import Expenses from "../expenses/Expenses.tsx";
-import Tools from "../tools/Tools.tsx";
+import Tools from "../tools/tools-home/Tools.tsx";
 import {useEffect, useState} from "react";
 import {
     BudgetItemEntity, CategoryToIconGroupAndColourMap,
@@ -17,7 +17,7 @@ import {
     PublicUserData
 } from "../../util.ts";
 import '../../css/App.css'
-import Home from "../home/Home.tsx";
+import Home from "../home/starting-page/Home.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.

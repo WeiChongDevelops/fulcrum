@@ -17,7 +17,7 @@ import {
 } from "../../util.ts";
 import "../../css/Expense.css"
 import Loader from "../other/Loader.tsx";
-import ExpenseMonthCarousel from "./ExpenseMonthCarousel.tsx";
+import ExpenseMonthCarousel from "./main-data-hierarchy/ExpenseMonthCarousel.tsx";
 import ExpenseModalsAndForms from "./ExpenseModalsAndForms.tsx";
 import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 
