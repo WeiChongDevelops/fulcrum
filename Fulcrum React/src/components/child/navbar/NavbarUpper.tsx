@@ -19,7 +19,7 @@ export default function NavbarUpper( { publicUserData, setPublicUserData, email 
                 <DarkModeToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData}/>
             </div>
             <img src={`/src/assets/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`} alt="Fulcrum logo in navbar"
-                 className="navbar-fulcrum-logo"
+                 className="app-navbar-fulcrum-logo"
                  onClick={() => window.location.href = "/budget"}/>
             <div className="flex-1 text-right">
                 <div className="flex justify-end items-center mr-8">

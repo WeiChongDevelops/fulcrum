@@ -1,23 +1,39 @@
 import FulcrumButton from "../other/FulcrumButton.tsx";
 import "../../../css/App.css";
 import "../../../css/Auth.css";
-import {FormEvent, useState} from "react";
+import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useState} from "react";
 import {handleUserLogin} from "../../../util.ts";
+
+
+interface LoginProps {
+    setEmail: Dispatch<SetStateAction<string>>;
+}
 
 /**
  * The login page for the Fulcrum application.
  */
-export default function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+export default function Login( { setEmail }: LoginProps ) {
+
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    })
+
+    async function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        setFormData(curr => ({...curr, [e.target.id]: e.target.value}));
+    }
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
 
-        await handleUserLogin(email, password);
-
-        setEmail("");
-        setPassword("");
+        const loginSuccess = await handleUserLogin(formData.email, formData.password);
+        if (loginSuccess) {
+            setEmail(formData.email);
+            setFormData({
+                email: "",
+                password: ""
+            });
+        }
     }
 
     return (
@@ -41,8 +57,9 @@ export default function Login() {
                         <label htmlFor={"email"}>Email</label>
                         <input type="email"
                                placeholder={"name@example.com"}
-                               value={email}
-                               onChange={e => setEmail(e.target.value)}
+                               id={"email"}
+                               value={formData.email}
+                               onChange={handleChange}
                                autoComplete={"email"}
                                required autoFocus/>
                     </div>
@@ -50,15 +67,16 @@ export default function Login() {
                         <label htmlFor={"password"}>Password</label>
                         <input type="password"
                                placeholder={"Your password"}
-                               value={password}
-                               onChange={e => setPassword(e.target.value)}
+                               id={"password"}
+                               value={formData.password}
+                               onChange={handleChange}
                                autoComplete={"current-password"}
                                required/>
                     </div>
                     <div className={"flex flex-row justify-center items-center w-full"}>
                         <div className={"mr-8"}>
                             <span>Don't have an account? </span>
-                            <a href="/src/components/child/auth/Register" className={"underline text-[#17423F] font-semibold"}>Register</a>
+                            <a href="http://localhost:5173/register" className={"underline text-[#17423F] font-semibold"}>Register</a>
                         </div>
                         <FulcrumButton displayText={"Log In"} backgroundColour={"green"}/>
                     </div>

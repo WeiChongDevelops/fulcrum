@@ -1,0 +1,24 @@
+
+.homepage-navbar-link {
+    position: relative;
+    padding: 0.2rem 0.2rem;
+}
+
+.homepage-navbar-link:after {
+    content: "";
+    position: absolute;
+    background-color: #17423f;
+    height: 0.1rem;
+    width: 0;
+    left: 0;
+    bottom: 0;
+    transition: width 225ms ease-in-out
+}
+
+.homepage-navbar-link:hover:after {
+    width: 100%;
+}
+
+.homepage-navbar-link:hover {
+    color: #17423f;
+}

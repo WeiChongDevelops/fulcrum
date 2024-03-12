@@ -129,7 +129,7 @@ export default function Register() {
                     <div className={"flex flex-row justify-center items-center w-full"}>
                         <div className={"mr-8"}>
                             <span>Already have any account? </span>
-                            <a href="/src/components/child/auth/Login" className={"underline text-[#17423F] font-semibold"}>Login</a>
+                            <a href="http://localhost:5173/login" className={"underline text-[#17423F] font-semibold"}>Login</a>
                         </div>
                         <FulcrumButton displayText={"Create account"} backgroundColour={"green"}/>
                     </div>

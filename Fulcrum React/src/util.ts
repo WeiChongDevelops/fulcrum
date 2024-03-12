@@ -1271,8 +1271,9 @@ export async function handleUserRegistration(email: string, password: string): P
 /**
  * Attempts to log in a user with the provided email and password.
  * Redirects to the budget page on successful login.
+ * Returns true if the login was successful, returns false otherwise.
  */
-export async function handleUserLogin(email: string, password: string): Promise<void> {
+export async function handleUserLogin(email: string, password: string): Promise<boolean> {
     try {
         const response = await fetch("http://localhost:8080/api/login", {
             method: "POST",
@@ -1288,20 +1289,24 @@ export async function handleUserLogin(email: string, password: string): Promise<
             console.error(`HTTP error - status: ${response.status}`);
             console.error("User not found.")
             window.alert("User not found - please check your credentials.")
+            return false;
         } else {
             if (response.status === 400) {
                 console.error(`HTTP error - status: ${response.status}`);
                 console.error("User already logged in.")
                 window.location.href = "/budget"
+                return true;
             } else {
                 console.log("Successful login.");
                 console.log(response.json());
                 window.location.href = "/budget";
+                return true;
             }
         }
 
     } catch (error) {
         console.error("Error:", error);
+        return false;
     }
 }
 

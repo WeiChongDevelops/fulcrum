@@ -81,13 +81,13 @@
 
 /* LOGOS */
 
-.navbar-fulcrum-logo {
+.app-navbar-fulcrum-logo {
   height: 50px;
   user-select: none;
   margin-right: 3rem;
 }
 
-.navbar-fulcrum-logo:hover {
+.app-navbar-fulcrum-logo:hover {
   cursor: pointer;
 }
 
@@ -145,7 +145,7 @@
     display: none;
   }
 
-  .navbar-fulcrum-logo {
+  .app-navbar-fulcrum-logo {
     width: 30vw;
     height: auto;
   }

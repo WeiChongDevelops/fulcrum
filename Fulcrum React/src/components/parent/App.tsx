@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
 import Register from "../child/auth/Register.tsx";
 import Login from "../child/auth/Login.tsx";
 import Budget from "../child/budget/Budget.tsx";
@@ -17,9 +17,10 @@ import {
     PublicUserData
 } from "../../util.ts";
 import '../../css/App.css'
-import About from "../child/home/about/About.tsx";
+import About from "../child/home/subpages/about/About.tsx";
 import Contact from "../child/home/subpages/Contact.tsx";
 import Pricing from "../child/home/subpages/Pricing.tsx";
+import Home from "../child/home/Home.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -68,7 +69,7 @@ export default function App() {
         retrieveGlobalAppData()
             .then(() => console.log("Global app data retrieval successful."))
             .catch(() => setError("We’re unable to load your data right now. Please try again later."))
-    },[]);
+    },[email]);
 
     useEffect(() => {
         publicUserData && sessionStorage.setItem("profileIcon", publicUserData.profileIconFileName)
@@ -77,14 +78,16 @@ export default function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/home" element={<About/>}>
-                    <Route path="/about" element={<About/>} />
-                    <Route path="/contact" element={<Contact/>} />
-                    <Route path="/pricing" element={<Pricing/>} />
+                <Route path="/home/" element={<Home/>}>
+                    <Route index element={<Navigate replace to="about" />} />
+                    <Route path="about" element={<About/>} />
+                    <Route path="contact" element={<Contact/>} />
+                    <Route path="pricing" element={<Pricing/>} />
                 </Route>
-                <Route path="/login" element={<Login/>} />
+                <Route path="/login" element={<Login setEmail={setEmail}/>} />
                 <Route path="/register" element={<Register/>} />
                 <Route path="/" element={<Fulcrum publicUserData={publicUserData} setPublicUserData={setPublicUserData} email={email} setEmail={setEmail}/>} >
+                    <Route index element={<Navigate replace to="budget" />} />
                     <Route path="expenses" element={<Expenses publicUserData={publicUserData}
                                                               expenseArray={expenseArray}
                                                               budgetArray={budgetArray}

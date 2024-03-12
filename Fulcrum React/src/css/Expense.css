@@ -54,10 +54,12 @@
     width: 94vw;
     margin-top: 1rem;
     border-radius: 1rem;
+    transition: all 200ms ease-out;
 }
 
 .create-expense-button:hover {
-    background: rgba(213, 220, 216, 0.4);
+    background: rgba(83, 83, 83, 0.1);
+    border-radius: 0.35rem;
 }
 
 .create-expense-button-dark {

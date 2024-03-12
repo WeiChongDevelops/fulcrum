@@ -85,11 +85,13 @@
     border: black 2px dashed;
     color: black;
     border-radius: 0.75rem;
+    transition: all 200ms ease-out;
 }
 
 
 .create-budget-button:hover {
-    background: rgba(222, 222, 222, 0.1);
+    background: rgba(222, 222, 222, 0.2);
+    border-radius: 0.35rem;
 }
 
 /* GROUP */
@@ -108,10 +110,12 @@
     color: black;
     margin-bottom: 2rem;
     border-radius: 1.5rem;
+    transition: all 200ms ease-out;
 }
 
 .create-group-button:hover {
-    background: rgba(213, 220, 216, 0.4);
+    background: rgba(83, 83, 83, 0.1);
+    border-radius: 0.35rem;
 }
 
 
