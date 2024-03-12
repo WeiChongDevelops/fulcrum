@@ -8,6 +8,7 @@
     content: "";
     position: absolute;
     background-color: #17423f;
+    /*background-color: #282d33;*/
     height: 0.1rem;
     width: 0;
     left: 0;
@@ -20,5 +21,30 @@
 }
 
 .homepage-navbar-link:hover {
-    color: #17423f;
+    color: #5b827f;
+}
+
+.homepage-number-circle {
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.upper-copy-first-row:after {
+    content: "";
+    background-color: #282d33;
+    width: 1px;
+    position: absolute;
+    height: 100%;
+    left: 113%;
 }

@@ -29,7 +29,7 @@ export default function FulcrumButton({ displayText, onClick, optionalTailwind, 
 
     return (
         <button onClick={onClick} className={`font-bold rounded-xl mx-2 py-[0.6rem] px-[1.2rem] text-center hover:opacity-90
-        ${hoverShadow && "transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[6px_6px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none"}
+        ${hoverShadow && "transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[6px_6px_0px_black]"}
         ${optionalTailwind}`}
                 style={{backgroundColor: backgroundStyles(), color: backgroundStyles() === "white" ? "black" : "white"}}
                 id={id}

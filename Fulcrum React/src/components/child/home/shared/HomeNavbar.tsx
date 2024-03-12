@@ -16,8 +16,8 @@ export default function HomeNavbar() {
                 <a href={"http://localhost:5173/home/pricing"} className={"mx-12 homepage-navbar-link"}>Pricing</a>
                 <a href={"http://localhost:5173/home/contact"} className={"homepage-navbar-link"} >Contact</a>
             </div>
-            <div className={"flex-1 flex flex-row justify-end mr-16"}>
-                <FulcrumButton displayText={"Start Saving"} backgroundColour={"green"} onClick={() => window.location.href = "http://localhost:5173/register"} hoverShadow={true}/>
+            <div className={"flex-1 flex flex-row justify-end mr-4 sm:mr-16"}>
+                <FulcrumButton displayText={"Sign Up for Free"} backgroundColour={"green"} onClick={() => window.location.href = "http://localhost:5173/register"} hoverShadow={true}/>
             </div>
         </div>
     );
