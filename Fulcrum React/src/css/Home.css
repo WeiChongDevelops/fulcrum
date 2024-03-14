@@ -8,7 +8,6 @@
     content: "";
     position: absolute;
     background-color: #17423f;
-    /*background-color: #282d33;*/
     height: 0.1rem;
     width: 0;
     left: 0;
@@ -21,7 +20,7 @@
 }
 
 .homepage-navbar-link:hover {
-    color: #5b827f;
+    color: #27433d;
 }
 
 .homepage-number-circle {
