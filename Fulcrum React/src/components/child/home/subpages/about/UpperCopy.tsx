@@ -13,7 +13,7 @@ export default function UpperCopy() {
                         <div className={"flex flex-row justify-start items-center rounded-full bg-[#F7FFFAFF] py-2 pl-2.5 pr-6 ml-2"}>
                             <img src="/src/assets/homepage-assets/kylie.png" className={"rounded-full border-4 border-white w-20"} alt=""/>
                             <div className={"flex flex-col justify-center items-start ml-4 w-80"}>
-                                <p className={"text-sm font-medium text-left"}>"This relief from financial stress has been an absolute game changer for my family and I."</p>
+                                <p className={"text-sm font-medium text-left"}>"The financial stress relief has been an absolute game changer for my family and I."</p>
                                 <p className={"font-bold text-xs ml-0.5 mt-1"}>Kylie Capelli</p>
                             </div>
                         </div>

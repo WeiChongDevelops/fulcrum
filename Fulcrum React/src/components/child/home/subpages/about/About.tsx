@@ -7,7 +7,7 @@ import LowerCopy from "./LowerCopy.tsx";
  */
 export default function About() {
     return (
-        <div className={"bg-[#e0eddf]"}>
+        <div className={"bg-[#e0eddf] relative"}>
             <UpperCopy/>
             <MidCopy/>
             <LowerCopy/>

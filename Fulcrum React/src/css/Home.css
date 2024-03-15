@@ -47,3 +47,56 @@
     height: 100%;
     left: 113%;
 }
+
+.hide-tile {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateX(-150%);
+}
+
+.show-tile {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateX(0%);
+    box-shadow: 0.9rem 0.9rem 0 0 #1c1c1c;
+}
+
+.mid-copy-animation-tile {
+    transition: all ease 200ms;
+    border-radius: 0.5rem;
+    width: 17vw;
+    height: 17vw;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mid-copy-animation-tile:nth-child(2) {
+    transition-delay: 150ms;
+}
+
+.mid-copy-animation-tile:nth-child(3) {
+    transition-delay: 300ms;
+}
+
+.single-tile-container {
+    transition: transform ease-out 200ms;
+}
+
+@keyframes tileBlur {
+    0% {
+        filter: blur(0);
+    }
+    50% {
+        filter: blur(2px);
+    }
+    100% {
+        filter: blur(0);
+    }
+}
+
+.single-tile-container:hover {
+    animation: tileBlur ease-out 185ms;
+    transform: rotate(-10deg) scale(110%);
+}
