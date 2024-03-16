@@ -2121,21 +2121,3 @@ export async function updateRecurringExpenseInstances(recurringExpenseArray: Rec
         setExpenseArray(await getExpenseList());
     }
 }
-
-
-/**
- * Adds the observer and logic that allows homepage info tiles to slide in when scrolled to
- */
-export function addHomepageAnimations(): void {
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("show-tile");
-            } else {
-                entry.target.classList.remove("show-tile");
-            }
-        });
-    })
-    const tiles = document.querySelectorAll(".mid-copy-animation-tile");
-    tiles.forEach(tile => observer.observe(tile))
-}
