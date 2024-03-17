@@ -138,3 +138,17 @@
     cursor: pointer;
     color: #1c5b57;
 }
+
+@keyframes iconRotation {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.animated-pricing-icon {
+    animation: infinite iconRotation 4000ms linear;
+    width: 30vw;
+}
