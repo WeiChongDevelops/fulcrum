@@ -47,7 +47,7 @@ export default function UpperCopy() {
                     </div>
                 </div>
             </div>
-            <div className={"flex flex-col justify-center items-center rounded-lg w-[90vw] h-60 bg-[#282d33] text-white text-xl shadow-[1.5rem_1.5rem_0_black] select-none mt-40"}>
+            <div className={"flex flex-col justify-center items-center rounded-lg w-[90vw] h-60 bg-[#282d33] text-white text-xl shadow-[1rem_1rem_0_black] select-none mt-40"}>
                 <img src="/src/assets/homepage-assets/complicated.png" className={"w-[30rem] sm:w-[42rem] mb-3"} alt=""/>
                 <p className={"font-extrabold text-md mt-8 text-[#44b775]"}>Find <span className={"underline underline-offset-2"}>your</span> balance.</p>
             </div>

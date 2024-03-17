@@ -23,14 +23,27 @@ export default function MidCopy() {
     return (
         <div className={"relative z-20 top-[25vw] h-0 mid-copy-container"}>
             <div className={"flex flex-row justify-center items-center mb-20"}>
-                <InfoTile initialDisplayText={"Simplify Your Finances"} hoverDisplayText={"No confusing UI or features - nothing more or less than what you need."} backgroundColour={"#84cbe3"}/>
-                <InfoTile initialDisplayText={"Adapt Your Finances"} hoverDisplayText={"Flexible budgets designed to change alongside you."} backgroundColour={"#4682B4"}/>
-                <InfoTile initialDisplayText={"Understand Your Finances"} hoverDisplayText={"Finally figure out where that paycheck keeps disappearing off to."} backgroundColour={"#00008B"}/>
+                <InfoTile initialDisplayText={"Simplify Your Finances"}
+                          hoverDisplayText={"No confusing UI or features - nothing more or less than what you need."}
+                          backgroundColour={"#84cbe3"}
+                          iconPathFront={"/src/assets/homepage-assets/tile-icon-simplify-front.svg"}
+                          iconPathBack={"/src/assets/homepage-assets/tile-icon-simplify-back.svg"}/>
+                <InfoTile initialDisplayText={"Adapt Your Finances"}
+                          hoverDisplayText={"Flexible budgets designed to change alongside you."}
+                          backgroundColour={"#3d97e1"}
+                          iconPathFront={"/src/assets/homepage-assets/tile-icon-adapt-front.svg"}
+                          iconPathBack={"/src/assets/homepage-assets/tile-icon-adapt-back.svg"}/>
+                <InfoTile initialDisplayText={"Master Your Finances"}
+                          hoverDisplayText={"Finally figure out where that paycheck keeps disappearing off to."}
+                          backgroundColour={"#29297b"}
+                          textColor={"white"}
+                          iconPathFront={"/src/assets/homepage-assets/tile-icon-master-front.svg"}
+                          iconPathBack={"/src/assets/homepage-assets/tile-icon-master-back.svg"}/>
             </div>
             <div className={"flex flex-row justify-center items-center"}>
-                <div className={"rounded-full bg-red-500 h-3 w-3"}></div>
-                <div className={"rounded-full bg-red-500 h-3 w-3 mx-4"}></div>
-                <div className={"rounded-full bg-red-500 h-3 w-3"}></div>
+                <div className={"rounded-full bg-black h-2 w-2"}></div>
+                <div className={"rounded-full bg-black h-2 w-2 mx-3"}></div>
+                <div className={"rounded-full bg-black h-2 w-2"}></div>
             </div>
         </div>
     );
