@@ -148,7 +148,30 @@
     }
 }
 
-.animated-pricing-icon {
-    animation: infinite iconRotation 4000ms linear;
-    width: 30vw;
+.animated-pricing-icon-inside {
+    position: absolute;
+    animation: infinite iconRotation 20s linear;
+    width: 35vw;
+    top: 5vw;
+}
+
+.animated-pricing-icon-outside {
+    position: absolute;
+    width: 35vw;
+    top: 4vw;
+}
+
+@keyframes bobbing {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.pricing-badge-container {
+    position: relative;
+    bottom: 6.5vw;
+    animation: bobbing 3s infinite ease-in-out;
 }
