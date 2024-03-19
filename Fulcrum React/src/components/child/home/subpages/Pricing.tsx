@@ -1,5 +1,8 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 
+/**
+ * The Pricing section of the Fulcrum homepage.
+ */
 export default function Pricing() {
     return (
         <div className={"w-screen h-[calc(100vh-170px)] flex flex-row p-[8vw] relative -mb-[3vw]"}>

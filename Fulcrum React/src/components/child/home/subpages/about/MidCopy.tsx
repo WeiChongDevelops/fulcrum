@@ -1,6 +1,9 @@
 import {useEffect} from "react";
 import InfoTile from "./InfoTile.tsx";
 
+/**
+ * Mid-page component displaying sales copy on interactive tiles for key benefits.
+ */
 export default function MidCopy() {
 
     useEffect(() => {

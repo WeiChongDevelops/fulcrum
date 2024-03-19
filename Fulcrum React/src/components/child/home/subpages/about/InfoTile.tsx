@@ -9,6 +9,9 @@ interface InfoTileProps {
     iconPathBack: string
 }
 
+/**
+ * Interactive tile for displaying financial benefits of Fulcrum, providing further detail on hover.
+ */
 export default function InfoTile( { initialDisplayText, hoverDisplayText, backgroundColour, textColor, iconPathFront, iconPathBack }: InfoTileProps) {
 
     const tileRef = useRef<HTMLDivElement>(null);

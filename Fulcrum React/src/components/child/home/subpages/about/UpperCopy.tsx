@@ -1,5 +1,8 @@
 import FulcrumButton from "../../../other/FulcrumButton.tsx";
 
+/**
+ * Upper-page component displaying sales copy and a concise version of the user steps.
+ */
 export default function UpperCopy() {
     return (
         <div className={"flex flex-col justify-start items-center w-screen px-20 pt-40 pb-6 text-black min-h-screen relative"}>

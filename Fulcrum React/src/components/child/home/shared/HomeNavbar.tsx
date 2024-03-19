@@ -1,6 +1,10 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import "../../../../css/Home.css"
 
+
+/**
+ * The header of the Fulcrum homepage.
+ */
 export default function HomeNavbar() {
     return (
         <div className={"flex flex-row justify-between items-center py-4 bg-white border-b-black border-2"}>

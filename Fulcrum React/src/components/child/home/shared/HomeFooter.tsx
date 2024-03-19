@@ -4,6 +4,9 @@ interface HomeFooterProps {
     backgroundPath?: string;
 }
 
+/**
+ * The footer of the Fulcrum homepage.
+ */
 export default function HomeFooter( { backgroundPath }: HomeFooterProps ) {
     return (
         <div className={"relative w-screen z-30 text-black h-48 py-8 mb-24 sm:mb-12 sm:px-8"}>

@@ -229,7 +229,9 @@ export const loaderCssOverride = {
 export interface ContactFormData {
     queryType: string,
     subject: string,
-    description: string
+    description: string,
+    firstName: string,
+    email: string
 }
 
 // SELECTOR CONTENT ARRAYS //

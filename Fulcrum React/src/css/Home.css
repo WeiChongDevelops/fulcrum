@@ -179,3 +179,14 @@
 #subject {
     text-align: left;
 }
+
+@keyframes iconFloat {
+    0% {
+        transform: translateY(0) rotate(0) scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-45px) rotate(360deg) scale(1.2);
+        opacity: 0;
+    }
+}

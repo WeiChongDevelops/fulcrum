@@ -19,13 +19,13 @@ export default function QueryTypeSelector( { setFormData }: QueryTypeSelectorPro
 
     return (
         <Select
-            id="category"
-            name="category"
+            id="queryType"
+            name="queryType"
             options={queryTypeOptions}
             onChange={handleInputChange}
             defaultValue={queryTypeOptions[2]}
             styles={colourStyles}
-            className="mb-3 mt-2"
+            className="mt-2"
             theme={(theme: any) => ({
                 ...theme,
                 borderRadius: 0,
