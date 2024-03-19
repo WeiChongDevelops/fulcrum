@@ -15,7 +15,7 @@ import {
     getRecurringExpenseList,
     RecurringExpenseFormVisibility, Value,
 } from "../../../../../util.ts";
-import Select from 'react-select/creatable';
+import Select from 'react-select';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';

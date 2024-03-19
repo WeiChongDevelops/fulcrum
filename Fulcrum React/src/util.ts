@@ -226,6 +226,12 @@ export const loaderCssOverride = {
     borderColor: "red",
 };
 
+export interface ContactFormData {
+    queryType: string,
+    subject: string,
+    description: string
+}
+
 // SELECTOR CONTENT ARRAYS //
 
 export const groupColourArray = [
@@ -1654,6 +1660,24 @@ export const currencyOptions = [
     { symbol: '¥JPY', code: 'JPY' },
     { symbol: '¥CNY', code: 'CNY' },
 ];
+
+export const queryTypeOptions = [
+    {
+        value: "reportIssue",
+        label: "Report Issue",
+        colour: "black"
+    },
+    {
+        value: "accountInquiry",
+        label: "Account Inquiry",
+        colour: "black"
+    },
+    {
+        value: "generalInquiry",
+        label: "General Inquiry",
+        colour: "black"
+    }
+]
 
 // DYNAMIC SIZING FUNCTIONS //
 

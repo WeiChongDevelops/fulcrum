@@ -35,7 +35,7 @@ h1 {
   line-height: 1.1;
 }
 
-body input {
+body input , body textarea {
   background-color: white;
   padding: 0 5px;
   color: black;
@@ -46,9 +46,9 @@ body label {
   font-weight: bold;
 }
 
-input::placeholder {
-  text-align: center;
-}
+/*input::placeholder {*/
+/*  text-align: center;*/
+/*}*/
 
 button:focus,
 button:focus-visible {

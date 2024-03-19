@@ -166,12 +166,16 @@
         transform: translateY(0);
     }
     50% {
-        transform: translateY(-10px);
+        transform: translateY(-14px);
     }
 }
 
 .pricing-badge-container {
     position: relative;
-    bottom: 6.5vw;
-    animation: bobbing 3s infinite ease-in-out;
+    bottom: 7vw;
+    animation: bobbing 3500ms infinite ease-in-out;
+}
+
+#subject {
+    text-align: left;
 }

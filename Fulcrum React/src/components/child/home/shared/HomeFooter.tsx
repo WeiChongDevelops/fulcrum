@@ -1,8 +1,13 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 
-export default function HomeFooter() {
+interface HomeFooterProps {
+    backgroundPath?: string;
+}
+
+export default function HomeFooter( { backgroundPath }: HomeFooterProps ) {
     return (
-        <div className={"relative w-screen h-44 mb-24 sm:mb-12 z-30 text-black sm:px-8"}>
+        <div className={"relative w-screen z-30 text-black h-48 py-8 mb-24 sm:mb-12 sm:px-8"}>
+            { backgroundPath && <img src={backgroundPath} className={"absolute -top-6 left-1/2 -translate-x-1/2 -z-10 w-screen"} alt="Pricing background"/> }
             <div className={"homepage-footer grid grid-cols-3 grid-rows-8 justify-items-start items-end gap-y-1"}>
                 <img className={"row-start-1 row-end-5 col-start-1 w-20 ml-[10vw]"} src={"/src/assets/fulcrum-logos/fulcrum-icon.png"} alt={"icon"}></img>
                 <FulcrumButton displayText={"Register for Free"} optionalTailwind={"row-start-5 row-end-7 col-start-1 ml-[8.5vw] mt-5"} onClick={() => window.location.href = "/register"} backgroundColour={"green"} hoverShadow={true}/>
