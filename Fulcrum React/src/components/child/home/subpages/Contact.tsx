@@ -2,6 +2,7 @@ import {ChangeEvent, FormEvent, useRef, useState} from "react";
 import QueryTypeSelector from "../../selectors/QueryTypeSelector.tsx";
 import emailjs from '@emailjs/browser';
 import FulcrumButton from "../../other/FulcrumButton.tsx";
+import Loader from "../../other/Loader.tsx";
 
 /**
  * The Contact section of the Fulcrum homepage.
@@ -18,6 +19,8 @@ export default function Contact() {
         description: "",
     });
     const [formStatus, setFormStatus] = useState("");
+    const [statusAnimationKey, setStatusAnimationKey] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
         setFormData( curr => ({...curr, [e.target.id]: e.target.value}));
@@ -44,6 +47,7 @@ export default function Contact() {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
+        setIsLoading(true);
 
         setFormData({
             queryType: "",
@@ -61,11 +65,15 @@ export default function Contact() {
                 .then(
                     () => {
                         console.log('SUCCESS!');
-                        setFormStatus("Message sent! We'll get back to you as soon we can.")
+                        setIsLoading(false);
+                        setStatusAnimationKey(curr => curr + 1);
+                        setFormStatus("Message sent! We'll get back to you as soon we can.");
                     },
                     (error: any) => {
                         console.log('FAILED...', error.text);
-                        setFormStatus("Message failed. Please try again later.")
+                        setIsLoading(false);
+                        setStatusAnimationKey(curr => curr + 1);
+                        setFormStatus("Message failed. Please try again later.");
                     },
                 );
         }
@@ -79,7 +87,8 @@ export default function Contact() {
             <div className={"contact-copy flex flex-col mr-4"}>
                 <p className={"text-5xl font-bold mb-4"}>We're here to help.</p>
                 <p className={"mt-2 font-bold"}>Reach out to our team for assistance or inquiries via the contact form.</p>
-                {formStatus && <p className={"my-6 font-bold text-blue-700 contact-status"}>{formStatus}</p>}
+                {formStatus && <p className={"my-6 font-bold text-gray-600 contact-status w-40%"} key={statusAnimationKey}>{formStatus}</p>}
+                <Loader isLoading={isLoading} isDarkMode={false} independentPosition={false}/>
             </div>
             <div className={"contact-form-container flex flex-col"}>
                 <form className={"flex flex-col bg-[#282d33] px-10 py-5 rounded-md w-full bg-opacity-80 text-sm"}

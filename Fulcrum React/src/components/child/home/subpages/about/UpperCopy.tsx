@@ -1,5 +1,5 @@
 import FulcrumButton from "../../../other/FulcrumButton.tsx";
-import {useEffect, useRef, useState,} from "react";
+import {useEffect, useRef} from "react";
 
 /**
  * Upper-page component displaying sales copy and a concise version of the user steps.

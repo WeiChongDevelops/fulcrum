@@ -202,6 +202,28 @@
     animation: bobbing 3500ms infinite ease-in-out;
 }
 
+.contact-status {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: swipe 2s, border-fade 2s ease;
+}
+
+@keyframes border-fade {
+    from {
+        border-right: 2px solid black;
+    }
+    to {
+        border-right: 0;
+    }
+}
+
+@keyframes swipe {
+    from {
+        width: 0
+    }
+}
+
 @keyframes iconFloat {
     0% {
         transform: translateY(0) rotate(0) scale(0);
