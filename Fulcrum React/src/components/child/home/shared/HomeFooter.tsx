@@ -17,14 +17,14 @@ export default function HomeFooter( { backgroundPath }: HomeFooterProps ) {
                 <div className={"row-start-[8] col-start-1 pl-[9vw] text-[0.55rem] text-left"}>Copyright © {(new Date()).getFullYear()}, Fulcrum. All Rights Reserved.</div>
 
                 <b className={"row-start-5 col-start-2 pl-[10vw] pb-1"}>Navigation</b>
-                <p className={"row-start-6 col-start-2 pl-[10vw] font-medium text-xs"} onClick={() => window.location.href = "/home/about"}>About</p>
-                <p className={"row-start-7 col-start-2 pl-[10vw] font-medium text-xs"} onClick={() => window.location.href = "/home/pricing"}>Pricing</p>
-                <p className={"row-start-[8] col-start-2 pl-[10vw] font-medium text-xs"} onClick={() => window.location.href = "/home/contact"}>Contact</p>
+                <p className={"row-start-6 col-start-2 pl-[10vw]"} onClick={() => window.location.href = "/home/about"}>About</p>
+                <p className={"row-start-7 col-start-2 pl-[10vw]"} onClick={() => window.location.href = "/home/pricing"}>Pricing</p>
+                <p className={"row-start-[8] col-start-2 pl-[10vw]"} onClick={() => window.location.href = "/home/contact"}>Contact</p>
 
                 <b className={"row-start-5 col-start-3 pl-[10vw] pb-1"}>Additional</b>
-                <p className={"row-start-6 col-start-3 pl-[10vw] font-medium text-xs"} onClick={() => window.location.href = "https://github.com/WeiChongDevelops/Fulcrum"}>GitHub</p>
-                <p className={"row-start-7 col-start-3 pl-[10vw] font-medium text-xs"} onClick={() => window.location.href = "https://github.com/WeiChongDevelops/Fulcrum/blob/main/LICENSE"}>License</p>
-                <p className={"row-start-[8] col-start-3 pl-[10vw] font-medium text-xs"} onClick={() => window.location.href = "https://weichong.dev/"}>More from Developer</p>
+                <p className={"row-start-6 col-start-3 pl-[10vw]"} onClick={() => window.location.href = "https://github.com/WeiChongDevelops/Fulcrum"}>GitHub</p>
+                <p className={"row-start-7 col-start-3 pl-[10vw]"} onClick={() => window.location.href = "https://github.com/WeiChongDevelops/Fulcrum/blob/main/LICENSE"}>License</p>
+                <p className={"row-start-[8] col-start-3 pl-[10vw]"} onClick={() => window.location.href = "https://weichong.dev/"}>More from Developer</p>
             </div>
         </div>
     );

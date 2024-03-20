@@ -27,12 +27,12 @@ export default function NavbarLower() {
                         <img
                             src={`/src/assets/navbar-icons/expenses-icon-${getWindowLocation() === "expenses" ? "white" : "black"}.svg`}
                             className={`w-6 transition-opacity duration-300 ${(getWindowLocation() === "expenses" && hoveredNavButton === "expenses") && "opacity-0"}`}
-                            alt=""/>
+                            alt="Navigation icon"/>
                         <p className="mx-4">Expenses</p>
                         <img
                             src={`/src/assets/navbar-icons/expenses-icon-${getWindowLocation() === "expenses" ? "white" : "black"}.svg`}
                             className={`w-6 transition-opacity duration-300 ${(getWindowLocation() === "expenses" && hoveredNavButton === "expenses") && "opacity-0"}`}
-                            alt=""/>
+                            alt="Navigation icon"/>
                     </button>
                     <button id="budget" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
                             className={`lower-navbar-third ${getWindowLocation() === "budget" ? "bg-[#17423F]" : "bg-black"} border-y-2 border-x-4`}
@@ -40,12 +40,12 @@ export default function NavbarLower() {
                         <img
                             src={`/src/assets/navbar-icons/budget-icon-${getWindowLocation() === "budget" ? "white" : "black"}.svg`}
                             className={`w-6 transition-opacity duration-300 ${(getWindowLocation() === "budget" && hoveredNavButton === "budget") && "opacity-0"}`}
-                            alt=""/>
+                            alt="Navigation icon"/>
                         <p className="mx-4">Budget</p>
                         <img
                             src={`/src/assets/navbar-icons/budget-icon-${getWindowLocation() === "budget" ? "white" : "black"}.svg`}
                             className={`w-6 transition-opacity duration-300 ${(getWindowLocation() === "budget" && hoveredNavButton === "budget") && "opacity-0"}`}
-                            alt=""/>
+                            alt="Navigation icon"/>
                     </button>
                     <button id="tools" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
                             className={`lower-navbar-third ${getWindowLocation() === "tools" ? "bg-[#17423F]" : "bg-black"} border-2 `}
@@ -53,12 +53,12 @@ export default function NavbarLower() {
                         <img
                             src={`/src/assets/navbar-icons/tools-icon-${getWindowLocation() === "tools" ? "white" : "black"}.svg`}
                             className={`w-6 transition-opacity duration-300 ${(getWindowLocation() === "tools" && hoveredNavButton === "tools") && "opacity-0"}`}
-                            alt=""/>
+                            alt="Navigation icon"/>
                         <p className="mx-4">Tools</p>
                         <img
                             src={`/src/assets/navbar-icons/tools-icon-${getWindowLocation() === "tools" ? "white" : "black"}.svg`}
                             className={`w-6 transition-opacity duration-300 ${(getWindowLocation() === "tools" && hoveredNavButton === "tools") && "opacity-0"}`}
-                            alt=""/>
+                            alt="Navigation icon"/>
                     </button>
                 </div>
             </div>

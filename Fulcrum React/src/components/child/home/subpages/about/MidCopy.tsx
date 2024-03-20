@@ -24,7 +24,7 @@ export default function MidCopy() {
     }, []);
 
     return (
-        <div className={"relative z-20 top-[25vw] h-0 mid-copy-container"}>
+        <div className={"relative z-20 top-[25vw] h-0"}>
             <div className={"flex flex-row justify-center items-center mb-20"}>
                 <InfoTile initialDisplayText={"Simplify Your Finances"}
                           hoverDisplayText={"No confusing UI or features - nothing more or less than what you need."}
@@ -43,10 +43,10 @@ export default function MidCopy() {
                           iconPathFront={"/src/assets/homepage-assets/tile-icon-master-front.svg"}
                           iconPathBack={"/src/assets/homepage-assets/tile-icon-master-back.svg"}/>
             </div>
-            <div className={"flex flex-row justify-center items-center"}>
-                <div className={"rounded-full bg-[#282d33] h-2 w-2"}></div>
-                <div className={"rounded-full bg-[#282d33] h-2 w-2 mx-3"}></div>
-                <div className={"rounded-full bg-[#282d33] h-2 w-2"}></div>
+            <div className={"divider-dots-container"}>
+                <div></div>
+                <div className={"mx-3"}></div>
+                <div></div>
             </div>
         </div>
     );

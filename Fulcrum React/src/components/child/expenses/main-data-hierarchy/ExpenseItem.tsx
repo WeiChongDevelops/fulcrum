@@ -72,7 +72,7 @@ export default function ExpenseItem( { expenseId,
              onClick={handleEditClick}>
             <div className="flex flex-row items-center">
                 <div className="rounded-full bg-[#1b1c1c] p-3">
-                    <img src={`/src/assets/category-icons/${iconPath}`} alt="" className="w-8 h-auto"/>
+                    <img src={`/src/assets/category-icons/${iconPath}`} alt="Category icon" className="w-8 h-auto"/>
                 </div>
                 <div className="flex flex-col items-start ml-2" style={{
                     color: groupName === "Miscellaneous" ? "white" : "black"
@@ -88,10 +88,10 @@ export default function ExpenseItem( { expenseId,
                 <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
                 <div className="flex flex-row items-center ml-2">
                     <button className="circle-button" onClick={handleEditClick}>
-                        <img src={`/src/assets/UI-icons/edit-pencil-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="" className="mx-1 w-6 h-6" />
+                        <img src={`/src/assets/UI-icons/edit-pencil-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="Edit icon" className="mx-1 w-6 h-6" />
                     </button>
                     <button className="circle-button" onClick={handleDeleteClick}>
-                        <img src={`/src/assets/UI-icons/delete-trash-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="" className="mx-1 w-6 h-6" />
+                        <img src={`/src/assets/UI-icons/delete-trash-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`} alt="Delete icon" className="mx-1 w-6 h-6" />
                     </button>
                 </div>
             </div>

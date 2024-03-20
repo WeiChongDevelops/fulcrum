@@ -84,13 +84,13 @@ export default function Contact() {
             <img src="/src/assets/homepage-assets/contact-background.png" className={"absolute top-0 left-0 -mt-28 -z-10 w-full h-[100vh]"} alt="Pricing background"/>
             <div className={"pricing-stripe absolute w-[150vw] h-[8vw] top-[38vh] -left-40 rotate-[-20deg] bg-[#17423f] -z-10"}></div>
 
-            <div className={"contact-copy flex flex-col mr-4"}>
+            <div className={"contact-copy"}>
                 <p className={"text-5xl font-bold mb-4"}>We're here to help.</p>
                 <p className={"mt-2 font-bold"}>Reach out to our team for assistance or inquiries via the contact form.</p>
                 {formStatus && <p className={"my-6 font-bold text-gray-600 contact-status w-40%"} key={statusAnimationKey}>{formStatus}</p>}
                 <Loader isLoading={isLoading} isDarkMode={false} independentPosition={false}/>
             </div>
-            <div className={"contact-form-container flex flex-col"}>
+            <div className={"contact-form-container"}>
                 <form className={"flex flex-col bg-[#282d33] px-10 py-5 rounded-md w-full bg-opacity-80 text-sm"}
                       ref={formRef}
                       onSubmit={handleSubmit}>

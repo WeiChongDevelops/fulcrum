@@ -37,12 +37,19 @@
     background-color: black;
     flex-shrink: 0;
     flex-grow: 0;
+    margin: 0.25rem 1rem 0 0;
 }
 
 
 .upper-copy-left-col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
     min-width: 30vw;
     max-width: 45vw;
+    padding-top: 1.5rem;
 }
 
 .upper-copy-left-col:after {
@@ -54,9 +61,25 @@
     left: 113%;
 }
 
-.upper-instructions {
+.upper-instructions-container {
     max-width: 30vw;
+    padding-top: 3rem;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
+    position: relative;
 }
+
+.upper-instructions-container .upper-instruction {
+    display: flex;
+    flex-direction: row;
+    justify-items: flex-start;
+    align-items: flex-start;
+}
+
 .circle-spotlight {
     position: absolute;
     width: 32rem;
@@ -77,9 +100,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-inline: 2rem;
 }
 
 .mid-copy-animation-tile {
+    position: relative;
     transition: all ease-out 300ms;
     border-radius: 0.5rem;
     width: 100%;
@@ -129,6 +154,20 @@
     }
 }
 
+.divider-dots-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.divider-dots-container > div {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 100vw;
+    background-color: #282d33;
+}
+
 .mid-copy-animation-tile:hover {
     animation: tileBlur ease-in-out 200ms;
     transform: rotate(-5deg) scale(110%);
@@ -154,6 +193,9 @@
 
 .homepage-footer > p {
     user-select: none;
+    font-weight: 500;
+    font-size: 0.75rem;
+    line-height: 1rem;
 }
 
 .homepage-footer > p:hover {
@@ -183,6 +225,12 @@
     top: 4vw;
 }
 
+.upper-copy-first-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 @keyframes bobbing {
     0%, 100% {
         transform: translateY(0);
@@ -194,11 +242,21 @@
 
 .pricing-copy {
     max-width: 35vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
 }
 
 .pricing-badge-container {
     position: relative;
     bottom: 7vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60vw;
     animation: bobbing 3500ms infinite ease-in-out;
 }
 
@@ -236,7 +294,15 @@
 }
 
 .contact-form-container {
+    display: flex;
+    flex-direction: column;
     max-width: 45vw;
+}
+
+.contact-copy {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
 }
 
 @media (max-width: 1040px) {
@@ -291,7 +357,7 @@
         gap: 3rem;
     }
 
-    .upper-instructions {
+    .upper-instructions-container {
         max-width: 85vw;
     }
 

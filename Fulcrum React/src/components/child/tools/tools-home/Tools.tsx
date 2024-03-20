@@ -86,19 +86,19 @@ export default function Tools({ publicUserData, setPublicUserData, budgetArray, 
                             <p>Settings</p>
                         </div>
 
-                        <img src="/src/assets/UI-icons/tools-settings-icon-black.svg" alt=""/>
+                        <img src="/src/assets/UI-icons/tools-settings-icon-black.svg" alt="Settings icon"/>
                     </div>
                     <div className="tools-tile tools-tile-interactive bg-[#B1D1CF] text-black text-lg leading-[1] hover:cursor-pointer" onClick={openRecurringExpenses}>
                         <div className="tools-text-container">
                             <p>Recurring Expenses</p>
                         </div>
-                        <img src="/src/assets/UI-icons/tools-recurring-icon-black.svg" alt=""/>
+                        <img src="/src/assets/UI-icons/tools-recurring-icon-black.svg" alt="Recurrence icon"/>
                     </div>
                     <div className="tools-tile bg-[#B1C5D1] text-black text-xl leading-7 hover:cursor-not-allowed">
                         <div className="tools-text-container">
                             <p>Coming Soon</p>
                         </div>
-                        <img src="/src/assets/UI-icons/tools-hardhat-icon.svg" alt=""/>
+                        <img src="/src/assets/UI-icons/tools-hardhat-icon.svg" alt="Tools icon"/>
                     </div>
                  </div>
             </div> : openToolsSection === "settings" ?

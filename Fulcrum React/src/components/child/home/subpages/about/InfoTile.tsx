@@ -40,8 +40,8 @@ export default function InfoTile( { initialDisplayText, hoverDisplayText, backgr
     }
 
     return (
-        <div className={"single-tile-container hide-tile mx-8"} ref={tileRef}>
-            <div className={"mid-copy-animation-tile relative"} style={{backgroundColor: backgroundColour, color: textColor ? textColor : "black"}} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <div className={"single-tile-container hide-tile"} ref={tileRef}>
+            <div className={"mid-copy-animation-tile"} style={{backgroundColor: backgroundColour, color: textColor ? textColor : "black"}} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <div className={`absolute flex flex-col justify-center items-center ${isHovered ? "hidden" : "block"}`}>
                     <img src={iconPathFront} alt="Info tile icon" className={"w-16 h-auto mb-6"}/>
                     <b className={"lg:text-lg text-sm"}>{initialDisplayText}</b>
