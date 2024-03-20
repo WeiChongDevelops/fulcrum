@@ -9,7 +9,7 @@ export default function HomeNavbar() {
     return (
         <div className={"flex flex-row justify-between items-center py-4 bg-white border-b-black border-2"}>
             <div className={"flex flex-1 justify-start item-center ml-4 sm:ml-16"}>
-                <div className={"flex flex-row justify-start w-40 transition-all cursor-pointer hover:-rotate-3"}>
+                <div className={"flex flex-row justify-start w-40 transition-all cursor-pointer hover:-rotate-3 hover:scale-110"}>
                 <img src={`/src/assets/fulcrum-logos/fulcrum-long-black.webp`} alt="Fulcrum logo in navbar"
                 className="w-full h-auto"
                      onClick={() => window.location.href = "/home/about"}/>

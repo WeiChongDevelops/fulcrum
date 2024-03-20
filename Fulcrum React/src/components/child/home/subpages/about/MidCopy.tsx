@@ -44,9 +44,9 @@ export default function MidCopy() {
                           iconPathBack={"/src/assets/homepage-assets/tile-icon-master-back.svg"}/>
             </div>
             <div className={"flex flex-row justify-center items-center"}>
-                <div className={"rounded-full bg-black h-2 w-2"}></div>
-                <div className={"rounded-full bg-black h-2 w-2 mx-3"}></div>
-                <div className={"rounded-full bg-black h-2 w-2"}></div>
+                <div className={"rounded-full bg-[#282d33] h-2 w-2"}></div>
+                <div className={"rounded-full bg-[#282d33] h-2 w-2 mx-3"}></div>
+                <div className={"rounded-full bg-[#282d33] h-2 w-2"}></div>
             </div>
         </div>
     );

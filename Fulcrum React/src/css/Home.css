@@ -57,6 +57,17 @@
 .upper-instructions {
     max-width: 30vw;
 }
+.circle-spotlight {
+    position: absolute;
+    width: 32rem;
+    height: 32rem;
+    top: -100%;
+    left: -100%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    background-color: rgba(23, 66, 63, 0.36);
+    border-radius: 100vw;
+}
 
 .single-tile-container {
     transition: all ease 300ms;
@@ -75,7 +86,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0.5rem 0.5rem 0 0 #1c1c1c;
+    box-shadow: 0.5rem 0.5rem 0 0 #222428;
 }
 
 .single-tile-container:nth-child(2) {
@@ -93,7 +104,7 @@
 .hide-tile {
     opacity: 0;
     filter: blur(5px);
-    transform: translateX(-170%);
+    transform: translateX(-100%);
 }
 
 .show-tile {

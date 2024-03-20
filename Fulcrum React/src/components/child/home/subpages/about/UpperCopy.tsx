@@ -1,9 +1,25 @@
 import FulcrumButton from "../../../other/FulcrumButton.tsx";
+import {useEffect, useRef,} from "react";
 
 /**
  * Upper-page component displaying sales copy and a concise version of the user steps.
  */
 export default function UpperCopy() {
+
+    const spotlightContainerRef = useRef<HTMLDivElement>(null);
+    const spotlightRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        function updateCursorLocation(e: MouseEvent) {
+            spotlightRef.current!.style.left = `${e.clientX - spotlightContainerRef.current!.getBoundingClientRect().left}px`;
+            spotlightRef.current!.style.top = `${e.clientY - spotlightContainerRef.current!.getBoundingClientRect().top}px`;
+        }
+        document.addEventListener("mousemove", updateCursorLocation);
+        return () => {
+            document.removeEventListener("mousemove", updateCursorLocation);
+        }
+    }, []);
+
     return (
         <div className={"flex flex-col justify-start items-center w-screen px-20 pt-40 pb-6 text-black relative"}>
             <div className={"upper-copy-first-row flex flex-row justify-center"}>
@@ -50,9 +66,10 @@ export default function UpperCopy() {
                     </div>
                 </div>
             </div>
-            <div className={"flex flex-col justify-center items-center rounded-lg w-[90vw] h-60 bg-[#282d33] text-white text-xl shadow-[1rem_1rem_0_black] select-none mt-40"}>
-                <img src="/src/assets/homepage-assets/complicated.png" className={"w-[30rem] sm:w-[42rem] mb-3"} alt=""/>
-                <p className={"font-extrabold text-md mt-8 text-[#44b775]"}>Find <span className={"underline underline-offset-2"}>your</span> balance.</p>
+            <div className={"relative overflow-hidden flex flex-col justify-center items-center rounded-lg w-[90vw] h-60 bg-[#282d33] text-white text-xl shadow-[1rem_1rem_0_black] select-none mt-40"} ref={spotlightContainerRef}>
+                <div className={"circle-spotlight"} ref={spotlightRef}></div>
+                <img src="/src/assets/homepage-assets/complicated.png" className={"w-[30rem] sm:w-[42rem] mb-3 relative z-10"} alt=""/>
+                <p className={"font-extrabold text-md mt-8 text-[#44b775] z-10"}>Find <span className={"underline underline-offset-2 relative z-10"}>your</span> balance.</p>
             </div>
             <div className={"flex flex-row justify-start items-center relative mt-20 font-bold text-lg sm:text-[1.7rem]"}>
                 <img src="/src/assets/homepage-assets/homepage-highlight-3.png" className={"w-2 sm:w-5 mr-6 mb-3"} alt=""/>
