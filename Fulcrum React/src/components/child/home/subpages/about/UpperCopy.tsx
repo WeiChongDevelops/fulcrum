@@ -1,5 +1,5 @@
 import FulcrumButton from "../../../other/FulcrumButton.tsx";
-import {useEffect, useRef,} from "react";
+import {useEffect, useRef, useState,} from "react";
 
 /**
  * Upper-page component displaying sales copy and a concise version of the user steps.
@@ -8,15 +8,23 @@ export default function UpperCopy() {
 
     const spotlightContainerRef = useRef<HTMLDivElement>(null);
     const spotlightRef = useRef<HTMLDivElement>(null);
+    const body = document.querySelector("body")!;
 
     useEffect(() => {
         function updateCursorLocation(e: MouseEvent) {
+            spotlightRef.current!.style.opacity = "1";
             spotlightRef.current!.style.left = `${e.clientX - spotlightContainerRef.current!.getBoundingClientRect().left}px`;
             spotlightRef.current!.style.top = `${e.clientY - spotlightContainerRef.current!.getBoundingClientRect().top}px`;
         }
+        const hideSpotlight = () => {
+            spotlightRef.current!.style.opacity = "0";
+        }
+
         document.addEventListener("mousemove", updateCursorLocation);
+        body.addEventListener("scroll", hideSpotlight)
         return () => {
             document.removeEventListener("mousemove", updateCursorLocation);
+            body.removeEventListener("scroll", hideSpotlight);
         }
     }, []);
 

@@ -20,7 +20,6 @@ export default function InfoTile( { initialDisplayText, hoverDisplayText, backgr
     useEffect(() => {
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
-                console.log("HI")
                 if (entry.isIntersecting) {
                     entry.target.classList.add("show-tile");
                 } else {

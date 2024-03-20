@@ -67,6 +67,7 @@
     pointer-events: none;
     background-color: rgba(23, 66, 63, 0.36);
     border-radius: 100vw;
+    transition: opacity 250ms ease-out;
 }
 
 .single-tile-container {
