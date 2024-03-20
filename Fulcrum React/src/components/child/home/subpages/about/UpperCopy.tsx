@@ -5,9 +5,9 @@ import FulcrumButton from "../../../other/FulcrumButton.tsx";
  */
 export default function UpperCopy() {
     return (
-        <div className={"flex flex-col justify-start items-center w-screen px-20 pt-40 pb-6 text-black min-h-screen relative"}>
-            <div className={"flex flex-row justify-center items-start"}>
-                <div className={"upper-copy-first-row flex flex-col justify-start items-start pt-6 w-[40vw] relative mr-8 sm:mr-32"}>
+        <div className={"flex flex-col justify-start items-center w-screen px-20 pt-40 pb-6 text-black relative"}>
+            <div className={"upper-copy-first-row flex flex-row justify-center"}>
+                <div className={"upper-copy-left-col flex flex-col justify-start items-start pt-6 relative mr-8 sm:mr-32"}>
                     <img src="/src/assets/homepage-assets/homepage-highlight-1.png" className={"w-8 absolute left-[100%] top-0"} alt=""/>
                     <p className={"text-5xl text-left font-bold"}>It's time to start paying yourself first.</p>
                     <p className={"my-6 font-bold"}>180,000 others have found their balance.</p>
@@ -23,7 +23,7 @@ export default function UpperCopy() {
                     </div>
                     <p className={"font-medium"}>Integrated Budgeting and Expense Tracking</p>
                 </div>
-                <div className={"flex flex-col justify-start items-start pt-12 text-md font-medium w-[30vw] text-left relative"}>
+                <div className={"upper-instructions flex flex-col justify-start items-start pt-12 text-md font-medium text-left relative"}>
                     <div className={"flex flex-row justify-start items-start"}>
                         <div className={"homepage-number-circle mr-4 mt-1"}>1</div>
                         <p>Sign up for a free account.</p>

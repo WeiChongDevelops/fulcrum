@@ -57,6 +57,7 @@ export default function Register() {
 
         const uppercaseRegex = /[A-Z]/;
         const lowercaseRegex = /[a-z]/;
+        const numberRegex = /[0-9]/;
 
         if (password.length < 8) {
             feedback = "Password must be at least 8 characters long."
@@ -64,6 +65,8 @@ export default function Register() {
             feedback = "Password must contain at least one uppercase letter."
         } else if (!lowercaseRegex.test(password)) {
             feedback = "Password must contain at least one lowercase letter."
+        } else if (!numberRegex.test(password)) {
+            feedback = "Password must contain at least one number."
         } else {
             feedback = "Great password!"
             passwordAccepted = true;
