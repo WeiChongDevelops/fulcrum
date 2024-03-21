@@ -58,7 +58,7 @@ export default function RecurringExpenseModalsAndForms( { recurringExpenseFormVi
     }
 
     return (
-        <div className={"z-4"}>
+        <div className={"z-40"}>
             {recurringExpenseFormVisibility.isCreateExpenseVisible &&
                 <ExpenseCreationForm
                     setExpenseFormVisibility={setRecurringExpenseFormVisibility}

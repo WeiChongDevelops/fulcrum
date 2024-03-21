@@ -27,13 +27,14 @@ export default function CurrencySelector({ publicUserData, setPublicUserData }: 
     }
 
     return (
-        <div className={"currency-selector font-bold text-3xl w-[80%] mt-6"}>
+        <div className={"currency-selector"}>
             {currencyOptions.map((currencyOption, key) => {
                 return <FulcrumButton
                     displayText={currencyOption.symbol}
                     backgroundColour={publicUserData.currency === currencyOption.code ? "grey" : "white"}
                     onClick={handleCurrencySelection}
-                    optionalTailwind={`w-32 mb-4 p-2 text-md ${publicUserData.currency === currencyOption.code && "outline"}`}
+                    optionalTailwind={`w-32 px-2 text-md ${publicUserData.currency === currencyOption.code && "outline"}`}
+                    hoverShadow={true}
                     key={key}/>
             })}
         </div>

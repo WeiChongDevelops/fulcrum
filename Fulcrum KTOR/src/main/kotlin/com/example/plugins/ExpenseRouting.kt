@@ -159,6 +159,7 @@ fun Application.configureExpenseRouting() {
                 for (expenseId in batchExpenseDeleteRequest.expenseIdsToDelete) {
                     val deletedExpense = supabase.postgrest["expenses"].delete {
                         eq("expenseId", expenseId)
+                        eq("userId", getActiveUserId())
                     }
                     if (deletedExpense.body == null) {
                         call.respondError("A batched expense deletion failed.")

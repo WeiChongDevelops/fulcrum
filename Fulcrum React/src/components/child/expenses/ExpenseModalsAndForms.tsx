@@ -81,7 +81,7 @@ export default function ExpenseModalsAndForms( { expenseFormVisibility,
     }
 
     return (
-        <div className={"z-4"}>
+        <div className={"z-40"}>
             {expenseFormVisibility.isCreateExpenseVisible && <ExpenseCreationForm
                 setExpenseFormVisibility={setExpenseFormVisibility}
                 setExpenseArray={setExpenseArray}

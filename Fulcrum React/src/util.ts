@@ -1806,24 +1806,6 @@ export function getNextRecurringInstance(timestamp: Date, frequency: RecurringEx
 
 
 /**
- * Retrieves all instances of a recurring expense present in the expense array on a specified date.
- * @param {ExpenseItemEntity[]} expenseArray - The array of expense items to search.
- * @param {RecurringExpenseItemEntity} recurringExpenseItem - The recurring expense item to search for.
- * @param date - The date to search for expense instances.
- * @returns An array of expense items that are instances of the recurring expense on the given date, or null if none found.
- */
-export function getRecurringExpenseInstancesOrNull(expenseArray: ExpenseItemEntity[],
-                                                   recurringExpenseItem: RecurringExpenseItemEntity,
-                                                   date: Date): ExpenseItemEntity[] | null {
-    const recurringExpenseInstances = expenseArray.filter((expenseItem: ExpenseItemEntity) => {
-        return (expenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId
-            && new Date(expenseItem.timestamp).getTime() === new Date(date).getTime())
-    })
-    return recurringExpenseInstances.length > 0 ? recurringExpenseInstances : null;
-}
-
-
-/**
  * Get random colour for a budget category group.
  * @returns A random colour from the groupColourArray.
  */
@@ -2012,6 +1994,8 @@ export function getMonthsFromToday(month: number, year: number): number {
 }
 
 
+
+
 /**
  * Creates the structured expense data using the data from the expense array.
  * @param {ExpenseItemEntity[]} expenseArray - The array of expense items.
@@ -2084,6 +2068,28 @@ export function getStructuredExpenseData(expenseArray: ExpenseItemEntity[], setS
 
 
 /**
+ * Retrieves all instances of a recurring expense present in the expense array on a specified date.
+ * @param {ExpenseItemEntity[]} expenseArray - The array of expense items to search.
+ * @param {string} recurringExpenseId - The recurring expense item to search for.
+ * @param date - The date to search for expense instances.
+ * @returns An array of expense items that are instances of the recurring expense on the given date, or null if none found.
+ */
+export function getRecurringExpenseInstancesOrNull(expenseArray: ExpenseItemEntity[],
+                                                   recurringExpenseId: string,
+                                                   date: Date): ExpenseItemEntity[] | null {
+    console.log(`Below is expense array in which we search for instances of ${recurringExpenseId}.`)
+    console.log(expenseArray)
+    const recurringExpenseInstances = expenseArray.filter((expenseItem: ExpenseItemEntity) => {
+        return (expenseItem.recurringExpenseId === recurringExpenseId
+            && new Date(expenseItem.timestamp).toLocaleDateString() === new Date(date).toLocaleDateString())
+    })
+    console.log("and below are the instances we found")
+    console.log(recurringExpenseInstances)
+    return recurringExpenseInstances.length > 0 ? recurringExpenseInstances : null;
+}
+
+
+/**
  * Updates the expenseArray's recurring expense instances, adding, removing or leaving instances as necessary.
  * @param {RecurringExpenseItemEntity[]} recurringExpenseArray - The array of recurring expense items.
  * @param {ExpenseItemEntity[]} expenseArray - The array of expense items.
@@ -2103,10 +2109,12 @@ export async function updateRecurringExpenseInstances(recurringExpenseArray: Rec
     recurringExpenseArray.forEach(recurringExpenseItem => {
 
         // We check each of the dates between when it was added and today.
-        for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setTime(date.getDate() + 1)) {
+        for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setDate(date.getDate() + 1)) {
             console.log(`Looking at date: ${date.toLocaleDateString()}`)
 
-            const expenseInstances = getRecurringExpenseInstancesOrNull(expenseArray, recurringExpenseItem, date);
+            const expenseInstances = getRecurringExpenseInstancesOrNull(expenseArray, recurringExpenseItem.recurringExpenseId, date);
+            console.log(`expenseInstances of ${recurringExpenseItem.recurringExpenseId} on ${date.toLocaleDateString()}:`)
+            console.log(expenseInstances)
             const isFrequencyMatch = recurringExpenseLandsOnDay(recurringExpenseItem.timestamp, recurringExpenseItem.frequency, date);
             const expenseInstanceIsBlacklisted = removedRecurringExpenseInstances ?
                 matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date)

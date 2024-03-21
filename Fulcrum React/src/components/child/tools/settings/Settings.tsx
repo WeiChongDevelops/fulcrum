@@ -48,7 +48,7 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
 
                 <div className="flex justify-between items-center my-8">
                     <div className="flex-grow flex flex-row flex-start">
-                        <FulcrumButton displayText={"Go Back"} onClick={() => setOpenToolsSection("home")} backgroundColour={"white"}/>
+                        <FulcrumButton displayText={"Go Back"} onClick={() => setOpenToolsSection("home")} backgroundColour={"white"} hoverShadow={true}/>
                     </div>
 
                     <img className={"w-12 h-auto"} src="/src/assets/UI-icons/tools-settings-icon-white.svg" alt="Settings icon"/>
@@ -85,10 +85,10 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
                     <p>{new Date(publicUserData.createdAt).toLocaleDateString()}</p>
                 </div>
 
-                <div className={"settings-row justify-center mt-8"}>
-                    <FulcrumButton displayText={"Wipe Expenses"} backgroundColour={"red"} optionalTailwind={"settings-box-shadow"} onClick={() => setSettingsFormVisibility(curr => ({...curr, typeDeleteMyExpensesForm: true}))}/>
-                    <FulcrumButton displayText={"Wipe Budget"} backgroundColour={"red"} optionalTailwind={"settings-box-shadow"} onClick={() => setSettingsFormVisibility(curr => ({...curr, typeDeleteMyBudgetForm: true}))}/>
-                    <FulcrumButton displayText={"Wipe Data"} backgroundColour={"red"} optionalTailwind={"settings-box-shadow"} onClick={() => setSettingsFormVisibility(curr => ({...curr, typeDeleteMyDataForm: true}))}/>
+                <div className={"settings-row wipe-options"}>
+                    <FulcrumButton displayText={"Wipe Expenses"} backgroundColour={"red"} onClick={() => setSettingsFormVisibility(curr => ({...curr, typeDeleteMyExpensesForm: true}))} hoverShadow={true}/>
+                    <FulcrumButton displayText={"Wipe Budget"} backgroundColour={"red"} onClick={() => setSettingsFormVisibility(curr => ({...curr, typeDeleteMyBudgetForm: true}))} hoverShadow={true}/>
+                    <FulcrumButton displayText={"Wipe All Data"} backgroundColour={"red"} onClick={() => setSettingsFormVisibility(curr => ({...curr, typeDeleteMyDataForm: true}))} hoverShadow={true}/>
                 </div>
             </div>
 

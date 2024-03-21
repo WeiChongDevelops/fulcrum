@@ -21,7 +21,7 @@ interface SettingsModalsAndFormsProps {
  */
 export default function SettingsModalsAndForms ( { settingsFormVisibility, setSettingsFormVisibility, settingsModalVisibility, setSettingsModalVisibility }: SettingsModalsAndFormsProps) {
     return (
-        <div className="z-4">
+        <div className="z-40">
             {settingsFormVisibility.typeDeleteMyExpensesForm &&
                 <TypeMatchConfirmationForm areYouSureMessage={"Are you sure you would like to wipe your expense logs? This decision is irreversible."}
                                            typeMatchString={"Wipe My Expenses"}

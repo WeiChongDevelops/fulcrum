@@ -57,8 +57,6 @@ fun Application.configureAuthRouting() {
 
                 if (userInfoInserted.body == null) {
                     call.respondError("New row not added to public user data.")
-                } else {
-                    call.respondSuccess("New row not added to public user data.")
                 }
 
                 // Default Budget Groups Initialised
@@ -75,8 +73,6 @@ fun Application.configureAuthRouting() {
 
                 if (defaultGroupsInserted.body == null) {
                     call.respondError("Default groups not added.")
-                } else {
-                    call.respondSuccess("Default groups successfully added.")
                 }
 
                 // Default Categories Initialised
@@ -100,8 +96,6 @@ fun Application.configureAuthRouting() {
 
                 if (defaultCategoriesInserted.body == null) {
                     call.respondError("Default categories not added.")
-                } else {
-                    call.respondSuccess("Default categories successfully added.")
                 }
 
                 // Total Income Initialised
@@ -114,8 +108,6 @@ fun Application.configureAuthRouting() {
                 )
                 if (initialisedTotalIncomeInserted.body == null) {
                     call.respondError("Default total income not inserted.")
-                } else {
-                    call.respondSuccess("Default total income inserted successfully.")
                 }
 
                 call.respondSuccess("User added successfully.")

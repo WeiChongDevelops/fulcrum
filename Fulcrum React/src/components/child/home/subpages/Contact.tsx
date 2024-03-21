@@ -88,7 +88,7 @@ export default function Contact() {
                 <p className={"text-5xl font-bold mb-4"}>We're here to help.</p>
                 <p className={"mt-2 font-bold"}>Reach out to our team for assistance or inquiries via the contact form.</p>
                 {formStatus && <p className={"my-6 font-bold text-gray-600 contact-status w-40%"} key={statusAnimationKey}>{formStatus}</p>}
-                <Loader isLoading={isLoading} isDarkMode={false} independentPosition={false}/>
+                <Loader isLoading={isLoading} isDarkMode={false} flexPosition={true}/>
             </div>
             <div className={"contact-form-container"}>
                 <form className={"flex flex-col bg-[#282d33] px-10 py-5 rounded-md w-full bg-opacity-80 text-sm"}

@@ -51,7 +51,7 @@ export default function BudgetModalsAndForms({ budgetFormVisibility,
                                                  runGroupDeletionWithUserPreference,
                                                  currencySymbol}:ModalsAndFormsProps ) {
     return(
-        <div className={"z-4"}>
+        <div className={"z-40"}>
             {budgetFormVisibility.isCreateBudgetVisible && <BudgetCreationForm setBudgetArray={setBudgetArray}
                                                                                groupArray={groupArray}
                                                                                groupNameOfNewItem={groupNameOfNewItem}

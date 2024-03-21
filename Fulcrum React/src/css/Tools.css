@@ -1,5 +1,5 @@
 .tools {
-    min-height: calc(100vh - 128px);
+    min-height: calc(100vh - 7rem);
     overflow: hidden;
 }
 
@@ -95,16 +95,20 @@
 
 .settings-row {
     display: flex;
-    padding: 3rem 2rem;
-    margin-bottom: 2rem;
+    padding: 1rem 2rem;
+    margin-bottom: 1.5rem;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     border-radius: 0.75rem;
-    height: 4rem;
-    font-size: 1.25rem;
+    font-size: 1rem;
     line-height: 1.75rem;
     text-align: left;
+}
+
+.wipe-options {
+    justify-content: center;
+    gap: 1rem;
 }
 
 .settings-box-shadow {
@@ -114,7 +118,11 @@
 .currency-selector {
     display: flex;
     flex-direction: row;
+    font-weight: 700;
     justify-content: space-around;
+    align-items: center;
+    font-size: 1.5rem;
+    width: 80%;
 }
 
 
