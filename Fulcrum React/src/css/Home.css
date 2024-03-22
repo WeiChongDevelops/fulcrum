@@ -1,4 +1,6 @@
 
+/* HOMEPAGE NAVBAR */
+
 .homepage-navbar-link {
     position: relative;
     padding: 0.2rem 0.2rem;
@@ -23,23 +25,48 @@
     color: #27433d;
 }
 
-.homepage-number-circle {
-    border-radius: 50%;
-    width: 1.5rem;
-    height: 1.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: bold;
-    color: white;
-    background-color: black;
-    flex-shrink: 0;
-    flex-grow: 0;
-    margin: 0.25rem 1rem 0 0;
+
+/* HOMEPAGE FOOTER */
+
+.homepage-footer > p {
+    user-select: none;
+    font-weight: 500;
+    font-size: 0.75rem;
+    line-height: 1rem;
 }
 
+.homepage-footer > p:hover {
+    cursor: pointer;
+    color: #1c5b57;
+}
+
+
+/* HOMEPAGE UPPER COPY */
+
+.upper-instructions-container {
+    max-width: 30vw;
+    padding-top: 3rem;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
+    position: relative;
+}
+
+.upper-instructions-container .upper-instruction {
+    display: flex;
+    flex-direction: row;
+    justify-items: flex-start;
+    align-items: flex-start;
+}
+
+.upper-copy-first-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
 
 .upper-copy-left-col {
     position: relative;
@@ -61,23 +88,21 @@
     left: 113%;
 }
 
-.upper-instructions-container {
-    max-width: 30vw;
-    padding-top: 3rem;
-    font-weight: 500;
+.homepage-number-circle {
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    text-align: left;
-    position: relative;
-}
-
-.upper-instructions-container .upper-instruction {
-    display: flex;
-    flex-direction: row;
-    justify-items: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin: 0.25rem 1rem 0 0;
 }
 
 .circle-spotlight {
@@ -93,8 +118,11 @@
     transition: opacity 250ms ease-out;
 }
 
+
+/* MID-PAGE COPY */
+
 .single-tile-container {
-    transition: all ease 300ms;
+    transition: all ease-out 300ms;
     width: 20vw;
     height: 20vw;
     display: flex;
@@ -123,10 +151,6 @@
     transition-delay: 300ms;
 }
 
-.single-tile-container {
-    transition: all ease-out 300ms;
-}
-
 .hide-tile {
     opacity: 0;
     filter: blur(5px);
@@ -139,6 +163,11 @@
     transform: translateX(0%);
 }
 
+.mid-copy-animation-tile:hover {
+    animation: tileBlur ease-in-out 200ms;
+    transform: rotate(-5deg) scale(110%);
+}
+
 @keyframes tileBlur {
     0% {
         filter: blur(0);
@@ -149,28 +178,6 @@
     85% {
         filter: blur(0);
     }
-    100% {
-        filter: blur(0);
-    }
-}
-
-.divider-dots-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-.divider-dots-container > div {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 100vw;
-    background-color: #282d33;
-}
-
-.mid-copy-animation-tile:hover {
-    animation: tileBlur ease-in-out 200ms;
-    transform: rotate(-5deg) scale(110%);
 }
 
 .show-tile:hover .mid-copy-animation-tile {
@@ -191,54 +198,22 @@
     background-color: white;
 }
 
-.homepage-footer > p {
-    user-select: none;
-    font-weight: 500;
-    font-size: 0.75rem;
-    line-height: 1rem;
-}
-
-.homepage-footer > p:hover {
-    cursor: pointer;
-    color: #1c5b57;
-}
-
-@keyframes iconRotation {
-    0% {
-        transform: rotate(0);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.animated-pricing-icon-inside {
-    position: absolute;
-    animation: infinite iconRotation 20s linear;
-    width: 35vw;
-    top: 5vw;
-}
-
-.animated-pricing-icon-outside {
-    position: absolute;
-    width: 35vw;
-    top: 4vw;
-}
-
-.upper-copy-first-row {
+.divider-dots-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
 }
 
-@keyframes bobbing {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-14px);
-    }
+.divider-dots-container > div {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 100vw;
+    background-color: #282d33;
 }
+
+
+/* PRICING PAGE */
 
 .pricing-copy {
     max-width: 35vw;
@@ -247,6 +222,12 @@
     justify-content: flex-start;
     align-items: flex-start;
     text-align: left;
+}
+
+.contact-copy {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
 }
 
 .pricing-badge-container {
@@ -260,11 +241,48 @@
     animation: bobbing 3500ms infinite ease-in-out;
 }
 
+.animated-pricing-icon-inside {
+    position: absolute;
+    animation: infinite iconSpin 20s linear;
+    width: 35vw;
+    top: 5vw;
+}
+
+@keyframes iconSpin {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.animated-pricing-icon-outside {
+    position: absolute;
+    width: 35vw;
+    top: 4vw;
+}
+
+@keyframes bobbing {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-14px);
+    }
+}
+
 .contact-status {
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
-    animation: swipe 2s, border-fade 2s ease;
+    animation: textSwipe 2s, border-fade 2s ease;
+}
+
+@keyframes textSwipe {
+    from {
+        width: 0
+    }
 }
 
 @keyframes border-fade {
@@ -276,34 +294,14 @@
     }
 }
 
-@keyframes swipe {
-    from {
-        width: 0
-    }
-}
-
-@keyframes iconFloat {
-    0% {
-        transform: translateY(0) rotate(0) scale(0);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(-45px) rotate(360deg) scale(1.2);
-        opacity: 0;
-    }
-}
-
 .contact-form-container {
     display: flex;
     flex-direction: column;
     max-width: 45vw;
 }
 
-.contact-copy {
-    display: flex;
-    flex-direction: column;
-    margin-right: 1rem;
-}
+
+/* MEDIA QUERIES */
 
 @media (max-width: 1040px) {
     .contact-container {
