@@ -3,7 +3,7 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, use
 import {
     addColourSelectionFunctionality,
     BasicGroupData, BudgetFormVisibility, capitaliseFirstLetter,
-    handleGroupCreation, GroupItemEntity, getRandomGroupColour
+    handleGroupCreation, GroupItemEntity, getRandomGroupColour, getGroupList
 } from "../../../../util.ts";
 import "../../../../css/Budget.css"
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
@@ -59,11 +59,8 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
             timestamp: new Date()
         }
 
-        setGroupArray( (oldGroupArray) => {
-            return [...oldGroupArray, newGroupItem]
-        })
-
         await handleGroupCreation(formData.group, formData.colour ? formData.colour : randomColour, setGroupArray, newGroupItem);
+        setGroupArray(await getGroupList());
         setFormData({ group: "", colour: "" });
     }
 

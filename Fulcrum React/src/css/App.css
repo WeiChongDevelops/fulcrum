@@ -1,6 +1,11 @@
 
 /* GLOBAL STYLES */
 
+#react-select-2-input {
+  text-align: left;
+}
+
+
 .bg-light {
   background-color: #F1F5F9;
 }

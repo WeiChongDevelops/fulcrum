@@ -27,7 +27,7 @@ export default function Register() {
             return;
         } else {
             if (!getPasswordValidation(formData.password).passwordAccepted) {
-                setPasswordValidation(curr => ({...curr, attemptedIgnore: true}))
+                setPasswordValidation(prevValidation => ({...prevValidation, attemptedIgnore: true}))
                 document.querySelector("#password")!.classList.add("invalid");
                 setTimeout(() => {
                     document.querySelector("#password")!.classList.remove("invalid")
@@ -45,7 +45,7 @@ export default function Register() {
     }
 
     async function handleChange(e: ChangeEvent<HTMLInputElement>) {
-        setFormData(curr => ({...curr, [e.target.id]: e.target.value}))
+        setFormData(prevFormData => ({...prevFormData, [e.target.id]: e.target.value}))
         if (e.target.id == "password") {
             setPasswordValidation(getPasswordValidation(e.target.value))
         }

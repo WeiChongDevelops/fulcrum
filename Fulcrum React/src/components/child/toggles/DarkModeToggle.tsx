@@ -29,7 +29,7 @@ export default function DarkModeToggle({ publicUserData, setPublicUserData }: Da
         };
 
         await handlePublicUserDataUpdating(updatedPublicUserData);
-        setPublicUserData(curr => ({ ...curr, darkModeEnabled: newIsDarkMode }));
+        setPublicUserData(prevPublicUserData => ({ ...prevPublicUserData, darkModeEnabled: newIsDarkMode }));
 
         sessionStorage.setItem("darkMode", newIsDarkMode.toString());
     }

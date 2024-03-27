@@ -17,7 +17,12 @@ import {
     colourStyles,
     handleInputChangeOnFormWithAmount,
     handleRecurringExpenseCreation,
-    RecurringExpenseItemEntity, recurringFrequencyOptions, Value, ExpenseFormVisibility, RecurringExpenseFormVisibility
+    RecurringExpenseItemEntity,
+    recurringFrequencyOptions,
+    Value,
+    ExpenseFormVisibility,
+    RecurringExpenseFormVisibility,
+    getExpenseList, getBudgetList, handleBudgetCreation, getRecurringExpenseList
 } from "../../../../util.ts";
 import { v4 as uuid } from "uuid";
 
@@ -89,19 +94,19 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
         }
 
         if (formData.frequency === "never") {
-            if (budgetArray.map(budgetItem => budgetItem.category).includes(newExpenseItem.category)) {
-                setExpenseArray(current => [newExpenseItem, ...current]);
-            } else {
+            if (!budgetArray.map(budgetItem => budgetItem.category).includes(newExpenseItem.category)) {
                 const newDefaultBudgetItem: BudgetItemEntity = {
                     category: formData.category,
                     amount: 0,
-                    iconPath: "/src/assets/category-icons/category-default-icon.svg",
+                    iconPath: "category-default-icon.svg",
                     group: "Miscellaneous",
                     timestamp: new Date(),
                 }
                 setBudgetArray(current => [...current, newDefaultBudgetItem]);
+                await handleBudgetCreation(setBudgetArray, newDefaultBudgetItem);
             }
-            await handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItem);
+            await handleExpenseCreation(newExpenseItem, setExpenseArray);
+            setExpenseArray(await getExpenseList());
         } else {
             const newRecurringExpenseItem: RecurringExpenseItemEntity = {
                 recurringExpenseId: uuid(),
@@ -110,7 +115,10 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
                 timestamp: formData.timestamp as Date,
                 frequency: formData.frequency
             }
-            await handleRecurringExpenseCreation(newRecurringExpenseItem, setRecurringExpenseArray);
+            await handleRecurringExpenseCreation(newRecurringExpenseItem);
+            setRecurringExpenseArray(await getRecurringExpenseList());
+            setExpenseArray(await getExpenseList());
+            setBudgetArray(await getBudgetList());
         }
         setFormData({
             category: "",
@@ -121,7 +129,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
     }
 
     function handleFrequencyInputChange(e: any) {
-        setFormData(currentFormData => ({ ...currentFormData, frequency: e.value }));
+        setFormData(prevFormData => ({ ...prevFormData, frequency: e.value }));
     }
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
@@ -129,7 +137,7 @@ export default function ExpenseCreationForm( { setExpenseFormVisibility, setExpe
     }
 
     function onDateInputChange(newValue: Value) {
-        setFormData(curr => ({ ...curr, timestamp: newValue }));
+        setFormData(prevFormData => ({ ...prevFormData, timestamp: newValue }));
     }
 
     return (

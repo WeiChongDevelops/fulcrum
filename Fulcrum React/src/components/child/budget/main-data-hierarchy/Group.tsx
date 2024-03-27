@@ -3,9 +3,9 @@ import {
     BudgetItemEntity,
     BudgetModalVisibility,
     dynamicallySizeBudgetNameDisplays,
-    ExpenseItemEntity, formatDollarAmountStatic,
+    ExpenseItemEntity, formatDollarAmountStatic, getBudgetList,
     getGroupBudgetTotal,
-    getGroupExpenditureTotal,
+    getGroupExpenditureTotal, getGroupList,
     GroupItemEntity,
     handleGroupDeletion,
     PreviousBudgetBeingEdited,
@@ -76,8 +76,12 @@ export default function Group({ groupName,
         if (filteredBudgetArray.length > 0) {
             setModalFormVisibility(current => ({...current, isDeleteOptionsModalVisible: true}))
         } else {
-            handleGroupDeletion(groupName, setGroupArray, setBudgetArray, false)
-                .then(() => console.log("Deletion successful"))
+            handleGroupDeletion(groupName, setGroupArray, false)
+                .then(async () => {
+                    setGroupArray(await getGroupList());
+                    setBudgetArray(await getBudgetList());
+                    console.log("Deletion successful")
+                })
                 .catch((error) => console.log("Deletion unsuccessful", error));
         }
     }

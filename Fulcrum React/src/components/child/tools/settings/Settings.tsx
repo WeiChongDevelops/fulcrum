@@ -86,9 +86,9 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
                 </div>
 
                 <div className={"settings-row wipe-options"}>
-                    <FulcrumButton displayText={"Wipe Expenses"} backgroundColour={"red"} onClick={() => setSettingsFormVisibility(curr => ({...curr, typeDeleteMyExpensesForm: true}))} hoverShadow={true}/>
-                    <FulcrumButton displayText={"Wipe Budget"} backgroundColour={"red"} onClick={() => setSettingsFormVisibility(curr => ({...curr, typeDeleteMyBudgetForm: true}))} hoverShadow={true}/>
-                    <FulcrumButton displayText={"Wipe All Data"} backgroundColour={"red"} onClick={() => setSettingsFormVisibility(curr => ({...curr, typeDeleteMyDataForm: true}))} hoverShadow={true}/>
+                    <FulcrumButton displayText={"Wipe Expenses"} backgroundColour={"red"} onClick={() => setSettingsFormVisibility(prevVisibility => ({...prevVisibility, typeDeleteMyExpensesForm: true}))} hoverShadow={true}/>
+                    <FulcrumButton displayText={"Wipe Budget"} backgroundColour={"red"} onClick={() => setSettingsFormVisibility(prevVisibility => ({...prevVisibility, typeDeleteMyBudgetForm: true}))} hoverShadow={true}/>
+                    <FulcrumButton displayText={"Wipe All Data"} backgroundColour={"red"} onClick={() => setSettingsFormVisibility(prevVisibility => ({...prevVisibility, typeDeleteMyDataForm: true}))} hoverShadow={true}/>
                 </div>
             </div>
 

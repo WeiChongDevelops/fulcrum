@@ -60,7 +60,7 @@ export default function ExpenseUpdatingForm({ setExpenseFormVisibility, setExpen
     }
 
     function onDateInputChange(newValue: Value) {
-        setFormData(curr => ({ ...curr, timestamp: newValue }));
+        setFormData(prevFormData => ({ ...prevFormData, timestamp: newValue }));
     }
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {

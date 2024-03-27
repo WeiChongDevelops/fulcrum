@@ -411,13 +411,11 @@ export function formatDate(date: Date): string {
 
 /**
  * Handles the creation of a new expense item.
- * @param setBudgetArray - Dispatch function from useState hook for setting the budget items array.
- * @param setExpenseArray - Dispatch function from useState hook for setting the expense items array.
  * @param newExpenseItem - The new expense item to be added.
+ * @param setExpenseArray - To update the local expense object array for immediate visual feedback to user
  */
-export async function handleExpenseCreation(setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
-                                            setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
-                                            newExpenseItem: ExpenseItemEntity): Promise<void> {
+export async function handleExpenseCreation(newExpenseItem: ExpenseItemEntity, setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>): Promise<void> {
+    setExpenseArray(current => [newExpenseItem, ...current]);
     try {
         const response = await fetch("http://localhost:8080/api/createExpense", {
             method: "POST",
@@ -436,19 +434,9 @@ export async function handleExpenseCreation(setBudgetArray: Dispatch<SetStateAct
         if (!response.ok) {
             console.error(`HTTP error - status: ${response.status}`);
             window.alert("Expense entry invalid.")
-            setExpenseArray(current => {
-                const indexOfInvalidItem = current.map(item => item.expenseId).lastIndexOf(newExpenseItem.expenseId)
-                if (indexOfInvalidItem !== -1) {
-                    return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)]
-                }
-                return current;
-            })
         }
         const responseData = await response.json();
         console.log(responseData);
-        setExpenseArray(await getExpenseList());
-        setBudgetArray(await getBudgetList());
-
     } catch (error) {
         console.error("Error:", error);
     }
@@ -512,7 +500,6 @@ export async function handleExpenseUpdating(expenseId: string, formData: Expense
         }
         const responseData = await response.json();
         console.log(responseData);
-
     } catch (error) {
         console.error("Error:", error);
     }
@@ -543,7 +530,6 @@ export async function handleRecurringExpenseInstanceUpdating(expenseId: string, 
         }
         const responseData = await response.json();
         console.log(responseData);
-
     } catch (error) {
         console.error("Error:", error);
     }
@@ -554,11 +540,9 @@ export async function handleRecurringExpenseInstanceUpdating(expenseId: string, 
  * Handles the deletion of a specific expense item.
  * @param expenseId - The ID of the expense to be deleted.
  * @param setExpenseArray - Dispatch function to update the expense array state.
- * @param setBudgetArray - Dispatch function to update the budget array state.
  */
 export async function handleExpenseDeletion(expenseId: string,
-                                            setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
-                                            setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>): Promise<void> {
+                                            setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>): Promise<void> {
     setExpenseArray(expenseArray => expenseArray.filter( expenseItem => {
         return expenseItem.expenseId !== expenseId
         }
@@ -573,17 +557,13 @@ export async function handleExpenseDeletion(expenseId: string,
                 "expenseId": expenseId,
             })
         })
-
         if (!response.ok) {
             console.error(`HTTP error - status: ${response.status}`);
         }
         console.log(await response.json());
-
     } catch(error) {
         console.error("Error:", error);
     }
-    getExpenseList().then( expenseList => setExpenseArray(expenseList))
-    getBudgetList().then( budgetList => setBudgetArray(budgetList))
 }
 
 /**
@@ -646,8 +626,6 @@ export async function handleBudgetCreation(setBudgetArray: Dispatch<SetStateActi
         }
         const responseData = await response.json()
         console.log(responseData);
-        setBudgetArray(await getBudgetList());
-
     } catch (error) {
         console.error("Error:", error);
     }
@@ -714,7 +692,6 @@ export async function handleBudgetUpdating(category: string, formData: BudgetUpd
         }
         const responseData = await response.json();
         console.log(responseData);
-
     } catch (error) {
         console.error("Error:", error);
     }
@@ -738,18 +715,14 @@ export async function handleBudgetDeletion(category: string, setBudgetArray: Dis
                 "category": category,
             })
         })
-
         if (!response.ok) {
             console.error(`HTTP error - status: ${response.status}`);
         }
         const responseData = await response.json();
         console.log(responseData);
-
     } catch(error) {
-        console.error("Error:", error);
+        console.error("Failed to delete budget:", error);
     }
-
-    getBudgetList().then( budgetList => setBudgetArray(budgetList))
 }
 
 
@@ -763,6 +736,7 @@ export async function handleBudgetDeletion(category: string, setBudgetArray: Dis
  * @param newGroupItem - The new group item data.
  */
 export async function handleGroupCreation(group: string, colour: string, setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>, newGroupItem: GroupItemEntity): Promise<void> {
+    setGroupArray( (oldGroupArray) => ([...oldGroupArray, newGroupItem]));
     try {
         const response = await fetch("http://localhost:8080/api/createGroup", {
             method: "POST",
@@ -787,7 +761,6 @@ export async function handleGroupCreation(group: string, colour: string, setGrou
         }
         const responseData = await response.json()
         console.log(responseData);
-        setGroupArray(await getGroupList());
     } catch (error) {
         console.error("Failed to create group:", error);
     }
@@ -858,7 +831,6 @@ export async function handleGroupUpdating(originalGroupName: string, originalCol
                 console.error(`HTTP error - status: ${response.status}`)
                 window.alert("Updated group is invalid.")
                 setGroupArray(currentGroupArray => {
-
                     const revertedGroupOptions = [...currentGroupArray]
                     const indexOfInvalidlyEditedOption = currentGroupArray.map(groupItem => groupItem.group).lastIndexOf(formData.group);
                     if (indexOfInvalidlyEditedOption !== -1) {
@@ -872,13 +844,11 @@ export async function handleGroupUpdating(originalGroupName: string, originalCol
                 })
             } else {
                 console.log("Group successfully updated.")
-                setGroupArray(await getGroupList());
             }
         } catch (error) {
             console.error("Failed to update group:", error)
         }
     } else {
-        console.error("Selected group name already taken.")
         window.alert("Selected group name already taken.")
     }
 }
@@ -888,12 +858,10 @@ export async function handleGroupUpdating(originalGroupName: string, originalCol
  * Handles the deletion of a group and optionally keeps the contained budgets.
  * @param groupName - The name of the group to be deleted.
  * @param setGroupArray - Dispatch function to update the group array state.
- * @param setBudgetArray - Dispatch function to update the budget array state.
  * @param keepContainedBudgets - Flag to keep or delete budgets contained within the group.
  */
 export async function handleGroupDeletion(groupName: string,
                                           setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
-                                          setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
                                           keepContainedBudgets: boolean): Promise<void> {
     setGroupArray(prevState => prevState.filter(groupItem => groupItem.group !== groupName))
     try {
@@ -913,14 +881,9 @@ export async function handleGroupDeletion(groupName: string,
         }
         const responseData = await response.json();
         console.log(responseData);
-
     } catch(error) {
         console.error("Error:", error);
     }
-
-    await getGroupList()
-        .then( options => setGroupArray(options))
-        .then( () => getBudgetList().then( budgets => setBudgetArray(budgets)))
 }
 
 
@@ -929,9 +892,8 @@ export async function handleGroupDeletion(groupName: string,
 /**
  * Handles the creation of a new recurring expense.
  * @param newRecurringExpenseItem - The data for the new recurring expense.
- * @param setRecurringExpenseArray - Dispatch function to update the recurring expense array state.
  */
-export async function handleRecurringExpenseCreation(newRecurringExpenseItem: RecurringExpenseItemEntity, setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>): Promise<void> {
+export async function handleRecurringExpenseCreation(newRecurringExpenseItem: RecurringExpenseItemEntity): Promise<void> {
     try {
         const response = await fetch("http://localhost:8080/api/createRecurringExpense", {
             method: "POST",
@@ -952,9 +914,7 @@ export async function handleRecurringExpenseCreation(newRecurringExpenseItem: Re
             window.alert("Expense entry invalid.")
         }
         const responseData = await response.json();
-        setRecurringExpenseArray(await getRecurringExpenseList());
         console.log(responseData);
-
     } catch (error) {
         console.error("Error:", error);
     }
@@ -2094,13 +2054,11 @@ export function getRecurringExpenseInstancesOrNull(expenseArray: ExpenseItemEnti
  * @param {RecurringExpenseItemEntity[]} recurringExpenseArray - The array of recurring expense items.
  * @param {ExpenseItemEntity[]} expenseArray - The array of expense items.
  * @param {RemovedRecurringExpenseItem[]} removedRecurringExpenseInstances - The array of removed recurring expense instances.
- * @param {Dispatch<SetStateAction<BudgetItemEntity[]>>} setBudgetArray - The state update function for the budget array.
  * @param {Dispatch<SetStateAction<ExpenseItemEntity[]>>} setExpenseArray - The state update function for the expense array.
  */
 export async function updateRecurringExpenseInstances(recurringExpenseArray: RecurringExpenseItemEntity[],
                                                           expenseArray: ExpenseItemEntity[],
                                                           removedRecurringExpenseInstances: RemovedRecurringExpenseItem[],
-                                                          setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
                                                           setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>, ): Promise<void> {
     const today = new Date();
     const misplacedExpensesToRemove = new Set<string>();
@@ -2145,7 +2103,7 @@ export async function updateRecurringExpenseInstances(recurringExpenseArray: Rec
                         timestamp: date,
                         recurringExpenseId: recurringExpenseItem.recurringExpenseId
                     }
-                    handleExpenseCreation(setBudgetArray, setExpenseArray, newExpenseItemLanded)
+                    handleExpenseCreation(newExpenseItemLanded, setExpenseArray);
                 }
             }
         }

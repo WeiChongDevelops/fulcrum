@@ -23,7 +23,7 @@ export default function Contact() {
     const [isLoading, setIsLoading] = useState(false);
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
-        setFormData( curr => ({...curr, [e.target.id]: e.target.value}));
+        setFormData( prevFormData => ({...prevFormData, [e.target.id]: e.target.value}));
     }
 
     function getActivePlaceholder(queryType: string) {
@@ -66,13 +66,13 @@ export default function Contact() {
                     () => {
                         console.log('SUCCESS!');
                         setIsLoading(false);
-                        setStatusAnimationKey(curr => curr + 1);
+                        setStatusAnimationKey(prevKey => prevKey + 1);
                         setFormStatus("Message sent! We'll get back to you as soon we can.");
                     },
                     (error: any) => {
                         console.log('FAILED...', error.text);
                         setIsLoading(false);
-                        setStatusAnimationKey(curr => curr + 1);
+                        setStatusAnimationKey(prevKey => prevKey + 1);
                         setFormStatus("Message failed. Please try again later.");
                     },
                 );

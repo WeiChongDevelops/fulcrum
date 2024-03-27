@@ -46,15 +46,6 @@ body label {
   font-weight: bold;
 }
 
-/*input::placeholder {*/
-/*  text-align: center;*/
-/*}*/
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto #ffffff;
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

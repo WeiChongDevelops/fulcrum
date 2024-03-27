@@ -20,7 +20,7 @@ export default function Login( { setEmail }: LoginProps ) {
     })
 
     async function handleChange(e: ChangeEvent<HTMLInputElement>) {
-        setFormData(curr => ({...curr, [e.target.id]: e.target.value}));
+        setFormData(prevFormData => ({...prevFormData, [e.target.id]: e.target.value}));
     }
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>){

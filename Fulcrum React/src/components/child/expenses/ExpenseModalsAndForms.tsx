@@ -1,4 +1,4 @@
-import ExpenseCreationForm from "./modals-and-forms/ExpenseCreationForm.tsx";
+import ExpenseCreationForm from "./forms/ExpenseCreationForm.tsx";
 import {
     BudgetItemEntity,
     categoryListAsOptions,
@@ -14,8 +14,8 @@ import {
     RecurringExpenseItemEntity,
     RemovedRecurringExpenseItem
 } from "../../../util.ts";
-import ExpenseUpdatingForm from "./modals-and-forms/ExpenseUpdatingForm.tsx";
-import RecurringExpenseInstanceUpdatingForm from "../tools/recurring-expenses/modals-and-forms/RecurringExpenseInstanceUpdatingForm.tsx";
+import ExpenseUpdatingForm from "./forms/ExpenseUpdatingForm.tsx";
+import RecurringExpenseInstanceUpdatingForm from "../tools/recurring-expenses/forms/RecurringExpenseInstanceUpdatingForm.tsx";
 import TwoOptionModal from "../other/TwoOptionModal.tsx";
 import {Dispatch, SetStateAction} from "react";
 
@@ -67,13 +67,13 @@ export default function ExpenseModalsAndForms( { expenseFormVisibility,
                 handleRemovedRecurringExpenseCreation(expenseItemToDelete.recurringExpenseId, expenseItemToDelete.timestamp, setRemovedRecurringExpenseInstances)
                     .then(() => {
                         console.log("Logged recurrence removal successful")
-                        handleExpenseDeletion(expenseIdToDelete, setExpenseArray, setBudgetArray)
+                        handleExpenseDeletion(expenseIdToDelete, setExpenseArray)
                             .then(() => console.log("Deletion successful"))
                             .catch(() => console.log("Deletion unsuccessful"));
                     })
                     .catch(() => console.log("Logged recurrence removal unsuccessful"));
             } else {
-                handleExpenseDeletion(expenseIdToDelete, setExpenseArray, setBudgetArray)
+                handleExpenseDeletion(expenseIdToDelete, setExpenseArray)
                     .then(() => console.log("Deletion successful"))
                     .catch(() => console.log("Deletion unsuccessful"));
             }

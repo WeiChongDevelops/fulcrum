@@ -1,12 +1,12 @@
-import BudgetCreationForm from "./modals-and-forms/BudgetCreationForm.tsx";
-import BudgetUpdatingForm from "./modals-and-forms/BudgetUpdatingForm.tsx";
-import GroupCreationForm from "./modals-and-forms/GroupCreationForm.tsx";
-import GroupUpdatingForm from "./modals-and-forms/GroupUpdatingForm.tsx";
+import BudgetCreationForm from "./forms/BudgetCreationForm.tsx";
+import BudgetUpdatingForm from "./forms/BudgetUpdatingForm.tsx";
+import GroupCreationForm from "./forms/GroupCreationForm.tsx";
+import GroupUpdatingForm from "./forms/GroupUpdatingForm.tsx";
 import TwoOptionModal from "../other/TwoOptionModal.tsx";
 import {
     BudgetFormVisibility,
     BudgetItemEntity,
-    BudgetModalVisibility,
+    BudgetModalVisibility, getBudgetList,
     GroupItemEntity,
     handleBudgetDeletion, PreviousBudgetBeingEdited, PreviousGroupBeingEdited
 } from "../../../util.ts";
@@ -17,8 +17,8 @@ interface ModalsAndFormsProps {
     budgetFormVisibility: BudgetFormVisibility;
     setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
 
-    modalFormVisibility:BudgetModalVisibility;
-    setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibility>>;
+    budgetModalVisibility: BudgetModalVisibility;
+    setBudgetModalVisibility: Dispatch<SetStateAction<BudgetModalVisibility>>;
 
     setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
     groupArray: GroupItemEntity[];
@@ -41,8 +41,8 @@ export default function BudgetModalsAndForms({ budgetFormVisibility,
                                                  groupArray,
                                                  groupNameOfNewItem,
                                                  setBudgetFormVisibility,
-                                                 modalFormVisibility,
-                                                 setModalFormVisibility,
+                                                 budgetModalVisibility,
+                                                 setBudgetModalVisibility,
                                                  oldBudgetBeingEdited,
                                                  setGroupArray,
                                                  oldGroupBeingEdited,
@@ -69,44 +69,47 @@ export default function BudgetModalsAndForms({ budgetFormVisibility,
                                                                              groupArray={groupArray}
                                                                              setGroupArray={setGroupArray}
                                                                              setBudgetFormVisibility={setBudgetFormVisibility}/>}
-            {modalFormVisibility.isDeleteOptionsModalVisible && <TwoOptionModal
+            {budgetModalVisibility.isDeleteOptionsModalVisible && <TwoOptionModal
                 title={`Would you like to keep the categories inside group '${groupToDelete}'?`}
-                setModalVisibility={setModalFormVisibility}
-                optionOneText="Keep Categories (Move to Miscellaneous)"
+                setModalVisibility={setBudgetModalVisibility}
+                optionOneText="Keep Categories (Moves Them to 'Miscellaneous')"
                 optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
                 optionTwoText="Delete Categories"
                 optionTwoFunction={() => {
-                    setModalFormVisibility(current => (
+                    setBudgetModalVisibility(current => (
                         {...current, isDeleteOptionsModalVisible: false, isConfirmGroupDestructionModalVisible: true}
                     ));
                 }}
                 isVisible="isDeleteOptionsModalVisible"
             />}
-            {modalFormVisibility.isConfirmGroupDestructionModalVisible && <TwoOptionModal
-                title="Are you sure? This will delete all expense entries for this budget category."
-                setModalVisibility={setModalFormVisibility}
+            {budgetModalVisibility.isConfirmGroupDestructionModalVisible && <TwoOptionModal
+                title="Are you sure? This will delete all categories in the group, as well as their expense records."
+                setModalVisibility={setBudgetModalVisibility}
                 optionOneText="Keep Categories (Move to Miscellaneous)"
                 optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
                 optionTwoText="Confirm"
                 optionTwoFunction={() => runGroupDeletionWithUserPreference(false)}
                 isVisible="isConfirmGroupDestructionModalVisible"/>
             }
-            {modalFormVisibility.isConfirmCategoryDestructionModalVisible && <TwoOptionModal
+            {budgetModalVisibility.isConfirmCategoryDestructionModalVisible && <TwoOptionModal
                 title="Are you sure? This will delete all expense entries for this budget category."
-                setModalVisibility={setModalFormVisibility}
+                setModalVisibility={setBudgetModalVisibility}
                 optionOneText="Cancel"
                 optionOneFunction={() => {
-                    setModalFormVisibility(current => (
+                    setBudgetModalVisibility(current => (
                         {...current, isConfirmCategoryDestructionModalVisible: false}
                     ));
                 }}
                 optionTwoText="Confirm"
                 optionTwoFunction={() => {
-                    setModalFormVisibility(current => (
+                    setBudgetModalVisibility(current => (
                         {...current, isConfirmCategoryDestructionModalVisible: false}
                     ));
                     handleBudgetDeletion(categoryToDelete, setBudgetArray)
-                        .then((response) => console.log("Deletion successful", response))
+                        .then(async (response) => {
+                            setBudgetArray(await getBudgetList());
+                            console.log("Deletion successful", response)
+                        })
                         .catch((error) => console.log("Deletion unsuccessful", error));
                 }}
                 isVisible="isConfirmCategoryDestructionModalVisible"/>

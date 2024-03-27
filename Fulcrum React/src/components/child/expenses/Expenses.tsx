@@ -79,7 +79,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
                 setRecurringExpenseArray(recurringExpenseList);
                 setRemovedRecurringExpenseInstances(removedRecurringExpenses);
 
-                await updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, removedRecurringExpenseInstances, setBudgetArray, setExpenseArray);
+                await updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, removedRecurringExpenseInstances, setExpenseArray);
             } catch (error) {
                 console.log(`Unsuccessful expense page data retrieval - error: ${error}`);
             }
@@ -98,7 +98,7 @@ export default function Expenses({ publicUserData, expenseArray, budgetArray, gr
     }, [expenseFormVisibility, expenseModalVisibility])
 
     useEffect(() => {
-        updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, removedRecurringExpenseInstances, setBudgetArray, setExpenseArray);
+        updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, removedRecurringExpenseInstances, setExpenseArray);
     }, [recurringExpenseArray]);
 
     return (

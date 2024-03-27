@@ -3,7 +3,7 @@ import {
     addColourSelectionFunctionality,
     BasicGroupData, BudgetFormVisibility,
     BudgetItemEntity,
-    getBudgetList, GroupItemEntity,
+    getBudgetList, getGroupList, GroupItemEntity,
     handleGroupUpdating
 } from "../../../../util.ts";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
@@ -58,7 +58,7 @@ export default function GroupUpdatingForm( { setBudgetArray, oldGroupBeingEdited
         hideForm();
 
         await handleGroupUpdating(oldGroupBeingEdited.oldGroupName, oldGroupBeingEdited.oldColour, formData, setGroupArray, groupArray)
-
+        setGroupArray(await getGroupList());
         setFormData({
             colour: oldGroupBeingEdited.oldColour,
             group: oldGroupBeingEdited.oldGroupName

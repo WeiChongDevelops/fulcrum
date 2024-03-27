@@ -7,7 +7,7 @@ import {
     getGroupList, getLineAngle, getTotalIncome,
     GroupItemEntity,
     handleGroupDeletion,
-    PreviousBudgetBeingEdited, PreviousGroupBeingEdited, PublicUserData, getCurrencySymbol,
+    PreviousBudgetBeingEdited, PreviousGroupBeingEdited, PublicUserData, getCurrencySymbol, getBudgetList,
 } from "../../../util.ts";
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
@@ -118,8 +118,11 @@ export default function Budget( { publicUserData, expenseArray, budgetArray, gro
             isConfirmGroupDestructionModalVisible: false
         }))
 
-        handleGroupDeletion(groupToDelete, setGroupArray, setBudgetArray, keepContainedBudgets)
-            .then(() => console.log("Deletion successful"))
+        handleGroupDeletion(groupToDelete, setGroupArray, keepContainedBudgets)
+            .then(async () => {
+                setBudgetArray(await getBudgetList());
+                console.log("Deletion successful")
+            })
             .catch((error) => console.log("Deletion unsuccessful", error));
     }
 
@@ -169,8 +172,8 @@ export default function Budget( { publicUserData, expenseArray, budgetArray, gro
                                           groupToDelete={groupToDelete}
                                           categoryToDelete={categoryToDelete}
                                           runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
-                                          modalFormVisibility={budgetModalVisibility}
-                                          setModalFormVisibility={setBudgetModalVisibility} currencySymbol={getCurrencySymbol(publicUserData.currency)}/>
+                                          budgetModalVisibility={budgetModalVisibility}
+                                          setBudgetModalVisibility={setBudgetModalVisibility} currencySymbol={getCurrencySymbol(publicUserData.currency)}/>
                 </div> : <p className={`error-message ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>{error}</p>}
                 </div> : <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled}/>}
         </div>

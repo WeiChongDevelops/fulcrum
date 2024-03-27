@@ -37,7 +37,7 @@ export default function MidCopy() {
                           iconPathFront={"/src/assets/homepage-assets/tile-icon-adapt-front.svg"}
                           iconPathBack={"/src/assets/homepage-assets/tile-icon-adapt-back.svg"}/>
                 <InfoTile initialDisplayText={"Master Your Finances"}
-                          hoverDisplayText={"Finally figure out where last week's paycheck disappeared off to (it was Uber Eats let's be honest)."}
+                          hoverDisplayText={"Finally figure out where last week's paycheck disappeared off to (it was Uber Eats - let's be honest)."}
                           backgroundColour={"#29297b"}
                           textColor={"white"}
                           iconPathFront={"/src/assets/homepage-assets/tile-icon-master-front.svg"}

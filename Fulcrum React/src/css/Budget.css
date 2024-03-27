@@ -75,7 +75,7 @@
 
 .create-budget-button {
     width: 17vw;
-    height: 19vw;
+    height: 20vw;
     min-width: 120px;
     min-height: 140px;
     max-width: 260px;
@@ -158,12 +158,15 @@
 /* GROUP COLOUR SELECTOR */
 
 #group-colour-selector {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    margin: 5px;
-    padding: 10px;
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+
+    display: grid;
+    grid-template-columns: repeat(8, minmax(70px, 1fr));
+    gap: 5px;
+    padding: 15px;
 }
 
 .group-colour-selectable-container {
@@ -171,22 +174,21 @@
     justify-content: center;
     cursor: pointer;
     margin: 10px;
-    flex: 0 0 10%;
-    width: 65px;
-    height: 65px;
+    width: 50px;
+    height: 50px;
 }
 
 .group-colour-triangle {
     transition: all 0.1s ease;
-    width: 52px;
-    height: 43px;
+    width: 80%;
+    height: 70%;
     clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
-    filter: blur(2px);
+    filter: blur(1px);
 }
 
 .selectedColour {
-    width: 68px;
-    height: 58px;
+    width: 95%;
+    height: 82%;
     transform: translate(0, -10%)
 }
 
@@ -213,7 +215,7 @@
 .contact-shadow {
     position: absolute;
     left: 50%;
-    top: 713%;
+    top: 736%;
     transform: translate(-50%, -50%);
     width: 20%;
     height: 18%;
@@ -224,7 +226,7 @@
 .bowl-shadow-right {
     position: absolute;
     left: 256%;
-    top: 713%;
+    top: 736%;
     transform: translate(-50%, -50%);
     background-color: black;
     border-radius: 50%;
@@ -234,7 +236,7 @@
 .bowl-shadow-left {
     position: absolute;
     right: 254.5%;
-    top: 713%;
+    top: 736%;
     transform: translate(50%, -50%);
     background-color: black;
     border-radius: 50%;
@@ -320,6 +322,12 @@
 
 /* MEDIA QUERIES */
 
+@media (max-width: 1650px) {
+    #group-colour-selector {
+        grid-template-columns: repeat(4, minmax(70px, 1fr));
+    }
+}
+
 @media (max-width: 1560px) {
     .category-icon-selectable + .group-colour-selectable-container {
         flex-basis: auto;
@@ -341,6 +349,9 @@
     }
     .group {
         width: 90vw;
+    }
+    #group-colour-selector {
+        grid-template-columns: repeat(2, minmax(70px, 1fr));
     }
 }
 

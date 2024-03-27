@@ -40,11 +40,11 @@ export function ExpenseMonthGroup( { monthExpenseGroupItem,
 
 
     function scrollLeft() {
-        setMonthPanelShowingIndex(curr => curr - 1);
+        setMonthPanelShowingIndex(prevIndex => prevIndex - 1);
     }
 
     function scrollRight() {
-        setMonthPanelShowingIndex(curr => curr + 1);
+        setMonthPanelShowingIndex(prevIndex => prevIndex + 1);
     }
 
     return (

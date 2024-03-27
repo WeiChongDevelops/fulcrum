@@ -20,7 +20,7 @@ export default function AccessibilityToggle({ publicUserData, setPublicUserData 
     async function handleAccessibilityToggle() {
         const newIsAccessibilityMode = !isAccessibilityMode;
         setIsAccessibilityMode(newIsAccessibilityMode);
-        setPublicUserData(curr => ({ ...curr, accessibilityEnabled: newIsAccessibilityMode }));
+        setPublicUserData(prevPublicUserData => ({ ...prevPublicUserData, accessibilityEnabled: newIsAccessibilityMode }));
 
         const updatedPublicUserData: PublicUserDataUpdate = {
             currency: publicUserData.currency,

@@ -66,7 +66,7 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
     }
 
     function handleFrequencyInputChange(e: any) {
-        setFormData(currentFormData => ({ ...currentFormData, frequency: e.value }));
+        setFormData(prevFormData => ({ ...prevFormData, frequency: e.value }));
     }
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -89,7 +89,7 @@ export default function RecurringExpenseUpdatingForm({ setRecurringExpenseFormVi
     }
 
     function onDateInputChange(newValue: Value) {
-        setFormData(curr => ({ ...curr, timestamp: newValue }));
+        setFormData(prevFormData => ({ ...prevFormData, timestamp: newValue }));
     }
 
     return (

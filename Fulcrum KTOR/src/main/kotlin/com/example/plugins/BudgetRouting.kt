@@ -125,8 +125,6 @@ fun Application.configureBudgetRouting() {
 
                 if (deletedBudget.body == null) {
                     call.respondError("Budget not deleted.")
-                } else if (deletedBudget.body.toString() == "[]") {
-                    call.respondAuthError("Deletion operation not authorised.")
                 } else {
                     call.respondSuccess("Budget successfully deleted.")
                 }

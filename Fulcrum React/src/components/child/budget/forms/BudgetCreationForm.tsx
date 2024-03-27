@@ -59,7 +59,7 @@ export default function BudgetCreationForm({ setBudgetArray, groupArray, groupNa
         const newBudgetItem: BudgetItemEntity = {
             category: formData.category,
             amount: formData.amount ? parseFloat(String(formData.amount)) : 0,
-            iconPath: formData.iconPath != "" ? formData.iconPath : "category-default-icon.svg",
+            iconPath: formData.iconPath === "" ? "category-default-icon.svg" : formData.iconPath,
             group: formData.group ? formData.group : "Miscellaneous",
             timestamp: new Date()
         }

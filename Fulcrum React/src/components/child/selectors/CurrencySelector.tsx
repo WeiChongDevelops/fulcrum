@@ -15,7 +15,7 @@ export default function CurrencySelector({ publicUserData, setPublicUserData }: 
     async function handleCurrencySelection(e: React.MouseEvent) {
         const target = e.target as HTMLDivElement;
         const newCurrencySetting = target.innerText.slice(1)
-        setPublicUserData(curr => ({...curr, currency: newCurrencySetting}))
+        setPublicUserData(prevPublicUserData => ({...prevPublicUserData, currency: newCurrencySetting}))
 
         const updatedPublicUserData: PublicUserDataUpdate = {
             currency: newCurrencySetting,

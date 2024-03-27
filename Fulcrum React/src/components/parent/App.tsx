@@ -6,7 +6,7 @@ import Budget from "../child/budget/Budget.tsx";
 import Fulcrum from "./Fulcrum.tsx";
 import Expenses from "../child/expenses/Expenses.tsx";
 import Tools from "../child/tools/tools-home/Tools.tsx";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {
     BudgetItemEntity, CategoryToIconGroupAndColourMap,
     ExpenseItemEntity,
@@ -74,6 +74,13 @@ export default function App() {
     useEffect(() => {
         publicUserData && sessionStorage.setItem("profileIcon", publicUserData.profileIconFileName)
     }, [publicUserData]);
+
+    useMemo(() => {
+        const updateCategoryDataMap = async () => {
+            setCategoryDataMap(await getGroupAndColourMap(budgetArray, groupArray));
+        }
+        updateCategoryDataMap();
+    }, [budgetArray, groupArray]);
 
     return (
         <Router>

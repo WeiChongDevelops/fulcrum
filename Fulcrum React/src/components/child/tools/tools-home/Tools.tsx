@@ -68,7 +68,7 @@ export default function Tools({ publicUserData, setPublicUserData, budgetArray, 
             {openToolsSection === "home" ? <div className="tools flex flex-col justify-center items-center bg-[#455259] p-10">
                 <div className="profile-icon-display mb-2" onClick={() => {
                     setIsChangeIconMessageVisible(false);
-                    setToolsFormVisibility(curr => ({...curr, isUpdateProfileIconFormVisible: true}))
+                    setToolsFormVisibility(prevVisibility => ({...prevVisibility, isUpdateProfileIconFormVisible: true}))
                 }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                     <img src={`/src/assets/profile-icons/${publicUserData.profileIconFileName.slice(0, -4)}-white.svg`} alt="Profile image"/>
                     {isChangeIconMessageVisible && <b className={"absolute z-4 mt-[90%]"} >Change Icon</b>}

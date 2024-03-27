@@ -50,7 +50,7 @@ export default function BudgetUpdatingForm({ setBudgetArray, groupArray, oldBudg
     }
 
     function handleGroupInputChange(e: any) {
-        setFormData(currentFormData => ({ ...currentFormData, group: e.value }));
+        setFormData(prevFormData => ({ ...prevFormData, group: e.value }));
     }
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
