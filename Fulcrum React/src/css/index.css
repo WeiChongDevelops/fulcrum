@@ -1,11 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: 'Quicksand', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Quicksand", Inter, system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -23,7 +24,8 @@
   -webkit-text-size-adjust: 100%;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   overflow-x: hidden;
@@ -35,7 +37,8 @@ h1 {
   line-height: 1.1;
 }
 
-body input , body textarea {
+body input,
+body textarea {
   background-color: white;
   padding: 0 5px;
   color: black;
