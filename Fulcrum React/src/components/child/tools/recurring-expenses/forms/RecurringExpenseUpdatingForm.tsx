@@ -1,13 +1,5 @@
 import FulcrumButton from "../../../other/FulcrumButton.tsx";
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import {
   BudgetItemEntity,
   getBudgetList,
@@ -31,12 +23,8 @@ import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../../selectors/CategorySelector.tsx";
 
 interface RecurringExpenseUpdatingFormProps {
-  setRecurringExpenseFormVisibility: Dispatch<
-    SetStateAction<RecurringExpenseFormVisibility>
-  >;
-  setRecurringExpenseArray: Dispatch<
-    SetStateAction<RecurringExpenseItemEntity[]>
-  >;
+  setRecurringExpenseFormVisibility: Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
+  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
   categoryOptions: SelectorOptionsFormattedData[];
   oldRecurringExpenseBeingEdited: PreviousRecurringExpenseBeingEdited;
@@ -96,10 +84,7 @@ export default function RecurringExpenseUpdatingForm({
 
     hideForm();
 
-    await handleRecurringExpenseUpdating(
-      oldRecurringExpenseBeingEdited.recurringExpenseId,
-      formData,
-    );
+    await handleRecurringExpenseUpdating(oldRecurringExpenseBeingEdited.recurringExpenseId, formData);
 
     setFormData({
       category: oldRecurringExpenseBeingEdited.oldCategory,
@@ -107,9 +92,7 @@ export default function RecurringExpenseUpdatingForm({
       timestamp: oldRecurringExpenseBeingEdited.oldTimestamp,
       frequency: oldRecurringExpenseBeingEdited.oldFrequency,
     });
-    getRecurringExpenseList().then((expenseList) =>
-      setRecurringExpenseArray(expenseList),
-    );
+    getRecurringExpenseList().then((expenseList) => setRecurringExpenseArray(expenseList));
 
     // To update budgetArray if new category is made:
     getBudgetList().then((budgetList) => setBudgetArray(budgetList));
@@ -131,10 +114,7 @@ export default function RecurringExpenseUpdatingForm({
       ></FulcrumButton>
 
       <p className="mb-6 mt-4 font-bold text-4xl">Updating Expense</p>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center mb-auto"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="category">Category</label>
         <CategorySelector
           categoryOptions={categoryOptions}
@@ -152,9 +132,7 @@ export default function RecurringExpenseUpdatingForm({
           id="frequency"
           name="frequency"
           defaultValue={{
-            label: capitaliseFirstLetter(
-              oldRecurringExpenseBeingEdited.oldFrequency,
-            ),
+            label: capitaliseFirstLetter(oldRecurringExpenseBeingEdited.oldFrequency),
             value: oldRecurringExpenseBeingEdited.oldFrequency as String,
             colour: "black",
           }}

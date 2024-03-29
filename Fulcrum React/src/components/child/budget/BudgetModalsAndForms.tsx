@@ -76,10 +76,7 @@ export default function BudgetModalsAndForms({
         />
       )}
       {budgetFormVisibility.isCreateGroupVisible && (
-        <GroupCreationForm
-          setGroupArray={setGroupArray}
-          setBudgetFormVisibility={setBudgetFormVisibility}
-        />
+        <GroupCreationForm setGroupArray={setGroupArray} setBudgetFormVisibility={setBudgetFormVisibility} />
       )}
       {budgetFormVisibility.isUpdateGroupVisible && (
         <GroupUpdatingForm

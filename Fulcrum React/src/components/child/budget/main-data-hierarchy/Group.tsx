@@ -67,12 +67,8 @@ export default function Group({
   perCategoryTotalExpenseArray,
   publicUserData,
 }: GroupProps) {
-  const [groupBudgetTotal, setGroupBudgetTotal] = useState(
-    getGroupBudgetTotal(filteredBudgetArray),
-  );
-  const [groupExpenditureTotal, setGroupExpenditureTotal] = useState(
-    getGroupBudgetTotal(filteredBudgetArray),
-  );
+  const [groupBudgetTotal, setGroupBudgetTotal] = useState(getGroupBudgetTotal(filteredBudgetArray));
+  const [groupExpenditureTotal, setGroupExpenditureTotal] = useState(getGroupBudgetTotal(filteredBudgetArray));
 
   function handleEditClick() {
     setOldGroupBeingEdited({ oldGroupName: groupName, oldColour: groupColour });
@@ -105,9 +101,7 @@ export default function Group({
     dynamicallySizeBudgetNameDisplays();
 
     setGroupBudgetTotal(getGroupBudgetTotal(filteredBudgetArray));
-    setGroupExpenditureTotal(
-      getGroupExpenditureTotal(expenseArray, filteredBudgetArray),
-    );
+    setGroupExpenditureTotal(getGroupExpenditureTotal(expenseArray, filteredBudgetArray));
   }, [filteredBudgetArray, expenseArray]);
 
   const currency = publicUserData.currency;
@@ -117,9 +111,7 @@ export default function Group({
       className="group flex flex-col w-[96vw] rounded-xl p-2 mb-5"
       style={{
         backgroundColor: groupColour,
-        filter: publicUserData.darkModeEnabled
-          ? "brightness(83%) contrast(113%)"
-          : "brightness(100%)",
+        filter: publicUserData.darkModeEnabled ? "brightness(83%) contrast(113%)" : "brightness(100%)",
       }}
     >
       <div className="flex flex-row justify-between items-center mb-4">
@@ -132,11 +124,7 @@ export default function Group({
           {groupName !== "Miscellaneous" && (
             <div className="flex flex-row justify-center items-center ml-2 relative top-0.5">
               <div className="circle-button" onClick={handleEditClick}>
-                <img
-                  src="/src/assets/UI-icons/edit-pencil-black-icon.svg"
-                  alt="Edit icon"
-                  className="w-5 h-5"
-                />
+                <img src="/src/assets/UI-icons/edit-pencil-black-icon.svg" alt="Edit icon" className="w-5 h-5" />
               </div>
               <div className="circle-button" onClick={handleDeleteClick}>
                 <img
@@ -148,9 +136,7 @@ export default function Group({
             </div>
           )}
         </div>
-        <p
-          className={`${groupName !== "Miscellaneous" ? "text-black" : "text-white"} font-bold mr-4 text-3xl`}
-        >
+        <p className={`${groupName !== "Miscellaneous" ? "text-black" : "text-white"} font-bold mr-4 text-3xl`}>
           Spent: {formatDollarAmountStatic(groupExpenditureTotal, currency)} of{" "}
           {formatDollarAmountStatic(groupBudgetTotal, currency)}
         </p>

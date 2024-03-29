@@ -14,7 +14,7 @@ import {
   PreviousExpenseBeingEdited,
   PublicUserData,
   RecurringExpenseItemEntity,
-  RemovedRecurringExpenseItem,
+  RemovedRecurringExpenseItemEntity,
   updateRecurringExpenseInstances,
 } from "../../../util.ts";
 import "../../../css/Expense.css";
@@ -53,39 +53,31 @@ export default function Expenses({
   error,
   setError,
 }: ExpensesProps) {
-  const [recurringExpenseArray, setRecurringExpenseArray] = useState<
-    RecurringExpenseItemEntity[]
-  >([]);
+  const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
   const [expenseFormVisibility, setExpenseFormVisibility] = useState({
     isCreateExpenseVisible: false,
     isUpdateExpenseVisible: false,
     isUpdateRecurringExpenseInstanceVisible: false,
   });
-  const [expenseModalVisibility, setExpenseModalVisibility] =
-    useState<ExpenseModalVisibility>({
-      isConfirmExpenseDestructionModalVisible: false,
-    });
-  const [isExpenseFormOrModalOpen, setIsExpenseFormOrModalOpen] =
-    useState(false);
-  const [oldExpenseBeingEdited, setOldExpenseBeingEdited] =
-    useState<PreviousExpenseBeingEdited>({
-      expenseId: "",
-      recurringExpenseId: "",
-      oldCategory: "",
-      oldTimestamp: new Date(),
-      oldAmount: 0,
-    });
+  const [expenseModalVisibility, setExpenseModalVisibility] = useState<ExpenseModalVisibility>({
+    isConfirmExpenseDestructionModalVisible: false,
+  });
+  const [isExpenseFormOrModalOpen, setIsExpenseFormOrModalOpen] = useState(false);
+  const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({
+    expenseId: "",
+    recurringExpenseId: "",
+    oldCategory: "",
+    oldTimestamp: new Date(),
+    oldAmount: 0,
+  });
   const [expenseIdToDelete, setExpenseIdToDelete] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [
-    removedRecurringExpenseInstances,
-    setRemovedRecurringExpenseInstances,
-  ] = useState<RemovedRecurringExpenseItem[]>([]);
+  const [removedRecurringExpenseInstances, setRemovedRecurringExpenseInstances] = useState<
+    RemovedRecurringExpenseItemEntity[]
+  >([]);
   const [defaultCalendarDate, setDefaultCalendarDate] = useState(new Date());
 
-  const [structuredExpenseData, setStructuredExpenseData] = useState<
-    MonthExpenseGroupEntity[]
-  >([]);
+  const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>([]);
 
   useEffect(() => {
     async function retrieveInitialData() {
@@ -98,11 +90,10 @@ export default function Expenses({
           window.location.href = "/login";
         }
 
-        const [recurringExpenseList, removedRecurringExpenses] =
-          await Promise.all([
-            getRecurringExpenseList(),
-            getRemovedRecurringExpenses(),
-          ]);
+        const [recurringExpenseList, removedRecurringExpenses] = await Promise.all([
+          getRecurringExpenseList(),
+          getRemovedRecurringExpenses(),
+        ]);
         setRecurringExpenseArray(recurringExpenseList);
         setRemovedRecurringExpenseInstances(removedRecurringExpenses);
 
@@ -113,18 +104,12 @@ export default function Expenses({
           setExpenseArray,
         );
       } catch (error) {
-        console.log(
-          `Unsuccessful expense page data retrieval - error: ${error}`,
-        );
+        console.log(`Unsuccessful expense page data retrieval - error: ${error}`);
       }
     }
     retrieveInitialData()
       .then(() => setIsLoading(false))
-      .catch(() =>
-        setError(
-          "We’re unable to load your data right now. Please try again later.",
-        ),
-      );
+      .catch(() => setError("We’re unable to load your data right now. Please try again later."));
   }, []);
 
   useMemo(() => {
@@ -132,9 +117,7 @@ export default function Expenses({
   }, [expenseArray]);
 
   useEffect(() => {
-    setIsExpenseFormOrModalOpen(
-      checkForOpenModalOrForm(expenseFormVisibility, expenseModalVisibility),
-    );
+    setIsExpenseFormOrModalOpen(checkForOpenModalOrForm(expenseFormVisibility, expenseModalVisibility));
   }, [expenseFormVisibility, expenseModalVisibility]);
 
   useMemo(() => {
@@ -144,15 +127,10 @@ export default function Expenses({
       removedRecurringExpenseInstances,
       setExpenseArray,
     );
-  }, [
-    recurringExpenseArray,
-    expenseArray,
-    removedRecurringExpenseInstances,
-    setExpenseArray,
-  ]);
+  }, [recurringExpenseArray, expenseArray, removedRecurringExpenseInstances, setExpenseArray]);
 
   return (
-    <div>
+    <>
       {!isLoading ? (
         <div className="flex flex-col justify-center items-center">
           {error === "" ? (
@@ -186,9 +164,7 @@ export default function Expenses({
                 setExpenseArray={setExpenseArray}
                 setBudgetArray={setBudgetArray}
                 setRecurringExpenseArray={setRecurringExpenseArray}
-                setRemovedRecurringExpenseInstances={
-                  setRemovedRecurringExpenseInstances
-                }
+                setRemovedRecurringExpenseInstances={setRemovedRecurringExpenseInstances}
                 publicUserData={publicUserData}
                 defaultCalendarDate={defaultCalendarDate}
                 oldExpenseBeingEdited={oldExpenseBeingEdited}
@@ -196,19 +172,14 @@ export default function Expenses({
               />
             </div>
           ) : (
-            <p
-              className={`error-message ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}
-            >
+            <p className={`error-message ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
               {error}
             </p>
           )}
         </div>
       ) : (
-        <Loader
-          isLoading={isLoading}
-          isDarkMode={publicUserData.darkModeEnabled}
-        />
+        <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled} />
       )}
-    </div>
+    </>
   );
 }

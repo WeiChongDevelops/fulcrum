@@ -1,13 +1,5 @@
 import FulcrumButton from "../../../other/FulcrumButton.tsx";
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import {
   ExpenseItemEntity,
   getExpenseList,
@@ -18,7 +10,7 @@ import {
   ExpenseFormVisibility,
   SelectorOptionsFormattedData,
   handleRemovedRecurringExpenseCreation,
-  RemovedRecurringExpenseItem,
+  RemovedRecurringExpenseItemEntity,
 } from "../../../../../util.ts";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
@@ -30,9 +22,7 @@ interface RecurringExpenseInstanceUpdatingFormProps {
   categoryOptions: SelectorOptionsFormattedData[];
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   currencySymbol: string;
-  setRemovedRecurringExpenseInstances: Dispatch<
-    SetStateAction<RemovedRecurringExpenseItem[]>
-  >;
+  setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItemEntity[]>>;
 }
 
 /**
@@ -46,11 +36,10 @@ export default function RecurringExpenseInstanceUpdatingForm({
   currencySymbol,
   setRemovedRecurringExpenseInstances,
 }: RecurringExpenseInstanceUpdatingFormProps) {
-  const [formData, setFormData] =
-    useState<RecurringExpenseInstanceUpdatingFormData>({
-      category: oldExpenseBeingEdited.oldCategory,
-      amount: oldExpenseBeingEdited.oldAmount,
-    });
+  const [formData, setFormData] = useState<RecurringExpenseInstanceUpdatingFormData>({
+    category: oldExpenseBeingEdited.oldCategory,
+    amount: oldExpenseBeingEdited.oldAmount,
+  });
   const formRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -82,10 +71,7 @@ export default function RecurringExpenseInstanceUpdatingForm({
 
     hideForm();
 
-    await handleRecurringExpenseInstanceUpdating(
-      oldExpenseBeingEdited.expenseId,
-      formData,
-    );
+    await handleRecurringExpenseInstanceUpdating(oldExpenseBeingEdited.expenseId, formData);
     await handleRemovedRecurringExpenseCreation(
       oldExpenseBeingEdited.recurringExpenseId,
       oldExpenseBeingEdited.oldTimestamp,
@@ -112,10 +98,7 @@ export default function RecurringExpenseInstanceUpdatingForm({
 
       <p className="mb-6 mt-4 font-bold text-4xl">Updating Expense</p>
 
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center mb-auto"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="category">Category</label>
         <CategorySelector
           categoryOptions={categoryOptions}
@@ -139,9 +122,7 @@ export default function RecurringExpenseInstanceUpdatingForm({
 
         <div className={"mt-2 text-sm"}>
           <p>You are editing only this instance of your recurring expense.</p>
-          <p>
-            To manage your recurring expenses, please see the Tools section.
-          </p>
+          <p>To manage your recurring expenses, please see the Tools section.</p>
         </div>
 
         <FulcrumButton displayText="Update Expense" optionalTailwind={"mt-8"} />

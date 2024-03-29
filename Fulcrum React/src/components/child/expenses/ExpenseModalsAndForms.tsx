@@ -12,7 +12,7 @@ import {
   PreviousExpenseBeingEdited,
   PublicUserData,
   RecurringExpenseItemEntity,
-  RemovedRecurringExpenseItem,
+  RemovedRecurringExpenseItemEntity,
 } from "../../../util.ts";
 import ExpenseUpdatingForm from "./forms/ExpenseUpdatingForm.tsx";
 import RecurringExpenseInstanceUpdatingForm from "../tools/recurring-expenses/forms/RecurringExpenseInstanceUpdatingForm.tsx";
@@ -31,12 +31,8 @@ interface ExpenseModalsAndFormsProps {
 
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-  setRecurringExpenseArray: Dispatch<
-    SetStateAction<RecurringExpenseItemEntity[]>
-  >;
-  setRemovedRecurringExpenseInstances: Dispatch<
-    SetStateAction<RemovedRecurringExpenseItem[]>
-  >;
+  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
+  setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItemEntity[]>>;
 
   publicUserData: PublicUserData;
   defaultCalendarDate: Date;
@@ -66,9 +62,7 @@ export default function ExpenseModalsAndForms({
   expenseIdToDelete,
 }: ExpenseModalsAndFormsProps) {
   async function runExpenseDeletion() {
-    const expenseItemToDelete = expenseArray.find(
-      (expenseItem) => expenseItem.expenseId === expenseIdToDelete,
-    );
+    const expenseItemToDelete = expenseArray.find((expenseItem) => expenseItem.expenseId === expenseIdToDelete);
     if (expenseItemToDelete) {
       if (expenseItemToDelete.recurringExpenseId !== null) {
         handleRemovedRecurringExpenseCreation(
@@ -124,9 +118,7 @@ export default function ExpenseModalsAndForms({
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           oldExpenseBeingEdited={oldExpenseBeingEdited}
           currencySymbol={getCurrencySymbol(publicUserData.currency)}
-          setRemovedRecurringExpenseInstances={
-            setRemovedRecurringExpenseInstances
-          }
+          setRemovedRecurringExpenseInstances={setRemovedRecurringExpenseInstances}
         />
       )}
 

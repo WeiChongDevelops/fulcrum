@@ -1,13 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import {
   BudgetItemEntity,
   getBudgetList,
@@ -112,10 +104,7 @@ export default function ExpenseUpdatingForm({
 
       <p className="mb-6 mt-4 font-bold text-4xl">Updating Expense</p>
 
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center mb-auto"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="category">Category</label>
         <CategorySelector
           categoryOptions={categoryOptions}
@@ -140,10 +129,7 @@ export default function ExpenseUpdatingForm({
         <div>
           <label htmlFor="timestamp">Date</label>
           <div className={"text-black"}>
-            <DatePicker
-              onChange={onDateInputChange}
-              value={formData.timestamp}
-            />
+            <DatePicker onChange={onDateInputChange} value={formData.timestamp} />
           </div>
         </div>
 

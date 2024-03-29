@@ -18,21 +18,15 @@ import { Dispatch, SetStateAction } from "react";
 
 interface RecurringExpenseModalsAndFormsProps {
   recurringExpenseFormVisibility: RecurringExpenseFormVisibility;
-  setRecurringExpenseFormVisibility: Dispatch<
-    SetStateAction<RecurringExpenseFormVisibility>
-  >;
+  setRecurringExpenseFormVisibility: Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
   recurringExpenseModalVisibility: RecurringExpenseModalVisibility;
-  setRecurringExpenseModalVisibility: Dispatch<
-    SetStateAction<RecurringExpenseModalVisibility>
-  >;
+  setRecurringExpenseModalVisibility: Dispatch<SetStateAction<RecurringExpenseModalVisibility>>;
 
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
 
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-  setRecurringExpenseArray: Dispatch<
-    SetStateAction<RecurringExpenseItemEntity[]>
-  >;
+  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
   publicUserData: PublicUserData;
@@ -59,10 +53,7 @@ export default function RecurringExpenseModalsAndForms({
   oldRecurringExpenseBeingEdited,
 }: RecurringExpenseModalsAndFormsProps) {
   function runRecurringExpenseDeletion() {
-    handleRecurringExpenseDeletion(
-      recurringExpenseIdToDelete,
-      setRecurringExpenseArray,
-    )
+    handleRecurringExpenseDeletion(recurringExpenseIdToDelete, setRecurringExpenseArray)
       .then(() => console.log("Deletion successful"))
       .catch(() => console.log("Deletion unsuccessful"));
   }

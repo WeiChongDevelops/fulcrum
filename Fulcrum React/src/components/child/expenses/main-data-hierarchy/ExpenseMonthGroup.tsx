@@ -15,9 +15,7 @@ interface ExpenseMonthGroupProps {
   monthExpenseGroupItem: MonthExpenseGroupEntity;
   setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
   setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
-  setOldExpenseBeingEdited: Dispatch<
-    SetStateAction<PreviousExpenseBeingEdited>
-  >;
+  setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
   categoryDataMap: CategoryToIconGroupAndColourMap;
   publicUserData: PublicUserData;
@@ -62,24 +60,16 @@ export function ExpenseMonthGroup({
           onClick={scrollLeft}
           className={`month-navigation-option navigate-left ${monthPanelShowingIndex === -monthsFromY2KToNow && "opacity-0 pointer-events-none"}`}
         >
-          <img
-            src="/src/assets/UI-icons/left-navigation-arrow.svg"
-            alt="Left navigation arrow"
-          />
+          <img src="/src/assets/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
         </button>
         <p className={"text-4xl"}>
-          {monthStringArray[monthExpenseGroupItem.monthIndex] +
-            " " +
-            monthExpenseGroupItem.year.toString()}
+          {monthStringArray[monthExpenseGroupItem.monthIndex] + " " + monthExpenseGroupItem.year.toString()}
         </p>
         <button
           onClick={scrollRight}
           className={`month-navigation-option navigate-right ${monthPanelShowingIndex === 12 && "opacity-0 pointer-events-none"}`}
         >
-          <img
-            src="/src/assets/UI-icons/right-navigation-arrow.svg"
-            alt="Right navigation arrow"
-          />
+          <img src="/src/assets/UI-icons/right-navigation-arrow.svg" alt="Right navigation arrow" />
         </button>
       </div>
 

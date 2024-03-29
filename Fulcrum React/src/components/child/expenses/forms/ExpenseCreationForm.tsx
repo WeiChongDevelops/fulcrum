@@ -1,13 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import {
   BudgetItemEntity,
   ExpenseCreationFormData,
@@ -41,9 +33,7 @@ interface ExpenseCreationFormProps {
     | Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-  setRecurringExpenseArray: Dispatch<
-    SetStateAction<RecurringExpenseItemEntity[]>
-  >;
+  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
 
   budgetArray: BudgetItemEntity[];
 
@@ -111,11 +101,7 @@ export default function ExpenseCreationForm({
     };
 
     if (formData.frequency === "never") {
-      if (
-        !budgetArray
-          .map((budgetItem) => budgetItem.category)
-          .includes(newExpenseItem.category)
-      ) {
+      if (!budgetArray.map((budgetItem) => budgetItem.category).includes(newExpenseItem.category)) {
         const newDefaultBudgetItem: BudgetItemEntity = {
           category: formData.category,
           amount: 0,
@@ -172,18 +158,10 @@ export default function ExpenseCreationForm({
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="mb-6 mt-4 font-bold text-4xl">
-        New {mustBeRecurring && "Recurring "}Expense
-      </p>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center mb-auto"
-      >
+      <p className="mb-6 mt-4 font-bold text-4xl">New {mustBeRecurring && "Recurring "}Expense</p>
+      <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="category">Category</label>
-        <CategorySelector
-          categoryOptions={categoryOptions}
-          setFormData={setFormData}
-        />
+        <CategorySelector categoryOptions={categoryOptions} setFormData={setFormData} />
 
         <label htmlFor="amount">Amount</label>
         <div>
@@ -213,11 +191,7 @@ export default function ExpenseCreationForm({
             value: mustBeRecurring ? "monthly" : "never",
             colour: "black",
           }}
-          options={
-            mustBeRecurring
-              ? recurringFrequencyOptions.slice(1)
-              : recurringFrequencyOptions
-          }
+          options={mustBeRecurring ? recurringFrequencyOptions.slice(1) : recurringFrequencyOptions}
           onChange={handleFrequencyInputChange}
           styles={colourStyles}
           className="mb-3"

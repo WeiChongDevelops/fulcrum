@@ -47,17 +47,12 @@ export default function Tools({
   setError,
 }: ToolsProps) {
   const sessionStoredEmail = sessionStorage.getItem("email");
-  const [openToolsSection, setOpenToolsSection] =
-    useState<OpenToolsSection>("home");
-  const [email, setEmail] = useState(
-    sessionStoredEmail ? sessionStoredEmail : "",
-  );
-  const [isChangeIconMessageVisible, setIsChangeIconMessageVisible] =
-    useState(false);
-  const [toolsFormVisibility, setToolsFormVisibility] =
-    useState<ToolsFormVisibility>({
-      isUpdateProfileIconFormVisible: false,
-    });
+  const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
+  const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
+  const [isChangeIconMessageVisible, setIsChangeIconMessageVisible] = useState(false);
+  const [toolsFormVisibility, setToolsFormVisibility] = useState<ToolsFormVisibility>({
+    isUpdateProfileIconFormVisible: false,
+  });
 
   function openSettings() {
     setOpenToolsSection("settings");
@@ -76,9 +71,7 @@ export default function Tools({
   }
 
   useEffect(() => {
-    getSessionEmail().then((response) =>
-      response.email ? setEmail(response.email) : "",
-    );
+    getSessionEmail().then((response) => (response.email ? setEmail(response.email) : ""));
   }, []);
 
   return (
@@ -101,17 +94,11 @@ export default function Tools({
               src={`/src/assets/profile-icons/${publicUserData.profileIconFileName.slice(0, -4)}-white.svg`}
               alt="Profile image"
             />
-            {isChangeIconMessageVisible && (
-              <b className={"absolute z-4 mt-[90%]"}>Change Icon</b>
-            )}
+            {isChangeIconMessageVisible && <b className={"absolute z-4 mt-[90%]"}>Change Icon</b>}
           </div>
           <p className={"font-bold text-2xl text-white mb-5"}>{email}</p>
           <div>
-            <FulcrumButton
-              displayText={"Sign Out"}
-              backgroundColour={"white"}
-              onClick={logoutOnClick}
-            />
+            <FulcrumButton displayText={"Sign Out"} backgroundColour={"white"} onClick={logoutOnClick} />
           </div>
 
           {toolsFormVisibility.isUpdateProfileIconFormVisible && (
@@ -127,10 +114,7 @@ export default function Tools({
                 <p>Settings</p>
               </div>
 
-              <img
-                src="/src/assets/UI-icons/tools-settings-icon-black.svg"
-                alt="Settings icon"
-              />
+              <img src="/src/assets/UI-icons/tools-settings-icon-black.svg" alt="Settings icon" />
             </div>
             <div
               className="tools-tile tools-tile-interactive bg-[#B1D1CF] text-black text-lg leading-[1] hover:cursor-pointer"
@@ -139,19 +123,13 @@ export default function Tools({
               <div className="tools-text-container">
                 <p>Recurring Expenses</p>
               </div>
-              <img
-                src="/src/assets/UI-icons/tools-recurring-icon-black.svg"
-                alt="Recurrence icon"
-              />
+              <img src="/src/assets/UI-icons/tools-recurring-icon-black.svg" alt="Recurrence icon" />
             </div>
             <div className="tools-tile bg-[#B1C5D1] text-black text-xl leading-7 hover:cursor-not-allowed">
               <div className="tools-text-container">
                 <p>Coming Soon</p>
               </div>
-              <img
-                src="/src/assets/UI-icons/tools-hardhat-icon.svg"
-                alt="Tools icon"
-              />
+              <img src="/src/assets/UI-icons/tools-hardhat-icon.svg" alt="Tools icon" />
             </div>
           </div>
         </div>

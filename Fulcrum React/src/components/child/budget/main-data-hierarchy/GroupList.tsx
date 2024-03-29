@@ -56,11 +56,9 @@ export default function GroupList({
   return (
     <div className="flex flex-col items-center">
       {groupArray.map((groupDataItem: GroupItemEntity, key) => {
-        const filteredBudgetArray = budgetArray.filter(
-          (budgetItem: BudgetItemEntity) => {
-            return budgetItem.group === groupDataItem.group;
-          },
-        );
+        const filteredBudgetArray = budgetArray.filter((budgetItem: BudgetItemEntity) => {
+          return budgetItem.group === groupDataItem.group;
+        });
         return (
           <Group
             groupName={groupDataItem.group}

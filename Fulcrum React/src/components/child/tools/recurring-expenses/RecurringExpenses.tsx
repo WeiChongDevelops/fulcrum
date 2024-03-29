@@ -13,12 +13,12 @@ import {
   RecurringExpenseModalVisibility,
 } from "../../../../util.ts";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import RecurringExpenseItem from "./RecurringExpenseItem.tsx";
 import Loader from "../../other/Loader.tsx";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import AddNewRecurringExpenseButton from "./buttons/AddNewRecurringExpenseButton.tsx";
 import RecurringExpenseModalsAndForms from "./RecurringExpenseModalsAndForms.tsx";
 import ActiveFormClickShield from "../../other/ActiveFormClickShield.tsx";
+import RecurringExpenseItem from "./RecurringExpenseItem.tsx";
 
 interface RecurringExpensesProps {
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
@@ -52,9 +52,7 @@ export default function RecurringExpenses({
   error,
   setError,
 }: RecurringExpensesProps) {
-  const [recurringExpenseArray, setRecurringExpenseArray] = useState<
-    RecurringExpenseItemEntity[]
-  >([]);
+  const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
   const [recurringExpenseModalVisibility, setRecurringExpenseModalVisibility] =
     useState<RecurringExpenseModalVisibility>({
       isConfirmRecurringExpenseDestructionModalVisible: false,
@@ -65,10 +63,7 @@ export default function RecurringExpenses({
       isUpdateRecurringExpenseVisible: false,
     });
 
-  const [
-    isRecurringExpenseFormOrModalOpen,
-    setIsRecurringExpenseFormOrModalOpen,
-  ] = useState(false);
+  const [isRecurringExpenseFormOrModalOpen, setIsRecurringExpenseFormOrModalOpen] = useState(false);
 
   const [oldRecurringExpenseBeingEdited, setOldRecurringExpenseBeingEdited] =
     useState<PreviousRecurringExpenseBeingEdited>({
@@ -78,40 +73,30 @@ export default function RecurringExpenses({
       oldTimestamp: new Date(),
       oldFrequency: "monthly",
     });
-  const [recurringExpenseIdToDelete, setRecurringExpenseIdToDelete] =
-    useState("");
+  const [recurringExpenseIdToDelete, setRecurringExpenseIdToDelete] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function retrieveData() {
-      const [recurringExpenseArray] = await Promise.all([
-        getRecurringExpenseList(),
-      ]);
+      const [recurringExpenseArray] = await Promise.all([getRecurringExpenseList()]);
       setRecurringExpenseArray(recurringExpenseArray);
 
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
     retrieveData()
       .then(() => setIsLoading(false))
-      .catch(() =>
-        setError(
-          "We’re unable to load your data right now. Please try again later.",
-        ),
-      );
+      .catch(() => setError("We’re unable to load your data right now. Please try again later."));
   }, []);
 
   useEffect(() => {
     setIsRecurringExpenseFormOrModalOpen(
-      checkForOpenModalOrForm(
-        recurringExpenseFormVisibility,
-        recurringExpenseModalVisibility,
-      ),
+      checkForOpenModalOrForm(recurringExpenseFormVisibility, recurringExpenseModalVisibility),
     );
   }, [recurringExpenseFormVisibility, recurringExpenseModalVisibility]);
 
   return (
-    <div>
+    <>
       {!isLoading ? (
         <div className="justify-start items-center bg-[#455259] min-h-screen">
           {error === "" ? (
@@ -135,9 +120,7 @@ export default function RecurringExpenses({
                     src="/src/assets/UI-icons/tools-recurring-icon-white.svg"
                     alt="Cycle icon"
                   />
-                  <h1 className="recurring-expenses-title text-white font-bold mx-8">
-                    Recurring Expenses
-                  </h1>
+                  <h1 className="recurring-expenses-title text-white font-bold mx-8">Recurring Expenses</h1>
                   <img
                     className={"w-12 h-auto"}
                     src="/src/assets/UI-icons/tools-recurring-icon-white.svg"
@@ -153,15 +136,10 @@ export default function RecurringExpenses({
                   </div>
                 </div>
 
-                <p className={"my-4"}>
-                  Add recurring expenses for transactions you expect to arise
-                  regularly.
-                </p>
+                <p className={"my-4"}>Add recurring expenses for transactions you expect to arise regularly.</p>
 
                 <AddNewRecurringExpenseButton
-                  setRecurringExpenseFormVisibility={
-                    setRecurringExpenseFormVisibility
-                  }
+                  setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
                   isDarkMode={true}
                 />
 
@@ -170,46 +148,25 @@ export default function RecurringExpenses({
                     recurringExpenseArray.map((recurringExpenseItem, key) => {
                       return (
                         <RecurringExpenseItem
-                          recurringExpenseId={
-                            recurringExpenseItem.recurringExpenseId
-                          }
+                          recurringExpenseId={recurringExpenseItem.recurringExpenseId}
                           category={recurringExpenseItem.category}
                           amount={recurringExpenseItem.amount}
-                          iconPath={
-                            categoryDataMap.get(recurringExpenseItem.category)!
-                              .iconPath
-                          }
+                          iconPath={categoryDataMap.get(recurringExpenseItem.category)!.iconPath}
                           timestamp={recurringExpenseItem.timestamp}
                           frequency={recurringExpenseItem.frequency}
-                          groupName={
-                            categoryDataMap.get(recurringExpenseItem.category)!
-                              .group
-                          }
-                          groupColour={
-                            categoryDataMap.get(recurringExpenseItem.category)!
-                              .colour
-                          }
-                          setRecurringExpenseFormVisibility={
-                            setRecurringExpenseFormVisibility
-                          }
-                          setRecurringExpenseModalVisibility={
-                            setRecurringExpenseModalVisibility
-                          }
-                          setOldRecurringExpenseBeingEdited={
-                            setOldRecurringExpenseBeingEdited
-                          }
-                          setRecurringExpenseIdToDelete={
-                            setRecurringExpenseIdToDelete
-                          }
+                          groupName={categoryDataMap.get(recurringExpenseItem.category)!.group}
+                          groupColour={categoryDataMap.get(recurringExpenseItem.category)!.colour}
+                          setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
+                          setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
+                          setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}
+                          setRecurringExpenseIdToDelete={setRecurringExpenseIdToDelete}
                           publicUserData={publicUserData}
                           key={key}
                         />
                       );
                     })
                   ) : (
-                    <p className={"text-2xl mt-48"}>
-                      Your recurring expenses will appear here.
-                    </p>
+                    <p className={"text-2xl mt-48"}>Your recurring expenses will appear here.</p>
                   )}
                 </div>
               </div>
@@ -217,19 +174,13 @@ export default function RecurringExpenses({
               {isRecurringExpenseFormOrModalOpen && <ActiveFormClickShield />}
 
               <RecurringExpenseModalsAndForms
-                recurringExpenseModalVisibility={
-                  recurringExpenseModalVisibility
-                }
+                recurringExpenseModalVisibility={recurringExpenseModalVisibility}
                 recurringExpenseFormVisibility={recurringExpenseFormVisibility}
                 setRecurringExpenseArray={setRecurringExpenseArray}
                 setBudgetArray={setBudgetArray}
                 groupArray={groupArray}
-                setRecurringExpenseFormVisibility={
-                  setRecurringExpenseFormVisibility
-                }
-                setRecurringExpenseModalVisibility={
-                  setRecurringExpenseModalVisibility
-                }
+                setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
+                setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
                 recurringExpenseIdToDelete={recurringExpenseIdToDelete}
                 publicUserData={publicUserData}
                 setExpenseArray={setExpenseArray}
@@ -242,11 +193,8 @@ export default function RecurringExpenses({
           )}
         </div>
       ) : (
-        <Loader
-          isLoading={isLoading}
-          isDarkMode={publicUserData.darkModeEnabled}
-        />
+        <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled} />
       )}
-    </div>
+    </>
   );
 }

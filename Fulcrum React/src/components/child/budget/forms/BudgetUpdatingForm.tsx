@@ -1,13 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
   BudgetFormVisibility,
@@ -113,13 +105,8 @@ export default function BudgetUpdatingForm({
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="mb-6 font-bold text-4xl">
-        Updating Budget for '{oldBudgetBeingEdited.oldCategory}'
-      </p>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center mb-auto"
-      >
+      <p className="mb-6 font-bold text-4xl">Updating Budget for '{oldBudgetBeingEdited.oldCategory}'</p>
+      <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="category">Category Name</label>
         <input
           type="text"

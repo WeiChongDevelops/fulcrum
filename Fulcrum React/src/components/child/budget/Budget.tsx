@@ -55,38 +55,35 @@ export default function Budget({
   error,
   setError,
 }: BudgetProps) {
-  const [budgetFormVisibility, setBudgetFormVisibility] =
-    useState<BudgetFormVisibility>({
-      isCreateBudgetVisible: false,
-      isUpdateBudgetVisible: false,
-      isCreateGroupVisible: false,
-      isUpdateGroupVisible: false,
-    });
-  const [budgetModalVisibility, setBudgetModalVisibility] =
-    useState<BudgetModalVisibility>({
-      isDeleteOptionsModalVisible: false,
-      isConfirmGroupDestructionModalVisible: false,
-      isConfirmCategoryDestructionModalVisible: false,
-    });
+  const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
+    isCreateBudgetVisible: false,
+    isUpdateBudgetVisible: false,
+    isCreateGroupVisible: false,
+    isUpdateGroupVisible: false,
+  });
+  const [budgetModalVisibility, setBudgetModalVisibility] = useState<BudgetModalVisibility>({
+    isDeleteOptionsModalVisible: false,
+    isConfirmGroupDestructionModalVisible: false,
+    isConfirmCategoryDestructionModalVisible: false,
+  });
   const [groupToDelete, setGroupToDelete] = useState<string>("");
   const [categoryToDelete, setCategoryToDelete] = useState<string>("");
-  const [oldBudgetBeingEdited, setOldBudgetBeingEdited] =
-    useState<PreviousBudgetBeingEdited>({
-      oldAmount: 0,
-      oldCategory: "",
-      oldGroup: "",
-    });
-  const [oldGroupBeingEdited, setOldGroupBeingEdited] =
-    useState<PreviousGroupBeingEdited>({ oldColour: "", oldGroupName: "" });
+  const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState<PreviousBudgetBeingEdited>({
+    oldAmount: 0,
+    oldCategory: "",
+    oldGroup: "",
+  });
+  const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState<PreviousGroupBeingEdited>({
+    oldColour: "",
+    oldGroupName: "",
+  });
   const [totalIncome, setTotalIncome] = useState<number>(1000);
   const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
   const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
   const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [lineAngle, setLineAngle] = useState(0);
-  const [perCategoryExpenditureMap, setPerCategoryExpenditureMap] = useState<
-    Map<string, number>
-  >(new Map());
+  const [perCategoryExpenditureMap, setPerCategoryExpenditureMap] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
     async function retrieveInitialData() {
@@ -100,11 +97,7 @@ export default function Budget({
       .then(() => {
         setIsLoading(false);
       })
-      .catch(() =>
-        setError(
-          "We’re unable to load your data right now. Please try again later.",
-        ),
-      );
+      .catch(() => setError("We’re unable to load your data right now. Please try again later."));
   }, []);
 
   useEffect(() => {
@@ -115,13 +108,8 @@ export default function Budget({
     // Map construction for each category's total expenditure
     const categoryArray = budgetArray.map((budgetItem) => budgetItem.category);
     categoryArray.forEach((category) => {
-      const thisCategoryExpenseArray = expenseArray.filter(
-        (expenseItem) => expenseItem.category === category,
-      );
-      const totalExpenses = thisCategoryExpenseArray.reduce(
-        (acc, expenseItem) => acc + expenseItem.amount,
-        0,
-      );
+      const thisCategoryExpenseArray = expenseArray.filter((expenseItem) => expenseItem.category === category);
+      const totalExpenses = thisCategoryExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
 
       setPerCategoryExpenditureMap((currentMap) => {
         const updatedMap = new Map(currentMap);
@@ -141,9 +129,7 @@ export default function Budget({
   }, [amountLeftToBudget, totalIncome]);
 
   useEffect(() => {
-    setIsBudgetFormOrModalOpen(
-      checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility),
-    );
+    setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility));
   }, [budgetFormVisibility, budgetModalVisibility]);
 
   function runGroupDeletionWithUserPreference(keepContainedBudgets: boolean) {
@@ -162,7 +148,7 @@ export default function Budget({
   }
 
   return (
-    <div>
+    <>
       {!isLoading ? (
         <div className="flex flex-row justify-center items-center">
           {error === "" ? (
@@ -178,10 +164,7 @@ export default function Budget({
                   publicUserData={publicUserData}
                 />
 
-                <FulcrumAnimation
-                  lineAngle={lineAngle}
-                  isDarkMode={publicUserData.darkModeEnabled}
-                />
+                <FulcrumAnimation lineAngle={lineAngle} isDarkMode={publicUserData.darkModeEnabled} />
 
                 {groupArray?.length > 0 && (
                   <GroupList
@@ -221,28 +204,21 @@ export default function Budget({
                 oldGroupBeingEdited={oldGroupBeingEdited}
                 groupToDelete={groupToDelete}
                 categoryToDelete={categoryToDelete}
-                runGroupDeletionWithUserPreference={
-                  runGroupDeletionWithUserPreference
-                }
+                runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
                 budgetModalVisibility={budgetModalVisibility}
                 setBudgetModalVisibility={setBudgetModalVisibility}
                 currencySymbol={getCurrencySymbol(publicUserData.currency)}
               />
             </div>
           ) : (
-            <p
-              className={`error-message ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}
-            >
+            <p className={`error-message ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
               {error}
             </p>
           )}
         </div>
       ) : (
-        <Loader
-          isLoading={isLoading}
-          isDarkMode={publicUserData.darkModeEnabled}
-        />
+        <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled} />
       )}
-    </div>
+    </>
   );
 }

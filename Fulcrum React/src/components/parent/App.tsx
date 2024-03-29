@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Navigate,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import Register from "../child/auth/Register.tsx";
 import Login from "../child/auth/Login.tsx";
 import Budget from "../child/budget/Budget.tsx";
@@ -35,72 +30,46 @@ import Home from "../child/home/Home.tsx";
 export default function App() {
   const sessionStoredProfileIcon = sessionStorage.getItem("profileIcon");
   const sessionStoredDarkMode = sessionStorage.getItem("darkMode");
-  const sessionStoredAccessibilityMode =
-    sessionStorage.getItem("accessibilityMode");
+  const sessionStoredAccessibilityMode = sessionStorage.getItem("accessibilityMode");
   const sessionStoredEmail = sessionStorage.getItem("email");
 
-  const [email, setEmail] = useState(
-    sessionStoredEmail ? sessionStoredEmail : "",
-  );
+  const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
 
   const [publicUserData, setPublicUserData] = useState<PublicUserData>({
     createdAt: new Date(),
     currency: "AUD",
-    darkModeEnabled: sessionStoredDarkMode
-      ? sessionStoredDarkMode === "true"
-      : false,
-    accessibilityEnabled: sessionStoredAccessibilityMode
-      ? sessionStoredAccessibilityMode === "true"
-      : false,
-    profileIconFileName: sessionStoredProfileIcon
-      ? sessionStoredProfileIcon
-      : "profile-icon-default.svg",
+    darkModeEnabled: sessionStoredDarkMode ? sessionStoredDarkMode === "true" : false,
+    accessibilityEnabled: sessionStoredAccessibilityMode ? sessionStoredAccessibilityMode === "true" : false,
+    profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "profile-icon-default.svg",
   });
   const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
   const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
   const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
-  const [categoryDataMap, setCategoryDataMap] =
-    useState<CategoryToIconGroupAndColourMap>(new Map());
+  const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
 
   const [error, setError] = useState("");
 
   useEffect(() => {
     async function retrieveGlobalAppData() {
       if (!!email) {
-        const [
-          publicUserDataRetrieved,
-          expenseDataRetrieved,
-          budgetDataRetrieved,
-          groupDataRetrieved,
-        ] = await Promise.all([
-          getPublicUserData(),
-          getExpenseList(),
-          getBudgetList(),
-          getGroupList(),
-        ]);
+        const [publicUserDataRetrieved, expenseDataRetrieved, budgetDataRetrieved, groupDataRetrieved] =
+          await Promise.all([getPublicUserData(), getExpenseList(), getBudgetList(), getGroupList()]);
 
         setPublicUserData(publicUserDataRetrieved);
         setExpenseArray(expenseDataRetrieved);
         setBudgetArray(budgetDataRetrieved);
         setGroupArray(groupDataRetrieved);
 
-        setCategoryDataMap(
-          await getGroupAndColourMap(budgetDataRetrieved, groupDataRetrieved),
-        );
+        setCategoryDataMap(await getGroupAndColourMap(budgetDataRetrieved, groupDataRetrieved));
       }
     }
     retrieveGlobalAppData()
       .then(() => console.log("Global app data retrieval successful."))
-      .catch(() =>
-        setError(
-          "We’re unable to load your data right now. Please try again later.",
-        ),
-      );
+      .catch(() => setError("We’re unable to load your data right now. Please try again later."));
   }, [email]);
 
   useEffect(() => {
-    publicUserData &&
-      sessionStorage.setItem("profileIcon", publicUserData.profileIconFileName);
+    publicUserData && sessionStorage.setItem("profileIcon", publicUserData.profileIconFileName);
   }, [publicUserData.profileIconFileName]);
 
   useMemo(() => {

@@ -1,13 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import {
   addColourSelectionFunctionality,
   BasicGroupData,
@@ -101,13 +93,8 @@ export default function GroupCreationForm(
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="close-form-or-modal-button mb-6 font-bold text-4xl">
-        New Group
-      </p>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center mb-auto"
-      >
+      <p className="close-form-or-modal-button mb-6 font-bold text-4xl">New Group</p>
+      <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="Group Name">Group Name</label>
         <input
           type="text"

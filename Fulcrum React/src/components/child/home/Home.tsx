@@ -8,7 +8,7 @@ import { getWindowLocation } from "../../../util.ts";
  */
 export default function Home() {
   return (
-    <div>
+    <>
       <HomeNavbar />
       <Outlet />
       <HomeFooter
@@ -18,6 +18,6 @@ export default function Home() {
             : undefined
         }
       />
-    </div>
+    </>
   );
 }

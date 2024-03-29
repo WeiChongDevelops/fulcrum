@@ -1,13 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
   BudgetFormVisibility,
@@ -80,10 +72,7 @@ export default function BudgetCreationForm({
     const newBudgetItem: BudgetItemEntity = {
       category: formData.category,
       amount: formData.amount ? parseFloat(String(formData.amount)) : 0,
-      iconPath:
-        formData.iconPath === ""
-          ? "category-default-icon.svg"
-          : formData.iconPath,
+      iconPath: formData.iconPath === "" ? "category-default-icon.svg" : formData.iconPath,
       group: formData.group ? formData.group : "Miscellaneous",
       timestamp: new Date(),
     };
@@ -108,10 +97,7 @@ export default function BudgetCreationForm({
   }
 
   return (
-    <div
-      ref={formRef}
-      className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl"
-    >
+    <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-center items-center rounded-3xl">
       <FulcrumButton
         displayText={"Close"}
         backgroundColour={"grey"}
@@ -122,10 +108,7 @@ export default function BudgetCreationForm({
       />
 
       <p className="mb-6 font-bold text-4xl">New Budget Item</p>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center mb-auto "
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto ">
         <label htmlFor="category">Category</label>
         <input
           type="text"

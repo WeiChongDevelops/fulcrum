@@ -15,9 +15,7 @@ interface ExpenseListProps {
   setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
   setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
 
-  setOldExpenseBeingEdited: Dispatch<
-    SetStateAction<PreviousExpenseBeingEdited>
-  >;
+  setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;

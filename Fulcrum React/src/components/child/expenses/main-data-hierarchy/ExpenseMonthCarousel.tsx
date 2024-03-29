@@ -14,9 +14,7 @@ interface ExpenseMonthCarouselProps {
   structuredExpenseData: MonthExpenseGroupEntity[];
   setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
   setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
-  setOldExpenseBeingEdited: Dispatch<
-    SetStateAction<PreviousExpenseBeingEdited>
-  >;
+  setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
   categoryDataMap: CategoryToIconGroupAndColourMap;
   publicUserData: PublicUserData;
@@ -59,12 +57,7 @@ export default function ExpenseMonthCarousel({
         <div className={"flex flex-row"}>
           {structuredExpenseData.map((monthExpenseGroupItem, key) => {
             return (
-              <div
-                className={
-                  "flex flex-col items-center w-screen h-[calc(100vh-135px)]"
-                }
-                key={key}
-              >
+              <div className={"flex flex-col items-center w-screen h-[calc(100vh-135px)]"} key={key}>
                 <ExpenseMonthGroup
                   monthExpenseGroupItem={monthExpenseGroupItem}
                   setExpenseFormVisibility={setExpenseFormVisibility}

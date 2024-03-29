@@ -42,7 +42,6 @@ export interface PreviousExpenseBeingEdited {
 export interface MonthExpenseGroupEntity {
   monthIndex: number;
   year: number;
-  // monthsFromToday: number,
   monthExpenseArray: DayExpenseGroupEntity[];
 }
 
@@ -173,7 +172,7 @@ export interface SettingsFormVisibility {
   typeDeleteMyDataForm: boolean;
 }
 
-export interface RemovedRecurringExpenseItem {
+export interface RemovedRecurringExpenseItemEntity {
   recurringExpenseId: string;
   timestampOfRemovedInstance: Date;
 }
@@ -1055,7 +1054,7 @@ export async function handleRecurringExpenseDeletion(
 export async function handleRemovedRecurringExpenseCreation(
   recurringExpenseId: string | null,
   timestampOfRemovedInstance: Date,
-  setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItem[]>>,
+  setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItemEntity[]>>,
 ): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/createRemovedRecurringExpense", {
@@ -1085,7 +1084,7 @@ export async function handleRemovedRecurringExpenseCreation(
  * Retrieves the list of removed recurring expense instances from the server.
  * @returns An array of removed recurring expense instances, or an empty array in case of an error.
  */
-export async function getRemovedRecurringExpenses(): Promise<RemovedRecurringExpenseItem[]> {
+export async function getRemovedRecurringExpenses(): Promise<RemovedRecurringExpenseItemEntity[]> {
   try {
     const response = await fetch("http://localhost:8080/api/getRemovedRecurringExpenses", {
       method: "GET",
@@ -1955,13 +1954,13 @@ export function getWindowLocation(): string {
 
 /**
  * Checks if there is a matching blacklist record for a recurring expense on a given date.
- * @param {RemovedRecurringExpenseItem[]} removedRecurringExpenseInstances - The blacklist.
+ * @param {RemovedRecurringExpenseItemEntity[]} removedRecurringExpenseInstances - The blacklist.
  * @param {RecurringExpenseItemEntity} recurringExpenseItem - The recurring expense item to check.
  * @param {Date} date - The date to check for a matching blacklist record.
  * @returns True if a matching blacklist record is found, false otherwise.
  */
 export function matchingRemovedRecurringExpenseFound(
-  removedRecurringExpenseInstances: RemovedRecurringExpenseItem[],
+  removedRecurringExpenseInstances: RemovedRecurringExpenseItemEntity[],
   recurringExpenseItem: RecurringExpenseItemEntity,
   date: Date,
 ): boolean {
@@ -2096,13 +2095,13 @@ export function getRecurringExpenseInstancesOrNull(
  * Updates the expenseArray's recurring expense instances, adding, removing or leaving instances as necessary.
  * @param {RecurringExpenseItemEntity[]} recurringExpenseArray - The array of recurring expense items.
  * @param {ExpenseItemEntity[]} expenseArray - The array of expense items.
- * @param {RemovedRecurringExpenseItem[]} removedRecurringExpenseInstances - The array of removed recurring expense instances.
+ * @param {RemovedRecurringExpenseItemEntity[]} removedRecurringExpenseInstances - The array of removed recurring expense instances.
  * @param {Dispatch<SetStateAction<ExpenseItemEntity[]>>} setExpenseArray - The state update function for the expense array.
  */
 export async function updateRecurringExpenseInstances(
   recurringExpenseArray: RecurringExpenseItemEntity[],
   expenseArray: ExpenseItemEntity[],
-  removedRecurringExpenseInstances: RemovedRecurringExpenseItem[],
+  removedRecurringExpenseInstances: RemovedRecurringExpenseItemEntity[],
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
 ): Promise<void> {
   const today = new Date();
