@@ -93,12 +93,7 @@ export default function App() {
         <Route
           path="/"
           element={
-            <Fulcrum
-              publicUserData={publicUserData}
-              setPublicUserData={setPublicUserData}
-              email={email}
-              setEmail={setEmail}
-            />
+            <Fulcrum publicUserData={publicUserData} setPublicUserData={setPublicUserData} email={email} setEmail={setEmail}/>
           }
         >
           <Route index element={<Navigate replace to="budget" />} />

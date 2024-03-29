@@ -14,16 +14,9 @@ interface FulcrumProps {
 /**
  * The Fulcrum component which renders the navigation bars and the active application section.
  */
-export default function Fulcrum({
-  publicUserData,
-  setPublicUserData,
-  email,
-  setEmail,
-}: FulcrumProps) {
+export default function Fulcrum({ publicUserData, setPublicUserData, email, setEmail }: FulcrumProps) {
   useEffect(() => {
-    getSessionEmail().then((response) =>
-      response.email ? setEmail(response.email) : "",
-    );
+    getSessionEmail().then((response) => (response.email ? setEmail(response.email) : ""));
   }, []);
 
   useEffect(() => {
@@ -34,17 +27,10 @@ export default function Fulcrum({
     <div
       className={`transition-filter duration-500 ease-in-out min-h-screen ${publicUserData.accessibilityEnabled && "accessibility-enabled"}`}
     >
-      <NavbarUpper
-        publicUserData={publicUserData}
-        setPublicUserData={setPublicUserData}
-        email={email}
-      />
-      <NavbarLower />
+      <NavbarUpper publicUserData={publicUserData} setPublicUserData={setPublicUserData} email={email} />
+      <NavbarLower darkModeEnabled={publicUserData.darkModeEnabled} />
       {!window.location.href.includes("tools") && (
-        <div
-          id="background"
-          className={`${publicUserData.darkModeEnabled ? "bg-dark" : "bg-light"}`}
-        ></div>
+        <div id="background" className={`${publicUserData.darkModeEnabled ? "bg-dark-2" : "bg-light"}`}></div>
       )}
       <Outlet />
     </div>

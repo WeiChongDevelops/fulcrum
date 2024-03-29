@@ -127,7 +127,7 @@ export default function Expenses({
       removedRecurringExpenseInstances,
       setExpenseArray,
     );
-  }, [recurringExpenseArray, expenseArray, removedRecurringExpenseInstances, setExpenseArray]);
+  }, [recurringExpenseArray]);
 
   return (
     <>
