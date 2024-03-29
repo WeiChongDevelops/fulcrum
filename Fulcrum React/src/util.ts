@@ -187,6 +187,23 @@ export interface ToolsFormVisibility {
 
 // MISCELLANEOUS ENTITIES //
 
+export type ModalVisibility =
+  | BudgetModalVisibility
+  | ExpenseModalVisibility
+  | RecurringExpenseModalVisibility
+  | SettingsModalVisibility;
+
+export type SetModalVisibility<T extends ModalVisibility> = Dispatch<SetStateAction<T>>;
+
+export type FormVisibility =
+  | BudgetFormVisibility
+  | ExpenseFormVisibility
+  | RecurringExpenseFormVisibility
+  | SettingsFormVisibility
+  | ToolsFormVisibility;
+
+export type SetFormVisibility<T extends FormVisibility> = Dispatch<SetStateAction<T>>;
+
 export interface RegisterFormData {
   email: string;
   password: string;
@@ -762,10 +779,7 @@ export async function handleGroupCreation(
       setGroupArray((currentGroupArray) => {
         const indexOfInvalidItem = currentGroupArray.map((item) => item.group).lastIndexOf(newGroupItem.group);
         if (indexOfInvalidItem !== -1) {
-          return [
-            ...currentGroupArray.slice(0, indexOfInvalidItem),
-            ...currentGroupArray.slice(indexOfInvalidItem + 1),
-          ];
+          return [...currentGroupArray.slice(0, indexOfInvalidItem), ...currentGroupArray.slice(indexOfInvalidItem + 1)];
         }
         return currentGroupArray;
       });
@@ -822,10 +836,7 @@ export async function handleGroupUpdating(
   setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
   groupArray: GroupItemEntity[],
 ): Promise<void> {
-  if (
-    originalGroupName === formData.group ||
-    !groupArray.map((groupItem) => groupItem.group).includes(formData.group)
-  ) {
+  if (originalGroupName === formData.group || !groupArray.map((groupItem) => groupItem.group).includes(formData.group)) {
     setGroupArray((currentGroupArray) => {
       return currentGroupArray.map((groupItem) =>
         groupItem.group == originalGroupName
@@ -917,9 +928,7 @@ export async function handleGroupDeletion(
  * Handles the creation of a new recurring expense.
  * @param newRecurringExpenseItem - The data for the new recurring expense.
  */
-export async function handleRecurringExpenseCreation(
-  newRecurringExpenseItem: RecurringExpenseItemEntity,
-): Promise<void> {
+export async function handleRecurringExpenseCreation(newRecurringExpenseItem: RecurringExpenseItemEntity): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/createRecurringExpense", {
       method: "POST",
@@ -1414,9 +1423,7 @@ export function addIconSelectionFunctionality<T extends { iconPath?: string }>(
  */
 export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAction<BasicGroupData>>): void {
   // Query all colour selection containers
-  const colourElementList: NodeListOf<HTMLImageElement> = document.querySelectorAll(
-    ".group-colour-selectable-container",
-  );
+  const colourElementList: NodeListOf<HTMLImageElement> = document.querySelectorAll(".group-colour-selectable-container");
 
   // Iterate over each colour selection container to add click event listeners
   colourElementList.forEach((colourSelectable) => {
@@ -1796,9 +1803,7 @@ export function getRandomGroupColour(): string {
  * @returns The total budget within the group.
  */
 export function getGroupBudgetTotal(filteredBudgetArray: BudgetItemEntity[]): number {
-  return filteredBudgetArray
-    .map((budgetItem) => budgetItem.amount)
-    .reduce((acc, amountSpent) => acc + amountSpent, 0);
+  return filteredBudgetArray.map((budgetItem) => budgetItem.amount).reduce((acc, amountSpent) => acc + amountSpent, 0);
 }
 
 /**
@@ -1812,9 +1817,7 @@ export function getGroupExpenditureTotal(
   filteredBudgetArray: BudgetItemEntity[],
 ): number {
   const categoriesInGroup = filteredBudgetArray.map((expenseItem) => expenseItem.category);
-  const filteredExpenseArray = expenseArray.filter((expenseItem) =>
-    categoriesInGroup.includes(expenseItem.category),
-  );
+  const filteredExpenseArray = expenseArray.filter((expenseItem) => categoriesInGroup.includes(expenseItem.category));
   return filteredExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
 }
 
@@ -1910,11 +1913,7 @@ export function handleInputChangeOnFormWithAmount(
   ) {
     setFormData(
       (
-        currentFormData:
-          | BudgetCreationFormData
-          | BudgetUpdatingFormData
-          | ExpenseCreationFormData
-          | ExpenseUpdatingFormData,
+        currentFormData: BudgetCreationFormData | BudgetUpdatingFormData | ExpenseCreationFormData | ExpenseUpdatingFormData,
       ) => {
         return { ...currentFormData, [e.target.name]: newFormValue };
       },
@@ -1929,11 +1928,7 @@ export function handleInputChangeOnFormWithAmount(
  * @returns True if any modal or form is open, false otherwise.
  */
 export function checkForOpenModalOrForm(
-  formVisibility:
-    | ExpenseFormVisibility
-    | BudgetFormVisibility
-    | RecurringExpenseFormVisibility
-    | SettingsFormVisibility,
+  formVisibility: ExpenseFormVisibility | BudgetFormVisibility | RecurringExpenseFormVisibility | SettingsFormVisibility,
   modalVisibility:
     | ExpenseModalVisibility
     | BudgetModalVisibility

@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
-import { ExpenseFormVisibility, MonthExpenseGroupEntity } from "../../../../util.ts";
+import { ExpenseFormVisibility, MonthExpenseGroupEntity, SetFormVisibility } from "../../../../util.ts";
 
 interface AddNewExpenseButtonProps {
-  setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
+  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   isDarkMode: boolean;
   setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
   monthExpenseGroupItem: MonthExpenseGroupEntity;
@@ -38,10 +38,7 @@ export default function AddNewExpenseButton({
   }
 
   return (
-    <button
-      className={`create-expense-button ${isDarkMode && "create-expense-button-dark"}`}
-      onClick={handleClick}
-    >
+    <button className={`create-expense-button ${isDarkMode && "create-expense-button-dark"}`} onClick={handleClick}>
       <p className="text-2xl font-bold">+</p>
     </button>
   );

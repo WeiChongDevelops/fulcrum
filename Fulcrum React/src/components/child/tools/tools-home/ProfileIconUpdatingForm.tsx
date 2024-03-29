@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
   getPublicUserData,
@@ -13,13 +6,14 @@ import {
   ProfileIconUpdatingFormData,
   PublicUserData,
   PublicUserDataUpdate,
+  SetFormVisibility,
   ToolsFormVisibility,
 } from "../../../../util.ts";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import ProfileIconSelector from "../../selectors/ProfileIconSelector.tsx";
 interface ProfileIconUpdatingFormProps {
   oldIconFileName: string;
-  setToolsFormVisibility: Dispatch<SetStateAction<ToolsFormVisibility>>;
+  setToolsFormVisibility: SetFormVisibility<ToolsFormVisibility>;
   setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
   publicUserData: PublicUserData;
 }
@@ -72,24 +66,17 @@ export default function ProfileIconUpdatingForm({
 
     await handlePublicUserDataUpdating(updatedPublicUserData);
 
-    getPublicUserData().then((publicUserData) =>
-      setPublicUserData(publicUserData),
-    );
+    getPublicUserData().then((publicUserData) => setPublicUserData(publicUserData));
   }
 
   useEffect(() => {
-    const oldProfileIconSelectable = document.querySelector(
-      `div[data-value="${oldIconFileName}"]`,
-    );
+    const oldProfileIconSelectable = document.querySelector(`div[data-value="${oldIconFileName}"]`);
     oldProfileIconSelectable?.classList.add("selectedColour");
   }, []);
 
   return (
     <div ref={formRef} className="fulcrum-form">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center mb-auto"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <ProfileIconSelector />
         <FulcrumButton displayText="Update Profile Icon" />
       </form>

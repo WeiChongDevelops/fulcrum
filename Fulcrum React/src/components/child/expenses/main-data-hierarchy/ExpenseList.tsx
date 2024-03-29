@@ -5,6 +5,8 @@ import {
   ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
   PublicUserData,
+  SetFormVisibility,
+  SetModalVisibility,
 } from "../../../../util.ts";
 import ExpenseItem from "./ExpenseItem.tsx";
 import { Dispatch, SetStateAction } from "react";
@@ -12,8 +14,8 @@ import { Dispatch, SetStateAction } from "react";
 interface ExpenseListProps {
   dayExpenseArray: ExpenseItemEntity[];
 
-  setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
-  setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
+  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
+  setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
 
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseIdToDelete: Dispatch<SetStateAction<string>>;

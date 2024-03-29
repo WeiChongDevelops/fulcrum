@@ -7,13 +7,14 @@ import {
   MonthExpenseGroupEntity,
   PreviousExpenseBeingEdited,
   PublicUserData,
+  SetFormVisibility,
 } from "../../../../util.ts";
 import { ExpenseMonthGroup } from "./ExpenseMonthGroup.tsx";
 
 interface ExpenseMonthCarouselProps {
   structuredExpenseData: MonthExpenseGroupEntity[];
-  setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
-  setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
+  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
+  setExpenseModalVisibility: SetFormVisibility<ExpenseModalVisibility>;
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
   categoryDataMap: CategoryToIconGroupAndColourMap;

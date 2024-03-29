@@ -4,16 +4,17 @@ import {
   handleWipeBudget,
   handleWipeData,
   handleWipeExpenses,
+  SetFormVisibility,
+  SetModalVisibility,
   SettingsFormVisibility,
   SettingsModalVisibility,
 } from "../../../../util.ts";
-import { Dispatch, SetStateAction } from "react";
 
 interface SettingsModalsAndFormsProps {
   settingsFormVisibility: SettingsFormVisibility;
-  setSettingsFormVisibility: Dispatch<SetStateAction<SettingsFormVisibility>>;
+  setSettingsFormVisibility: SetFormVisibility<SettingsFormVisibility>;
   settingsModalVisibility: SettingsModalVisibility;
-  setSettingsModalVisibility: Dispatch<SetStateAction<SettingsModalVisibility>>;
+  setSettingsModalVisibility: SetModalVisibility<SettingsModalVisibility>;
 }
 
 /**
@@ -29,9 +30,7 @@ export default function SettingsModalsAndForms({
     <div className="z-40">
       {settingsFormVisibility.typeDeleteMyExpensesForm && (
         <TypeMatchConfirmationForm
-          areYouSureMessage={
-            "Are you sure you would like to wipe your expense logs? This decision is irreversible."
-          }
+          areYouSureMessage={"Are you sure you would like to wipe your expense logs? This decision is irreversible."}
           typeMatchString={"Wipe My Expenses"}
           setFormVisibility={setSettingsFormVisibility}
           setModalVisibility={setSettingsModalVisibility}
@@ -42,9 +41,7 @@ export default function SettingsModalsAndForms({
 
       {settingsFormVisibility.typeDeleteMyBudgetForm && (
         <TypeMatchConfirmationForm
-          areYouSureMessage={
-            "Are you sure you would like to wipe your budget data? This decision is irreversible."
-          }
+          areYouSureMessage={"Are you sure you would like to wipe your budget data? This decision is irreversible."}
           typeMatchString={"Wipe My Budget"}
           setFormVisibility={setSettingsFormVisibility}
           setModalVisibility={setSettingsModalVisibility}
@@ -86,9 +83,7 @@ export default function SettingsModalsAndForms({
           }}
           setModalVisibility={setSettingsModalVisibility}
           isVisible={"isConfirmExpenseWipeModalVisible"}
-          title={
-            "Please confirm that you wish to permanently wipe all expense data."
-          }
+          title={"Please confirm that you wish to permanently wipe all expense data."}
         />
       )}
 
@@ -112,9 +107,7 @@ export default function SettingsModalsAndForms({
           }}
           setModalVisibility={setSettingsModalVisibility}
           isVisible={"isConfirmBudgetWipeModalVisible"}
-          title={
-            "Please confirm that you wish to permanently wipe all budget data."
-          }
+          title={"Please confirm that you wish to permanently wipe all budget data."}
         />
       )}
 
@@ -138,9 +131,7 @@ export default function SettingsModalsAndForms({
           }}
           setModalVisibility={setSettingsModalVisibility}
           isVisible={"isConfirmAllDataWipeModalVisible"}
-          title={
-            "Please confirm that you wish to permanently wipe all budget and expense data."
-          }
+          title={"Please confirm that you wish to permanently wipe all budget and expense data."}
         />
       )}
     </div>

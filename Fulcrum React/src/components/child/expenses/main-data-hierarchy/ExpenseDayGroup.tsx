@@ -7,6 +7,7 @@ import {
   formatDollarAmountStatic,
   PreviousExpenseBeingEdited,
   PublicUserData,
+  SetFormVisibility,
 } from "../../../../util.ts";
 import { Dispatch, SetStateAction } from "react";
 import ExpenseList from "./ExpenseList.tsx";
@@ -15,8 +16,8 @@ import "../../../../css/Expense.css";
 interface ExpenseDayGroupProps {
   dayExpenseGroup: DayExpenseGroupEntity;
 
-  setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
-  setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
+  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
+  setExpenseModalVisibility: SetFormVisibility<ExpenseModalVisibility>;
 
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseIdToDelete: Dispatch<SetStateAction<string>>;

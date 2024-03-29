@@ -22,35 +22,26 @@ interface SettingsProps {
 /**
  * The root component for the settings page.
  */
-export default function Settings({
-  setOpenToolsSection,
-  publicUserData,
-  setPublicUserData,
-}: SettingsProps) {
-  const [settingsFormVisibility, setSettingsFormVisibility] =
-    useState<SettingsFormVisibility>({
-      typeDeleteMyExpensesForm: false,
-      typeDeleteMyBudgetForm: false,
-      typeDeleteMyDataForm: false,
-    });
-  const [settingsModalVisibility, setSettingsModalVisibility] =
-    useState<SettingsModalVisibility>({
-      isConfirmExpenseWipeModalVisible: false,
-      isConfirmBudgetWipeModalVisible: false,
-      isConfirmAllDataWipeModalVisible: false,
-    });
-  const [isSettingsFormOrModalOpen, setIsSettingsFormOrModalOpen] =
-    useState<boolean>(false);
+export default function Settings({ setOpenToolsSection, publicUserData, setPublicUserData }: SettingsProps) {
+  const [settingsFormVisibility, setSettingsFormVisibility] = useState<SettingsFormVisibility>({
+    typeDeleteMyExpensesForm: false,
+    typeDeleteMyBudgetForm: false,
+    typeDeleteMyDataForm: false,
+  });
+  const [settingsModalVisibility, setSettingsModalVisibility] = useState<SettingsModalVisibility>({
+    isConfirmExpenseWipeModalVisible: false,
+    isConfirmBudgetWipeModalVisible: false,
+    isConfirmAllDataWipeModalVisible: false,
+  });
+  const [isSettingsFormOrModalOpen, setIsSettingsFormOrModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    setIsSettingsFormOrModalOpen(
-      checkForOpenModalOrForm(settingsFormVisibility, settingsModalVisibility),
-    );
+    setIsSettingsFormOrModalOpen(checkForOpenModalOrForm(settingsFormVisibility, settingsModalVisibility));
     document.getElementById("right-button")?.focus();
   }, [settingsFormVisibility, settingsModalVisibility]);
 
   return (
-    <div className="flex flex-col justify-start items-center bg-[#455259] min-h-screen">
+    <div className="flex flex-col justify-start items-center bg-[#455259] min-h-screen relative">
       <div
         className={`w-[100vw] px-8 elementsBelowPopUpForm
                 ${isSettingsFormOrModalOpen && "blur"}`}
@@ -65,17 +56,9 @@ export default function Settings({
             />
           </div>
 
-          <img
-            className={"w-12 h-auto"}
-            src="/src/assets/UI-icons/tools-settings-icon-white.svg"
-            alt="Settings icon"
-          />
+          <img className={"w-12 h-auto"} src="/src/assets/UI-icons/tools-settings-icon-white.svg" alt="Settings icon" />
           <h1 className="text-white font-bold mx-8">Settings</h1>
-          <img
-            className={"w-12 h-auto"}
-            src="/src/assets/UI-icons/tools-settings-icon-white.svg"
-            alt="Settings icon"
-          />
+          <img className={"w-12 h-auto"} src="/src/assets/UI-icons/tools-settings-icon-white.svg" alt="Settings icon" />
 
           <div className="flex-grow flex flex-row justify-end">
             <FulcrumButton
@@ -87,32 +70,19 @@ export default function Settings({
           </div>
         </div>
 
-        <div
-          className={
-            "settings-row bg-[#17423f] settings-box-shadow currency-selector-row"
-          }
-        >
+        <div className={"settings-row bg-[#17423f] settings-box-shadow currency-selector-row"}>
           <b>Currency</b>
-          <CurrencySelector
-            publicUserData={publicUserData}
-            setPublicUserData={setPublicUserData}
-          />
+          <CurrencySelector publicUserData={publicUserData} setPublicUserData={setPublicUserData} />
         </div>
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
           <b>Appearance</b>
-          <DarkModeToggle
-            publicUserData={publicUserData}
-            setPublicUserData={setPublicUserData}
-          />
+          <DarkModeToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData} />
         </div>
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
           <b>Accessibility</b>
-          <AccessibilityToggle
-            publicUserData={publicUserData}
-            setPublicUserData={setPublicUserData}
-          />
+          <AccessibilityToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData} />
         </div>
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
@@ -121,12 +91,7 @@ export default function Settings({
             displayText={"See Public License"}
             backgroundColour={"white"}
             optionalTailwind={"m-0"}
-            onClick={() =>
-              window.open(
-                "https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md",
-                "_blank",
-              )
-            }
+            onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}
           />
         </div>
 

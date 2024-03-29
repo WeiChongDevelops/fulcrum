@@ -13,6 +13,8 @@ import {
   PublicUserData,
   RecurringExpenseItemEntity,
   RemovedRecurringExpenseItemEntity,
+  SetFormVisibility,
+  SetModalVisibility,
 } from "../../../util.ts";
 import ExpenseUpdatingForm from "./forms/ExpenseUpdatingForm.tsx";
 import RecurringExpenseInstanceUpdatingForm from "../tools/recurring-expenses/forms/RecurringExpenseInstanceUpdatingForm.tsx";
@@ -21,9 +23,9 @@ import { Dispatch, SetStateAction } from "react";
 
 interface ExpenseModalsAndFormsProps {
   expenseFormVisibility: ExpenseFormVisibility;
-  setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
+  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   expenseModalVisibility: ExpenseModalVisibility;
-  setExpenseModalVisibility: Dispatch<SetStateAction<ExpenseModalVisibility>>;
+  setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
 
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];

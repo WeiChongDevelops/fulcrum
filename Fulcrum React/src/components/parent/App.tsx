@@ -4,7 +4,7 @@ import Login from "../child/auth/Login.tsx";
 import Budget from "../child/budget/Budget.tsx";
 import Fulcrum from "./Fulcrum.tsx";
 import Expenses from "../child/expenses/Expenses.tsx";
-import Tools from "../child/tools/tools-home/Tools.tsx";
+import Tools from "../child/tools/Tools.tsx";
 import { useEffect, useMemo, useState } from "react";
 import {
   BudgetItemEntity,
@@ -52,8 +52,12 @@ export default function App() {
   useEffect(() => {
     async function retrieveGlobalAppData() {
       if (!!email) {
-        const [publicUserDataRetrieved, expenseDataRetrieved, budgetDataRetrieved, groupDataRetrieved] =
-          await Promise.all([getPublicUserData(), getExpenseList(), getBudgetList(), getGroupList()]);
+        const [publicUserDataRetrieved, expenseDataRetrieved, budgetDataRetrieved, groupDataRetrieved] = await Promise.all([
+          getPublicUserData(),
+          getExpenseList(),
+          getBudgetList(),
+          getGroupList(),
+        ]);
 
         setPublicUserData(publicUserDataRetrieved);
         setExpenseArray(expenseDataRetrieved);
@@ -93,7 +97,12 @@ export default function App() {
         <Route
           path="/"
           element={
-            <Fulcrum publicUserData={publicUserData} setPublicUserData={setPublicUserData} email={email} setEmail={setEmail}/>
+            <Fulcrum
+              publicUserData={publicUserData}
+              setPublicUserData={setPublicUserData}
+              email={email}
+              setEmail={setEmail}
+            />
           }
         >
           <Route index element={<Navigate replace to="budget" />} />

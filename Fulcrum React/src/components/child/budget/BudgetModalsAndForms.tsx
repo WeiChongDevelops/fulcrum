@@ -12,16 +12,18 @@ import {
   handleBudgetDeletion,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
+  SetFormVisibility,
+  SetModalVisibility,
 } from "../../../util.ts";
 
 import { Dispatch, SetStateAction } from "react";
 
 interface ModalsAndFormsProps {
   budgetFormVisibility: BudgetFormVisibility;
-  setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
+  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
 
   budgetModalVisibility: BudgetModalVisibility;
-  setBudgetModalVisibility: Dispatch<SetStateAction<BudgetModalVisibility>>;
+  setBudgetModalVisibility: SetModalVisibility<BudgetModalVisibility>;
 
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
   groupArray: GroupItemEntity[];

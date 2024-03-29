@@ -11,6 +11,8 @@ import {
   RecurringExpenseFormVisibility,
   RecurringExpenseItemEntity,
   RecurringExpenseModalVisibility,
+  SetFormVisibility,
+  SetModalVisibility,
 } from "../../../../util.ts";
 import RecurringExpenseUpdatingForm from "./forms/RecurringExpenseUpdatingForm.tsx";
 import TwoOptionModal from "../../other/TwoOptionModal.tsx";
@@ -18,9 +20,9 @@ import { Dispatch, SetStateAction } from "react";
 
 interface RecurringExpenseModalsAndFormsProps {
   recurringExpenseFormVisibility: RecurringExpenseFormVisibility;
-  setRecurringExpenseFormVisibility: Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
+  setRecurringExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility>;
   recurringExpenseModalVisibility: RecurringExpenseModalVisibility;
-  setRecurringExpenseModalVisibility: Dispatch<SetStateAction<RecurringExpenseModalVisibility>>;
+  setRecurringExpenseModalVisibility: SetModalVisibility<RecurringExpenseModalVisibility>;
 
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];

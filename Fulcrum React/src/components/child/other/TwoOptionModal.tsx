@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   BudgetModalVisibility,
   ExpenseModalVisibility,
   RecurringExpenseModalVisibility,
+  SetModalVisibility,
   SettingsModalVisibility,
 } from "../../../util.ts";
 import FulcrumButton from "./FulcrumButton.tsx";
@@ -13,10 +14,10 @@ interface TwoOptionModalProps {
   optionTwoText: string;
   optionTwoFunction: () => void;
   setModalVisibility:
-    | Dispatch<SetStateAction<BudgetModalVisibility>>
-    | Dispatch<SetStateAction<ExpenseModalVisibility>>
-    | Dispatch<SetStateAction<RecurringExpenseModalVisibility>>
-    | Dispatch<SetStateAction<SettingsModalVisibility>>;
+    | SetModalVisibility<BudgetModalVisibility>
+    | SetModalVisibility<ExpenseModalVisibility>
+    | SetModalVisibility<RecurringExpenseModalVisibility>
+    | SetModalVisibility<SettingsModalVisibility>;
   isVisible: string;
   title: string;
 }

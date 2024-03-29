@@ -12,12 +12,13 @@ import {
   RecurringExpenseItemEntity,
   recurringFrequencyOptions,
   Value,
-  ExpenseFormVisibility,
-  RecurringExpenseFormVisibility,
   getExpenseList,
   getBudgetList,
   handleBudgetCreation,
   getRecurringExpenseList,
+  RecurringExpenseFormVisibility,
+  ExpenseFormVisibility,
+  SetFormVisibility,
 } from "../../../../util.ts";
 import { v4 as uuid } from "uuid";
 
@@ -28,9 +29,7 @@ import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../selectors/CategorySelector.tsx";
 
 interface ExpenseCreationFormProps {
-  setExpenseFormVisibility:
-    | Dispatch<SetStateAction<ExpenseFormVisibility>>
-    | Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
+  setExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility> | SetFormVisibility<ExpenseFormVisibility>;
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
   setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
@@ -207,10 +206,7 @@ export default function ExpenseCreationForm({
           required
         />
 
-        <FulcrumButton
-          displayText={`Insert ${mustBeRecurring ? "Recurring " : ""}Expense`}
-          optionalTailwind={"mt-6"}
-        />
+        <FulcrumButton displayText={`Insert ${mustBeRecurring ? "Recurring " : ""}Expense`} optionalTailwind={"mt-6"} />
       </form>
     </div>
   );

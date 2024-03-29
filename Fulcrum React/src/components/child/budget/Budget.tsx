@@ -89,9 +89,7 @@ export default function Budget({
     async function retrieveInitialData() {
       const userStatus = await checkForUser();
       !userStatus["loggedIn"] && (window.location.href = "/login");
-
-      const [totalIncome] = await Promise.all([getTotalIncome()]);
-      setTotalIncome(totalIncome);
+      setTotalIncome(await getTotalIncome());
     }
     retrieveInitialData()
       .then(() => {
@@ -150,7 +148,7 @@ export default function Budget({
   return (
     <>
       {!isLoading ? (
-        <div className="flex flex-row justify-center items-center">
+        <div className="flex flex-row justify-center items-center relative">
           {error === "" ? (
             <div>
               <div
@@ -211,9 +209,7 @@ export default function Budget({
               />
             </div>
           ) : (
-            <p className={`error-message ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
-              {error}
-            </p>
+            <p className={`error-message ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>{error}</p>
           )}
         </div>
       ) : (

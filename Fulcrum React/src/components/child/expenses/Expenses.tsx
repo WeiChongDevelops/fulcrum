@@ -121,20 +121,15 @@ export default function Expenses({
   }, [expenseFormVisibility, expenseModalVisibility]);
 
   useMemo(() => {
-    updateRecurringExpenseInstances(
-      recurringExpenseArray,
-      expenseArray,
-      removedRecurringExpenseInstances,
-      setExpenseArray,
-    );
+    updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, removedRecurringExpenseInstances, setExpenseArray);
   }, [recurringExpenseArray]);
 
   return (
     <>
       {!isLoading ? (
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center relative">
           {error === "" ? (
-            <div>
+            <div className={""}>
               <div
                 className={`justify-center items-center elementsBelowPopUpForm
                     ${isExpenseFormOrModalOpen && "blur"}`}
@@ -172,9 +167,7 @@ export default function Expenses({
               />
             </div>
           ) : (
-            <p className={`error-message ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
-              {error}
-            </p>
+            <p className={`error-message ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>{error}</p>
           )}
         </div>
       ) : (

@@ -12,6 +12,7 @@ import {
   handleBudgetUpdating,
   GroupItemEntity,
   handleInputChangeOnFormWithAmount,
+  SetFormVisibility,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
@@ -24,7 +25,7 @@ interface DBUpdatingFormProps {
     oldGroup: string;
   };
   groupArray: GroupItemEntity[];
-  setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
+  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
   currencySymbol: string;
 }
 
@@ -92,10 +93,7 @@ export default function BudgetUpdatingForm({
   }
 
   return (
-    <div
-      ref={formRef}
-      className="fulcrum-form fixed flex flex-col justify-start items-center rounded-3xl text-white"
-    >
+    <div ref={formRef} className="fulcrum-form fixed flex flex-col justify-start items-center rounded-3xl text-white">
       <FulcrumButton
         onClick={() => {
           hideForm();

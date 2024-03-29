@@ -9,22 +9,20 @@ import {
   GroupItemEntity,
   getRandomGroupColour,
   getGroupList,
+  SetFormVisibility,
 } from "../../../../util.ts";
 import "../../../../css/Budget.css";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
 
 interface GroupCreationFormProps {
   setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
-  setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
+  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
 }
 
 /**
  * A form for creating a new budget category group.
  */
-export default function GroupCreationForm(
-  this: any,
-  { setGroupArray, setBudgetFormVisibility }: GroupCreationFormProps,
-) {
+export default function GroupCreationForm(this: any, { setGroupArray, setBudgetFormVisibility }: GroupCreationFormProps) {
   const [formData, setFormData] = useState<BasicGroupData>({
     group: "",
     colour: "",
@@ -72,12 +70,7 @@ export default function GroupCreationForm(
       timestamp: new Date(),
     };
 
-    await handleGroupCreation(
-      formData.group,
-      formData.colour ? formData.colour : randomColour,
-      setGroupArray,
-      newGroupItem,
-    );
+    await handleGroupCreation(formData.group, formData.colour ? formData.colour : randomColour, setGroupArray, newGroupItem);
     setGroupArray(await getGroupList());
     setFormData({ group: "", colour: "" });
   }

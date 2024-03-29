@@ -14,6 +14,7 @@ import {
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
   PublicUserData,
+  SetFormVisibility,
 } from "../../../../util.ts";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import BudgetTile from "./BudgetTile.tsx";
@@ -32,8 +33,8 @@ interface GroupProps {
 
   setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
 
-  setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
-  setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibility>>;
+  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
+  setModalFormVisibility: SetFormVisibility<BudgetModalVisibility>;
 
   setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>;
   setOldGroupBeingEdited: Dispatch<SetStateAction<PreviousGroupBeingEdited>>;
@@ -116,9 +117,7 @@ export default function Group({
     >
       <div className="flex flex-row justify-between items-center mb-4">
         <div className="flex flex-row ml-4 mt-1">
-          <p
-            className={`mt - 2 text-3xl font-bold ${groupName !== "Miscellaneous" ? "text-black" : "text-white"}`}
-          >
+          <p className={`mt - 2 text-3xl font-bold ${groupName !== "Miscellaneous" ? "text-black" : "text-white"}`}>
             {groupName}
           </p>
           {groupName !== "Miscellaneous" && (
@@ -127,11 +126,7 @@ export default function Group({
                 <img src="/src/assets/UI-icons/edit-pencil-black-icon.svg" alt="Edit icon" className="w-5 h-5" />
               </div>
               <div className="circle-button" onClick={handleDeleteClick}>
-                <img
-                  src="/src/assets/UI-icons/delete-trash-black-icon.svg"
-                  alt="Delete icon"
-                  className="w-5 h-5"
-                />
+                <img src="/src/assets/UI-icons/delete-trash-black-icon.svg" alt="Delete icon" className="w-5 h-5" />
               </div>
             </div>
           )}

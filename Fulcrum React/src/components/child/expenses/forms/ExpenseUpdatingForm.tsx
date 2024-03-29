@@ -12,6 +12,7 @@ import {
   PreviousExpenseBeingEdited,
   Value,
   ExpenseFormVisibility,
+  SetFormVisibility,
 } from "../../../../util.ts";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
@@ -19,7 +20,7 @@ import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../selectors/CategorySelector.tsx";
 
 interface ExpenseUpdatingFormProps {
-  setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
+  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
   categoryOptions: SelectorOptionsFormattedData[];

@@ -1,18 +1,14 @@
-import { Dispatch, SetStateAction } from "react";
-import { BudgetFormVisibility } from "../../../../util.ts";
+import { BudgetFormVisibility, SetFormVisibility } from "../../../../util.ts";
 
 interface AddNewGroupButtonProps {
-  setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
+  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
   isDarkMode: boolean;
 }
 
 /**
  * Button to create a new budget category group.
  */
-export default function AddNewGroupButton({
-  setBudgetFormVisibility,
-  isDarkMode,
-}: AddNewGroupButtonProps) {
+export default function AddNewGroupButton({ setBudgetFormVisibility, isDarkMode }: AddNewGroupButtonProps) {
   async function handleClick() {
     setBudgetFormVisibility((current) => ({
       ...current,
@@ -21,10 +17,7 @@ export default function AddNewGroupButton({
   }
 
   return (
-    <button
-      className={`create-group-button ${isDarkMode && "create-expense-button-dark"}`}
-      onClick={handleClick}
-    >
+    <button className={`create-group-button ${isDarkMode && "create-expense-button-dark"}`} onClick={handleClick}>
       <p className="text-2xl font-bold">+</p>
     </button>
   );

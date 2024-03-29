@@ -15,6 +15,7 @@ import {
   getRecurringExpenseList,
   RecurringExpenseFormVisibility,
   Value,
+  SetFormVisibility,
 } from "../../../../../util.ts";
 import Select from "react-select";
 import DatePicker from "react-date-picker";
@@ -23,7 +24,7 @@ import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../../selectors/CategorySelector.tsx";
 
 interface RecurringExpenseUpdatingFormProps {
-  setRecurringExpenseFormVisibility: Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
+  setRecurringExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility>;
   setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
   categoryOptions: SelectorOptionsFormattedData[];

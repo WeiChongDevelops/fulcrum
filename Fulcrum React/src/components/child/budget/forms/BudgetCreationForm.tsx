@@ -12,6 +12,7 @@ import {
   GroupItemEntity,
   BudgetCreationFormData,
   handleInputChangeOnFormWithAmount,
+  SetFormVisibility,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import "../../../../css/Budget.css";
@@ -21,7 +22,7 @@ interface BudgetCreationFormProps {
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
   groupArray: GroupItemEntity[];
   groupNameOfNewItem: string;
-  setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
+  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
   currencySymbol: string;
 }
 

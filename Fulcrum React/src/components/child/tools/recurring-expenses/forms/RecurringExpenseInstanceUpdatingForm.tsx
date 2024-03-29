@@ -11,13 +11,14 @@ import {
   SelectorOptionsFormattedData,
   handleRemovedRecurringExpenseCreation,
   RemovedRecurringExpenseItemEntity,
+  SetFormVisibility,
 } from "../../../../../util.ts";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../../selectors/CategorySelector.tsx";
 
 interface RecurringExpenseInstanceUpdatingFormProps {
-  setExpenseFormVisibility: Dispatch<SetStateAction<ExpenseFormVisibility>>;
+  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
   categoryOptions: SelectorOptionsFormattedData[];
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
@@ -121,8 +122,8 @@ export default function RecurringExpenseInstanceUpdatingForm({
         </div>
 
         <div className={"mt-2 text-sm"}>
-          <p>You are editing only this instance of your recurring expense.</p>
-          <p>To manage your recurring expenses, please see the Tools section.</p>
+          <p className={"mb-2"}>You are editing only this instance of your recurring expense.</p>
+          <p>To manage all your recurring expenses, go to the Tools section!</p>
         </div>
 
         <FulcrumButton displayText="Update Expense" optionalTailwind={"mt-8"} />

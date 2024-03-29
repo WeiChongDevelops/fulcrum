@@ -6,6 +6,8 @@ import {
   formatDollarAmountStatic,
   PreviousBudgetBeingEdited,
   PublicUserData,
+  SetFormVisibility,
+  SetModalVisibility,
 } from "../../../../util.ts";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
@@ -17,8 +19,8 @@ interface BudgetTileProps {
 
   setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>;
 
-  setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
-  setModalFormVisibility: Dispatch<SetStateAction<BudgetModalVisibility>>;
+  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
+  setModalFormVisibility: SetModalVisibility<BudgetModalVisibility>;
 
   perCategoryTotalExpenseArray: Map<string, number>;
 
@@ -80,38 +82,23 @@ export default function BudgetTile({
       onClick={handleEditClick}
     >
       <div className="tile-icon-container">
-        <img
-          className="budget-tile-icon"
-          src={`/src/assets/category-icons/${icon}`}
-          alt="Category icon"
-        />
+        <img className="budget-tile-icon" src={`/src/assets/category-icons/${icon}`} alt="Category icon" />
       </div>
       <div className="budget-name-container line-clamp-2">
         <p className="budget-name">{category.toUpperCase()}</p>
       </div>
       <div className="budgeting-values-container">
         <p className={"truncate"}>
-          Spent: {formatDollarAmountStatic(spent, currency)} of{" "}
-          {formatDollarAmountStatic(amount, currency)}
+          Spent: {formatDollarAmountStatic(spent, currency)} of {formatDollarAmountStatic(amount, currency)}
         </p>
-        <p className={"truncate"}>
-          Left: {formatDollarAmountStatic(amount - spent, currency)}
-        </p>
+        <p className={"truncate"}>Left: {formatDollarAmountStatic(amount - spent, currency)}</p>
       </div>
       <div className="flex flex-row mb-2">
         <button className="circle-button" onClick={handleEditClick}>
-          <img
-            src="/src/assets/UI-icons/edit-pencil-white-icon.svg"
-            alt="Edit icon"
-            className="mx-1 w-5 h-5"
-          />
+          <img src="/src/assets/UI-icons/edit-pencil-white-icon.svg" alt="Edit icon" className="mx-1 w-5 h-5" />
         </button>
         <button className="circle-button" onClick={handleDeleteClick}>
-          <img
-            src="/src/assets/UI-icons/delete-trash-white-icon.svg"
-            alt="Delete icon"
-            className="mx-1 w-5 h-5"
-          />
+          <img src="/src/assets/UI-icons/delete-trash-white-icon.svg" alt="Delete icon" className="mx-1 w-5 h-5" />
         </button>
       </div>
     </div>

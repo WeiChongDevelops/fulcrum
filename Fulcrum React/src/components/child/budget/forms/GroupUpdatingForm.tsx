@@ -8,6 +8,7 @@ import {
   getGroupList,
   GroupItemEntity,
   handleGroupUpdating,
+  SetFormVisibility,
 } from "../../../../util.ts";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
@@ -17,7 +18,7 @@ interface GroupUpdatingFormProps {
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
   setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
   groupArray: GroupItemEntity[];
-  setBudgetFormVisibility: Dispatch<SetStateAction<BudgetFormVisibility>>;
+  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
 }
 
 /**

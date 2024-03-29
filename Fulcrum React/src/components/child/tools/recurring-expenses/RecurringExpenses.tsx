@@ -53,26 +53,23 @@ export default function RecurringExpenses({
   setError,
 }: RecurringExpensesProps) {
   const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
-  const [recurringExpenseModalVisibility, setRecurringExpenseModalVisibility] =
-    useState<RecurringExpenseModalVisibility>({
-      isConfirmRecurringExpenseDestructionModalVisible: false,
-    });
-  const [recurringExpenseFormVisibility, setRecurringExpenseFormVisibility] =
-    useState<RecurringExpenseFormVisibility>({
-      isCreateExpenseVisible: false,
-      isUpdateRecurringExpenseVisible: false,
-    });
+  const [recurringExpenseModalVisibility, setRecurringExpenseModalVisibility] = useState<RecurringExpenseModalVisibility>({
+    isConfirmRecurringExpenseDestructionModalVisible: false,
+  });
+  const [recurringExpenseFormVisibility, setRecurringExpenseFormVisibility] = useState<RecurringExpenseFormVisibility>({
+    isCreateExpenseVisible: false,
+    isUpdateRecurringExpenseVisible: false,
+  });
 
   const [isRecurringExpenseFormOrModalOpen, setIsRecurringExpenseFormOrModalOpen] = useState(false);
 
-  const [oldRecurringExpenseBeingEdited, setOldRecurringExpenseBeingEdited] =
-    useState<PreviousRecurringExpenseBeingEdited>({
-      recurringExpenseId: "",
-      oldCategory: "",
-      oldAmount: 0,
-      oldTimestamp: new Date(),
-      oldFrequency: "monthly",
-    });
+  const [oldRecurringExpenseBeingEdited, setOldRecurringExpenseBeingEdited] = useState<PreviousRecurringExpenseBeingEdited>({
+    recurringExpenseId: "",
+    oldCategory: "",
+    oldAmount: 0,
+    oldTimestamp: new Date(),
+    oldFrequency: "monthly",
+  });
   const [recurringExpenseIdToDelete, setRecurringExpenseIdToDelete] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
@@ -98,7 +95,7 @@ export default function RecurringExpenses({
   return (
     <>
       {!isLoading ? (
-        <div className="justify-start items-center bg-[#455259] min-h-screen">
+        <div className="justify-start items-center bg-[#455259] min-h-screen relative">
           {error === "" ? (
             <div>
               <div
@@ -193,7 +190,7 @@ export default function RecurringExpenses({
           )}
         </div>
       ) : (
-        <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled} />
+        <Loader isLoading={isLoading} isDarkMode={false} />
       )}
     </>
   );

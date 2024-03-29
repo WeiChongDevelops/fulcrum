@@ -1,23 +1,12 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import {
-  SettingsFormVisibility,
-  SettingsModalVisibility,
-} from "../../../../util.ts";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { SetFormVisibility, SettingsFormVisibility, SettingsModalVisibility } from "../../../../util.ts";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 
 interface TypeMatchConfirmationFormProps {
   areYouSureMessage: string;
   typeMatchString: string;
-  setFormVisibility: Dispatch<SetStateAction<SettingsFormVisibility>>;
-  setModalVisibility: Dispatch<SetStateAction<SettingsModalVisibility>>;
+  setFormVisibility: SetFormVisibility<SettingsFormVisibility>;
+  setModalVisibility: SetFormVisibility<SettingsModalVisibility>;
   formVisibility: string;
   lastChanceModalVisibility: string;
 }
