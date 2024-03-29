@@ -8,13 +8,15 @@ import {
   PreviousExpenseBeingEdited,
   PublicUserData,
   SetFormVisibility,
+  SetModalVisibility,
+  y2K,
 } from "../../../../util.ts";
 import { ExpenseMonthGroup } from "./ExpenseMonthGroup.tsx";
 
 interface ExpenseMonthCarouselProps {
   structuredExpenseData: MonthExpenseGroupEntity[];
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  setExpenseModalVisibility: SetFormVisibility<ExpenseModalVisibility>;
+  setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
   categoryDataMap: CategoryToIconGroupAndColourMap;
@@ -35,7 +37,6 @@ export default function ExpenseMonthCarousel({
   publicUserData,
   setDefaultCalendarDate,
 }: ExpenseMonthCarouselProps) {
-  const y2K = new Date("2000-01-01T00:00:00Z");
   const y2KMonth = y2K.getMonth();
   const y2KYear = y2K.getFullYear();
 

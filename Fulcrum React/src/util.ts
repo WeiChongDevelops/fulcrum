@@ -1,6 +1,10 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { v4 as uuid } from "uuid";
 
+// GLOBAL VARIABLES //
+
+export const y2K = new Date("2000-01-01T00:00:00Z");
+
 //  EXPENSE ENTITIES //
 export interface ExpenseItemEntity {
   expenseId: string;
@@ -1058,12 +1062,10 @@ export async function handleRecurringExpenseDeletion(
  * Creates a record for a removed instance of a recurring expense, for blacklist purposes.
  * @param recurringExpenseId - The ID of the recurring expense from which an instance is removed.
  * @param timestampOfRemovedInstance - The timestamp of the removed expense instance.
- * @param setRemovedRecurringExpenseInstances - Dispatch function to update the state of removed recurring expense instances.
  */
 export async function handleRemovedRecurringExpenseCreation(
   recurringExpenseId: string | null,
   timestampOfRemovedInstance: Date,
-  setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItemEntity[]>>,
 ): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/createRemovedRecurringExpense", {
@@ -1082,7 +1084,6 @@ export async function handleRemovedRecurringExpenseCreation(
     } else {
       const responseData = await response.json();
       console.log(responseData);
-      setRemovedRecurringExpenseInstances(await getRemovedRecurringExpenses());
     }
   } catch (error) {
     console.error("Error creating removed recurring expense:", error);
@@ -2156,4 +2157,34 @@ export async function updateRecurringExpenseInstances(
     await handleBatchExpenseDeletion(misplacedExpensesToRemove);
   }
   setExpenseArray(await getExpenseList());
+}
+
+export async function removeAllInstancesOf(
+  recurringExpenseId: string,
+  expenseArray: ExpenseItemEntity[],
+  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
+  startingFrom: Date,
+  setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItemEntity[]>>,
+) {
+  const batchDeletionQueue = new Set<string>();
+  for (const expenseItem of expenseArray) {
+    if (
+      expenseItem.recurringExpenseId === recurringExpenseId &&
+      new Date(expenseItem.timestamp).getTime() >= new Date(startingFrom).getTime()
+    ) {
+      batchDeletionQueue.add(expenseItem.expenseId);
+      await handleRemovedRecurringExpenseCreation(recurringExpenseId, expenseItem.timestamp);
+    }
+  }
+  setExpenseArray((prevExpenseArray) =>
+    prevExpenseArray.filter((expenseItem) => !(expenseItem.expenseId in batchDeletionQueue)),
+  );
+  console.log("Queuing the below for batch deletion.");
+  console.log(batchDeletionQueue);
+  setRemovedRecurringExpenseInstances(await getRemovedRecurringExpenses());
+  await handleBatchExpenseDeletion(batchDeletionQueue);
+}
+
+export function findExpenseWithId(expenseId: string, expenseArray: ExpenseItemEntity[]) {
+  return expenseArray.find((expenseItem) => expenseItem.expenseId === expenseId);
 }
