@@ -83,4 +83,4 @@ Contributions, issues, and feature requests are welcome!
 
 # License
 
-This project is open source, licensed under the GNU GENERAL PUBLIC LICENSE.
+This project is open source, licensed under [APACHE 2.0](https://github.com/WeiChongDevelops/Fulcrum/blob/main/LICENSE).
