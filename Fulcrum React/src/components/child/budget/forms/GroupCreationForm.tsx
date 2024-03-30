@@ -86,7 +86,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="close-form-or-modal-button mb-6 font-bold text-4xl">New Group</p>
+      <p className="close-form-or-modal-button mb-6 font-bold text-3xl">New Group</p>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="Group Name">Group Name</label>
         <input

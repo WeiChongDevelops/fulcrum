@@ -103,7 +103,7 @@ export default function BudgetUpdatingForm({
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="mb-6 font-bold text-4xl">Updating Budget for '{oldBudgetBeingEdited.oldCategory}'</p>
+      <p className="mb-6 font-bold text-3xl">Updating Budget for '{oldBudgetBeingEdited.oldCategory}'</p>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="category">Category Name</label>
         <input

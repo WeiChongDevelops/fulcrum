@@ -114,7 +114,7 @@ export default function RecurringExpenseUpdatingForm({
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="mb-6 mt-4 font-bold text-4xl">Updating Expense</p>
+      <p className="mb-6 mt-4 font-bold text-3xl">Updating Recurring Expense</p>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="category">Category</label>
         <CategorySelector

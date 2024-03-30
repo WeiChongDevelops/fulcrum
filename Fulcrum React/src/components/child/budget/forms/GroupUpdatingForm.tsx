@@ -94,7 +94,7 @@ export default function GroupUpdatingForm({
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="mb-6 font-bold text-4xl">Updating Group {oldGroupBeingEdited.oldGroupName}</p>
+      <p className="mb-6 font-bold text-3xl">Updating Group {oldGroupBeingEdited.oldGroupName}</p>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="groupName">Group Name</label>
         <input type="text" name="group" id="group" value={formData.group} onChange={handleInputChange} />

@@ -8,15 +8,15 @@ import {
   findExpenseWithId,
   getCurrencySymbol,
   getExpenseList,
-  getRemovedRecurringExpenses,
+  getBlacklistedExpenses,
   GroupItemEntity,
   handleExpenseDeletion,
-  handleRemovedRecurringExpenseCreation,
+  handleBlacklistedExpenseCreation,
   PreviousExpenseBeingEdited,
   PublicUserData,
   RecurringExpenseItemEntity,
-  removeAllInstancesOf,
-  RemovedRecurringExpenseItemEntity,
+  removeAllInstancesOfRecurringExpenseAfterDate,
+  BlacklistedExpenseItemEntity,
   SetFormVisibility,
   SetModalVisibility,
   y2K,
@@ -40,7 +40,7 @@ interface ExpenseModalsAndFormsProps {
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
   setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
-  setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItemEntity[]>>;
+  setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
 
   publicUserData: PublicUserData;
   defaultCalendarDate: Date;
@@ -63,7 +63,7 @@ export default function ExpenseModalsAndForms({
   setExpenseArray,
   setBudgetArray,
   setRecurringExpenseArray,
-  setRemovedRecurringExpenseInstances,
+  setBlacklistedExpenseArray,
   publicUserData,
   defaultCalendarDate,
   oldExpenseBeingEdited,
@@ -81,11 +81,11 @@ export default function ExpenseModalsAndForms({
     );
     if (expenseItemToDelete) {
       if (expenseItemToDeleteIsRecurring) {
-        handleRemovedRecurringExpenseCreation(expenseItemToDelete.recurringExpenseId, expenseItemToDelete.timestamp)
+        handleBlacklistedExpenseCreation(expenseItemToDelete.recurringExpenseId, expenseItemToDelete.timestamp)
           .then(() => {
             console.log("Logged recurrence removal successful");
-            getRemovedRecurringExpenses()
-              .then((results) => setRemovedRecurringExpenseInstances(results))
+            getBlacklistedExpenses()
+              .then((results) => setBlacklistedExpenseArray(results))
               .then(() =>
                 handleExpenseDeletion(expenseIdToDelete, setExpenseArray)
                   .then(() => console.log("Deletion successful"))
@@ -134,54 +134,54 @@ export default function ExpenseModalsAndForms({
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           oldExpenseBeingEdited={oldExpenseBeingEdited}
           currencySymbol={getCurrencySymbol(publicUserData.currency)}
-          setRemovedRecurringExpenseInstances={setRemovedRecurringExpenseInstances}
+          setBlacklistedExpenseArray={setBlacklistedExpenseArray}
         />
       )}
 
-      {expenseModalVisibility.isConfirmExpenseDestructionModalVisible &&
+      {expenseModalVisibility.isConfirmExpenseDeletionModalVisible &&
         (expenseItemToDeleteIsRecurring ? (
           <ThreeOptionModal
-            optionOneText={"Delete This Instance Only"}
+            optionOneText={"Delete This Repeat Only"}
             optionOneFunction={() => {
               runExpenseDeletion();
               setExpenseModalVisibility((current) => ({
                 ...current,
-                isConfirmExpenseDestructionModalVisible: false,
+                isConfirmExpenseDeletionModalVisible: false,
               }));
             }}
-            optionTwoText={"Delete Future Instances"}
+            optionTwoText={"Delete This and Future Repeats"}
             optionTwoFunction={async () => {
-              await removeAllInstancesOf(
+              setExpenseModalVisibility((current) => ({
+                ...current,
+                isConfirmExpenseDeletionModalVisible: false,
+              }));
+              await removeAllInstancesOfRecurringExpenseAfterDate(
                 expenseItemToDelete!.recurringExpenseId!,
                 expenseArray,
                 setExpenseArray,
                 expenseItemToDelete!.timestamp,
-                setRemovedRecurringExpenseInstances,
+                setBlacklistedExpenseArray,
               );
               setExpenseArray(await getExpenseList());
-              setExpenseModalVisibility((current) => ({
-                ...current,
-                isConfirmExpenseDestructionModalVisible: false,
-              }));
             }}
-            optionThreeText={"Delete All Instances"}
+            optionThreeText={"Delete All Repeats"}
             optionThreeFunction={async () => {
-              await removeAllInstancesOf(
+              await removeAllInstancesOfRecurringExpenseAfterDate(
                 expenseItemToDelete!.recurringExpenseId!,
                 expenseArray,
                 setExpenseArray,
                 y2K,
-                setRemovedRecurringExpenseInstances,
+                setBlacklistedExpenseArray,
               );
               setExpenseArray(await getExpenseList());
               setExpenseModalVisibility((current) => ({
                 ...current,
-                isConfirmExpenseDestructionModalVisible: false,
+                isConfirmExpenseDeletionModalVisible: false,
               }));
             }}
             setModalVisibility={setExpenseModalVisibility}
-            isVisible="isConfirmExpenseDestructionModalVisible"
-            title="Are you sure you want to delete this expense?"
+            isVisible="isConfirmExpenseDeletionModalVisible"
+            title="Are you sure you want to delete this expense? For more recurring expense options, see the 'Tools' page."
           />
         ) : (
           <TwoOptionModal
@@ -189,7 +189,7 @@ export default function ExpenseModalsAndForms({
             optionOneFunction={() =>
               setExpenseModalVisibility((current) => ({
                 ...current,
-                isConfirmExpenseDestructionModalVisible: false,
+                isConfirmExpenseDeletionModalVisible: false,
               }))
             }
             optionTwoText="Confirm"
@@ -197,11 +197,11 @@ export default function ExpenseModalsAndForms({
               runExpenseDeletion();
               setExpenseModalVisibility((current) => ({
                 ...current,
-                isConfirmExpenseDestructionModalVisible: false,
+                isConfirmExpenseDeletionModalVisible: false,
               }));
             }}
             setModalVisibility={setExpenseModalVisibility}
-            isVisible="isConfirmExpenseDestructionModalVisible"
+            isVisible="isConfirmExpenseDeletionModalVisible"
             title="Are you sure you want to delete this expense?"
           />
         ))}

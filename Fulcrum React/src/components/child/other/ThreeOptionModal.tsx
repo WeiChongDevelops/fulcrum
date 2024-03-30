@@ -76,21 +76,21 @@ export default function ThreeOptionModal({
         <FulcrumButton
           displayText={optionOneText}
           onClick={optionOneFunction}
-          optionalTailwind={"min-w-[30%]"}
+          optionalTailwind={"w-[30%] text-sm"}
           backgroundColour={"green"}
           id={"left-button"}
         />
         <FulcrumButton
           displayText={optionTwoText}
           onClick={optionTwoFunction}
-          optionalTailwind={"mx-2 min-w-[30%]"}
-          backgroundColour={"grey"}
+          optionalTailwind={"mx-2 w-[30%] text-sm"}
+          backgroundColour={"green"}
           id={"centre-button"}
         />
         <FulcrumButton
           displayText={optionThreeText}
           onClick={optionThreeFunction}
-          optionalTailwind={"min-w-[30%]"}
+          optionalTailwind={"w-[30%] text-sm"}
           backgroundColour={"red"}
           id={"right-button"}
         />

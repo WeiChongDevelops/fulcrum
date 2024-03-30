@@ -69,7 +69,7 @@ export default function BudgetTile({
     setCategoryToDelete(category);
     setModalFormVisibility((current) => ({
       ...current,
-      isConfirmCategoryDestructionModalVisible: true,
+      isConfirmCategoryDeletionModalVisible: true,
     }));
   }
 

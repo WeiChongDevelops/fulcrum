@@ -75,7 +75,7 @@ export default function ExpenseItem({
     setExpenseIdToDelete(expenseId);
     setExpenseModalVisibility((current) => ({
       ...current,
-      isConfirmExpenseDestructionModalVisible: true,
+      isConfirmExpenseDeletionModalVisible: true,
     }));
   }
 

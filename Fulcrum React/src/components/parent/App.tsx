@@ -15,8 +15,10 @@ import {
   getGroupAndColourMap,
   getGroupList,
   getPublicUserData,
+  getBlacklistedExpenses,
   GroupItemEntity,
   PublicUserData,
+  BlacklistedExpenseItemEntity,
 } from "../../util.ts";
 import "../../css/App.css";
 import About from "../child/home/subpages/about/About.tsx";
@@ -46,23 +48,32 @@ export default function App() {
   const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
   const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
   const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
+  const [blacklistedExpenseArray, setBlacklistedExpenseArray] = useState<BlacklistedExpenseItemEntity[]>([]);
 
   const [error, setError] = useState("");
 
   useEffect(() => {
     async function retrieveGlobalAppData() {
       if (!!email) {
-        const [publicUserDataRetrieved, expenseDataRetrieved, budgetDataRetrieved, groupDataRetrieved] = await Promise.all([
+        const [
+          publicUserDataRetrieved,
+          expenseDataRetrieved,
+          budgetDataRetrieved,
+          groupDataRetrieved,
+          blacklistedExpenseDataRetrieved,
+        ] = await Promise.all([
           getPublicUserData(),
           getExpenseList(),
           getBudgetList(),
           getGroupList(),
+          getBlacklistedExpenses(),
         ]);
 
         setPublicUserData(publicUserDataRetrieved);
         setExpenseArray(expenseDataRetrieved);
         setBudgetArray(budgetDataRetrieved);
         setGroupArray(groupDataRetrieved);
+        setBlacklistedExpenseArray(blacklistedExpenseDataRetrieved);
 
         setCategoryDataMap(await getGroupAndColourMap(budgetDataRetrieved, groupDataRetrieved));
       }
@@ -117,6 +128,8 @@ export default function App() {
                 setExpenseArray={setExpenseArray}
                 setBudgetArray={setBudgetArray}
                 categoryDataMap={categoryDataMap}
+                blacklistedExpenseArray={blacklistedExpenseArray}
+                setBlacklistedExpenseArray={setBlacklistedExpenseArray}
                 error={error}
                 setError={setError}
               />
@@ -143,10 +156,12 @@ export default function App() {
               <Tools
                 publicUserData={publicUserData}
                 setPublicUserData={setPublicUserData}
+                expenseArray={expenseArray}
                 budgetArray={budgetArray}
                 groupArray={groupArray}
                 setExpenseArray={setExpenseArray}
                 setBudgetArray={setBudgetArray}
+                setBlacklistedExpenseArray={setBlacklistedExpenseArray}
                 categoryDataMap={categoryDataMap}
                 error={error}
                 setError={setError}

@@ -157,7 +157,7 @@ export default function ExpenseCreationForm({
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="mb-6 mt-4 font-bold text-4xl">New {mustBeRecurring && "Recurring "}Expense</p>
+      <p className="mb-6 mt-4 font-bold text-3xl">New {mustBeRecurring && "Recurring "}Expense</p>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="category">Category</label>
         <CategorySelector categoryOptions={categoryOptions} setFormData={setFormData} />

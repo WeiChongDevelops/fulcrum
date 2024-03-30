@@ -9,9 +9,10 @@ import {
   handleRecurringExpenseInstanceUpdating,
   ExpenseFormVisibility,
   SelectorOptionsFormattedData,
-  handleRemovedRecurringExpenseCreation,
-  RemovedRecurringExpenseItemEntity,
+  handleBlacklistedExpenseCreation,
+  BlacklistedExpenseItemEntity,
   SetFormVisibility,
+  getBlacklistedExpenses,
 } from "../../../../../util.ts";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
@@ -23,7 +24,7 @@ interface RecurringExpenseInstanceUpdatingFormProps {
   categoryOptions: SelectorOptionsFormattedData[];
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   currencySymbol: string;
-  setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItemEntity[]>>;
+  setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
 }
 
 /**
@@ -35,7 +36,7 @@ export default function RecurringExpenseInstanceUpdatingForm({
   categoryOptions,
   oldExpenseBeingEdited,
   currencySymbol,
-  setRemovedRecurringExpenseInstances,
+  setBlacklistedExpenseArray,
 }: RecurringExpenseInstanceUpdatingFormProps) {
   const [formData, setFormData] = useState<RecurringExpenseInstanceUpdatingFormData>({
     category: oldExpenseBeingEdited.oldCategory,
@@ -73,11 +74,8 @@ export default function RecurringExpenseInstanceUpdatingForm({
     hideForm();
 
     await handleRecurringExpenseInstanceUpdating(oldExpenseBeingEdited.expenseId, formData);
-    await handleRemovedRecurringExpenseCreation(
-      oldExpenseBeingEdited.recurringExpenseId,
-      oldExpenseBeingEdited.oldTimestamp,
-      setRemovedRecurringExpenseInstances,
-    );
+    await handleBlacklistedExpenseCreation(oldExpenseBeingEdited.recurringExpenseId, oldExpenseBeingEdited.oldTimestamp);
+    setBlacklistedExpenseArray(await getBlacklistedExpenses());
 
     setFormData({
       category: oldExpenseBeingEdited.oldCategory,
@@ -97,7 +95,7 @@ export default function RecurringExpenseInstanceUpdatingForm({
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="mb-6 mt-4 font-bold text-4xl">Updating Expense</p>
+      <p className="mb-6 mt-4 font-bold text-3xl">Updating Expense</p>
 
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="category">Category</label>

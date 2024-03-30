@@ -4,6 +4,7 @@ import {
   categoryListAsOptions,
   ExpenseItemEntity,
   getCurrencySymbol,
+  getExpenseList,
   GroupItemEntity,
   handleRecurringExpenseDeletion,
   PreviousRecurringExpenseBeingEdited,
@@ -11,8 +12,11 @@ import {
   RecurringExpenseFormVisibility,
   RecurringExpenseItemEntity,
   RecurringExpenseModalVisibility,
+  removeAllInstancesOfRecurringExpenseAfterDate,
+  BlacklistedExpenseItemEntity,
   SetFormVisibility,
   SetModalVisibility,
+  y2K,
 } from "../../../../util.ts";
 import RecurringExpenseUpdatingForm from "./forms/RecurringExpenseUpdatingForm.tsx";
 import TwoOptionModal from "../../other/TwoOptionModal.tsx";
@@ -24,12 +28,14 @@ interface RecurringExpenseModalsAndFormsProps {
   recurringExpenseModalVisibility: RecurringExpenseModalVisibility;
   setRecurringExpenseModalVisibility: SetModalVisibility<RecurringExpenseModalVisibility>;
 
+  expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
 
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
   setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+  setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
 
   publicUserData: PublicUserData;
 
@@ -45,11 +51,13 @@ export default function RecurringExpenseModalsAndForms({
   setRecurringExpenseFormVisibility,
   recurringExpenseModalVisibility,
   setRecurringExpenseModalVisibility,
+  expenseArray,
   budgetArray,
   groupArray,
   setExpenseArray,
   setRecurringExpenseArray,
   setBudgetArray,
+  setBlacklistedExpenseArray,
   publicUserData,
   recurringExpenseIdToDelete,
   oldRecurringExpenseBeingEdited,
@@ -87,26 +95,58 @@ export default function RecurringExpenseModalsAndForms({
         />
       )}
 
-      {recurringExpenseModalVisibility.isConfirmRecurringExpenseDestructionModalVisible && (
+      {recurringExpenseModalVisibility.isConfirmRecurringExpenseDeletionModalVisible && (
         <TwoOptionModal
           optionOneText="Cancel"
-          optionOneFunction={() =>
+          optionOneFunction={() => {
             setRecurringExpenseModalVisibility((current) => ({
               ...current,
-              isConfirmRecurringExpenseDestructionModalVisible: false,
-            }))
-          }
+              isConfirmRecurringExpenseDeletionModalVisible: false,
+            }));
+          }}
           optionTwoText="Confirm"
           optionTwoFunction={() => {
-            runRecurringExpenseDeletion();
             setRecurringExpenseModalVisibility((current) => ({
               ...current,
-              isConfirmRecurringExpenseDestructionModalVisible: false,
+              isConfirmRecurringExpenseDeletionModalVisible: false,
+              isSelectRecurringExpenseDeletionTypeModalVisible: true,
             }));
           }}
           setModalVisibility={setRecurringExpenseModalVisibility}
-          isVisible="isConfirmRecurringExpenseDestructionModalVisible"
-          title="Are you sure you want to delete this recurring expense? Don't worry, this won't affect any past records."
+          isVisible="isConfirmRecurringExpenseDeletionModalVisible"
+          title="Are you sure you want to delete this recurring expense?"
+        />
+      )}
+
+      {recurringExpenseModalVisibility.isSelectRecurringExpenseDeletionTypeModalVisible && (
+        <TwoOptionModal
+          optionOneText={"Keep Previous Repeats"}
+          optionOneFunction={() => {
+            runRecurringExpenseDeletion();
+            setRecurringExpenseModalVisibility((current) => ({
+              ...current,
+              isSelectRecurringExpenseDeletionTypeModalVisible: false,
+            }));
+          }}
+          optionTwoText={"Delete Previous Repeats"}
+          optionTwoFunction={async () => {
+            runRecurringExpenseDeletion();
+            await removeAllInstancesOfRecurringExpenseAfterDate(
+              recurringExpenseIdToDelete,
+              expenseArray,
+              setExpenseArray,
+              y2K,
+              setBlacklistedExpenseArray,
+            );
+            setExpenseArray(await getExpenseList());
+            setRecurringExpenseModalVisibility((current) => ({
+              ...current,
+              isSelectRecurringExpenseDeletionTypeModalVisible: false,
+            }));
+          }}
+          setModalVisibility={setRecurringExpenseModalVisibility}
+          isVisible={"isSelectRecurringExpenseDeletionTypeModalVisible"}
+          title={"Would you like to keep previous repeats? You can delete specific instances from the 'Expenses' page"}
         />
       )}
     </div>

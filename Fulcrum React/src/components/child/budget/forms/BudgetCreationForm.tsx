@@ -108,7 +108,7 @@ export default function BudgetCreationForm({
         }}
       />
 
-      <p className="mb-6 font-bold text-4xl">New Budget Item</p>
+      <p className="mb-6 font-bold text-3xl">New Budget Item</p>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto ">
         <label htmlFor="category">Category</label>
         <input

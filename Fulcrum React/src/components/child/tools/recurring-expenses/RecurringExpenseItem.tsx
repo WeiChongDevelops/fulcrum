@@ -23,16 +23,10 @@ interface RecurringExpenseItemProps {
   groupName: string;
   groupColour: string;
 
-  setRecurringExpenseFormVisibility: Dispatch<
-    SetStateAction<RecurringExpenseFormVisibility>
-  >;
-  setRecurringExpenseModalVisibility: Dispatch<
-    SetStateAction<RecurringExpenseModalVisibility>
-  >;
+  setRecurringExpenseFormVisibility: Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
+  setRecurringExpenseModalVisibility: Dispatch<SetStateAction<RecurringExpenseModalVisibility>>;
 
-  setOldRecurringExpenseBeingEdited: Dispatch<
-    SetStateAction<PreviousRecurringExpenseBeingEdited>
-  >;
+  setOldRecurringExpenseBeingEdited: Dispatch<SetStateAction<PreviousRecurringExpenseBeingEdited>>;
   setRecurringExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 
   publicUserData: PublicUserData;
@@ -75,7 +69,7 @@ export default function RecurringExpenseItem({
     setRecurringExpenseIdToDelete(recurringExpenseId);
     setRecurringExpenseModalVisibility((current) => ({
       ...current,
-      isConfirmRecurringExpenseDestructionModalVisible: true,
+      isConfirmRecurringExpenseDeletionModalVisible: true,
     }));
   }
 
@@ -94,11 +88,7 @@ export default function RecurringExpenseItem({
     >
       <div className="flex flex-row items-center">
         <div className="rounded-full bg-[#1b1c1c] p-3">
-          <img
-            src={`/src/assets/category-icons/${iconPath}`}
-            alt="Category icon"
-            className="w-8 h-auto"
-          />
+          <img src={`/src/assets/category-icons/${iconPath}`} alt="Category icon" className="w-8 h-auto" />
         </div>
         <div
           className="flex flex-col items-start ml-2"
@@ -122,9 +112,7 @@ export default function RecurringExpenseItem({
             alt="Cycle icon"
             className={"w-8 h-8"}
           />
-          <p className={"text-xl ml-3 mr-4 font-bold"}>
-            {capitaliseFirstLetter(frequency)}
-          </p>
+          <p className={"text-xl ml-3 mr-4 font-bold"}>{capitaliseFirstLetter(frequency)}</p>
         </div>
 
         <div className="font-extrabold mr-12">
@@ -132,9 +120,7 @@ export default function RecurringExpenseItem({
           <p>{nextRecurringInstance && formatDate(nextRecurringInstance)}</p>
         </div>
 
-        <b className="text-xl">
-          {formatDollarAmountStatic(amount, publicUserData.currency)}
-        </b>
+        <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
         <div className="flex flex-row items-center ml-2">
           <button className="circle-button" onClick={handleEditClick}>
             <img

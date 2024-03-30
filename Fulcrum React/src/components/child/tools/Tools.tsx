@@ -6,6 +6,7 @@ import {
   GroupItemEntity,
   OpenToolsSection,
   PublicUserData,
+  BlacklistedExpenseItemEntity,
 } from "../../../util.ts";
 import "../../../css/Tools.css";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -17,6 +18,7 @@ interface ToolsProps {
   publicUserData: PublicUserData;
   setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
 
+  expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
 
@@ -24,6 +26,7 @@ interface ToolsProps {
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
+  setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
 
   error: string;
   setError: Dispatch<SetStateAction<string>>;
@@ -35,11 +38,13 @@ interface ToolsProps {
 export default function Tools({
   publicUserData,
   setPublicUserData,
+  expenseArray,
   budgetArray,
   groupArray,
   setExpenseArray,
   setBudgetArray,
   categoryDataMap,
+  setBlacklistedExpenseArray,
   error,
   setError,
 }: ToolsProps) {
@@ -70,11 +75,13 @@ export default function Tools({
         <RecurringExpenses
           setOpenToolsSection={setOpenToolsSection}
           publicUserData={publicUserData}
+          expenseArray={expenseArray}
           budgetArray={budgetArray}
           groupArray={groupArray}
           setExpenseArray={setExpenseArray}
           setBudgetArray={setBudgetArray}
           categoryDataMap={categoryDataMap}
+          setBlacklistedExpenseArray={setBlacklistedExpenseArray}
           error={error}
           setError={setError}
         />

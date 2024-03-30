@@ -74,14 +74,14 @@ export default function TwoOptionModal({
         <FulcrumButton
           displayText={optionOneText}
           onClick={optionOneFunction}
-          optionalTailwind={"mx-2 w-1/2"}
+          optionalTailwind={"mx-2 max-w-1/2"}
           backgroundColour={"green"}
           id={"left-button"}
         />
         <FulcrumButton
           displayText={optionTwoText}
           onClick={optionTwoFunction}
-          optionalTailwind={"mx-2 w-1/2"}
+          optionalTailwind={"mx-2 max-w-1/2"}
           backgroundColour={"red"}
           id={"right-button"}
           refObject={rightButtonRef}

@@ -7,14 +7,14 @@ import {
   ExpenseItemEntity,
   ExpenseModalVisibility,
   getRecurringExpenseList,
-  getRemovedRecurringExpenses,
+  getBlacklistedExpenses,
   getStructuredExpenseData,
   GroupItemEntity,
   MonthExpenseGroupEntity,
   PreviousExpenseBeingEdited,
   PublicUserData,
   RecurringExpenseItemEntity,
-  RemovedRecurringExpenseItemEntity,
+  BlacklistedExpenseItemEntity,
   updateRecurringExpenseInstances,
 } from "../../../util.ts";
 import "../../../css/Expense.css";
@@ -34,6 +34,8 @@ interface ExpensesProps {
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
+  blacklistedExpenseArray: BlacklistedExpenseItemEntity[];
+  setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
 
   error: string;
   setError: Dispatch<SetStateAction<string>>;
@@ -50,6 +52,8 @@ export default function Expenses({
   setExpenseArray,
   setBudgetArray,
   categoryDataMap,
+  blacklistedExpenseArray,
+  setBlacklistedExpenseArray,
   error,
   setError,
 }: ExpensesProps) {
@@ -60,7 +64,7 @@ export default function Expenses({
     isUpdateRecurringExpenseInstanceVisible: false,
   });
   const [expenseModalVisibility, setExpenseModalVisibility] = useState<ExpenseModalVisibility>({
-    isConfirmExpenseDestructionModalVisible: false,
+    isConfirmExpenseDeletionModalVisible: false,
   });
   const [isExpenseFormOrModalOpen, setIsExpenseFormOrModalOpen] = useState(false);
   const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({
@@ -72,9 +76,6 @@ export default function Expenses({
   });
   const [expenseIdToDelete, setExpenseIdToDelete] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [removedRecurringExpenseInstances, setRemovedRecurringExpenseInstances] = useState<
-    RemovedRecurringExpenseItemEntity[]
-  >([]);
   const [defaultCalendarDate, setDefaultCalendarDate] = useState(new Date());
 
   const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>([]);
@@ -90,19 +91,14 @@ export default function Expenses({
           window.location.href = "/login";
         }
 
-        const [recurringExpenseList, removedRecurringExpenses] = await Promise.all([
+        const [recurringExpenseList, blacklistedExpenses] = await Promise.all([
           getRecurringExpenseList(),
-          getRemovedRecurringExpenses(),
+          getBlacklistedExpenses(),
         ]);
         setRecurringExpenseArray(recurringExpenseList);
-        setRemovedRecurringExpenseInstances(removedRecurringExpenses);
+        setBlacklistedExpenseArray(blacklistedExpenses);
 
-        await updateRecurringExpenseInstances(
-          recurringExpenseArray,
-          expenseArray,
-          removedRecurringExpenseInstances,
-          setExpenseArray,
-        );
+        await updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, blacklistedExpenseArray, setExpenseArray);
       } catch (error) {
         console.log(`Unsuccessful expense page data retrieval - error: ${error}`);
       }
@@ -121,7 +117,7 @@ export default function Expenses({
   }, [expenseFormVisibility, expenseModalVisibility]);
 
   useMemo(() => {
-    updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, removedRecurringExpenseInstances, setExpenseArray);
+    updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, blacklistedExpenseArray, setExpenseArray);
   }, [recurringExpenseArray]);
 
   return (
@@ -159,7 +155,7 @@ export default function Expenses({
                 setExpenseArray={setExpenseArray}
                 setBudgetArray={setBudgetArray}
                 setRecurringExpenseArray={setRecurringExpenseArray}
-                setRemovedRecurringExpenseInstances={setRemovedRecurringExpenseInstances}
+                setBlacklistedExpenseArray={setBlacklistedExpenseArray}
                 publicUserData={publicUserData}
                 defaultCalendarDate={defaultCalendarDate}
                 oldExpenseBeingEdited={oldExpenseBeingEdited}

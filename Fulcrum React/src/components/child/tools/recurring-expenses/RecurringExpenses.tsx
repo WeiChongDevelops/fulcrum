@@ -11,6 +11,7 @@ import {
   RecurringExpenseFormVisibility,
   RecurringExpenseItemEntity,
   RecurringExpenseModalVisibility,
+  BlacklistedExpenseItemEntity,
 } from "../../../../util.ts";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Loader from "../../other/Loader.tsx";
@@ -25,6 +26,7 @@ interface RecurringExpensesProps {
 
   publicUserData: PublicUserData;
 
+  expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
 
@@ -33,6 +35,7 @@ interface RecurringExpensesProps {
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
+  setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
 
   error: string;
   setError: Dispatch<SetStateAction<string>>;
@@ -44,17 +47,20 @@ interface RecurringExpensesProps {
 export default function RecurringExpenses({
   setOpenToolsSection,
   publicUserData,
+  expenseArray,
   budgetArray,
   groupArray,
   setExpenseArray,
   setBudgetArray,
   categoryDataMap,
+  setBlacklistedExpenseArray,
   error,
   setError,
 }: RecurringExpensesProps) {
   const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
   const [recurringExpenseModalVisibility, setRecurringExpenseModalVisibility] = useState<RecurringExpenseModalVisibility>({
-    isConfirmRecurringExpenseDestructionModalVisible: false,
+    isConfirmRecurringExpenseDeletionModalVisible: false,
+    isSelectRecurringExpenseDeletionTypeModalVisible: false,
   });
   const [recurringExpenseFormVisibility, setRecurringExpenseFormVisibility] = useState<RecurringExpenseFormVisibility>({
     isCreateExpenseVisible: false,
@@ -175,6 +181,8 @@ export default function RecurringExpenses({
                 recurringExpenseFormVisibility={recurringExpenseFormVisibility}
                 setRecurringExpenseArray={setRecurringExpenseArray}
                 setBudgetArray={setBudgetArray}
+                setBlacklistedExpenseArray={setBlacklistedExpenseArray}
+                expenseArray={expenseArray}
                 groupArray={groupArray}
                 setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
                 setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}

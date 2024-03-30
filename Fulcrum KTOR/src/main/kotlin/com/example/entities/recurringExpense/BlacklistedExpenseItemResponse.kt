@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.datetime.Instant
 
 @Serializable
-data class RemovedRecurringExpenseCreateRequestReceived(
+data class BlacklistedExpenseItemResponse(
     val recurringExpenseId: String,
     @Contextual val timestampOfRemovedInstance: Instant
 )

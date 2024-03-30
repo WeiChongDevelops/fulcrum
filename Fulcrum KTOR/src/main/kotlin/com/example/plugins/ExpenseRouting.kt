@@ -264,24 +264,24 @@ fun Application.configureExpenseRouting() {
             }
         }
 
-        suspend fun checkIfRemovedRecurringExpenseExists(recurringExpenseId: String, timestampOfRemovedInstance: Instant): Boolean {
+        suspend fun checkIfBlacklistedExpenseExists(recurringExpenseId: String, timestampOfRemovedInstance: Instant): Boolean {
             val response = supabase.postgrest["removed_recurring_expenses"].select(columns = Columns.list("recurringExpenseId", "timestampOfRemovedInstance")) {
                 eq("userId", getActiveUserId())
                 eq("recurringExpenseId", recurringExpenseId)
                 eq("timestampOfRemovedInstance", timestampOfRemovedInstance)
-            }.decodeList<RemovedRecurringExpenseItemResponse>()
+            }.decodeList<BlacklistedExpenseItemResponse>()
             return response.isNotEmpty();
         }
 
-        post("/api/createRemovedRecurringExpense") {
+        post("/api/createBlacklistedExpense") {
             try {
-                val removedRecurringExpenseRequest = call.receive<RemovedRecurringExpenseCreateRequestReceived>()
+                val blacklistedExpenseRequest = call.receive<BlacklistedExpenseCreateRequestReceived>()
 
-                val recurringExpenseId = removedRecurringExpenseRequest.recurringExpenseId
-                val timestampOfRemovedInstance = removedRecurringExpenseRequest.timestampOfRemovedInstance
+                val recurringExpenseId = blacklistedExpenseRequest.recurringExpenseId
+                val timestampOfRemovedInstance = blacklistedExpenseRequest.timestampOfRemovedInstance
 
-                if (!checkIfRemovedRecurringExpenseExists(recurringExpenseId, timestampOfRemovedInstance)) {
-                    val itemToInsert = RemovedRecurringExpenseCreateRequestSent (
+                if (!checkIfBlacklistedExpenseExists(recurringExpenseId, timestampOfRemovedInstance)) {
+                    val itemToInsert = BlacklistedExpenseCreateRequestSent (
                         recurringExpenseId = recurringExpenseId,
                         timestampOfRemovedInstance = timestampOfRemovedInstance
                     )
@@ -306,14 +306,14 @@ fun Application.configureExpenseRouting() {
             }
         }
 
-        get("/api/getRemovedRecurringExpenses") {
+        get("/api/getBlacklistedExpenses") {
             try {
                 val userId = getActiveUserId()
-                val removedRecurringExpensesList = supabase.postgrest["removed_recurring_expenses"].select(columns = Columns.list("recurringExpenseId", "timestampOfRemovedInstance")) {
+                val blacklistedExpensesList = supabase.postgrest["removed_recurring_expenses"].select(columns = Columns.list("recurringExpenseId", "timestampOfRemovedInstance")) {
                     eq("userId", userId)
-                }.decodeList<RemovedRecurringExpenseItemResponse>()
+                }.decodeList<BlacklistedExpenseItemResponse>()
 
-                call.respond(HttpStatusCode.OK, removedRecurringExpensesList)
+                call.respond(HttpStatusCode.OK, blacklistedExpensesList)
             } catch (e: UnauthorizedRestException) {
                 call.respondAuthError("Not authorised - JWT token likely expired.")
             } catch (e: Exception) {

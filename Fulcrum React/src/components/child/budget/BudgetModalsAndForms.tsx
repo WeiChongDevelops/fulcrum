@@ -100,13 +100,13 @@ export default function BudgetModalsAndForms({
             setBudgetModalVisibility((current) => ({
               ...current,
               isDeleteOptionsModalVisible: false,
-              isConfirmGroupDestructionModalVisible: true,
+              isConfirmGroupDeletionModalVisible: true,
             }));
           }}
           isVisible="isDeleteOptionsModalVisible"
         />
       )}
-      {budgetModalVisibility.isConfirmGroupDestructionModalVisible && (
+      {budgetModalVisibility.isConfirmGroupDeletionModalVisible && (
         <TwoOptionModal
           title="Are you sure? This will delete all categories in the group, as well as their expense records."
           setModalVisibility={setBudgetModalVisibility}
@@ -114,10 +114,10 @@ export default function BudgetModalsAndForms({
           optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
           optionTwoText="Confirm"
           optionTwoFunction={() => runGroupDeletionWithUserPreference(false)}
-          isVisible="isConfirmGroupDestructionModalVisible"
+          isVisible="isConfirmGroupDeletionModalVisible"
         />
       )}
-      {budgetModalVisibility.isConfirmCategoryDestructionModalVisible && (
+      {budgetModalVisibility.isConfirmCategoryDeletionModalVisible && (
         <TwoOptionModal
           title="Are you sure? This will delete all expense entries for this budget category."
           setModalVisibility={setBudgetModalVisibility}
@@ -125,14 +125,14 @@ export default function BudgetModalsAndForms({
           optionOneFunction={() => {
             setBudgetModalVisibility((current) => ({
               ...current,
-              isConfirmCategoryDestructionModalVisible: false,
+              isConfirmCategoryDeletionModalVisible: false,
             }));
           }}
           optionTwoText="Confirm"
           optionTwoFunction={() => {
             setBudgetModalVisibility((current) => ({
               ...current,
-              isConfirmCategoryDestructionModalVisible: false,
+              isConfirmCategoryDeletionModalVisible: false,
             }));
             handleBudgetDeletion(categoryToDelete, setBudgetArray)
               .then(async (response) => {
@@ -141,7 +141,7 @@ export default function BudgetModalsAndForms({
               })
               .catch((error) => console.log("Deletion unsuccessful", error));
           }}
-          isVisible="isConfirmCategoryDestructionModalVisible"
+          isVisible="isConfirmCategoryDeletionModalVisible"
         />
       )}
     </div>

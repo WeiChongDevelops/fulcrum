@@ -63,8 +63,8 @@ export default function Budget({
   });
   const [budgetModalVisibility, setBudgetModalVisibility] = useState<BudgetModalVisibility>({
     isDeleteOptionsModalVisible: false,
-    isConfirmGroupDestructionModalVisible: false,
-    isConfirmCategoryDestructionModalVisible: false,
+    isConfirmGroupDeletionModalVisible: false,
+    isConfirmCategoryDeletionModalVisible: false,
   });
   const [groupToDelete, setGroupToDelete] = useState<string>("");
   const [categoryToDelete, setCategoryToDelete] = useState<string>("");
@@ -134,7 +134,7 @@ export default function Budget({
     setBudgetModalVisibility((current) => ({
       ...current,
       isDeleteOptionsModalVisible: false,
-      isConfirmGroupDestructionModalVisible: false,
+      isConfirmGroupDeletionModalVisible: false,
     }));
 
     handleGroupDeletion(groupToDelete, setGroupArray, keepContainedBudgets)

@@ -112,8 +112,8 @@ export interface BudgetFormVisibility {
 
 export interface BudgetModalVisibility {
   isDeleteOptionsModalVisible: boolean;
-  isConfirmGroupDestructionModalVisible: boolean;
-  isConfirmCategoryDestructionModalVisible: boolean;
+  isConfirmGroupDeletionModalVisible: boolean;
+  isConfirmCategoryDeletionModalVisible: boolean;
 }
 
 export interface ExpenseFormVisibility {
@@ -123,7 +123,7 @@ export interface ExpenseFormVisibility {
 }
 
 export interface ExpenseModalVisibility {
-  isConfirmExpenseDestructionModalVisible: boolean;
+  isConfirmExpenseDeletionModalVisible: boolean;
 }
 
 // TOOLS ENTITIES //
@@ -141,7 +141,8 @@ export interface RecurringExpenseItemEntity {
 }
 
 export interface RecurringExpenseModalVisibility {
-  isConfirmRecurringExpenseDestructionModalVisible: boolean;
+  isConfirmRecurringExpenseDeletionModalVisible: boolean;
+  isSelectRecurringExpenseDeletionTypeModalVisible: boolean;
 }
 
 export interface RecurringExpenseFormVisibility {
@@ -176,7 +177,7 @@ export interface SettingsFormVisibility {
   typeDeleteMyDataForm: boolean;
 }
 
-export interface RemovedRecurringExpenseItemEntity {
+export interface BlacklistedExpenseItemEntity {
   recurringExpenseId: string;
   timestampOfRemovedInstance: Date;
 }
@@ -1063,12 +1064,12 @@ export async function handleRecurringExpenseDeletion(
  * @param recurringExpenseId - The ID of the recurring expense from which an instance is removed.
  * @param timestampOfRemovedInstance - The timestamp of the removed expense instance.
  */
-export async function handleRemovedRecurringExpenseCreation(
+export async function handleBlacklistedExpenseCreation(
   recurringExpenseId: string | null,
   timestampOfRemovedInstance: Date,
 ): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/createRemovedRecurringExpense", {
+    const response = await fetch("http://localhost:8080/api/createBlacklistedExpense", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1091,12 +1092,12 @@ export async function handleRemovedRecurringExpenseCreation(
 }
 
 /**
- * Retrieves the list of removed recurring expense instances from the server.
+ * Retrieves the list of removed recurring expense instances from the server, for blacklist purposes.
  * @returns An array of removed recurring expense instances, or an empty array in case of an error.
  */
-export async function getRemovedRecurringExpenses(): Promise<RemovedRecurringExpenseItemEntity[]> {
+export async function getBlacklistedExpenses(): Promise<BlacklistedExpenseItemEntity[]> {
   try {
-    const response = await fetch("http://localhost:8080/api/getRemovedRecurringExpenses", {
+    const response = await fetch("http://localhost:8080/api/getBlacklistedExpenses", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -1106,12 +1107,11 @@ export async function getRemovedRecurringExpenses(): Promise<RemovedRecurringExp
     if (!response.ok) {
       console.error(`HTTP error - status: ${response.status}`);
     }
-    const removedRecurringExpenses = await response.json();
-    console.log("Below, removedRecurringExpenses");
-    console.log(removedRecurringExpenses);
-    return removedRecurringExpenses;
+    const blacklistedExpenses = await response.json();
+    console.log(blacklistedExpenses);
+    return blacklistedExpenses;
   } catch (error) {
-    console.error("Error getting removed recurring expenses:", error);
+    console.error("Error getting blacklisted expenses:", error);
     return [];
   }
 }
@@ -1358,7 +1358,6 @@ export async function checkForUser(): Promise<{ loggedIn: boolean }> {
 
 /**
  * Retrieves the email address of the currently logged-in user.
- * @returns {void}
  */
 export async function getSessionEmail(): Promise<any> {
   try {
@@ -1385,8 +1384,8 @@ export async function getSessionEmail(): Promise<any> {
 /**
  * Adds click event listeners to icon elements for icon selection functionality.
  * @template T - A generic type extending an object that optionally includes an iconPath property.
- * @param {Dispatch<SetStateAction<T>>} setFormData - Dispatch function that updates state for selected icon.
- * @param {string} selectorType - The base part of the class name used to select icon elements.
+ * @param setFormData - Dispatch function that updates state for selected icon.
+ * @param selectorType - The base part of the class name used to select icon elements.
  */
 export function addIconSelectionFunctionality<T extends { iconPath?: string }>(
   setFormData: Dispatch<SetStateAction<T>>,
@@ -1420,7 +1419,7 @@ export function addIconSelectionFunctionality<T extends { iconPath?: string }>(
 
 /**
  * Adds click event listeners to colour selection elements for group colour selection functionality.
- * @param {Dispatch<SetStateAction<BasicGroupData>>} setFormData - Dispatch function to update state for the selected colour.
+ * @param setFormData - Dispatch function to update state for the selected colour.
  */
 export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAction<BasicGroupData>>): void {
   // Query all colour selection containers
@@ -1453,9 +1452,9 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
 
 /**
  * Sorts group items, placing "Miscellaneous" at the end and others by their timestamps in ascending order.
- * @param {GroupItemEntity} a - The first group item for comparison.
- * @param {GroupItemEntity} b - The second group item for comparison.
- * @returns {number} - Sorting order value.
+ * @param a - The first group item for comparison.
+ * @param b - The second group item for comparison.
+ * @returns Sorting order value.
  */
 function groupSort(a: GroupItemEntity, b: GroupItemEntity): number {
   if (a.group === "Miscellaneous") return 1;
@@ -1465,9 +1464,9 @@ function groupSort(a: GroupItemEntity, b: GroupItemEntity): number {
 
 /**
  * Sorts expense items by their timestamps in descending order.
- * @param {ExpenseItemEntity} a - The first expense item for comparison.
- * @param {ExpenseItemEntity} b - The second expense item for comparison.
- * @returns {number} - Sorting order value.
+ * @param a - The first expense item for comparison.
+ * @param b - The second expense item for comparison.
+ * @returns Sorting order value.
  */
 function expenseSort(a: ExpenseItemEntity, b: ExpenseItemEntity): number {
   return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
@@ -1476,9 +1475,9 @@ function expenseSort(a: ExpenseItemEntity, b: ExpenseItemEntity): number {
 /**
  * Sorts budget items by their timestamps in ascending order.
  * Logs errors to console if timestamps are invalid.
- * @param {BudgetItemEntity} budgetItemA - The first budget item for comparison.
- * @param {BudgetItemEntity} budgetItemB - The second budget item for comparison.
- * @returns {number} - Sorting order value, or logs error if timestamp conversion fails.
+ * @param budgetItemA - The first budget item for comparison.
+ * @param budgetItemB - The second budget item for comparison.
+ * @returns Sorting order value, or logs error if timestamp conversion fails.
  */
 function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity): number {
   return new Date(budgetItemA.timestamp!).getTime() - new Date(budgetItemB.timestamp!).getTime();
@@ -1516,7 +1515,7 @@ export async function getPublicUserData(): Promise<any> {
 
 /**
  * Updates public user data with the specified settings.
- * @param {PublicUserData} updatedPublicUserData - The updated public user data.
+ * @param updatedPublicUserData - The updated public user data.
  */
 export async function handlePublicUserDataUpdating(updatedPublicUserData: PublicUserDataUpdate) {
   try {
@@ -1616,6 +1615,10 @@ export const colourStyles = {
   }),
 };
 
+/**
+ * Converts an array of budget category groups into the selector options format.
+ * @param groupArray - The array of budget category groups to convert.
+ */
 export function groupListAsOptions(groupArray: GroupItemEntity[]): SelectorOptionsFormattedData[] {
   return groupArray.map((groupItemEntity) => {
     return {
@@ -1626,6 +1629,11 @@ export function groupListAsOptions(groupArray: GroupItemEntity[]): SelectorOptio
   });
 }
 
+/**
+ * Converts an array of budget categories into the selector options format, with colour data derived from their group.
+ * @param budgetArray - The array of budget categories to convert.
+ * @param groupArray - The array of budget category groups.
+ */
 export function categoryListAsOptions(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
   return budgetArray.map((budgetItemEntity) => {
     const groupOfCategory = getGroupOfCategory(budgetArray, budgetItemEntity.category);
@@ -1733,9 +1741,9 @@ export const monthStringArray = [
 
 /**
  * Determines if a recurring expense lands on a specified day.
- * @param {Date} timestamp - The timestamp of the recurring expense.
- * @param {RecurringExpenseFrequency} frequency - The frequency of the recurring expense.
- * @param {Date} dateToAnalyseForExpenseLanding - The date to check for expense landing.
+ * @param timestamp - The timestamp of the recurring expense.
+ * @param frequency - The frequency of the recurring expense.
+ * @param dateToAnalyseForExpenseLanding - The date to check for expense landing.
  * @returns True if the expense lands on the given day, false otherwise.
  */
 export function recurringExpenseLandsOnDay(
@@ -1773,8 +1781,8 @@ export function recurringExpenseLandsOnDay(
 
 /**
  * Retrieves the next instance of a recurring expense.
- * @param {Date} timestamp - The timestamp of the recurring expense.
- * @param {RecurringExpenseFrequency} frequency - The frequency of the recurring expense.
+ * @param timestamp - The timestamp of the recurring expense.
+ * @param frequency - The frequency of the recurring expense.
  */
 export function getNextRecurringInstance(timestamp: Date, frequency: RecurringExpenseFrequency): Date | null {
   const [startDate, endDate] = [new Date(), new Date()];
@@ -1800,7 +1808,7 @@ export function getRandomGroupColour(): string {
 
 /**
  * Get the total budget for a budget category group.
- * @param {BudgetItemEntity[]} filteredBudgetArray - An array of the budget items in a given group.
+ * @param filteredBudgetArray - An array of the budget items in a given group.
  * @returns The total budget within the group.
  */
 export function getGroupBudgetTotal(filteredBudgetArray: BudgetItemEntity[]): number {
@@ -1809,8 +1817,8 @@ export function getGroupBudgetTotal(filteredBudgetArray: BudgetItemEntity[]): nu
 
 /**
  * Get the total expenditure within a budget category group.
- * @param {ExpenseItemEntity[]} expenseArray - An array of expense items within a given group.
- * @param {BudgetItemEntity[]} filteredBudgetArray - An array of the budget items in a given group.
+ * @param expenseArray - An array of expense items within a given group.
+ * @param filteredBudgetArray - An array of the budget items in a given group.
  * @returns The total expenditure within the group.
  */
 export function getGroupExpenditureTotal(
@@ -1824,8 +1832,8 @@ export function getGroupExpenditureTotal(
 
 /**
  * Get the group of a given category.
- * @param {BudgetItemEntity[]} budgetArray - The array of budget items.
- * @param {string} category - The category to search for.
+ * @param budgetArray - The array of budget items.
+ * @param category - The category to search for.
  * @returns The group of the given category, or null if not found.
  */
 export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string): string | null {
@@ -1835,8 +1843,8 @@ export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: st
 
 /**
  * Get the colour of a given group.
- * @param {string} groupName - The name of the group to search for.
- * @param {GroupItemEntity[]} groupArray - The array of group items.
+ * @param groupName - The name of the group to search for.
+ * @param groupArray - The array of group items.
  * @returns The colour of the given group, or null if not found.
  */
 export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]): string | null {
@@ -1846,7 +1854,7 @@ export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[
 
 /**
  * Get the total amount budgeted across all categories in all groups.
- * @param {BudgetItemEntity[]} budgetArray - The array of budget items.
+ * @param budgetArray - The array of budget items.
  * @returns The total amount budgeted across all categories in all groups.
  */
 export function getTotalAmountBudgeted(budgetArray: BudgetItemEntity[]): number {
@@ -1856,8 +1864,8 @@ export function getTotalAmountBudgeted(budgetArray: BudgetItemEntity[]): number 
 
 /**
  * Get the data map for category to icon, group, and colour.
- * @param {BudgetItemEntity[]} budgetArray - The array of budget items.
- * @param {GroupItemEntity[]} groupArray - The array of group items.
+ * @param budgetArray - The array of budget items.
+ * @param groupArray - The array of group items.
  * @returns The map of category to icon, group, and colour.
  */
 export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
@@ -1874,7 +1882,7 @@ export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], grou
 
 /**
  * Get the line angle of the Fulcrum scale animation.
- * @param {number} percentageIncomeRemaining - The percentage of income remaining.
+ * @param percentageIncomeRemaining - The percentage of income remaining.
  * @returns The line angle of the animation.
  */
 export function getLineAngle(percentageIncomeRemaining: number): number {
@@ -1889,8 +1897,8 @@ export function getLineAngle(percentageIncomeRemaining: number): number {
 
 /**
  * Handle the input change on a form with a formatted amount input field.
- * @param {ChangeEvent<HTMLInputElement>} e - The input change event.
- * @param {Dispatch<SetStateAction<any>>} setFormData - The state update function.
+ * @param e - The input change event.
+ * @param setFormData - The state update function.
  */
 export function handleInputChangeOnFormWithAmount(
   e: ChangeEvent<HTMLInputElement>,
@@ -1924,8 +1932,8 @@ export function handleInputChangeOnFormWithAmount(
 
 /**
  * Check if any modal or form is open.
- * @param {Record<string, boolean>} formVisibility - The visibility of the expense form.
- * @param {Record<string, boolean>} modalVisibility - The visibility of the expense modal.
+ * @param  formVisibility - The visibility of the expense form.
+ * @param  modalVisibility - The visibility of the expense modal.
  * @returns True if any modal or form is open, false otherwise.
  */
 export function checkForOpenModalOrForm(
@@ -1950,21 +1958,20 @@ export function getWindowLocation(): string {
 
 /**
  * Checks if there is a matching blacklist record for a recurring expense on a given date.
- * @param {RemovedRecurringExpenseItemEntity[]} removedRecurringExpenseInstances - The blacklist.
- * @param {RecurringExpenseItemEntity} recurringExpenseItem - The recurring expense item to check.
- * @param {Date} date - The date to check for a matching blacklist record.
+ * @param blacklistedExpenseInstances - The blacklist.
+ * @param recurringExpenseItem - The recurring expense item to check.
+ * @param date - The date to check for a matching blacklist record.
  * @returns True if a matching blacklist record is found, false otherwise.
  */
-export function matchingRemovedRecurringExpenseFound(
-  removedRecurringExpenseInstances: RemovedRecurringExpenseItemEntity[],
+export function matchingBlacklistEntryFound(
+  blacklistedExpenseInstances: BlacklistedExpenseItemEntity[],
   recurringExpenseItem: RecurringExpenseItemEntity,
   date: Date,
 ): boolean {
-  const checkResult = removedRecurringExpenseInstances.find((removedRecurringExpenseItem) => {
+  const checkResult = blacklistedExpenseInstances.find((blacklistedExpense) => {
     return (
-      removedRecurringExpenseItem.recurringExpenseId === recurringExpenseItem.recurringExpenseId &&
-      new Date(removedRecurringExpenseItem.timestampOfRemovedInstance).toLocaleDateString() ===
-        new Date(date).toLocaleDateString()
+      blacklistedExpense.recurringExpenseId === recurringExpenseItem.recurringExpenseId &&
+      new Date(blacklistedExpense.timestampOfRemovedInstance).toLocaleDateString() === new Date(date).toLocaleDateString()
     );
   });
   return checkResult !== undefined;
@@ -1972,8 +1979,8 @@ export function matchingRemovedRecurringExpenseFound(
 
 /**
  * Gets the number of months from a given month and year to the current month and year.
- * @param {number} month - The month to compare.
- * @param {number} year - The year to compare.
+ * @param month - The month to compare.
+ * @param year - The year to compare.
  * @returns The number of months from the given month and year to the current month and year.
  */
 export function getMonthsFromToday(month: number, year: number): number {
@@ -1985,8 +1992,8 @@ export function getMonthsFromToday(month: number, year: number): number {
 
 /**
  * Creates the structured expense data using the data from the expense array.
- * @param {ExpenseItemEntity[]} expenseArray - The array of expense items.
- * @param {Dispatch<SetStateAction<MonthExpenseGroupEntity[]>>} setStructuredExpenseData - The state update function.
+ * @param expenseArray - The array of expense items.
+ * @param setStructuredExpenseData - The state update function.
  * @returns The structured expense data.
  */
 export function getStructuredExpenseData(
@@ -1995,17 +2002,20 @@ export function getStructuredExpenseData(
     value: ((prevState: MonthExpenseGroupEntity[]) => MonthExpenseGroupEntity[]) | MonthExpenseGroupEntity[],
   ) => void,
 ) {
-  // Initialise structure from the dawn of y2k to 12 months into the future from today
+  setStructuredExpenseData(populateStructuredExpenseData(expenseArray, initialiseStructuredExpenseData()));
+}
+
+/**
+ * Initialises the stratified expense data structure from Y2K to a year from today; no expense data is populated.
+ * @returns The initialised structured expense data.
+ */
+function initialiseStructuredExpenseData(): MonthExpenseGroupEntity[] {
   let newStructuredExpenseData: MonthExpenseGroupEntity[] = [];
 
-  const y2K = new Date("2000-01-01T00:00:00Z");
   const y2KMonth = y2K.getMonth();
   const y2KYear = y2K.getFullYear();
-
-  const dateToday = new Date();
-  const currentMonth = dateToday.getMonth();
-  const currentYear = dateToday.getFullYear();
-
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
   const monthsFromY2KToNow = getMonthsFromToday(y2KMonth, y2KYear);
 
   for (let i = -monthsFromY2KToNow; i <= 12; i++) {
@@ -2020,24 +2030,32 @@ export function getStructuredExpenseData(
     };
     newStructuredExpenseData = [...newStructuredExpenseData, newMonthExpenseGroup];
   }
+  return newStructuredExpenseData;
+}
 
+/**
+ * Populates the initialised expense data structure with expense data.
+ * @param expenseArray - The array of expenses used for data population.
+ * @param newStructuredExpenseData - The initialised data structure to populate.
+ * @returns The populated expense data structure.
+ */
+function populateStructuredExpenseData(
+  expenseArray: ExpenseItemEntity[],
+  newStructuredExpenseData: MonthExpenseGroupEntity[],
+): MonthExpenseGroupEntity[] {
   for (const expenseItem of expenseArray) {
     for (let monthExpenseGroupItem of newStructuredExpenseData) {
       if (
         monthExpenseGroupItem.monthIndex === new Date(expenseItem.timestamp).getMonth() &&
         monthExpenseGroupItem.year === new Date(expenseItem.timestamp).getFullYear()
       ) {
-        // Execution here occurs where a monthExpenseGroupItem's month and year (day) match to this iteration's expenseItem's day.
-        // Here, if a DayExpenseGroupEntity exists for the expenseItem's day, add the expenseItem in.
         let matchingDayGroupExists = false;
         for (let dayExpenseGroupItem of monthExpenseGroupItem.monthExpenseArray) {
           if (
             new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString() ===
             new Date(expenseItem.timestamp).toLocaleDateString()
           ) {
-            console.log(
-              `Adding an expense item to existing group on ${new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString()}`,
-            );
+            console.log(`Adding expense to old group on ${new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString()}`);
             dayExpenseGroupItem.dayExpenseArray = [...dayExpenseGroupItem.dayExpenseArray, expenseItem];
             matchingDayGroupExists = true;
             break;
@@ -2046,12 +2064,8 @@ export function getStructuredExpenseData(
         if (matchingDayGroupExists) {
           break;
         }
-
         // Otherwise, make a new DayExpenseGroupEntity for the expenseItem's day and add it in.
-        console.log(
-          `Adding an expense item to newly created group on ${new Date(expenseItem.timestamp).toLocaleDateString()}`,
-        );
-
+        console.log(`Adding expense item to new group on ${new Date(expenseItem.timestamp).toLocaleDateString()}`);
         const startOfDayCalendarDate = new Date(expenseItem.timestamp);
         startOfDayCalendarDate.setHours(0, 0, 0, 0);
 
@@ -2063,13 +2077,13 @@ export function getStructuredExpenseData(
       }
     }
   }
-  setStructuredExpenseData(newStructuredExpenseData);
+  return newStructuredExpenseData;
 }
 
 /**
  * Retrieves all instances of a recurring expense present in the expense array on a specified date.
- * @param {ExpenseItemEntity[]} expenseArray - The array of expense items to search.
- * @param {string} recurringExpenseId - The recurring expense item to search for.
+ * @param expenseArray - The array of expense items to search.
+ * @param recurringExpenseId - The ID of the recurring expense item to search for.
  * @param date - The date to search for expense instances.
  * @returns An array of expense items that are instances of the recurring expense on the given date, or null if none found.
  */
@@ -2089,69 +2103,26 @@ export function getRecurringExpenseInstancesOrNull(
 
 /**
  * Updates the expenseArray's recurring expense instances, adding, removing or leaving instances as necessary.
- * @param {RecurringExpenseItemEntity[]} recurringExpenseArray - The array of recurring expense items.
- * @param {ExpenseItemEntity[]} expenseArray - The array of expense items.
- * @param {RemovedRecurringExpenseItemEntity[]} removedRecurringExpenseInstances - The array of removed recurring expense instances.
- * @param {Dispatch<SetStateAction<ExpenseItemEntity[]>>} setExpenseArray - The state update function for the expense array.
+ * @param recurringExpenseArray - The array of recurring expense items.
+ * @param expenseArray - The array of expense items.
+ * @param BlacklistedExpenseInstances - The array of blacklisted (removed) recurring expense instances.
+ * @param setExpenseArray - The state update function for the expense array.
  */
 export async function updateRecurringExpenseInstances(
   recurringExpenseArray: RecurringExpenseItemEntity[],
   expenseArray: ExpenseItemEntity[],
-  removedRecurringExpenseInstances: RemovedRecurringExpenseItemEntity[],
+  BlacklistedExpenseInstances: BlacklistedExpenseItemEntity[],
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
 ): Promise<void> {
-  const today = new Date();
   const misplacedExpensesToRemove = new Set<string>();
-
-  // For each recurring expense...
   recurringExpenseArray.forEach((recurringExpenseItem) => {
-    // We check each of the dates between when it was added and today.
-    for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setDate(date.getDate() + 1)) {
-      console.log(`Looking at date: ${date.toLocaleDateString()}`);
-
-      const expenseInstances = getRecurringExpenseInstancesOrNull(
-        expenseArray,
-        recurringExpenseItem.recurringExpenseId,
-        date,
-      );
-      const isFrequencyMatch = recurringExpenseLandsOnDay(
-        recurringExpenseItem.timestamp,
-        recurringExpenseItem.frequency,
-        date,
-      );
-      const expenseInstanceIsBlacklisted = removedRecurringExpenseInstances
-        ? matchingRemovedRecurringExpenseFound(removedRecurringExpenseInstances, recurringExpenseItem, date)
-        : false;
-
-      // If recurring instance already exists on a day
-      if (expenseInstances != null) {
-        let keepFirstInstance = true;
-
-        // And this instance shouldn't have landed on this day (can happen when freq is changed),
-        // Queue this and any duplicate instances on this day for removal
-        if (!isFrequencyMatch) {
-          keepFirstInstance = false;
-        }
-
-        // Otherwise only queue the duplicate instances on this day for removal
-        for (let i = keepFirstInstance ? 1 : 0; i < expenseInstances.length; i++) {
-          misplacedExpensesToRemove.add(expenseInstances[i].expenseId);
-        }
-      } else {
-        // If: (1) There is no instance on this day, (2) It matches frequency patterns, (3) not blacklisted,
-        // Create an instance of this recurrence expense in the expense array
-        if (isFrequencyMatch && !expenseInstanceIsBlacklisted) {
-          const newExpenseItemLanded: ExpenseItemEntity = {
-            expenseId: uuid(),
-            category: recurringExpenseItem.category,
-            amount: recurringExpenseItem.amount,
-            timestamp: date,
-            recurringExpenseId: recurringExpenseItem.recurringExpenseId,
-          };
-          handleExpenseCreation(newExpenseItemLanded, setExpenseArray);
-        }
-      }
-    }
+    processRecurringExpenseInstances(
+      recurringExpenseItem,
+      expenseArray,
+      setExpenseArray,
+      BlacklistedExpenseInstances,
+      misplacedExpensesToRemove,
+    );
   });
   if (misplacedExpensesToRemove.size !== 0) {
     await handleBatchExpenseDeletion(misplacedExpensesToRemove);
@@ -2159,13 +2130,77 @@ export async function updateRecurringExpenseInstances(
   setExpenseArray(await getExpenseList());
 }
 
-export async function removeAllInstancesOf(
+/**
+ * Takes a recurring expense, checks dates from its creation to today, then performs creation and deletion on instances as needed.
+ * @param recurringExpenseItem - The recurring expense of which instances are processed.
+ * @param expenseArray - The array of expenses.
+ * @param setExpenseArray - The state updating function for the array of expenses.
+ * @param BlacklistedExpenseInstances - The array of blacklisted recurring expense instances (manually user-deleted).
+ * @param misplacedExpensesToRemove - The cumulative set of expense IDs to batch delete.
+ */
+function processRecurringExpenseInstances(
+  recurringExpenseItem: RecurringExpenseItemEntity,
+  expenseArray: ExpenseItemEntity[],
+  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
+  BlacklistedExpenseInstances: BlacklistedExpenseItemEntity[],
+  misplacedExpensesToRemove: Set<string>,
+): void {
+  const today = new Date();
+  for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setDate(date.getDate() + 1)) {
+    console.log(`Looking at date: ${date.toLocaleDateString()}`);
+    const expenseInstances = getRecurringExpenseInstancesOrNull(expenseArray, recurringExpenseItem.recurringExpenseId, date);
+    const isFrequencyMatch = recurringExpenseLandsOnDay(
+      recurringExpenseItem.timestamp,
+      recurringExpenseItem.frequency,
+      date,
+    );
+    const expenseInstanceIsBlacklisted = BlacklistedExpenseInstances
+      ? matchingBlacklistEntryFound(BlacklistedExpenseInstances, recurringExpenseItem, date)
+      : false;
+    // If recurring instance already exists on a day,
+    if (expenseInstances != null) {
+      let keepFirstInstance = true;
+      // And this instance shouldn't have landed on this day (can happen when freq is changed),
+      // Queue this and any duplicate instances on this day for removal
+      if (!isFrequencyMatch) {
+        keepFirstInstance = false;
+      }
+      // Otherwise only queue the duplicate instances on this day for removal
+      for (let i = keepFirstInstance ? 1 : 0; i < expenseInstances.length; i++) {
+        misplacedExpensesToRemove.add(expenseInstances[i].expenseId);
+      }
+    } else {
+      // If: (1) There is no instance on this day, (2) it matches frequency patterns, and (3) it's not blacklisted,
+      // Create an instance of this recurrence expense in the expense array
+      if (isFrequencyMatch && !expenseInstanceIsBlacklisted) {
+        const newExpenseItemLanded: ExpenseItemEntity = {
+          expenseId: uuid(),
+          category: recurringExpenseItem.category,
+          amount: recurringExpenseItem.amount,
+          timestamp: date,
+          recurringExpenseId: recurringExpenseItem.recurringExpenseId,
+        };
+        handleExpenseCreation(newExpenseItemLanded, setExpenseArray);
+      }
+    }
+  }
+}
+
+/**
+ * Performs batched deletion of all instances of a recurring expense from a particular date onwards.
+ * @param recurringExpenseId - The ID of the recurringExpense to delete instances of.
+ * @param expenseArray - The array of expense items.
+ * @param setExpenseArray - The state update function for the expense array.
+ * @param startingFrom - The date from which instances are deleted.
+ * @param setBlacklistedExpenseInstances - The state update function for the recurring expense array.
+ */
+export async function removeAllInstancesOfRecurringExpenseAfterDate(
   recurringExpenseId: string,
   expenseArray: ExpenseItemEntity[],
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
   startingFrom: Date,
-  setRemovedRecurringExpenseInstances: Dispatch<SetStateAction<RemovedRecurringExpenseItemEntity[]>>,
-) {
+  setBlacklistedExpenseInstances: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>,
+): Promise<void> {
   const batchDeletionQueue = new Set<string>();
   for (const expenseItem of expenseArray) {
     if (
@@ -2173,18 +2208,21 @@ export async function removeAllInstancesOf(
       new Date(expenseItem.timestamp).getTime() >= new Date(startingFrom).getTime()
     ) {
       batchDeletionQueue.add(expenseItem.expenseId);
-      await handleRemovedRecurringExpenseCreation(recurringExpenseId, expenseItem.timestamp);
+      await handleBlacklistedExpenseCreation(recurringExpenseId, expenseItem.timestamp);
     }
   }
   setExpenseArray((prevExpenseArray) =>
     prevExpenseArray.filter((expenseItem) => !(expenseItem.expenseId in batchDeletionQueue)),
   );
-  console.log("Queuing the below for batch deletion.");
-  console.log(batchDeletionQueue);
-  setRemovedRecurringExpenseInstances(await getRemovedRecurringExpenses());
+  setBlacklistedExpenseInstances(await getBlacklistedExpenses());
   await handleBatchExpenseDeletion(batchDeletionQueue);
 }
 
+/**
+ * Locates the expense item with the given expense ID.
+ * @param expenseId - The expense ID to search for.
+ * @param expenseArray - To array of expense items in which to search.
+ */
 export function findExpenseWithId(expenseId: string, expenseArray: ExpenseItemEntity[]) {
   return expenseArray.find((expenseItem) => expenseItem.expenseId === expenseId);
 }
