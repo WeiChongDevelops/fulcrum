@@ -46,6 +46,18 @@ The scalability of Google Firebase’s NoSQL databases was deemed superfluous fo
 AWS RDS was avoided due to unnecessary cost implications.
 
 
+## Docker
+
+Docker was used to containerise the application, providing a consistent and reproducible deployment environment.
+
+It allows for easy packaging and distribution of the application along with its dependencies, ensuring that the application runs smoothly across different systems.
+
+
+## Amazon Web Services (AWS)
+
+AWS was utilised for reliably hosting and deploying the Fulcrum application; EC2 in particular.
+
+
 ## Prettier
 
 Opinionated formatter for consistent codebase format.
@@ -62,18 +74,6 @@ The heuristic for when each technology is used is simple:
     2. Single-instance unique elements that don’t require the precision of raw CSS
 - With CSS used for everything else.
 - Although Tailwind CSS can be used in stylesheets, its entire utility is predicated on inline use, and so it was limited to this.
-
-
-## Docker
-
-Docker was used to containerise the application, providing a consistent and reproducible deployment environment.
-
-It allows for easy packaging and distribution of the application along with its dependencies, ensuring that the application runs smoothly across different systems.
-
-
-## Amazon Web Services (AWS)
-
-AWS was utilised for reliably hosting and deploying the Fulcrum application; EC2 in particular.
 
 
 # Contribution
