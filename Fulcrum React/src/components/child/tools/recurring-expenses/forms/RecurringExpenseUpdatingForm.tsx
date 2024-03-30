@@ -16,6 +16,7 @@ import {
   RecurringExpenseFormVisibility,
   Value,
   SetFormVisibility,
+  changeFormOrModalVisibility,
 } from "../../../../../util.ts";
 import Select from "react-select";
 import DatePicker from "react-date-picker";
@@ -60,10 +61,7 @@ export default function RecurringExpenseUpdatingForm({
   }, []);
 
   function hideForm() {
-    setRecurringExpenseFormVisibility((current) => ({
-      ...current,
-      isUpdateRecurringExpenseVisible: false,
-    }));
+    changeFormOrModalVisibility(setRecurringExpenseFormVisibility, "isUpdateRecurringExpenseVisible", false);
   }
 
   const handleClickOutside = (e: MouseEvent) => {

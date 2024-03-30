@@ -17,6 +17,7 @@ import {
   SetFormVisibility,
   SetModalVisibility,
   y2K,
+  changeFormOrModalVisibility,
 } from "../../../../util.ts";
 import RecurringExpenseUpdatingForm from "./forms/RecurringExpenseUpdatingForm.tsx";
 import TwoOptionModal from "../../other/TwoOptionModal.tsx";
@@ -99,18 +100,24 @@ export default function RecurringExpenseModalsAndForms({
         <TwoOptionModal
           optionOneText="Cancel"
           optionOneFunction={() => {
-            setRecurringExpenseModalVisibility((current) => ({
-              ...current,
-              isConfirmRecurringExpenseDeletionModalVisible: false,
-            }));
+            changeFormOrModalVisibility(
+              setRecurringExpenseModalVisibility,
+              "isConfirmRecurringExpenseDeletionModalVisible",
+              false,
+            );
           }}
           optionTwoText="Confirm"
           optionTwoFunction={() => {
-            setRecurringExpenseModalVisibility((current) => ({
-              ...current,
-              isConfirmRecurringExpenseDeletionModalVisible: false,
-              isSelectRecurringExpenseDeletionTypeModalVisible: true,
-            }));
+            changeFormOrModalVisibility(
+              setRecurringExpenseModalVisibility,
+              "isConfirmRecurringExpenseDeletionModalVisible",
+              false,
+            );
+            changeFormOrModalVisibility(
+              setRecurringExpenseModalVisibility,
+              "isSelectRecurringExpenseDeletionTypeModalVisible",
+              true,
+            );
           }}
           setModalVisibility={setRecurringExpenseModalVisibility}
           isVisible="isConfirmRecurringExpenseDeletionModalVisible"
@@ -123,10 +130,11 @@ export default function RecurringExpenseModalsAndForms({
           optionOneText={"Keep Previous Repeats"}
           optionOneFunction={() => {
             runRecurringExpenseDeletion();
-            setRecurringExpenseModalVisibility((current) => ({
-              ...current,
-              isSelectRecurringExpenseDeletionTypeModalVisible: false,
-            }));
+            changeFormOrModalVisibility(
+              setRecurringExpenseModalVisibility,
+              "isSelectRecurringExpenseDeletionTypeModalVisible",
+              false,
+            );
           }}
           optionTwoText={"Delete Previous Repeats"}
           optionTwoFunction={async () => {
@@ -139,10 +147,11 @@ export default function RecurringExpenseModalsAndForms({
               setBlacklistedExpenseArray,
             );
             setExpenseArray(await getExpenseList());
-            setRecurringExpenseModalVisibility((current) => ({
-              ...current,
-              isSelectRecurringExpenseDeletionTypeModalVisible: false,
-            }));
+            changeFormOrModalVisibility(
+              setRecurringExpenseModalVisibility,
+              "isSelectRecurringExpenseDeletionTypeModalVisible",
+              false,
+            );
           }}
           setModalVisibility={setRecurringExpenseModalVisibility}
           isVisible={"isSelectRecurringExpenseDeletionTypeModalVisible"}

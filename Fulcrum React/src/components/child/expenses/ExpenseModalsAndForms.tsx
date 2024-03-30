@@ -20,6 +20,7 @@ import {
   SetFormVisibility,
   SetModalVisibility,
   y2K,
+  changeFormOrModalVisibility,
 } from "../../../util.ts";
 import ExpenseUpdatingForm from "./forms/ExpenseUpdatingForm.tsx";
 import RecurringExpenseInstanceUpdatingForm from "../tools/recurring-expenses/forms/RecurringExpenseInstanceUpdatingForm.tsx";
@@ -79,25 +80,10 @@ export default function ExpenseModalsAndForms({
     setExpenseArray((prevExpenseArray) =>
       prevExpenseArray.filter((expenseItem) => expenseItem.expenseId !== expenseIdToDelete),
     );
-    if (expenseItemToDelete) {
-      if (expenseItemToDeleteIsRecurring) {
-        handleBlacklistedExpenseCreation(expenseItemToDelete.recurringExpenseId, expenseItemToDelete.timestamp)
-          .then(() => {
-            console.log("Logged recurrence removal successful");
-            getBlacklistedExpenses()
-              .then((results) => setBlacklistedExpenseArray(results))
-              .then(() =>
-                handleExpenseDeletion(expenseIdToDelete, setExpenseArray)
-                  .then(() => console.log("Deletion successful"))
-                  .catch(() => console.log("Deletion unsuccessful")),
-              );
-          })
-          .catch(() => console.log("Logged recurrence removal unsuccessful"));
-      } else {
-        handleExpenseDeletion(expenseIdToDelete, setExpenseArray)
-          .then(() => console.log("Deletion successful"))
-          .catch(() => console.log("Deletion unsuccessful"));
-      }
+    if (expenseItemToDelete && expenseItemToDeleteIsRecurring) {
+      await handleBlacklistedExpenseCreation(expenseItemToDelete.recurringExpenseId, expenseItemToDelete.timestamp);
+      setBlacklistedExpenseArray(await getBlacklistedExpenses());
+      await handleExpenseDeletion(expenseIdToDelete, setExpenseArray);
     }
   }
 
@@ -144,17 +130,10 @@ export default function ExpenseModalsAndForms({
             optionOneText={"Delete This Repeat Only"}
             optionOneFunction={() => {
               runExpenseDeletion();
-              setExpenseModalVisibility((current) => ({
-                ...current,
-                isConfirmExpenseDeletionModalVisible: false,
-              }));
+              changeFormOrModalVisibility(setExpenseModalVisibility, "isConfirmExpenseDeletionModalVisible", false);
             }}
             optionTwoText={"Delete This and Future Repeats"}
             optionTwoFunction={async () => {
-              setExpenseModalVisibility((current) => ({
-                ...current,
-                isConfirmExpenseDeletionModalVisible: false,
-              }));
               await removeAllInstancesOfRecurringExpenseAfterDate(
                 expenseItemToDelete!.recurringExpenseId!,
                 expenseArray,
@@ -163,6 +142,7 @@ export default function ExpenseModalsAndForms({
                 setBlacklistedExpenseArray,
               );
               setExpenseArray(await getExpenseList());
+              changeFormOrModalVisibility(setExpenseModalVisibility, "isConfirmExpenseDeletionModalVisible", false);
             }}
             optionThreeText={"Delete All Repeats"}
             optionThreeFunction={async () => {
@@ -174,10 +154,7 @@ export default function ExpenseModalsAndForms({
                 setBlacklistedExpenseArray,
               );
               setExpenseArray(await getExpenseList());
-              setExpenseModalVisibility((current) => ({
-                ...current,
-                isConfirmExpenseDeletionModalVisible: false,
-              }));
+              changeFormOrModalVisibility(setExpenseModalVisibility, "isConfirmExpenseDeletionModalVisible", false);
             }}
             setModalVisibility={setExpenseModalVisibility}
             isVisible="isConfirmExpenseDeletionModalVisible"
@@ -187,18 +164,12 @@ export default function ExpenseModalsAndForms({
           <TwoOptionModal
             optionOneText="Cancel"
             optionOneFunction={() =>
-              setExpenseModalVisibility((current) => ({
-                ...current,
-                isConfirmExpenseDeletionModalVisible: false,
-              }))
+              changeFormOrModalVisibility(setExpenseModalVisibility, "isConfirmExpenseDeletionModalVisible", false)
             }
             optionTwoText="Confirm"
             optionTwoFunction={() => {
               runExpenseDeletion();
-              setExpenseModalVisibility((current) => ({
-                ...current,
-                isConfirmExpenseDeletionModalVisible: false,
-              }));
+              changeFormOrModalVisibility(setExpenseModalVisibility, "isConfirmExpenseDeletionModalVisible", false);
             }}
             setModalVisibility={setExpenseModalVisibility}
             isVisible="isConfirmExpenseDeletionModalVisible"

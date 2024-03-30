@@ -6,90 +6,51 @@ import Fulcrum from "./Fulcrum.tsx";
 import Expenses from "../child/expenses/Expenses.tsx";
 import Tools from "../child/tools/Tools.tsx";
 import { useEffect, useMemo, useState } from "react";
-import {
-  BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
-  ExpenseItemEntity,
-  getBudgetList,
-  getExpenseList,
-  getGroupAndColourMap,
-  getGroupList,
-  getPublicUserData,
-  getBlacklistedExpenses,
-  GroupItemEntity,
-  PublicUserData,
-  BlacklistedExpenseItemEntity,
-} from "../../util.ts";
+import { CategoryToIconGroupAndColourMap, getGroupAndColourMap } from "../../util.ts";
 import "../../css/App.css";
 import About from "../child/home/subpages/about/About.tsx";
 import Contact from "../child/home/subpages/Contact.tsx";
 import Pricing from "../child/home/subpages/Pricing.tsx";
 import Home from "../child/home/Home.tsx";
+import { useGlobalAppData } from "../../hooks/useGlobalAppData.ts";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
  */
 export default function App() {
-  const sessionStoredProfileIcon = sessionStorage.getItem("profileIcon");
-  const sessionStoredDarkMode = sessionStorage.getItem("darkMode");
-  const sessionStoredAccessibilityMode = sessionStorage.getItem("accessibilityMode");
   const sessionStoredEmail = sessionStorage.getItem("email");
-
   const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
-
-  const [publicUserData, setPublicUserData] = useState<PublicUserData>({
-    createdAt: new Date(),
-    currency: "AUD",
-    darkModeEnabled: sessionStoredDarkMode ? sessionStoredDarkMode === "true" : false,
-    accessibilityEnabled: sessionStoredAccessibilityMode ? sessionStoredAccessibilityMode === "true" : false,
-    profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "profile-icon-default.svg",
-  });
-  const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
-  const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
-  const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
   const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
-  const [blacklistedExpenseArray, setBlacklistedExpenseArray] = useState<BlacklistedExpenseItemEntity[]>([]);
-
   const [error, setError] = useState("");
 
+  const {
+    publicUserData,
+    setPublicUserData,
+    expenseArray,
+    setExpenseArray,
+    budgetArray,
+    setBudgetArray,
+    groupArray,
+    setGroupArray,
+    recurringExpenseArray,
+    setRecurringExpenseArray,
+    blacklistedExpenseArray,
+    setBlacklistedExpenseArray,
+  } = useGlobalAppData({ email, setCategoryDataMap, setError });
+
   useEffect(() => {
-    async function retrieveGlobalAppData() {
-      if (!!email) {
-        const [
-          publicUserDataRetrieved,
-          expenseDataRetrieved,
-          budgetDataRetrieved,
-          groupDataRetrieved,
-          blacklistedExpenseDataRetrieved,
-        ] = await Promise.all([
-          getPublicUserData(),
-          getExpenseList(),
-          getBudgetList(),
-          getGroupList(),
-          getBlacklistedExpenses(),
-        ]);
-
-        setPublicUserData(publicUserDataRetrieved);
-        setExpenseArray(expenseDataRetrieved);
-        setBudgetArray(budgetDataRetrieved);
-        setGroupArray(groupDataRetrieved);
-        setBlacklistedExpenseArray(blacklistedExpenseDataRetrieved);
-
-        setCategoryDataMap(await getGroupAndColourMap(budgetDataRetrieved, groupDataRetrieved));
-      }
+    if (publicUserData) {
+      sessionStorage.setItem("profileIconFileName", publicUserData.profileIconFileName);
+      sessionStorage.setItem("darkModeEnabled", publicUserData.darkModeEnabled.toString());
+      sessionStorage.setItem("accessibilityEnabled", publicUserData.accessibilityEnabled.toString());
     }
-    retrieveGlobalAppData()
-      .then(() => console.log("Global app data retrieval successful."))
-      .catch(() => setError("We’re unable to load your data right now. Please try again later."));
-  }, [email]);
-
-  useEffect(() => {
-    publicUserData && sessionStorage.setItem("profileIcon", publicUserData.profileIconFileName);
-  }, [publicUserData.profileIconFileName]);
+  }, [publicUserData]);
 
   useMemo(() => {
     const updateCategoryDataMap = async () => {
-      setCategoryDataMap(await getGroupAndColourMap(budgetArray, groupArray));
+      groupArray.length !== 0 &&
+        budgetArray.length !== 0 &&
+        setCategoryDataMap(await getGroupAndColourMap(budgetArray, groupArray));
     };
     updateCategoryDataMap();
   }, [budgetArray, groupArray]);
@@ -128,6 +89,8 @@ export default function App() {
                 setExpenseArray={setExpenseArray}
                 setBudgetArray={setBudgetArray}
                 categoryDataMap={categoryDataMap}
+                recurringExpenseArray={recurringExpenseArray}
+                setRecurringExpenseArray={setRecurringExpenseArray}
                 blacklistedExpenseArray={blacklistedExpenseArray}
                 setBlacklistedExpenseArray={setBlacklistedExpenseArray}
                 error={error}
@@ -161,6 +124,8 @@ export default function App() {
                 groupArray={groupArray}
                 setExpenseArray={setExpenseArray}
                 setBudgetArray={setBudgetArray}
+                recurringExpenseArray={recurringExpenseArray}
+                setRecurringExpenseArray={setRecurringExpenseArray}
                 setBlacklistedExpenseArray={setBlacklistedExpenseArray}
                 categoryDataMap={categoryDataMap}
                 error={error}

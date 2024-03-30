@@ -13,6 +13,7 @@ import {
   Value,
   ExpenseFormVisibility,
   SetFormVisibility,
+  changeFormOrModalVisibility,
 } from "../../../../util.ts";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
@@ -54,10 +55,7 @@ export default function ExpenseUpdatingForm({
   }, []);
 
   function hideForm() {
-    setExpenseFormVisibility((current) => ({
-      ...current,
-      isUpdateExpenseVisible: false,
-    }));
+    changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateExpenseVisible", false);
   }
 
   const handleClickOutside = (e: MouseEvent) => {

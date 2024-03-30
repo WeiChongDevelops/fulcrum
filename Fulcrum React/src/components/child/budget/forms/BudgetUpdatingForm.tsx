@@ -13,6 +13,7 @@ import {
   GroupItemEntity,
   handleInputChangeOnFormWithAmount,
   SetFormVisibility,
+  changeFormOrModalVisibility,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
@@ -56,10 +57,7 @@ export default function BudgetUpdatingForm({
   }, []);
 
   function hideForm() {
-    setBudgetFormVisibility((current) => ({
-      ...current,
-      isUpdateBudgetVisible: false,
-    }));
+    changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateBudgetVisible", false);
   }
 
   const handleClickOutside = (e: MouseEvent) => {

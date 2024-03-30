@@ -4,6 +4,7 @@ import {
   handleWipeBudget,
   handleWipeData,
   handleWipeExpenses,
+  changeFormOrModalVisibility,
   SetFormVisibility,
   SetModalVisibility,
   SettingsFormVisibility,
@@ -67,18 +68,12 @@ export default function SettingsModalsAndForms({
         <TwoOptionModal
           optionOneText={"Cancel"}
           optionOneFunction={() => {
-            setSettingsModalVisibility((current) => ({
-              ...current,
-              isConfirmExpenseWipeModalVisible: false,
-            }));
+            changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmExpenseWipeModalVisible", false);
           }}
           optionTwoText={"Delete"}
           optionTwoFunction={() => {
             handleWipeExpenses();
-            setSettingsModalVisibility((current) => ({
-              ...current,
-              isConfirmExpenseWipeModalVisible: false,
-            }));
+            changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmExpenseWipeModalVisible", false);
             console.log("Wiping all expenses.");
           }}
           setModalVisibility={setSettingsModalVisibility}
@@ -91,18 +86,12 @@ export default function SettingsModalsAndForms({
         <TwoOptionModal
           optionOneText={"Cancel"}
           optionOneFunction={() => {
-            setSettingsModalVisibility((current) => ({
-              ...current,
-              isConfirmBudgetWipeModalVisible: false,
-            }));
+            changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmBudgetWipeModalVisible", false);
           }}
           optionTwoText={"Delete"}
           optionTwoFunction={() => {
             handleWipeBudget();
-            setSettingsModalVisibility((current) => ({
-              ...current,
-              isConfirmBudgetWipeModalVisible: false,
-            }));
+            changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmBudgetWipeModalVisible", false);
             console.log("Wiping all budgets.");
           }}
           setModalVisibility={setSettingsModalVisibility}
@@ -115,18 +104,12 @@ export default function SettingsModalsAndForms({
         <TwoOptionModal
           optionOneText={"Cancel"}
           optionOneFunction={() => {
-            setSettingsModalVisibility((current) => ({
-              ...current,
-              isConfirmAllDataWipeModalVisible: false,
-            }));
+            changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmAllDataWipeModalVisible", false);
           }}
           optionTwoText={"Delete"}
           optionTwoFunction={() => {
             handleWipeData();
-            setSettingsModalVisibility((current) => ({
-              ...current,
-              isConfirmAllDataWipeModalVisible: false,
-            }));
+            changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmAllDataWipeModalVisible", false);
             console.log("Wiping all data.");
           }}
           setModalVisibility={setSettingsModalVisibility}

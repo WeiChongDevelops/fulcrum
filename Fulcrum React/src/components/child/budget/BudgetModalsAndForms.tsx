@@ -7,9 +7,11 @@ import {
   BudgetFormVisibility,
   BudgetItemEntity,
   BudgetModalVisibility,
+  changeFormOrModalVisibility,
   getBudgetList,
   GroupItemEntity,
   handleBudgetDeletion,
+  handleGroupDeletion,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
   SetFormVisibility,
@@ -33,7 +35,6 @@ interface ModalsAndFormsProps {
   oldGroupBeingEdited: PreviousGroupBeingEdited;
   groupToDelete: string;
   categoryToDelete: string;
-  runGroupDeletionWithUserPreference: (keepContainedBudgets: boolean) => void;
 
   currencySymbol: string;
 }
@@ -54,9 +55,19 @@ export default function BudgetModalsAndForms({
   oldGroupBeingEdited,
   groupToDelete,
   categoryToDelete,
-  runGroupDeletionWithUserPreference,
   currencySymbol,
 }: ModalsAndFormsProps) {
+  function runGroupDeletionWithUserPreference(keepContainedBudgets: boolean) {
+    changeFormOrModalVisibility(setBudgetModalVisibility, "isDeleteOptionsModalVisible", false);
+    changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmGroupDeletionModalVisible", false);
+    handleGroupDeletion(groupToDelete, setGroupArray, keepContainedBudgets)
+      .then(async () => {
+        setBudgetArray(await getBudgetList());
+        console.log("Deletion successful");
+      })
+      .catch((error) => console.log("Deletion unsuccessful", error));
+  }
+
   return (
     <div className={"z-40"}>
       {budgetFormVisibility.isCreateBudgetVisible && (
@@ -91,17 +102,14 @@ export default function BudgetModalsAndForms({
       )}
       {budgetModalVisibility.isDeleteOptionsModalVisible && (
         <TwoOptionModal
-          title={`Would you like to keep the categories inside group '${groupToDelete}'?`}
+          title={`Would you like to keep the categories inside the group '${groupToDelete}'?`}
           setModalVisibility={setBudgetModalVisibility}
-          optionOneText="Keep Categories (Moves Them to 'Miscellaneous')"
+          optionOneText="Keep Categories (Move to 'Miscellaneous')"
           optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
           optionTwoText="Delete Categories"
           optionTwoFunction={() => {
-            setBudgetModalVisibility((current) => ({
-              ...current,
-              isDeleteOptionsModalVisible: false,
-              isConfirmGroupDeletionModalVisible: true,
-            }));
+            changeFormOrModalVisibility(setBudgetModalVisibility, "isDeleteOptionsModalVisible", false);
+            changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmGroupDeletionModalVisible", true);
           }}
           isVisible="isDeleteOptionsModalVisible"
         />
@@ -110,7 +118,7 @@ export default function BudgetModalsAndForms({
         <TwoOptionModal
           title="Are you sure? This will delete all categories in the group, as well as their expense records."
           setModalVisibility={setBudgetModalVisibility}
-          optionOneText="Keep Categories (Move to Miscellaneous)"
+          optionOneText="Keep Categories (Move to 'Miscellaneous')"
           optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
           optionTwoText="Confirm"
           optionTwoFunction={() => runGroupDeletionWithUserPreference(false)}
@@ -123,17 +131,11 @@ export default function BudgetModalsAndForms({
           setModalVisibility={setBudgetModalVisibility}
           optionOneText="Cancel"
           optionOneFunction={() => {
-            setBudgetModalVisibility((current) => ({
-              ...current,
-              isConfirmCategoryDeletionModalVisible: false,
-            }));
+            changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmCategoryDeletionModalVisible", false);
           }}
           optionTwoText="Confirm"
           optionTwoFunction={() => {
-            setBudgetModalVisibility((current) => ({
-              ...current,
-              isConfirmCategoryDeletionModalVisible: false,
-            }));
+            changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmCategoryDeletionModalVisible", false);
             handleBudgetDeletion(categoryToDelete, setBudgetArray)
               .then(async (response) => {
                 setBudgetArray(await getBudgetList());

@@ -1,27 +1,22 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo } from "react";
 import {
   BudgetItemEntity,
   CategoryToIconGroupAndColourMap,
   checkForOpenModalOrForm,
-  checkForUser,
   ExpenseItemEntity,
-  ExpenseModalVisibility,
-  getRecurringExpenseList,
-  getBlacklistedExpenses,
   getStructuredExpenseData,
   GroupItemEntity,
-  MonthExpenseGroupEntity,
-  PreviousExpenseBeingEdited,
   PublicUserData,
-  RecurringExpenseItemEntity,
   BlacklistedExpenseItemEntity,
   updateRecurringExpenseInstances,
+  RecurringExpenseItemEntity,
 } from "../../../util.ts";
 import "../../../css/Expense.css";
 import Loader from "../other/Loader.tsx";
 import ExpenseMonthCarousel from "./main-data-hierarchy/ExpenseMonthCarousel.tsx";
 import ExpenseModalsAndForms from "./ExpenseModalsAndForms.tsx";
 import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
+import useInitialExpenseData from "../../../hooks/useInitialExpenseData.ts";
 
 interface ExpensesProps {
   publicUserData: PublicUserData;
@@ -29,9 +24,11 @@ interface ExpensesProps {
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
+  recurringExpenseArray: RecurringExpenseItemEntity[];
 
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[];
@@ -54,59 +51,42 @@ export default function Expenses({
   categoryDataMap,
   blacklistedExpenseArray,
   setBlacklistedExpenseArray,
+  recurringExpenseArray,
+  setRecurringExpenseArray,
   error,
   setError,
 }: ExpensesProps) {
-  const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
-  const [expenseFormVisibility, setExpenseFormVisibility] = useState({
-    isCreateExpenseVisible: false,
-    isUpdateExpenseVisible: false,
-    isUpdateRecurringExpenseInstanceVisible: false,
+  const {
+    structuredExpenseData,
+    setStructuredExpenseData,
+
+    expenseFormVisibility,
+    setExpenseFormVisibility,
+
+    expenseModalVisibility,
+    setExpenseModalVisibility,
+
+    isExpenseFormOrModalOpen,
+    setIsExpenseFormOrModalOpen,
+
+    oldExpenseBeingEdited,
+    setOldExpenseBeingEdited,
+
+    expenseIdToDelete,
+    setExpenseIdToDelete,
+
+    isLoading,
+
+    defaultCalendarDate,
+    setDefaultCalendarDate,
+  } = useInitialExpenseData({
+    setBlacklistedExpenseArray,
+    expenseArray,
+    blacklistedExpenseArray,
+    setExpenseArray,
+    setError,
+    recurringExpenseArray,
   });
-  const [expenseModalVisibility, setExpenseModalVisibility] = useState<ExpenseModalVisibility>({
-    isConfirmExpenseDeletionModalVisible: false,
-  });
-  const [isExpenseFormOrModalOpen, setIsExpenseFormOrModalOpen] = useState(false);
-  const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({
-    expenseId: "",
-    recurringExpenseId: "",
-    oldCategory: "",
-    oldTimestamp: new Date(),
-    oldAmount: 0,
-  });
-  const [expenseIdToDelete, setExpenseIdToDelete] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [defaultCalendarDate, setDefaultCalendarDate] = useState(new Date());
-
-  const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>([]);
-
-  useEffect(() => {
-    async function retrieveInitialData() {
-      try {
-        const userStatus = await checkForUser();
-        if (userStatus["loggedIn"]) {
-          console.log("User logged in.");
-        } else {
-          console.log("User not logged in, login redirect initiated.");
-          window.location.href = "/login";
-        }
-
-        const [recurringExpenseList, blacklistedExpenses] = await Promise.all([
-          getRecurringExpenseList(),
-          getBlacklistedExpenses(),
-        ]);
-        setRecurringExpenseArray(recurringExpenseList);
-        setBlacklistedExpenseArray(blacklistedExpenses);
-
-        await updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, blacklistedExpenseArray, setExpenseArray);
-      } catch (error) {
-        console.log(`Unsuccessful expense page data retrieval - error: ${error}`);
-      }
-    }
-    retrieveInitialData()
-      .then(() => setIsLoading(false))
-      .catch(() => setError("We’re unable to load your data right now. Please try again later."));
-  }, []);
 
   useMemo(() => {
     getStructuredExpenseData(expenseArray, setStructuredExpenseData);

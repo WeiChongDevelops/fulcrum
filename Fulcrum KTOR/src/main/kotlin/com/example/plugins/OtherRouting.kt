@@ -1,6 +1,7 @@
 package com.example.plugins
 
 import com.example.SupabaseClient.supabase
+import com.example.entities.budget.BudgetItemResponse
 import com.example.entities.successFeedback.ErrorResponseSent
 import com.example.entities.successFeedback.SuccessResponseSent
 import com.example.entities.user.*
@@ -31,19 +32,24 @@ fun Application.configureOtherRouting() {
 
         // BROADER DESTRUCTIVE API //
 
+        suspend fun wipeTableIfPopulated(table: String, call: ApplicationCall) {
+            if (supabase.postgrest["budgets"].select() {
+                    eq("userId", com.example.getActiveUserId())
+                }.decodeSingleOrNull<BudgetItemResponse>() != null){
+                val budgetWipeRequestSent = supabase.postgrest[table].delete() {
+                    eq("userId", getActiveUserId())
+                }
+                if (budgetWipeRequestSent.body == null) {
+                    call.respondError("Items not wiped.")
+                }
+            }
+        }
+
         delete("/api/wipeExpenses"){
             try {
-                val expenseWipeRequestSent = supabase.postgrest["expenses"].delete() {
-                    eq("userId", getActiveUserId())
-                }
-                val recurringExpenseWipeRequestSent = supabase.postgrest["recurring_expenses"].delete() {
-                    eq("userId", getActiveUserId())
-                }
-                if (expenseWipeRequestSent.body == null || recurringExpenseWipeRequestSent.body == null) {
-                    call.respondError("Expenses not wiped.")
-                } else {
-                    call.respondSuccess("Expenses wiped successfully.")
-                }
+                wipeTableIfPopulated("expenses", call)
+                wipeTableIfPopulated("recurring_expenses", call)
+                call.respondSuccess("Expenses wiped successfully.")
             } catch (e: Exception) {
                 call.respondError("Error while wiping expenses.")
             }
@@ -51,14 +57,9 @@ fun Application.configureOtherRouting() {
 
         delete("/api/wipeBudget"){
             try {
-                val budgetWipeRequestSent = supabase.postgrest["budgets"].delete() {
-                    eq("userId", getActiveUserId())
-                }
-                if (budgetWipeRequestSent.body == null) {
-                    call.respondError("Budget not wiped.")
-                } else {
-                    call.respondSuccess("Budget wiped successfully.")
-                }
+                wipeTableIfPopulated("budgets", call)
+                wipeTableIfPopulated("groups", call)
+                call.respondSuccess("Budget wiped successfully.")
             } catch (e: Exception) {
                 call.respondError("Error while wiping budget.")
             }
@@ -66,22 +67,10 @@ fun Application.configureOtherRouting() {
 
         delete("/api/wipeData"){
             try {
-                val recurringExpenseWipeRequestSent = supabase.postgrest["recurring_expenses"].delete() {
-                    eq("userId", getActiveUserId())
-                }
-                val expenseWipeRequestSent = supabase.postgrest["expenses"].delete() {
-                    eq("userId", getActiveUserId())
-                }
-                val budgetWipeRequestSent = supabase.postgrest["budget"].delete() {
-                    eq("userId", getActiveUserId())
-                }
-                if (expenseWipeRequestSent.body == null ||
-                    budgetWipeRequestSent.body == null ||
-                    recurringExpenseWipeRequestSent.body == null) {
-                    call.respondError("Data not wiped.")
-                } else {
-                    call.respondSuccess("Data wiped successfully.")
-                }
+                wipeTableIfPopulated("budget", call)
+                wipeTableIfPopulated("expenses", call)
+                wipeTableIfPopulated("recurring_expenses", call)
+                call.respondSuccess("Data wiped successfully.")
             } catch (e: Exception) {
                 call.respondError("Error while wiping data.")
             }

@@ -3,23 +3,20 @@ import {
   CategoryToIconGroupAndColourMap,
   checkForOpenModalOrForm,
   ExpenseItemEntity,
-  getRecurringExpenseList,
   GroupItemEntity,
   OpenToolsSection,
-  PreviousRecurringExpenseBeingEdited,
   PublicUserData,
-  RecurringExpenseFormVisibility,
   RecurringExpenseItemEntity,
-  RecurringExpenseModalVisibility,
   BlacklistedExpenseItemEntity,
 } from "../../../../util.ts";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import Loader from "../../other/Loader.tsx";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import AddNewRecurringExpenseButton from "./buttons/AddNewRecurringExpenseButton.tsx";
 import RecurringExpenseModalsAndForms from "./RecurringExpenseModalsAndForms.tsx";
 import ActiveFormClickShield from "../../other/ActiveFormClickShield.tsx";
 import RecurringExpenseItem from "./RecurringExpenseItem.tsx";
+import useInitialRecurringExpenseData from "../../../../hooks/useInitialRecurringExpenseData.ts";
 
 interface RecurringExpensesProps {
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
@@ -33,6 +30,9 @@ interface RecurringExpensesProps {
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
 
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+
+  recurringExpenseArray: RecurringExpenseItemEntity[];
+  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
   setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
@@ -54,43 +54,24 @@ export default function RecurringExpenses({
   setBudgetArray,
   categoryDataMap,
   setBlacklistedExpenseArray,
+  recurringExpenseArray,
+  setRecurringExpenseArray,
   error,
   setError,
 }: RecurringExpensesProps) {
-  const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
-  const [recurringExpenseModalVisibility, setRecurringExpenseModalVisibility] = useState<RecurringExpenseModalVisibility>({
-    isConfirmRecurringExpenseDeletionModalVisible: false,
-    isSelectRecurringExpenseDeletionTypeModalVisible: false,
-  });
-  const [recurringExpenseFormVisibility, setRecurringExpenseFormVisibility] = useState<RecurringExpenseFormVisibility>({
-    isCreateExpenseVisible: false,
-    isUpdateRecurringExpenseVisible: false,
-  });
-
-  const [isRecurringExpenseFormOrModalOpen, setIsRecurringExpenseFormOrModalOpen] = useState(false);
-
-  const [oldRecurringExpenseBeingEdited, setOldRecurringExpenseBeingEdited] = useState<PreviousRecurringExpenseBeingEdited>({
-    recurringExpenseId: "",
-    oldCategory: "",
-    oldAmount: 0,
-    oldTimestamp: new Date(),
-    oldFrequency: "monthly",
-  });
-  const [recurringExpenseIdToDelete, setRecurringExpenseIdToDelete] = useState("");
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function retrieveData() {
-      const [recurringExpenseArray] = await Promise.all([getRecurringExpenseList()]);
-      setRecurringExpenseArray(recurringExpenseArray);
-
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    }
-    retrieveData()
-      .then(() => setIsLoading(false))
-      .catch(() => setError("We’re unable to load your data right now. Please try again later."));
-  }, []);
+  const {
+    recurringExpenseModalVisibility,
+    setRecurringExpenseModalVisibility,
+    recurringExpenseFormVisibility,
+    setRecurringExpenseFormVisibility,
+    isRecurringExpenseFormOrModalOpen,
+    setIsRecurringExpenseFormOrModalOpen,
+    oldRecurringExpenseBeingEdited,
+    setOldRecurringExpenseBeingEdited,
+    recurringExpenseIdToDelete,
+    setRecurringExpenseIdToDelete,
+    isLoading,
+  } = useInitialRecurringExpenseData({ setRecurringExpenseArray, setError });
 
   useEffect(() => {
     setIsRecurringExpenseFormOrModalOpen(

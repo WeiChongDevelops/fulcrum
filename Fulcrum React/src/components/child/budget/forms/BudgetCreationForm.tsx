@@ -13,6 +13,7 @@ import {
   BudgetCreationFormData,
   handleInputChangeOnFormWithAmount,
   SetFormVisibility,
+  changeFormOrModalVisibility,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import "../../../../css/Budget.css";
@@ -45,10 +46,7 @@ export default function BudgetCreationForm({
   const formRef = useRef<HTMLDivElement>(null);
 
   function hideForm() {
-    setBudgetFormVisibility((current) => ({
-      ...current,
-      isCreateBudgetVisible: false,
-    }));
+    changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateBudgetVisible", false);
   }
   const handleClickOutside = (e: MouseEvent) => {
     if (formRef.current && !formRef.current.contains(e.target as Node)) {

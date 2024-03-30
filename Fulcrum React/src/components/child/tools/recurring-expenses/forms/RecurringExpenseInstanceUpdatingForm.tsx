@@ -13,6 +13,7 @@ import {
   BlacklistedExpenseItemEntity,
   SetFormVisibility,
   getBlacklistedExpenses,
+  changeFormOrModalVisibility,
 } from "../../../../../util.ts";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
@@ -52,10 +53,7 @@ export default function RecurringExpenseInstanceUpdatingForm({
   }, []);
 
   function hideForm() {
-    setExpenseFormVisibility((current) => ({
-      ...current,
-      isUpdateRecurringExpenseInstanceVisible: false,
-    }));
+    changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateRecurringExpenseInstanceVisible", false);
   }
 
   const handleClickOutside = (e: MouseEvent) => {

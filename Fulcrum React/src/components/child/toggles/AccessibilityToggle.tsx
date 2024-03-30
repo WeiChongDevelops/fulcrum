@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  handlePublicUserDataUpdating,
-  PublicUserData,
-  PublicUserDataUpdate,
-} from "../../../util.ts";
+import { handlePublicUserDataUpdating, PublicUserData, PublicUserDataUpdate } from "../../../util.ts";
 import { Dispatch, SetStateAction } from "react";
 
 interface AccessibilityToggleProps {
@@ -14,13 +10,8 @@ interface AccessibilityToggleProps {
 /**
  * A toggle for the user to choose between standard mode and accessibility mode (high contrast + greyscale).
  */
-export default function AccessibilityToggle({
-  publicUserData,
-  setPublicUserData,
-}: AccessibilityToggleProps) {
-  const [isAccessibilityMode, setIsAccessibilityMode] = useState(
-    publicUserData.accessibilityEnabled,
-  );
+export default function AccessibilityToggle({ publicUserData, setPublicUserData }: AccessibilityToggleProps) {
+  const [isAccessibilityMode, setIsAccessibilityMode] = useState(publicUserData.accessibilityEnabled);
 
   useEffect(() => {
     setIsAccessibilityMode(publicUserData.accessibilityEnabled);
@@ -42,11 +33,6 @@ export default function AccessibilityToggle({
     };
 
     await handlePublicUserDataUpdating(updatedPublicUserData);
-
-    sessionStorage.setItem(
-      "accessibilityMode",
-      newIsAccessibilityMode.toString(),
-    );
   }
 
   return (

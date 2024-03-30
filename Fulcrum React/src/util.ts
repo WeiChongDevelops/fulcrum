@@ -1505,6 +1505,7 @@ export async function getPublicUserData(): Promise<any> {
       console.error(`HTTP error when getting public user data - ${response.status}`);
     } else {
       const publicUserData = await response.json();
+      console.log("Public User Data:");
       console.log(publicUserData);
       return publicUserData;
     }
@@ -1869,6 +1870,10 @@ export function getTotalAmountBudgeted(budgetArray: BudgetItemEntity[]): number 
  * @returns The map of category to icon, group, and colour.
  */
 export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
+  console.log("ONE: BUDGETS");
+  console.log(budgetArray);
+  console.log("TWO: GROUPS");
+  console.log(groupArray);
   const categoryToGroupAndColourMap: CategoryToIconGroupAndColourMap = new Map();
   budgetArray.forEach((budgetItem) => {
     categoryToGroupAndColourMap.set(budgetItem.category, {
@@ -1936,14 +1941,7 @@ export function handleInputChangeOnFormWithAmount(
  * @param  modalVisibility - The visibility of the expense modal.
  * @returns True if any modal or form is open, false otherwise.
  */
-export function checkForOpenModalOrForm(
-  formVisibility: ExpenseFormVisibility | BudgetFormVisibility | RecurringExpenseFormVisibility | SettingsFormVisibility,
-  modalVisibility:
-    | ExpenseModalVisibility
-    | BudgetModalVisibility
-    | RecurringExpenseModalVisibility
-    | SettingsModalVisibility,
-) {
+export function checkForOpenModalOrForm(formVisibility: FormVisibility, modalVisibility: ModalVisibility) {
   return Object.values(formVisibility).includes(true) || Object.values(modalVisibility).includes(true);
 }
 
@@ -2225,4 +2223,12 @@ export async function removeAllInstancesOfRecurringExpenseAfterDate(
  */
 export function findExpenseWithId(expenseId: string, expenseArray: ExpenseItemEntity[]) {
   return expenseArray.find((expenseItem) => expenseItem.expenseId === expenseId);
+}
+
+export function changeFormOrModalVisibility<T extends FormVisibility, U extends ModalVisibility>(
+  setVisibility: SetFormVisibility<T> | SetModalVisibility<U>,
+  visibilityAttribute: string,
+  showNotHide: boolean,
+) {
+  setVisibility((prevVisibility: any) => ({ ...prevVisibility, [visibilityAttribute]: showNotHide }));
 }

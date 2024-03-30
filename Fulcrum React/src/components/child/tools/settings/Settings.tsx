@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import {
   checkForOpenModalOrForm,
   OpenToolsSection,
@@ -35,9 +35,10 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
   });
   const [isSettingsFormOrModalOpen, setIsSettingsFormOrModalOpen] = useState<boolean>(false);
 
+  const elementsBelowPopUpForm = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     setIsSettingsFormOrModalOpen(checkForOpenModalOrForm(settingsFormVisibility, settingsModalVisibility));
-    document.getElementById("right-button")?.focus();
   }, [settingsFormVisibility, settingsModalVisibility]);
 
   return (
@@ -45,6 +46,7 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
       <div
         className={`w-[100vw] px-8 elementsBelowPopUpForm
                 ${isSettingsFormOrModalOpen && "blur"}`}
+        ref={elementsBelowPopUpForm}
       >
         <div className="flex justify-between items-center my-8">
           <div className="flex-grow flex flex-row flex-start">
@@ -135,9 +137,9 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
             hoverShadow={true}
           />
         </div>
-      </div>
 
-      {isSettingsFormOrModalOpen && <ActiveFormClickShield />}
+        {isSettingsFormOrModalOpen && <ActiveFormClickShield />}
+      </div>
 
       <SettingsModalsAndForms
         settingsModalVisibility={settingsModalVisibility}

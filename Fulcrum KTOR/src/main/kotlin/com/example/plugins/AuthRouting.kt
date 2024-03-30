@@ -34,7 +34,6 @@ import java.lang.IllegalStateException
 
 fun Application.configureAuthRouting() {
 
-
     routing {
 
         post("/api/register") {

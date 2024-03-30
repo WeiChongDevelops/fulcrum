@@ -10,6 +10,7 @@ import {
   getRandomGroupColour,
   getGroupList,
   SetFormVisibility,
+  changeFormOrModalVisibility,
 } from "../../../../util.ts";
 import "../../../../css/Budget.css";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
@@ -30,10 +31,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
   const formRef = useRef<HTMLDivElement>(null);
 
   function hideForm() {
-    setBudgetFormVisibility((current) => ({
-      ...current,
-      isCreateGroupVisible: false,
-    }));
+    changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateGroupVisible", false);
   }
 
   const handleClickOutside = (e: MouseEvent) => {

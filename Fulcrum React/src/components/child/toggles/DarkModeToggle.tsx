@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  handlePublicUserDataUpdating,
-  PublicUserData,
-  PublicUserDataUpdate,
-} from "../../../util.ts";
+import { handlePublicUserDataUpdating, PublicUserData, PublicUserDataUpdate } from "../../../util.ts";
 import { Dispatch, SetStateAction } from "react";
 
 interface DarkModeToggleProps {
@@ -14,10 +10,7 @@ interface DarkModeToggleProps {
 /**
  * A toggle for the user to choose between light and dark mode.
  */
-export default function DarkModeToggle({
-  publicUserData,
-  setPublicUserData,
-}: DarkModeToggleProps) {
+export default function DarkModeToggle({ publicUserData, setPublicUserData }: DarkModeToggleProps) {
   const [isDarkMode, setIsDarkMode] = useState(publicUserData.darkModeEnabled);
 
   useEffect(() => {
@@ -40,8 +33,6 @@ export default function DarkModeToggle({
       ...prevPublicUserData,
       darkModeEnabled: newIsDarkMode,
     }));
-
-    sessionStorage.setItem("darkMode", newIsDarkMode.toString());
   }
 
   return (

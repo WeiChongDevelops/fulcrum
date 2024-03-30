@@ -1,23 +1,14 @@
 import {
-  BudgetFormVisibility,
   BudgetItemEntity,
-  BudgetModalVisibility,
   checkForOpenModalOrForm,
-  checkForUser,
   ExpenseItemEntity,
   getTotalAmountBudgeted,
-  getGroupList,
   getLineAngle,
-  getTotalIncome,
   GroupItemEntity,
-  handleGroupDeletion,
-  PreviousBudgetBeingEdited,
-  PreviousGroupBeingEdited,
   PublicUserData,
   getCurrencySymbol,
-  getBudgetList,
 } from "../../../util.ts";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./main-data-hierarchy/GroupList.tsx";
@@ -27,6 +18,7 @@ import Loader from "../other/Loader.tsx";
 import "../../../css/App.css";
 import "../../../css/Budget.css";
 import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
+import useInitialBudgetData from "../../../hooks/useInitialBudgetData.ts";
 
 interface BudgetProps {
   publicUserData: PublicUserData;
@@ -55,52 +47,33 @@ export default function Budget({
   error,
   setError,
 }: BudgetProps) {
-  const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
-    isCreateBudgetVisible: false,
-    isUpdateBudgetVisible: false,
-    isCreateGroupVisible: false,
-    isUpdateGroupVisible: false,
-  });
-  const [budgetModalVisibility, setBudgetModalVisibility] = useState<BudgetModalVisibility>({
-    isDeleteOptionsModalVisible: false,
-    isConfirmGroupDeletionModalVisible: false,
-    isConfirmCategoryDeletionModalVisible: false,
-  });
-  const [groupToDelete, setGroupToDelete] = useState<string>("");
-  const [categoryToDelete, setCategoryToDelete] = useState<string>("");
-  const [oldBudgetBeingEdited, setOldBudgetBeingEdited] = useState<PreviousBudgetBeingEdited>({
-    oldAmount: 0,
-    oldCategory: "",
-    oldGroup: "",
-  });
-  const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState<PreviousGroupBeingEdited>({
-    oldColour: "",
-    oldGroupName: "",
-  });
-  const [totalIncome, setTotalIncome] = useState<number>(1000);
-  const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
-  const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
-  const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [lineAngle, setLineAngle] = useState(0);
-  const [perCategoryExpenditureMap, setPerCategoryExpenditureMap] = useState<Map<string, number>>(new Map());
-
-  useEffect(() => {
-    async function retrieveInitialData() {
-      const userStatus = await checkForUser();
-      !userStatus["loggedIn"] && (window.location.href = "/login");
-      setTotalIncome(await getTotalIncome());
-    }
-    retrieveInitialData()
-      .then(() => {
-        setIsLoading(false);
-      })
-      .catch(() => setError("We’re unable to load your data right now. Please try again later."));
-  }, []);
-
-  useEffect(() => {
-    getGroupList().then((results) => setGroupArray(results));
-  }, [budgetArray]);
+  const {
+    budgetFormVisibility,
+    setBudgetFormVisibility,
+    budgetModalVisibility,
+    setBudgetModalVisibility,
+    groupToDelete,
+    setGroupToDelete,
+    categoryToDelete,
+    setCategoryToDelete,
+    oldBudgetBeingEdited,
+    setOldBudgetBeingEdited,
+    oldGroupBeingEdited,
+    setOldGroupBeingEdited,
+    amountLeftToBudget,
+    setAmountLeftToBudget,
+    groupNameOfNewItem,
+    setGroupNameOfNewItem,
+    isBudgetFormOrModalOpen,
+    setIsBudgetFormOrModalOpen,
+    isLoading,
+    lineAngle,
+    setLineAngle,
+    perCategoryExpenditureMap,
+    setPerCategoryExpenditureMap,
+    totalIncome,
+    setTotalIncome,
+  } = useInitialBudgetData(setError);
 
   useEffect(() => {
     // Map construction for each category's total expenditure
@@ -129,21 +102,6 @@ export default function Budget({
   useEffect(() => {
     setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility));
   }, [budgetFormVisibility, budgetModalVisibility]);
-
-  function runGroupDeletionWithUserPreference(keepContainedBudgets: boolean) {
-    setBudgetModalVisibility((current) => ({
-      ...current,
-      isDeleteOptionsModalVisible: false,
-      isConfirmGroupDeletionModalVisible: false,
-    }));
-
-    handleGroupDeletion(groupToDelete, setGroupArray, keepContainedBudgets)
-      .then(async () => {
-        setBudgetArray(await getBudgetList());
-        console.log("Deletion successful");
-      })
-      .catch((error) => console.log("Deletion unsuccessful", error));
-  }
 
   return (
     <>
@@ -202,7 +160,6 @@ export default function Budget({
                 oldGroupBeingEdited={oldGroupBeingEdited}
                 groupToDelete={groupToDelete}
                 categoryToDelete={categoryToDelete}
-                runGroupDeletionWithUserPreference={runGroupDeletionWithUserPreference}
                 budgetModalVisibility={budgetModalVisibility}
                 setBudgetModalVisibility={setBudgetModalVisibility}
                 currencySymbol={getCurrencySymbol(publicUserData.currency)}

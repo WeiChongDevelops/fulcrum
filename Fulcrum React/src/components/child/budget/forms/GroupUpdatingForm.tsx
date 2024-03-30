@@ -4,6 +4,7 @@ import {
   BasicGroupData,
   BudgetFormVisibility,
   BudgetItemEntity,
+  changeFormOrModalVisibility,
   getBudgetList,
   getGroupList,
   GroupItemEntity,
@@ -46,10 +47,7 @@ export default function GroupUpdatingForm({
   }, []);
 
   function hideForm() {
-    setBudgetFormVisibility((current) => ({
-      ...current,
-      isUpdateGroupVisible: false,
-    }));
+    changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", false);
   }
 
   const handleClickOutside = (e: MouseEvent) => {

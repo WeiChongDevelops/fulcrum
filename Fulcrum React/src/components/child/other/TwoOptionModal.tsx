@@ -70,18 +70,18 @@ export default function TwoOptionModal({
 
       <h2 className="mt-8 mx-4 text-xl">{title}</h2>
 
-      <div className="flex flex-row justify-between mt-12">
+      <div className="flex flex-row justify-between mt-12 w-full">
         <FulcrumButton
           displayText={optionOneText}
           onClick={optionOneFunction}
-          optionalTailwind={"mx-2 max-w-1/2"}
+          optionalTailwind={"mx-2 w-1/2"}
           backgroundColour={"green"}
           id={"left-button"}
         />
         <FulcrumButton
           displayText={optionTwoText}
           onClick={optionTwoFunction}
-          optionalTailwind={"mx-2 max-w-1/2"}
+          optionalTailwind={"mx-2 w-1/2"}
           backgroundColour={"red"}
           id={"right-button"}
           refObject={rightButtonRef}
