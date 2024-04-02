@@ -5,24 +5,18 @@ import Budget from "../child/budget/Budget.tsx";
 import Fulcrum from "./Fulcrum.tsx";
 import Expenses from "../child/expenses/Expenses.tsx";
 import Tools from "../child/tools/Tools.tsx";
-import { useEffect, useMemo, useState } from "react";
-import { CategoryToIconGroupAndColourMap, getGroupAndColourMap } from "../../util.ts";
 import "../../css/App.css";
 import About from "../child/home/subpages/about/About.tsx";
 import Contact from "../child/home/subpages/Contact.tsx";
 import Pricing from "../child/home/subpages/Pricing.tsx";
 import Home from "../child/home/Home.tsx";
 import { useGlobalAppData } from "../../hooks/useGlobalAppData.ts";
+import Loader from "../child/other/Loader.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
  */
 export default function App() {
-  const sessionStoredEmail = sessionStorage.getItem("email");
-  const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
-  const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
-  const [error, setError] = useState("");
-
   const {
     publicUserData,
     setPublicUserData,
@@ -36,24 +30,27 @@ export default function App() {
     setRecurringExpenseArray,
     blacklistedExpenseArray,
     setBlacklistedExpenseArray,
-  } = useGlobalAppData({ email, setCategoryDataMap, setError });
+    email,
+    setEmail,
+    categoryDataMap,
+    isLoading,
+    isError,
+    error,
+  } = useGlobalAppData();
 
-  useEffect(() => {
-    if (publicUserData) {
-      sessionStorage.setItem("profileIconFileName", publicUserData.profileIconFileName);
-      sessionStorage.setItem("darkModeEnabled", publicUserData.darkModeEnabled.toString());
-      sessionStorage.setItem("accessibilityEnabled", publicUserData.accessibilityEnabled.toString());
-    }
-  }, [publicUserData]);
+  if (isLoading) {
+    return <Loader isLoading={isLoading} isDarkMode={false} />;
+  }
 
-  useMemo(() => {
-    const updateCategoryDataMap = async () => {
-      groupArray.length !== 0 &&
-        budgetArray.length !== 0 &&
-        setCategoryDataMap(await getGroupAndColourMap(budgetArray, groupArray));
-    };
-    updateCategoryDataMap();
-  }, [budgetArray, groupArray]);
+  if (isError) {
+    return (
+      <div className={"flex flex-col justify-center items-center h-screen gap-14 text-black font-bold"}>
+        <p>There's been an error. Please try again later or reach through the contact form.</p>
+        {error && <p>{error.toString()}</p>}
+        <img src="/src/assets/fulcrum-logos/fulcrum-icon.png" className={"w-10 h-10"} alt="Fulcrum icon" />
+      </div>
+    );
+  }
 
   return (
     <Router>
@@ -93,8 +90,6 @@ export default function App() {
                 setRecurringExpenseArray={setRecurringExpenseArray}
                 blacklistedExpenseArray={blacklistedExpenseArray}
                 setBlacklistedExpenseArray={setBlacklistedExpenseArray}
-                error={error}
-                setError={setError}
               />
             }
           />
@@ -108,8 +103,6 @@ export default function App() {
                 groupArray={groupArray}
                 setBudgetArray={setBudgetArray}
                 setGroupArray={setGroupArray}
-                error={error}
-                setError={setError}
               />
             }
           />
@@ -128,8 +121,6 @@ export default function App() {
                 setRecurringExpenseArray={setRecurringExpenseArray}
                 setBlacklistedExpenseArray={setBlacklistedExpenseArray}
                 categoryDataMap={categoryDataMap}
-                error={error}
-                setError={setError}
               />
             }
           />

@@ -16,7 +16,6 @@ interface useInitialExpenseDataProps {
   expenseArray: ExpenseItemEntity[];
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[];
   setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-  setError: Dispatch<SetStateAction<string>>;
   recurringExpenseArray: RecurringExpenseItemEntity[];
 }
 
@@ -25,7 +24,6 @@ export default function useInitialExpenseData({
   expenseArray,
   blacklistedExpenseArray,
   setExpenseArray,
-  setError,
   recurringExpenseArray,
 }: useInitialExpenseDataProps) {
   const [expenseFormVisibility, setExpenseFormVisibility] = useState({
@@ -68,9 +66,7 @@ export default function useInitialExpenseData({
         console.log(`Unsuccessful expense page data retrieval - error: ${error}`);
       }
     }
-    retrieveInitialData()
-      .then(() => setIsLoading(false))
-      .catch(() => setError("We’re unable to load your data right now. Please try again later."));
+    retrieveInitialData().then(() => setIsLoading(false));
   }, []);
 
   return {

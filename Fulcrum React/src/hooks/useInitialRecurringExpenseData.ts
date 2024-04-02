@@ -9,13 +9,9 @@ import {
 
 interface useInitialRecurringExpenseDataProps {
   setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
-  setError: Dispatch<SetStateAction<string>>;
 }
 
-export default function useInitialRecurringExpenseData({
-  setRecurringExpenseArray,
-  setError,
-}: useInitialRecurringExpenseDataProps) {
+export default function useInitialRecurringExpenseData({ setRecurringExpenseArray }: useInitialRecurringExpenseDataProps) {
   const [recurringExpenseModalVisibility, setRecurringExpenseModalVisibility] = useState<RecurringExpenseModalVisibility>({
     isConfirmRecurringExpenseDeletionModalVisible: false,
     isSelectRecurringExpenseDeletionTypeModalVisible: false,
@@ -45,9 +41,7 @@ export default function useInitialRecurringExpenseData({
 
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
-    retrieveData()
-      .then(() => setIsLoading(false))
-      .catch(() => setError("We’re unable to load your data right now. Please try again later."));
+    retrieveData().then(() => setIsLoading(false));
   }, []);
 
   return {

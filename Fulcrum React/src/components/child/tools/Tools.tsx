@@ -31,9 +31,6 @@ interface ToolsProps {
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
   setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
-
-  error: string;
-  setError: Dispatch<SetStateAction<string>>;
 }
 
 /**
@@ -51,8 +48,6 @@ export default function Tools({
   setRecurringExpenseArray,
   categoryDataMap,
   setBlacklistedExpenseArray,
-  error,
-  setError,
 }: ToolsProps) {
   const sessionStoredEmail = sessionStorage.getItem("email");
   const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
@@ -90,8 +85,6 @@ export default function Tools({
           recurringExpenseArray={recurringExpenseArray}
           setRecurringExpenseArray={setRecurringExpenseArray}
           setBlacklistedExpenseArray={setBlacklistedExpenseArray}
-          error={error}
-          setError={setError}
         />
       )}
     </>

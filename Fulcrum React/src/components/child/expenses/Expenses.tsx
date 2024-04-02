@@ -33,9 +33,6 @@ interface ExpensesProps {
   categoryDataMap: CategoryToIconGroupAndColourMap;
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[];
   setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
-
-  error: string;
-  setError: Dispatch<SetStateAction<string>>;
 }
 
 /**
@@ -53,8 +50,6 @@ export default function Expenses({
   setBlacklistedExpenseArray,
   recurringExpenseArray,
   setRecurringExpenseArray,
-  error,
-  setError,
 }: ExpensesProps) {
   const {
     structuredExpenseData,
@@ -84,7 +79,6 @@ export default function Expenses({
     expenseArray,
     blacklistedExpenseArray,
     setExpenseArray,
-    setError,
     recurringExpenseArray,
   });
 
@@ -104,47 +98,44 @@ export default function Expenses({
     <>
       {!isLoading ? (
         <div className="flex flex-col justify-center items-center relative">
-          {error === "" ? (
-            <div className={""}>
-              <div
-                className={`justify-center items-center elementsBelowPopUpForm
+          <div className={""}>
+            <div
+              className={`justify-center items-center elementsBelowPopUpForm
                     ${isExpenseFormOrModalOpen && "blur"}`}
-              >
-                <ExpenseMonthCarousel
-                  structuredExpenseData={structuredExpenseData}
-                  setExpenseFormVisibility={setExpenseFormVisibility}
-                  setExpenseModalVisibility={setExpenseModalVisibility}
-                  setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-                  setExpenseIdToDelete={setExpenseIdToDelete}
-                  categoryDataMap={categoryDataMap}
-                  publicUserData={publicUserData}
-                  setDefaultCalendarDate={setDefaultCalendarDate}
-                />
-              </div>
-
-              {isExpenseFormOrModalOpen && <ActiveFormClickShield />}
-
-              <ExpenseModalsAndForms
-                expenseFormVisibility={expenseFormVisibility}
+            >
+              <ExpenseMonthCarousel
+                structuredExpenseData={structuredExpenseData}
                 setExpenseFormVisibility={setExpenseFormVisibility}
-                expenseModalVisibility={expenseModalVisibility}
                 setExpenseModalVisibility={setExpenseModalVisibility}
-                expenseArray={expenseArray}
-                budgetArray={budgetArray}
-                groupArray={groupArray}
-                setExpenseArray={setExpenseArray}
-                setBudgetArray={setBudgetArray}
-                setRecurringExpenseArray={setRecurringExpenseArray}
-                setBlacklistedExpenseArray={setBlacklistedExpenseArray}
+                setOldExpenseBeingEdited={setOldExpenseBeingEdited}
+                setExpenseIdToDelete={setExpenseIdToDelete}
+                categoryDataMap={categoryDataMap}
                 publicUserData={publicUserData}
-                defaultCalendarDate={defaultCalendarDate}
-                oldExpenseBeingEdited={oldExpenseBeingEdited}
-                expenseIdToDelete={expenseIdToDelete}
+                setDefaultCalendarDate={setDefaultCalendarDate}
               />
             </div>
-          ) : (
-            <p className={`error-message ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>{error}</p>
-          )}
+
+            {isExpenseFormOrModalOpen && <ActiveFormClickShield />}
+
+            <ExpenseModalsAndForms
+              expenseFormVisibility={expenseFormVisibility}
+              setExpenseFormVisibility={setExpenseFormVisibility}
+              expenseModalVisibility={expenseModalVisibility}
+              setExpenseModalVisibility={setExpenseModalVisibility}
+              expenseArray={expenseArray}
+              budgetArray={budgetArray}
+              groupArray={groupArray}
+              setExpenseArray={setExpenseArray}
+              setBudgetArray={setBudgetArray}
+              setRecurringExpenseArray={setRecurringExpenseArray}
+              setBlacklistedExpenseArray={setBlacklistedExpenseArray}
+              publicUserData={publicUserData}
+              defaultCalendarDate={defaultCalendarDate}
+              oldExpenseBeingEdited={oldExpenseBeingEdited}
+              expenseIdToDelete={expenseIdToDelete}
+            />
+          </div>
+          )
         </div>
       ) : (
         <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled} />

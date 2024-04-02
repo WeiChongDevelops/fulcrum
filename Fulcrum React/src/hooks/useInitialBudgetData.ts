@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BudgetFormVisibility,
   BudgetModalVisibility,
@@ -8,7 +8,7 @@ import {
   PreviousGroupBeingEdited,
 } from "../util.ts";
 
-export default function useInitialBudgetData(setError: Dispatch<SetStateAction<string>>) {
+export default function useInitialBudgetData() {
   const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
     isCreateBudgetVisible: false,
     isUpdateBudgetVisible: false,
@@ -46,11 +46,9 @@ export default function useInitialBudgetData(setError: Dispatch<SetStateAction<s
       !userStatus["loggedIn"] && (window.location.href = "/login");
       setTotalIncome(await getTotalIncome());
     }
-    retrieveInitialData()
-      .then(() => {
-        setIsLoading(false);
-      })
-      .catch(() => setError("We’re unable to load your data right now. Please try again later."));
+    retrieveInitialData().then(() => {
+      setIsLoading(false);
+    });
   }, []);
 
   return {
