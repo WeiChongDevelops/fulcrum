@@ -1,12 +1,11 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
   BudgetFormVisibility,
   BudgetItemEntity,
   BudgetUpdatingFormData,
   colourStyles,
-  getBudgetList,
   getColourOfGroup,
   groupListAsOptions,
   handleBudgetUpdating,
@@ -14,9 +13,12 @@ import {
   handleInputChangeOnFormWithAmount,
   SetFormVisibility,
   changeFormOrModalVisibility,
+  EmailContext,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
+import { useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface DBUpdatingFormProps {
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
@@ -47,6 +49,36 @@ export default function BudgetUpdatingForm({
     group: oldBudgetBeingEdited.oldGroup,
   });
   const formRef = useRef<HTMLDivElement>(null);
+
+  interface BudgetUpdatingMutationProps {
+    category: string;
+    updatedBudgetItem: BudgetItemEntity;
+  }
+
+  const queryClient = useQueryClient();
+  const email = useContext(EmailContext);
+  const budgetUpdatingMutation = useMutation({
+    mutationFn: (budgetUpdatingMutationProps: BudgetUpdatingMutationProps) =>
+      handleBudgetUpdating(budgetUpdatingMutationProps.category, budgetUpdatingMutationProps.updatedBudgetItem),
+    onMutate: async (budgetUpdatingMutationProps: BudgetUpdatingMutationProps) => {
+      await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
+      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
+        return prevBudgetCache.map((budgetItem) =>
+          budgetItem.category === budgetUpdatingMutationProps.category
+            ? budgetUpdatingMutationProps.updatedBudgetItem
+            : budgetItem,
+        );
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["budgetArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+    },
+  });
 
   useEffect(() => {
     addIconSelectionFunctionality(setFormData, "category");
@@ -79,7 +111,11 @@ export default function BudgetUpdatingForm({
 
     hideForm();
 
-    await handleBudgetUpdating(oldBudgetBeingEdited.oldCategory, formData);
+    // await handleBudgetUpdating(oldBudgetBeingEdited.oldCategory, formData);
+    // getBudgetList().then((budgetList) => setBudgetArray(budgetList));
+
+    const updatedBudgetItem = { ...formData, timestamp: new Date() };
+    budgetUpdatingMutation.mutate({ category: oldBudgetBeingEdited.oldCategory, updatedBudgetItem: updatedBudgetItem });
 
     setFormData({
       category: oldBudgetBeingEdited.oldCategory,
@@ -87,7 +123,6 @@ export default function BudgetUpdatingForm({
       iconPath: "",
       group: oldBudgetBeingEdited.oldGroup,
     });
-    getBudgetList().then((budgetList) => setBudgetArray(budgetList));
   }
 
   return (

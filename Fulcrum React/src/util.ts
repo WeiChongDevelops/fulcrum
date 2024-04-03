@@ -696,9 +696,9 @@ export async function getBudgetList(): Promise<BudgetItemEntity[]> {
 /**
  * Updates an existing budget item based on the provided form data.
  * @param category - The category of the budget item to update.
- * @param formData - The updated data for the budget item.
+ * @param updatedBudgetItem - The updated data for the budget item.
  */
-export async function handleBudgetUpdating(category: string, formData: BudgetUpdatingFormData): Promise<void> {
+export async function handleBudgetUpdating(category: string, updatedBudgetItem: BudgetItemEntity): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/updateBudget", {
       method: "PUT",
@@ -707,10 +707,10 @@ export async function handleBudgetUpdating(category: string, formData: BudgetUpd
       },
       body: JSON.stringify({
         category: category,
-        newCategoryName: formData.category.trim(),
-        amount: formData.amount,
-        group: formData.group.trim(),
-        iconPath: formData.iconPath,
+        newCategoryName: updatedBudgetItem.category.trim(),
+        amount: updatedBudgetItem.amount,
+        group: updatedBudgetItem.group.trim(),
+        iconPath: updatedBudgetItem.iconPath,
       }),
     });
     if (!response.ok) {
