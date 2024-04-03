@@ -1295,12 +1295,12 @@ export async function handleUserLogin(email: string, password: string): Promise<
       if (response.status === 400) {
         console.error(`HTTP error - status: ${response.status}`);
         console.error("User already logged in.");
-        window.location.href = "/budget";
+        window.location.href = "/app/budget";
         return true;
       } else {
         console.log("Successful login.");
         console.log(response.json());
-        window.location.href = "/budget";
+        window.location.href = "/app/budget";
         return true;
       }
     }

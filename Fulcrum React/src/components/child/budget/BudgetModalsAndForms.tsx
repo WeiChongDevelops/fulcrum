@@ -8,6 +8,7 @@ import {
   BudgetItemEntity,
   BudgetModalVisibility,
   changeFormOrModalVisibility,
+  EmailContext,
   getBudgetList,
   GroupItemEntity,
   handleBudgetDeletion,
@@ -18,7 +19,8 @@ import {
   SetModalVisibility,
 } from "../../../util.ts";
 
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ModalsAndFormsProps {
   budgetFormVisibility: BudgetFormVisibility;
@@ -57,16 +59,58 @@ export default function BudgetModalsAndForms({
   categoryToDelete,
   currencySymbol,
 }: ModalsAndFormsProps) {
-  function runGroupDeletionWithUserPreference(keepContainedBudgets: boolean) {
-    changeFormOrModalVisibility(setBudgetModalVisibility, "isDeleteOptionsModalVisible", false);
-    changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmGroupDeletionModalVisible", false);
-    handleGroupDeletion(groupToDelete, setGroupArray, keepContainedBudgets)
-      .then(async () => {
-        setBudgetArray(await getBudgetList());
-        console.log("Deletion successful");
-      })
-      .catch((error) => console.log("Deletion unsuccessful", error));
+  const queryClient = useQueryClient();
+  const email = useContext(EmailContext);
+
+  // const budgetCreationMutation = useMutation({
+  //   mutationFn: (newBudgetItem: BudgetItemEntity) => handleBudgetCreation(setBudgetArray, newBudgetItem),
+  //   onMutate: async (newBudgetItem: BudgetItemEntity) => {
+  //     await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
+  //     const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
+  //     await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
+  //       return [...prevBudgetCache, newBudgetItem];
+  //     });
+  //     return { dataBeforeOptimisticUpdate };
+  //   },
+  //   onError: (_error, _variables, context) => {
+  //     return queryClient.setQueryData(["budgetArray", email], context?.dataBeforeOptimisticUpdate);
+  //   },
+  //   onSettled: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+  //   },
+  // });
+
+  interface GroupDeletionProps {
+    groupToDelete: string;
+    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
+    keepContainedCategories: boolean;
   }
+
+  const groupDeletionMutation = useMutation({
+    mutationFn: (groupDeletionProps: GroupDeletionProps) => {
+      return handleGroupDeletion(
+        groupDeletionProps.groupToDelete,
+        groupDeletionProps.setGroupArray,
+        groupDeletionProps.keepContainedCategories,
+      );
+    },
+    mutationKey: ["groupArray", email],
+    onMutate: async (groupDeletionProps: GroupDeletionProps) => {
+      await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["groupArray", email]);
+      await queryClient.setQueryData(["groupArray", email], (prevGroupCache: GroupItemEntity[]) => {
+        return prevGroupCache.filter((groupItem) => groupItem.group !== groupDeletionProps.groupToDelete);
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["groupArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["groupArray", email] });
+      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+    },
+  });
 
   return (
     <div className={"z-40"}>
@@ -105,7 +149,14 @@ export default function BudgetModalsAndForms({
           title={`Would you like to keep the categories inside the group '${groupToDelete}'?`}
           setModalVisibility={setBudgetModalVisibility}
           optionOneText="Keep Categories (Move to 'Miscellaneous')"
-          optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
+          optionOneFunction={() => {
+            groupDeletionMutation.mutate({
+              groupToDelete: groupToDelete,
+              setGroupArray: setGroupArray,
+              keepContainedCategories: true,
+            });
+            changeFormOrModalVisibility(setBudgetModalVisibility, "isDeleteOptionsModalVisible", false);
+          }}
           optionTwoText="Delete Categories"
           optionTwoFunction={() => {
             changeFormOrModalVisibility(setBudgetModalVisibility, "isDeleteOptionsModalVisible", false);
@@ -119,9 +170,23 @@ export default function BudgetModalsAndForms({
           title="Are you sure? This will delete all categories in the group, as well as their expense records."
           setModalVisibility={setBudgetModalVisibility}
           optionOneText="Keep Categories (Move to 'Miscellaneous')"
-          optionOneFunction={() => runGroupDeletionWithUserPreference(true)}
+          optionOneFunction={() => {
+            groupDeletionMutation.mutate({
+              groupToDelete: groupToDelete,
+              setGroupArray: setGroupArray,
+              keepContainedCategories: true,
+            });
+            changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmGroupDeletionModalVisible", false);
+          }}
           optionTwoText="Confirm"
-          optionTwoFunction={() => runGroupDeletionWithUserPreference(false)}
+          optionTwoFunction={() => {
+            groupDeletionMutation.mutate({
+              groupToDelete: groupToDelete,
+              setGroupArray: setGroupArray,
+              keepContainedCategories: false,
+            });
+            changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmGroupDeletionModalVisible", false);
+          }}
           isVisible="isConfirmGroupDeletionModalVisible"
         />
       )}

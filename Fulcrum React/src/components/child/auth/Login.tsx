@@ -1,13 +1,7 @@
 import FulcrumButton from "../other/FulcrumButton.tsx";
 import "../../../css/App.css";
 import "../../../css/Auth.css";
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useState,
-} from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { handleUserLogin } from "../../../util.ts";
 
 interface LoginProps {
@@ -33,12 +27,10 @@ export default function Login({ setEmail }: LoginProps) {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const loginSuccess = await handleUserLogin(
-      formData.email,
-      formData.password,
-    );
+    const loginSuccess = await handleUserLogin(formData.email, formData.password);
     if (loginSuccess) {
       setEmail(formData.email);
+      sessionStorage.setItem("email", formData.email);
       setFormData({
         email: "",
         password: "",
@@ -98,10 +90,7 @@ export default function Login({ setEmail }: LoginProps) {
           <div className={"flex flex-row justify-center items-center w-full"}>
             <div className={"mr-8"}>
               <span>Don't have an account? </span>
-              <a
-                href="http://localhost:5173/register"
-                className={"underline text-[#17423F] font-semibold"}
-              >
+              <a href="http://localhost:5173/register" className={"underline text-[#17423F] font-semibold"}>
                 Register
               </a>
             </div>

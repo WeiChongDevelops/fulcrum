@@ -24,6 +24,7 @@ export default function App() {
     setPublicUserData,
     expenseArray,
     setExpenseArray,
+    budgetArray,
     budgetArrayQuery,
     setBudgetArray,
     groupArray,
@@ -61,7 +62,7 @@ export default function App() {
           <Route path="/login" element={<Login setEmail={setEmail} />} />
           <Route path="/register" element={<Register />} />
           <Route
-            path="/"
+            path="/app/"
             element={
               <Fulcrum
                 publicUserData={publicUserData}
@@ -99,6 +100,7 @@ export default function App() {
                   publicUserData={publicUserData}
                   expenseArray={expenseArray}
                   budgetArray={budgetArrayQuery.data as BudgetItemEntity[]}
+                  // budgetArray={budgetArray}
                   groupArray={groupArray}
                   setBudgetArray={setBudgetArray}
                   setGroupArray={setGroupArray}

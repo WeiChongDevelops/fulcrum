@@ -75,10 +75,6 @@ export default function Budget({
     error,
   } = useInitialBudgetData(email);
 
-  useEffect(() => {
-    console.log("Rerender of Budget.tsx triggered.");
-  }, [budgetArray]);
-
   let { totalIncome } = data || {};
 
   useEffect(() => {

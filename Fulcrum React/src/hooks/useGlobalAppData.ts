@@ -11,11 +11,12 @@ import {
   getGroupList,
   getPublicUserData,
   getRecurringExpenseList,
+  getWindowLocation,
   GroupItemEntity,
   PublicUserData,
   RecurringExpenseItemEntity,
 } from "../util.ts";
-import { useQueries, UseQueryResult } from "@tanstack/react-query";
+import { useQueries, useQuery, UseQueryResult } from "@tanstack/react-query";
 
 export function useGlobalAppData() {
   const sessionStoredProfileIcon = sessionStorage.getItem("profileIconFileName");
@@ -45,15 +46,6 @@ export function useGlobalAppData() {
       sessionStorage.setItem("accessibilityEnabled", publicUserData.accessibilityEnabled.toString());
     }
   }, [publicUserData]);
-
-  useMemo(() => {
-    const updateCategoryDataMap = async () => {
-      groupArray.length !== 0 &&
-        budgetArray.length !== 0 &&
-        setCategoryDataMap(await getGroupAndColourMap(budgetArray, groupArray));
-    };
-    updateCategoryDataMap();
-  }, [budgetArray, groupArray]);
 
   // async function retrieveGlobalAppData() {
   //   const [
@@ -85,32 +77,46 @@ export function useGlobalAppData() {
   //   };
   // }
 
+  const retrievalConditions = !!email && window.location.href.split("/").includes("app");
+
   const globalAppDataQueries: UseQueryResult[] = useQueries({
     queries: [
-      { queryKey: ["publicUserData", email], queryFn: getPublicUserData, enabled: !!email },
-      { queryKey: ["expenseArray", email], queryFn: getExpenseList, enabled: !!email },
-      { queryKey: ["budgetArray", email], queryFn: getBudgetList, enabled: !!email },
-      { queryKey: ["groupArray", email], queryFn: getGroupList, enabled: !!email },
-      { queryKey: ["recurringExpenseArray", email], queryFn: getRecurringExpenseList, enabled: !!email },
-      { queryKey: ["blacklistedExpenseArray", email], queryFn: getBlacklistedExpenses, enabled: !!email },
-      {
-        queryKey: ["groupAndColourMap", email],
-        queryFn: () =>
-          getGroupAndColourMap(budgetArrayQuery.data as BudgetItemEntity[], groupArrayQuery.data as GroupItemEntity[]),
-        enabled: !!email && !!budgetArray && !!groupArray,
-      },
+      { queryKey: ["budgetArray", email], queryFn: getBudgetList, enabled: retrievalConditions },
+      { queryKey: ["groupArray", email], queryFn: getGroupList, enabled: retrievalConditions },
+      { queryKey: ["expenseArray", email], queryFn: getExpenseList, enabled: retrievalConditions },
+      { queryKey: ["recurringExpenseArray", email], queryFn: getRecurringExpenseList, enabled: retrievalConditions },
+      { queryKey: ["blacklistedExpenseArray", email], queryFn: getBlacklistedExpenses, enabled: retrievalConditions },
+      { queryKey: ["publicUserData", email], queryFn: getPublicUserData, enabled: retrievalConditions },
     ],
   });
 
   const [
-    publicUserDataQuery,
-    expenseArrayQuery,
     budgetArrayQuery,
     groupArrayQuery,
+    expenseArrayQuery,
     recurringExpenseArrayQuery,
     blacklistedExpenseArrayQuery,
-    groupAndColourMapQuery,
+    publicUserDataQuery,
   ] = globalAppDataQueries;
+
+  const groupAndColourMapQuery = useQuery({
+    queryKey: ["groupAndColourMap", email],
+    queryFn: () =>
+      getGroupAndColourMap(
+        globalAppDataQueries[0].data as BudgetItemEntity[],
+        globalAppDataQueries[1].data as GroupItemEntity[],
+      ),
+    enabled: !!email && !!budgetArrayQuery.data && !!groupArrayQuery.data,
+  });
+
+  // useMemo(() => {
+  //   const updateCategoryDataMap = async () => {
+  //     groupArray.length !== 0 &&
+  //     budgetArray.length !== 0 &&
+  //     setCategoryDataMap(await getGroupAndColourMap(budgetArray, groupArray));
+  //   };
+  //   updateCategoryDataMap();
+  // }, [budgetArray, groupArray]);
 
   // const { data, isLoading, isSuccess, isError, error } = useQuery({
   //   queryKey: ["globalAppData", email],
@@ -118,9 +124,11 @@ export function useGlobalAppData() {
   //   enabled: !!email,
   // });
 
-  const isAnyLoading = globalAppDataQueries.some((query: UseQueryResult) => query.isLoading);
-  const isAnyError = globalAppDataQueries.some((query: UseQueryResult) => query.isError);
-  const isAllSuccess = globalAppDataQueries.every((query: UseQueryResult) => query.isSuccess);
+  const isAnyLoading =
+    globalAppDataQueries.some((query: UseQueryResult) => query.isLoading) || groupAndColourMapQuery.isLoading;
+  const isAnyError = globalAppDataQueries.some((query: UseQueryResult) => query.isError) || groupAndColourMapQuery.isError;
+  const isAllSuccess =
+    globalAppDataQueries.every((query: UseQueryResult) => query.isSuccess) && groupAndColourMapQuery.isSuccess;
   const errors = globalAppDataQueries
     .map((query: UseQueryResult) => query.error)
     .filter((error) => error !== null) as Error[];
@@ -130,7 +138,7 @@ export function useGlobalAppData() {
     if (isAllSuccess) {
       setPublicUserData(publicUserDataQuery.data! as PublicUserData);
       setExpenseArray(expenseArrayQuery.data! as ExpenseItemEntity[]);
-      // setBudgetArray(budgetArrayQuery.data! as BudgetItemEntity[]);
+      setBudgetArray(budgetArrayQuery.data! as BudgetItemEntity[]);
       setGroupArray(groupArrayQuery.data! as GroupItemEntity[]);
       setRecurringExpenseArray(recurringExpenseArrayQuery.data! as RecurringExpenseItemEntity[]);
       setBlacklistedExpenseArray(blacklistedExpenseArrayQuery.data! as BlacklistedExpenseItemEntity[]);
@@ -143,6 +151,7 @@ export function useGlobalAppData() {
     setPublicUserData,
     expenseArray,
     setExpenseArray,
+    budgetArray,
     budgetArrayQuery,
     setBudgetArray,
     groupArray,
