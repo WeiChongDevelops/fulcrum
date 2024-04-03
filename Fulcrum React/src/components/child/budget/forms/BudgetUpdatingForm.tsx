@@ -51,7 +51,7 @@ export default function BudgetUpdatingForm({
   const formRef = useRef<HTMLDivElement>(null);
 
   interface BudgetUpdatingMutationProps {
-    category: string;
+    originalCategory: string;
     updatedBudgetItem: BudgetItemEntity;
   }
 
@@ -59,13 +59,13 @@ export default function BudgetUpdatingForm({
   const email = useContext(EmailContext);
   const budgetUpdatingMutation = useMutation({
     mutationFn: (budgetUpdatingMutationProps: BudgetUpdatingMutationProps) =>
-      handleBudgetUpdating(budgetUpdatingMutationProps.category, budgetUpdatingMutationProps.updatedBudgetItem),
+      handleBudgetUpdating(budgetUpdatingMutationProps.originalCategory, budgetUpdatingMutationProps.updatedBudgetItem),
     onMutate: async (budgetUpdatingMutationProps: BudgetUpdatingMutationProps) => {
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
       await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
         return prevBudgetCache.map((budgetItem) =>
-          budgetItem.category === budgetUpdatingMutationProps.category
+          budgetItem.category === budgetUpdatingMutationProps.originalCategory
             ? budgetUpdatingMutationProps.updatedBudgetItem
             : budgetItem,
         );

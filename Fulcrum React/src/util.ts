@@ -695,10 +695,10 @@ export async function getBudgetList(): Promise<BudgetItemEntity[]> {
 
 /**
  * Updates an existing budget item based on the provided form data.
- * @param category - The category of the budget item to update.
+ * @param originalCategory - The category of the budget item to update.
  * @param updatedBudgetItem - The updated data for the budget item.
  */
-export async function handleBudgetUpdating(category: string, updatedBudgetItem: BudgetItemEntity): Promise<void> {
+export async function handleBudgetUpdating(originalCategory: string, updatedBudgetItem: BudgetItemEntity): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/updateBudget", {
       method: "PUT",
@@ -706,7 +706,7 @@ export async function handleBudgetUpdating(category: string, updatedBudgetItem: 
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        category: category,
+        category: originalCategory,
         newCategoryName: updatedBudgetItem.category.trim(),
         amount: updatedBudgetItem.amount,
         group: updatedBudgetItem.group.trim(),
@@ -829,68 +829,59 @@ export async function getGroupList(): Promise<GroupItemEntity[]> {
 /**
  * Updates an existing budget category group.
  * @param originalGroupName - The original name of the group being updated.
- * @param originalColour - The original color of the group being updated.
- * @param formData - The new data for the group.
- * @param setGroupArray - Dispatch function to update the group array state.
- * @param groupArray - The current array of group items.
+ * @param updatedGroupItem - The new data for the group.
  */
-export async function handleGroupUpdating(
-  originalGroupName: string,
-  originalColour: string,
-  formData: BasicGroupData,
-  setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
-  groupArray: GroupItemEntity[],
-): Promise<void> {
-  if (originalGroupName === formData.group || !groupArray.map((groupItem) => groupItem.group).includes(formData.group)) {
-    setGroupArray((currentGroupArray) => {
-      return currentGroupArray.map((groupItem) =>
-        groupItem.group == originalGroupName
-          ? {
-              colour: formData.colour ? formData.colour : groupItem.colour,
-              group: formData.group,
-              timestamp: groupItem.timestamp,
-            }
-          : groupItem,
-      );
+export async function handleGroupUpdating(originalGroupName: string, updatedGroupItem: GroupItemEntity): Promise<void> {
+  // if (originalGroupName === updatedGroupItem.group || !groupArray.map((groupItem) => groupItem.group).includes(updatedGroupItem.group)) {
+  //     setGroupArray((currentGroupArray) => {
+  //       return currentGroupArray.map((groupItem) =>
+  //         groupItem.group == originalGroupName
+  //           ? {
+  //               colour: updatedGroupItem.colour ? updatedGroupItem.colour : groupItem.colour,
+  //               group: updatedGroupItem.group,
+  //               timestamp: groupItem.timestamp,
+  //             }
+  //           : groupItem,
+  //       );
+  //     });
+  try {
+    const response = await fetch("http://localhost:8080/api/updateGroup", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        originalGroupName: originalGroupName,
+        newGroupName: updatedGroupItem.group.trim(),
+        newColour: updatedGroupItem.colour ? updatedGroupItem.colour : "",
+      }),
     });
-    try {
-      const response = await fetch("http://localhost:8080/api/updateGroup", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          originalGroupName: originalGroupName,
-          newGroupName: formData.group.trim(),
-          newColour: formData.colour ? formData.colour : "",
-        }),
-      });
-      if (!response.ok) {
-        console.error(`HTTP error - status: ${response.status}`);
-        window.alert("Updated group is invalid.");
-        setGroupArray((currentGroupArray) => {
-          const revertedGroupOptions = [...currentGroupArray];
-          const indexOfInvalidlyEditedOption = currentGroupArray
-            .map((groupItem) => groupItem.group)
-            .lastIndexOf(formData.group);
-          if (indexOfInvalidlyEditedOption !== -1) {
-            revertedGroupOptions[indexOfInvalidlyEditedOption] = {
-              group: originalGroupName,
-              colour: originalColour,
-              timestamp: revertedGroupOptions[indexOfInvalidlyEditedOption].timestamp,
-            };
-          }
-          return revertedGroupOptions;
-        });
-      } else {
-        console.log("Group successfully updated.");
-      }
-    } catch (error) {
-      console.error("Failed to update group:", error);
+    if (!response.ok) {
+      console.error(`HTTP error - status: ${response.status}`);
+      window.alert("Updated group is invalid.");
+      // setGroupArray((currentGroupArray) => {
+      //   const revertedGroupOptions = [...currentGroupArray];
+      //   const indexOfInvalidlyEditedOption = currentGroupArray
+      //     .map((groupItem) => groupItem.group)
+      //     .lastIndexOf(updatedGroupItem.group);
+      //   if (indexOfInvalidlyEditedOption !== -1) {
+      //     revertedGroupOptions[indexOfInvalidlyEditedOption] = {
+      //       group: originalGroupName,
+      //       colour: originalColour,
+      //       timestamp: revertedGroupOptions[indexOfInvalidlyEditedOption].timestamp,
+      //     };
+      //   }
+      //   return revertedGroupOptions;
+      // });
+    } else {
+      console.log("Group successfully updated.");
     }
-  } else {
-    window.alert("Selected group name already taken.");
+  } catch (error) {
+    console.error("Failed to update group:", error);
   }
+  // } else {
+  //   window.alert("Selected group name already taken.");
+  // }
 }
 
 /**

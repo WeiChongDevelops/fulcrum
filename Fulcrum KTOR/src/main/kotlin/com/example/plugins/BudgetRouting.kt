@@ -216,22 +216,21 @@ fun Application.configureBudgetRouting() {
                 val groupUpdateRequest = call.receive<GroupUpdateRequestReceived>()
 
                 // First, if a new colour was passed, update it
-                if (groupUpdateRequest.newColour.isNotEmpty()) {
-                    val updatedColour = supabase.postgrest["groups"].update(
-                        {
-                            set("colour", groupUpdateRequest.newColour)
-                        }
-                    ) {
-                        eq("group", groupUpdateRequest.originalGroupName)
-                        eq("userId", getActiveUserId())
-                    }
-                    if (updatedColour.body == null) {
-                        call.respondError("Group colour not updated.")
-                    } else {
-                        call.respondSuccess("Group colour updated successfully.")
-                    }
-                }
-
+//                if (groupUpdateRequest.newColour.isNotEmpty()) {
+//                    val updatedColour = supabase.postgrest["groups"].update(
+//                        {
+//                            set("colour", groupUpdateRequest.newColour)
+//                        }
+//                    ) {
+//                        eq("group", groupUpdateRequest.originalGroupName)
+//                        eq("userId", getActiveUserId())
+//                    }
+//                    if (updatedColour.body == null) {
+//                        call.respondError("Group colour not updated.")
+//                    } else {
+//                        call.respondSuccess("Group colour updated successfully.")
+//                    }
+//                }
 
                 // Then, update the group name. ON UPDATE CASCADE constraint ensures budget entries will be updated.
                 if (groupUpdateRequest.newGroupName == groupUpdateRequest.originalGroupName) {
@@ -239,6 +238,7 @@ fun Application.configureBudgetRouting() {
                 }
                 val updatedGroupName = supabase.postgrest["groups"].update(
                     {
+                        set("colour", groupUpdateRequest.newColour)
                         set("group", groupUpdateRequest.newGroupName)
                     }
                 ) {
@@ -247,9 +247,9 @@ fun Application.configureBudgetRouting() {
                 }
 
                 if (updatedGroupName.body == null) {
-                    call.respondError("Group name not updated.")
+                    call.respondError("Group not updated.")
                 } else {
-                    call.respondSuccess("Group name updated successfully.")
+                    call.respondSuccess("Group updated successfully.")
                 }
             } catch (e: Exception){
                 call.application.log.error("Error while updating group.", e)
