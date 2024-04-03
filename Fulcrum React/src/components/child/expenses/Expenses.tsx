@@ -17,10 +17,9 @@ import ExpenseMonthCarousel from "./main-data-hierarchy/ExpenseMonthCarousel.tsx
 import ExpenseModalsAndForms from "./ExpenseModalsAndForms.tsx";
 import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 import useInitialExpenseData from "../../../hooks/useInitialExpenseData.ts";
+import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
 
 interface ExpensesProps {
-  email: string;
-
   publicUserData: PublicUserData;
 
   expenseArray: ExpenseItemEntity[];
@@ -41,7 +40,6 @@ interface ExpensesProps {
  * The root component for the expense page.
  */
 export default function Expenses({
-  email,
   publicUserData,
   expenseArray,
   budgetArray,
@@ -73,76 +71,62 @@ export default function Expenses({
     expenseIdToDelete,
     setExpenseIdToDelete,
 
-    isLoading,
-
     defaultCalendarDate,
     setDefaultCalendarDate,
   } = useInitialExpenseData({
-    setBlacklistedExpenseArray,
     expenseArray,
     blacklistedExpenseArray,
     setExpenseArray,
     recurringExpenseArray,
   });
 
-  useMemo(() => {
-    getStructuredExpenseData(expenseArray, setStructuredExpenseData);
-  }, [expenseArray]);
-
-  useEffect(() => {
-    setIsExpenseFormOrModalOpen(checkForOpenModalOrForm(expenseFormVisibility, expenseModalVisibility));
-  }, [expenseFormVisibility, expenseModalVisibility]);
-
-  useMemo(() => {
-    updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, blacklistedExpenseArray, setExpenseArray);
-  }, [recurringExpenseArray]);
+  // if (isLoading) {
+  //   return <Loader isLoading={isLoading} isDarkMode={false} />;
+  // }
+  //
+  // if (isError) {
+  //   return <FulcrumErrorPage errors={[error!]} />;
+  // }
 
   return (
-    <>
-      {!isLoading ? (
-        <div className="flex flex-col justify-center items-center relative">
-          <div className={""}>
-            <div
-              className={`justify-center items-center elementsBelowPopUpForm
+    <div className="flex flex-col justify-center items-center relative">
+      <div className={""}>
+        <div
+          className={`justify-center items-center elementsBelowPopUpForm
                     ${isExpenseFormOrModalOpen && "blur"}`}
-            >
-              <ExpenseMonthCarousel
-                structuredExpenseData={structuredExpenseData}
-                setExpenseFormVisibility={setExpenseFormVisibility}
-                setExpenseModalVisibility={setExpenseModalVisibility}
-                setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-                setExpenseIdToDelete={setExpenseIdToDelete}
-                categoryDataMap={categoryDataMap}
-                publicUserData={publicUserData}
-                setDefaultCalendarDate={setDefaultCalendarDate}
-              />
-            </div>
-
-            {isExpenseFormOrModalOpen && <ActiveFormClickShield />}
-
-            <ExpenseModalsAndForms
-              expenseFormVisibility={expenseFormVisibility}
-              setExpenseFormVisibility={setExpenseFormVisibility}
-              expenseModalVisibility={expenseModalVisibility}
-              setExpenseModalVisibility={setExpenseModalVisibility}
-              expenseArray={expenseArray}
-              budgetArray={budgetArray}
-              groupArray={groupArray}
-              setExpenseArray={setExpenseArray}
-              setBudgetArray={setBudgetArray}
-              setRecurringExpenseArray={setRecurringExpenseArray}
-              setBlacklistedExpenseArray={setBlacklistedExpenseArray}
-              publicUserData={publicUserData}
-              defaultCalendarDate={defaultCalendarDate}
-              oldExpenseBeingEdited={oldExpenseBeingEdited}
-              expenseIdToDelete={expenseIdToDelete}
-            />
-          </div>
-          )
+        >
+          <ExpenseMonthCarousel
+            structuredExpenseData={structuredExpenseData}
+            setExpenseFormVisibility={setExpenseFormVisibility}
+            setExpenseModalVisibility={setExpenseModalVisibility}
+            setOldExpenseBeingEdited={setOldExpenseBeingEdited}
+            setExpenseIdToDelete={setExpenseIdToDelete}
+            categoryDataMap={categoryDataMap}
+            publicUserData={publicUserData}
+            setDefaultCalendarDate={setDefaultCalendarDate}
+          />
         </div>
-      ) : (
-        <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled} />
-      )}
-    </>
+
+        {isExpenseFormOrModalOpen && <ActiveFormClickShield />}
+
+        <ExpenseModalsAndForms
+          expenseFormVisibility={expenseFormVisibility}
+          setExpenseFormVisibility={setExpenseFormVisibility}
+          expenseModalVisibility={expenseModalVisibility}
+          setExpenseModalVisibility={setExpenseModalVisibility}
+          expenseArray={expenseArray}
+          budgetArray={budgetArray}
+          groupArray={groupArray}
+          setExpenseArray={setExpenseArray}
+          setBudgetArray={setBudgetArray}
+          setRecurringExpenseArray={setRecurringExpenseArray}
+          setBlacklistedExpenseArray={setBlacklistedExpenseArray}
+          publicUserData={publicUserData}
+          defaultCalendarDate={defaultCalendarDate}
+          oldExpenseBeingEdited={oldExpenseBeingEdited}
+          expenseIdToDelete={expenseIdToDelete}
+        />
+      </div>
+    </div>
   );
 }

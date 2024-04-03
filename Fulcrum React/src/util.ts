@@ -626,10 +626,10 @@ export async function handleBatchExpenseDeletion(expenseIdsToDelete: Set<string>
 /**
  * Creates a new budget item and updates the budget array state.
  * @param setBudgetArray - Dispatch function to update the budget array state.
- * @param newBudgetItem - The new budget item to be added.
+ * @param newBudgetItem - The new budget item to be added.u
  */
 export async function handleBudgetCreation(
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
+  // setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
   newBudgetItem: BudgetItemEntity,
 ): Promise<void> {
   try {
@@ -649,13 +649,13 @@ export async function handleBudgetCreation(
     if (!response.ok) {
       console.error(`HTTP error - status: ${response.status}`);
       window.alert("Category name is invalid or already has assigned budget; or $999,999,999 limit exceeded.");
-      setBudgetArray((current) => {
-        const indexOfInvalidItem = current.map((item) => item.category).lastIndexOf(newBudgetItem.category);
-        if (indexOfInvalidItem !== -1) {
-          return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)];
-        }
-        return current;
-      });
+      // setBudgetArray((current) => {
+      //   const indexOfInvalidItem = current.map((item) => item.category).lastIndexOf(newBudgetItem.category);
+      //   if (indexOfInvalidItem !== -1) {
+      //     return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)];
+      //   }
+      //   return current;
+      // });
     }
     const responseData = await response.json();
     console.log(responseData);

@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   BudgetFormVisibility,
   BudgetModalVisibility,
   checkForUser,
+  EmailContext,
   getTotalIncome,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
 } from "../util.ts";
 import { useQuery } from "@tanstack/react-query";
 
-export default function useInitialBudgetData(email: string) {
+export default function useInitialBudgetData() {
   const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
     isCreateBudgetVisible: false,
     isUpdateBudgetVisible: false,
@@ -38,15 +39,21 @@ export default function useInitialBudgetData(email: string) {
   const [lineAngle, setLineAngle] = useState(0);
   const [perCategoryExpenditureMap, setPerCategoryExpenditureMap] = useState<Map<string, number>>(new Map());
 
+  const email = useContext(EmailContext);
+
   async function retrieveInitialData() {
-    const userStatus = await checkForUser();
-    if (userStatus["loggedIn"]) {
-      console.log("User logged in.");
-    } else {
-      console.log("User not logged in, login redirect initiated.");
-      window.location.href = "/login";
+    try {
+      const userStatus = await checkForUser();
+      if (userStatus["loggedIn"]) {
+        console.log("User logged in.");
+      } else {
+        console.log("User not logged in, login redirect initiated.");
+        window.location.href = "/login";
+      }
+      return getTotalIncome();
+    } catch (error) {
+      console.log(`Unsuccessful budget page data retrieval - error: ${error}`);
     }
-    return { totalIncome: await getTotalIncome() };
   }
 
   const { data, isLoading, isError, error } = useQuery({

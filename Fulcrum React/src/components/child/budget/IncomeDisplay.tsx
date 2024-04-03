@@ -53,7 +53,7 @@ export default function IncomeDisplay({ totalIncome, amountLeftToBudget, publicU
     onMutate: async (newTotalIncomeData: number) => {
       await queryClient.cancelQueries({ queryKey: ["totalIncome", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["totalIncome", email]);
-      await queryClient.setQueryData(["totalIncome", email], { totalIncome: newTotalIncomeData });
+      await queryClient.setQueryData(["totalIncome", email], newTotalIncomeData);
       return { dataBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {

@@ -51,7 +51,7 @@ export default function BudgetCreationForm({
   const email = useContext(EmailContext);
 
   const budgetCreationMutation = useMutation({
-    mutationFn: (newBudgetItem: BudgetItemEntity) => handleBudgetCreation(setBudgetArray, newBudgetItem),
+    mutationFn: (newBudgetItem: BudgetItemEntity) => handleBudgetCreation(newBudgetItem),
     onMutate: async (newBudgetItem: BudgetItemEntity) => {
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
@@ -67,7 +67,6 @@ export default function BudgetCreationForm({
       queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
     },
   });
-
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateBudgetVisible", false);
   }

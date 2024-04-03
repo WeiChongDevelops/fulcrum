@@ -42,22 +42,24 @@ export default function ExpenseList({
       <div>
         {dayExpenseArray.map((expenseElement, key) => {
           return (
-            <ExpenseItem
-              expenseId={expenseElement.expenseId}
-              category={expenseElement.category}
-              amount={expenseElement.amount}
-              iconPath={categoryDataMap.get(expenseElement.category)!.iconPath}
-              groupName={categoryDataMap.get(expenseElement.category)!.group}
-              groupColour={categoryDataMap.get(expenseElement.category)!.colour}
-              recurringExpenseId={expenseElement.recurringExpenseId}
-              timestamp={expenseElement.timestamp}
-              setExpenseFormVisibility={setExpenseFormVisibility}
-              setExpenseModalVisibility={setExpenseModalVisibility}
-              setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-              setExpenseIdToDelete={setExpenseIdToDelete}
-              publicUserData={publicUserData}
-              key={key}
-            />
+            expenseElement && (
+              <ExpenseItem
+                expenseId={expenseElement.expenseId}
+                category={expenseElement.category}
+                amount={expenseElement.amount}
+                iconPath={categoryDataMap.get(expenseElement.category)!.iconPath}
+                groupName={categoryDataMap.get(expenseElement.category)!.group}
+                groupColour={categoryDataMap.get(expenseElement.category)!.colour}
+                recurringExpenseId={expenseElement.recurringExpenseId}
+                timestamp={expenseElement.timestamp}
+                setExpenseFormVisibility={setExpenseFormVisibility}
+                setExpenseModalVisibility={setExpenseModalVisibility}
+                setOldExpenseBeingEdited={setOldExpenseBeingEdited}
+                setExpenseIdToDelete={setExpenseIdToDelete}
+                publicUserData={publicUserData}
+                key={key}
+              />
+            )
           );
         })}
       </div>

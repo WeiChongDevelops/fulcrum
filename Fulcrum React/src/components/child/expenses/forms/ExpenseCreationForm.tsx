@@ -1,5 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import {
   BudgetItemEntity,
   ExpenseCreationFormData,
@@ -19,6 +19,7 @@ import {
   RecurringExpenseFormVisibility,
   ExpenseFormVisibility,
   SetFormVisibility,
+  EmailContext,
 } from "../../../../util.ts";
 import { v4 as uuid } from "uuid";
 
@@ -27,6 +28,8 @@ import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../selectors/CategorySelector.tsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { budgetCreationMutation } from "../../budget/forms/BudgetCreationForm.tsx";
 
 interface ExpenseCreationFormProps {
   setExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility> | SetFormVisibility<ExpenseFormVisibility>;
@@ -66,6 +69,45 @@ export default function ExpenseCreationForm({
     frequency: mustBeRecurring ? "monthly" : "never",
   });
   const formRef = useRef<HTMLDivElement>(null);
+
+  const queryClient = useQueryClient();
+  const email = useContext(EmailContext);
+
+  const expenseCreationMutation = useMutation({
+    mutationFn: (newExpenseItem: ExpenseItemEntity) => handleExpenseCreation(newExpenseItem, setExpenseArray),
+    onMutate: async (newExpenseItem: ExpenseItemEntity) => {
+      await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
+      await queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
+        return [newExpenseItem, ...prevExpenseCache];
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["expenseArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+    },
+  });
+
+  const budgetCreationMutation = useMutation({
+    mutationFn: (newBudgetItem: BudgetItemEntity) => handleBudgetCreation(newBudgetItem),
+    onMutate: async (newBudgetItem: BudgetItemEntity) => {
+      await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
+      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
+        return [...prevBudgetCache, newBudgetItem];
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["budgetArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+    },
+  });
 
   function hideForm() {
     setExpenseFormVisibility((current: any) => ({
@@ -109,10 +151,12 @@ export default function ExpenseCreationForm({
           timestamp: new Date(),
         };
         setBudgetArray((current) => [...current, newDefaultBudgetItem]);
-        await handleBudgetCreation(setBudgetArray, newDefaultBudgetItem);
+        // await handleBudgetCreation(setBudgetArray, newDefaultBudgetItem);
+        budgetCreationMutation.mutate(newDefaultBudgetItem);
       }
-      await handleExpenseCreation(newExpenseItem, setExpenseArray);
-      setExpenseArray(await getExpenseList());
+      // await handleExpenseCreation(newExpenseItem, setExpenseArray);
+      // setExpenseArray(await getExpenseList());
+      expenseCreationMutation.mutate(newExpenseItem);
     } else {
       const newRecurringExpenseItem: RecurringExpenseItemEntity = {
         recurringExpenseId: uuid(),

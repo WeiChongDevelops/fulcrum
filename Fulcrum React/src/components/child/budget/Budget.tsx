@@ -22,8 +22,6 @@ import useInitialBudgetData from "../../../hooks/useInitialBudgetData.ts";
 import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
 
 interface BudgetProps {
-  email: string;
-
   publicUserData: PublicUserData;
 
   expenseArray: ExpenseItemEntity[];
@@ -38,7 +36,6 @@ interface BudgetProps {
  * The root component for the budget page. It contains the income display, the Fulcrum animation and the user's budget.
  */
 export default function Budget({
-  email,
   publicUserData,
   expenseArray,
   budgetArray,
@@ -47,7 +44,7 @@ export default function Budget({
   setGroupArray,
 }: BudgetProps) {
   const {
-    data,
+    data: totalIncome,
     budgetFormVisibility,
     setBudgetFormVisibility,
     budgetModalVisibility,
@@ -73,9 +70,7 @@ export default function Budget({
     isLoading,
     isError,
     error,
-  } = useInitialBudgetData(email);
-
-  let { totalIncome } = data || {};
+  } = useInitialBudgetData();
 
   useEffect(() => {
     // Map construction for each category's total expenditure

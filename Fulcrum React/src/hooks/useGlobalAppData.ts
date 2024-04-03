@@ -150,6 +150,7 @@ export function useGlobalAppData() {
     publicUserData,
     setPublicUserData,
     expenseArray,
+    expenseArrayQuery,
     setExpenseArray,
     budgetArray,
     budgetArrayQuery,
