@@ -9,7 +9,6 @@ import {
   BudgetModalVisibility,
   changeFormOrModalVisibility,
   EmailContext,
-  getBudgetList,
   GroupItemEntity,
   handleBudgetDeletion,
   handleGroupDeletion,
@@ -112,6 +111,33 @@ export default function BudgetModalsAndForms({
     },
   });
 
+  interface BudgetDeletionProps {
+    category: string;
+    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
+  }
+
+  const budgetDeletionMutation = useMutation({
+    mutationFn: (budgetDeletionProps: BudgetDeletionProps) => {
+      return handleBudgetDeletion(budgetDeletionProps.category, budgetDeletionProps.setBudgetArray);
+    },
+    mutationKey: ["budgetArray", email],
+    onMutate: async (budgetDeletionProps: BudgetDeletionProps) => {
+      await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
+      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
+        return prevBudgetCache.filter((budgetItem) => budgetItem.category !== budgetDeletionProps.category);
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["budgetArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+    },
+  });
+
   return (
     <div className={"z-40"}>
       {budgetFormVisibility.isCreateBudgetVisible && (
@@ -201,12 +227,13 @@ export default function BudgetModalsAndForms({
           optionTwoText="Confirm"
           optionTwoFunction={() => {
             changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmCategoryDeletionModalVisible", false);
-            handleBudgetDeletion(categoryToDelete, setBudgetArray)
-              .then(async (response) => {
-                setBudgetArray(await getBudgetList());
-                console.log("Deletion successful", response);
-              })
-              .catch((error) => console.log("Deletion unsuccessful", error));
+            // handleBudgetDeletion(categoryToDelete, setBudgetArray)
+            //   .then(async (response) => {
+            //     setBudgetArray(await getBudgetList());
+            //     console.log("Deletion successful", response);
+            //   })
+            //   .catch((error) => console.log("Deletion unsuccessful", error));
+            budgetDeletionMutation.mutate({ category: categoryToDelete, setBudgetArray: setBudgetArray });
           }}
           isVisible="isConfirmCategoryDeletionModalVisible"
         />
