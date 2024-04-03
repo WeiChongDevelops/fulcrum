@@ -759,14 +759,10 @@ export async function handleBudgetDeletion(
 
 /**
  * Creates a new budget category group.
- * @param group - The name of the group to create.
- * @param colour - The color associated with the group.
  * @param setGroupArray - Dispatch function to update the group array state.
  * @param newGroupItem - The new group item data.
  */
 export async function handleGroupCreation(
-  group: string,
-  colour: string,
   setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
   newGroupItem: GroupItemEntity,
 ): Promise<void> {
@@ -778,8 +774,8 @@ export async function handleGroupCreation(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        group: group.trim(),
-        colour: colour.trim(),
+        group: newGroupItem.group,
+        colour: newGroupItem.colour,
       }),
     });
     if (!response.ok) {

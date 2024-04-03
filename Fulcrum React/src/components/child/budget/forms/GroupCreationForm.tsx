@@ -1,5 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import {
   addColourSelectionFunctionality,
   BasicGroupData,
@@ -8,12 +8,13 @@ import {
   handleGroupCreation,
   GroupItemEntity,
   getRandomGroupColour,
-  getGroupList,
   SetFormVisibility,
   changeFormOrModalVisibility,
+  EmailContext,
 } from "../../../../util.ts";
 import "../../../../css/Budget.css";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface GroupCreationFormProps {
   setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
@@ -29,6 +30,27 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
     colour: "",
   });
   const formRef = useRef<HTMLDivElement>(null);
+
+  const queryClient = useQueryClient();
+  const email = useContext(EmailContext);
+
+  const groupCreationMutation = useMutation({
+    mutationFn: (newGroupItem: GroupItemEntity) => handleGroupCreation(setGroupArray, newGroupItem),
+    onMutate: async (newGroupItem: GroupItemEntity) => {
+      await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["groupArray", email]);
+      await queryClient.setQueryData(["groupArray", email], (prevGroupCache: GroupItemEntity[]) => {
+        return [...prevGroupCache, newGroupItem];
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["groupArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["groupArray", email] });
+    },
+  });
 
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateGroupVisible", false);
@@ -68,8 +90,11 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
       timestamp: new Date(),
     };
 
-    await handleGroupCreation(formData.group, formData.colour ? formData.colour : randomColour, setGroupArray, newGroupItem);
-    setGroupArray(await getGroupList());
+    // await handleGroupCreation(setGroupArray, newGroupItem);
+    // setGroupArray(await getGroupList());
+
+    groupCreationMutation.mutate(newGroupItem);
+
     setFormData({ group: "", colour: "" });
   }
 

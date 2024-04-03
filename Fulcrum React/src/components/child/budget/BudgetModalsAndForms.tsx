@@ -61,24 +61,6 @@ export default function BudgetModalsAndForms({
   const queryClient = useQueryClient();
   const email = useContext(EmailContext);
 
-  // const budgetCreationMutation = useMutation({
-  //   mutationFn: (newBudgetItem: BudgetItemEntity) => handleBudgetCreation(setBudgetArray, newBudgetItem),
-  //   onMutate: async (newBudgetItem: BudgetItemEntity) => {
-  //     await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
-  //     const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
-  //     await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
-  //       return [...prevBudgetCache, newBudgetItem];
-  //     });
-  //     return { dataBeforeOptimisticUpdate };
-  //   },
-  //   onError: (_error, _variables, context) => {
-  //     return queryClient.setQueryData(["budgetArray", email], context?.dataBeforeOptimisticUpdate);
-  //   },
-  //   onSettled: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
-  //   },
-  // });
-
   interface GroupDeletionProps {
     groupToDelete: string;
     setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
