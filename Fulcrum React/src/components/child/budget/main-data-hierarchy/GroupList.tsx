@@ -8,6 +8,7 @@ import {
   PreviousGroupBeingEdited,
   PublicUserData,
   SetFormVisibility,
+  SetModalVisibility,
 } from "../../../../util.ts";
 import Group from "./Group.tsx";
 import { Dispatch, SetStateAction } from "react";
@@ -20,7 +21,7 @@ interface GroupListProps {
   expenseArray: ExpenseItemEntity[];
 
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
-  setModalFormVisibility: SetFormVisibility<BudgetModalVisibility>;
+  setModalFormVisibility: SetModalVisibility<BudgetModalVisibility>;
 
   setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
 

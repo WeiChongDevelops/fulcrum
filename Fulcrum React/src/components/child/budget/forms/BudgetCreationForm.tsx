@@ -1,5 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
   BudgetFormVisibility,
@@ -14,10 +14,12 @@ import {
   handleInputChangeOnFormWithAmount,
   SetFormVisibility,
   changeFormOrModalVisibility,
+  EmailContext,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import "../../../../css/Budget.css";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface BudgetCreationFormProps {
   setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
@@ -44,6 +46,27 @@ export default function BudgetCreationForm({
     group: groupNameOfNewItem,
   });
   const formRef = useRef<HTMLDivElement>(null);
+
+  const queryClient = useQueryClient();
+  const email = useContext(EmailContext);
+
+  const budgetCreationMutation = useMutation({
+    mutationFn: (newBudgetItem: BudgetItemEntity) => handleBudgetCreation(setBudgetArray, newBudgetItem),
+    onMutate: async (newBudgetItem: BudgetItemEntity) => {
+      await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
+      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
+        return [...prevBudgetCache, newBudgetItem];
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["budgetArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+    },
+  });
 
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateBudgetVisible", false);
@@ -76,16 +99,20 @@ export default function BudgetCreationForm({
       timestamp: new Date(),
     };
 
-    setBudgetArray((current) => [...current, newBudgetItem]);
+    budgetCreationMutation.mutate(newBudgetItem);
 
-    hideForm();
-    await handleBudgetCreation(setBudgetArray, newBudgetItem);
     setFormData({
       category: "",
       amount: 0,
       iconPath: "",
       group: groupNameOfNewItem,
     });
+
+    // setBudgetArray((current) => [...current, newBudgetItem]);
+
+    // await handleBudgetCreation(setBudgetArray, newBudgetItem);
+
+    hideForm();
   }
 
   function handleGroupInputChange(e: any) {

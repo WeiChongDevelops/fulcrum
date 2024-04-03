@@ -52,7 +52,7 @@ fun Application.configureBudgetRouting() {
 
         get("/api/getBudget") {
             try {
-                val budgetList = supabase.postgrest["budgets"].select() {
+                val budgetList = supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp")) {
                     eq("userId", getActiveUserId())
                 }
                     .decodeList<BudgetItemResponse>()

@@ -1,9 +1,13 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, createContext, Dispatch, SetStateAction } from "react";
 import { v4 as uuid } from "uuid";
 
 // GLOBAL VARIABLES //
 
 export const y2K = new Date("2000-01-01T00:00:00Z");
+
+// CONTEXT //
+
+export const EmailContext = createContext<string>("");
 
 //  EXPENSE ENTITIES //
 export interface ExpenseItemEntity {
@@ -1870,10 +1874,6 @@ export function getTotalAmountBudgeted(budgetArray: BudgetItemEntity[]): number 
  * @returns The map of category to icon, group, and colour.
  */
 export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
-  console.log("ONE: BUDGETS");
-  console.log(budgetArray);
-  console.log("TWO: GROUPS");
-  console.log(groupArray);
   const categoryToGroupAndColourMap: CategoryToIconGroupAndColourMap = new Map();
   budgetArray.forEach((budgetItem) => {
     categoryToGroupAndColourMap.set(budgetItem.category, {
@@ -1917,7 +1917,6 @@ export function handleInputChangeOnFormWithAmount(
       newFormValue = formatDollarAmountDynamic(e.target.value);
     }
   } else {
-    console.log("not amount");
     newFormValue = e.target.value;
   }
   if (

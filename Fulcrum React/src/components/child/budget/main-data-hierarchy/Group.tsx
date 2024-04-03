@@ -15,6 +15,7 @@ import {
   PreviousGroupBeingEdited,
   PublicUserData,
   SetFormVisibility,
+  SetModalVisibility,
 } from "../../../../util.ts";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import BudgetTile from "./BudgetTile.tsx";
@@ -34,7 +35,7 @@ interface GroupProps {
   setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
 
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
-  setModalFormVisibility: SetFormVisibility<BudgetModalVisibility>;
+  setModalFormVisibility: SetModalVisibility<BudgetModalVisibility>;
 
   setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>;
   setOldGroupBeingEdited: Dispatch<SetStateAction<PreviousGroupBeingEdited>>;

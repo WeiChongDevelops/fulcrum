@@ -1,21 +1,16 @@
 import {
+  EmailContext,
   formatDollarAmountDynamic,
   formatDollarAmountStatic,
   handleTotalIncomeUpdating,
   PublicUserData,
 } from "../../../util.ts";
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
 
 interface IncomeDisplayProps {
   totalIncome: number;
-  setTotalIncome: Dispatch<SetStateAction<number>>;
   amountLeftToBudget: number;
   publicUserData: PublicUserData;
 }
@@ -23,16 +18,11 @@ interface IncomeDisplayProps {
 /**
  * Displays the user's total income and the amount left to budget, also allowing users to edit their total income.
  */
-export default function IncomeDisplay({
-  totalIncome,
-  setTotalIncome,
-  amountLeftToBudget,
-  publicUserData,
-}: IncomeDisplayProps) {
+export default function IncomeDisplay({ totalIncome, amountLeftToBudget, publicUserData }: IncomeDisplayProps) {
   const currency = publicUserData.currency;
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [incomeFormData, setIncomeFormData] = useState({
-    income: formatDollarAmountDynamic(totalIncome.toString()),
+    income: totalIncome ? formatDollarAmountDynamic(totalIncome.toString()) : "8000",
   });
 
   const handleEditClick = () => {
@@ -50,32 +40,51 @@ export default function IncomeDisplay({
   };
   const handleInputBlur = () => {
     setIncomeFormData({
-      income: formatDollarAmountDynamic(totalIncome.toString()),
+      income: totalIncome ? formatDollarAmountDynamic(totalIncome.toString()) : "8000",
     });
     setIsEditing(false);
   };
+
+  const queryClient = useQueryClient();
+  const email = useContext(EmailContext);
+
+  const incomeMutation = useMutation({
+    mutationFn: (newTotalIncomeData: number) => handleTotalIncomeUpdating(newTotalIncomeData),
+    onMutate: async (newTotalIncomeData: number) => {
+      await queryClient.cancelQueries({ queryKey: ["totalIncome", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["totalIncome", email]);
+      await queryClient.setQueryData(["totalIncome", email], { totalIncome: newTotalIncomeData });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["totalIncome", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["totalIncome", email] });
+    },
+  });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsEditing(false);
 
     const newTotalIncomeData = parseFloat(incomeFormData.income);
-    setTotalIncome(newTotalIncomeData);
-    await handleTotalIncomeUpdating(newTotalIncomeData);
+    incomeMutation.mutate(newTotalIncomeData);
   };
 
   useEffect(() => {
     setIncomeFormData({
-      income: formatDollarAmountDynamic(totalIncome.toString()),
+      income: totalIncome ? formatDollarAmountDynamic(totalIncome.toString()) : "8000",
     });
   }, [totalIncome]);
 
+  if (incomeMutation.isError) {
+    return <FulcrumErrorPage errors={[incomeMutation.error]} />;
+  }
+
   return (
     <div className="flex flex-row w-full items-center mt-1">
-      <div
-        className="income-display monthly-income bg-[#17423f]"
-        onClick={handleEditClick}
-      >
+      <div className="income-display monthly-income bg-[#17423f]" onClick={handleEditClick}>
         <span>MONTHLY INCOME: </span>
         {isEditing ? (
           <form className="inline relative bottom-1" onSubmit={handleSubmit}>

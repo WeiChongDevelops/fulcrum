@@ -66,7 +66,7 @@ fun Application.configureExpenseRouting() {
 
         get("/api/getExpenses") {
             try {
-                val expenseList = supabase.postgrest["expenses"].select() {
+                val expenseList = supabase.postgrest["expenses"].select(columns = Columns.list("expenseId, amount, timestamp, category, recurringExpenseId")) {
                     eq("userId", getActiveUserId())
                 }
                     .decodeList<ExpenseItemResponse>()
@@ -204,7 +204,7 @@ fun Application.configureExpenseRouting() {
 
         get("/api/getRecurringExpenses") {
             try {
-                val recurringExpenseList = supabase.postgrest["recurring_expenses"].select() {
+                val recurringExpenseList = supabase.postgrest["recurring_expenses"].select(columns = Columns.list("recurringExpenseId, category, amount, timestamp, frequency")) {
                     eq("userId", getActiveUserId())
                 }
                     .decodeList<RecurringExpenseItemResponse>()

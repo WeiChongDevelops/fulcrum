@@ -19,8 +19,11 @@ import "../../../css/App.css";
 import "../../../css/Budget.css";
 import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 import useInitialBudgetData from "../../../hooks/useInitialBudgetData.ts";
+import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
 
 interface BudgetProps {
+  email: string;
+
   publicUserData: PublicUserData;
 
   expenseArray: ExpenseItemEntity[];
@@ -35,6 +38,7 @@ interface BudgetProps {
  * The root component for the budget page. It contains the income display, the Fulcrum animation and the user's budget.
  */
 export default function Budget({
+  email,
   publicUserData,
   expenseArray,
   budgetArray,
@@ -43,6 +47,7 @@ export default function Budget({
   setGroupArray,
 }: BudgetProps) {
   const {
+    data,
     budgetFormVisibility,
     setBudgetFormVisibility,
     budgetModalVisibility,
@@ -61,14 +66,20 @@ export default function Budget({
     setGroupNameOfNewItem,
     isBudgetFormOrModalOpen,
     setIsBudgetFormOrModalOpen,
-    isLoading,
     lineAngle,
     setLineAngle,
     perCategoryExpenditureMap,
     setPerCategoryExpenditureMap,
-    totalIncome,
-    setTotalIncome,
-  } = useInitialBudgetData();
+    isLoading,
+    isError,
+    error,
+  } = useInitialBudgetData(email);
+
+  useEffect(() => {
+    console.log("Rerender of Budget.tsx triggered.");
+  }, [budgetArray]);
+
+  let { totalIncome } = data || {};
 
   useEffect(() => {
     // Map construction for each category's total expenditure
@@ -86,17 +97,24 @@ export default function Budget({
   }, [budgetArray, expenseArray]);
 
   useEffect(() => {
-    setAmountLeftToBudget(totalIncome - getTotalAmountBudgeted(budgetArray));
+    totalIncome && setAmountLeftToBudget(totalIncome - getTotalAmountBudgeted(budgetArray));
   }, [budgetArray, totalIncome]);
 
   useEffect(() => {
-    // Update scale animation line angle when either of its two factors change
-    setLineAngle(getLineAngle((amountLeftToBudget / totalIncome) * 100));
+    totalIncome && setLineAngle(getLineAngle((amountLeftToBudget / totalIncome) * 100));
   }, [amountLeftToBudget, totalIncome]);
 
   useEffect(() => {
     setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility));
   }, [budgetFormVisibility, budgetModalVisibility]);
+
+  if (isLoading) {
+    return <Loader isLoading={isLoading} isDarkMode={false} />;
+  }
+
+  if (isError) {
+    return <FulcrumErrorPage errors={[error!]} />;
+  }
 
   return (
     <>
@@ -108,8 +126,7 @@ export default function Budget({
                         ${isBudgetFormOrModalOpen && "blur"}`}
             >
               <IncomeDisplay
-                totalIncome={totalIncome}
-                setTotalIncome={setTotalIncome}
+                totalIncome={totalIncome!}
                 amountLeftToBudget={amountLeftToBudget}
                 publicUserData={publicUserData}
               />

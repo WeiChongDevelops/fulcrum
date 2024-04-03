@@ -19,6 +19,8 @@ import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 import useInitialExpenseData from "../../../hooks/useInitialExpenseData.ts";
 
 interface ExpensesProps {
+  email: string;
+
   publicUserData: PublicUserData;
 
   expenseArray: ExpenseItemEntity[];
@@ -39,6 +41,7 @@ interface ExpensesProps {
  * The root component for the expense page.
  */
 export default function Expenses({
+  email,
   publicUserData,
   expenseArray,
   budgetArray,

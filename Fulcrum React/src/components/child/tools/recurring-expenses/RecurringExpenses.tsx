@@ -19,6 +19,8 @@ import RecurringExpenseItem from "./RecurringExpenseItem.tsx";
 import useInitialRecurringExpenseData from "../../../../hooks/useInitialRecurringExpenseData.ts";
 
 interface RecurringExpensesProps {
+  email: string;
+
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
 
   publicUserData: PublicUserData;
@@ -42,6 +44,7 @@ interface RecurringExpensesProps {
  * The root component for the recurring expense page.
  */
 export default function RecurringExpenses({
+  email,
   setOpenToolsSection,
   publicUserData,
   expenseArray,

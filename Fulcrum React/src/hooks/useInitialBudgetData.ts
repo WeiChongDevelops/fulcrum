@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   BudgetFormVisibility,
   BudgetModalVisibility,
@@ -7,8 +7,9 @@ import {
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
 } from "../util.ts";
+import { useQuery } from "@tanstack/react-query";
 
-export default function useInitialBudgetData() {
+export default function useInitialBudgetData(email: string) {
   const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
     isCreateBudgetVisible: false,
     isUpdateBudgetVisible: false,
@@ -34,24 +35,29 @@ export default function useInitialBudgetData() {
   const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
   const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
   const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [lineAngle, setLineAngle] = useState(0);
   const [perCategoryExpenditureMap, setPerCategoryExpenditureMap] = useState<Map<string, number>>(new Map());
 
-  const [totalIncome, setTotalIncome] = useState<number>(1000);
-
-  useEffect(() => {
-    async function retrieveInitialData() {
-      const userStatus = await checkForUser();
-      !userStatus["loggedIn"] && (window.location.href = "/login");
-      setTotalIncome(await getTotalIncome());
+  async function retrieveInitialData() {
+    const userStatus = await checkForUser();
+    if (userStatus["loggedIn"]) {
+      console.log("User logged in.");
+    } else {
+      console.log("User not logged in, login redirect initiated.");
+      window.location.href = "/login";
     }
-    retrieveInitialData().then(() => {
-      setIsLoading(false);
-    });
-  }, []);
+    return { totalIncome: await getTotalIncome() };
+  }
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["totalIncome", email],
+    queryFn: retrieveInitialData,
+    enabled: !!email,
+  });
 
   return {
+    data,
+
     budgetFormVisibility,
     setBudgetFormVisibility,
 
@@ -79,15 +85,14 @@ export default function useInitialBudgetData() {
     isBudgetFormOrModalOpen,
     setIsBudgetFormOrModalOpen,
 
-    isLoading,
-
     lineAngle,
     setLineAngle,
 
     perCategoryExpenditureMap,
     setPerCategoryExpenditureMap,
 
-    totalIncome,
-    setTotalIncome,
+    isLoading,
+    isError,
+    error,
   };
 }
