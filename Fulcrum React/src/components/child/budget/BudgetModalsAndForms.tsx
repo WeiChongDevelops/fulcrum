@@ -75,7 +75,6 @@ export default function BudgetModalsAndForms({
         groupDeletionProps.keepContainedCategories,
       );
     },
-    mutationKey: ["groupArray", email],
     onMutate: async (groupDeletionProps: GroupDeletionProps) => {
       await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["groupArray", email]);
@@ -102,7 +101,6 @@ export default function BudgetModalsAndForms({
     mutationFn: (budgetDeletionProps: BudgetDeletionProps) => {
       return handleBudgetDeletion(budgetDeletionProps.category, budgetDeletionProps.setBudgetArray);
     },
-    mutationKey: ["budgetArray", email],
     onMutate: async (budgetDeletionProps: BudgetDeletionProps) => {
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);

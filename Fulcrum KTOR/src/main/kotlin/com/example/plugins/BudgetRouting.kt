@@ -215,24 +215,6 @@ fun Application.configureBudgetRouting() {
             try {
                 val groupUpdateRequest = call.receive<GroupUpdateRequestReceived>()
 
-                // First, if a new colour was passed, update it
-//                if (groupUpdateRequest.newColour.isNotEmpty()) {
-//                    val updatedColour = supabase.postgrest["groups"].update(
-//                        {
-//                            set("colour", groupUpdateRequest.newColour)
-//                        }
-//                    ) {
-//                        eq("group", groupUpdateRequest.originalGroupName)
-//                        eq("userId", getActiveUserId())
-//                    }
-//                    if (updatedColour.body == null) {
-//                        call.respondError("Group colour not updated.")
-//                    } else {
-//                        call.respondSuccess("Group colour updated successfully.")
-//                    }
-//                }
-
-                // Then, update the group name. ON UPDATE CASCADE constraint ensures budget entries will be updated.
                 if (groupUpdateRequest.newGroupName == groupUpdateRequest.originalGroupName) {
                     call.respondSuccess("Group name unchanged.")
                 }

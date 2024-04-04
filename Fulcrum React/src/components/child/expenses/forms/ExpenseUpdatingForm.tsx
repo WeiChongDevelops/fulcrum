@@ -1,5 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import {
   BudgetItemEntity,
   getBudgetList,
@@ -14,11 +14,14 @@ import {
   ExpenseFormVisibility,
   SetFormVisibility,
   changeFormOrModalVisibility,
+  EmailContext,
 } from "../../../../util.ts";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../selectors/CategorySelector.tsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { v4 as uuid } from "uuid";
 
 interface ExpenseUpdatingFormProps {
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
@@ -46,6 +49,38 @@ export default function ExpenseUpdatingForm({
     timestamp: oldExpenseBeingEdited.oldTimestamp,
   });
   const formRef = useRef<HTMLDivElement>(null);
+
+  const email = useContext(EmailContext);
+  const queryClient = useQueryClient();
+
+  interface ExpenseUpdatingMutationProps {
+    expenseId: string;
+    updatedExpenseItem: ExpenseItemEntity;
+  }
+
+  const expenseUpdatingMutation = useMutation({
+    mutationFn: (expenseUpdatingMutationProps: ExpenseUpdatingMutationProps) => {
+      return handleExpenseUpdating(expenseUpdatingMutationProps.expenseId, expenseUpdatingMutationProps.updatedExpenseItem);
+    },
+    onMutate: async (expenseUpdatingMutationProps: ExpenseUpdatingMutationProps) => {
+      await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
+      await queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
+        return prevExpenseCache.map((expenseItem) =>
+          expenseItem.expenseId === expenseUpdatingMutationProps.expenseId
+            ? expenseUpdatingMutationProps.updatedExpenseItem
+            : expenseItem,
+        );
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData(["expenseArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+    },
+  });
 
   useEffect(() => {
     window.addEventListener("mousedown", handleClickOutside);
@@ -77,7 +112,16 @@ export default function ExpenseUpdatingForm({
 
     hideForm();
 
-    await handleExpenseUpdating(oldExpenseBeingEdited.expenseId, formData);
+    const updatedExpenseItem = {
+      ...formData,
+      expenseId: uuid(),
+      recurringExpenseId: null,
+      timestamp: formData.timestamp as Date,
+    };
+
+    expenseUpdatingMutation.mutate({ expenseId: oldExpenseBeingEdited.expenseId, updatedExpenseItem: updatedExpenseItem });
+
+    // await handleExpenseUpdating(oldExpenseBeingEdited.expenseId, updatedExpenseItem);
 
     setFormData({
       category: oldExpenseBeingEdited.oldCategory,

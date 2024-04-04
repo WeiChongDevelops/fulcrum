@@ -29,7 +29,6 @@ import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../selectors/CategorySelector.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { budgetCreationMutation } from "../../budget/forms/BudgetCreationForm.tsx";
 
 interface ExpenseCreationFormProps {
   setExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility> | SetFormVisibility<ExpenseFormVisibility>;

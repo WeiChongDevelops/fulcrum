@@ -506,9 +506,9 @@ export async function getExpenseList(): Promise<ExpenseItemEntity[]> {
 /**
  * Handles the updating of an existing expense item.
  * @param expenseId - The ID of the expense to update.
- * @param formData - The updated data for the expense item.
+ * @param updatedExpenseItem - The updated data for the expense item.
  */
-export async function handleExpenseUpdating(expenseId: string, formData: ExpenseUpdatingFormData): Promise<void> {
+export async function handleExpenseUpdating(expenseId: string, updatedExpenseItem: ExpenseItemEntity): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/updateExpense", {
       method: "PUT",
@@ -517,9 +517,9 @@ export async function handleExpenseUpdating(expenseId: string, formData: Expense
       },
       body: JSON.stringify({
         expenseId: expenseId,
-        category: formData.category,
-        amount: formData.amount,
-        timestamp: formData.timestamp,
+        category: updatedExpenseItem.category,
+        amount: updatedExpenseItem.amount,
+        timestamp: updatedExpenseItem.timestamp,
       }),
     });
     if (!response.ok) {
