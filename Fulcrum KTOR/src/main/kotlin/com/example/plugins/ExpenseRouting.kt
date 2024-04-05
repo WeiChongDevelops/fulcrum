@@ -91,6 +91,7 @@ fun Application.configureExpenseRouting() {
                         set("category", expenseUpdateRequest.category)
                         set("amount", expenseUpdateRequest.amount)
                         set("timestamp", expenseUpdateRequest.timestamp)
+                        set("recurringExpenseId", expenseUpdateRequest.recurringExpenseId)
                     }
                 ) {
                     eq("expenseId", expenseUpdateRequest.expenseId)
@@ -108,31 +109,31 @@ fun Application.configureExpenseRouting() {
             }
         }
 
-        put("/api/updateRecurringExpenseInstance") {
-            try {
-                val expenseInstanceUpdateRequest = call.receive<RecurringExpenseInstanceUpdateRequestReceived>()
-
-                val updatedItem = supabase.postgrest["expenses"].update(
-                    {
-                        set("category", expenseInstanceUpdateRequest.category)
-                        set("amount", expenseInstanceUpdateRequest.amount)
-                        set("recurringExpenseId", expenseInstanceUpdateRequest.recurringExpenseId)
-                    }
-                ) {
-                    eq("expenseId", expenseInstanceUpdateRequest.expenseId)
-                    eq("userId", getActiveUserId())
-                }
-
-                if (updatedItem.body == null) {
-                    call.respondError("Recurring expense instance not updated")
-                } else {
-                    call.respondSuccess("Recurring expense instance updated.")
-                }
-            } catch (e: Exception) {
-                call.application.log.error("Error while updating recurring expense instance", e)
-                call.respondError("Recurring expense instance not updated.")
-            }
-        }
+//        put("/api/updateRecurringExpenseInstance") {
+//            try {
+//                val expenseInstanceUpdateRequest = call.receive<RecurringExpenseInstanceUpdateRequestReceived>()
+//
+//                val updatedItem = supabase.postgrest["expenses"].update(
+//                    {
+//                        set("category", expenseInstanceUpdateRequest.category)
+//                        set("amount", expenseInstanceUpdateRequest.amount)
+//                        set("recurringExpenseId", expenseInstanceUpdateRequest.recurringExpenseId)
+//                    }
+//                ) {
+//                    eq("expenseId", expenseInstanceUpdateRequest.expenseId)
+//                    eq("userId", getActiveUserId())
+//                }
+//
+//                if (updatedItem.body == null) {
+//                    call.respondError("Recurring expense instance not updated")
+//                } else {
+//                    call.respondSuccess("Recurring expense instance updated.")
+//                }
+//            } catch (e: Exception) {
+//                call.application.log.error("Error while updating recurring expense instance", e)
+//                call.respondError("Recurring expense instance not updated.")
+//            }
+//        }
 
         delete("/api/deleteExpense") {
             try {
@@ -273,36 +274,76 @@ fun Application.configureExpenseRouting() {
             return response.isNotEmpty();
         }
 
+        suspend fun executeBlacklistedExpenseCreation(recurringExpenseId: String, timestampOfRemovedInstance: Instant, call: ApplicationCall) {
+            if (!checkIfBlacklistedExpenseExists(recurringExpenseId, timestampOfRemovedInstance)) {
+                val itemToInsert = BlacklistedExpenseCreateRequestSent (
+                    recurringExpenseId = recurringExpenseId,
+                    timestampOfRemovedInstance = timestampOfRemovedInstance
+                )
+
+                val insertedItem = supabase.postgrest["removed_recurring_expenses"].insert(
+                    itemToInsert,
+                    returning = Returning.REPRESENTATION
+                )
+
+                if (insertedItem.body == null) {
+                    call.respondError("Removed recurring expense instance not added.")
+                } else {
+                    call.respondSuccess("Removed recurring expense instance added successfully.")
+                }
+            } else {
+                call.respondSuccess("Entry already exists.")
+            }
+        }
+
         post("/api/createBlacklistedExpense") {
             try {
                 val blacklistedExpenseRequest = call.receive<BlacklistedExpenseCreateRequestReceived>()
 
-                val recurringExpenseId = blacklistedExpenseRequest.recurringExpenseId
-                val timestampOfRemovedInstance = blacklistedExpenseRequest.timestampOfRemovedInstance
+                executeBlacklistedExpenseCreation(blacklistedExpenseRequest.recurringExpenseId,
+                    blacklistedExpenseRequest.timestampOfRemovedInstance,
+                    call)
 
-                if (!checkIfBlacklistedExpenseExists(recurringExpenseId, timestampOfRemovedInstance)) {
-                    val itemToInsert = BlacklistedExpenseCreateRequestSent (
-                        recurringExpenseId = recurringExpenseId,
-                        timestampOfRemovedInstance = timestampOfRemovedInstance
-                    )
-
-                    val insertedItem = supabase.postgrest["removed_recurring_expenses"].insert(
-                        itemToInsert,
-                        returning = Returning.REPRESENTATION
-                    )
-
-                    if (insertedItem.body == null) {
-                        call.respondError("Removed recurring expense instance not added.")
-                    } else {
-                        call.respondSuccess("Removed recurring expense instance added successfully.")
-                    }
-                } else {
-                    call.respondSuccess("Entry already exists.")
-                }
+//                val recurringExpenseId = blacklistedExpenseRequest.recurringExpenseId
+//                val timestampOfRemovedInstance = blacklistedExpenseRequest.timestampOfRemovedInstance
+//
+//                if (!checkIfBlacklistedExpenseExists(recurringExpenseId, timestampOfRemovedInstance)) {
+//                    val itemToInsert = BlacklistedExpenseCreateRequestSent (
+//                        recurringExpenseId = recurringExpenseId,
+//                        timestampOfRemovedInstance = timestampOfRemovedInstance
+//                    )
+//
+//                    val insertedItem = supabase.postgrest["removed_recurring_expenses"].insert(
+//                        itemToInsert,
+//                        returning = Returning.REPRESENTATION
+//                    )
+//
+//                    if (insertedItem.body == null) {
+//                        call.respondError("Removed recurring expense instance not added.")
+//                    } else {
+//                        call.respondSuccess("Removed recurring expense instance added successfully.")
+//                    }
+//                } else {
+//                    call.respondSuccess("Entry already exists.")
+//                }
 
             } catch (e: Exception) {
                 call.application.log.error("Error while creating removed recurring expense instance", e)
                 call.respondError("Removed recurring expense instance not added.")
+            }
+        }
+
+        post("/api/batchCreateBlacklistedExpenses") {
+            try {
+                val batchCreateBlacklistedExpenseRequest = call.receive<BatchCreateBlacklistedExpenseRequestReceived>()
+
+                for ( timestamp in batchCreateBlacklistedExpenseRequest.timestampsToBlacklist) {
+                    executeBlacklistedExpenseCreation(batchCreateBlacklistedExpenseRequest.recurringExpenseId,
+                        timestamp,
+                        call)
+                }
+            } catch (e: Exception) {
+                call.respondError("Error while batch blacklisting.")
             }
         }
 

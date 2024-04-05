@@ -1,23 +1,23 @@
 import FulcrumButton from "../../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import {
   ExpenseItemEntity,
   getExpenseList,
   handleInputChangeOnFormWithAmount,
   PreviousExpenseBeingEdited,
   RecurringExpenseInstanceUpdatingFormData,
-  handleRecurringExpenseInstanceUpdating,
   ExpenseFormVisibility,
   SelectorOptionsFormattedData,
-  handleBlacklistedExpenseCreation,
   BlacklistedExpenseItemEntity,
   SetFormVisibility,
-  getBlacklistedExpenses,
   changeFormOrModalVisibility,
+  EmailContext,
+  handleExpenseUpdating,
 } from "../../../../../util.ts";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../../selectors/CategorySelector.tsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface RecurringExpenseInstanceUpdatingFormProps {
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
@@ -45,6 +45,31 @@ export default function RecurringExpenseInstanceUpdatingForm({
   });
   const formRef = useRef<HTMLDivElement>(null);
 
+  const email = useContext(EmailContext);
+  const queryClient = useQueryClient();
+
+  const expenseUpdatingMutation = useMutation({
+    mutationFn: (updatedExpenseItem: ExpenseItemEntity) => {
+      return handleExpenseUpdating(updatedExpenseItem);
+    },
+    onMutate: async (updatedExpenseItem: ExpenseItemEntity) => {
+      await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
+      await queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
+        return prevExpenseCache.map((expenseItem) =>
+          expenseItem.expenseId === updatedExpenseItem.expenseId ? updatedExpenseItem : expenseItem,
+        );
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData(["expenseArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+    },
+  });
+
   useEffect(() => {
     window.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -71,9 +96,22 @@ export default function RecurringExpenseInstanceUpdatingForm({
 
     hideForm();
 
-    await handleRecurringExpenseInstanceUpdating(oldExpenseBeingEdited.expenseId, formData);
-    await handleBlacklistedExpenseCreation(oldExpenseBeingEdited.recurringExpenseId, oldExpenseBeingEdited.oldTimestamp);
-    setBlacklistedExpenseArray(await getBlacklistedExpenses());
+    const noChangesMade =
+      formData.category === oldExpenseBeingEdited.oldCategory && formData.amount === oldExpenseBeingEdited.oldAmount;
+
+    const updatedExpenseItem: ExpenseItemEntity = {
+      expenseId: oldExpenseBeingEdited.expenseId,
+      category: formData.category,
+      amount: formData.amount,
+      timestamp: oldExpenseBeingEdited.oldTimestamp,
+      recurringExpenseId: noChangesMade ? oldExpenseBeingEdited.recurringExpenseId : null,
+    };
+
+    expenseUpdatingMutation.mutate(updatedExpenseItem);
+
+    // await handleRecurringExpenseInstanceUpdating(oldExpenseBeingEdited.expenseId, formData);
+    // await handleBlacklistedExpenseCreation(oldExpenseBeingEdited.recurringExpenseId!, oldExpenseBeingEdited.oldTimestamp);
+    // setBlacklistedExpenseArray(await getBlacklistedExpenses());
 
     setFormData({
       category: oldExpenseBeingEdited.oldCategory,

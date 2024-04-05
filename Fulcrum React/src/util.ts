@@ -505,10 +505,9 @@ export async function getExpenseList(): Promise<ExpenseItemEntity[]> {
 
 /**
  * Handles the updating of an existing expense item.
- * @param expenseId - The ID of the expense to update.
  * @param updatedExpenseItem - The updated data for the expense item.
  */
-export async function handleExpenseUpdating(expenseId: string, updatedExpenseItem: ExpenseItemEntity): Promise<void> {
+export async function handleExpenseUpdating(updatedExpenseItem: ExpenseItemEntity): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/updateExpense", {
       method: "PUT",
@@ -516,10 +515,11 @@ export async function handleExpenseUpdating(expenseId: string, updatedExpenseIte
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        expenseId: expenseId,
+        expenseId: updatedExpenseItem.expenseId,
         category: updatedExpenseItem.category,
         amount: updatedExpenseItem.amount,
         timestamp: updatedExpenseItem.timestamp,
+        recurringExpenseId: updatedExpenseItem.recurringExpenseId,
       }),
     });
     if (!response.ok) {
@@ -532,37 +532,37 @@ export async function handleExpenseUpdating(expenseId: string, updatedExpenseIte
   }
 }
 
-/**
- * Updates a specific instance of a recurring expense.
- * @param expenseId - The ID of the expense instance to update.
- * @param formData - The updated data for the expense instance.
- */
-export async function handleRecurringExpenseInstanceUpdating(
-  expenseId: string,
-  formData: RecurringExpenseInstanceUpdatingFormData,
-): Promise<void> {
-  try {
-    const response = await fetch("http://localhost:8080/api/updateRecurringExpenseInstance", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        expenseId: expenseId,
-        amount: formData.amount,
-        category: formData.category,
-        recurringExpenseId: null,
-      }),
-    });
-    if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
-    }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
+// /**
+//  * Updates a specific instance of a recurring expense.
+//  * @param expenseId - The ID of the expense instance to update.
+//  * @param updatedExpenseItem - The updated data for the expense instance.
+//  */
+// export async function handleRecurringExpenseInstanceUpdating(
+//   expenseId: string,
+//   updatedExpenseItem: ExpenseItemEntity[],
+// ): Promise<void> {
+//   try {
+//     const response = await fetch("http://localhost:8080/api/updateRecurringExpenseInstance", {
+//       method: "PUT",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         expenseId: expenseId,
+//         amount: updatedExpenseItem.amount,
+//         category: updatedExpenseItem.category,
+//         recurringExpenseId: null,
+//       }),
+//     });
+//     if (!response.ok) {
+//       console.error(`HTTP error - status: ${response.status}`);
+//     }
+//     const responseData = await response.json();
+//     console.log(responseData);
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+// }
 
 /**
  * Handles the deletion of a specific expense item.
@@ -571,13 +571,13 @@ export async function handleRecurringExpenseInstanceUpdating(
  */
 export async function handleExpenseDeletion(
   expenseId: string,
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
+  // setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
 ): Promise<void> {
-  setExpenseArray((expenseArray) =>
-    expenseArray.filter((expenseItem) => {
-      return expenseItem.expenseId !== expenseId;
-    }),
-  );
+  // setExpenseArray((expenseArray) =>
+  //   expenseArray.filter((expenseItem) => {
+  //     return expenseItem.expenseId !== expenseId;
+  //   }),
+  // );
   try {
     const response = await fetch("http://localhost:8080/api/deleteExpense", {
       method: "DELETE",
@@ -599,9 +599,9 @@ export async function handleExpenseDeletion(
 
 /**
  * Handles the deletion of multiple expense items in a batch operation.
- * @param expenseIdsToDelete - A set of IDs of the expenses to be deleted.
+ * @param expenseIdsToDelete - An array of IDs of the expenses to be deleted.
  */
-export async function handleBatchExpenseDeletion(expenseIdsToDelete: Set<string>): Promise<void> {
+export async function handleBatchExpenseDeletion(expenseIdsToDelete: string[]): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/batchDeleteExpenses", {
       method: "DELETE",
@@ -609,7 +609,7 @@ export async function handleBatchExpenseDeletion(expenseIdsToDelete: Set<string>
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        expenseIdsToDelete: Array.from(expenseIdsToDelete),
+        expenseIdsToDelete: expenseIdsToDelete,
       }),
     });
     if (!response.ok) {
@@ -1056,7 +1056,7 @@ export async function handleRecurringExpenseDeletion(
  * @param timestampOfRemovedInstance - The timestamp of the removed expense instance.
  */
 export async function handleBlacklistedExpenseCreation(
-  recurringExpenseId: string | null,
+  recurringExpenseId: string,
   timestampOfRemovedInstance: Date,
 ): Promise<void> {
   try {
@@ -1079,6 +1079,35 @@ export async function handleBlacklistedExpenseCreation(
     }
   } catch (error) {
     console.error("Error creating removed recurring expense:", error);
+  }
+}
+
+/**
+ * Handles the deletion of multiple expense items in a batch operation.
+ * @param recurringExpenseId - The recurring expense ID shared by the new blacklist entries.
+ * @param timestampsToBlacklist - A set of Dates to include in blacklist entries.
+ */
+export async function handleBatchBlacklistedExpenseCreation(
+  recurringExpenseId: string,
+  timestampsToBlacklist: Date[],
+): Promise<void> {
+  try {
+    const response = await fetch("http://localhost:8080/api/batchCreateBlacklistedExpenses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        recurringExpenseId: recurringExpenseId,
+        timestampsToBlacklist: timestampsToBlacklist,
+      }),
+    });
+    if (!response.ok) {
+      console.error(`HTTP error - status: ${response.status}`);
+    }
+    console.log(await response.json());
+  } catch (error) {
+    console.error("Error:", error);
   }
 }
 
@@ -2039,7 +2068,7 @@ function populateStructuredExpenseData(
             new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString() ===
             new Date(expenseItem.timestamp).toLocaleDateString()
           ) {
-            console.log(`Adding expense to old group on ${new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString()}`);
+            // console.log(`Adding expense to old group on ${new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString()}`);
             dayExpenseGroupItem.dayExpenseArray = [...dayExpenseGroupItem.dayExpenseArray, expenseItem];
             matchingDayGroupExists = true;
             break;
@@ -2049,7 +2078,7 @@ function populateStructuredExpenseData(
           break;
         }
         // Otherwise, make a new DayExpenseGroupEntity for the expenseItem's day and add it in.
-        console.log(`Adding expense item to new group on ${new Date(expenseItem.timestamp).toLocaleDateString()}`);
+        // console.log(`Adding expense item to new group on ${new Date(expenseItem.timestamp).toLocaleDateString()}`);
         const startOfDayCalendarDate = new Date(expenseItem.timestamp);
         startOfDayCalendarDate.setHours(0, 0, 0, 0);
 
@@ -2170,36 +2199,60 @@ function processRecurringExpenseInstances(
   }
 }
 
+// /**
+//  * Performs batched deletion of all instances of a recurring expense from a particular date onwards.
+//  * @param recurringExpenseId - The ID of the recurringExpense to delete instances of.
+//  * @param expenseArray - The array of expense items.
+//  * @param setExpenseArray - The state update function for the expense array.
+//  * @param startingFrom - The date from which instances are deleted onwards.
+//  * @param setBlacklistedExpenseInstances - The state update function for the recurring expense array.
+//  */
+// export async function removeAllInstancesOfRecurringExpenseAfterDate(
+//   recurringExpenseId: string,
+//   expenseArray: ExpenseItemEntity[],
+//   // setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
+//   startingFrom: Date,
+//   // setBlacklistedExpenseInstances: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>,
+// ): Promise<void> {
+//   const batchDeletionQueue = new Set<string>();
+//   for (const expenseItem of expenseArray) {
+//     if (
+//       expenseItem.recurringExpenseId === recurringExpenseId &&
+//       new Date(expenseItem.timestamp).getTime() > new Date(startingFrom).getTime()
+//     ) {
+//       batchDeletionQueue.add(expenseItem.expenseId);
+//       await handleBlacklistedExpenseCreation(recurringExpenseId, expenseItem.timestamp);
+//     }
+//   }
+//   // setExpenseArray((prevExpenseArray) =>
+//   //   prevExpenseArray.filter((expenseItem) => !(expenseItem.expenseId in batchDeletionQueue)),
+//   // );
+//   // setBlacklistedExpenseInstances(await getBlacklistedExpenses());
+//   await handleBatchExpenseDeletion(batchDeletionQueue);
+// }
+
 /**
- * Performs batched deletion of all instances of a recurring expense from a particular date onwards.
- * @param recurringExpenseId - The ID of the recurringExpense to delete instances of.
+ * Retrieves all of a given recurring expense's instances from a given date onwards.
+ * @param recurringExpenseId - The ID of the recurringExpense to retrieve instances of.
  * @param expenseArray - The array of expense items.
- * @param setExpenseArray - The state update function for the expense array.
- * @param startingFrom - The date from which instances are deleted.
- * @param setBlacklistedExpenseInstances - The state update function for the recurring expense array.
+ * @param startingFrom - The date from which instances are retrieved onwards.
+ * @return An array of the requested expenses.
  */
-export async function removeAllInstancesOfRecurringExpenseAfterDate(
+export async function getRecurringExpenseInstancesAfterDate(
   recurringExpenseId: string,
   expenseArray: ExpenseItemEntity[],
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
   startingFrom: Date,
-  setBlacklistedExpenseInstances: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>,
-): Promise<void> {
-  const batchDeletionQueue = new Set<string>();
+): Promise<ExpenseItemEntity[]> {
+  const requestedExpenseList = new Set<ExpenseItemEntity>();
   for (const expenseItem of expenseArray) {
     if (
       expenseItem.recurringExpenseId === recurringExpenseId &&
-      new Date(expenseItem.timestamp).getTime() >= new Date(startingFrom).getTime()
+      new Date(expenseItem.timestamp).getTime() > new Date(startingFrom).getTime()
     ) {
-      batchDeletionQueue.add(expenseItem.expenseId);
-      await handleBlacklistedExpenseCreation(recurringExpenseId, expenseItem.timestamp);
+      requestedExpenseList.add(expenseItem);
     }
   }
-  setExpenseArray((prevExpenseArray) =>
-    prevExpenseArray.filter((expenseItem) => !(expenseItem.expenseId in batchDeletionQueue)),
-  );
-  setBlacklistedExpenseInstances(await getBlacklistedExpenses());
-  await handleBatchExpenseDeletion(batchDeletionQueue);
+  return Array.from(requestedExpenseList);
 }
 
 /**

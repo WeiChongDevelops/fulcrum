@@ -90,6 +90,29 @@ export default function ExpenseCreationForm({
     },
   });
 
+  const recurringExpenseCreationMutation = useMutation({
+    mutationFn: (newRecurringExpenseItem: RecurringExpenseItemEntity) =>
+      handleRecurringExpenseCreation(newRecurringExpenseItem),
+    onMutate: async (newRecurringExpenseItem: RecurringExpenseItemEntity) => {
+      await queryClient.cancelQueries({ queryKey: ["recurringExpenseArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["recurringExpenseArray", email]);
+      await queryClient.setQueryData(
+        ["recurringExpenseArray", email],
+        (prevRecurringExpenseCache: RecurringExpenseItemEntity[]) => {
+          return [newRecurringExpenseItem, ...prevRecurringExpenseCache];
+        },
+      );
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["recurringExpenseArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["recurringExpenseArray", email] });
+      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+    },
+  });
+
   const budgetCreationMutation = useMutation({
     mutationFn: (newBudgetItem: BudgetItemEntity) => handleBudgetCreation(newBudgetItem),
     onMutate: async (newBudgetItem: BudgetItemEntity) => {
@@ -164,10 +187,11 @@ export default function ExpenseCreationForm({
         timestamp: formData.timestamp as Date,
         frequency: formData.frequency,
       };
-      await handleRecurringExpenseCreation(newRecurringExpenseItem);
-      setRecurringExpenseArray(await getRecurringExpenseList());
-      setExpenseArray(await getExpenseList());
-      setBudgetArray(await getBudgetList());
+      // await handleRecurringExpenseCreation(newRecurringExpenseItem);
+      // setRecurringExpenseArray(await getRecurringExpenseList());
+      // setExpenseArray(await getExpenseList());
+      // setBudgetArray(await getBudgetList());
+      recurringExpenseCreationMutation.mutate(newRecurringExpenseItem);
     }
     setFormData({
       category: "",

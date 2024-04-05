@@ -53,23 +53,16 @@ export default function ExpenseUpdatingForm({
   const email = useContext(EmailContext);
   const queryClient = useQueryClient();
 
-  interface ExpenseUpdatingMutationProps {
-    expenseId: string;
-    updatedExpenseItem: ExpenseItemEntity;
-  }
-
   const expenseUpdatingMutation = useMutation({
-    mutationFn: (expenseUpdatingMutationProps: ExpenseUpdatingMutationProps) => {
-      return handleExpenseUpdating(expenseUpdatingMutationProps.expenseId, expenseUpdatingMutationProps.updatedExpenseItem);
+    mutationFn: (updatedExpenseItem: ExpenseItemEntity) => {
+      return handleExpenseUpdating(updatedExpenseItem);
     },
-    onMutate: async (expenseUpdatingMutationProps: ExpenseUpdatingMutationProps) => {
+    onMutate: async (updatedExpenseItem: ExpenseItemEntity) => {
       await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
       await queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
         return prevExpenseCache.map((expenseItem) =>
-          expenseItem.expenseId === expenseUpdatingMutationProps.expenseId
-            ? expenseUpdatingMutationProps.updatedExpenseItem
-            : expenseItem,
+          expenseItem.expenseId === updatedExpenseItem.expenseId ? updatedExpenseItem : expenseItem,
         );
       });
       return { dataBeforeOptimisticUpdate };
@@ -115,11 +108,11 @@ export default function ExpenseUpdatingForm({
     const updatedExpenseItem = {
       ...formData,
       expenseId: uuid(),
-      recurringExpenseId: null,
       timestamp: formData.timestamp as Date,
+      recurringExpenseId: null,
     };
 
-    expenseUpdatingMutation.mutate({ expenseId: oldExpenseBeingEdited.expenseId, updatedExpenseItem: updatedExpenseItem });
+    expenseUpdatingMutation.mutate(updatedExpenseItem);
 
     // await handleExpenseUpdating(oldExpenseBeingEdited.expenseId, updatedExpenseItem);
 
