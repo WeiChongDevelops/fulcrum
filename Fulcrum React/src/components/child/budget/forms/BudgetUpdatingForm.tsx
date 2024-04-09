@@ -1,5 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
   BudgetFormVisibility,
@@ -14,19 +14,15 @@ import {
   SetFormVisibility,
   changeFormOrModalVisibility,
   EmailContext,
+  PreviousBudgetBeingEdited,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
-interface DBUpdatingFormProps {
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-  oldBudgetBeingEdited: {
-    oldAmount: number;
-    oldCategory: string;
-    oldGroup: string;
-  };
+interface BudgetUpdatingFormProps {
+  oldBudgetBeingEdited: PreviousBudgetBeingEdited;
   groupArray: GroupItemEntity[];
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
   currencySymbol: string;
@@ -36,16 +32,15 @@ interface DBUpdatingFormProps {
  * A form for updating an existing budget item.
  */
 export default function BudgetUpdatingForm({
-  setBudgetArray,
   groupArray,
   oldBudgetBeingEdited,
   setBudgetFormVisibility,
   currencySymbol,
-}: DBUpdatingFormProps) {
+}: BudgetUpdatingFormProps) {
   const [formData, setFormData] = useState<BudgetUpdatingFormData>({
     category: oldBudgetBeingEdited.oldCategory,
     amount: oldBudgetBeingEdited.oldAmount,
-    iconPath: "",
+    iconPath: oldBudgetBeingEdited.oldIconPath,
     group: oldBudgetBeingEdited.oldGroup,
   });
   const formRef = useRef<HTMLDivElement>(null);
@@ -58,8 +53,12 @@ export default function BudgetUpdatingForm({
   const queryClient = useQueryClient();
   const email = useContext(EmailContext);
   const budgetUpdatingMutation = useMutation({
-    mutationFn: (budgetUpdatingMutationProps: BudgetUpdatingMutationProps) =>
-      handleBudgetUpdating(budgetUpdatingMutationProps.originalCategory, budgetUpdatingMutationProps.updatedBudgetItem),
+    mutationFn: (budgetUpdatingMutationProps: BudgetUpdatingMutationProps) => {
+      return handleBudgetUpdating(
+        budgetUpdatingMutationProps.originalCategory,
+        budgetUpdatingMutationProps.updatedBudgetItem,
+      );
+    },
     onMutate: async (budgetUpdatingMutationProps: BudgetUpdatingMutationProps) => {
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
@@ -114,8 +113,11 @@ export default function BudgetUpdatingForm({
     // await handleBudgetUpdating(oldBudgetBeingEdited.oldCategory, formData);
     // getBudgetList().then((budgetList) => setBudgetArray(budgetList));
 
-    const updatedBudgetItem = { ...formData, timestamp: new Date() };
-    budgetUpdatingMutation.mutate({ category: oldBudgetBeingEdited.oldCategory, updatedBudgetItem: updatedBudgetItem });
+    const updatedBudgetItem: BudgetItemEntity = { ...formData, iconPath: formData.iconPath, timestamp: new Date() };
+    budgetUpdatingMutation.mutate({
+      originalCategory: oldBudgetBeingEdited.oldCategory,
+      updatedBudgetItem: updatedBudgetItem,
+    });
 
     setFormData({
       category: oldBudgetBeingEdited.oldCategory,
@@ -149,7 +151,9 @@ export default function BudgetUpdatingForm({
           required
         />
 
-        <label htmlFor="amount">Amount</label>
+        <label htmlFor="amount" className={"mt-3"}>
+          Amount
+        </label>
         <div>
           <b className="relative left-6 text-black">{currencySymbol}</b>
           <input
@@ -163,7 +167,7 @@ export default function BudgetUpdatingForm({
           />
         </div>
 
-        <label htmlFor="group">Group</label>
+        <label htmlFor="group">Category Group</label>
         <CreatableSelect
           id="group"
           name="group"

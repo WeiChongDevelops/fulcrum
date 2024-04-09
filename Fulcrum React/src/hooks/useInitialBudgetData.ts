@@ -2,8 +2,8 @@ import { useContext, useState } from "react";
 import {
   BudgetFormVisibility,
   BudgetModalVisibility,
-  checkForUser,
   EmailContext,
+  getSessionEmailOrNull,
   getTotalIncome,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
@@ -28,6 +28,7 @@ export default function useInitialBudgetData() {
     oldAmount: 0,
     oldCategory: "",
     oldGroup: "",
+    oldIconPath: "",
   });
   const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState<PreviousGroupBeingEdited>({
     oldColour: "",
@@ -43,8 +44,8 @@ export default function useInitialBudgetData() {
 
   async function retrieveInitialData() {
     try {
-      const userStatus = await checkForUser();
-      if (userStatus["loggedIn"]) {
+      const isLoggedIn = (await getSessionEmailOrNull()).email !== null;
+      if (isLoggedIn) {
         console.log("User logged in.");
       } else {
         console.log("User not logged in, login redirect initiated.");

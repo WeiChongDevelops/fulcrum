@@ -16,13 +16,12 @@ import SettingsModalsAndForms from "./SettingsModalsAndForms.tsx";
 interface SettingsProps {
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
   publicUserData: PublicUserData;
-  setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
 }
 
 /**
  * The root component for the settings page.
  */
-export default function Settings({ setOpenToolsSection, publicUserData, setPublicUserData }: SettingsProps) {
+export default function Settings({ setOpenToolsSection, publicUserData }: SettingsProps) {
   const [settingsFormVisibility, setSettingsFormVisibility] = useState<SettingsFormVisibility>({
     typeDeleteMyExpensesForm: false,
     typeDeleteMyBudgetForm: false,
@@ -74,17 +73,17 @@ export default function Settings({ setOpenToolsSection, publicUserData, setPubli
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow currency-selector-row"}>
           <b>Currency</b>
-          <CurrencySelector publicUserData={publicUserData} setPublicUserData={setPublicUserData} />
+          <CurrencySelector publicUserData={publicUserData} />
         </div>
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
           <b>Appearance</b>
-          <DarkModeToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData} />
+          <DarkModeToggle publicUserData={publicUserData} />
         </div>
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
           <b>Accessibility</b>
-          <AccessibilityToggle publicUserData={publicUserData} setPublicUserData={setPublicUserData} />
+          <AccessibilityToggle publicUserData={publicUserData} />
         </div>
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>

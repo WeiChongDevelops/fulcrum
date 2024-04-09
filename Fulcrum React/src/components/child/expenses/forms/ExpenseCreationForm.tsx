@@ -1,5 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   BudgetItemEntity,
   ExpenseCreationFormData,
@@ -12,10 +12,7 @@ import {
   RecurringExpenseItemEntity,
   recurringFrequencyOptions,
   Value,
-  getExpenseList,
-  getBudgetList,
   handleBudgetCreation,
-  getRecurringExpenseList,
   RecurringExpenseFormVisibility,
   ExpenseFormVisibility,
   SetFormVisibility,
@@ -32,18 +29,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ExpenseCreationFormProps {
   setExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility> | SetFormVisibility<ExpenseFormVisibility>;
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
-
   budgetArray: BudgetItemEntity[];
-
   categoryOptions: SelectorOptionsFormattedData[];
-
   currencySymbol: string;
-
   defaultCalendarDate: Date;
-
   mustBeRecurring: boolean;
 }
 
@@ -52,9 +41,6 @@ interface ExpenseCreationFormProps {
  */
 export default function ExpenseCreationForm({
   setExpenseFormVisibility,
-  setExpenseArray,
-  setBudgetArray,
-  setRecurringExpenseArray,
   budgetArray,
   categoryOptions,
   currencySymbol,
@@ -73,7 +59,7 @@ export default function ExpenseCreationForm({
   const email = useContext(EmailContext);
 
   const expenseCreationMutation = useMutation({
-    mutationFn: (newExpenseItem: ExpenseItemEntity) => handleExpenseCreation(newExpenseItem, setExpenseArray),
+    mutationFn: (newExpenseItem: ExpenseItemEntity) => handleExpenseCreation(newExpenseItem),
     onMutate: async (newExpenseItem: ExpenseItemEntity) => {
       await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
@@ -83,7 +69,7 @@ export default function ExpenseCreationForm({
       return { dataBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {
-      return queryClient.setQueryData(["expenseArray", email], context?.dataBeforeOptimisticUpdate);
+      queryClient.setQueryData(["expenseArray", email], context?.dataBeforeOptimisticUpdate);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
@@ -163,19 +149,20 @@ export default function ExpenseCreationForm({
       recurringExpenseId: null,
     };
 
+    if (!budgetArray.map((budgetItem) => budgetItem.category).includes(newExpenseItem.category)) {
+      const newDefaultBudgetItem: BudgetItemEntity = {
+        category: formData.category,
+        amount: 0,
+        iconPath: "category-default-icon.svg",
+        group: "Miscellaneous",
+        timestamp: formData.timestamp as Date,
+      };
+      // setBudgetArray((current) => [...current, newDefaultBudgetItem]);
+      // await handleBudgetCreation(setBudgetArray, newDefaultBudgetItem);
+      budgetCreationMutation.mutate(newDefaultBudgetItem);
+    }
+
     if (formData.frequency === "never") {
-      if (!budgetArray.map((budgetItem) => budgetItem.category).includes(newExpenseItem.category)) {
-        const newDefaultBudgetItem: BudgetItemEntity = {
-          category: formData.category,
-          amount: 0,
-          iconPath: "category-default-icon.svg",
-          group: "Miscellaneous",
-          timestamp: new Date(),
-        };
-        setBudgetArray((current) => [...current, newDefaultBudgetItem]);
-        // await handleBudgetCreation(setBudgetArray, newDefaultBudgetItem);
-        budgetCreationMutation.mutate(newDefaultBudgetItem);
-      }
       // await handleExpenseCreation(newExpenseItem, setExpenseArray);
       // setExpenseArray(await getExpenseList());
       expenseCreationMutation.mutate(newExpenseItem);

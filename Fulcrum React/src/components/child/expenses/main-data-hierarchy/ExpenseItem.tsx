@@ -1,6 +1,7 @@
 import "/src/css/Budget.css";
 import {
   ExpenseFormVisibility,
+  ExpenseItemEntity,
   ExpenseModalVisibility,
   formatDollarAmountStatic,
   PreviousExpenseBeingEdited,
@@ -26,7 +27,7 @@ interface ExpenseItemProps {
   setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
 
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-  setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
+  setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
 
   publicUserData: PublicUserData;
 }
@@ -46,7 +47,7 @@ export default function ExpenseItem({
   setExpenseFormVisibility,
   setExpenseModalVisibility,
   setOldExpenseBeingEdited,
-  setExpenseIdToDelete,
+  setExpenseItemToDelete,
   publicUserData,
 }: ExpenseItemProps) {
   function handleEditClick() {
@@ -72,7 +73,13 @@ export default function ExpenseItem({
 
   function handleDeleteClick(e: React.MouseEvent) {
     e.stopPropagation();
-    setExpenseIdToDelete(expenseId);
+    setExpenseItemToDelete({
+      expenseId: expenseId,
+      category: category,
+      amount: amount,
+      timestamp: timestamp,
+      recurringExpenseId: recurringExpenseId,
+    });
     setExpenseModalVisibility((current) => ({
       ...current,
       isConfirmExpenseDeletionModalVisible: true,
@@ -80,7 +87,7 @@ export default function ExpenseItem({
   }
 
   return (
-    <div className="expense-item" style={{ backgroundColor: groupColour }} onClick={handleEditClick}>
+    <div className="expense-item" style={{ backgroundColor: groupColour }} onClick={handleEditClick} data-value={expenseId}>
       <div className="flex flex-row items-center">
         <div className="rounded-full bg-[#1b1c1c] p-3">
           <img src={`/src/assets/category-icons/${iconPath}`} alt="Category icon" className="w-8 h-auto" />

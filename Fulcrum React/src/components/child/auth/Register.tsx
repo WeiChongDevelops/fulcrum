@@ -37,12 +37,12 @@ export default function Register() {
         }, 500);
       } else {
         await handleUserRegistration(formData.email, formData.password);
-
-        setFormData({
-          email: "",
-          password: "",
-          confirmPassword: "",
-        });
+        //
+        // setFormData({
+        //   email: "",
+        //   password: "",
+        //   confirmPassword: "",
+        // });
       }
     }
   }
@@ -151,20 +151,14 @@ export default function Register() {
               required
             />
           </div>
-          <div className={"flex flex-row justify-center items-center w-full"}>
-            <div className={"mr-8"}>
-              <span>Already have any account? </span>
-              <a
-                href="http://localhost:5173/login"
-                className={"underline text-[#17423F] font-semibold"}
-              >
+          <div className={"flex flex-row justify-between items-center w-full"}>
+            <div className={"mr-8 text-xs font-medium"}>
+              <span>Already have an account? </span>
+              <a href="http://localhost:5173/login" className={"underline text-[#17423F] font-semibold"}>
                 Login
               </a>
             </div>
-            <FulcrumButton
-              displayText={"Create account"}
-              backgroundColour={"green"}
-            />
+            <FulcrumButton displayText={"Create account"} backgroundColour={"green"} />
           </div>
         </form>
       </div>

@@ -1,16 +1,14 @@
-import { logoutOnClick, OpenToolsSection, PublicUserData, ToolsFormVisibility } from "../../../../util.ts";
-import { Dispatch, SetStateAction, useState } from "react";
+import { EmailContext, logoutOnClick, OpenToolsSection, PublicUserData, ToolsFormVisibility } from "../../../../util.ts";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import ProfileIconUpdatingForm from "./ProfileIconUpdatingForm.tsx";
 
 interface ToolsHomeProps {
   publicUserData: PublicUserData;
-  setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
-  email: string;
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
 }
 
-export default function ToolsHome({ publicUserData, setPublicUserData, email, setOpenToolsSection }: ToolsHomeProps) {
+export default function ToolsHome({ publicUserData, setOpenToolsSection }: ToolsHomeProps) {
   const [toolsFormVisibility, setToolsFormVisibility] = useState<ToolsFormVisibility>({
     isUpdateProfileIconFormVisible: false,
   });
@@ -39,6 +37,8 @@ export default function ToolsHome({ publicUserData, setPublicUserData, email, se
   function openRecurringExpenses() {
     setOpenToolsSection("recurring");
   }
+
+  const email = useContext(EmailContext);
 
   return (
     <div className="tools flex flex-col justify-center items-center bg-[#455259] p-10">
@@ -95,7 +95,6 @@ export default function ToolsHome({ publicUserData, setPublicUserData, email, se
         <ProfileIconUpdatingForm
           oldIconFileName={publicUserData.profileIconFileName}
           publicUserData={publicUserData}
-          setPublicUserData={setPublicUserData}
           setToolsFormVisibility={setToolsFormVisibility}
         />
       )}

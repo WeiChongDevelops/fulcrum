@@ -1,5 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
   BudgetFormVisibility,
@@ -22,7 +22,6 @@ import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface BudgetCreationFormProps {
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
   groupArray: GroupItemEntity[];
   groupNameOfNewItem: string;
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
@@ -33,7 +32,6 @@ interface BudgetCreationFormProps {
  * A form for creating a new budget item.
  */
 export default function BudgetCreationForm({
-  setBudgetArray,
   groupArray,
   groupNameOfNewItem,
   setBudgetFormVisibility,
@@ -159,7 +157,7 @@ export default function BudgetCreationForm({
           />
         </div>
 
-        <label htmlFor="group">Group</label>
+        <label htmlFor="group">Category Group</label>
         <CreatableSelect
           id="group"
           name="group"

@@ -24,8 +24,7 @@
 }
 
 .tile-icon-container {
-  background: url("../assets/UI-icons/green-triangle-background.webp") center /
-    contain no-repeat;
+  background: url("../assets/UI-icons/green-triangle-background.webp") center / contain no-repeat;
   min-width: 105px;
   min-height: 60px;
   display: flex;
@@ -216,24 +215,24 @@
   border-radius: 50%;
 }
 
+.bowl-shadow-left,
 .bowl-shadow-right {
   position: absolute;
-  left: 256%;
-  top: 736%;
-  transform: translate(-50%, -50%);
-  background-color: black;
   border-radius: 50%;
+  background-color: black;
+  transform: translate(-50%, -50%);
   transition: all ease-in-out 750ms;
+  top: 736%;
+  /*max-width: 8rem;*/
+  /*min-width: 3rem;*/
+}
+
+.bowl-shadow-right {
+  left: 256%;
 }
 
 .bowl-shadow-left {
-  position: absolute;
   right: 254.5%;
-  top: 736%;
-  transform: translate(50%, -50%);
-  background-color: black;
-  border-radius: 50%;
-  transition: all ease-in-out 750ms;
 }
 
 .rotating-container {

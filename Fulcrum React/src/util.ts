@@ -1,5 +1,6 @@
 import { ChangeEvent, createContext, Dispatch, SetStateAction } from "react";
 import { v4 as uuid } from "uuid";
+import { UseMutationResult } from "@tanstack/react-query";
 
 // GLOBAL VARIABLES //
 
@@ -72,6 +73,7 @@ export interface PreviousBudgetBeingEdited {
   oldAmount: number;
   oldCategory: string;
   oldGroup: string;
+  oldIconPath: string;
 }
 export interface BudgetCreationFormData {
   category: string;
@@ -440,13 +442,9 @@ export function formatDate(date: Date): string {
 /**
  * Handles the creation of a new expense item.
  * @param newExpenseItem - The new expense item to be added.
- * @param setExpenseArray - To update the local expense object array for immediate visual feedback to user
  */
-export async function handleExpenseCreation(
-  newExpenseItem: ExpenseItemEntity,
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
-): Promise<void> {
-  setExpenseArray((current) => [newExpenseItem, ...current]);
+export async function handleExpenseCreation(newExpenseItem: ExpenseItemEntity): Promise<void> {
+  console.log(`Adding expense on day: ${newExpenseItem.timestamp}`);
   try {
     const response = await fetch("http://localhost:8080/api/createExpense", {
       method: "POST",
@@ -463,13 +461,13 @@ export async function handleExpenseCreation(
     });
 
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting expense creation: ${response.status}`);
       window.alert("Expense entry invalid.");
     }
     const responseData = await response.json();
     console.log(responseData);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting expense creation: ${e}`);
   }
 }
 
@@ -492,13 +490,13 @@ export async function getExpenseList(): Promise<ExpenseItemEntity[]> {
       });
     }
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting expense list retrieval: ${response.status}`);
     }
     const responseData = await response.json();
-    console.log(responseData);
+    console.log({ Expense_List_Retrieved: responseData.sort(expenseSort) });
     return responseData.sort(expenseSort);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting expense list retrieval: ${e}`);
     return [];
   }
 }
@@ -523,12 +521,12 @@ export async function handleExpenseUpdating(updatedExpenseItem: ExpenseItemEntit
       }),
     });
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting expense update: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting expense update: ${e}`);
   }
 }
 
@@ -589,11 +587,12 @@ export async function handleExpenseDeletion(
       }),
     });
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting expense deletion: ${response.status}`);
+    } else {
+      console.log(await response.json());
     }
-    console.log(await response.json());
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting expense deletion: ${e}`);
   }
 }
 
@@ -613,11 +612,11 @@ export async function handleBatchExpenseDeletion(expenseIdsToDelete: string[]): 
       }),
     });
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when performing batch expense deletion: ${response.status}`);
     }
     console.log(await response.json());
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting batch expense deletion: ${e}`);
   }
 }
 
@@ -647,7 +646,7 @@ export async function handleBudgetCreation(
     });
 
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting budget creation: ${response.status}`);
       window.alert("Category name is invalid or already has assigned budget; or $999,999,999 limit exceeded.");
       // setBudgetArray((current) => {
       //   const indexOfInvalidItem = current.map((item) => item.category).lastIndexOf(newBudgetItem.category);
@@ -659,8 +658,8 @@ export async function handleBudgetCreation(
     }
     const responseData = await response.json();
     console.log(responseData);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting budget creation: ${e}`);
   }
 }
 
@@ -682,13 +681,13 @@ export async function getBudgetList(): Promise<BudgetItemEntity[]> {
         window.location.href !== "/login" && (window.location.href = "/login");
       });
     } else if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting budget list retrieval: ${response.status}`);
     }
     const responseData = await response.json();
-    console.log(responseData.sort(budgetSort));
+    console.log({ Budget_List_Retrieved: responseData.sort(budgetSort) });
     return responseData.sort(budgetSort);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting budget list retrieval: ${e}`);
     return [];
   }
 }
@@ -714,27 +713,22 @@ export async function handleBudgetUpdating(originalCategory: string, updatedBudg
       }),
     });
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting budget updating: ${response.status}`);
       const responseData = await response.json();
       console.log(responseData);
     }
     const responseData = await response.json();
     console.log(responseData);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting budget updating: ${e}`);
   }
 }
 
 /**
  * Deletes a budget item.
  * @param category - The category of the budget item to be deleted.
- * @param setBudgetArray - Dispatch function to update the budget array state.
  */
-export async function handleBudgetDeletion(
-  category: string,
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
-): Promise<void> {
-  setBudgetArray((prevState) => prevState.filter((budgetItem) => budgetItem.category !== category));
+export async function handleBudgetDeletion(category: string): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/deleteBudget", {
       method: "DELETE",
@@ -746,12 +740,12 @@ export async function handleBudgetDeletion(
       }),
     });
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting budget deletion: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
-  } catch (error) {
-    console.error("Failed to delete budget:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting budget deletion: ${e}`);
   }
 }
 
@@ -759,14 +753,9 @@ export async function handleBudgetDeletion(
 
 /**
  * Creates a new budget category group.
- * @param setGroupArray - Dispatch function to update the group array state.
  * @param newGroupItem - The new group item data.
  */
-export async function handleGroupCreation(
-  setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
-  newGroupItem: GroupItemEntity,
-): Promise<void> {
-  setGroupArray((oldGroupArray) => [...oldGroupArray, newGroupItem]);
+export async function handleGroupCreation(newGroupItem: GroupItemEntity): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/createGroup", {
       method: "POST",
@@ -779,20 +768,20 @@ export async function handleGroupCreation(
       }),
     });
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting group creation: ${response.status}`);
       window.alert("Group name is invalid or already exists.");
-      setGroupArray((currentGroupArray) => {
-        const indexOfInvalidItem = currentGroupArray.map((item) => item.group).lastIndexOf(newGroupItem.group);
-        if (indexOfInvalidItem !== -1) {
-          return [...currentGroupArray.slice(0, indexOfInvalidItem), ...currentGroupArray.slice(indexOfInvalidItem + 1)];
-        }
-        return currentGroupArray;
-      });
+      // setGroupArray((currentGroupArray) => {
+      //   const indexOfInvalidItem = currentGroupArray.map((item) => item.group).lastIndexOf(newGroupItem.group);
+      //   if (indexOfInvalidItem !== -1) {
+      //     return [...currentGroupArray.slice(0, indexOfInvalidItem), ...currentGroupArray.slice(indexOfInvalidItem + 1)];
+      //   }
+      //   return currentGroupArray;
+      // });
     }
     const responseData = await response.json();
     console.log(responseData);
-  } catch (error) {
-    console.error("Failed to create group:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting group creation: ${e}`);
   }
 }
 
@@ -815,13 +804,13 @@ export async function getGroupList(): Promise<GroupItemEntity[]> {
       });
     }
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error when attempting group list retrieval: ${response.status}`);
     }
     const responseData = await response.json();
-    console.log(responseData);
+    console.log({ Groups_Retrieved: responseData.sort(groupSort) });
     return responseData.sort(groupSort);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting group list retrieval: ${e}`);
     return [];
   }
 }
@@ -857,8 +846,8 @@ export async function handleGroupUpdating(originalGroupName: string, updatedGrou
       }),
     });
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
-      window.alert("Updated group is invalid.");
+      console.error(`HTTP error when attempting group update: ${response.status}`);
+      window.alert("Group name is invalid or already exists.");
       // setGroupArray((currentGroupArray) => {
       //   const revertedGroupOptions = [...currentGroupArray];
       //   const indexOfInvalidlyEditedOption = currentGroupArray
@@ -876,8 +865,8 @@ export async function handleGroupUpdating(originalGroupName: string, updatedGrou
     } else {
       console.log("Group successfully updated.");
     }
-  } catch (error) {
-    console.error("Failed to update group:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting group update: ${e}`);
   }
   // } else {
   //   window.alert("Selected group name already taken.");
@@ -887,15 +876,9 @@ export async function handleGroupUpdating(originalGroupName: string, updatedGrou
 /**
  * Handles the deletion of a group and optionally keeps the contained budgets.
  * @param groupName - The name of the group to be deleted.
- * @param setGroupArray - Dispatch function to update the group array state.
  * @param keepContainedBudgets - Flag to keep or delete budgets contained within the group.
  */
-export async function handleGroupDeletion(
-  groupName: string,
-  setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>,
-  keepContainedBudgets: boolean,
-): Promise<void> {
-  setGroupArray((prevState) => prevState.filter((groupItem) => groupItem.group !== groupName));
+export async function handleGroupDeletion(groupName: string, keepContainedBudgets: boolean): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/deleteGroup", {
       method: "DELETE",
@@ -909,12 +892,12 @@ export async function handleGroupDeletion(
     });
 
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting group deletion: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting group deletion: ${e}`);
   }
 }
 
@@ -941,13 +924,13 @@ export async function handleRecurringExpenseCreation(newRecurringExpenseItem: Re
     });
 
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting recurring expense creation: ${response.status}`);
       window.alert("Expense entry invalid.");
     }
     const responseData = await response.json();
     console.log(responseData);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting recurring expense creation: ${e}`);
   }
 }
 
@@ -970,25 +953,23 @@ export async function getRecurringExpenseList(): Promise<RecurringExpenseItemEnt
       });
     }
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting recurring expense list retrieval: ${response.status}`);
     }
     const responseData = await response.json();
-    console.log(responseData);
+    console.log({ Recurring_Expenses_Retrieved: responseData.sort(expenseSort) });
     return responseData.sort(expenseSort);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting recurring expense list retrieval: ${e}`);
     return [];
   }
 }
 
 /**
  * Updates the details of an existing recurring expense.
- * @param recurringExpenseId - The ID of the recurring expense to update.
- * @param formData - The new data for the recurring expense.
+ * @param updatedRecurringExpenseItem - The updated recurring expense item.
  */
 export async function handleRecurringExpenseUpdating(
-  recurringExpenseId: string,
-  formData: RecurringExpenseUpdatingFormData,
+  updatedRecurringExpenseItem: RecurringExpenseItemEntity,
 ): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/updateRecurringExpense", {
@@ -997,37 +978,28 @@ export async function handleRecurringExpenseUpdating(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        recurringExpenseId: recurringExpenseId,
-        category: formData.category,
-        amount: formData.amount,
-        timestamp: formData.timestamp,
-        frequency: formData.frequency,
+        recurringExpenseId: updatedRecurringExpenseItem.recurringExpenseId,
+        category: updatedRecurringExpenseItem.category,
+        amount: updatedRecurringExpenseItem.amount,
+        timestamp: updatedRecurringExpenseItem.timestamp,
+        frequency: updatedRecurringExpenseItem.frequency,
       }),
     });
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting recurring expense deletion: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting recurring expense deletion: ${e}`);
   }
 }
 
 /**
  * Deletes a specified recurring expense.
  * @param recurringExpenseId - The ID of the recurring expense to delete.
- * @param setRecurringExpenseArray - Dispatch function to update the recurring expense array state.
  */
-export async function handleRecurringExpenseDeletion(
-  recurringExpenseId: string,
-  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>,
-): Promise<void> {
-  setRecurringExpenseArray((recurringExpenseArray) =>
-    recurringExpenseArray.filter((recurringExpenseItem) => {
-      return recurringExpenseItem.recurringExpenseId !== recurringExpenseId;
-    }),
-  );
+export async function handleRecurringExpenseDeletion(recurringExpenseId: string): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/deleteRecurringExpense", {
       method: "DELETE",
@@ -1040,14 +1012,13 @@ export async function handleRecurringExpenseDeletion(
     });
 
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting recurring expense deletion: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting recurring expense deletion: ${e}`);
   }
-  getRecurringExpenseList().then((recurringExpenseList) => setRecurringExpenseArray(recurringExpenseList));
 }
 
 /**
@@ -1072,13 +1043,13 @@ export async function handleBlacklistedExpenseCreation(
     });
 
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting blacklist entry creation: ${response.status}`);
     } else {
       const responseData = await response.json();
       console.log(responseData);
     }
-  } catch (error) {
-    console.error("Error creating removed recurring expense:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting blacklist entry creation: ${e}`);
   }
 }
 
@@ -1103,11 +1074,11 @@ export async function handleBatchBlacklistedExpenseCreation(
       }),
     });
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting batch blacklist entry creation: ${response.status}`);
     }
     console.log(await response.json());
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting batch blacklist entry creation: ${e}`);
   }
 }
 
@@ -1125,13 +1096,13 @@ export async function getBlacklistedExpenses(): Promise<BlacklistedExpenseItemEn
     });
 
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(`HTTP error encountered when attempting blacklist retrieval: ${response.status}`);
     }
     const blacklistedExpenses = await response.json();
-    console.log(blacklistedExpenses);
+    console.log({ Blacklisted_Expenses_Retrieved: blacklistedExpenses });
     return blacklistedExpenses;
-  } catch (error) {
-    console.error("Error getting blacklisted expenses:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting blacklist retrieval: ${e}`);
     return [];
   }
 }
@@ -1151,14 +1122,14 @@ export async function getTotalIncome(): Promise<number> {
       },
     });
     if (!response.ok) {
-      console.error(`HTTP error when getting total income - ${response.status}`);
+      console.error(`HTTP error encountered when attempting total income retrieval: ${response.status}`);
     }
     const totalIncome = await response.json();
     console.log(totalIncome);
     return totalIncome.totalIncome;
   } catch (e) {
-    console.error(`Failed to execute total income retrieval - ${e}`);
-    return 1000;
+    console.error(`Exception encountered when requesting total income retrieval: ${e}`);
+    return 10000;
   }
 }
 
@@ -1178,12 +1149,12 @@ export async function handleTotalIncomeUpdating(newTotalIncome: number): Promise
       }),
     });
     if (!response.ok) {
-      console.error(`HTTP error when updating total income - ${response.status}`);
+      console.error(`HTTP error encountered when attempting total income wipe: ${response.status}`);
     } else {
       console.log(await response.json());
     }
   } catch (e) {
-    console.error(`Failed to execute total income update - ${e}`);
+    console.error(`Exception encountered when requesting total income wipe: ${e}`);
   }
 }
 
@@ -1201,12 +1172,11 @@ export async function handleWipeExpenses(): Promise<void> {
       },
     });
     if (!response.ok) {
-      console.error(`HTTP error when wiping expenses - status: ${response.status}`);
-    } else {
-      console.log(await response.json());
+      console.error(`HTTP error when attempting expense wipe: ${response.status}`);
     }
+    console.log(await response.json());
   } catch (e) {
-    console.error(`Failed to wipe expenses - ${e}`);
+    console.error(`Exception encountered when requesting expense wipe: ${e}`);
   }
 }
 
@@ -1222,35 +1192,34 @@ export async function handleWipeBudget(): Promise<void> {
       },
     });
     if (!response.ok) {
-      console.error(`HTTP error when wiping budget - status: ${response.status}`);
-    } else {
-      console.log(await response.json());
+      console.error(`HTTP error encountered when attempting budget wipe: ${response.status}`);
     }
+    console.log(await response.json());
   } catch (e) {
-    console.error(`Failed to wipe budget - ${e}`);
+    console.error(`Exception encountered when requesting budget wipe: ${e}`);
   }
 }
 
-/**
- * Deletes all user data (expenses, budgets, recurring expenses).
- */
-export async function handleWipeData(): Promise<void> {
-  try {
-    const response = await fetch("http://localhost:8080/api/wipeData", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      console.error(`HTTP error when wiping data - status: ${response.status}`);
-    } else {
-      console.log(await response.json());
-    }
-  } catch (e) {
-    console.error(`Failed to wipe data - ${e}`);
-  }
-}
+// /**
+//  * Deletes all user data (expenses, budgets, recurring expenses).
+//  */
+// export async function handleWipeData(): Promise<void> {
+//   try {
+//     const response = await fetch("http://localhost:8080/api/wipeData", {
+//       method: "DELETE",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     if (!response.ok) {
+//       console.error(`HTTP error when wiping data - status: ${response.status}`);
+//     } else {
+//       console.log(await response.json());
+//     }
+//   } catch (e) {
+//     console.error(`Failed to wipe data - ${e}`);
+//   }
+// }
 
 // AUTH API CALL FUNCTIONS //
 
@@ -1272,9 +1241,11 @@ export async function handleUserRegistration(email: string, password: string): P
     });
 
     if (!response.ok) {
-      console.error(`HTTP error - status: ${response.status}`);
+      console.error(
+        `User with given email may already exist. HTTP error encountered when attempting user registration: ${response.status}`,
+      );
       console.log(await response.json());
-      window.alert("Registration failed - user may already exist.");
+      window.alert("Registration was unsuccessful. A user with this email may already exist.");
     } else {
       console.log("Successful registration.");
       console.log(await response.json());
@@ -1303,25 +1274,23 @@ export async function handleUserLogin(email: string, password: string): Promise<
       }),
     });
     if (response.status === 500) {
-      console.error(`HTTP error - status: ${response.status}`);
-      console.error("User not found.");
-      window.alert("User not found - please check your credentials.");
+      console.error(`Credentials may be incorrect. HTTP error encountered when attempting login: ${response.status}`);
+      window.alert("Please double-check your credentials.");
       return false;
     } else {
       if (response.status === 400) {
-        console.error(`HTTP error - status: ${response.status}`);
-        console.error("User already logged in.");
+        console.error(`User may already be logged in. HTTP error encountered when attempting login: ${response.status}`);
         window.location.href = "/app/budget";
         return true;
       } else {
-        console.log("Successful login.");
+        console.log("Login was successful.");
         console.log(response.json());
         window.location.href = "/app/budget";
         return true;
       }
     }
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error(`Exception encountered when requesting user login: ${e}`);
     return false;
   }
 }
@@ -1332,70 +1301,98 @@ export async function handleUserLogin(email: string, password: string): Promise<
 export async function logoutOnClick(): Promise<void> {
   try {
     sessionStorage.removeItem("email");
-    await fetch("http://localhost:8080/api/logout", {
+    const response = await fetch("http://localhost:8080/api/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ jwt: localStorage.getItem("jwt") }),
-    })
-      .then(() => (window.location.href = "/login"))
-      .catch((error) => console.error(error));
-  } catch {
-    console.error("Error: Logout failed");
-  }
-}
-
-/**
- * Checks if a user is currently logged in and handles session status accordingly.
- * Redirects to the login page if the session is expired or not found.
- */
-export async function checkForUser(): Promise<{ loggedIn: boolean }> {
-  try {
-    const response = await fetch("http://localhost:8080/api/checkForUser", {
-      method: "GET",
     });
-    if (response.status === 400) {
-      console.error("Failed to check for user status.");
-    } else if (response.status === 401) {
-      console.error("JWT token expiry detected. Logging out.");
-      window.alert("Login expired. Please login again.");
-      const userStatus = { loggedIn: false };
-      logoutOnClick().then(() => {
-        console.log(`window.location.href: ${window.location.href}`);
-        window.location.href !== "/login" && (window.location.href = "/login");
-      });
-      return userStatus;
+    if (!response.ok) {
+      console.error(`HTTP error encountered when attempting logout: ${response.status}`);
     }
-    const userStatus = await response.json();
-    console.log(userStatus);
-    return userStatus;
-  } catch (error) {
-    console.error("Error:", error);
-    return { loggedIn: false };
+    window.location.href = "/login";
+  } catch (e) {
+    console.error(`Exception encountered when requesting logout: ${e}`);
   }
 }
 
+// /**
+//  * Checks if a user is currently logged in and handles session status accordingly.
+//  * Redirects to the login page if the session is expired or not found.
+//  */
+// export async function checkForUser(): Promise<{ loggedIn: boolean }> {
+//   try {
+//     const response = await fetch("http://localhost:8080/api/checkForUser", {
+//       method: "GET",
+//     });
+//     if (response.status === 400) {
+//       console.error("Failed to check for user status.");
+//     } else if (response.status === 401) {
+//       console.error("JWT token expiry detected. Logging out.");
+//       window.alert("Login expired. Please login again.");
+//       const userStatus = { loggedIn: false };
+//       logoutOnClick().then(() => {
+//         console.log(`window.location.href: ${window.location.href}`);
+//         window.location.href !== "/login" && (window.location.href = "/login");
+//       });
+//       return userStatus;
+//     }
+//     const userStatus = await response.json();
+//     console.log(userStatus);
+//     return userStatus;
+//   } catch (error) {
+//     console.error("Error:", error);
+//     return { loggedIn: false };
+//   }
+// }
+//
+// /**
+//  * Retrieves the email address of the currently logged-in user.
+//  */
+// export async function getSessionEmail(): Promise<any> {
+//   try {
+//     const response = await fetch("http://localhost:8080/api/getUserEmailIfLoggedIn", {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     if (!response.ok) {
+//       console.error(`Email retrieval failed - no user logged in.: ${response.status}`);
+//     } else {
+//       const responseData = await response.json();
+//       console.log(responseData);
+//       return responseData.email;
+//     }
+//   } catch (error) {
+//     console.error(`Email retrieval api query failed: ${error}`);
+//     return null;
+//   }
+// }
+
 /**
- * Retrieves the email address of the currently logged-in user.
+ * Retrieves the email address of the active user, or null if no user is currently authenticated.
+ * @return - The active email, or null if there is no active user
  */
-export async function getSessionEmail(): Promise<any> {
+export async function getSessionEmailOrNull(): Promise<any> {
   try {
-    const response = await fetch("http://localhost:8080/api/getUserEmailIfLoggedIn", {
+    const response = await fetch("http://localhost:8080/api/getActiveUserEmailOrNull", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
     if (!response.ok) {
-      console.error(`Email retrieval failed - no user logged in.: ${response.status}`);
+      console.error(`HTTP error encountered when requesting session email: ${response.status}`);
     } else {
       const responseData = await response.json();
       console.log(responseData);
-      return responseData;
+      return responseData.email;
     }
-  } catch (error) {
-    console.error(`Email retrieval api query failed: ${error}`);
+  } catch (e) {
+    console.error(`Exception encountered when requesting session email: ${e}`);
+    return null;
   }
 }
 
@@ -1522,7 +1519,7 @@ export async function getPublicUserData(): Promise<any> {
         window.location.href !== "/login" && (window.location.href = "/login");
       });
     } else if (!response.ok) {
-      console.error(`HTTP error when getting public user data - ${response.status}`);
+      console.error(`HTTP error encountered when attempting public user data retrieval: ${response.status}`);
     } else {
       const publicUserData = await response.json();
       console.log("Public User Data:");
@@ -1530,7 +1527,7 @@ export async function getPublicUserData(): Promise<any> {
       return publicUserData;
     }
   } catch (e) {
-    console.error(`Failed to execute public data retrieval - ${e}`);
+    console.error(`Exception encountered when requesting public user data retrieval: ${e}`);
   }
 }
 
@@ -1538,7 +1535,7 @@ export async function getPublicUserData(): Promise<any> {
  * Updates public user data with the specified settings.
  * @param updatedPublicUserData - The updated public user data.
  */
-export async function handlePublicUserDataUpdating(updatedPublicUserData: PublicUserDataUpdate) {
+export async function handlePublicUserDataUpdating(updatedPublicUserData: PublicUserData) {
   try {
     const response = await fetch("http://localhost:8080/api/updatePublicUserData", {
       method: "PUT",
@@ -1553,14 +1550,14 @@ export async function handlePublicUserDataUpdating(updatedPublicUserData: Public
       }),
     });
     if (!response.ok) {
-      console.error(`HTTP error when updating public user data - ${response.status}`);
+      console.error(`HTTP error encountered when attempting public user data update: ${response.status}`);
     } else {
       const publicUserData = await response.json();
       console.log(publicUserData);
       return publicUserData;
     }
   } catch (e) {
-    console.error(`Failed to execute public user data update - ${e}`);
+    console.log(`Exception encountered when requesting public user data retrieval: ${e}`);
   }
 }
 
@@ -1619,6 +1616,7 @@ export const colourStyles = {
     ...styles,
     fontWeight: "bold",
     backgroundColor: "white",
+    maxHeight: "0.5rem",
   }),
   option: (styles: any, { data }: any) => {
     return {
@@ -2006,16 +2004,10 @@ export function getMonthsFromToday(month: number, year: number): number {
 /**
  * Creates the structured expense data using the data from the expense array.
  * @param expenseArray - The array of expense items.
- * @param setStructuredExpenseData - The state update function.
  * @returns The structured expense data.
  */
-export function getStructuredExpenseData(
-  expenseArray: ExpenseItemEntity[],
-  setStructuredExpenseData: (
-    value: ((prevState: MonthExpenseGroupEntity[]) => MonthExpenseGroupEntity[]) | MonthExpenseGroupEntity[],
-  ) => void,
-) {
-  setStructuredExpenseData(populateStructuredExpenseData(expenseArray, initialiseStructuredExpenseData()));
+export async function getStructuredExpenseData(expenseArray: ExpenseItemEntity[]) {
+  return populateStructuredExpenseData(expenseArray, initialiseStructuredExpenseData());
 }
 
 /**
@@ -2111,6 +2103,8 @@ export function getRecurringExpenseInstancesOrNull(
       new Date(expenseItem.timestamp).toLocaleDateString() === new Date(date).toLocaleDateString()
     );
   });
+  console.log(`Found the below instances of the recurring expense ID ${recurringExpenseId}`);
+  console.log(recurringExpenseInstances);
   return recurringExpenseInstances.length > 0 ? recurringExpenseInstances : null;
 }
 
@@ -2118,57 +2112,64 @@ export function getRecurringExpenseInstancesOrNull(
  * Updates the expenseArray's recurring expense instances, adding, removing or leaving instances as necessary.
  * @param recurringExpenseArray - The array of recurring expense items.
  * @param expenseArray - The array of expense items.
- * @param BlacklistedExpenseInstances - The array of blacklisted (removed) recurring expense instances.
- * @param setExpenseArray - The state update function for the expense array.
+ * @param blacklistedExpenseArray - The array of blacklisted (removed) recurring expense instances.
+ * @param expenseCreationMutation - The mutation for creating expenses.
+ * @param batchExpenseDeletionMutation - The mutation for deleting expenses.
  */
 export async function updateRecurringExpenseInstances(
   recurringExpenseArray: RecurringExpenseItemEntity[],
   expenseArray: ExpenseItemEntity[],
-  BlacklistedExpenseInstances: BlacklistedExpenseItemEntity[],
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
+  blacklistedExpenseArray: BlacklistedExpenseItemEntity[],
+  expenseCreationMutation: UseMutationResult,
+  batchExpenseDeletionMutation: UseMutationResult,
 ): Promise<void> {
   const misplacedExpensesToRemove = new Set<string>();
   recurringExpenseArray.forEach((recurringExpenseItem) => {
     processRecurringExpenseInstances(
       recurringExpenseItem,
       expenseArray,
-      setExpenseArray,
-      BlacklistedExpenseInstances,
+      blacklistedExpenseArray,
       misplacedExpensesToRemove,
+      expenseCreationMutation,
     );
   });
   if (misplacedExpensesToRemove.size !== 0) {
-    await handleBatchExpenseDeletion(misplacedExpensesToRemove);
+    // await handleBatchExpenseDeletion(misplacedExpensesToRemove);
+    batchExpenseDeletionMutation.mutate(Array.from(misplacedExpensesToRemove));
   }
-  setExpenseArray(await getExpenseList());
 }
 
 /**
  * Takes a recurring expense, checks dates from its creation to today, then performs creation and deletion on instances as needed.
  * @param recurringExpenseItem - The recurring expense of which instances are processed.
  * @param expenseArray - The array of expenses.
- * @param setExpenseArray - The state updating function for the array of expenses.
- * @param BlacklistedExpenseInstances - The array of blacklisted recurring expense instances (manually user-deleted).
+ * @param blacklistedExpenseInstances - The array of blacklisted recurring expense instances (manually user-deleted).
  * @param misplacedExpensesToRemove - The cumulative set of expense IDs to batch delete.
+ * @param expenseCreationMutation - The mutation for creating expenses.
  */
 function processRecurringExpenseInstances(
   recurringExpenseItem: RecurringExpenseItemEntity,
   expenseArray: ExpenseItemEntity[],
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
-  BlacklistedExpenseInstances: BlacklistedExpenseItemEntity[],
+  blacklistedExpenseInstances: BlacklistedExpenseItemEntity[],
   misplacedExpensesToRemove: Set<string>,
+  expenseCreationMutation: UseMutationResult,
 ): void {
   const today = new Date();
-  for (let date = new Date(recurringExpenseItem.timestamp); date <= today; date.setDate(date.getDate() + 1)) {
+  today.setDate(today.getDate() + 1);
+  today.setHours(0, 0, 0, 0);
+  let date = new Date(recurringExpenseItem.timestamp);
+
+  while (date < today) {
     console.log(`Looking at date: ${date.toLocaleDateString()}`);
+    console.log(`Looking at date: ${date}`);
     const expenseInstances = getRecurringExpenseInstancesOrNull(expenseArray, recurringExpenseItem.recurringExpenseId, date);
     const isFrequencyMatch = recurringExpenseLandsOnDay(
       recurringExpenseItem.timestamp,
       recurringExpenseItem.frequency,
       date,
     );
-    const expenseInstanceIsBlacklisted = BlacklistedExpenseInstances
-      ? matchingBlacklistEntryFound(BlacklistedExpenseInstances, recurringExpenseItem, date)
+    const expenseInstanceIsBlacklisted = blacklistedExpenseInstances
+      ? matchingBlacklistEntryFound(blacklistedExpenseInstances, recurringExpenseItem, date)
       : false;
     // If recurring instance already exists on a day,
     if (expenseInstances != null) {
@@ -2193,9 +2194,14 @@ function processRecurringExpenseInstances(
           timestamp: date,
           recurringExpenseId: recurringExpenseItem.recurringExpenseId,
         };
-        handleExpenseCreation(newExpenseItemLanded, setExpenseArray);
+        // handleExpenseCreation(newExpenseItemLanded);
+        expenseCreationMutation.mutate({
+          ...newExpenseItemLanded,
+          timestamp: new Date(newExpenseItemLanded.timestamp.getTime()),
+        });
       }
     }
+    date.setDate(date.getDate() + 1);
   }
 }
 
@@ -2243,13 +2249,19 @@ export async function getRecurringExpenseInstancesAfterDate(
   expenseArray: ExpenseItemEntity[],
   startingFrom: Date,
 ): Promise<ExpenseItemEntity[]> {
+  console.log(`We're checking from ${startingFrom} onwards.`);
   const requestedExpenseList = new Set<ExpenseItemEntity>();
   for (const expenseItem of expenseArray) {
     if (
       expenseItem.recurringExpenseId === recurringExpenseId &&
-      new Date(expenseItem.timestamp).getTime() > new Date(startingFrom).getTime()
+      new Date(expenseItem.timestamp).getTime() >= new Date(startingFrom).getTime()
     ) {
+      console.log(`Expense instance on ${expenseItem.timestamp} is on or after that start date - deleting.`);
       requestedExpenseList.add(expenseItem);
+    } else {
+      console.log(
+        `Expense instance on ${expenseItem.timestamp} is NOT on or after that start date - doesn't meet deletion criteria.`,
+      );
     }
   }
   return Array.from(requestedExpenseList);

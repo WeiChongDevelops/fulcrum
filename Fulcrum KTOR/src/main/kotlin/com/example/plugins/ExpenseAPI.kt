@@ -1,11 +1,11 @@
 package com.example.plugins
 
+import com.example.*
 import com.example.SupabaseClient.supabase
 import com.example.entities.expense.*
 import com.example.entities.recurringExpense.*
 import com.example.entities.successFeedback.ErrorResponseSent
 import com.example.entities.successFeedback.SuccessResponseSent
-import com.example.respondAuthError
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
 import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.postgrest.postgrest
@@ -20,18 +20,6 @@ import kotlinx.datetime.Instant
 import java.lang.IllegalStateException
 
 fun Application.configureExpenseRouting() {
-
-    suspend fun getActiveUserId(): String {
-        return supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id
-    }
-
-    suspend fun ApplicationCall.respondSuccess(message: String) {
-        respond(HttpStatusCode.OK, SuccessResponseSent(message))
-    }
-
-    suspend fun ApplicationCall.respondError(message: String) {
-        respond(HttpStatusCode.BadRequest, ErrorResponseSent(message))
-    }
 
     routing {
 
@@ -54,23 +42,23 @@ fun Application.configureExpenseRouting() {
                 )
 
                 if (insertedItem.body == null) {
-                    call.respondError("Expense not added.")
+                    call.respondError("Expense creation failed.")
                 } else {
-                    call.respondSuccess("Expense added successfully.")
+                    call.respondSuccess("Expense creation successful.")
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while creating expense", e)
-                call.respondError("Expense not added.")
+                call.respondError("Error while creating expense: $e")
             }
         }
 
         get("/api/getExpenses") {
             try {
-                val expenseList = supabase.postgrest["expenses"].select(columns = Columns.list("expenseId, amount, timestamp, category, recurringExpenseId")) {
+                val expenseList = supabase.postgrest["expenses"].select(
+                    columns = Columns.list("expenseId, amount, timestamp, category, recurringExpenseId")
+                ) {
                     eq("userId", getActiveUserId())
-                }
-                    .decodeList<ExpenseItemResponse>()
-
+                }.decodeList<ExpenseItemResponse>()
                 call.respond(HttpStatusCode.OK, expenseList)
             } catch (e: UnauthorizedRestException) {
                 call.respondAuthError("Not authorised - JWT token likely expired.")
@@ -78,13 +66,15 @@ fun Application.configureExpenseRouting() {
                 call.respondAuthError("Session not found.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading expenses", e)
-                call.respondError("Expenses not read.")
+                call.respondError("Error while reading expenses: $e.")
             }
         }
 
         put("/api/updateExpense") {
             try {
                 val expenseUpdateRequest = call.receive<ExpenseUpdateRequestReceived>()
+
+                println("Received: ${expenseUpdateRequest.amount}")
 
                 val updatedItem = supabase.postgrest["expenses"].update(
                     {
@@ -99,13 +89,13 @@ fun Application.configureExpenseRouting() {
                 }
 
                 if (updatedItem.body == null) {
-                    call.respondError("Expense not updated")
+                    call.respondError("Expense updating failed")
                 } else {
-                    call.respondSuccess("Expense updated.")
+                    call.respondSuccess("Expense updating successful.")
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while updating expense", e)
-                call.respondError("Expense not updated.")
+                call.respondError("Error while updating expense: $e")
             }
         }
 
@@ -135,22 +125,18 @@ fun Application.configureExpenseRouting() {
 //            }
 //        }
 
+
         delete("/api/deleteExpense") {
             try {
                 val expenseDeleteRequest = call.receive<ExpenseDeleteRequestReceived>()
-                val deletedExpense = supabase.postgrest["expenses"].delete {
-                    eq("expenseId", expenseDeleteRequest.expenseId)
-                    eq("userId", getActiveUserId())
-                }
-
-                if (deletedExpense.body == null) {
-                    call.respondError("Expense not deleted.")
+                if (executeExpenseDeletion(expenseDeleteRequest.expenseId, call)) {
+                    call.respondSuccess("Expense was already deleted.")
                 } else {
-                    call.respondSuccess("Expense deleted successfully.")
+                    call.respondSuccess("Expense deletion successful.")
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while deleting expense", e)
-                call.respondError("Expense not deleted.")
+                call.respondError("Error while deleting expense: $e")
             }
         }
 
@@ -158,18 +144,12 @@ fun Application.configureExpenseRouting() {
             try {
                 val batchExpenseDeleteRequest = call.receive<BatchExpenseDeleteRequestReceived>()
                 for (expenseId in batchExpenseDeleteRequest.expenseIdsToDelete) {
-                    val deletedExpense = supabase.postgrest["expenses"].delete {
-                        eq("expenseId", expenseId)
-                        eq("userId", getActiveUserId())
-                    }
-                    if (deletedExpense.body == null) {
-                        call.respondError("A batched expense deletion failed.")
-                    } else {
-                        call.respondSuccess("A batched expense deletion succeeded.")
-                    }
+                    executeExpenseDeletion(expenseId, call)
                 }
+                call.respondSuccess("Batch expense deletion succeeded.")
             } catch (e: Exception) {
-                call.respondError("Batch expense deletion unsuccessful.")
+                call.application.log.error("Error while batch deleting expenses.")
+                call.respondError("Error while batch deleting expenses: $e")
             }
         }
 
@@ -193,22 +173,23 @@ fun Application.configureExpenseRouting() {
                 )
 
                 if (insertedItem.body == null) {
-                    call.respondError("Recurring expense not added.")
+                    call.respondError("Recurring expense creation failed.")
                 } else {
-                    call.respondSuccess("Recurring expense added successfully.")
+                    call.respondSuccess("Recurring expense creation successful.")
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while creating recurring expense", e)
-                call.respondError("Recurring expense not added.")
+                call.respondError("Error while creating recurring expense: $e")
             }
         }
 
         get("/api/getRecurringExpenses") {
             try {
-                val recurringExpenseList = supabase.postgrest["recurring_expenses"].select(columns = Columns.list("recurringExpenseId, category, amount, timestamp, frequency")) {
+                val recurringExpenseList = supabase.postgrest["recurring_expenses"].select(
+                    columns = Columns.list("recurringExpenseId, category, amount, timestamp, frequency")
+                ) {
                     eq("userId", getActiveUserId())
-                }
-                    .decodeList<RecurringExpenseItemResponse>()
+                }.decodeList<RecurringExpenseItemResponse>()
 
                 call.respond(HttpStatusCode.OK, recurringExpenseList)
             } catch (e: UnauthorizedRestException) {
@@ -217,7 +198,7 @@ fun Application.configureExpenseRouting() {
                 call.respondAuthError("Session not found.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading recurring expenses", e)
-                call.respondError("Recurring expenses not read.")
+                call.respondError("Error while reading recurring expenses: $e")
             }
         }
 
@@ -238,12 +219,13 @@ fun Application.configureExpenseRouting() {
                 }
 
                 if (updatedItem.body == null) {
-                    call.respondError("Recurring expense not updated")
+                    call.respondError("Recurring expense update failed.")
                 } else {
-                    call.respondSuccess("Recurring expense updated.")
+                    call.respondSuccess("Recurring expense update successful.")
                 }
             } catch (e: Exception) {
-                call.respondError("Recurring expense not updated.")
+                call.application.log.error("Error while updating recurring expense", e)
+                call.respondError("Error while updating recurring expense: $e")
             }
         }
 
@@ -256,43 +238,13 @@ fun Application.configureExpenseRouting() {
                 }
 
                 if (deletedExpense.body == null) {
-                    call.respondError("Recurring expense not deleted.")
+                    call.respondError("Recurring expense deletion failed.")
                 } else {
-                    call.respondSuccess("Recurring expense deleted successfully.")
+                    call.respondSuccess("Recurring expense deletion successful.")
                 }
             } catch (e: Exception) {
-                call.respondError("Recurring expense not deleted.")
-            }
-        }
-
-        suspend fun checkIfBlacklistedExpenseExists(recurringExpenseId: String, timestampOfRemovedInstance: Instant): Boolean {
-            val response = supabase.postgrest["removed_recurring_expenses"].select(columns = Columns.list("recurringExpenseId", "timestampOfRemovedInstance")) {
-                eq("userId", getActiveUserId())
-                eq("recurringExpenseId", recurringExpenseId)
-                eq("timestampOfRemovedInstance", timestampOfRemovedInstance)
-            }.decodeList<BlacklistedExpenseItemResponse>()
-            return response.isNotEmpty();
-        }
-
-        suspend fun executeBlacklistedExpenseCreation(recurringExpenseId: String, timestampOfRemovedInstance: Instant, call: ApplicationCall) {
-            if (!checkIfBlacklistedExpenseExists(recurringExpenseId, timestampOfRemovedInstance)) {
-                val itemToInsert = BlacklistedExpenseCreateRequestSent (
-                    recurringExpenseId = recurringExpenseId,
-                    timestampOfRemovedInstance = timestampOfRemovedInstance
-                )
-
-                val insertedItem = supabase.postgrest["removed_recurring_expenses"].insert(
-                    itemToInsert,
-                    returning = Returning.REPRESENTATION
-                )
-
-                if (insertedItem.body == null) {
-                    call.respondError("Removed recurring expense instance not added.")
-                } else {
-                    call.respondSuccess("Removed recurring expense instance added successfully.")
-                }
-            } else {
-                call.respondSuccess("Entry already exists.")
+                call.application.log.error("Error while deleting recurring expense", e)
+                call.respondError("Error while deleting recurring expense: $e")
             }
         }
 
@@ -300,9 +252,14 @@ fun Application.configureExpenseRouting() {
             try {
                 val blacklistedExpenseRequest = call.receive<BlacklistedExpenseCreateRequestReceived>()
 
-                executeBlacklistedExpenseCreation(blacklistedExpenseRequest.recurringExpenseId,
-                    blacklistedExpenseRequest.timestampOfRemovedInstance,
-                    call)
+                if (executeBlacklistedExpenseCreation(
+                        blacklistedExpenseRequest.recurringExpenseId,
+                        blacklistedExpenseRequest.timestampOfRemovedInstance,
+                        call
+                    )
+                ) {
+                    call.respondSuccess("Blacklist entry already exists.")
+                }
 
 //                val recurringExpenseId = blacklistedExpenseRequest.recurringExpenseId
 //                val timestampOfRemovedInstance = blacklistedExpenseRequest.timestampOfRemovedInstance
@@ -337,20 +294,29 @@ fun Application.configureExpenseRouting() {
             try {
                 val batchCreateBlacklistedExpenseRequest = call.receive<BatchCreateBlacklistedExpenseRequestReceived>()
 
-                for ( timestamp in batchCreateBlacklistedExpenseRequest.timestampsToBlacklist) {
-                    executeBlacklistedExpenseCreation(batchCreateBlacklistedExpenseRequest.recurringExpenseId,
+                for (timestamp in batchCreateBlacklistedExpenseRequest.timestampsToBlacklist) {
+                    executeBlacklistedExpenseCreation(
+                        batchCreateBlacklistedExpenseRequest.recurringExpenseId,
                         timestamp,
-                        call)
+                        call
+                    )
                 }
+                call.respondSuccess("Batch blacklist entry creation successful.")
             } catch (e: Exception) {
-                call.respondError("Error while batch blacklisting.")
+                call.application.log.error("Error while batch creating blacklist entries.", e)
+                call.respondError("Error while batch creating blacklist entries: $e")
             }
         }
 
         get("/api/getBlacklistedExpenses") {
             try {
                 val userId = getActiveUserId()
-                val blacklistedExpensesList = supabase.postgrest["removed_recurring_expenses"].select(columns = Columns.list("recurringExpenseId", "timestampOfRemovedInstance")) {
+                val blacklistedExpensesList = supabase.postgrest["removed_recurring_expenses"].select(
+                    columns = Columns.list(
+                        "recurringExpenseId",
+                        "timestampOfRemovedInstance"
+                    )
+                ) {
                     eq("userId", userId)
                 }.decodeList<BlacklistedExpenseItemResponse>()
 
@@ -359,7 +325,7 @@ fun Application.configureExpenseRouting() {
                 call.respondAuthError("Not authorised - JWT token likely expired.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading removed recurring expenses", e)
-                call.respondError("Removed recurring expenses not read.")
+                call.respondError("Error while reading removed recurring expenses: $e")
             }
         }
     }

@@ -7,7 +7,6 @@ import {
   OpenToolsSection,
   PublicUserData,
   RecurringExpenseItemEntity,
-  BlacklistedExpenseItemEntity,
 } from "../../../../util.ts";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
@@ -26,15 +25,9 @@ interface RecurringExpensesProps {
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
 
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-
   recurringExpenseArray: RecurringExpenseItemEntity[];
-  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
-  setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
 }
 
 /**
@@ -46,12 +39,8 @@ export default function RecurringExpenses({
   expenseArray,
   budgetArray,
   groupArray,
-  setExpenseArray,
-  setBudgetArray,
   categoryDataMap,
-  setBlacklistedExpenseArray,
   recurringExpenseArray,
-  setRecurringExpenseArray,
 }: RecurringExpensesProps) {
   const {
     recurringExpenseModalVisibility,
@@ -143,16 +132,12 @@ export default function RecurringExpenses({
           <RecurringExpenseModalsAndForms
             recurringExpenseModalVisibility={recurringExpenseModalVisibility}
             recurringExpenseFormVisibility={recurringExpenseFormVisibility}
-            setRecurringExpenseArray={setRecurringExpenseArray}
-            setBudgetArray={setBudgetArray}
-            setBlacklistedExpenseArray={setBlacklistedExpenseArray}
             expenseArray={expenseArray}
             groupArray={groupArray}
             setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
             setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
             recurringExpenseIdToDelete={recurringExpenseIdToDelete}
             publicUserData={publicUserData}
-            setExpenseArray={setExpenseArray}
             budgetArray={budgetArray}
             oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
           />

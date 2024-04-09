@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
 import {
   BlacklistedExpenseItemEntity,
   BudgetItemEntity,
@@ -11,7 +10,7 @@ import {
   getGroupList,
   getPublicUserData,
   getRecurringExpenseList,
-  getWindowLocation,
+  getSessionEmailOrNull,
   GroupItemEntity,
   PublicUserData,
   RecurringExpenseItemEntity,
@@ -19,33 +18,19 @@ import {
 import { useQueries, useQuery, UseQueryResult } from "@tanstack/react-query";
 
 export function useGlobalAppData() {
-  const sessionStoredProfileIcon = sessionStorage.getItem("profileIconFileName");
-  const sessionStoredDarkMode = sessionStorage.getItem("darkModeEnabled");
-  const sessionStoredAccessibilityMode = sessionStorage.getItem("accessibilityEnabled");
-  const sessionStoredEmail = sessionStorage.getItem("email");
-
-  const [email, setEmail] = useState(sessionStoredEmail ? sessionStoredEmail : "");
-  const [publicUserData, setPublicUserData] = useState<PublicUserData>({
-    createdAt: new Date(),
-    currency: "AUD",
-    darkModeEnabled: sessionStoredDarkMode ? sessionStoredDarkMode === "true" : false,
-    accessibilityEnabled: sessionStoredAccessibilityMode ? sessionStoredAccessibilityMode === "true" : false,
-    profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "profile-icon-default.svg",
-  });
-  const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
-  const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
-  const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
-  const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
-  const [blacklistedExpenseArray, setBlacklistedExpenseArray] = useState<BlacklistedExpenseItemEntity[]>([]);
-  const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
-
-  useEffect(() => {
-    if (publicUserData) {
-      sessionStorage.setItem("profileIconFileName", publicUserData.profileIconFileName);
-      sessionStorage.setItem("darkModeEnabled", publicUserData.darkModeEnabled.toString());
-      sessionStorage.setItem("accessibilityEnabled", publicUserData.accessibilityEnabled.toString());
-    }
-  }, [publicUserData]);
+  // const [publicUserData, setPublicUserData] = useState<PublicUserData>({
+  //   createdAt: new Date(),
+  //   currency: "AUD",
+  //   darkModeEnabled: sessionStoredDarkMode ? sessionStoredDarkMode === "true" : false,
+  //   accessibilityEnabled: sessionStoredAccessibilityMode ? sessionStoredAccessibilityMode === "true" : false,
+  //   profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "profile-icon-default.svg",
+  // });
+  // const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
+  // const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
+  // const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
+  // const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
+  // const [blacklistedExpenseArray, setBlacklistedExpenseArray] = useState<BlacklistedExpenseItemEntity[]>([]);
+  // const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
 
   // async function retrieveGlobalAppData() {
   //   const [
@@ -77,6 +62,20 @@ export function useGlobalAppData() {
   //   };
   // }
 
+  const sessionStoredProfileIcon = sessionStorage.getItem("profileIconFileName");
+  const sessionStoredDarkMode = sessionStorage.getItem("darkModeEnabled");
+  const sessionStoredAccessibilityMode = sessionStorage.getItem("accessibilityEnabled");
+  const sessionStoredEmail = sessionStorage.getItem("email");
+
+  const emailQuery = useQuery({
+    queryKey: ["activeEmail"],
+    initialData: !!sessionStoredEmail ? sessionStoredEmail : null,
+    queryFn: getSessionEmailOrNull,
+    enabled: window.location.href.split("/").includes("app"),
+  });
+
+  const email = emailQuery.data;
+
   const retrievalConditions = !!email && window.location.href.split("/").includes("app");
 
   const globalAppDataQueries: UseQueryResult[] = useQueries({
@@ -86,7 +85,18 @@ export function useGlobalAppData() {
       { queryKey: ["expenseArray", email], queryFn: getExpenseList, enabled: retrievalConditions },
       { queryKey: ["recurringExpenseArray", email], queryFn: getRecurringExpenseList, enabled: retrievalConditions },
       { queryKey: ["blacklistedExpenseArray", email], queryFn: getBlacklistedExpenses, enabled: retrievalConditions },
-      { queryKey: ["publicUserData", email], queryFn: getPublicUserData, enabled: retrievalConditions },
+      {
+        queryKey: ["publicUserData", email],
+        queryFn: getPublicUserData,
+        enabled: retrievalConditions,
+        initialData: {
+          createdAt: new Date(),
+          currency: "AUD",
+          profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "",
+          darkModeEnabled: sessionStoredDarkMode ? sessionStoredDarkMode : false,
+          accessibilityEnabled: sessionStoredAccessibilityMode ? sessionStoredAccessibilityMode : false,
+        },
+      },
     ],
   });
 
@@ -99,7 +109,14 @@ export function useGlobalAppData() {
     publicUserDataQuery,
   ] = globalAppDataQueries;
 
-  const groupAndColourMapQuery = useQuery({
+  if (!!publicUserDataQuery.data) {
+    const publicUserData = publicUserDataQuery.data as PublicUserData;
+    sessionStorage.setItem("profileIconFileName", publicUserData.profileIconFileName);
+    sessionStorage.setItem("darkModeEnabled", publicUserData.darkModeEnabled.toString());
+    sessionStorage.setItem("accessibilityEnabled", publicUserData.accessibilityEnabled.toString());
+  }
+
+  const categoryDataMapQuery = useQuery({
     queryKey: ["groupAndColourMap", email],
     queryFn: () =>
       getGroupAndColourMap(
@@ -125,45 +142,36 @@ export function useGlobalAppData() {
   // });
 
   const isAnyLoading =
-    globalAppDataQueries.some((query: UseQueryResult) => query.isLoading) || groupAndColourMapQuery.isLoading;
-  const isAnyError = globalAppDataQueries.some((query: UseQueryResult) => query.isError) || groupAndColourMapQuery.isError;
-  const isAllSuccess =
-    globalAppDataQueries.every((query: UseQueryResult) => query.isSuccess) && groupAndColourMapQuery.isSuccess;
+    globalAppDataQueries.some((query: UseQueryResult) => query.isLoading) || categoryDataMapQuery.isLoading;
+  const isAnyError = globalAppDataQueries.some((query: UseQueryResult) => query.isError) || categoryDataMapQuery.isError;
+  // const isAllSuccess =
+  //   globalAppDataQueries.every((query: UseQueryResult) => query.isSuccess) && groupAndColourMapQuery.isSuccess;
   const errors = globalAppDataQueries
     .map((query: UseQueryResult) => query.error)
     .filter((error) => error !== null) as Error[];
 
   // THIS USE EFFECT IS TEMPORARY - NO STATE SETTING NEEDED WITH REACT QUERY AFTER RQ IS IMPLEMENTED.
-  useEffect(() => {
-    if (isAllSuccess) {
-      setPublicUserData(publicUserDataQuery.data! as PublicUserData);
-      setExpenseArray(expenseArrayQuery.data! as ExpenseItemEntity[]);
-      setBudgetArray(budgetArrayQuery.data! as BudgetItemEntity[]);
-      setGroupArray(groupArrayQuery.data! as GroupItemEntity[]);
-      setRecurringExpenseArray(recurringExpenseArrayQuery.data! as RecurringExpenseItemEntity[]);
-      setBlacklistedExpenseArray(blacklistedExpenseArrayQuery.data! as BlacklistedExpenseItemEntity[]);
-      setCategoryDataMap(groupAndColourMapQuery.data! as CategoryToIconGroupAndColourMap);
-    }
-  }, [globalAppDataQueries]);
+  // useEffect(() => {
+  //   if (isAllSuccess) {
+  //     setPublicUserData(publicUserDataQuery.data! as PublicUserData);
+  //     setExpenseArray(expenseArrayQuery.data! as ExpenseItemEntity[]);
+  //     setBudgetArray(budgetArrayQuery.data! as BudgetItemEntity[]);
+  //     setGroupArray(groupArrayQuery.data! as GroupItemEntity[]);
+  //     setRecurringExpenseArray(recurringExpenseArrayQuery.data! as RecurringExpenseItemEntity[]);
+  //     setBlacklistedExpenseArray(blacklistedExpenseArrayQuery.data! as BlacklistedExpenseItemEntity[]);
+  //     setCategoryDataMap(groupAndColourMapQuery.data! as CategoryToIconGroupAndColourMap);
+  //   }
+  // }, [globalAppDataQueries]);
 
   return {
-    publicUserData,
-    setPublicUserData,
-    expenseArray,
-    expenseArrayQuery,
-    setExpenseArray,
-    budgetArray,
-    budgetArrayQuery,
-    setBudgetArray,
-    groupArray,
-    setGroupArray,
-    recurringExpenseArray,
-    setRecurringExpenseArray,
-    blacklistedExpenseArray,
-    setBlacklistedExpenseArray,
     email,
-    setEmail,
-    categoryDataMap,
+    budgetArray: budgetArrayQuery.data as BudgetItemEntity[],
+    groupArray: groupArrayQuery.data as GroupItemEntity[],
+    expenseArray: expenseArrayQuery.data as ExpenseItemEntity[],
+    recurringExpenseArray: recurringExpenseArrayQuery.data as RecurringExpenseItemEntity[],
+    blacklistedExpenseArray: blacklistedExpenseArrayQuery.data as BlacklistedExpenseItemEntity[],
+    publicUserData: publicUserDataQuery.data as PublicUserData,
+    categoryDataMap: categoryDataMapQuery.data as CategoryToIconGroupAndColourMap,
     isAnyLoading,
     isAnyError,
     errors,

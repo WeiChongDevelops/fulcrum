@@ -40,78 +40,105 @@ fun Application.configureBudgetRouting() {
                 )
 
                 if (insertedItem.body == null) {
-                    call.respondError("Budget not added.")
+                    call.respondError("Budget creation failed.")
                 } else {
-                    call.respondSuccess("Budget added successfully.")
+                    call.respondSuccess("Budget creation successful.")
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while creating budget", e)
-                call.respondError("Budget not added.")
+                call.respondError("Error while creating budget: $e")
             }
         }
 
         get("/api/getBudget") {
             try {
-                val budgetList = supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp")) {
-                    eq("userId", getActiveUserId())
-                }
-                    .decodeList<BudgetItemResponse>()
+                val budgetList =
+                    supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp")) {
+                        eq("userId", getActiveUserId())
+                    }
+                        .decodeList<BudgetItemResponse>()
                 call.respond(HttpStatusCode.OK, budgetList)
             } catch (e: UnauthorizedRestException) {
-                call.respondAuthError("Not authorised - JWT token likely expired.")
+                call.application.log.error("Not authorised - JWT token likely expired.", e)
+                call.respondAuthError("Not authorised - JWT token likely expired: $e")
             } catch (e: IllegalStateException) {
-                call.respondAuthError("Session not found.")
+                call.application.log.error("Session not found.", e)
+                call.respondAuthError("Session not found: $e")
             } catch (e: Exception) {
-                call.application.log.error("Error while reading budget", e)
-                call.respondError("Budget not read.")
+                call.application.log.error("Error while reading budget.", e)
+                call.respondError("Error while reading budget: $e")
             }
         }
 
         put("/api/updateBudget") {
+//            try {
+//                val budgetUpdateRequest = call.receive<BudgetUpdateRequestReceived>()
+//
+//                val categoryToChange = budgetUpdateRequest.category
+//
+//                val updatedItemNoIconOrGroup = supabase.postgrest["budgets"].update(
+//                    {
+//                        set("amount", budgetUpdateRequest.amount)
+//                        set("category", budgetUpdateRequest.newCategoryName)
+//                    }
+//                ) {
+//                    eq("category", categoryToChange)
+//                    eq("userId", getActiveUserId())
+//                }
+//
+//                if (updatedItemNoIconOrGroup.body == null) {
+//                    call.respondError("Budget not updated")
+//                } else {
+//                    if (budgetUpdateRequest.iconPath != "") {
+//                        val updatedItemIconOnly = supabase.postgrest["budgets"].update(
+//                            {
+//                                set("iconPath", budgetUpdateRequest.iconPath)
+//                            }
+//                        ) {
+//                            eq("category", budgetUpdateRequest.newCategoryName)
+//                            eq("userId", getActiveUserId())
+//                        }
+//                    }
+//                    if (budgetUpdateRequest.group != "") {
+//                        val updatedItemGroupOnly = supabase.postgrest["budgets"].update(
+//                            {
+//                                set("group", budgetUpdateRequest.group)
+//                            }
+//                        ) {
+//                            eq("category", budgetUpdateRequest.newCategoryName)
+//                            eq("userId", getActiveUserId())
+//                        }
+//                    }
+//                    call.respondSuccess("Budget successfully updated.")
+//                }
+//            } catch (e: Exception) {
+//                call.application.log.error("Error while updating budget", e)
+//                call.respondError("Budget not updated.")
+//            }
             try {
                 val budgetUpdateRequest = call.receive<BudgetUpdateRequestReceived>()
-
                 val categoryToChange = budgetUpdateRequest.category
 
-                val updatedItemNoIconOrGroup = supabase.postgrest["budgets"].update(
+                val updatedBudgetItem = supabase.postgrest["budgets"].update(
                     {
-                        set("amount", budgetUpdateRequest.amount)
                         set("category", budgetUpdateRequest.newCategoryName)
+                        set("amount", budgetUpdateRequest.amount)
+                        set("group", budgetUpdateRequest.group)
+                        set("iconPath", budgetUpdateRequest.iconPath)
                     }
                 ) {
                     eq("category", categoryToChange)
                     eq("userId", getActiveUserId())
                 }
 
-                if (updatedItemNoIconOrGroup.body == null) {
-                    call.respondError("Budget not updated")
+                if (updatedBudgetItem.body == null) {
+                    call.respondError("Budget update failed.")
                 } else {
-                    if (budgetUpdateRequest.iconPath != "") {
-                        val updatedItemIconOnly = supabase.postgrest["budgets"].update(
-                            {
-                                set("iconPath", budgetUpdateRequest.iconPath)
-                            }
-                        ) {
-                            eq("category", budgetUpdateRequest.newCategoryName)
-                            eq("userId", getActiveUserId())
-                        }
-                        call.respondSuccess("Budget updated.")
-                    }
-                    if (budgetUpdateRequest.group != "") {
-                        val updatedItemGroupOnly = supabase.postgrest["budgets"].update(
-                            {
-                                set("group", budgetUpdateRequest.group)
-                            }
-                        ) {
-                            eq("category", budgetUpdateRequest.newCategoryName)
-                            eq("userId", getActiveUserId())
-                        }
-                        call.respondSuccess("Budget updated.")
-                    }
+                    call.respondSuccess("Budget update successful.")
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while updating budget", e)
-                call.respondError("Budget not updated.")
+                call.respondError("Error while updating budget: $e")
             }
         }
 
@@ -124,13 +151,13 @@ fun Application.configureBudgetRouting() {
                 }
 
                 if (deletedBudget.body == null) {
-                    call.respondError("Budget not deleted.")
+                    call.respondError("Budget deletion failed.")
                 } else {
-                    call.respondSuccess("Budget successfully deleted.")
+                    call.respondSuccess("Budget deletion successful.")
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while deleting budget", e)
-                call.respondError("Budget not deleted.")
+                call.respondError("Error while deleting budget: $e")
             }
         }
 
@@ -148,22 +175,27 @@ fun Application.configureBudgetRouting() {
                 call.respondAuthError("Session not found.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading total income", e)
-                call.respondError("Failed to retrieve total income.")
+                call.respondError("Error while reading total income: $e.")
             }
         }
 
         put("/api/updateTotalIncome") {
             val incomeUpdateRequest = call.receive<TotalIncomeUpdateRequestReceived>()
             try {
-                val incomeUpdateRequestSent = supabase.postgrest["total_income"].update ({
+                val incomeUpdateRequestSent = supabase.postgrest["total_income"].update({
                     set("totalIncome", incomeUpdateRequest.totalIncome)
                 }
-                ){
+                ) {
                     eq("userId", getActiveUserId())
                 }
-                call.respondSuccess("Updated total income to " + incomeUpdateRequest.totalIncome.toString())
+
+                if (incomeUpdateRequestSent.body == null) {
+                    call.respondError("Total income update failed.")
+                }
+                call.respondSuccess("Successfully updated total income to " + incomeUpdateRequest.totalIncome.toString())
             } catch (e: Exception) {
-                call.respondError("Failed to update total income.")
+                call.application.log.error("Error while updating total income", e)
+                call.respondError("Error while updating total income: $e")
             }
         }
 
@@ -184,22 +216,22 @@ fun Application.configureBudgetRouting() {
                 )
 
                 if (insertedItem.body == null) {
-                    call.respondError("Group not added.")
+                    call.respondError("Group creation failed.")
                 } else {
-                    call.respondSuccess("Group added successfully.")
+                    call.respondSuccess("Group creation successful.")
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while creating group", e)
-                call.respondError("Group not added.")
+                call.respondError("Error while creating group: $e")
             }
         }
 
         get("/api/getGroups") {
             try {
-                val groupList = supabase.postgrest["groups"].select(columns = Columns.list("group, colour, dateCreated")) {
-                    eq("userId", getActiveUserId())
-                }
-                    .decodeList<GroupItemResponse>()
+                val groupList =
+                    supabase.postgrest["groups"].select(columns = Columns.list("group, colour, dateCreated")) {
+                        eq("userId", getActiveUserId())
+                    }.decodeList<GroupItemResponse>()
                 call.respond(HttpStatusCode.OK, groupList)
             } catch (e: UnauthorizedRestException) {
                 call.respondAuthError("Not authorised - JWT token likely expired.")
@@ -207,7 +239,7 @@ fun Application.configureBudgetRouting() {
                 call.respondAuthError("Session not found.")
             } catch (e: Exception) {
                 call.application.log.error("Error while reading group list", e)
-                call.respondError("Group list not read.")
+                call.respondError("Error while reading group list: $e.")
             }
         }
 
@@ -215,9 +247,6 @@ fun Application.configureBudgetRouting() {
             try {
                 val groupUpdateRequest = call.receive<GroupUpdateRequestReceived>()
 
-                if (groupUpdateRequest.newGroupName == groupUpdateRequest.originalGroupName) {
-                    call.respondSuccess("Group name unchanged.")
-                }
                 val updatedGroupName = supabase.postgrest["groups"].update(
                     {
                         set("colour", groupUpdateRequest.newColour)
@@ -229,22 +258,19 @@ fun Application.configureBudgetRouting() {
                 }
 
                 if (updatedGroupName.body == null) {
-                    call.respondError("Group not updated.")
+                    call.respondError("Group update failed.")
                 } else {
-                    call.respondSuccess("Group updated successfully.")
+                    call.respondSuccess("Group update successful.")
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 call.application.log.error("Error while updating group.", e)
-                call.respondError("Group not updated.")
+                call.respondError("Error while updating group: $e.")
             }
         }
 
         delete("/api/deleteGroup") {
             val groupDeleteRequest = call.receive<GroupDeleteRequestReceived>()
-            // First we reassign any groups with this name to miscellaneous. If we want to have an alternate behaviour, that data needs to be included in the above entity, chosen in react and sent to ktor API as part of body.
-            // Actually, if this block below runs and renames groups, the cascade behaviour would make no difference - there would be nothing to cascade deletes to.
-            // So if the property of the request 'moveCategoriesToMisc' is true, we run this.
-            // Now, in React, we need a way for the user to pick between two options.
+
             if (groupDeleteRequest.keepContainedBudgets) {
                 try {
                     supabase.postgrest["budgets"].update(
@@ -257,11 +283,10 @@ fun Application.configureBudgetRouting() {
                     }
                 } catch (e: Exception) {
                     call.application.log.error("Error while reassigning budgets to Misc", e)
-                    call.respondError("Group deletion failed at reassignment.")
+                    call.respondError("Group deletion failed at reassignment: $e")
                 }
             }
 
-            // Then we delete the group from the groups table
             try {
                 val deletedGroup = supabase.postgrest["groups"].delete {
                     eq("group", groupDeleteRequest.group)
@@ -269,13 +294,13 @@ fun Application.configureBudgetRouting() {
                 }
 
                 if (deletedGroup.body == null) {
-                    call.respondError("Group not deleted.")
+                    call.respondError("Group deletion failed.")
                 } else {
-                    call.respondSuccess("Group deleted successfully.")
+                    call.respondSuccess("Group deletion successful.")
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while deleting group", e)
-                call.respondError("Group not deleted.")
+                call.respondError("Error while deleting group: $e")
             }
         }
     }

@@ -13,29 +13,20 @@ import Home from "../child/home/Home.tsx";
 import { useGlobalAppData } from "../../hooks/useGlobalAppData.ts";
 import Loader from "../child/other/Loader.tsx";
 import FulcrumErrorPage from "../child/other/FulcrumErrorPage.tsx";
-import { BudgetItemEntity, EmailContext, ExpenseItemEntity } from "../../util.ts";
+import { EmailContext } from "../../util.ts";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
  */
 export default function App() {
   const {
-    publicUserData,
-    setPublicUserData,
-    expenseArray,
-    expenseArrayQuery,
-    setExpenseArray,
-    budgetArray,
-    budgetArrayQuery,
-    setBudgetArray,
-    groupArray,
-    setGroupArray,
-    recurringExpenseArray,
-    setRecurringExpenseArray,
-    blacklistedExpenseArray,
-    setBlacklistedExpenseArray,
     email,
-    setEmail,
+    budgetArray,
+    groupArray,
+    expenseArray,
+    recurringExpenseArray,
+    blacklistedExpenseArray,
+    publicUserData,
     categoryDataMap,
     isAnyLoading,
     isAnyError,
@@ -60,19 +51,9 @@ export default function App() {
             <Route path="contact" element={<Contact />} />
             <Route path="pricing" element={<Pricing />} />
           </Route>
-          <Route path="/login" element={<Login setEmail={setEmail} />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route
-            path="/app/"
-            element={
-              <Fulcrum
-                publicUserData={publicUserData}
-                setPublicUserData={setPublicUserData}
-                email={email}
-                setEmail={setEmail}
-              />
-            }
-          >
+          <Route path="/app/" element={<Fulcrum publicUserData={publicUserData} />}>
             <Route index element={<Navigate replace to="budget" />} />
             <Route
               path="expenses"
@@ -80,16 +61,11 @@ export default function App() {
                 <Expenses
                   publicUserData={publicUserData}
                   expenseArray={expenseArray}
-                  // expenseArray={expenseArrayQuery.data as ExpenseItemEntity[]}
                   budgetArray={budgetArray}
                   groupArray={groupArray}
-                  setExpenseArray={setExpenseArray}
-                  setBudgetArray={setBudgetArray}
                   categoryDataMap={categoryDataMap}
                   recurringExpenseArray={recurringExpenseArray}
-                  setRecurringExpenseArray={setRecurringExpenseArray}
                   blacklistedExpenseArray={blacklistedExpenseArray}
-                  setBlacklistedExpenseArray={setBlacklistedExpenseArray}
                 />
               }
             />
@@ -99,33 +75,24 @@ export default function App() {
                 <Budget
                   publicUserData={publicUserData}
                   expenseArray={expenseArray}
-                  budgetArray={budgetArrayQuery.data as BudgetItemEntity[]}
-                  // budgetArray={budgetArray}
+                  budgetArray={budgetArray}
                   groupArray={groupArray}
-                  setBudgetArray={setBudgetArray}
-                  setGroupArray={setGroupArray}
                 />
               }
             />
-            {/*  <Route*/}
-            {/*    path="tools"*/}
-            {/*    element={*/}
-            {/*      <Tools*/}
-            {/*        email={email}*/}
-            {/*        publicUserData={publicUserData}*/}
-            {/*        setPublicUserData={setPublicUserData}*/}
-            {/*        expenseArray={expenseArray}*/}
-            {/*        budgetArray={budgetArray}*/}
-            {/*        groupArray={groupArray}*/}
-            {/*        setExpenseArray={setExpenseArray}*/}
-            {/*        setBudgetArray={setBudgetArray}*/}
-            {/*        recurringExpenseArray={recurringExpenseArray}*/}
-            {/*        setRecurringExpenseArray={setRecurringExpenseArray}*/}
-            {/*        setBlacklistedExpenseArray={setBlacklistedExpenseArray}*/}
-            {/*        categoryDataMap={categoryDataMap}*/}
-            {/*      />*/}
-            {/*    }*/}
-            {/*  />*/}
+            <Route
+              path="tools"
+              element={
+                <Tools
+                  publicUserData={publicUserData}
+                  expenseArray={expenseArray}
+                  budgetArray={budgetArray}
+                  groupArray={groupArray}
+                  recurringExpenseArray={recurringExpenseArray}
+                  categoryDataMap={categoryDataMap}
+                />
+              }
+            />
           </Route>
         </Routes>
       </Router>

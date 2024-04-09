@@ -1,17 +1,36 @@
-import { useState, useEffect } from "react";
-import { handlePublicUserDataUpdating, PublicUserData, PublicUserDataUpdate } from "../../../util.ts";
-import { Dispatch, SetStateAction } from "react";
+import { useState, useEffect, useContext } from "react";
+import { EmailContext, handlePublicUserDataUpdating, PublicUserData } from "../../../util.ts";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface AccessibilityToggleProps {
   publicUserData: PublicUserData;
-  setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
 }
 
 /**
  * A toggle for the user to choose between standard mode and accessibility mode (high contrast + greyscale).
  */
-export default function AccessibilityToggle({ publicUserData, setPublicUserData }: AccessibilityToggleProps) {
+export default function AccessibilityToggle({ publicUserData }: AccessibilityToggleProps) {
   const [isAccessibilityMode, setIsAccessibilityMode] = useState(publicUserData.accessibilityEnabled);
+
+  const email = useContext(EmailContext);
+  const queryClient = useQueryClient();
+
+  const publicUserDataUpdatingMutation = useMutation({
+    mutationKey: ["publicUserData", email],
+    mutationFn: (updatedPublicUserData: PublicUserData) => handlePublicUserDataUpdating(updatedPublicUserData),
+    onMutate: async (updatedPublicUserData: PublicUserData) => {
+      await queryClient.cancelQueries({ queryKey: ["publicUserData", email] });
+      const publicUserDataBeforeOptimisticUpdate = queryClient.getQueryData(["publicUserData", email]);
+      await queryClient.setQueryData(["publicUserData", email], updatedPublicUserData);
+      return { publicUserDataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData(["publicUserData", email], context?.publicUserDataBeforeOptimisticUpdate);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["publicUserData", email] });
+    },
+  });
 
   useEffect(() => {
     setIsAccessibilityMode(publicUserData.accessibilityEnabled);
@@ -20,19 +39,15 @@ export default function AccessibilityToggle({ publicUserData, setPublicUserData 
   async function handleAccessibilityToggle() {
     const newIsAccessibilityMode = !isAccessibilityMode;
     setIsAccessibilityMode(newIsAccessibilityMode);
-    setPublicUserData((prevPublicUserData) => ({
-      ...prevPublicUserData,
-      accessibilityEnabled: newIsAccessibilityMode,
-    }));
+    // setPublicUserData((prevPublicUserData) => ({
+    //   ...prevPublicUserData,
+    //   accessibilityEnabled: newIsAccessibilityMode,
+    // }));
 
-    const updatedPublicUserData: PublicUserDataUpdate = {
-      currency: publicUserData.currency,
-      darkModeEnabled: publicUserData.darkModeEnabled,
-      accessibilityEnabled: newIsAccessibilityMode,
-      profileIconFileName: publicUserData.profileIconFileName,
-    };
+    const updatedPublicUserData: PublicUserData = { ...publicUserData, accessibilityEnabled: newIsAccessibilityMode };
+    publicUserDataUpdatingMutation.mutate(updatedPublicUserData);
 
-    await handlePublicUserDataUpdating(updatedPublicUserData);
+    // await handlePublicUserDataUpdating(updatedPublicUserData);
   }
 
   return (

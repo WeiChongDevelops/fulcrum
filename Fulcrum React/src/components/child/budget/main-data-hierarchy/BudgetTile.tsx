@@ -52,6 +52,7 @@ export default function BudgetTile({
       oldCategory: category,
       oldAmount: amount,
       oldGroup: group,
+      oldIconPath: icon,
     });
     setBudgetFormVisibility((current) => ({
       ...current,

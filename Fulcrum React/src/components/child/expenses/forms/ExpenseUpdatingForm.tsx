@@ -1,13 +1,10 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
-  BudgetItemEntity,
-  getBudgetList,
   ExpenseItemEntity,
   SelectorOptionsFormattedData,
   ExpenseUpdatingFormData,
   handleExpenseUpdating,
-  getExpenseList,
   handleInputChangeOnFormWithAmount,
   PreviousExpenseBeingEdited,
   Value,
@@ -15,18 +12,17 @@ import {
   SetFormVisibility,
   changeFormOrModalVisibility,
   EmailContext,
+  BudgetItemEntity,
+  handleBudgetCreation,
 } from "../../../../util.ts";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../selectors/CategorySelector.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { v4 as uuid } from "uuid";
-
 interface ExpenseUpdatingFormProps {
+  budgetArray: BudgetItemEntity[];
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
   categoryOptions: SelectorOptionsFormattedData[];
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   currencySymbol: string;
@@ -36,9 +32,8 @@ interface ExpenseUpdatingFormProps {
  * A form for updating an existing expense item.
  */
 export default function ExpenseUpdatingForm({
+  budgetArray,
   setExpenseFormVisibility,
-  setExpenseArray,
-  setBudgetArray,
   categoryOptions,
   oldExpenseBeingEdited,
   currencySymbol,
@@ -70,8 +65,27 @@ export default function ExpenseUpdatingForm({
     onError: (_error, _variables, context) => {
       queryClient.setQueryData(["expenseArray", email], context?.dataBeforeOptimisticUpdate);
     },
-    onSettled: () => {
+    onSettled: async () => {
+      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
       queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+    },
+  });
+
+  const budgetCreationMutation = useMutation({
+    mutationFn: (newBudgetItem: BudgetItemEntity) => handleBudgetCreation(newBudgetItem),
+    onMutate: async (newBudgetItem: BudgetItemEntity) => {
+      await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
+      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
+        return [...prevBudgetCache, newBudgetItem];
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["budgetArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
     },
   });
 
@@ -102,15 +116,30 @@ export default function ExpenseUpdatingForm({
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
     hideForm();
 
-    const updatedExpenseItem = {
+    console.log(`Here we see ${formData.amount}`);
+
+    const updatedExpenseItem: ExpenseItemEntity = {
       ...formData,
-      expenseId: uuid(),
+      amount: formData.amount,
+      expenseId: oldExpenseBeingEdited.expenseId,
       timestamp: formData.timestamp as Date,
       recurringExpenseId: null,
     };
+
+    if (!budgetArray.map((budgetItem) => budgetItem.category).includes(updatedExpenseItem.category)) {
+      const newDefaultBudgetItem: BudgetItemEntity = {
+        category: formData.category,
+        amount: 0,
+        iconPath: "category-default-icon.svg",
+        group: "Miscellaneous",
+        timestamp: new Date(),
+      };
+      // setBudgetArray((current) => [...current, newDefaultBudgetItem]);
+      // await handleBudgetCreation(setBudgetArray, newDefaultBudgetItem);
+      budgetCreationMutation.mutate(newDefaultBudgetItem);
+    }
 
     expenseUpdatingMutation.mutate(updatedExpenseItem);
 
@@ -121,10 +150,10 @@ export default function ExpenseUpdatingForm({
       amount: oldExpenseBeingEdited.oldAmount,
       timestamp: oldExpenseBeingEdited.oldTimestamp,
     });
-    getExpenseList().then((expenseList) => setExpenseArray(expenseList));
-
-    // To update budgetArray if new category is made:
-    getBudgetList().then((budgetList) => setBudgetArray(budgetList));
+    // getExpenseList().then((expenseList) => setExpenseArray(expenseList));
+    //
+    // // To update budgetArray if new category is made:
+    // getBudgetList().then((budgetList) => setBudgetArray(budgetList));
   }
 
   return (

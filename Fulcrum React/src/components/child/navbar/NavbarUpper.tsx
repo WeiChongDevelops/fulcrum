@@ -1,31 +1,24 @@
 import DarkModeToggle from "../toggles/DarkModeToggle.tsx";
 import FulcrumButton from "../other/FulcrumButton.tsx";
-import { logoutOnClick, PublicUserData } from "../../../util.ts";
-import { Dispatch, SetStateAction } from "react";
+import { EmailContext, logoutOnClick, PublicUserData } from "../../../util.ts";
+import { useContext } from "react";
 
 interface NavbarUpperProps {
   publicUserData: PublicUserData;
-  setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
-  email: string;
 }
 
 /**
  * The upper navbar, which displays the dark-mode toggle, Fulcrum logo, user email, profile icon and sign-out button.
  */
-export default function NavbarUpper({
-  publicUserData,
-  setPublicUserData,
-  email,
-}: NavbarUpperProps) {
+export default function NavbarUpper({ publicUserData }: NavbarUpperProps) {
+  const email = useContext(EmailContext);
+
   return (
     <nav
       className={`flex flex-row flex-shrink justify-between items-center h-[55px] py-1 ${publicUserData.darkModeEnabled ? "bg-dark" : "bg-light"}`}
     >
       <div className="flex-1 ml-10">
-        <DarkModeToggle
-          publicUserData={publicUserData}
-          setPublicUserData={setPublicUserData}
-        />
+        <DarkModeToggle publicUserData={publicUserData} />
       </div>
       <img
         src={`/src/assets/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`}
@@ -35,9 +28,7 @@ export default function NavbarUpper({
       />
       <div className="flex-1 text-right">
         <div className="flex justify-end items-center mr-8">
-          <p
-            className={`navbar-email select-none ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}
-          >
+          <p className={`navbar-email select-none ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
             {email}
           </p>
           <img
@@ -48,10 +39,7 @@ export default function NavbarUpper({
           {email != "" ? (
             <FulcrumButton displayText="Log Out" onClick={logoutOnClick} />
           ) : (
-            <FulcrumButton
-              displayText="Register"
-              onClick={() => (window.location.href = "/register")}
-            />
+            <FulcrumButton displayText="Register" onClick={() => (window.location.href = "/register")} />
           )}
         </div>
       </div>

@@ -1,20 +1,19 @@
-import { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
-  getPublicUserData,
+  EmailContext,
   handlePublicUserDataUpdating,
   ProfileIconUpdatingFormData,
   PublicUserData,
-  PublicUserDataUpdate,
   SetFormVisibility,
   ToolsFormVisibility,
 } from "../../../../util.ts";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import ProfileIconSelector from "../../selectors/ProfileIconSelector.tsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface ProfileIconUpdatingFormProps {
   oldIconFileName: string;
   setToolsFormVisibility: SetFormVisibility<ToolsFormVisibility>;
-  setPublicUserData: Dispatch<SetStateAction<PublicUserData>>;
   publicUserData: PublicUserData;
 }
 
@@ -25,12 +24,31 @@ export default function ProfileIconUpdatingForm({
   oldIconFileName,
   setToolsFormVisibility,
   publicUserData,
-  setPublicUserData,
 }: ProfileIconUpdatingFormProps) {
   const [formData, setFormData] = useState<ProfileIconUpdatingFormData>({
     iconPath: oldIconFileName,
   });
   const formRef = useRef<HTMLDivElement>(null);
+
+  const email = useContext(EmailContext);
+  const queryClient = useQueryClient();
+
+  const publicUserDataUpdatingMutation = useMutation({
+    mutationKey: ["publicUserData", email],
+    mutationFn: (updatedPublicUserData: PublicUserData) => handlePublicUserDataUpdating(updatedPublicUserData),
+    onMutate: async (updatedPublicUserData: PublicUserData) => {
+      await queryClient.cancelQueries({ queryKey: ["publicUserData", email] });
+      const publicUserDataBeforeOptimisticUpdate = queryClient.getQueryData(["publicUserData", email]);
+      await queryClient.setQueryData(["publicUserData", email], updatedPublicUserData);
+      return { publicUserDataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData(["publicUserData", email], context?.publicUserDataBeforeOptimisticUpdate);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["publicUserData", email] });
+    },
+  });
 
   useEffect(() => {
     addIconSelectionFunctionality(setFormData, "profile");
@@ -57,16 +75,10 @@ export default function ProfileIconUpdatingForm({
     e.preventDefault();
     hideForm();
 
-    const updatedPublicUserData: PublicUserDataUpdate = {
-      currency: publicUserData.currency,
-      darkModeEnabled: publicUserData.darkModeEnabled,
-      accessibilityEnabled: publicUserData.accessibilityEnabled,
-      profileIconFileName: formData.iconPath,
-    };
-
-    await handlePublicUserDataUpdating(updatedPublicUserData);
-
-    getPublicUserData().then((publicUserData) => setPublicUserData(publicUserData));
+    const updatedPublicUserData: PublicUserData = { ...publicUserData, profileIconFileName: formData.iconPath };
+    publicUserDataUpdatingMutation.mutate(updatedPublicUserData);
+    // await handlePublicUserDataUpdating(updatedPublicUserData);
+    // getPublicUserData().then((publicUserData) => setPublicUserData(publicUserData));
   }
 
   useEffect(() => {

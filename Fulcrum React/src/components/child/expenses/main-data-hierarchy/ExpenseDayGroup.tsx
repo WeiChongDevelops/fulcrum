@@ -2,12 +2,14 @@ import {
   CategoryToIconGroupAndColourMap,
   DayExpenseGroupEntity,
   ExpenseFormVisibility,
+  ExpenseItemEntity,
   ExpenseModalVisibility,
   formatDate,
   formatDollarAmountStatic,
   PreviousExpenseBeingEdited,
   PublicUserData,
   SetFormVisibility,
+  SetModalVisibility,
 } from "../../../../util.ts";
 import { Dispatch, SetStateAction } from "react";
 import ExpenseList from "./ExpenseList.tsx";
@@ -17,10 +19,10 @@ interface ExpenseDayGroupProps {
   dayExpenseGroup: DayExpenseGroupEntity;
 
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  setExpenseModalVisibility: SetFormVisibility<ExpenseModalVisibility>;
+  setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
 
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-  setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
+  setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
 
@@ -35,7 +37,7 @@ export default function ExpenseDayGroup({
   setExpenseFormVisibility,
   setExpenseModalVisibility,
   setOldExpenseBeingEdited,
-  setExpenseIdToDelete,
+  setExpenseItemToDelete,
   categoryDataMap,
   publicUserData,
 }: ExpenseDayGroupProps) {
@@ -70,7 +72,7 @@ export default function ExpenseDayGroup({
           setExpenseFormVisibility={setExpenseFormVisibility}
           setExpenseModalVisibility={setExpenseModalVisibility}
           setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-          setExpenseIdToDelete={setExpenseIdToDelete}
+          setExpenseItemToDelete={setExpenseItemToDelete}
           categoryDataMap={categoryDataMap}
           publicUserData={publicUserData}
         />

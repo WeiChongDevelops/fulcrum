@@ -1,23 +1,18 @@
-import { Dispatch, SetStateAction, useEffect, useMemo } from "react";
 import {
   BudgetItemEntity,
   CategoryToIconGroupAndColourMap,
-  checkForOpenModalOrForm,
   ExpenseItemEntity,
-  getStructuredExpenseData,
   GroupItemEntity,
   PublicUserData,
   BlacklistedExpenseItemEntity,
-  updateRecurringExpenseInstances,
   RecurringExpenseItemEntity,
 } from "../../../util.ts";
 import "../../../css/Expense.css";
-import Loader from "../other/Loader.tsx";
 import ExpenseMonthCarousel from "./main-data-hierarchy/ExpenseMonthCarousel.tsx";
 import ExpenseModalsAndForms from "./ExpenseModalsAndForms.tsx";
 import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 import useInitialExpenseData from "../../../hooks/useInitialExpenseData.ts";
-import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
+import Loader from "../other/Loader.tsx";
 
 interface ExpensesProps {
   publicUserData: PublicUserData;
@@ -27,13 +22,8 @@ interface ExpensesProps {
   groupArray: GroupItemEntity[];
   recurringExpenseArray: RecurringExpenseItemEntity[];
 
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
-
   categoryDataMap: CategoryToIconGroupAndColourMap;
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[];
-  setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
 }
 
 /**
@@ -44,49 +34,33 @@ export default function Expenses({
   expenseArray,
   budgetArray,
   groupArray,
-  setExpenseArray,
-  setBudgetArray,
   categoryDataMap,
   blacklistedExpenseArray,
-  setBlacklistedExpenseArray,
   recurringExpenseArray,
-  setRecurringExpenseArray,
 }: ExpensesProps) {
   const {
     structuredExpenseData,
-    setStructuredExpenseData,
-
     expenseFormVisibility,
     setExpenseFormVisibility,
-
     expenseModalVisibility,
     setExpenseModalVisibility,
-
     isExpenseFormOrModalOpen,
-    setIsExpenseFormOrModalOpen,
-
     oldExpenseBeingEdited,
     setOldExpenseBeingEdited,
-
-    expenseIdToDelete,
-    setExpenseIdToDelete,
-
+    expenseItemToDelete,
+    setExpenseItemToDelete,
     defaultCalendarDate,
     setDefaultCalendarDate,
+    isLoading,
   } = useInitialExpenseData({
     expenseArray,
     blacklistedExpenseArray,
-    setExpenseArray,
     recurringExpenseArray,
   });
 
-  // if (isLoading) {
-  //   return <Loader isLoading={isLoading} isDarkMode={false} />;
-  // }
-  //
-  // if (isError) {
-  //   return <FulcrumErrorPage errors={[error!]} />;
-  // }
+  if (isLoading) {
+    return <Loader isLoading={isLoading} isDarkMode={false} />;
+  }
 
   return (
     <div className="flex flex-col justify-center items-center relative">
@@ -96,11 +70,11 @@ export default function Expenses({
                     ${isExpenseFormOrModalOpen && "blur"}`}
         >
           <ExpenseMonthCarousel
-            structuredExpenseData={structuredExpenseData}
+            structuredExpenseData={structuredExpenseData!}
             setExpenseFormVisibility={setExpenseFormVisibility}
             setExpenseModalVisibility={setExpenseModalVisibility}
             setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-            setExpenseIdToDelete={setExpenseIdToDelete}
+            setExpenseItemToDelete={setExpenseItemToDelete}
             categoryDataMap={categoryDataMap}
             publicUserData={publicUserData}
             setDefaultCalendarDate={setDefaultCalendarDate}
@@ -117,14 +91,10 @@ export default function Expenses({
           expenseArray={expenseArray}
           budgetArray={budgetArray}
           groupArray={groupArray}
-          setExpenseArray={setExpenseArray}
-          setBudgetArray={setBudgetArray}
-          setRecurringExpenseArray={setRecurringExpenseArray}
-          setBlacklistedExpenseArray={setBlacklistedExpenseArray}
           publicUserData={publicUserData}
           defaultCalendarDate={defaultCalendarDate}
           oldExpenseBeingEdited={oldExpenseBeingEdited}
-          expenseIdToDelete={expenseIdToDelete}
+          expenseItemToDelete={expenseItemToDelete}
         />
       </div>
     </div>

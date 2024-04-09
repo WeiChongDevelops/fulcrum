@@ -5,22 +5,17 @@ import {
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseModalVisibility,
-  findExpenseWithId,
   getCurrencySymbol,
-  getExpenseList,
-  getBlacklistedExpenses,
   GroupItemEntity,
   handleExpenseDeletion,
   handleBlacklistedExpenseCreation,
   PreviousExpenseBeingEdited,
   PublicUserData,
-  RecurringExpenseItemEntity,
   BlacklistedExpenseItemEntity,
   SetFormVisibility,
   SetModalVisibility,
   y2K,
   changeFormOrModalVisibility,
-  handleBudgetDeletion,
   EmailContext,
   getRecurringExpenseInstancesAfterDate,
   handleBatchExpenseDeletion,
@@ -29,7 +24,7 @@ import {
 import ExpenseUpdatingForm from "./forms/ExpenseUpdatingForm.tsx";
 import RecurringExpenseInstanceUpdatingForm from "../tools/recurring-expenses/forms/RecurringExpenseInstanceUpdatingForm.tsx";
 import TwoOptionModal from "../other/TwoOptionModal.tsx";
-import { Dispatch, SetStateAction, useContext, useMemo } from "react";
+import { useContext } from "react";
 import ThreeOptionModal from "../other/ThreeOptionModal.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -43,16 +38,11 @@ interface ExpenseModalsAndFormsProps {
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
 
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
-  setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
-
   publicUserData: PublicUserData;
   defaultCalendarDate: Date;
 
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
-  expenseIdToDelete: string;
+  expenseItemToDelete: ExpenseItemEntity;
 }
 
 /**
@@ -66,21 +56,11 @@ export default function ExpenseModalsAndForms({
   expenseArray,
   budgetArray,
   groupArray,
-  setExpenseArray,
-  setBudgetArray,
-  setRecurringExpenseArray,
-  setBlacklistedExpenseArray,
   publicUserData,
   defaultCalendarDate,
   oldExpenseBeingEdited,
-  expenseIdToDelete,
+  expenseItemToDelete,
 }: ExpenseModalsAndFormsProps) {
-  const expenseItemToDelete = findExpenseWithId(expenseIdToDelete, expenseArray);
-  const expenseItemToDeleteIsRecurring = useMemo(
-    () => expenseItemToDelete?.recurringExpenseId !== null,
-    [expenseIdToDelete],
-  );
-
   // async function runExpenseDeletion() {
   //   setExpenseArray((prevExpenseArray) =>
   //     prevExpenseArray.filter((expenseItem) => expenseItem.expenseId !== expenseIdToDelete),
@@ -107,42 +87,47 @@ export default function ExpenseModalsAndForms({
       console.log("Mutation running");
       // console.log(expenseDeletionMutationProps.expenseItemToDelete);
       // If it's a recurring expense instance, add to blacklist and if requested by user delete future/all instances
-      if (expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId) {
-        console.log("has recurring expense id");
+      if (expenseDeletionMutationProps.deletionScale === "THIS") {
         await handleBlacklistedExpenseCreation(
-          expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId,
+          expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
           expenseDeletionMutationProps.expenseItemToDelete.timestamp,
         );
+        return await handleExpenseDeletion(expenseDeletionMutationProps.expenseItemToDelete.expenseId);
+      } else {
         let recurringInstancesToDelete: ExpenseItemEntity[] = [];
         if (expenseDeletionMutationProps.deletionScale === "FUTURE") {
+          console.log("future pathing is right.");
           recurringInstancesToDelete = await getRecurringExpenseInstancesAfterDate(
-            expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId,
+            expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
             expenseArray,
             expenseDeletionMutationProps.expenseItemToDelete.timestamp,
           );
         } else if (expenseDeletionMutationProps.deletionScale === "ALL") {
           recurringInstancesToDelete = await getRecurringExpenseInstancesAfterDate(
-            expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId,
+            expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
             expenseArray,
             y2K,
           );
-        } else {
-          return;
         }
-        await handleBatchExpenseDeletion(recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId));
         await handleBatchBlacklistedExpenseCreation(
-          expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId,
+          expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
           recurringInstancesToDelete.map((expenseItem) => expenseItem.timestamp),
         );
-      } else {
-        console.log("it didn't have a recurring expense id");
+        await handleBatchExpenseDeletion(recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId));
       }
-      await handleExpenseDeletion(expenseDeletionMutationProps.expenseItemToDelete.expenseId);
     },
     onMutate: async (expenseDeletionMutationProps: ExpenseDeletionMutationProps) => {
       await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
-      const expenseArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
+      await queryClient.cancelQueries({ queryKey: ["blacklistedExpenseArray", email] });
+
       const blacklistExpenseArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["blacklistedExpenseArray", email]);
+      const expenseArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
+
+      queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
+        return prevExpenseCache.filter(
+          (expenseItem) => expenseItem.expenseId !== expenseDeletionMutationProps.expenseItemToDelete.expenseId,
+        );
+      });
 
       let recurringInstancesToDelete: ExpenseItemEntity[] = [];
       if (expenseDeletionMutationProps.deletionScale === "FUTURE") {
@@ -158,36 +143,28 @@ export default function ExpenseModalsAndForms({
           y2K,
         );
       }
+      console.log("below is the deletion list for both batch functions.");
+      console.log(recurringInstancesToDelete);
 
-      expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId &&
-        (await queryClient.setQueryData(
+      if (expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId) {
+        queryClient.setQueryData(
           ["blacklistedExpenseArray", email],
           (prevBlacklistCache: BlacklistedExpenseItemEntity[]) => {
-            let optimisticBlacklist = { ...prevBlacklistCache };
-            for (const blacklistedExpense of recurringInstancesToDelete) {
-              optimisticBlacklist = [
-                ...optimisticBlacklist,
-                {
-                  recurringExpenseId: expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
-                  timestampOfRemovedInstance: blacklistedExpense.timestamp,
-                },
-              ];
-            }
-            return optimisticBlacklist;
+            const newBlacklistEntries: BlacklistedExpenseItemEntity[] = [...recurringInstancesToDelete].map(
+              (expenseItem) => ({
+                recurringExpenseId: expenseItem.recurringExpenseId!,
+                timestampOfRemovedInstance: expenseItem.timestamp,
+              }),
+            );
+            return [...prevBlacklistCache, newBlacklistEntries];
           },
-        ));
-
-      await queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
-        let optimisticExpenseArray = prevExpenseCache.filter(
-          (expenseItem) => expenseItem.expenseId !== expenseDeletionMutationProps.expenseItemToDelete.expenseId,
         );
-        if (expenseDeletionMutationProps.deletionScale === "THIS") {
-          return optimisticExpenseArray;
-        }
-        optimisticExpenseArray = optimisticExpenseArray.filter(
-          (expenseItem) => !(expenseItem.expenseId in recurringInstancesToDelete),
+      }
+      queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
+        return prevExpenseCache.filter(
+          (expenseItem) =>
+            !recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId).includes(expenseItem.expenseId),
         );
-        return optimisticExpenseArray;
       });
       return { expenseArrayBeforeOptimisticUpdate, blacklistExpenseArrayBeforeOptimisticUpdate };
     },
@@ -195,9 +172,9 @@ export default function ExpenseModalsAndForms({
       queryClient.setQueryData(["expenseArray", email], context?.expenseArrayBeforeOptimisticUpdate);
       queryClient.setQueryData(["blacklistedExpenseArray", email], context?.blacklistExpenseArrayBeforeOptimisticUpdate);
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
-      queryClient.invalidateQueries({ queryKey: ["blacklistedExpenseArray", email] });
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["blacklistedExpenseArray", email] });
+      await queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
     },
   });
 
@@ -206,9 +183,6 @@ export default function ExpenseModalsAndForms({
       {expenseFormVisibility.isCreateExpenseVisible && (
         <ExpenseCreationForm
           setExpenseFormVisibility={setExpenseFormVisibility}
-          setExpenseArray={setExpenseArray}
-          setBudgetArray={setBudgetArray}
-          setRecurringExpenseArray={setRecurringExpenseArray}
           budgetArray={budgetArray}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           currencySymbol={getCurrencySymbol(publicUserData.currency)}
@@ -218,9 +192,8 @@ export default function ExpenseModalsAndForms({
       )}
       {expenseFormVisibility.isUpdateExpenseVisible && (
         <ExpenseUpdatingForm
+          budgetArray={budgetArray}
           setExpenseFormVisibility={setExpenseFormVisibility}
-          setExpenseArray={setExpenseArray}
-          setBudgetArray={setBudgetArray}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           oldExpenseBeingEdited={oldExpenseBeingEdited}
           currencySymbol={getCurrencySymbol(publicUserData.currency)}
@@ -230,16 +203,14 @@ export default function ExpenseModalsAndForms({
       {expenseFormVisibility.isUpdateRecurringExpenseInstanceVisible && (
         <RecurringExpenseInstanceUpdatingForm
           setExpenseFormVisibility={setExpenseFormVisibility}
-          setExpenseArray={setExpenseArray}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           oldExpenseBeingEdited={oldExpenseBeingEdited}
           currencySymbol={getCurrencySymbol(publicUserData.currency)}
-          setBlacklistedExpenseArray={setBlacklistedExpenseArray}
         />
       )}
 
       {expenseModalVisibility.isConfirmExpenseDeletionModalVisible &&
-        (expenseItemToDeleteIsRecurring ? (
+        (!!expenseItemToDelete?.recurringExpenseId ? (
           <ThreeOptionModal
             optionOneText={"Delete This Repeat Only"}
             optionOneFunction={() => {

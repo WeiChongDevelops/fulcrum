@@ -3,6 +3,7 @@ package com.example.entities.user
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserEmail(
-    val email: String
+data class UserCredentials(
+    val email: String,
+    val password: String
 )

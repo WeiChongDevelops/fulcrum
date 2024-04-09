@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   CategoryToIconGroupAndColourMap,
   ExpenseFormVisibility,
+  ExpenseItemEntity,
   ExpenseModalVisibility,
   getMonthsFromToday,
   MonthExpenseGroupEntity,
@@ -18,7 +19,7 @@ interface ExpenseMonthCarouselProps {
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-  setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
+  setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
   categoryDataMap: CategoryToIconGroupAndColourMap;
   publicUserData: PublicUserData;
   setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
@@ -32,7 +33,7 @@ export default function ExpenseMonthCarousel({
   setExpenseFormVisibility,
   setExpenseModalVisibility,
   setOldExpenseBeingEdited,
-  setExpenseIdToDelete,
+  setExpenseItemToDelete,
   categoryDataMap,
   publicUserData,
   setDefaultCalendarDate,
@@ -45,9 +46,8 @@ export default function ExpenseMonthCarousel({
   const [monthPanelShowingIndex, setMonthPanelShowingIndex] = useState(0);
 
   useEffect(() => {
-    console.log(`Index is ${monthPanelShowingIndex}`);
+    console.log(`Month panel index: ${monthPanelShowingIndex}`);
   }, [monthPanelShowingIndex]);
-
   return (
     <div className={"relative"}>
       <div
@@ -65,7 +65,7 @@ export default function ExpenseMonthCarousel({
                   setExpenseFormVisibility={setExpenseFormVisibility}
                   setExpenseModalVisibility={setExpenseModalVisibility}
                   setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-                  setExpenseIdToDelete={setExpenseIdToDelete}
+                  setExpenseItemToDelete={setExpenseItemToDelete}
                   categoryDataMap={categoryDataMap}
                   publicUserData={publicUserData}
                   monthsFromY2KToNow={monthsFromY2KToNow}

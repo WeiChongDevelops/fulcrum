@@ -18,7 +18,7 @@ interface ExpenseListProps {
   setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
 
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-  setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
+  setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
 
@@ -33,7 +33,7 @@ export default function ExpenseList({
   setExpenseFormVisibility,
   setExpenseModalVisibility,
   setOldExpenseBeingEdited,
-  setExpenseIdToDelete,
+  setExpenseItemToDelete,
   categoryDataMap,
   publicUserData,
 }: ExpenseListProps) {
@@ -55,7 +55,7 @@ export default function ExpenseList({
                 setExpenseFormVisibility={setExpenseFormVisibility}
                 setExpenseModalVisibility={setExpenseModalVisibility}
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-                setExpenseIdToDelete={setExpenseIdToDelete}
+                setExpenseItemToDelete={setExpenseItemToDelete}
                 publicUserData={publicUserData}
                 key={key}
               />

@@ -8,7 +8,7 @@ import {
   PublicUserData,
   getCurrencySymbol,
 } from "../../../util.ts";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useEffect } from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./main-data-hierarchy/GroupList.tsx";
@@ -27,22 +27,12 @@ interface BudgetProps {
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
-
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-  setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
 }
 
 /**
  * The root component for the budget page. It contains the income display, the Fulcrum animation and the user's budget.
  */
-export default function Budget({
-  publicUserData,
-  expenseArray,
-  budgetArray,
-  groupArray,
-  setBudgetArray,
-  setGroupArray,
-}: BudgetProps) {
+export default function Budget({ publicUserData, expenseArray, budgetArray, groupArray }: BudgetProps) {
   const {
     data: totalIncome,
     budgetFormVisibility,
@@ -127,12 +117,10 @@ export default function Budget({
               {groupArray?.length > 0 && (
                 <GroupList
                   budgetArray={budgetArray}
-                  setBudgetArray={setBudgetArray}
                   expenseArray={expenseArray}
                   setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                   setOldGroupBeingEdited={setOldGroupBeingEdited}
                   groupArray={groupArray}
-                  setGroupArray={setGroupArray}
                   setGroupNameOfNewItem={setGroupNameOfNewItem}
                   setBudgetFormVisibility={setBudgetFormVisibility}
                   setGroupToDelete={setGroupToDelete}
@@ -153,12 +141,10 @@ export default function Budget({
 
             <BudgetModalsAndForms
               budgetFormVisibility={budgetFormVisibility}
-              setBudgetArray={setBudgetArray}
               groupArray={groupArray}
               groupNameOfNewItem={groupNameOfNewItem}
               setBudgetFormVisibility={setBudgetFormVisibility}
               oldBudgetBeingEdited={oldBudgetBeingEdited}
-              setGroupArray={setGroupArray}
               oldGroupBeingEdited={oldGroupBeingEdited}
               groupToDelete={groupToDelete}
               categoryToDelete={categoryToDelete}

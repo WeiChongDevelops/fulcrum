@@ -1,14 +1,12 @@
 import FulcrumButton from "../../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   ExpenseItemEntity,
-  getExpenseList,
   handleInputChangeOnFormWithAmount,
   PreviousExpenseBeingEdited,
   RecurringExpenseInstanceUpdatingFormData,
   ExpenseFormVisibility,
   SelectorOptionsFormattedData,
-  BlacklistedExpenseItemEntity,
   SetFormVisibility,
   changeFormOrModalVisibility,
   EmailContext,
@@ -21,11 +19,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface RecurringExpenseInstanceUpdatingFormProps {
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
   categoryOptions: SelectorOptionsFormattedData[];
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   currencySymbol: string;
-  setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
 }
 
 /**
@@ -33,11 +29,9 @@ interface RecurringExpenseInstanceUpdatingFormProps {
  */
 export default function RecurringExpenseInstanceUpdatingForm({
   setExpenseFormVisibility,
-  setExpenseArray,
   categoryOptions,
   oldExpenseBeingEdited,
   currencySymbol,
-  setBlacklistedExpenseArray,
 }: RecurringExpenseInstanceUpdatingFormProps) {
   const [formData, setFormData] = useState<RecurringExpenseInstanceUpdatingFormData>({
     category: oldExpenseBeingEdited.oldCategory,
@@ -117,7 +111,7 @@ export default function RecurringExpenseInstanceUpdatingForm({
       category: oldExpenseBeingEdited.oldCategory,
       amount: oldExpenseBeingEdited.oldAmount,
     });
-    getExpenseList().then((expenseList) => setExpenseArray(expenseList));
+    // getExpenseList().then((expenseList) => setExpenseArray(expenseList));
   }
 
   return (

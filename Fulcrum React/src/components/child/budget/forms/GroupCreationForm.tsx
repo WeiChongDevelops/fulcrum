@@ -1,5 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   addColourSelectionFunctionality,
   BasicGroupData,
@@ -17,14 +17,13 @@ import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface GroupCreationFormProps {
-  setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
 }
 
 /**
  * A form for creating a new budget category group.
  */
-export default function GroupCreationForm(this: any, { setGroupArray, setBudgetFormVisibility }: GroupCreationFormProps) {
+export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCreationFormProps) {
   const [formData, setFormData] = useState<BasicGroupData>({
     group: "",
     colour: "",
@@ -35,7 +34,7 @@ export default function GroupCreationForm(this: any, { setGroupArray, setBudgetF
   const email = useContext(EmailContext);
 
   const groupCreationMutation = useMutation({
-    mutationFn: (newGroupItem: GroupItemEntity) => handleGroupCreation(setGroupArray, newGroupItem),
+    mutationFn: (newGroupItem: GroupItemEntity) => handleGroupCreation(newGroupItem),
     onMutate: async (newGroupItem: GroupItemEntity) => {
       await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["groupArray", email]);

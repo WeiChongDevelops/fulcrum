@@ -18,7 +18,7 @@ import {
   SetModalVisibility,
 } from "../../../util.ts";
 
-import { Dispatch, SetStateAction, useContext } from "react";
+import { useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ModalsAndFormsProps {
@@ -28,11 +28,9 @@ interface ModalsAndFormsProps {
   budgetModalVisibility: BudgetModalVisibility;
   setBudgetModalVisibility: SetModalVisibility<BudgetModalVisibility>;
 
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
   groupArray: GroupItemEntity[];
   groupNameOfNewItem: string;
   oldBudgetBeingEdited: PreviousBudgetBeingEdited;
-  setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
   oldGroupBeingEdited: PreviousGroupBeingEdited;
   groupToDelete: string;
   categoryToDelete: string;
@@ -45,14 +43,12 @@ interface ModalsAndFormsProps {
  */
 export default function BudgetModalsAndForms({
   budgetFormVisibility,
-  setBudgetArray,
   groupArray,
   groupNameOfNewItem,
   setBudgetFormVisibility,
   budgetModalVisibility,
   setBudgetModalVisibility,
   oldBudgetBeingEdited,
-  setGroupArray,
   oldGroupBeingEdited,
   groupToDelete,
   categoryToDelete,
@@ -63,17 +59,12 @@ export default function BudgetModalsAndForms({
 
   interface GroupDeletionProps {
     groupToDelete: string;
-    setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
     keepContainedCategories: boolean;
   }
 
   const groupDeletionMutation = useMutation({
     mutationFn: (groupDeletionProps: GroupDeletionProps) => {
-      return handleGroupDeletion(
-        groupDeletionProps.groupToDelete,
-        groupDeletionProps.setGroupArray,
-        groupDeletionProps.keepContainedCategories,
-      );
+      return handleGroupDeletion(groupDeletionProps.groupToDelete, groupDeletionProps.keepContainedCategories);
     },
     onMutate: async (groupDeletionProps: GroupDeletionProps) => {
       await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
@@ -92,20 +83,15 @@ export default function BudgetModalsAndForms({
     },
   });
 
-  interface BudgetDeletionProps {
-    category: string;
-    setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-  }
-
   const budgetDeletionMutation = useMutation({
-    mutationFn: (budgetDeletionProps: BudgetDeletionProps) => {
-      return handleBudgetDeletion(budgetDeletionProps.category, budgetDeletionProps.setBudgetArray);
+    mutationFn: (categoryToDelete: string) => {
+      return handleBudgetDeletion(categoryToDelete);
     },
-    onMutate: async (budgetDeletionProps: BudgetDeletionProps) => {
+    onMutate: async (categoryToDelete: string) => {
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
       await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
-        return prevBudgetCache.filter((budgetItem) => budgetItem.category !== budgetDeletionProps.category);
+        return prevBudgetCache.filter((budgetItem) => budgetItem.category !== categoryToDelete);
       });
       return { dataBeforeOptimisticUpdate };
     },
@@ -122,7 +108,6 @@ export default function BudgetModalsAndForms({
     <div className={"z-40"}>
       {budgetFormVisibility.isCreateBudgetVisible && (
         <BudgetCreationForm
-          setBudgetArray={setBudgetArray}
           groupArray={groupArray}
           groupNameOfNewItem={groupNameOfNewItem}
           setBudgetFormVisibility={setBudgetFormVisibility}
@@ -131,24 +116,15 @@ export default function BudgetModalsAndForms({
       )}
       {budgetFormVisibility.isUpdateBudgetVisible && (
         <BudgetUpdatingForm
-          setBudgetArray={setBudgetArray}
           oldBudgetBeingEdited={oldBudgetBeingEdited}
           groupArray={groupArray}
           setBudgetFormVisibility={setBudgetFormVisibility}
           currencySymbol={currencySymbol}
         />
       )}
-      {budgetFormVisibility.isCreateGroupVisible && (
-        <GroupCreationForm setGroupArray={setGroupArray} setBudgetFormVisibility={setBudgetFormVisibility} />
-      )}
+      {budgetFormVisibility.isCreateGroupVisible && <GroupCreationForm setBudgetFormVisibility={setBudgetFormVisibility} />}
       {budgetFormVisibility.isUpdateGroupVisible && (
-        <GroupUpdatingForm
-          oldGroupBeingEdited={oldGroupBeingEdited}
-          setBudgetArray={setBudgetArray}
-          groupArray={groupArray}
-          setGroupArray={setGroupArray}
-          setBudgetFormVisibility={setBudgetFormVisibility}
-        />
+        <GroupUpdatingForm oldGroupBeingEdited={oldGroupBeingEdited} setBudgetFormVisibility={setBudgetFormVisibility} />
       )}
       {budgetModalVisibility.isDeleteOptionsModalVisible && (
         <TwoOptionModal
@@ -158,7 +134,6 @@ export default function BudgetModalsAndForms({
           optionOneFunction={() => {
             groupDeletionMutation.mutate({
               groupToDelete: groupToDelete,
-              setGroupArray: setGroupArray,
               keepContainedCategories: true,
             });
             changeFormOrModalVisibility(setBudgetModalVisibility, "isDeleteOptionsModalVisible", false);
@@ -179,7 +154,6 @@ export default function BudgetModalsAndForms({
           optionOneFunction={() => {
             groupDeletionMutation.mutate({
               groupToDelete: groupToDelete,
-              setGroupArray: setGroupArray,
               keepContainedCategories: true,
             });
             changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmGroupDeletionModalVisible", false);
@@ -188,7 +162,6 @@ export default function BudgetModalsAndForms({
           optionTwoFunction={() => {
             groupDeletionMutation.mutate({
               groupToDelete: groupToDelete,
-              setGroupArray: setGroupArray,
               keepContainedCategories: false,
             });
             changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmGroupDeletionModalVisible", false);
@@ -213,7 +186,7 @@ export default function BudgetModalsAndForms({
             //     console.log("Deletion successful", response);
             //   })
             //   .catch((error) => console.log("Deletion unsuccessful", error));
-            budgetDeletionMutation.mutate({ category: categoryToDelete, setBudgetArray: setBudgetArray });
+            budgetDeletionMutation.mutate(categoryToDelete);
           }}
           isVisible="isConfirmCategoryDeletionModalVisible"
         />

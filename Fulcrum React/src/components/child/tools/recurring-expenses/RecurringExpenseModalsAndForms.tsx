@@ -4,7 +4,6 @@ import {
   categoryListAsOptions,
   ExpenseItemEntity,
   getCurrencySymbol,
-  getExpenseList,
   GroupItemEntity,
   handleRecurringExpenseDeletion,
   PreviousRecurringExpenseBeingEdited,
@@ -12,16 +11,18 @@ import {
   RecurringExpenseFormVisibility,
   RecurringExpenseItemEntity,
   RecurringExpenseModalVisibility,
-  removeAllInstancesOfRecurringExpenseAfterDate,
-  BlacklistedExpenseItemEntity,
   SetFormVisibility,
   SetModalVisibility,
   y2K,
   changeFormOrModalVisibility,
+  EmailContext,
+  getRecurringExpenseInstancesAfterDate,
+  handleBatchExpenseDeletion,
 } from "../../../../util.ts";
 import RecurringExpenseUpdatingForm from "./forms/RecurringExpenseUpdatingForm.tsx";
 import TwoOptionModal from "../../other/TwoOptionModal.tsx";
-import { Dispatch, SetStateAction } from "react";
+import { useContext } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface RecurringExpenseModalsAndFormsProps {
   recurringExpenseFormVisibility: RecurringExpenseFormVisibility;
@@ -32,11 +33,6 @@ interface RecurringExpenseModalsAndFormsProps {
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
-
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
-  setRecurringExpenseArray: Dispatch<SetStateAction<RecurringExpenseItemEntity[]>>;
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-  setBlacklistedExpenseArray: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>;
 
   publicUserData: PublicUserData;
 
@@ -55,28 +51,57 @@ export default function RecurringExpenseModalsAndForms({
   expenseArray,
   budgetArray,
   groupArray,
-  setExpenseArray,
-  setRecurringExpenseArray,
-  setBudgetArray,
-  setBlacklistedExpenseArray,
   publicUserData,
   recurringExpenseIdToDelete,
   oldRecurringExpenseBeingEdited,
 }: RecurringExpenseModalsAndFormsProps) {
-  function runRecurringExpenseDeletion() {
-    handleRecurringExpenseDeletion(recurringExpenseIdToDelete, setRecurringExpenseArray)
-      .then(() => console.log("Deletion successful"))
-      .catch(() => console.log("Deletion unsuccessful"));
+  const email = useContext(EmailContext);
+  const queryClient = useQueryClient();
+
+  interface RecurringExpenseDeletionMutationProps {
+    recurringExpenseId: string;
+    alsoDeleteAllInstances: boolean;
   }
+
+  const recurringExpenseDeletionMutation = useMutation({
+    mutationFn: async (recurringExpenseDeletionMutationProps: RecurringExpenseDeletionMutationProps) => {
+      if (recurringExpenseDeletionMutationProps.alsoDeleteAllInstances) {
+        const recurringInstancesToDelete = await getRecurringExpenseInstancesAfterDate(
+          recurringExpenseDeletionMutationProps.recurringExpenseId,
+          expenseArray,
+          y2K,
+        );
+        await handleBatchExpenseDeletion(recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId));
+      }
+      return handleRecurringExpenseDeletion(recurringExpenseDeletionMutationProps.recurringExpenseId);
+    },
+    onMutate: async (recurringExpenseDeletionMutationProps: RecurringExpenseDeletionMutationProps) => {
+      await queryClient.cancelQueries({ queryKey: ["recurringExpenseArray", email] });
+      const recurringExpenseArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["recurringExpenseArray", email]);
+      await queryClient.setQueryData(
+        ["recurringExpenseArray", email],
+        (prevRecurringExpenseCache: RecurringExpenseItemEntity[]) => {
+          return prevRecurringExpenseCache.filter(
+            (recurringExpenseItem) =>
+              recurringExpenseItem.recurringExpenseId !== recurringExpenseDeletionMutationProps.recurringExpenseId,
+          );
+        },
+      );
+      return { recurringExpenseArrayBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData(["recurringExpenseArray", email], context?.recurringExpenseArrayBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["recurringExpenseArray", email] });
+    },
+  });
 
   return (
     <div className={"z-40"}>
       {recurringExpenseFormVisibility.isCreateExpenseVisible && (
         <ExpenseCreationForm
           setExpenseFormVisibility={setRecurringExpenseFormVisibility}
-          setExpenseArray={setExpenseArray}
-          setBudgetArray={setBudgetArray}
-          setRecurringExpenseArray={setRecurringExpenseArray}
           budgetArray={budgetArray}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           currencySymbol={getCurrencySymbol(publicUserData.currency)}
@@ -88,8 +113,6 @@ export default function RecurringExpenseModalsAndForms({
       {recurringExpenseFormVisibility.isUpdateRecurringExpenseVisible && (
         <RecurringExpenseUpdatingForm
           setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
-          setRecurringExpenseArray={setRecurringExpenseArray}
-          setBudgetArray={setBudgetArray}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
           currencySymbol={getCurrencySymbol(publicUserData.currency)}
@@ -129,7 +152,10 @@ export default function RecurringExpenseModalsAndForms({
         <TwoOptionModal
           optionOneText={"Keep Previous Repeats"}
           optionOneFunction={() => {
-            runRecurringExpenseDeletion();
+            recurringExpenseDeletionMutation.mutate({
+              recurringExpenseId: recurringExpenseIdToDelete,
+              alsoDeleteAllInstances: false,
+            });
             changeFormOrModalVisibility(
               setRecurringExpenseModalVisibility,
               "isSelectRecurringExpenseDeletionTypeModalVisible",
@@ -138,15 +164,18 @@ export default function RecurringExpenseModalsAndForms({
           }}
           optionTwoText={"Delete Previous Repeats"}
           optionTwoFunction={async () => {
-            runRecurringExpenseDeletion();
-            await removeAllInstancesOfRecurringExpenseAfterDate(
-              recurringExpenseIdToDelete,
-              expenseArray,
-              setExpenseArray,
-              y2K,
-              setBlacklistedExpenseArray,
-            );
-            setExpenseArray(await getExpenseList());
+            recurringExpenseDeletionMutation.mutate({
+              recurringExpenseId: recurringExpenseIdToDelete,
+              alsoDeleteAllInstances: true,
+            });
+            // await removeAllInstancesOfRecurringExpenseAfterDate(
+            //   recurringExpenseIdToDelete,
+            //   expenseArray,
+            //   setExpenseArray,
+            //   y2K,
+            //   setBlacklistedExpenseArray,
+            // );
+            // setExpenseArray(await getExpenseList());
             changeFormOrModalVisibility(
               setRecurringExpenseModalVisibility,
               "isSelectRecurringExpenseDeletionTypeModalVisible",

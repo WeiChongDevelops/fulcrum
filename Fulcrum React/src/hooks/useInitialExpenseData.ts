@@ -1,27 +1,30 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import {
   BlacklistedExpenseItemEntity,
   checkForOpenModalOrForm,
+  EmailContext,
   ExpenseItemEntity,
   ExpenseModalVisibility,
   getStructuredExpenseData,
+  handleBatchExpenseDeletion,
+  handleExpenseCreation,
   MonthExpenseGroupEntity,
   PreviousExpenseBeingEdited,
   RecurringExpenseItemEntity,
   updateRecurringExpenseInstances,
 } from "../util.ts";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface useInitialExpenseDataProps {
   expenseArray: ExpenseItemEntity[];
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[];
-  setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>;
   recurringExpenseArray: RecurringExpenseItemEntity[];
 }
 
 export default function useInitialExpenseData({
   expenseArray,
   blacklistedExpenseArray,
-  setExpenseArray,
   recurringExpenseArray,
 }: useInitialExpenseDataProps) {
   const [expenseFormVisibility, setExpenseFormVisibility] = useState({
@@ -40,37 +43,126 @@ export default function useInitialExpenseData({
     oldTimestamp: new Date(),
     oldAmount: 0,
   });
-  const [expenseIdToDelete, setExpenseIdToDelete] = useState("");
+  const [expenseItemToDelete, setExpenseItemToDelete] = useState<ExpenseItemEntity>({
+    expenseId: "",
+    category: "",
+    amount: 0,
+    timestamp: new Date(),
+    recurringExpenseId: null,
+  });
   const [defaultCalendarDate, setDefaultCalendarDate] = useState(new Date());
-
-  const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>([]);
-
-  useMemo(() => {
-    getStructuredExpenseData(expenseArray, setStructuredExpenseData);
-  }, [expenseArray]);
 
   useEffect(() => {
     setIsExpenseFormOrModalOpen(checkForOpenModalOrForm(expenseFormVisibility, expenseModalVisibility));
   }, [expenseFormVisibility, expenseModalVisibility]);
 
+  const email = useContext(EmailContext);
+  const queryClient = useQueryClient();
+
+  const expenseCreationMutation = useMutation({
+    mutationFn: (newExpenseItem: ExpenseItemEntity) => {
+      console.log("MUTATION OBJECT");
+      console.log(newExpenseItem);
+      return handleExpenseCreation(newExpenseItem);
+    },
+    onMutate: async (newExpenseItem: ExpenseItemEntity) => {
+      await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
+      await queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
+        return [newExpenseItem, ...prevExpenseCache];
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["expenseArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+    },
+  });
+
+  const batchExpenseDeletionMutation = useMutation({
+    mutationFn: (expenseIdsToDelete: string[]) => {
+      return handleBatchExpenseDeletion(expenseIdsToDelete);
+    },
+    onMutate: async (expenseIdsToDelete: string[]) => {
+      await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
+      const expenseArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
+      await queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
+        return prevExpenseCache.filter((expenseItem) => !(expenseItem.expenseId in expenseIdsToDelete));
+      });
+      return { expenseArrayBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData(["expenseArray", email], context?.expenseArrayBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+    },
+  });
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  // let structuredExpenseDataQuery = useQuery({
+  //   queryKey: ["structuredExpenseData", email],
+  //   queryFn: async () => {
+  //     await updateRecurringExpenseInstances(
+  //       recurringExpenseArray,
+  //       expenseArray,
+  //       blacklistedExpenseArray,
+  //       expenseCreationMutation as UseMutationResult,
+  //       batchExpenseDeletionMutation as UseMutationResult,
+  //     );
+  //     return await getStructuredExpenseData(expenseArray);
+  //   },
+  // });
+
+  // useEffect(() => {
+  //   async function updateExpenseDisplay() {
+  //     await updateRecurringExpenseInstances(
+  //       recurringExpenseArray,
+  //       expenseArray,
+  //       blacklistedExpenseArray,
+  //       expenseCreationMutation as UseMutationResult,
+  //       batchExpenseDeletionMutation as UseMutationResult,
+  //     );
+  //     setStructuredExpenseData(await getStructuredExpenseData(expenseArray));
+  //   }
+  //   updateExpenseDisplay();
+  // }, [expenseArray]);
+
+  const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>();
+
   useMemo(() => {
-    updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, blacklistedExpenseArray, setExpenseArray);
+    const updateStructuredExpenseData = async () => {
+      setStructuredExpenseData(await getStructuredExpenseData(expenseArray));
+    };
+    updateStructuredExpenseData().then(() => setIsLoading(false));
+  }, [expenseArray]);
+
+  useMemo(() => {
+    updateRecurringExpenseInstances(
+      recurringExpenseArray,
+      expenseArray,
+      blacklistedExpenseArray,
+      expenseCreationMutation as UseMutationResult,
+      batchExpenseDeletionMutation as UseMutationResult,
+    );
   }, [recurringExpenseArray]);
 
   return {
     structuredExpenseData,
-    setStructuredExpenseData,
     expenseFormVisibility,
     setExpenseFormVisibility,
     expenseModalVisibility,
     setExpenseModalVisibility,
     isExpenseFormOrModalOpen,
-    setIsExpenseFormOrModalOpen,
     oldExpenseBeingEdited,
     setOldExpenseBeingEdited,
-    expenseIdToDelete,
-    setExpenseIdToDelete,
+    expenseItemToDelete,
+    setExpenseItemToDelete,
     defaultCalendarDate,
     setDefaultCalendarDate,
+    isLoading,
   };
 }

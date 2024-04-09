@@ -1,12 +1,10 @@
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   addColourSelectionFunctionality,
   BasicGroupData,
   BudgetFormVisibility,
-  BudgetItemEntity,
   changeFormOrModalVisibility,
   EmailContext,
-  getBudgetList,
   GroupItemEntity,
   handleGroupUpdating,
   SetFormVisibility,
@@ -17,22 +15,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface GroupUpdatingFormProps {
   oldGroupBeingEdited: { oldColour: string; oldGroupName: string };
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-  setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
-  groupArray: GroupItemEntity[];
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
 }
 
 /**
  * A form for updating an existing budget category group.
  */
-export default function GroupUpdatingForm({
-  setBudgetArray,
-  oldGroupBeingEdited,
-  setGroupArray,
-  groupArray,
-  setBudgetFormVisibility,
-}: GroupUpdatingFormProps) {
+export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVisibility }: GroupUpdatingFormProps) {
   const [formData, setFormData] = useState<BasicGroupData>({
     colour: oldGroupBeingEdited.oldColour,
     group: oldGroupBeingEdited.oldGroupName,
@@ -114,7 +103,7 @@ export default function GroupUpdatingForm({
       colour: oldGroupBeingEdited.oldColour,
       group: oldGroupBeingEdited.oldGroupName,
     });
-    getBudgetList().then((budgetList) => setBudgetArray(budgetList));
+    // getBudgetList().then((budgetList) => setBudgetArray(budgetList));
   }
 
   return (

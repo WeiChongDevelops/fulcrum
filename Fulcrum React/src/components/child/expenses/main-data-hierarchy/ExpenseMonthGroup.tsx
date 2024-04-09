@@ -1,6 +1,7 @@
 import {
   CategoryToIconGroupAndColourMap,
   ExpenseFormVisibility,
+  ExpenseItemEntity,
   ExpenseModalVisibility,
   MonthExpenseGroupEntity,
   monthStringArray,
@@ -18,7 +19,7 @@ interface ExpenseMonthGroupProps {
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-  setExpenseIdToDelete: Dispatch<SetStateAction<string>>;
+  setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
   categoryDataMap: CategoryToIconGroupAndColourMap;
   publicUserData: PublicUserData;
   monthsFromY2KToNow: number;
@@ -36,7 +37,7 @@ export const ExpenseMonthGroup = memo(
     setExpenseFormVisibility,
     setExpenseModalVisibility,
     setOldExpenseBeingEdited,
-    setExpenseIdToDelete,
+    setExpenseItemToDelete,
     categoryDataMap,
     publicUserData,
     monthsFromY2KToNow,
@@ -91,7 +92,7 @@ export const ExpenseMonthGroup = memo(
                 setExpenseFormVisibility={setExpenseFormVisibility}
                 setExpenseModalVisibility={setExpenseModalVisibility}
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-                setExpenseIdToDelete={setExpenseIdToDelete}
+                setExpenseItemToDelete={setExpenseItemToDelete}
                 categoryDataMap={categoryDataMap}
                 publicUserData={publicUserData}
                 key={key}

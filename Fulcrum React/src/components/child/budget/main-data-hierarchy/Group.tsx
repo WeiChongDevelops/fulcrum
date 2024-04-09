@@ -3,12 +3,11 @@ import {
   BudgetItemEntity,
   BudgetModalVisibility,
   dynamicallySizeBudgetNameDisplays,
+  EmailContext,
   ExpenseItemEntity,
   formatDollarAmountStatic,
-  getBudgetList,
   getGroupBudgetTotal,
   getGroupExpenditureTotal,
-  getGroupList,
   GroupItemEntity,
   handleGroupDeletion,
   PreviousBudgetBeingEdited,
@@ -17,14 +16,12 @@ import {
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../../util.ts";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import BudgetTile from "./BudgetTile.tsx";
 import AddNewBudgetToGroupButton from "../buttons/AddNewBudgetToGroupButton.tsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface GroupProps {
-  setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>;
-  setGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
-
   groupName: string;
   groupColour: string;
 
@@ -55,8 +52,6 @@ interface GroupProps {
 export default function Group({
   groupName,
   filteredBudgetArray,
-  setBudgetArray,
-  setGroupArray,
   groupColour,
   expenseArray,
   setGroupNameOfNewItem,
@@ -69,6 +64,35 @@ export default function Group({
   perCategoryTotalExpenseArray,
   publicUserData,
 }: GroupProps) {
+  const queryClient = useQueryClient();
+  const email = useContext(EmailContext);
+
+  interface GroupDeletionProps {
+    groupToDelete: string;
+    keepContainedCategories: boolean;
+  }
+
+  const groupDeletionMutation = useMutation({
+    mutationFn: (groupDeletionProps: GroupDeletionProps) => {
+      return handleGroupDeletion(groupDeletionProps.groupToDelete, groupDeletionProps.keepContainedCategories);
+    },
+    onMutate: async (groupDeletionProps: GroupDeletionProps) => {
+      await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
+      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["groupArray", email]);
+      await queryClient.setQueryData(["groupArray", email], (prevGroupCache: GroupItemEntity[]) => {
+        return prevGroupCache.filter((groupItem) => groupItem.group !== groupDeletionProps.groupToDelete);
+      });
+      return { dataBeforeOptimisticUpdate };
+    },
+    onError: (_error, _variables, context) => {
+      return queryClient.setQueryData(["groupArray", email], context?.dataBeforeOptimisticUpdate);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["groupArray", email] });
+      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+    },
+  });
+
   const [groupBudgetTotal, setGroupBudgetTotal] = useState(getGroupBudgetTotal(filteredBudgetArray));
   const [groupExpenditureTotal, setGroupExpenditureTotal] = useState(getGroupBudgetTotal(filteredBudgetArray));
 
@@ -89,13 +113,17 @@ export default function Group({
         isDeleteOptionsModalVisible: true,
       }));
     } else {
-      handleGroupDeletion(groupName, setGroupArray, false)
-        .then(async () => {
-          setGroupArray(await getGroupList());
-          setBudgetArray(await getBudgetList());
-          console.log("Deletion successful");
-        })
-        .catch((error) => console.log("Deletion unsuccessful", error));
+      // handleGroupDeletion(groupName, setGroupArray, false)
+      //   .then(async () => {
+      //     setGroupArray(await getGroupList());
+      //     setBudgetArray(await getBudgetList());
+      //     console.log("Deletion successful");
+      //   })
+      //   .catch((error) => console.log("Deletion unsuccessful", error));
+      groupDeletionMutation.mutate({
+        groupToDelete: groupName,
+        keepContainedCategories: false,
+      });
     }
   }
 
