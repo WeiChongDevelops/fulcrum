@@ -88,11 +88,13 @@ export default function ExpenseModalsAndForms({
       // console.log(expenseDeletionMutationProps.expenseItemToDelete);
       // If it's a recurring expense instance, add to blacklist and if requested by user delete future/all instances
       if (expenseDeletionMutationProps.deletionScale === "THIS") {
-        await handleBlacklistedExpenseCreation(
-          expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
-          expenseDeletionMutationProps.expenseItemToDelete.timestamp,
-        );
-        return await handleExpenseDeletion(expenseDeletionMutationProps.expenseItemToDelete.expenseId);
+        if (!!expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId) {
+          await handleBlacklistedExpenseCreation(
+            expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
+            expenseDeletionMutationProps.expenseItemToDelete.timestamp,
+          );
+        }
+        await handleExpenseDeletion(expenseDeletionMutationProps.expenseItemToDelete.expenseId);
       } else {
         let recurringInstancesToDelete: ExpenseItemEntity[] = [];
         if (expenseDeletionMutationProps.deletionScale === "FUTURE") {
@@ -184,6 +186,7 @@ export default function ExpenseModalsAndForms({
         <ExpenseCreationForm
           setExpenseFormVisibility={setExpenseFormVisibility}
           budgetArray={budgetArray}
+          groupArray={groupArray}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           currencySymbol={getCurrencySymbol(publicUserData.currency)}
           defaultCalendarDate={defaultCalendarDate}
@@ -192,7 +195,7 @@ export default function ExpenseModalsAndForms({
       )}
       {expenseFormVisibility.isUpdateExpenseVisible && (
         <ExpenseUpdatingForm
-          budgetArray={budgetArray}
+          // budgetArray={budgetArray}
           setExpenseFormVisibility={setExpenseFormVisibility}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           oldExpenseBeingEdited={oldExpenseBeingEdited}

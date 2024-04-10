@@ -103,6 +103,7 @@ export default function RecurringExpenseModalsAndForms({
         <ExpenseCreationForm
           setExpenseFormVisibility={setRecurringExpenseFormVisibility}
           budgetArray={budgetArray}
+          groupArray={groupArray}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           currencySymbol={getCurrencySymbol(publicUserData.currency)}
           defaultCalendarDate={new Date()}

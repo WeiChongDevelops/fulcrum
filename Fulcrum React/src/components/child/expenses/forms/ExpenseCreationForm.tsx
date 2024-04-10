@@ -12,11 +12,13 @@ import {
   RecurringExpenseItemEntity,
   recurringFrequencyOptions,
   Value,
-  handleBudgetCreation,
   RecurringExpenseFormVisibility,
   ExpenseFormVisibility,
   SetFormVisibility,
   EmailContext,
+  CategoryToIconGroupAndColourMap,
+  getColourOfGroup,
+  GroupItemEntity,
 } from "../../../../util.ts";
 import { v4 as uuid } from "uuid";
 
@@ -30,6 +32,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface ExpenseCreationFormProps {
   setExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility> | SetFormVisibility<ExpenseFormVisibility>;
   budgetArray: BudgetItemEntity[];
+  groupArray: GroupItemEntity[];
   categoryOptions: SelectorOptionsFormattedData[];
   currencySymbol: string;
   defaultCalendarDate: Date;
@@ -42,6 +45,7 @@ interface ExpenseCreationFormProps {
 export default function ExpenseCreationForm({
   setExpenseFormVisibility,
   budgetArray,
+  groupArray,
   categoryOptions,
   currencySymbol,
   defaultCalendarDate,
@@ -58,64 +62,151 @@ export default function ExpenseCreationForm({
   const queryClient = useQueryClient();
   const email = useContext(EmailContext);
 
+  interface ExpenseCreationMutationProps {
+    newExpenseItem: ExpenseItemEntity;
+    newBudgetItem?: BudgetItemEntity;
+  }
+
   const expenseCreationMutation = useMutation({
-    mutationFn: (newExpenseItem: ExpenseItemEntity) => handleExpenseCreation(newExpenseItem),
-    onMutate: async (newExpenseItem: ExpenseItemEntity) => {
+    mutationFn: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {
+      // expenseCreationMutationProps.newBudgetItem && (await handleBudgetCreation(expenseCreationMutationProps.newBudgetItem));
+      await handleExpenseCreation(expenseCreationMutationProps.newExpenseItem);
+    },
+    onMutate: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {
       await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
-      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
-      await queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
-        return [newExpenseItem, ...prevExpenseCache];
+      await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
+      await queryClient.cancelQueries({ queryKey: ["groupAndColourMap", email] });
+
+      const budgetArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
+      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
+        return [...prevBudgetCache, { ...expenseCreationMutationProps.newBudgetItem }];
       });
-      return { dataBeforeOptimisticUpdate };
+
+      const categoryDataMapBeforeOptimisticUpdate = await queryClient.getQueryData(["groupAndColourMap", email]);
+      if (expenseCreationMutationProps.newBudgetItem) {
+        const newBudgetItem = expenseCreationMutationProps.newBudgetItem;
+        await queryClient.setQueryData(["groupAndColourMap", email], (prevCategoryMap: CategoryToIconGroupAndColourMap) => {
+          return new Map([
+            ...prevCategoryMap,
+            [
+              newBudgetItem.category,
+              {
+                iconPath: newBudgetItem.iconPath,
+                group: newBudgetItem.group,
+                colour: getColourOfGroup(newBudgetItem.group, groupArray),
+              },
+            ],
+          ]);
+        });
+      }
+
+      const expenseArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
+      await queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
+        return [expenseCreationMutationProps.newExpenseItem, ...prevExpenseCache];
+      });
+
+      return {
+        budgetArrayBeforeOptimisticUpdate,
+        expenseArrayBeforeOptimisticUpdate,
+        categoryDataMapBeforeOptimisticUpdate,
+      };
     },
     onError: (_error, _variables, context) => {
-      queryClient.setQueryData(["expenseArray", email], context?.dataBeforeOptimisticUpdate);
+      queryClient.setQueryData(["budgetArray", email], context?.budgetArrayBeforeOptimisticUpdate);
+      queryClient.setQueryData(["groupAndColourMap", email], context?.categoryDataMapBeforeOptimisticUpdate);
+      queryClient.setQueryData(["expenseArray", email], context?.expenseArrayBeforeOptimisticUpdate);
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+      await queryClient.invalidateQueries({ queryKey: ["groupAndColourMap", email] });
+      await queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
     },
   });
 
+  interface RecurringExpenseCreationMutationProps {
+    newRecurringExpenseItem: RecurringExpenseItemEntity;
+    newBudgetItem?: BudgetItemEntity;
+  }
+
   const recurringExpenseCreationMutation = useMutation({
-    mutationFn: (newRecurringExpenseItem: RecurringExpenseItemEntity) =>
-      handleRecurringExpenseCreation(newRecurringExpenseItem),
-    onMutate: async (newRecurringExpenseItem: RecurringExpenseItemEntity) => {
+    mutationFn: async (recurringExpenseCreationMutationProps: RecurringExpenseCreationMutationProps) => {
+      // recurringExpenseCreationMutationProps.newBudgetItem &&
+      //   (await handleBudgetCreation(recurringExpenseCreationMutationProps.newBudgetItem));
+      await handleRecurringExpenseCreation(recurringExpenseCreationMutationProps.newRecurringExpenseItem);
+    },
+    onMutate: async (recurringExpenseCreationMutationProps: RecurringExpenseCreationMutationProps) => {
+      await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
+      await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
+      await queryClient.cancelQueries({ queryKey: ["groupAndColourMap", email] });
       await queryClient.cancelQueries({ queryKey: ["recurringExpenseArray", email] });
-      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["recurringExpenseArray", email]);
+
+      const budgetArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
+      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
+        return [...prevBudgetCache, { ...recurringExpenseCreationMutationProps.newBudgetItem }];
+      });
+
+      const categoryDataMapBeforeOptimisticUpdate = await queryClient.getQueryData(["groupAndColourMap", email]);
+      if (recurringExpenseCreationMutationProps.newBudgetItem) {
+        const newBudgetItem = recurringExpenseCreationMutationProps.newBudgetItem;
+        await queryClient.setQueryData(["groupAndColourMap", email], (prevCategoryMap: CategoryToIconGroupAndColourMap) => {
+          return new Map([
+            ...prevCategoryMap,
+            [
+              newBudgetItem.category,
+              {
+                iconPath: newBudgetItem.iconPath,
+                group: newBudgetItem.group,
+                colour: getColourOfGroup(newBudgetItem.group, groupArray),
+              },
+            ],
+          ]);
+        });
+      }
+
+      const recurringExpenseArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["recurringExpenseArray", email]);
       await queryClient.setQueryData(
         ["recurringExpenseArray", email],
         (prevRecurringExpenseCache: RecurringExpenseItemEntity[]) => {
-          return [newRecurringExpenseItem, ...prevRecurringExpenseCache];
+          return [recurringExpenseCreationMutationProps.newRecurringExpenseItem, ...prevRecurringExpenseCache];
         },
       );
-      return { dataBeforeOptimisticUpdate };
+
+      return {
+        budgetArrayBeforeOptimisticUpdate,
+        recurringExpenseArrayBeforeOptimisticUpdate,
+        categoryDataMapBeforeOptimisticUpdate,
+      };
     },
-    onError: (_error, _variables, context) => {
-      return queryClient.setQueryData(["recurringExpenseArray", email], context?.dataBeforeOptimisticUpdate);
+    onError: async (_error, _variables, context) => {
+      await queryClient.setQueryData(["budgetArray", email], context?.budgetArrayBeforeOptimisticUpdate);
+      await queryClient.setQueryData(["groupAndColourMap", email], context?.categoryDataMapBeforeOptimisticUpdate);
+      queryClient.setQueryData(["recurringExpenseArray", email], context?.recurringExpenseArrayBeforeOptimisticUpdate);
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["recurringExpenseArray", email] });
-      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+      await queryClient.invalidateQueries({ queryKey: ["groupAndColourMap", email] });
+      await queryClient.invalidateQueries({ queryKey: ["recurringExpenseArray", email] });
+      await queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
     },
   });
 
-  const budgetCreationMutation = useMutation({
-    mutationFn: (newBudgetItem: BudgetItemEntity) => handleBudgetCreation(newBudgetItem),
-    onMutate: async (newBudgetItem: BudgetItemEntity) => {
-      await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
-      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
-      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
-        return [...prevBudgetCache, newBudgetItem];
-      });
-      return { dataBeforeOptimisticUpdate };
-    },
-    onError: (_error, _variables, context) => {
-      return queryClient.setQueryData(["budgetArray", email], context?.dataBeforeOptimisticUpdate);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
-    },
-  });
+  // const budgetCreationMutation = useMutation({
+  //   mutationFn: (newBudgetItem: BudgetItemEntity) => handleBudgetCreation(newBudgetItem),
+  //   onMutate: async (newBudgetItem: BudgetItemEntity) => {
+  //     await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
+  //     const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
+  //     await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
+  //       return [...prevBudgetCache, { ...newBudgetItem }];
+  //     });
+  //     return { dataBeforeOptimisticUpdate };
+  //   },
+  //   onError: (_error, _variables, context) => {
+  //     return queryClient.setQueryData(["budgetArray", email], context?.dataBeforeOptimisticUpdate);
+  //   },
+  //   onSettled: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+  //   },
+  // });
 
   function hideForm() {
     setExpenseFormVisibility((current: any) => ({
@@ -149,23 +240,24 @@ export default function ExpenseCreationForm({
       recurringExpenseId: null,
     };
 
+    let newDefaultBudgetItem: BudgetItemEntity | undefined = undefined;
+
     if (!budgetArray.map((budgetItem) => budgetItem.category).includes(newExpenseItem.category)) {
-      const newDefaultBudgetItem: BudgetItemEntity = {
+      newDefaultBudgetItem = {
         category: formData.category,
         amount: 0,
         iconPath: "category-default-icon.svg",
         group: "Miscellaneous",
         timestamp: formData.timestamp as Date,
       };
-      // setBudgetArray((current) => [...current, newDefaultBudgetItem]);
-      // await handleBudgetCreation(setBudgetArray, newDefaultBudgetItem);
-      budgetCreationMutation.mutate(newDefaultBudgetItem);
+      // budgetCreationMutation.mutate(newDefaultBudgetItem);
     }
 
     if (formData.frequency === "never") {
-      // await handleExpenseCreation(newExpenseItem, setExpenseArray);
-      // setExpenseArray(await getExpenseList());
-      expenseCreationMutation.mutate(newExpenseItem);
+      expenseCreationMutation.mutate({
+        newExpenseItem: newExpenseItem,
+        newBudgetItem: newDefaultBudgetItem,
+      });
     } else {
       const newRecurringExpenseItem: RecurringExpenseItemEntity = {
         recurringExpenseId: uuid(),
@@ -174,11 +266,10 @@ export default function ExpenseCreationForm({
         timestamp: formData.timestamp as Date,
         frequency: formData.frequency,
       };
-      // await handleRecurringExpenseCreation(newRecurringExpenseItem);
-      // setRecurringExpenseArray(await getRecurringExpenseList());
-      // setExpenseArray(await getExpenseList());
-      // setBudgetArray(await getBudgetList());
-      recurringExpenseCreationMutation.mutate(newRecurringExpenseItem);
+      recurringExpenseCreationMutation.mutate({
+        newRecurringExpenseItem: newRecurringExpenseItem,
+        newBudgetItem: newDefaultBudgetItem,
+      });
     }
     setFormData({
       category: "",

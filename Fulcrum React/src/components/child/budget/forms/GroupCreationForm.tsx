@@ -11,6 +11,7 @@ import {
   SetFormVisibility,
   changeFormOrModalVisibility,
   EmailContext,
+  groupSort,
 } from "../../../../util.ts";
 import "../../../../css/Budget.css";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
@@ -39,7 +40,7 @@ export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCrea
       await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["groupArray", email]);
       await queryClient.setQueryData(["groupArray", email], (prevGroupCache: GroupItemEntity[]) => {
-        return [...prevGroupCache, newGroupItem];
+        return [...prevGroupCache, newGroupItem].sort(groupSort);
       });
       return { dataBeforeOptimisticUpdate };
     },

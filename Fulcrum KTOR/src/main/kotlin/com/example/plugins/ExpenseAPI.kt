@@ -285,8 +285,8 @@ fun Application.configureExpenseRouting() {
 //                }
 
             } catch (e: Exception) {
-                call.application.log.error("Error while creating removed recurring expense instance", e)
-                call.respondError("Removed recurring expense instance not added.")
+                call.application.log.error("Error while creating blacklist entry.", e)
+                call.respondError("Error while creating blacklist entry: $e")
             }
         }
 

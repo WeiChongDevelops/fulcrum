@@ -12,8 +12,6 @@ import {
   SetFormVisibility,
   changeFormOrModalVisibility,
   EmailContext,
-  BudgetItemEntity,
-  handleBudgetCreation,
 } from "../../../../util.ts";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
@@ -21,7 +19,7 @@ import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../selectors/CategorySelector.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface ExpenseUpdatingFormProps {
-  budgetArray: BudgetItemEntity[];
+  // budgetArray: BudgetItemEntity[];
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   categoryOptions: SelectorOptionsFormattedData[];
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
@@ -32,7 +30,7 @@ interface ExpenseUpdatingFormProps {
  * A form for updating an existing expense item.
  */
 export default function ExpenseUpdatingForm({
-  budgetArray,
+  // budgetArray,
   setExpenseFormVisibility,
   categoryOptions,
   oldExpenseBeingEdited,
@@ -68,24 +66,6 @@ export default function ExpenseUpdatingForm({
     onSettled: async () => {
       queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
       queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
-    },
-  });
-
-  const budgetCreationMutation = useMutation({
-    mutationFn: (newBudgetItem: BudgetItemEntity) => handleBudgetCreation(newBudgetItem),
-    onMutate: async (newBudgetItem: BudgetItemEntity) => {
-      await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
-      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
-      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
-        return [...prevBudgetCache, newBudgetItem];
-      });
-      return { dataBeforeOptimisticUpdate };
-    },
-    onError: (_error, _variables, context) => {
-      return queryClient.setQueryData(["budgetArray", email], context?.dataBeforeOptimisticUpdate);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
     },
   });
 
@@ -128,18 +108,18 @@ export default function ExpenseUpdatingForm({
       recurringExpenseId: null,
     };
 
-    if (!budgetArray.map((budgetItem) => budgetItem.category).includes(updatedExpenseItem.category)) {
-      const newDefaultBudgetItem: BudgetItemEntity = {
-        category: formData.category,
-        amount: 0,
-        iconPath: "category-default-icon.svg",
-        group: "Miscellaneous",
-        timestamp: new Date(),
-      };
-      // setBudgetArray((current) => [...current, newDefaultBudgetItem]);
-      // await handleBudgetCreation(setBudgetArray, newDefaultBudgetItem);
-      budgetCreationMutation.mutate(newDefaultBudgetItem);
-    }
+    // if (!budgetArray.map((budgetItem) => budgetItem.category).includes(updatedExpenseItem.category)) {
+    //   const newDefaultBudgetItem: BudgetItemEntity = {
+    //     category: formData.category,
+    //     amount: 0,
+    //     iconPath: "category-default-icon.svg",
+    //     group: "Miscellaneous",
+    //     timestamp: new Date(),
+    //   };
+    //   // setBudgetArray((current) => [...current, newDefaultBudgetItem]);
+    //   // await handleBudgetCreation(setBudgetArray, newDefaultBudgetItem);
+    //   budgetCreationMutation.mutate(newDefaultBudgetItem);
+    // }
 
     expenseUpdatingMutation.mutate(updatedExpenseItem);
 

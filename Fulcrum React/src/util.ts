@@ -632,6 +632,7 @@ export async function handleBudgetCreation(
   newBudgetItem: BudgetItemEntity,
 ): Promise<void> {
   try {
+    console.log(`Found path: ${newBudgetItem.iconPath}`);
     const response = await fetch("http://localhost:8080/api/createBudget", {
       method: "POST",
       headers: {
@@ -1473,7 +1474,7 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
  * @param b - The second group item for comparison.
  * @returns Sorting order value.
  */
-function groupSort(a: GroupItemEntity, b: GroupItemEntity): number {
+export function groupSort(a: GroupItemEntity, b: GroupItemEntity): number {
   if (a.group === "Miscellaneous") return 1;
   if (b.group === "Miscellaneous") return -1;
   return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();

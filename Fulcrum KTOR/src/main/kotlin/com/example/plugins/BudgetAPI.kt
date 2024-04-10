@@ -26,6 +26,10 @@ fun Application.configureBudgetRouting() {
         post("/api/createBudget") {
             try {
                 val budgetCreateRequest = call.receive<BudgetCreateRequestReceived>()
+                val budgetList =
+                    supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp")) {
+                        eq("userId", getActiveUserId())
+                    }.decodeList<BudgetItemResponse>()
 
                 val itemToInsert = BudgetCreateRequestSent(
                     userId = getActiveUserId(),

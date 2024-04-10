@@ -15,6 +15,8 @@ import {
   changeFormOrModalVisibility,
   EmailContext,
   PreviousBudgetBeingEdited,
+  getRandomGroupColour,
+  groupSort,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
@@ -48,6 +50,7 @@ export default function BudgetUpdatingForm({
   interface BudgetUpdatingMutationProps {
     originalCategory: string;
     updatedBudgetItem: BudgetItemEntity;
+    newGroupItem?: GroupItemEntity;
   }
 
   const queryClient = useQueryClient();
@@ -60,8 +63,16 @@ export default function BudgetUpdatingForm({
       );
     },
     onMutate: async (budgetUpdatingMutationProps: BudgetUpdatingMutationProps) => {
+      if (!!budgetUpdatingMutationProps.newGroupItem) {
+        await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
+        await queryClient.setQueryData(["groupArray", email], (prevGroupCache: GroupItemEntity[]) => {
+          return [...prevGroupCache, budgetUpdatingMutationProps.newGroupItem!].sort(groupSort);
+        });
+      }
+      const groupArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["groupArray", email]);
+
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
-      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
+      const budgetArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
       await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
         return prevBudgetCache.map((budgetItem) =>
           budgetItem.category === budgetUpdatingMutationProps.originalCategory
@@ -69,13 +80,15 @@ export default function BudgetUpdatingForm({
             : budgetItem,
         );
       });
-      return { dataBeforeOptimisticUpdate };
+      return { budgetArrayBeforeOptimisticUpdate, groupArrayBeforeOptimisticUpdate };
     },
-    onError: (_error, _variables, context) => {
-      return queryClient.setQueryData(["budgetArray", email], context?.dataBeforeOptimisticUpdate);
+    onError: async (_error, _variables, context) => {
+      await queryClient.setQueryData(["budgetArray", email], context?.budgetArrayBeforeOptimisticUpdate);
+      await queryClient.setQueryData(["groupArray", email], context?.groupArrayBeforeOptimisticUpdate);
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
+      await queryClient.invalidateQueries({ queryKey: ["groupArray", email] });
     },
   });
 
@@ -110,13 +123,22 @@ export default function BudgetUpdatingForm({
 
     hideForm();
 
-    // await handleBudgetUpdating(oldBudgetBeingEdited.oldCategory, formData);
-    // getBudgetList().then((budgetList) => setBudgetArray(budgetList));
+    let defaultGroupItem: GroupItemEntity | undefined = undefined;
 
     const updatedBudgetItem: BudgetItemEntity = { ...formData, iconPath: formData.iconPath, timestamp: new Date() };
+
+    if (!groupArray.map((groupItem) => groupItem.group).includes(updatedBudgetItem.group)) {
+      defaultGroupItem = {
+        group: updatedBudgetItem.group,
+        colour: getRandomGroupColour(),
+        timestamp: new Date(),
+      };
+    }
+
     budgetUpdatingMutation.mutate({
       originalCategory: oldBudgetBeingEdited.oldCategory,
       updatedBudgetItem: updatedBudgetItem,
+      newGroupItem: defaultGroupItem,
     });
 
     setFormData({
