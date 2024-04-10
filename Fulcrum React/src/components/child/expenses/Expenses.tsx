@@ -6,13 +6,17 @@ import {
   PublicUserData,
   BlacklistedExpenseItemEntity,
   RecurringExpenseItemEntity,
+  MonthExpenseGroupEntity,
+  getStructuredExpenseData,
+  updateRecurringExpenseInstances,
 } from "../../../util.ts";
 import "../../../css/Expense.css";
 import ExpenseMonthCarousel from "./main-data-hierarchy/ExpenseMonthCarousel.tsx";
 import ExpenseModalsAndForms from "./ExpenseModalsAndForms.tsx";
 import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
-import useInitialExpenseData from "../../../hooks/useInitialExpenseData.ts";
+import useInitialExpenseData from "../../../hooks/initialisations/useInitialExpenseData.ts";
 import Loader from "../other/Loader.tsx";
+import { useMemo, useState } from "react";
 
 interface ExpensesProps {
   publicUserData: PublicUserData;
@@ -39,7 +43,6 @@ export default function Expenses({
   recurringExpenseArray,
 }: ExpensesProps) {
   const {
-    structuredExpenseData,
     expenseFormVisibility,
     setExpenseFormVisibility,
     expenseModalVisibility,
@@ -51,12 +54,21 @@ export default function Expenses({
     setExpenseItemToDelete,
     defaultCalendarDate,
     setDefaultCalendarDate,
-    isLoading,
-  } = useInitialExpenseData({
-    expenseArray,
-    blacklistedExpenseArray,
-    recurringExpenseArray,
-  });
+  } = useInitialExpenseData();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>();
+
+  useMemo(() => {
+    const updateStructuredExpenseData = async () => {
+      setStructuredExpenseData(await getStructuredExpenseData(expenseArray));
+    };
+    updateStructuredExpenseData().then(() => setIsLoading(false));
+  }, [expenseArray]);
+
+  useMemo(() => {
+    updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, blacklistedExpenseArray);
+  }, [recurringExpenseArray]);
 
   if (isLoading) {
     return <Loader isLoading={isLoading} isDarkMode={false} />;

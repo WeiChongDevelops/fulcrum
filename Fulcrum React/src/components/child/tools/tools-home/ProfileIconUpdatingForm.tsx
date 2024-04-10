@@ -1,8 +1,6 @@
-import { FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
-  EmailContext,
-  handlePublicUserDataUpdating,
   ProfileIconUpdatingFormData,
   PublicUserData,
   SetFormVisibility,
@@ -10,7 +8,7 @@ import {
 } from "../../../../util.ts";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import ProfileIconSelector from "../../selectors/ProfileIconSelector.tsx";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useUpdatePublicUserData from "../../../../hooks/mutations/other/useUpdatePublicUserData.ts";
 interface ProfileIconUpdatingFormProps {
   oldIconFileName: string;
   setToolsFormVisibility: SetFormVisibility<ToolsFormVisibility>;
@@ -30,25 +28,7 @@ export default function ProfileIconUpdatingForm({
   });
   const formRef = useRef<HTMLDivElement>(null);
 
-  const email = useContext(EmailContext);
-  const queryClient = useQueryClient();
-
-  const publicUserDataUpdatingMutation = useMutation({
-    mutationKey: ["publicUserData", email],
-    mutationFn: (updatedPublicUserData: PublicUserData) => handlePublicUserDataUpdating(updatedPublicUserData),
-    onMutate: async (updatedPublicUserData: PublicUserData) => {
-      await queryClient.cancelQueries({ queryKey: ["publicUserData", email] });
-      const publicUserDataBeforeOptimisticUpdate = queryClient.getQueryData(["publicUserData", email]);
-      await queryClient.setQueryData(["publicUserData", email], updatedPublicUserData);
-      return { publicUserDataBeforeOptimisticUpdate };
-    },
-    onError: (_error, _variables, context) => {
-      queryClient.setQueryData(["publicUserData", email], context?.publicUserDataBeforeOptimisticUpdate);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["publicUserData", email] });
-    },
-  });
+  const { mutate: updatePublicUserData } = useUpdatePublicUserData();
 
   useEffect(() => {
     addIconSelectionFunctionality(setFormData, "profile");
@@ -76,9 +56,7 @@ export default function ProfileIconUpdatingForm({
     hideForm();
 
     const updatedPublicUserData: PublicUserData = { ...publicUserData, profileIconFileName: formData.iconPath };
-    publicUserDataUpdatingMutation.mutate(updatedPublicUserData);
-    // await handlePublicUserDataUpdating(updatedPublicUserData);
-    // getPublicUserData().then((publicUserData) => setPublicUserData(publicUserData));
+    updatePublicUserData(updatedPublicUserData);
   }
 
   useEffect(() => {

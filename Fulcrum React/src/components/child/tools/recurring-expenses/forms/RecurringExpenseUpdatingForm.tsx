@@ -1,5 +1,5 @@
 import FulcrumButton from "../../../other/FulcrumButton.tsx";
-import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
   SelectorOptionsFormattedData,
   colourStyles,
@@ -9,20 +9,18 @@ import {
   RecurringExpenseUpdatingFormData,
   recurringFrequencyOptions,
   capitaliseFirstLetter,
-  handleRecurringExpenseUpdating,
   RecurringExpenseFormVisibility,
   Value,
   SetFormVisibility,
   changeFormOrModalVisibility,
-  EmailContext,
 } from "../../../../../util.ts";
 import Select from "react-select";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../../selectors/CategorySelector.tsx";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuid } from "uuid";
+import useUpdateRecurringExpense from "../../../../../hooks/mutations/recurring-expense/useUpdateRecurringExpense.ts";
 
 interface RecurringExpenseUpdatingFormProps {
   setRecurringExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility>;
@@ -47,36 +45,7 @@ export default function RecurringExpenseUpdatingForm({
     frequency: oldRecurringExpenseBeingEdited.oldFrequency,
   });
   const formRef = useRef<HTMLDivElement>(null);
-
-  const email = useContext(EmailContext);
-  const queryClient = useQueryClient();
-
-  const recurringExpenseUpdatingMutation = useMutation({
-    mutationFn: (updatedRecurringExpenseItem: RecurringExpenseItemEntity) => {
-      return handleRecurringExpenseUpdating(updatedRecurringExpenseItem);
-    },
-    onMutate: async (updatedRecurringExpenseItem: RecurringExpenseItemEntity) => {
-      await queryClient.cancelQueries({ queryKey: ["recurringExpenseArray", email] });
-      const recurringExpenseArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["recurringExpenseArray", email]);
-      await queryClient.setQueryData(
-        ["recurringExpenseArray", email],
-        (prevRecurringExpenseCache: RecurringExpenseItemEntity[]) => {
-          return prevRecurringExpenseCache.map((recurringExpenseItem) =>
-            recurringExpenseItem.recurringExpenseId === updatedRecurringExpenseItem.recurringExpenseId
-              ? updatedRecurringExpenseItem
-              : recurringExpenseItem,
-          );
-        },
-      );
-      return { recurringExpenseArrayBeforeOptimisticUpdate };
-    },
-    onError: (_error, _variables, context) => {
-      queryClient.setQueryData(["recurringExpenseArray", email], context?.recurringExpenseArrayBeforeOptimisticUpdate);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["recurringExpenseArray", email] });
-    },
-  });
+  const { mutate: updateRecurringExpense } = useUpdateRecurringExpense();
 
   useEffect(() => {
     window.addEventListener("mousedown", handleClickOutside);
@@ -112,7 +81,7 @@ export default function RecurringExpenseUpdatingForm({
       recurringExpenseId: uuid(),
       timestamp: formData.timestamp as Date,
     };
-    recurringExpenseUpdatingMutation.mutate(updatedRecurringExpenseItem);
+    updateRecurringExpense(updatedRecurringExpenseItem);
     // getRecurringExpenseList().then((expenseList) => setRecurringExpenseArray(expenseList));
     //
     // // To update budgetArray if new category is made:

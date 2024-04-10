@@ -14,7 +14,7 @@ import AddNewRecurringExpenseButton from "./buttons/AddNewRecurringExpenseButton
 import RecurringExpenseModalsAndForms from "./RecurringExpenseModalsAndForms.tsx";
 import ActiveFormClickShield from "../../other/ActiveFormClickShield.tsx";
 import RecurringExpenseItem from "./RecurringExpenseItem.tsx";
-import useInitialRecurringExpenseData from "../../../../hooks/useInitialRecurringExpenseData.ts";
+import useInitialRecurringExpenseData from "../../../../hooks/initialisations/useInitialRecurringExpenseData.ts";
 
 interface RecurringExpensesProps {
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;

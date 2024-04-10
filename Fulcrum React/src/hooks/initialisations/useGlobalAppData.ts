@@ -14,7 +14,7 @@ import {
   GroupItemEntity,
   PublicUserData,
   RecurringExpenseItemEntity,
-} from "../util.ts";
+} from "../../util.ts";
 import { useQueries, useQuery, UseQueryResult } from "@tanstack/react-query";
 
 export function useGlobalAppData() {
@@ -149,19 +149,6 @@ export function useGlobalAppData() {
   const errors = globalAppDataQueries
     .map((query: UseQueryResult) => query.error)
     .filter((error) => error !== null) as Error[];
-
-  // THIS USE EFFECT IS TEMPORARY - NO STATE SETTING NEEDED WITH REACT QUERY AFTER RQ IS IMPLEMENTED.
-  // useEffect(() => {
-  //   if (isAllSuccess) {
-  //     setPublicUserData(publicUserDataQuery.data! as PublicUserData);
-  //     setExpenseArray(expenseArrayQuery.data! as ExpenseItemEntity[]);
-  //     setBudgetArray(budgetArrayQuery.data! as BudgetItemEntity[]);
-  //     setGroupArray(groupArrayQuery.data! as GroupItemEntity[]);
-  //     setRecurringExpenseArray(recurringExpenseArrayQuery.data! as RecurringExpenseItemEntity[]);
-  //     setBlacklistedExpenseArray(blacklistedExpenseArrayQuery.data! as BlacklistedExpenseItemEntity[]);
-  //     setCategoryDataMap(groupAndColourMapQuery.data! as CategoryToIconGroupAndColourMap);
-  //   }
-  // }, [globalAppDataQueries]);
 
   return {
     email,

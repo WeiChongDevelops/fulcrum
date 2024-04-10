@@ -10,7 +10,7 @@ import {
   PublicUserData,
   SetFormVisibility,
   SetModalVisibility,
-  y2K,
+  Y2K,
 } from "../../../../util.ts";
 import { ExpenseMonthGroup } from "./ExpenseMonthGroup.tsx";
 
@@ -38,8 +38,8 @@ export default function ExpenseMonthCarousel({
   publicUserData,
   setDefaultCalendarDate,
 }: ExpenseMonthCarouselProps) {
-  const y2KMonth = y2K.getMonth();
-  const y2KYear = y2K.getFullYear();
+  const y2KMonth = Y2K.getMonth();
+  const y2KYear = Y2K.getFullYear();
 
   const monthsFromY2KToNow = getMonthsFromToday(y2KMonth, y2KYear);
 

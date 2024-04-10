@@ -1,10 +1,13 @@
 import { ChangeEvent, createContext, Dispatch, SetStateAction } from "react";
 import { v4 as uuid } from "uuid";
-import { UseMutationResult } from "@tanstack/react-query";
+import useCreateExpense from "./hooks/mutations/expense/useCreateExpense.ts";
+import useBatchDeleteExpenses from "./hooks/mutations/expense/useBatchDeleteExpenses.ts";
 
 // GLOBAL VARIABLES //
 
-export const y2K = new Date("2000-01-01T00:00:00Z");
+export const Y2K = new Date("2000-01-01T00:00:00Z");
+export const DEFAULT_GROUP_COLOUR = "#3f4240";
+export const DEFAULT_CATEGORY_ICON = "category-default-icon.svg";
 
 // CONTEXT //
 
@@ -641,7 +644,7 @@ export async function handleBudgetCreation(
       body: JSON.stringify({
         category: newBudgetItem.category.trim(),
         amount: newBudgetItem.amount ? newBudgetItem.amount : 0,
-        iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : "category-default-icon.svg",
+        iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : DEFAULT_CATEGORY_ICON,
         group: newBudgetItem.group ? newBudgetItem.group.trim() : "Miscellaneous",
       }),
     });
@@ -2018,8 +2021,8 @@ export async function getStructuredExpenseData(expenseArray: ExpenseItemEntity[]
 function initialiseStructuredExpenseData(): MonthExpenseGroupEntity[] {
   let newStructuredExpenseData: MonthExpenseGroupEntity[] = [];
 
-  const y2KMonth = y2K.getMonth();
-  const y2KYear = y2K.getFullYear();
+  const y2KMonth = Y2K.getMonth();
+  const y2KYear = Y2K.getFullYear();
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   const monthsFromY2KToNow = getMonthsFromToday(y2KMonth, y2KYear);
@@ -2114,29 +2117,18 @@ export function getRecurringExpenseInstancesOrNull(
  * @param recurringExpenseArray - The array of recurring expense items.
  * @param expenseArray - The array of expense items.
  * @param blacklistedExpenseArray - The array of blacklisted (removed) recurring expense instances.
- * @param expenseCreationMutation - The mutation for creating expenses.
- * @param batchExpenseDeletionMutation - The mutation for deleting expenses.
  */
 export async function updateRecurringExpenseInstances(
   recurringExpenseArray: RecurringExpenseItemEntity[],
   expenseArray: ExpenseItemEntity[],
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[],
-  expenseCreationMutation: UseMutationResult,
-  batchExpenseDeletionMutation: UseMutationResult,
 ): Promise<void> {
   const misplacedExpensesToRemove = new Set<string>();
   recurringExpenseArray.forEach((recurringExpenseItem) => {
-    processRecurringExpenseInstances(
-      recurringExpenseItem,
-      expenseArray,
-      blacklistedExpenseArray,
-      misplacedExpensesToRemove,
-      expenseCreationMutation,
-    );
+    processRecurringExpenseInstances(recurringExpenseItem, expenseArray, blacklistedExpenseArray, misplacedExpensesToRemove);
   });
   if (misplacedExpensesToRemove.size !== 0) {
-    // await handleBatchExpenseDeletion(misplacedExpensesToRemove);
-    batchExpenseDeletionMutation.mutate(Array.from(misplacedExpensesToRemove));
+    useBatchDeleteExpenses().mutate(Array.from(misplacedExpensesToRemove));
   }
 }
 
@@ -2146,14 +2138,12 @@ export async function updateRecurringExpenseInstances(
  * @param expenseArray - The array of expenses.
  * @param blacklistedExpenseInstances - The array of blacklisted recurring expense instances (manually user-deleted).
  * @param misplacedExpensesToRemove - The cumulative set of expense IDs to batch delete.
- * @param expenseCreationMutation - The mutation for creating expenses.
  */
 function processRecurringExpenseInstances(
   recurringExpenseItem: RecurringExpenseItemEntity,
   expenseArray: ExpenseItemEntity[],
   blacklistedExpenseInstances: BlacklistedExpenseItemEntity[],
   misplacedExpensesToRemove: Set<string>,
-  expenseCreationMutation: UseMutationResult,
 ): void {
   const today = new Date();
   today.setDate(today.getDate() + 1);
@@ -2196,9 +2186,11 @@ function processRecurringExpenseInstances(
           recurringExpenseId: recurringExpenseItem.recurringExpenseId,
         };
         // handleExpenseCreation(newExpenseItemLanded);
-        expenseCreationMutation.mutate({
-          ...newExpenseItemLanded,
-          timestamp: new Date(newExpenseItemLanded.timestamp.getTime()),
+        useCreateExpense().mutate({
+          newExpenseItem: {
+            ...newExpenseItemLanded,
+            timestamp: new Date(newExpenseItemLanded.timestamp.getTime()),
+          },
         });
       }
     }

@@ -7,7 +7,7 @@ import {
   getTotalIncome,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
-} from "../util.ts";
+} from "../../util.ts";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useInitialBudgetData() {

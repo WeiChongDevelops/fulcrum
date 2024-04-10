@@ -1,17 +1,14 @@
 import { TypeMatchConfirmationForm } from "./TypeMatchConfirmationForm.tsx";
 import TwoOptionModal from "../../other/TwoOptionModal.tsx";
 import {
-  handleWipeBudget,
-  handleWipeExpenses,
   changeFormOrModalVisibility,
   SetFormVisibility,
   SetModalVisibility,
   SettingsFormVisibility,
   SettingsModalVisibility,
-  EmailContext,
 } from "../../../../util.ts";
-import { useContext } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useWipeBudget from "../../../../hooks/mutations/budget/useWipeBudget.ts";
+import useWipeExpenses from "../../../../hooks/mutations/expense/useWipeExpenses.ts";
 
 interface SettingsModalsAndFormsProps {
   settingsFormVisibility: SettingsFormVisibility;
@@ -29,31 +26,8 @@ export default function SettingsModalsAndForms({
   settingsModalVisibility,
   setSettingsModalVisibility,
 }: SettingsModalsAndFormsProps) {
-  const email = useContext(EmailContext);
-  const queryClient = useQueryClient();
-
-  const wipeExpensesMutation = useMutation({
-    mutationFn: handleWipeExpenses,
-    onMutate: () => {
-      queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
-      queryClient.invalidateQueries({ queryKey: ["recurringExpenseArray", email] });
-      queryClient.invalidateQueries({ queryKey: ["blacklistedExpenseArray", email] });
-    },
-  });
-
-  const wipeBudgetMutation = useMutation({
-    mutationFn: handleWipeBudget,
-    onMutate: () => {
-      queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["budgetArray"] });
-      queryClient.invalidateQueries({ queryKey: ["groupArray"] });
-    },
-  });
+  const { mutate: wipeExpenses } = useWipeExpenses();
+  const { mutate: wipeBudget } = useWipeBudget();
 
   return (
     <div className="z-40">
@@ -101,7 +75,7 @@ export default function SettingsModalsAndForms({
           optionTwoText={"Delete"}
           optionTwoFunction={() => {
             // handleWipeExpenses();
-            wipeExpensesMutation.mutate();
+            wipeExpenses();
             changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmExpenseWipeModalVisible", false);
             console.log("Wiping all expenses.");
           }}
@@ -120,7 +94,7 @@ export default function SettingsModalsAndForms({
           optionTwoText={"Delete"}
           optionTwoFunction={() => {
             // handleWipeBudget();
-            wipeBudgetMutation.mutate();
+            wipeBudget();
             changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmBudgetWipeModalVisible", false);
             console.log("Wiping all budgets.");
           }}
@@ -139,8 +113,8 @@ export default function SettingsModalsAndForms({
           optionTwoText={"Delete"}
           optionTwoFunction={() => {
             // handleWipeData();
-            wipeBudgetMutation.mutate();
-            wipeExpensesMutation.mutate();
+            wipeExpenses();
+            wipeBudget();
             changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmAllDataWipeModalVisible", false);
             console.log("Wiping all data.");
           }}

@@ -3,7 +3,7 @@ import {
   PreviousRecurringExpenseBeingEdited,
   RecurringExpenseFormVisibility,
   RecurringExpenseModalVisibility,
-} from "../util.ts";
+} from "../../util.ts";
 
 export default function useInitialRecurringExpenseData() {
   const [recurringExpenseModalVisibility, setRecurringExpenseModalVisibility] = useState<RecurringExpenseModalVisibility>({

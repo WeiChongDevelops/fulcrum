@@ -1,23 +1,21 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
   ExpenseItemEntity,
   SelectorOptionsFormattedData,
   ExpenseUpdatingFormData,
-  handleExpenseUpdating,
   handleInputChangeOnFormWithAmount,
   PreviousExpenseBeingEdited,
   Value,
   ExpenseFormVisibility,
   SetFormVisibility,
   changeFormOrModalVisibility,
-  EmailContext,
 } from "../../../../util.ts";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../selectors/CategorySelector.tsx";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useUpdateExpense from "../../../../hooks/mutations/expense/useUpdateExpense.ts";
 interface ExpenseUpdatingFormProps {
   // budgetArray: BudgetItemEntity[];
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
@@ -42,32 +40,7 @@ export default function ExpenseUpdatingForm({
     timestamp: oldExpenseBeingEdited.oldTimestamp,
   });
   const formRef = useRef<HTMLDivElement>(null);
-
-  const email = useContext(EmailContext);
-  const queryClient = useQueryClient();
-
-  const expenseUpdatingMutation = useMutation({
-    mutationFn: (updatedExpenseItem: ExpenseItemEntity) => {
-      return handleExpenseUpdating(updatedExpenseItem);
-    },
-    onMutate: async (updatedExpenseItem: ExpenseItemEntity) => {
-      await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
-      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
-      await queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
-        return prevExpenseCache.map((expenseItem) =>
-          expenseItem.expenseId === updatedExpenseItem.expenseId ? updatedExpenseItem : expenseItem,
-        );
-      });
-      return { dataBeforeOptimisticUpdate };
-    },
-    onError: (_error, _variables, context) => {
-      queryClient.setQueryData(["expenseArray", email], context?.dataBeforeOptimisticUpdate);
-    },
-    onSettled: async () => {
-      queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
-      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
-    },
-  });
+  const { mutate: updateExpense } = useUpdateExpense();
 
   useEffect(() => {
     window.addEventListener("mousedown", handleClickOutside);
@@ -108,32 +81,13 @@ export default function ExpenseUpdatingForm({
       recurringExpenseId: null,
     };
 
-    // if (!budgetArray.map((budgetItem) => budgetItem.category).includes(updatedExpenseItem.category)) {
-    //   const newDefaultBudgetItem: BudgetItemEntity = {
-    //     category: formData.category,
-    //     amount: 0,
-    //     iconPath: "category-default-icon.svg",
-    //     group: "Miscellaneous",
-    //     timestamp: new Date(),
-    //   };
-    //   // setBudgetArray((current) => [...current, newDefaultBudgetItem]);
-    //   // await handleBudgetCreation(setBudgetArray, newDefaultBudgetItem);
-    //   budgetCreationMutation.mutate(newDefaultBudgetItem);
-    // }
-
-    expenseUpdatingMutation.mutate(updatedExpenseItem);
-
-    // await handleExpenseUpdating(oldExpenseBeingEdited.expenseId, updatedExpenseItem);
+    updateExpense(updatedExpenseItem);
 
     setFormData({
       category: oldExpenseBeingEdited.oldCategory,
       amount: oldExpenseBeingEdited.oldAmount,
       timestamp: oldExpenseBeingEdited.oldTimestamp,
     });
-    // getExpenseList().then((expenseList) => setExpenseArray(expenseList));
-    //
-    // // To update budgetArray if new category is made:
-    // getBudgetList().then((budgetList) => setBudgetArray(budgetList));
   }
 
   return (

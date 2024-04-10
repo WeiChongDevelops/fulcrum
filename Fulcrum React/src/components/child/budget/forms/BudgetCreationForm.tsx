@@ -1,5 +1,5 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
-import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
   BudgetFormVisibility,
@@ -8,20 +8,18 @@ import {
   colourStyles,
   getColourOfGroup,
   groupListAsOptions,
-  handleBudgetCreation,
   GroupItemEntity,
   BudgetCreationFormData,
   handleInputChangeOnFormWithAmount,
   SetFormVisibility,
   changeFormOrModalVisibility,
-  EmailContext,
   getRandomGroupColour,
-  groupSort,
+  DEFAULT_CATEGORY_ICON,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import "../../../../css/Budget.css";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useCreateBudget from "../../../../hooks/mutations/budget/useCreateBudget.ts";
 
 interface BudgetCreationFormProps {
   groupArray: GroupItemEntity[];
@@ -46,44 +44,8 @@ export default function BudgetCreationForm({
     group: groupNameOfNewItem,
   });
   const formRef = useRef<HTMLDivElement>(null);
+  const { mutate: createBudget } = useCreateBudget();
 
-  const queryClient = useQueryClient();
-  const email = useContext(EmailContext);
-
-  interface BudgetCreationMutationProps {
-    newBudgetItem: BudgetItemEntity;
-    newGroupItem?: GroupItemEntity;
-  }
-
-  const budgetCreationMutation = useMutation({
-    mutationFn: (budgetCreationMutationProps: BudgetCreationMutationProps) =>
-      handleBudgetCreation(budgetCreationMutationProps.newBudgetItem),
-    onMutate: async (budgetCreationMutationProps: BudgetCreationMutationProps) => {
-      if (!!budgetCreationMutationProps.newGroupItem) {
-        await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
-        await queryClient.setQueryData(["groupArray", email], (prevGroupCache: GroupItemEntity[]) => {
-          return [...prevGroupCache, budgetCreationMutationProps.newGroupItem!].sort(groupSort);
-        });
-      }
-      const groupArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["groupArray", email]);
-
-      const budgetArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
-      await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
-      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
-        return [...prevBudgetCache, budgetCreationMutationProps.newBudgetItem];
-      });
-
-      return { budgetArrayBeforeOptimisticUpdate, groupArrayBeforeOptimisticUpdate };
-    },
-    onError: async (_error, _variables, context) => {
-      await queryClient.setQueryData(["budgetArray", email], context?.budgetArrayBeforeOptimisticUpdate);
-      await queryClient.setQueryData(["groupArray", email], context?.groupArrayBeforeOptimisticUpdate);
-    },
-    onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
-      await queryClient.invalidateQueries({ queryKey: ["groupArray", email] });
-    },
-  });
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateBudgetVisible", false);
   }
@@ -110,7 +72,7 @@ export default function BudgetCreationForm({
     const newBudgetItem: BudgetItemEntity = {
       category: formData.category,
       amount: formData.amount ? parseFloat(String(formData.amount)) : 0,
-      iconPath: formData.iconPath === "" ? "category-default-icon.svg" : formData.iconPath,
+      iconPath: formData.iconPath === "" ? DEFAULT_CATEGORY_ICON : formData.iconPath,
       group: formData.group ? formData.group : "Miscellaneous",
       timestamp: new Date(),
     };
@@ -125,7 +87,7 @@ export default function BudgetCreationForm({
       };
     }
 
-    budgetCreationMutation.mutate({
+    createBudget({
       newBudgetItem: newBudgetItem,
       newGroupItem: defaultGroupItem,
     });

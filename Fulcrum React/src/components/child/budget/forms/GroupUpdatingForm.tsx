@@ -1,17 +1,15 @@
-import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
   addColourSelectionFunctionality,
   BasicGroupData,
   BudgetFormVisibility,
   changeFormOrModalVisibility,
-  EmailContext,
   GroupItemEntity,
-  handleGroupUpdating,
   SetFormVisibility,
 } from "../../../../util.ts";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useUpdateGroup from "../../../../hooks/mutations/budget/useUpdateGroup.ts";
 
 interface GroupUpdatingFormProps {
   oldGroupBeingEdited: { oldColour: string; oldGroupName: string };
@@ -27,36 +25,7 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
     group: oldGroupBeingEdited.oldGroupName,
   });
   const formRef = useRef<HTMLDivElement>(null);
-
-  interface GroupUpdatingMutationProps {
-    originalGroupName: string;
-    updatedGroupItem: GroupItemEntity;
-  }
-
-  const queryClient = useQueryClient();
-  const email = useContext(EmailContext);
-  const groupUpdatingMutation = useMutation({
-    mutationFn: (groupUpdatingMutationProps: GroupUpdatingMutationProps) =>
-      handleGroupUpdating(groupUpdatingMutationProps.originalGroupName, groupUpdatingMutationProps.updatedGroupItem),
-    onMutate: async (groupUpdatingMutationProps: GroupUpdatingMutationProps) => {
-      await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
-      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["groupArray", email]);
-      await queryClient.setQueryData(["groupArray", email], (prevGroupCache: GroupItemEntity[]) => {
-        return prevGroupCache.map((groupItem) =>
-          groupItem.group === groupUpdatingMutationProps.originalGroupName
-            ? groupUpdatingMutationProps.updatedGroupItem
-            : groupItem,
-        );
-      });
-      return { dataBeforeOptimisticUpdate };
-    },
-    onError: (_error, _variables, context) => {
-      return queryClient.setQueryData(["groupArray", email], context?.dataBeforeOptimisticUpdate);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["groupArray", email] });
-    },
-  });
+  const { mutate: updateGroup } = useUpdateGroup();
 
   useEffect(() => {
     addColourSelectionFunctionality(setFormData);
@@ -94,7 +63,7 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
 
     const updatedGroupItem: GroupItemEntity = { ...formData, colour: formData.colour!, timestamp: new Date() };
 
-    groupUpdatingMutation.mutate({
+    updateGroup({
       originalGroupName: oldGroupBeingEdited.oldGroupName,
       updatedGroupItem: updatedGroupItem,
     });

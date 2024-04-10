@@ -18,7 +18,7 @@ import Loader from "../other/Loader.tsx";
 import "../../../css/App.css";
 import "../../../css/Budget.css";
 import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
-import useInitialBudgetData from "../../../hooks/useInitialBudgetData.ts";
+import useInitialBudgetData from "../../../hooks/initialisations/useInitialBudgetData.ts";
 import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
 
 interface BudgetProps {

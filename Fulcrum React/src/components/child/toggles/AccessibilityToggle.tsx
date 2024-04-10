@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext } from "react";
-import { EmailContext, handlePublicUserDataUpdating, PublicUserData } from "../../../util.ts";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { PublicUserData } from "../../../util.ts";
+import useUpdatePublicUserData from "../../../hooks/mutations/other/useUpdatePublicUserData.ts";
 
 interface AccessibilityToggleProps {
   publicUserData: PublicUserData;
@@ -11,44 +11,21 @@ interface AccessibilityToggleProps {
  */
 export default function AccessibilityToggle({ publicUserData }: AccessibilityToggleProps) {
   const [isAccessibilityMode, setIsAccessibilityMode] = useState(publicUserData.accessibilityEnabled);
-
-  const email = useContext(EmailContext);
-  const queryClient = useQueryClient();
-
-  const publicUserDataUpdatingMutation = useMutation({
-    mutationKey: ["publicUserData", email],
-    mutationFn: (updatedPublicUserData: PublicUserData) => handlePublicUserDataUpdating(updatedPublicUserData),
-    onMutate: async (updatedPublicUserData: PublicUserData) => {
-      await queryClient.cancelQueries({ queryKey: ["publicUserData", email] });
-      const publicUserDataBeforeOptimisticUpdate = queryClient.getQueryData(["publicUserData", email]);
-      await queryClient.setQueryData(["publicUserData", email], updatedPublicUserData);
-      return { publicUserDataBeforeOptimisticUpdate };
-    },
-    onError: (_error, _variables, context) => {
-      queryClient.setQueryData(["publicUserData", email], context?.publicUserDataBeforeOptimisticUpdate);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["publicUserData", email] });
-    },
-  });
-
-  useEffect(() => {
-    setIsAccessibilityMode(publicUserData.accessibilityEnabled);
-  }, [publicUserData.accessibilityEnabled]);
+  const { mutate: updatePublicUserData } = useUpdatePublicUserData();
 
   async function handleAccessibilityToggle() {
     const newIsAccessibilityMode = !isAccessibilityMode;
     setIsAccessibilityMode(newIsAccessibilityMode);
-    // setPublicUserData((prevPublicUserData) => ({
-    //   ...prevPublicUserData,
-    //   accessibilityEnabled: newIsAccessibilityMode,
-    // }));
 
     const updatedPublicUserData: PublicUserData = { ...publicUserData, accessibilityEnabled: newIsAccessibilityMode };
-    publicUserDataUpdatingMutation.mutate(updatedPublicUserData);
+    updatePublicUserData(updatedPublicUserData);
 
     // await handlePublicUserDataUpdating(updatedPublicUserData);
   }
+
+  useEffect(() => {
+    setIsAccessibilityMode(publicUserData.accessibilityEnabled);
+  }, [publicUserData.accessibilityEnabled]);
 
   return (
     <div

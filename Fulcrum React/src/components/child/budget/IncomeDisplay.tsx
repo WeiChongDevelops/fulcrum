@@ -1,13 +1,6 @@
-import {
-  EmailContext,
-  formatDollarAmountDynamic,
-  formatDollarAmountStatic,
-  handleTotalIncomeUpdating,
-  PublicUserData,
-} from "../../../util.ts";
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
+import { formatDollarAmountDynamic, formatDollarAmountStatic, PublicUserData } from "../../../util.ts";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import useUpdateTotalIncome from "../../../hooks/mutations/budget/useUpdateTotalIncome.ts";
 
 interface IncomeDisplayProps {
   totalIncome: number;
@@ -45,31 +38,14 @@ export default function IncomeDisplay({ totalIncome, amountLeftToBudget, publicU
     setIsEditing(false);
   };
 
-  const queryClient = useQueryClient();
-  const email = useContext(EmailContext);
-
-  const incomeMutation = useMutation({
-    mutationFn: (newTotalIncomeData: number) => handleTotalIncomeUpdating(newTotalIncomeData),
-    onMutate: async (newTotalIncomeData: number) => {
-      await queryClient.cancelQueries({ queryKey: ["totalIncome", email] });
-      const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["totalIncome", email]);
-      await queryClient.setQueryData(["totalIncome", email], newTotalIncomeData);
-      return { dataBeforeOptimisticUpdate };
-    },
-    onError: (_error, _variables, context) => {
-      return queryClient.setQueryData(["totalIncome", email], context?.dataBeforeOptimisticUpdate);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["totalIncome", email] });
-    },
-  });
+  const { mutate } = useUpdateTotalIncome();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsEditing(false);
 
     const newTotalIncomeData = parseFloat(incomeFormData.income);
-    incomeMutation.mutate(newTotalIncomeData);
+    mutate(newTotalIncomeData);
   };
 
   useEffect(() => {
@@ -78,9 +54,9 @@ export default function IncomeDisplay({ totalIncome, amountLeftToBudget, publicU
     });
   }, [totalIncome]);
 
-  if (incomeMutation.isError) {
-    return <FulcrumErrorPage errors={[incomeMutation.error]} />;
-  }
+  // if (incomeMutation.isError) {
+  //   return <FulcrumErrorPage errors={[incomeMutation.error]} />;
+  // }
 
   return (
     <div className="flex flex-row w-full items-center mt-1">

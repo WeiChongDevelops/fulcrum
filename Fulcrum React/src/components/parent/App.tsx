@@ -10,7 +10,7 @@ import About from "../child/home/subpages/about/About.tsx";
 import Contact from "../child/home/subpages/Contact.tsx";
 import Pricing from "../child/home/subpages/Pricing.tsx";
 import Home from "../child/home/Home.tsx";
-import { useGlobalAppData } from "../../hooks/useGlobalAppData.ts";
+import { useGlobalAppData } from "../../hooks/initialisations/useGlobalAppData.ts";
 import Loader from "../child/other/Loader.tsx";
 import FulcrumErrorPage from "../child/other/FulcrumErrorPage.tsx";
 import { EmailContext } from "../../util.ts";
