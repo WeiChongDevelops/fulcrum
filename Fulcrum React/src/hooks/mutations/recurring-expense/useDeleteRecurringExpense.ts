@@ -10,15 +10,15 @@ import {
 } from "../../../util.ts";
 import { useContext } from "react";
 
+interface RecurringExpenseDeletionMutationProps {
+  recurringExpenseId: string;
+  alsoDeleteAllInstances: boolean;
+  expenseArray: ExpenseItemEntity[];
+}
+
 export default function useDeleteRecurringExpense() {
   const email = useContext(EmailContext);
   const queryClient = useQueryClient();
-
-  interface RecurringExpenseDeletionMutationProps {
-    recurringExpenseId: string;
-    alsoDeleteAllInstances: boolean;
-    expenseArray: ExpenseItemEntity[];
-  }
 
   return useMutation({
     mutationFn: async (recurringExpenseDeletionMutationProps: RecurringExpenseDeletionMutationProps) => {

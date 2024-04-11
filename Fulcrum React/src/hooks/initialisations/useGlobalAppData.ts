@@ -18,50 +18,6 @@ import {
 import { useQueries, useQuery, UseQueryResult } from "@tanstack/react-query";
 
 export function useGlobalAppData() {
-  // const [publicUserData, setPublicUserData] = useState<PublicUserData>({
-  //   createdAt: new Date(),
-  //   currency: "AUD",
-  //   darkModeEnabled: sessionStoredDarkMode ? sessionStoredDarkMode === "true" : false,
-  //   accessibilityEnabled: sessionStoredAccessibilityMode ? sessionStoredAccessibilityMode === "true" : false,
-  //   profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "profile-icon-default.svg",
-  // });
-  // const [expenseArray, setExpenseArray] = useState<ExpenseItemEntity[]>([]);
-  // const [budgetArray, setBudgetArray] = useState<BudgetItemEntity[]>([]);
-  // const [groupArray, setGroupArray] = useState<GroupItemEntity[]>([]);
-  // const [recurringExpenseArray, setRecurringExpenseArray] = useState<RecurringExpenseItemEntity[]>([]);
-  // const [blacklistedExpenseArray, setBlacklistedExpenseArray] = useState<BlacklistedExpenseItemEntity[]>([]);
-  // const [categoryDataMap, setCategoryDataMap] = useState<CategoryToIconGroupAndColourMap>(new Map());
-
-  // async function retrieveGlobalAppData() {
-  //   const [
-  //     publicUserDataRetrieved,
-  //     expenseDataRetrieved,
-  //     budgetDataRetrieved,
-  //     groupDataRetrieved,
-  //     recurringExpenseDataRetrieved,
-  //     blacklistedExpenseDataRetrieved,
-  //   ] = await Promise.all([
-  //     getPublicUserData(),
-  //     getExpenseList(),
-  //     getBudgetList(),
-  //     getGroupList(),
-  //     getRecurringExpenseList(),
-  //     getBlacklistedExpenses(),
-  //   ]);
-  //
-  //   const groupAndColourMapRetrieved = await getGroupAndColourMap(budgetDataRetrieved, groupDataRetrieved);
-  //
-  //   return {
-  //     publicUserDataRetrieved: publicUserDataRetrieved,
-  //     expenseDataRetrieved: expenseDataRetrieved,
-  //     budgetDataRetrieved: budgetDataRetrieved,
-  //     groupDataRetrieved: groupDataRetrieved,
-  //     recurringExpenseDataRetrieved: recurringExpenseDataRetrieved,
-  //     blacklistedExpenseDataRetrieved: blacklistedExpenseDataRetrieved,
-  //     groupAndColourMapRetrieved: groupAndColourMapRetrieved,
-  //   };
-  // }
-
   const sessionStoredProfileIcon = sessionStorage.getItem("profileIconFileName");
   const sessionStoredDarkMode = sessionStorage.getItem("darkModeEnabled");
   const sessionStoredAccessibilityMode = sessionStorage.getItem("accessibilityEnabled");
@@ -75,7 +31,6 @@ export function useGlobalAppData() {
   });
 
   const email = emailQuery.data;
-
   const retrievalConditions = !!email && window.location.href.split("/").includes("app");
 
   const globalAppDataQueries: UseQueryResult[] = useQueries({
@@ -126,26 +81,9 @@ export function useGlobalAppData() {
     enabled: !!email && !!budgetArrayQuery.data && !!groupArrayQuery.data,
   });
 
-  // useMemo(() => {
-  //   const updateCategoryDataMap = async () => {
-  //     groupArray.length !== 0 &&
-  //     budgetArray.length !== 0 &&
-  //     setCategoryDataMap(await getGroupAndColourMap(budgetArray, groupArray));
-  //   };
-  //   updateCategoryDataMap();
-  // }, [budgetArray, groupArray]);
-
-  // const { data, isLoading, isSuccess, isError, error } = useQuery({
-  //   queryKey: ["globalAppData", email],
-  //   queryFn: retrieveGlobalAppData,
-  //   enabled: !!email,
-  // });
-
   const isAnyLoading =
     globalAppDataQueries.some((query: UseQueryResult) => query.isLoading) || categoryDataMapQuery.isLoading;
   const isAnyError = globalAppDataQueries.some((query: UseQueryResult) => query.isError) || categoryDataMapQuery.isError;
-  // const isAllSuccess =
-  //   globalAppDataQueries.every((query: UseQueryResult) => query.isSuccess) && groupAndColourMapQuery.isSuccess;
   const errors = globalAppDataQueries
     .map((query: UseQueryResult) => query.error)
     .filter((error) => error !== null) as Error[];

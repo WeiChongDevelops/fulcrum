@@ -2,6 +2,8 @@ import {
   BudgetFormVisibility,
   BudgetItemEntity,
   BudgetModalVisibility,
+  changeFormOrModalVisibility,
+  DEFAULT_CATEGORY_GROUP,
   dynamicallySizeBudgetNameDisplays,
   EmailContext,
   ExpenseItemEntity,
@@ -26,9 +28,7 @@ interface GroupProps {
   groupColour: string;
 
   filteredBudgetArray: BudgetItemEntity[];
-
   expenseArray: ExpenseItemEntity[];
-
   setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
 
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
@@ -38,11 +38,8 @@ interface GroupProps {
   setOldGroupBeingEdited: Dispatch<SetStateAction<PreviousGroupBeingEdited>>;
 
   setGroupToDelete: Dispatch<SetStateAction<string>>;
-
   setCategoryToDelete: Dispatch<SetStateAction<string>>;
-
   perCategoryTotalExpenseArray: Map<string, number>;
-
   publicUserData: PublicUserData;
 }
 
@@ -98,28 +95,13 @@ export default function Group({
 
   function handleEditClick() {
     setOldGroupBeingEdited({ oldGroupName: groupName, oldColour: groupColour });
-    setBudgetFormVisibility((current) => ({
-      ...current,
-      isUpdateGroupVisible: true,
-    }));
+    changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", true);
   }
   function handleDeleteClick() {
     setGroupToDelete(groupName);
-
-    // If there are categories inside this group, allow the user to choose between retaining them and deleting them.
     if (filteredBudgetArray.length > 0) {
-      setModalFormVisibility((current) => ({
-        ...current,
-        isDeleteOptionsModalVisible: true,
-      }));
+      changeFormOrModalVisibility(setModalFormVisibility, "isDeleteOptionsModalVisible", true);
     } else {
-      // handleGroupDeletion(groupName, setGroupArray, false)
-      //   .then(async () => {
-      //     setGroupArray(await getGroupList());
-      //     setBudgetArray(await getBudgetList());
-      //     console.log("Deletion successful");
-      //   })
-      //   .catch((error) => console.log("Deletion unsuccessful", error));
       groupDeletionMutation.mutate({
         groupToDelete: groupName,
         keepContainedCategories: false,
@@ -129,12 +111,12 @@ export default function Group({
 
   useEffect(() => {
     dynamicallySizeBudgetNameDisplays();
-
     setGroupBudgetTotal(getGroupBudgetTotal(filteredBudgetArray));
     setGroupExpenditureTotal(getGroupExpenditureTotal(expenseArray, filteredBudgetArray));
   }, [filteredBudgetArray, expenseArray]);
 
   const currency = publicUserData.currency;
+  const isMiscellaneous = groupName === DEFAULT_CATEGORY_GROUP;
 
   return (
     <div
@@ -146,10 +128,8 @@ export default function Group({
     >
       <div className="flex flex-row justify-between items-center mb-4">
         <div className="flex flex-row ml-4 mt-1">
-          <p className={`mt - 2 text-3xl font-bold ${groupName !== "Miscellaneous" ? "text-black" : "text-white"}`}>
-            {groupName}
-          </p>
-          {groupName !== "Miscellaneous" && (
+          <p className={`mt - 2 text-3xl font-bold ${isMiscellaneous ? "text-white" : "text-black"}`}>{groupName}</p>
+          {!isMiscellaneous && (
             <div className="flex flex-row justify-center items-center ml-2 relative top-0.5">
               <div className="circle-button" onClick={handleEditClick}>
                 <img src="/src/assets/UI-icons/edit-pencil-black-icon.svg" alt="Edit icon" className="w-5 h-5" />
@@ -160,7 +140,7 @@ export default function Group({
             </div>
           )}
         </div>
-        <p className={`${groupName !== "Miscellaneous" ? "text-black" : "text-white"} font-bold mr-4 text-3xl`}>
+        <p className={`${isMiscellaneous ? "text-white" : "text-black"} font-bold mr-4 text-3xl`}>
           Spent: {formatDollarAmountStatic(groupExpenditureTotal, currency)} of{" "}
           {formatDollarAmountStatic(groupBudgetTotal, currency)}
         </p>

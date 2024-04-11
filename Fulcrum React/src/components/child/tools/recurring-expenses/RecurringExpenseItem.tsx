@@ -1,6 +1,8 @@
 import "/src/css/Budget.css";
 import {
   capitaliseFirstLetter,
+  changeFormOrModalVisibility,
+  DEFAULT_CATEGORY_GROUP,
   formatDate,
   formatDollarAmountStatic,
   getNextRecurringInstance,
@@ -58,24 +60,20 @@ export default function RecurringExpenseItem({
       oldTimestamp: timestamp,
       oldFrequency: frequency,
     });
-    setRecurringExpenseFormVisibility((current) => ({
-      ...current,
-      isUpdateRecurringExpenseVisible: true,
-    }));
+    changeFormOrModalVisibility(setRecurringExpenseFormVisibility, "isUpdateRecurringExpenseVisible", true);
   }
 
   function handleDeleteClick(e: React.MouseEvent) {
     e.stopPropagation();
     setRecurringExpenseIdToDelete(recurringExpenseId);
-    setRecurringExpenseModalVisibility((current) => ({
-      ...current,
-      isConfirmRecurringExpenseDeletionModalVisible: true,
-    }));
+    changeFormOrModalVisibility(setRecurringExpenseModalVisibility, "isConfirmRecurringExpenseDeletionModalVisible", true);
   }
 
   const nextRecurringInstance = useMemo(() => {
     return getNextRecurringInstance(timestamp, frequency);
   }, [timestamp, frequency]);
+
+  const isMiscellaneous = groupName === DEFAULT_CATEGORY_GROUP;
 
   return (
     <div
@@ -93,7 +91,7 @@ export default function RecurringExpenseItem({
         <div
           className="flex flex-col items-start ml-2"
           style={{
-            color: groupName === "Miscellaneous" ? "white" : "black",
+            color: isMiscellaneous ? "white" : "black",
           }}
         >
           <p className="font-bold text-xl mb-[-2px]">{category}</p>
@@ -103,12 +101,12 @@ export default function RecurringExpenseItem({
       <div
         className="flex flex-row items-center"
         style={{
-          color: groupName === "Miscellaneous" ? "white" : "black",
+          color: isMiscellaneous ? "white" : "black",
         }}
       >
         <div className="flex flex-row w-44 items-center">
           <img
-            src={`/src/assets/UI-icons/tools-recurring-icon-${groupName === "Miscellaneous" ? "white" : "black"}.svg`}
+            src={`/src/assets/UI-icons/tools-recurring-icon-${isMiscellaneous ? "white" : "black"}.svg`}
             alt="Cycle icon"
             className={"w-8 h-8"}
           />
@@ -124,14 +122,14 @@ export default function RecurringExpenseItem({
         <div className="flex flex-row items-center ml-2">
           <button className="circle-button" onClick={handleEditClick}>
             <img
-              src={`/src/assets/UI-icons/edit-pencil-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`}
+              src={`/src/assets/UI-icons/edit-pencil-${isMiscellaneous ? "white" : "black"}-icon.svg`}
               alt="Edit icon"
               className="mx-1 w-6 h-6"
             />
           </button>
           <button className="circle-button" onClick={handleDeleteClick}>
             <img
-              src={`/src/assets/UI-icons/delete-trash-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`}
+              src={`/src/assets/UI-icons/delete-trash-${isMiscellaneous ? "white" : "black"}-icon.svg`}
               alt="Delete icon"
               className="mx-1 w-6 h-6"
             />

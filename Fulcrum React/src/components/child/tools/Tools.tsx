@@ -35,23 +35,23 @@ export default function Tools({
 }: ToolsProps) {
   const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
 
-  return (
-    <>
-      {openToolsSection === "home" ? (
-        <ToolsHome publicUserData={publicUserData} setOpenToolsSection={setOpenToolsSection} />
-      ) : openToolsSection === "settings" ? (
-        <Settings setOpenToolsSection={setOpenToolsSection} publicUserData={publicUserData} />
-      ) : (
-        <RecurringExpenses
-          setOpenToolsSection={setOpenToolsSection}
-          publicUserData={publicUserData}
-          expenseArray={expenseArray}
-          budgetArray={budgetArray}
-          groupArray={groupArray}
-          categoryDataMap={categoryDataMap}
-          recurringExpenseArray={recurringExpenseArray}
-        />
-      )}
-    </>
-  );
+  if (openToolsSection === "settings") {
+    return <Settings setOpenToolsSection={setOpenToolsSection} publicUserData={publicUserData} />;
+  }
+
+  if (openToolsSection === "recurring") {
+    return (
+      <RecurringExpenses
+        setOpenToolsSection={setOpenToolsSection}
+        publicUserData={publicUserData}
+        expenseArray={expenseArray}
+        budgetArray={budgetArray}
+        groupArray={groupArray}
+        categoryDataMap={categoryDataMap}
+        recurringExpenseArray={recurringExpenseArray}
+      />
+    );
+  }
+
+  return <ToolsHome publicUserData={publicUserData} setOpenToolsSection={setOpenToolsSection} />;
 }

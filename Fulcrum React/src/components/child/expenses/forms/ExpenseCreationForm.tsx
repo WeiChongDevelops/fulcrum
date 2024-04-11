@@ -13,7 +13,8 @@ import {
   RecurringExpenseFormVisibility,
   ExpenseFormVisibility,
   SetFormVisibility,
-  GroupItemEntity,
+  DEFAULT_CATEGORY_ICON,
+  DEFAULT_CATEGORY_GROUP,
 } from "../../../../util.ts";
 import { v4 as uuid } from "uuid";
 
@@ -28,7 +29,6 @@ import useCreateRecurringExpense from "../../../../hooks/mutations/recurring-exp
 interface ExpenseCreationFormProps {
   setExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility> | SetFormVisibility<ExpenseFormVisibility>;
   budgetArray: BudgetItemEntity[];
-  // groupArray: GroupItemEntity[];
   categoryOptions: SelectorOptionsFormattedData[];
   currencySymbol: string;
   defaultCalendarDate: Date;
@@ -41,12 +41,14 @@ interface ExpenseCreationFormProps {
 export default function ExpenseCreationForm({
   setExpenseFormVisibility,
   budgetArray,
-  // groupArray,
   categoryOptions,
   currencySymbol,
   defaultCalendarDate,
   mustBeRecurring,
 }: ExpenseCreationFormProps) {
+  const { mutate: createExpense } = useCreateExpense();
+  const { mutate: createRecurringExpense } = useCreateRecurringExpense();
+
   const [formData, setFormData] = useState<ExpenseCreationFormData>({
     category: "",
     amount: 0,
@@ -54,8 +56,6 @@ export default function ExpenseCreationForm({
     frequency: mustBeRecurring ? "monthly" : "never",
   });
   const formRef = useRef<HTMLDivElement>(null);
-  const { mutate: createExpense } = useCreateExpense();
-  const { mutate: createRecurringExpense } = useCreateRecurringExpense();
 
   function hideForm() {
     setExpenseFormVisibility((current: any) => ({
@@ -80,6 +80,13 @@ export default function ExpenseCreationForm({
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     hideForm();
+    setFormData({
+      category: "",
+      amount: 0,
+      timestamp: defaultCalendarDate,
+      frequency: mustBeRecurring ? "monthly" : "never",
+    });
+    let newDefaultBudgetItem: BudgetItemEntity | undefined = undefined;
 
     const newExpenseItem: ExpenseItemEntity = {
       expenseId: uuid(),
@@ -89,17 +96,14 @@ export default function ExpenseCreationForm({
       recurringExpenseId: null,
     };
 
-    let newDefaultBudgetItem: BudgetItemEntity | undefined = undefined;
-
     if (!budgetArray.map((budgetItem) => budgetItem.category).includes(newExpenseItem.category)) {
       newDefaultBudgetItem = {
         category: formData.category,
         amount: 0,
-        iconPath: "DEFAULT_CATEGORY_ICON",
-        group: "Miscellaneous",
+        iconPath: DEFAULT_CATEGORY_ICON,
+        group: DEFAULT_CATEGORY_GROUP,
         timestamp: formData.timestamp as Date,
       };
-      // budgetCreationMutation.mutate(newDefaultBudgetItem);
     }
 
     if (formData.frequency === "never") {
@@ -120,12 +124,6 @@ export default function ExpenseCreationForm({
         newBudgetItem: newDefaultBudgetItem,
       });
     }
-    setFormData({
-      category: "",
-      amount: 0,
-      timestamp: defaultCalendarDate,
-      frequency: mustBeRecurring ? "monthly" : "never",
-    });
   }
 
   function handleFrequencyInputChange(e: any) {

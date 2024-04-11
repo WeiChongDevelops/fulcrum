@@ -48,9 +48,9 @@ export default function RecurringExpenseUpdatingForm({
   const { mutate: updateRecurringExpense } = useUpdateRecurringExpense();
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -75,6 +75,12 @@ export default function RecurringExpenseUpdatingForm({
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     hideForm();
+    setFormData({
+      category: oldRecurringExpenseBeingEdited.oldCategory,
+      amount: oldRecurringExpenseBeingEdited.oldAmount,
+      timestamp: oldRecurringExpenseBeingEdited.oldTimestamp,
+      frequency: oldRecurringExpenseBeingEdited.oldFrequency,
+    });
 
     const updatedRecurringExpenseItem: RecurringExpenseItemEntity = {
       ...formData,
@@ -82,16 +88,6 @@ export default function RecurringExpenseUpdatingForm({
       timestamp: formData.timestamp as Date,
     };
     updateRecurringExpense(updatedRecurringExpenseItem);
-    // getRecurringExpenseList().then((expenseList) => setRecurringExpenseArray(expenseList));
-    //
-    // // To update budgetArray if new category is made:
-    // getBudgetList().then((budgetList) => setBudgetArray(budgetList));
-    setFormData({
-      category: oldRecurringExpenseBeingEdited.oldCategory,
-      amount: oldRecurringExpenseBeingEdited.oldAmount,
-      timestamp: oldRecurringExpenseBeingEdited.oldTimestamp,
-      frequency: oldRecurringExpenseBeingEdited.oldFrequency,
-    });
   }
 
   function onDateInputChange(newValue: Value) {

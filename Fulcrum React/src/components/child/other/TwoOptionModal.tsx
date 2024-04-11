@@ -39,9 +39,9 @@ export default function TwoOptionModal({
 
   useEffect(() => {
     rightButtonRef.current?.focus();
-    window.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 

@@ -123,14 +123,6 @@ export default function RecurringExpenseModalsAndForms({
               alsoDeleteAllInstances: true,
               expenseArray: expenseArray,
             });
-            // await removeAllInstancesOfRecurringExpenseAfterDate(
-            //   recurringExpenseIdToDelete,
-            //   expenseArray,
-            //   setExpenseArray,
-            //   Y2K,
-            //   setBlacklistedExpenseArray,
-            // );
-            // setExpenseArray(await getExpenseList());
             changeFormOrModalVisibility(
               setRecurringExpenseModalVisibility,
               "isSelectRecurringExpenseDeletionTypeModalVisible",

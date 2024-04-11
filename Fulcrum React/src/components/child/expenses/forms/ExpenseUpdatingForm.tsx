@@ -17,7 +17,6 @@ import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../selectors/CategorySelector.tsx";
 import useUpdateExpense from "../../../../hooks/mutations/expense/useUpdateExpense.ts";
 interface ExpenseUpdatingFormProps {
-  // budgetArray: BudgetItemEntity[];
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   categoryOptions: SelectorOptionsFormattedData[];
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
@@ -28,7 +27,6 @@ interface ExpenseUpdatingFormProps {
  * A form for updating an existing expense item.
  */
 export default function ExpenseUpdatingForm({
-  // budgetArray,
   setExpenseFormVisibility,
   categoryOptions,
   oldExpenseBeingEdited,
@@ -42,13 +40,6 @@ export default function ExpenseUpdatingForm({
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateExpense } = useUpdateExpense();
 
-  useEffect(() => {
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   function hideForm() {
     changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateExpenseVisible", false);
   }
@@ -58,6 +49,13 @@ export default function ExpenseUpdatingForm({
       hideForm();
     }
   };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     handleInputChangeOnFormWithAmount(e, setFormData);
@@ -70,8 +68,11 @@ export default function ExpenseUpdatingForm({
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     hideForm();
-
-    console.log(`Here we see ${formData.amount}`);
+    setFormData({
+      category: oldExpenseBeingEdited.oldCategory,
+      amount: oldExpenseBeingEdited.oldAmount,
+      timestamp: oldExpenseBeingEdited.oldTimestamp,
+    });
 
     const updatedExpenseItem: ExpenseItemEntity = {
       ...formData,
@@ -80,14 +81,7 @@ export default function ExpenseUpdatingForm({
       timestamp: formData.timestamp as Date,
       recurringExpenseId: null,
     };
-
     updateExpense(updatedExpenseItem);
-
-    setFormData({
-      category: oldExpenseBeingEdited.oldCategory,
-      amount: oldExpenseBeingEdited.oldAmount,
-      timestamp: oldExpenseBeingEdited.oldTimestamp,
-    });
   }
 
   return (

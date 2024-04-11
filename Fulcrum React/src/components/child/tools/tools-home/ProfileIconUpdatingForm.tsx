@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
+  changeFormOrModalVisibility,
   ProfileIconUpdatingFormData,
   PublicUserData,
   SetFormVisibility,
@@ -27,22 +28,19 @@ export default function ProfileIconUpdatingForm({
     iconPath: oldIconFileName,
   });
   const formRef = useRef<HTMLDivElement>(null);
-
   const { mutate: updatePublicUserData } = useUpdatePublicUserData();
 
   useEffect(() => {
-    addIconSelectionFunctionality(setFormData, "profile");
-    window.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    const removeIconEventListeners = addIconSelectionFunctionality(setFormData, "profile");
     return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
+      removeIconEventListeners();
     };
   }, []);
 
   function hideForm() {
-    setToolsFormVisibility((current) => ({
-      ...current,
-      isUpdateProfileIconFormVisible: false,
-    }));
+    changeFormOrModalVisibility(setToolsFormVisibility, "isUpdateProfileIconFormVisible", false);
   }
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -59,13 +57,16 @@ export default function ProfileIconUpdatingForm({
     updatePublicUserData(updatedPublicUserData);
   }
 
-  useEffect(() => {
-    const oldProfileIconSelectable = document.querySelector(`div[data-value="${oldIconFileName}"]`);
-    oldProfileIconSelectable?.classList.add("selectedColour");
-  }, []);
-
   return (
     <div ref={formRef} className="fulcrum-form">
+      <FulcrumButton
+        onClick={() => {
+          hideForm();
+        }}
+        displayText={"Cancel"}
+        optionalTailwind={"ml-auto mb-auto"}
+        backgroundColour="grey"
+      />
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <ProfileIconSelector />
         <FulcrumButton displayText="Update Profile Icon" />

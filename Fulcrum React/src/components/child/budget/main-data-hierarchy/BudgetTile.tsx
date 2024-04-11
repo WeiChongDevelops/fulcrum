@@ -2,6 +2,7 @@ import "/src/css/Budget.css";
 import {
   BudgetFormVisibility,
   BudgetModalVisibility,
+  changeFormOrModalVisibility,
   dynamicallySizeBudgetNumberDisplays,
   formatDollarAmountStatic,
   PreviousBudgetBeingEdited,
@@ -18,14 +19,10 @@ interface BudgetTileProps {
   icon: string;
 
   setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>;
-
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
   setModalFormVisibility: SetModalVisibility<BudgetModalVisibility>;
-
   perCategoryTotalExpenseArray: Map<string, number>;
-
   setCategoryToDelete: Dispatch<SetStateAction<string>>;
-
   publicUserData: PublicUserData;
 }
 
@@ -54,10 +51,7 @@ export default function BudgetTile({
       oldGroup: group,
       oldIconPath: icon,
     });
-    setBudgetFormVisibility((current) => ({
-      ...current,
-      isUpdateBudgetVisible: true,
-    }));
+    changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateBudgetVisible", true);
   }
 
   useEffect(() => {
@@ -68,10 +62,7 @@ export default function BudgetTile({
   function handleDeleteClick(e: React.MouseEvent) {
     e.stopPropagation();
     setCategoryToDelete(category);
-    setModalFormVisibility((current) => ({
-      ...current,
-      isConfirmCategoryDeletionModalVisible: true,
-    }));
+    changeFormOrModalVisibility(setModalFormVisibility, "isConfirmCategoryDeletionModalVisible", true);
   }
 
   const currency = publicUserData.currency;

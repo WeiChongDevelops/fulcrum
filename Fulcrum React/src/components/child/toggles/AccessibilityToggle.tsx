@@ -19,8 +19,6 @@ export default function AccessibilityToggle({ publicUserData }: AccessibilityTog
 
     const updatedPublicUserData: PublicUserData = { ...publicUserData, accessibilityEnabled: newIsAccessibilityMode };
     updatePublicUserData(updatedPublicUserData);
-
-    // await handlePublicUserDataUpdating(updatedPublicUserData);
   }
 
   useEffect(() => {

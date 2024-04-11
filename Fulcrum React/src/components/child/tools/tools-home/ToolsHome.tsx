@@ -1,4 +1,11 @@
-import { EmailContext, logoutOnClick, OpenToolsSection, PublicUserData, ToolsFormVisibility } from "../../../../util.ts";
+import {
+  changeFormOrModalVisibility,
+  EmailContext,
+  logoutOnClick,
+  OpenToolsSection,
+  PublicUserData,
+  ToolsFormVisibility,
+} from "../../../../util.ts";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import ProfileIconUpdatingForm from "./ProfileIconUpdatingForm.tsx";
@@ -7,6 +14,10 @@ interface ToolsHomeProps {
   publicUserData: PublicUserData;
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
 }
+
+/**
+ * The home component for the tools page.
+ */
 
 export default function ToolsHome({ publicUserData, setOpenToolsSection }: ToolsHomeProps) {
   const [toolsFormVisibility, setToolsFormVisibility] = useState<ToolsFormVisibility>({
@@ -24,10 +35,7 @@ export default function ToolsHome({ publicUserData, setOpenToolsSection }: Tools
 
   function openProfileIconSelector() {
     setIsChangeIconMessageVisible(false);
-    setToolsFormVisibility((prevVisibility) => ({
-      ...prevVisibility,
-      isUpdateProfileIconFormVisible: true,
-    }));
+    changeFormOrModalVisibility(setToolsFormVisibility, "isUpdateProfileIconFormVisible", true);
   }
 
   function openSettings() {

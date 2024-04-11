@@ -2,13 +2,13 @@ import { BudgetItemEntity, EmailContext, GroupItemEntity, groupSort, handleBudge
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 
-export default function useUpdateBudget() {
-  interface BudgetUpdatingMutationProps {
-    originalCategory: string;
-    updatedBudgetItem: BudgetItemEntity;
-    newGroupItem?: GroupItemEntity;
-  }
+interface BudgetUpdatingMutationProps {
+  originalCategory: string;
+  updatedBudgetItem: BudgetItemEntity;
+  newGroupItem?: GroupItemEntity;
+}
 
+export default function useUpdateBudget() {
   const queryClient = useQueryClient();
   const email = useContext(EmailContext);
   return useMutation({

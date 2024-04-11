@@ -151,11 +151,6 @@
 /* GROUP COLOUR SELECTOR */
 
 #group-colour-selector {
-  /*display: flex;*/
-  /*flex-wrap: wrap;*/
-  /*justify-content: center;*/
-  /*align-items: center;*/
-
   display: grid;
   grid-template-columns: repeat(8, minmax(70px, 1fr));
   gap: 5px;

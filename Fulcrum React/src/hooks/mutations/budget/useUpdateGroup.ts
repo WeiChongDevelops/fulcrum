@@ -2,14 +2,15 @@ import { EmailContext, GroupItemEntity, handleGroupUpdating } from "../../../uti
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 
-export default function useUpdateGroup() {
-  interface GroupUpdatingMutationProps {
-    originalGroupName: string;
-    updatedGroupItem: GroupItemEntity;
-  }
+interface GroupUpdatingMutationProps {
+  originalGroupName: string;
+  updatedGroupItem: GroupItemEntity;
+}
 
+export default function useUpdateGroup() {
   const queryClient = useQueryClient();
   const email = useContext(EmailContext);
+
   return useMutation({
     mutationFn: (groupUpdatingMutationProps: GroupUpdatingMutationProps) =>
       handleGroupUpdating(groupUpdatingMutationProps.originalGroupName, groupUpdatingMutationProps.updatedGroupItem),

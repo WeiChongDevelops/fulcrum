@@ -1,12 +1,18 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { SetFormVisibility, SettingsFormVisibility, SettingsModalVisibility } from "../../../../util.ts";
+import {
+  changeFormOrModalVisibility,
+  SetFormVisibility,
+  SetModalVisibility,
+  SettingsFormVisibility,
+  SettingsModalVisibility,
+} from "../../../../util.ts";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 
 interface TypeMatchConfirmationFormProps {
   areYouSureMessage: string;
   typeMatchString: string;
   setFormVisibility: SetFormVisibility<SettingsFormVisibility>;
-  setModalVisibility: SetFormVisibility<SettingsModalVisibility>;
+  setModalVisibility: SetModalVisibility<SettingsModalVisibility>;
   formVisibility: string;
   lastChanceModalVisibility: string;
 }
@@ -27,15 +33,15 @@ export function TypeMatchConfirmationForm({
   const typeMatchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     typeMatchInputRef.current?.focus();
     return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   function hideForm() {
-    setFormVisibility((current) => ({ ...current, [formVisibility]: false }));
+    changeFormOrModalVisibility(setFormVisibility, formVisibility, false);
   }
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -50,11 +56,8 @@ export function TypeMatchConfirmationForm({
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (typeMatchInput === typeMatchString) {
-      setFormVisibility((current) => ({ ...current, [formVisibility]: false }));
-      setModalVisibility((current) => ({
-        ...current,
-        [lastChanceModalVisibility]: true,
-      }));
+      changeFormOrModalVisibility(setFormVisibility, formVisibility, false);
+      changeFormOrModalVisibility(setModalVisibility, lastChanceModalVisibility, true);
     } else {
       console.log("Input text not matching.");
     }

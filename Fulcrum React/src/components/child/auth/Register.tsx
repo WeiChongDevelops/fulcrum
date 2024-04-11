@@ -37,12 +37,6 @@ export default function Register() {
         }, 500);
       } else {
         await handleUserRegistration(formData.email, formData.password);
-        //
-        // setFormData({
-        //   email: "",
-        //   password: "",
-        //   confirmPassword: "",
-        // });
       }
     }
   }

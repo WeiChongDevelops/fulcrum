@@ -27,14 +27,6 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateGroup } = useUpdateGroup();
 
-  useEffect(() => {
-    addColourSelectionFunctionality(setFormData);
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", false);
   }
@@ -45,6 +37,15 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
     }
   };
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    const removeColourEventListeners = addColourSelectionFunctionality(setFormData);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      removeColourEventListeners();
+    };
+  }, []);
+
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     setFormData((currentFormData) => {
       return { ...currentFormData, [e.target.name]: e.target.value };
@@ -54,12 +55,10 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     hideForm();
-
-    // await handleGroupUpdating(
-    //   oldGroupBeingEdited.oldGroupName,
-    //   formData
-    // );
-    // setGroupArray(await getGroupList());
+    setFormData({
+      colour: oldGroupBeingEdited.oldColour,
+      group: oldGroupBeingEdited.oldGroupName,
+    });
 
     const updatedGroupItem: GroupItemEntity = { ...formData, colour: formData.colour!, timestamp: new Date() };
 
@@ -67,12 +66,6 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
       originalGroupName: oldGroupBeingEdited.oldGroupName,
       updatedGroupItem: updatedGroupItem,
     });
-
-    setFormData({
-      colour: oldGroupBeingEdited.oldColour,
-      group: oldGroupBeingEdited.oldGroupName,
-    });
-    // getBudgetList().then((budgetList) => setBudgetArray(budgetList));
   }
 
   return (
@@ -86,7 +79,7 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="mb-6 font-bold text-3xl">Updating Group {oldGroupBeingEdited.oldGroupName}</p>
+      <p className="mb-6 font-bold text-3xl">Updating Category Group {oldGroupBeingEdited.oldGroupName}</p>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="groupName">Group Name</label>
         <input type="text" name="group" id="group" value={formData.group} onChange={handleInputChange} />

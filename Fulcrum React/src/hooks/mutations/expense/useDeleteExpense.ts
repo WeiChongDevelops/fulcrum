@@ -12,23 +12,20 @@ import {
   Y2K,
 } from "../../../util.ts";
 
+type ExpenseDeletionScale = "THIS" | "FUTURE" | "ALL";
+
+interface ExpenseDeletionMutationProps {
+  expenseItemToDelete: ExpenseItemEntity;
+  deletionScale: ExpenseDeletionScale;
+  expenseArray: ExpenseItemEntity[];
+}
+
 export default function useDeleteExpense() {
   const queryClient = useQueryClient();
   const email = useContext(EmailContext);
 
-  type ExpenseDeletionScale = "THIS" | "FUTURE" | "ALL";
-
-  interface ExpenseDeletionMutationProps {
-    expenseItemToDelete: ExpenseItemEntity;
-    deletionScale: ExpenseDeletionScale;
-    expenseArray: ExpenseItemEntity[];
-  }
-
   return useMutation({
     mutationFn: async (expenseDeletionMutationProps: ExpenseDeletionMutationProps) => {
-      console.log("Mutation running");
-      // console.log(expenseDeletionMutationProps.expenseItemToDelete);
-      // If it's a recurring expense instance, add to blacklist and if requested by user delete future/all instances
       if (expenseDeletionMutationProps.deletionScale === "THIS") {
         if (!!expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId) {
           await handleBlacklistedExpenseCreation(
@@ -40,7 +37,6 @@ export default function useDeleteExpense() {
       } else {
         let recurringInstancesToDelete: ExpenseItemEntity[] = [];
         if (expenseDeletionMutationProps.deletionScale === "FUTURE") {
-          console.log("future pathing is right.");
           recurringInstancesToDelete = await getRecurringExpenseInstancesAfterDate(
             expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
             expenseDeletionMutationProps.expenseArray,
@@ -87,8 +83,6 @@ export default function useDeleteExpense() {
           Y2K,
         );
       }
-      console.log("below is the deletion list for both batch functions.");
-      console.log(recurringInstancesToDelete);
 
       if (expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId) {
         queryClient.setQueryData(

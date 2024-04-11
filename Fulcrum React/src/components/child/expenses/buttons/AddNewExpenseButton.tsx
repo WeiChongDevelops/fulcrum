@@ -1,5 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
-import { ExpenseFormVisibility, MonthExpenseGroupEntity, SetFormVisibility } from "../../../../util.ts";
+import {
+  changeFormOrModalVisibility,
+  ExpenseFormVisibility,
+  MonthExpenseGroupEntity,
+  SetFormVisibility,
+} from "../../../../util.ts";
 
 interface AddNewExpenseButtonProps {
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
@@ -28,13 +33,10 @@ export default function AddNewExpenseButton({
     if (currentMonth === clickedMonth && currentYear === clickedYear) {
       setDefaultCalendarDate(new Date());
     } else {
-      // Otherwise default new expenses to the first of that month's date
+      // Otherwise default new expenses to the first day of that month
       setDefaultCalendarDate(new Date(monthExpenseGroupItem.year, monthExpenseGroupItem.monthIndex, 1, 0, 0, 0));
     }
-    setExpenseFormVisibility((current) => ({
-      ...current,
-      isCreateExpenseVisible: true,
-    }));
+    changeFormOrModalVisibility(setExpenseFormVisibility, "isCreateExpenseVisible", true);
   }
 
   return (

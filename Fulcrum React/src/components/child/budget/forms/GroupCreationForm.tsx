@@ -41,10 +41,10 @@ export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCrea
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-
-    addColourSelectionFunctionality(setFormData);
+    const removeColourEventListeners = addColourSelectionFunctionality(setFormData);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      removeColourEventListeners();
     };
   }, []);
 
@@ -56,23 +56,16 @@ export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCrea
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
     hideForm();
-
-    const randomColour = getRandomGroupColour();
+    setFormData({ group: "", colour: "" });
 
     const newGroupItem: GroupItemEntity = {
       group: formData.group,
-      colour: formData.colour ? formData.colour : randomColour,
+      colour: formData.colour ? formData.colour : getRandomGroupColour(),
       timestamp: new Date(),
     };
 
-    // await handleGroupCreation(setGroupArray, newGroupItem);
-    // setGroupArray(await getGroupList());
-
     createGroup(newGroupItem);
-
-    setFormData({ group: "", colour: "" });
   }
 
   return (
@@ -86,7 +79,7 @@ export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCrea
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="close-form-or-modal-button mb-6 font-bold text-3xl">New Group</p>
+      <p className="close-form-or-modal-button mb-6 font-bold text-3xl">New Category Group</p>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="Group Name">Group Name</label>
         <input

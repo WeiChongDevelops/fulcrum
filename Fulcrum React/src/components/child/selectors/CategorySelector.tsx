@@ -15,9 +15,7 @@ import { InputProps } from "react-select";
 
 interface CategorySelectorProps {
   categoryOptions: SelectorOptionsFormattedData[];
-  oldExpenseBeingEdited?:
-    | PreviousExpenseBeingEdited
-    | PreviousRecurringExpenseBeingEdited;
+  oldExpenseBeingEdited?: PreviousExpenseBeingEdited | PreviousRecurringExpenseBeingEdited;
   setFormData:
     | Dispatch<SetStateAction<RecurringExpenseInstanceUpdatingFormData>>
     | Dispatch<SetStateAction<RecurringExpenseUpdatingFormData>>
@@ -28,11 +26,7 @@ interface CategorySelectorProps {
 /**
  * A creatable selector for the user to select a category for an expense.
  */
-export default function CategorySelector({
-  categoryOptions,
-  oldExpenseBeingEdited,
-  setFormData,
-}: CategorySelectorProps) {
+export default function CategorySelector({ categoryOptions, oldExpenseBeingEdited, setFormData }: CategorySelectorProps) {
   const maxLengthInput: any = (props: InputProps) => {
     return <components.Input {...props} maxLength={18} />;
   };
@@ -52,10 +46,8 @@ export default function CategorySelector({
         oldExpenseBeingEdited && {
           label: oldExpenseBeingEdited.oldCategory,
           value: oldExpenseBeingEdited.oldCategory,
-          colour: categoryOptions.filter(
-            (categoryOption) =>
-              categoryOption.label === oldExpenseBeingEdited.oldCategory,
-          )[0].colour,
+          colour: categoryOptions.filter((categoryOption) => categoryOption.label === oldExpenseBeingEdited.oldCategory)[0]
+            .colour,
         }
       }
       options={categoryOptions.map((option) => {
@@ -67,6 +59,7 @@ export default function CategorySelector({
       })}
       components={{ Input: maxLengthInput }}
       onChange={handleCategoryInputChange}
+      placeholder={"Type to search or create... "}
       styles={colourStyles}
       className="mb-3"
       theme={(theme: any) => ({

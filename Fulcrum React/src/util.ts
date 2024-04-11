@@ -1,13 +1,14 @@
 import { ChangeEvent, createContext, Dispatch, SetStateAction } from "react";
 import { v4 as uuid } from "uuid";
-import useCreateExpense from "./hooks/mutations/expense/useCreateExpense.ts";
-import useBatchDeleteExpenses from "./hooks/mutations/expense/useBatchDeleteExpenses.ts";
+import { ExpenseCreationMutationProps } from "./hooks/mutations/expense/useCreateExpense.ts";
+import { UseMutateFunction } from "@tanstack/react-query";
 
 // GLOBAL VARIABLES //
 
 export const Y2K = new Date("2000-01-01T00:00:00Z");
 export const DEFAULT_GROUP_COLOUR = "#3f4240";
 export const DEFAULT_CATEGORY_ICON = "category-default-icon.svg";
+export const DEFAULT_CATEGORY_GROUP = "Miscellaneous";
 
 // CONTEXT //
 
@@ -533,52 +534,11 @@ export async function handleExpenseUpdating(updatedExpenseItem: ExpenseItemEntit
   }
 }
 
-// /**
-//  * Updates a specific instance of a recurring expense.
-//  * @param expenseId - The ID of the expense instance to update.
-//  * @param updatedExpenseItem - The updated data for the expense instance.
-//  */
-// export async function handleRecurringExpenseInstanceUpdating(
-//   expenseId: string,
-//   updatedExpenseItem: ExpenseItemEntity[],
-// ): Promise<void> {
-//   try {
-//     const response = await fetch("http://localhost:8080/api/updateRecurringExpenseInstance", {
-//       method: "PUT",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         expenseId: expenseId,
-//         amount: updatedExpenseItem.amount,
-//         category: updatedExpenseItem.category,
-//         recurringExpenseId: null,
-//       }),
-//     });
-//     if (!response.ok) {
-//       console.error(`HTTP error - status: ${response.status}`);
-//     }
-//     const responseData = await response.json();
-//     console.log(responseData);
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
-// }
-
 /**
  * Handles the deletion of a specific expense item.
  * @param expenseId - The ID of the expense to be deleted.
- * @param setExpenseArray - Dispatch function to update the expense array state.
  */
-export async function handleExpenseDeletion(
-  expenseId: string,
-  // setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
-): Promise<void> {
-  // setExpenseArray((expenseArray) =>
-  //   expenseArray.filter((expenseItem) => {
-  //     return expenseItem.expenseId !== expenseId;
-  //   }),
-  // );
+export async function handleExpenseDeletion(expenseId: string): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/deleteExpense", {
       method: "DELETE",
@@ -627,13 +587,9 @@ export async function handleBatchExpenseDeletion(expenseIdsToDelete: string[]): 
 
 /**
  * Creates a new budget item and updates the budget array state.
- * @param setBudgetArray - Dispatch function to update the budget array state.
  * @param newBudgetItem - The new budget item to be added.u
  */
-export async function handleBudgetCreation(
-  // setBudgetArray: Dispatch<SetStateAction<BudgetItemEntity[]>>,
-  newBudgetItem: BudgetItemEntity,
-): Promise<void> {
+export async function handleBudgetCreation(newBudgetItem: BudgetItemEntity): Promise<void> {
   try {
     console.log(`Found path: ${newBudgetItem.iconPath}`);
     const response = await fetch("http://localhost:8080/api/createBudget", {
@@ -645,20 +601,13 @@ export async function handleBudgetCreation(
         category: newBudgetItem.category.trim(),
         amount: newBudgetItem.amount ? newBudgetItem.amount : 0,
         iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : DEFAULT_CATEGORY_ICON,
-        group: newBudgetItem.group ? newBudgetItem.group.trim() : "Miscellaneous",
+        group: newBudgetItem.group ? newBudgetItem.group.trim() : DEFAULT_CATEGORY_GROUP,
       }),
     });
 
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting budget creation: ${response.status}`);
       window.alert("Category name is invalid or already has assigned budget; or $999,999,999 limit exceeded.");
-      // setBudgetArray((current) => {
-      //   const indexOfInvalidItem = current.map((item) => item.category).lastIndexOf(newBudgetItem.category);
-      //   if (indexOfInvalidItem !== -1) {
-      //     return [...current.slice(0, indexOfInvalidItem), ...current.slice(indexOfInvalidItem + 1)];
-      //   }
-      //   return current;
-      // });
     }
     const responseData = await response.json();
     console.log(responseData);
@@ -774,13 +723,6 @@ export async function handleGroupCreation(newGroupItem: GroupItemEntity): Promis
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting group creation: ${response.status}`);
       window.alert("Group name is invalid or already exists.");
-      // setGroupArray((currentGroupArray) => {
-      //   const indexOfInvalidItem = currentGroupArray.map((item) => item.group).lastIndexOf(newGroupItem.group);
-      //   if (indexOfInvalidItem !== -1) {
-      //     return [...currentGroupArray.slice(0, indexOfInvalidItem), ...currentGroupArray.slice(indexOfInvalidItem + 1)];
-      //   }
-      //   return currentGroupArray;
-      // });
     }
     const responseData = await response.json();
     console.log(responseData);
@@ -825,18 +767,6 @@ export async function getGroupList(): Promise<GroupItemEntity[]> {
  * @param updatedGroupItem - The new data for the group.
  */
 export async function handleGroupUpdating(originalGroupName: string, updatedGroupItem: GroupItemEntity): Promise<void> {
-  // if (originalGroupName === updatedGroupItem.group || !groupArray.map((groupItem) => groupItem.group).includes(updatedGroupItem.group)) {
-  //     setGroupArray((currentGroupArray) => {
-  //       return currentGroupArray.map((groupItem) =>
-  //         groupItem.group == originalGroupName
-  //           ? {
-  //               colour: updatedGroupItem.colour ? updatedGroupItem.colour : groupItem.colour,
-  //               group: updatedGroupItem.group,
-  //               timestamp: groupItem.timestamp,
-  //             }
-  //           : groupItem,
-  //       );
-  //     });
   try {
     const response = await fetch("http://localhost:8080/api/updateGroup", {
       method: "PUT",
@@ -852,29 +782,12 @@ export async function handleGroupUpdating(originalGroupName: string, updatedGrou
     if (!response.ok) {
       console.error(`HTTP error when attempting group update: ${response.status}`);
       window.alert("Group name is invalid or already exists.");
-      // setGroupArray((currentGroupArray) => {
-      //   const revertedGroupOptions = [...currentGroupArray];
-      //   const indexOfInvalidlyEditedOption = currentGroupArray
-      //     .map((groupItem) => groupItem.group)
-      //     .lastIndexOf(updatedGroupItem.group);
-      //   if (indexOfInvalidlyEditedOption !== -1) {
-      //     revertedGroupOptions[indexOfInvalidlyEditedOption] = {
-      //       group: originalGroupName,
-      //       colour: originalColour,
-      //       timestamp: revertedGroupOptions[indexOfInvalidlyEditedOption].timestamp,
-      //     };
-      //   }
-      //   return revertedGroupOptions;
-      // });
     } else {
       console.log("Group successfully updated.");
     }
   } catch (e) {
     console.error(`Exception encountered when requesting group update: ${e}`);
   }
-  // } else {
-  //   window.alert("Selected group name already taken.");
-  // }
 }
 
 /**
@@ -894,7 +807,6 @@ export async function handleGroupDeletion(groupName: string, keepContainedBudget
         keepContainedBudgets: keepContainedBudgets,
       }),
     });
-
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting group deletion: ${response.status}`);
     }
@@ -1204,27 +1116,6 @@ export async function handleWipeBudget(): Promise<void> {
   }
 }
 
-// /**
-//  * Deletes all user data (expenses, budgets, recurring expenses).
-//  */
-// export async function handleWipeData(): Promise<void> {
-//   try {
-//     const response = await fetch("http://localhost:8080/api/wipeData", {
-//       method: "DELETE",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     });
-//     if (!response.ok) {
-//       console.error(`HTTP error when wiping data - status: ${response.status}`);
-//     } else {
-//       console.log(await response.json());
-//     }
-//   } catch (e) {
-//     console.error(`Failed to wipe data - ${e}`);
-//   }
-// }
-
 // AUTH API CALL FUNCTIONS //
 
 /**
@@ -1321,60 +1212,6 @@ export async function logoutOnClick(): Promise<void> {
   }
 }
 
-// /**
-//  * Checks if a user is currently logged in and handles session status accordingly.
-//  * Redirects to the login page if the session is expired or not found.
-//  */
-// export async function checkForUser(): Promise<{ loggedIn: boolean }> {
-//   try {
-//     const response = await fetch("http://localhost:8080/api/checkForUser", {
-//       method: "GET",
-//     });
-//     if (response.status === 400) {
-//       console.error("Failed to check for user status.");
-//     } else if (response.status === 401) {
-//       console.error("JWT token expiry detected. Logging out.");
-//       window.alert("Login expired. Please login again.");
-//       const userStatus = { loggedIn: false };
-//       logoutOnClick().then(() => {
-//         console.log(`window.location.href: ${window.location.href}`);
-//         window.location.href !== "/login" && (window.location.href = "/login");
-//       });
-//       return userStatus;
-//     }
-//     const userStatus = await response.json();
-//     console.log(userStatus);
-//     return userStatus;
-//   } catch (error) {
-//     console.error("Error:", error);
-//     return { loggedIn: false };
-//   }
-// }
-//
-// /**
-//  * Retrieves the email address of the currently logged-in user.
-//  */
-// export async function getSessionEmail(): Promise<any> {
-//   try {
-//     const response = await fetch("http://localhost:8080/api/getUserEmailIfLoggedIn", {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     });
-//     if (!response.ok) {
-//       console.error(`Email retrieval failed - no user logged in.: ${response.status}`);
-//     } else {
-//       const responseData = await response.json();
-//       console.log(responseData);
-//       return responseData.email;
-//     }
-//   } catch (error) {
-//     console.error(`Email retrieval api query failed: ${error}`);
-//     return null;
-//   }
-// }
-
 /**
  * Retrieves the email address of the active user, or null if no user is currently authenticated.
  * @return - The active email, or null if there is no active user
@@ -1407,17 +1244,19 @@ export async function getSessionEmailOrNull(): Promise<any> {
  * @template T - A generic type extending an object that optionally includes an iconPath property.
  * @param setFormData - Dispatch function that updates state for selected icon.
  * @param selectorType - The base part of the class name used to select icon elements.
+ * @return - A cleanup function for the event listeners
  */
 export function addIconSelectionFunctionality<T extends { iconPath?: string }>(
   setFormData: Dispatch<SetStateAction<T>>,
   selectorType: string,
-): void {
-  // Get array of icons
+): () => void {
+  // Get array of icons and initialise array of listeners (for later cleanup)
   const icons: NodeListOf<HTMLImageElement> = document.querySelectorAll(`.${selectorType}-icon-selectable`);
+  const listeners: Array<{ element: Element; handler: (event: any) => void }> = [];
 
   // Iterate over each icon to add click event listeners
   icons.forEach((icon): void => {
-    icon.addEventListener("click", (e: MouseEvent) => {
+    const eventHandler = (e: MouseEvent) => {
       e.preventDefault(); // Prevent default action
 
       // Retrieve the icon's path from its data-value attribute
@@ -1434,21 +1273,29 @@ export function addIconSelectionFunctionality<T extends { iconPath?: string }>(
       icons.forEach((icon2) => icon2.classList.remove("selected-icon"));
       icon.classList.add("selected-icon");
       console.log(`iconPath: ${iconPath}`);
-    });
+    };
+    icon.addEventListener("click", eventHandler);
+    listeners.push({ element: icon, handler: eventHandler });
   });
+  return () => {
+    listeners.forEach(({ element, handler }) => {
+      element.removeEventListener("click", handler);
+    });
+  };
 }
 
 /**
  * Adds click event listeners to colour selection elements for group colour selection functionality.
  * @param setFormData - Dispatch function to update state for the selected colour.
  */
-export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAction<BasicGroupData>>): void {
+export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAction<BasicGroupData>>): () => void {
   // Query all colour selection containers
   const colourElementList: NodeListOf<HTMLImageElement> = document.querySelectorAll(".group-colour-selectable-container");
+  const listeners: Array<{ element: Element; handler: (event: any) => void }> = [];
 
   // Iterate over each colour selection container to add click event listeners
   colourElementList.forEach((colourSelectable) => {
-    colourSelectable.addEventListener("click", (e: MouseEvent) => {
+    const eventHandler = (e: MouseEvent) => {
       // Prevent the default action of the event
       e.preventDefault();
 
@@ -1465,21 +1312,28 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
         triangle.classList.remove("selectedColour");
       });
       triangleElement.classList.add("selectedColour");
-    });
+    };
+    colourSelectable.addEventListener("click", eventHandler);
+    listeners.push({ element: colourSelectable, handler: eventHandler });
   });
+  return () => {
+    listeners.forEach(({ element, handler }) => {
+      element.removeEventListener("click", handler);
+    });
+  };
 }
 
 // SORTING FUNCTIONS //
 
 /**
- * Sorts group items, placing "Miscellaneous" at the end and others by their timestamps in ascending order.
+ * Sorts group items, placing the default category group at the end and others by their timestamps in ascending order.
  * @param a - The first group item for comparison.
  * @param b - The second group item for comparison.
  * @returns Sorting order value.
  */
 export function groupSort(a: GroupItemEntity, b: GroupItemEntity): number {
-  if (a.group === "Miscellaneous") return 1;
-  if (b.group === "Miscellaneous") return -1;
+  if (a.group === DEFAULT_CATEGORY_GROUP) return 1;
+  if (b.group === DEFAULT_CATEGORY_GROUP) return -1;
   return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
 }
 
@@ -2107,8 +1961,6 @@ export function getRecurringExpenseInstancesOrNull(
       new Date(expenseItem.timestamp).toLocaleDateString() === new Date(date).toLocaleDateString()
     );
   });
-  console.log(`Found the below instances of the recurring expense ID ${recurringExpenseId}`);
-  console.log(recurringExpenseInstances);
   return recurringExpenseInstances.length > 0 ? recurringExpenseInstances : null;
 }
 
@@ -2117,18 +1969,28 @@ export function getRecurringExpenseInstancesOrNull(
  * @param recurringExpenseArray - The array of recurring expense items.
  * @param expenseArray - The array of expense items.
  * @param blacklistedExpenseArray - The array of blacklisted (removed) recurring expense instances.
+ * @param batchDeleteExpenses - The mutation that batch deletes expenses.
+ * @param createExpense - The mutation that batch deletes expenses.
  */
-export async function updateRecurringExpenseInstances(
+export function updateRecurringExpenseInstances(
   recurringExpenseArray: RecurringExpenseItemEntity[],
   expenseArray: ExpenseItemEntity[],
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[],
-): Promise<void> {
+  batchDeleteExpenses: UseMutateFunction<void, Error, string[]>,
+  createExpense: UseMutateFunction<void, Error, ExpenseCreationMutationProps>,
+): void {
   const misplacedExpensesToRemove = new Set<string>();
   recurringExpenseArray.forEach((recurringExpenseItem) => {
-    processRecurringExpenseInstances(recurringExpenseItem, expenseArray, blacklistedExpenseArray, misplacedExpensesToRemove);
+    processRecurringExpenseInstances(
+      recurringExpenseItem,
+      expenseArray,
+      blacklistedExpenseArray,
+      misplacedExpensesToRemove,
+      createExpense,
+    );
   });
   if (misplacedExpensesToRemove.size !== 0) {
-    useBatchDeleteExpenses().mutate(Array.from(misplacedExpensesToRemove));
+    batchDeleteExpenses(Array.from(misplacedExpensesToRemove));
   }
 }
 
@@ -2138,12 +2000,14 @@ export async function updateRecurringExpenseInstances(
  * @param expenseArray - The array of expenses.
  * @param blacklistedExpenseInstances - The array of blacklisted recurring expense instances (manually user-deleted).
  * @param misplacedExpensesToRemove - The cumulative set of expense IDs to batch delete.
+ * @param createExpense - The mutation that batch deletes expenses.
  */
 function processRecurringExpenseInstances(
   recurringExpenseItem: RecurringExpenseItemEntity,
   expenseArray: ExpenseItemEntity[],
   blacklistedExpenseInstances: BlacklistedExpenseItemEntity[],
   misplacedExpensesToRemove: Set<string>,
+  createExpense: UseMutateFunction<void, Error, ExpenseCreationMutationProps>,
 ): void {
   const today = new Date();
   today.setDate(today.getDate() + 1);
@@ -2186,7 +2050,7 @@ function processRecurringExpenseInstances(
           recurringExpenseId: recurringExpenseItem.recurringExpenseId,
         };
         // handleExpenseCreation(newExpenseItemLanded);
-        useCreateExpense().mutate({
+        createExpense({
           newExpenseItem: {
             ...newExpenseItemLanded,
             timestamp: new Date(newExpenseItemLanded.timestamp.getTime()),
@@ -2197,38 +2061,6 @@ function processRecurringExpenseInstances(
     date.setDate(date.getDate() + 1);
   }
 }
-
-// /**
-//  * Performs batched deletion of all instances of a recurring expense from a particular date onwards.
-//  * @param recurringExpenseId - The ID of the recurringExpense to delete instances of.
-//  * @param expenseArray - The array of expense items.
-//  * @param setExpenseArray - The state update function for the expense array.
-//  * @param startingFrom - The date from which instances are deleted onwards.
-//  * @param setBlacklistedExpenseInstances - The state update function for the recurring expense array.
-//  */
-// export async function removeAllInstancesOfRecurringExpenseAfterDate(
-//   recurringExpenseId: string,
-//   expenseArray: ExpenseItemEntity[],
-//   // setExpenseArray: Dispatch<SetStateAction<ExpenseItemEntity[]>>,
-//   startingFrom: Date,
-//   // setBlacklistedExpenseInstances: Dispatch<SetStateAction<BlacklistedExpenseItemEntity[]>>,
-// ): Promise<void> {
-//   const batchDeletionQueue = new Set<string>();
-//   for (const expenseItem of expenseArray) {
-//     if (
-//       expenseItem.recurringExpenseId === recurringExpenseId &&
-//       new Date(expenseItem.timestamp).getTime() > new Date(startingFrom).getTime()
-//     ) {
-//       batchDeletionQueue.add(expenseItem.expenseId);
-//       await handleBlacklistedExpenseCreation(recurringExpenseId, expenseItem.timestamp);
-//     }
-//   }
-//   // setExpenseArray((prevExpenseArray) =>
-//   //   prevExpenseArray.filter((expenseItem) => !(expenseItem.expenseId in batchDeletionQueue)),
-//   // );
-//   // setBlacklistedExpenseInstances(await getBlacklistedExpenses());
-//   await handleBatchExpenseDeletion(batchDeletionQueue);
-// }
 
 /**
  * Retrieves all of a given recurring expense's instances from a given date onwards.
@@ -2249,12 +2081,7 @@ export async function getRecurringExpenseInstancesAfterDate(
       expenseItem.recurringExpenseId === recurringExpenseId &&
       new Date(expenseItem.timestamp).getTime() >= new Date(startingFrom).getTime()
     ) {
-      console.log(`Expense instance on ${expenseItem.timestamp} is on or after that start date - deleting.`);
       requestedExpenseList.add(expenseItem);
-    } else {
-      console.log(
-        `Expense instance on ${expenseItem.timestamp} is NOT on or after that start date - doesn't meet deletion criteria.`,
-      );
     }
   }
   return Array.from(requestedExpenseList);
@@ -2269,10 +2096,16 @@ export function findExpenseWithId(expenseId: string, expenseArray: ExpenseItemEn
   return expenseArray.find((expenseItem) => expenseItem.expenseId === expenseId);
 }
 
+/**
+ * Changes the visibility of a particular form or modal, hiding or showing it.
+ * @param setVisibility - The state updating function used to change visibility.
+ * @param visibilityAttribute - The form/modal-specific identifier.
+ * @param showNotHide - True if the caller wishes to show the form or modal, false if they wish to hide it.
+ */
 export function changeFormOrModalVisibility<T extends FormVisibility, U extends ModalVisibility>(
   setVisibility: SetFormVisibility<T> | SetModalVisibility<U>,
   visibilityAttribute: string,
   showNotHide: boolean,
-) {
+): void {
   setVisibility((prevVisibility: any) => ({ ...prevVisibility, [visibilityAttribute]: showNotHide }));
 }

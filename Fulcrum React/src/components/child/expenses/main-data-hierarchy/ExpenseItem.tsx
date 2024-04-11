@@ -1,5 +1,7 @@
 import "/src/css/Budget.css";
 import {
+  changeFormOrModalVisibility,
+  DEFAULT_CATEGORY_GROUP,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseModalVisibility,
@@ -59,15 +61,9 @@ export default function ExpenseItem({
       oldTimestamp: timestamp,
     });
     if (recurringExpenseId === null) {
-      setExpenseFormVisibility((current) => ({
-        ...current,
-        isUpdateExpenseVisible: true,
-      }));
+      changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateExpenseVisible", true);
     } else {
-      setExpenseFormVisibility((current) => ({
-        ...current,
-        isUpdateRecurringExpenseInstanceVisible: true,
-      }));
+      changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateRecurringExpenseInstanceVisible", true);
     }
   }
 
@@ -80,11 +76,10 @@ export default function ExpenseItem({
       timestamp: timestamp,
       recurringExpenseId: recurringExpenseId,
     });
-    setExpenseModalVisibility((current) => ({
-      ...current,
-      isConfirmExpenseDeletionModalVisible: true,
-    }));
+    changeFormOrModalVisibility(setExpenseModalVisibility, "isConfirmExpenseDeletionModalVisible", true);
   }
+
+  const isMiscellaneous = groupName === DEFAULT_CATEGORY_GROUP;
 
   return (
     <div className="expense-item" style={{ backgroundColor: groupColour }} onClick={handleEditClick} data-value={expenseId}>
@@ -95,7 +90,7 @@ export default function ExpenseItem({
         <div
           className="flex flex-col items-start ml-2"
           style={{
-            color: groupName === "Miscellaneous" ? "white" : "black",
+            color: isMiscellaneous ? "white" : "black",
           }}
         >
           <p className="font-bold text-xl mb-[-2px]">{category}</p>
@@ -105,12 +100,12 @@ export default function ExpenseItem({
       <div
         className="flex flex-row items-center"
         style={{
-          color: groupName === "Miscellaneous" ? "white" : "black",
+          color: isMiscellaneous ? "white" : "black",
         }}
       >
         {recurringExpenseId && (
           <img
-            src={`/src/assets/UI-icons/tools-recurring-icon-${groupName === "Miscellaneous" ? "white" : "black"}.svg`}
+            src={`/src/assets/UI-icons/tools-recurring-icon-${isMiscellaneous ? "white" : "black"}.svg`}
             alt="Cycle icon"
             className={"w-8 h-8 mr-6"}
           />
@@ -119,14 +114,14 @@ export default function ExpenseItem({
         <div className="flex flex-row items-center ml-2">
           <button className="circle-button" onClick={handleEditClick}>
             <img
-              src={`/src/assets/UI-icons/edit-pencil-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`}
+              src={`/src/assets/UI-icons/edit-pencil-${isMiscellaneous ? "white" : "black"}-icon.svg`}
               alt="Edit icon"
               className="mx-1 w-6 h-6"
             />
           </button>
           <button className="circle-button" onClick={handleDeleteClick}>
             <img
-              src={`/src/assets/UI-icons/delete-trash-${groupName === "Miscellaneous" ? "white" : "black"}-icon.svg`}
+              src={`/src/assets/UI-icons/delete-trash-${isMiscellaneous ? "white" : "black"}-icon.svg`}
               alt="Delete icon"
               className="mx-1 w-6 h-6"
             />

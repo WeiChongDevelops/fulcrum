@@ -9,7 +9,6 @@ import Loader from "../../other/Loader.tsx";
  */
 export default function Contact() {
   const formRef = useRef<HTMLFormElement>(null);
-
   const [formData, setFormData] = useState({
     queryType: "",
     firstName: "",

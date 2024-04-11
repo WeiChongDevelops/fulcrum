@@ -10,18 +10,17 @@ import {
   RecurringExpenseItemEntity,
 } from "../../../util.ts";
 
+interface RecurringExpenseCreationMutationProps {
+  newRecurringExpenseItem: RecurringExpenseItemEntity;
+  newBudgetItem?: BudgetItemEntity;
+}
+
 export default function useCreateRecurringExpense() {
-  const queryClient = useQueryClient();
   const email = useContext(EmailContext);
-  interface RecurringExpenseCreationMutationProps {
-    newRecurringExpenseItem: RecurringExpenseItemEntity;
-    newBudgetItem?: BudgetItemEntity;
-  }
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (recurringExpenseCreationMutationProps: RecurringExpenseCreationMutationProps) => {
-      // recurringExpenseCreationMutationProps.newBudgetItem &&
-      //   (await handleBudgetCreation(recurringExpenseCreationMutationProps.newBudgetItem));
       await handleRecurringExpenseCreation(recurringExpenseCreationMutationProps.newRecurringExpenseItem);
     },
     onMutate: async (recurringExpenseCreationMutationProps: RecurringExpenseCreationMutationProps) => {

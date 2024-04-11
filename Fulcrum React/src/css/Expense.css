@@ -3,7 +3,6 @@
   margin: 0 25px 0 15px;
   height: 5px;
   background: repeating-linear-gradient(to right, black, black 16px, transparent 2px, transparent 30px);
-  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 99%, rgba(0, 0, 0, 0) 100%);
 }
 
 .dotted-line-dark {
@@ -11,7 +10,7 @@
     to right,
     white,
     white 16px,
-    /* dash width */ transparent 2px,
+    transparent 2px /* dash width */,
     transparent 30px /* dash spacing */
   );
 }

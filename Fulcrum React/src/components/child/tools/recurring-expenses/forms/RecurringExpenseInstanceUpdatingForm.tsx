@@ -39,9 +39,9 @@ export default function RecurringExpenseInstanceUpdatingForm({
   const { mutate: updateExpense } = useUpdateExpense();
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -61,8 +61,11 @@ export default function RecurringExpenseInstanceUpdatingForm({
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
     hideForm();
+    setFormData({
+      category: oldExpenseBeingEdited.oldCategory,
+      amount: oldExpenseBeingEdited.oldAmount,
+    });
 
     const noChangesMade =
       formData.category === oldExpenseBeingEdited.oldCategory && formData.amount === oldExpenseBeingEdited.oldAmount;
@@ -76,16 +79,6 @@ export default function RecurringExpenseInstanceUpdatingForm({
     };
 
     updateExpense(updatedExpenseItem);
-
-    // await handleRecurringExpenseInstanceUpdating(oldExpenseBeingEdited.expenseId, formData);
-    // await handleBlacklistedExpenseCreation(oldExpenseBeingEdited.recurringExpenseId!, oldExpenseBeingEdited.oldTimestamp);
-    // setBlacklistedExpenseArray(await getBlacklistedExpenses());
-
-    setFormData({
-      category: oldExpenseBeingEdited.oldCategory,
-      amount: oldExpenseBeingEdited.oldAmount,
-    });
-    // getExpenseList().then((expenseList) => setExpenseArray(expenseList));
   }
 
   return (
@@ -124,8 +117,8 @@ export default function RecurringExpenseInstanceUpdatingForm({
         </div>
 
         <div className={"mt-2 text-sm"}>
-          <p className={"mb-2"}>You are editing only this instance of your recurring expense.</p>
-          <p>To manage all your recurring expenses, go to the Tools section!</p>
+          <p className={"mb-2"}>You are only editing this particular repeat of your recurring expense.</p>
+          <p>To manage your recurring expenses, please see the 'Tools' section.</p>
         </div>
 
         <FulcrumButton displayText="Update Expense" optionalTailwind={"mt-8"} />

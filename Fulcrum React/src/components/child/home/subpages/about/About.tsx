@@ -14,7 +14,6 @@ export default function About() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         setShowArrow(!entry.isIntersecting);
-        console.log("test");
       });
     });
     if (scrollHideRef.current) {

@@ -136,17 +136,6 @@ fun Application.configureOtherRouting() {
             }
         }
 
-//        delete("/api/wipeData"){
-//            try {
-//                wipeTableIfPopulated("budget", call)
-//                wipeTableIfPopulated("expenses", call)
-//                wipeTableIfPopulated("recurring_expenses", call)
-//                call.respondSuccess("Data wiped successfully.")
-//            } catch (e: Exception) {
-//                call.respondError("Error while wiping data.")
-//            }
-//        }
-
 
         // PUBLIC USER DATA //
 

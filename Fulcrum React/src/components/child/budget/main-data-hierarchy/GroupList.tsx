@@ -22,15 +22,12 @@ interface GroupListProps {
   setModalFormVisibility: SetModalVisibility<BudgetModalVisibility>;
 
   setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
-
   setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>;
   setOldGroupBeingEdited: Dispatch<SetStateAction<PreviousGroupBeingEdited>>;
-
   setGroupToDelete: Dispatch<SetStateAction<string>>;
   setCategoryToDelete: Dispatch<SetStateAction<string>>;
 
   perCategoryTotalExpenseArray: Map<string, number>;
-
   publicUserData: PublicUserData;
 }
 

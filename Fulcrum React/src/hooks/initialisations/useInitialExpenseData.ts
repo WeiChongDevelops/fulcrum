@@ -36,34 +36,6 @@ export default function useInitialExpenseData() {
     setIsExpenseFormOrModalOpen(checkForOpenModalOrForm(expenseFormVisibility, expenseModalVisibility));
   }, [expenseFormVisibility, expenseModalVisibility]);
 
-  // let structuredExpenseDataQuery = useQuery({
-  //   queryKey: ["structuredExpenseData", email],
-  //   queryFn: async () => {
-  //     await updateRecurringExpenseInstances(
-  //       recurringExpenseArray,
-  //       expenseArray,
-  //       blacklistedExpenseArray,
-  //       expenseCreationMutation as UseMutationResult,
-  //       batchExpenseDeletionMutation as UseMutationResult,
-  //     );
-  //     return await getStructuredExpenseData(expenseArray);
-  //   },
-  // });
-
-  // useEffect(() => {
-  //   async function updateExpenseDisplay() {
-  //     await updateRecurringExpenseInstances(
-  //       recurringExpenseArray,
-  //       expenseArray,
-  //       blacklistedExpenseArray,
-  //       expenseCreationMutation as UseMutationResult,
-  //       batchExpenseDeletionMutation as UseMutationResult,
-  //     );
-  //     setStructuredExpenseData(await getStructuredExpenseData(expenseArray));
-  //   }
-  //   updateExpenseDisplay();
-  // }, [expenseArray]);
-
   return {
     expenseFormVisibility,
     setExpenseFormVisibility,

@@ -41,9 +41,9 @@ export default function ThreeOptionModal({
   const formRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 

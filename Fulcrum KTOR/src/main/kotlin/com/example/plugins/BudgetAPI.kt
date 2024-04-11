@@ -26,10 +26,9 @@ fun Application.configureBudgetRouting() {
         post("/api/createBudget") {
             try {
                 val budgetCreateRequest = call.receive<BudgetCreateRequestReceived>()
-                val budgetList =
-                    supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp")) {
-                        eq("userId", getActiveUserId())
-                    }.decodeList<BudgetItemResponse>()
+                supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp")) {
+                    eq("userId", getActiveUserId())
+                }.decodeList<BudgetItemResponse>()
 
                 val itemToInsert = BudgetCreateRequestSent(
                     userId = getActiveUserId(),
@@ -75,50 +74,6 @@ fun Application.configureBudgetRouting() {
         }
 
         put("/api/updateBudget") {
-//            try {
-//                val budgetUpdateRequest = call.receive<BudgetUpdateRequestReceived>()
-//
-//                val categoryToChange = budgetUpdateRequest.category
-//
-//                val updatedItemNoIconOrGroup = supabase.postgrest["budgets"].update(
-//                    {
-//                        set("amount", budgetUpdateRequest.amount)
-//                        set("category", budgetUpdateRequest.newCategoryName)
-//                    }
-//                ) {
-//                    eq("category", categoryToChange)
-//                    eq("userId", getActiveUserId())
-//                }
-//
-//                if (updatedItemNoIconOrGroup.body == null) {
-//                    call.respondError("Budget not updated")
-//                } else {
-//                    if (budgetUpdateRequest.iconPath != "") {
-//                        val updatedItemIconOnly = supabase.postgrest["budgets"].update(
-//                            {
-//                                set("iconPath", budgetUpdateRequest.iconPath)
-//                            }
-//                        ) {
-//                            eq("category", budgetUpdateRequest.newCategoryName)
-//                            eq("userId", getActiveUserId())
-//                        }
-//                    }
-//                    if (budgetUpdateRequest.group != "") {
-//                        val updatedItemGroupOnly = supabase.postgrest["budgets"].update(
-//                            {
-//                                set("group", budgetUpdateRequest.group)
-//                            }
-//                        ) {
-//                            eq("category", budgetUpdateRequest.newCategoryName)
-//                            eq("userId", getActiveUserId())
-//                        }
-//                    }
-//                    call.respondSuccess("Budget successfully updated.")
-//                }
-//            } catch (e: Exception) {
-//                call.application.log.error("Error while updating budget", e)
-//                call.respondError("Budget not updated.")
-//            }
             try {
                 val budgetUpdateRequest = call.receive<BudgetUpdateRequestReceived>()
                 val categoryToChange = budgetUpdateRequest.category

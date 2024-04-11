@@ -105,37 +105,6 @@ fun Application.configureAuthRouting() {
                 call.respondError("Error while logging user out: $e.")
             }
         }
-//
-//        get("/api/getUserEmailIfLoggedIn") {
-//            try {
-//                val currentUser = supabase.gotrue.currentSessionOrNull()
-//                if (currentUser != null) {
-//                    call.respond(HttpStatusCode.OK, UserEmail(email = currentUser.user?.email!!))
-//                } else {
-//                    call.respondSuccess("Check found no user currently logged in.")
-//                }
-//            } catch (e: Exception) {
-//                call.respondError("Error while checking for user.")
-//            }
-//        }
-//
-//        get("/api/checkForUser") {
-//            try {
-//                val currentUser = supabase.gotrue.currentSessionOrNull()
-//                val statusJSON = if (currentUser == null) {
-//                    UserStatusCheck(loggedIn = false)
-//                } else {
-//                    UserStatusCheck(loggedIn = true)
-//                }
-//                call.respond(HttpStatusCode.OK, statusJSON)
-//            } catch (e: UnauthorizedRestException) {
-//                call.respondAuthError("Not authorised - JWT token likely expired.")
-//            } catch (e: IllegalStateException) {
-//                call.respondAuthError("Session not found.")
-//            } catch (e: Exception) {
-//                call.respondError("Error while checking for user.")
-//            }
-//        }
 
         get("/api/getActiveUserEmailOrNull") {
             try {

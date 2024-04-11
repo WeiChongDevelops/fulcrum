@@ -18,15 +18,11 @@ import useInitialRecurringExpenseData from "../../../../hooks/initialisations/us
 
 interface RecurringExpensesProps {
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
-
   publicUserData: PublicUserData;
-
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
-
   recurringExpenseArray: RecurringExpenseItemEntity[];
-
   categoryDataMap: CategoryToIconGroupAndColourMap;
 }
 

@@ -10,18 +10,17 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 
+export interface ExpenseCreationMutationProps {
+  newExpenseItem: ExpenseItemEntity;
+  newBudgetItem?: BudgetItemEntity;
+}
+
 export default function useCreateExpense() {
   const queryClient = useQueryClient();
   const email = useContext(EmailContext);
 
-  interface ExpenseCreationMutationProps {
-    newExpenseItem: ExpenseItemEntity;
-    newBudgetItem?: BudgetItemEntity;
-  }
-
   return useMutation({
     mutationFn: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {
-      // expenseCreationMutationProps.newBudgetItem && (await handleBudgetCreation(expenseCreationMutationProps.newBudgetItem));
       await handleExpenseCreation(expenseCreationMutationProps.newExpenseItem);
     },
     onMutate: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {

@@ -74,7 +74,6 @@ export default function SettingsModalsAndForms({
           }}
           optionTwoText={"Delete"}
           optionTwoFunction={() => {
-            // handleWipeExpenses();
             wipeExpenses();
             changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmExpenseWipeModalVisible", false);
             console.log("Wiping all expenses.");
@@ -93,7 +92,6 @@ export default function SettingsModalsAndForms({
           }}
           optionTwoText={"Delete"}
           optionTwoFunction={() => {
-            // handleWipeBudget();
             wipeBudget();
             changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmBudgetWipeModalVisible", false);
             console.log("Wiping all budgets.");
@@ -112,7 +110,6 @@ export default function SettingsModalsAndForms({
           }}
           optionTwoText={"Delete"}
           optionTwoFunction={() => {
-            // handleWipeData();
             wipeExpenses();
             wipeBudget();
             changeFormOrModalVisibility(setSettingsModalVisibility, "isConfirmAllDataWipeModalVisible", false);

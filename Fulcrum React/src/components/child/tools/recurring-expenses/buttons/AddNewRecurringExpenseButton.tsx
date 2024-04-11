@@ -1,10 +1,7 @@
-import { Dispatch, SetStateAction } from "react";
-import { RecurringExpenseFormVisibility } from "../../../../../util.ts";
+import { RecurringExpenseFormVisibility, SetFormVisibility } from "../../../../../util.ts";
 
 interface AddNewRecurringExpenseButtonProps {
-  setRecurringExpenseFormVisibility: Dispatch<
-    SetStateAction<RecurringExpenseFormVisibility>
-  >;
+  setRecurringExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility>;
   isDarkMode: boolean;
 }
 
@@ -23,10 +20,7 @@ export default function AddNewRecurringExpenseButton({
   }
 
   return (
-    <button
-      className={`create-expense-button ${isDarkMode && "create-expense-button-dark"}`}
-      onClick={handleClick}
-    >
+    <button className={`create-expense-button ${isDarkMode && "create-expense-button-dark"}`} onClick={handleClick}>
       <p className="text-2xl font-bold">+</p>
     </button>
   );

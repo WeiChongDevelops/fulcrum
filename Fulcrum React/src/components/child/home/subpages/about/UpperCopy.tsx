@@ -10,7 +10,7 @@ export default function UpperCopy() {
   const body = document.querySelector("body")!;
 
   useEffect(() => {
-    function updateCursorLocation(e: MouseEvent) {
+    function shiftCursorSpotlight(e: MouseEvent) {
       spotlightRef.current!.style.opacity = "1";
       spotlightRef.current!.style.left = `${e.clientX - spotlightContainerRef.current!.getBoundingClientRect().left}px`;
       spotlightRef.current!.style.top = `${e.clientY - spotlightContainerRef.current!.getBoundingClientRect().top}px`;
@@ -19,20 +19,16 @@ export default function UpperCopy() {
       spotlightRef.current!.style.opacity = "0";
     };
 
-    document.addEventListener("mousemove", updateCursorLocation);
+    document.addEventListener("mousemove", shiftCursorSpotlight);
     body.addEventListener("scroll", hideSpotlight);
     return () => {
-      document.removeEventListener("mousemove", updateCursorLocation);
+      document.removeEventListener("mousemove", shiftCursorSpotlight);
       body.removeEventListener("scroll", hideSpotlight);
     };
   }, []);
 
   return (
-    <div
-      className={
-        "flex flex-col justify-start items-center w-screen px-20 pt-40 pb-6 text-black relative"
-      }
-    >
+    <div className={"flex flex-col justify-start items-center w-screen px-20 pt-40 pb-6 text-black relative"}>
       <div className={"upper-copy-first-row"}>
         <div className={"upper-copy-left-col mr-8 sm:mr-32"}>
           <img
@@ -40,23 +36,11 @@ export default function UpperCopy() {
             className={"w-8 absolute left-[100%] top-0"}
             alt="Page highlight"
           />
-          <p className={"text-5xl text-left font-bold"}>
-            It's time to start paying yourself first.
-          </p>
-          <p className={"my-6 font-bold"}>
-            180,000 others have found their balance.
-          </p>
+          <p className={"text-5xl text-left font-bold"}>It's time to start paying yourself first.</p>
+          <p className={"my-6 font-bold"}>180,000 others have found their balance.</p>
           <div className={"flex flex-row justify-start items-center mb-8"}>
-            <img
-              src="/src/assets/homepage-assets/testimonials.svg"
-              alt="Testimonials"
-              className={"w-32"}
-            />
-            <div
-              className={
-                "flex flex-row justify-start items-center rounded-full bg-[#F7FFFAFF] py-2 pl-2.5 pr-6 ml-2"
-              }
-            >
+            <img src="/src/assets/homepage-assets/testimonials.svg" alt="Testimonials" className={"w-32"} />
+            <div className={"flex flex-row justify-start items-center rounded-full bg-[#F7FFFAFF] py-2 pl-2.5 pr-6 ml-2"}>
               <img
                 src="/src/assets/homepage-assets/kylie.png"
                 className={
@@ -64,20 +48,15 @@ export default function UpperCopy() {
                 }
                 alt="Testimonial user"
               />
-              <div
-                className={"flex flex-col justify-center items-start ml-4 w-80"}
-              >
+              <div className={"flex flex-col justify-center items-start ml-4 w-80"}>
                 <p className={"text-sm font-medium text-left"}>
-                  "The financial stress relief has been an absolute game changer
-                  for my family and I."
+                  "The financial stress relief has been an absolute game changer for my family and I."
                 </p>
                 <p className={"font-bold text-xs ml-0.5 mt-1"}>Kylie Capelli</p>
               </div>
             </div>
           </div>
-          <p className={"font-medium"}>
-            Integrated Budgeting and Expense Tracking
-          </p>
+          <p className={"font-medium"}>Integrated Budgeting and Expense Tracking</p>
         </div>
         <div className={"upper-instructions-container"}>
           <div className={"upper-instruction"}>
@@ -86,31 +65,21 @@ export default function UpperCopy() {
           </div>
           <div className={"upper-instruction mt-4"}>
             <div className={"homepage-number-circle"}>2</div>
-            <p>
-              Estimate your income and create your budget, giving every dollar a
-              job.
-            </p>
+            <p>Estimate your income and create your budget, giving every dollar a job.</p>
           </div>
           <div className={"upper-instruction mt-4"}>
             <div className={"homepage-number-circle"}>3</div>
-            <p>
-              Log your expenses over time, checking in with your budget to stay
-              on track.
-            </p>
+            <p>Log your expenses over time, checking in with your budget to stay on track.</p>
           </div>
           <div className={"upper-instruction mt-4"}>
             <div className={"homepage-number-circle"}>4</div>
-            <p>
-              Watch as your savings grow and your financial stress fade away.
-            </p>
+            <p>Watch as your savings grow and your financial stress fade away.</p>
           </div>
           <div>
             <FulcrumButton
               displayText={"Start Saving"}
               backgroundColour={"green"}
-              onClick={() =>
-                (window.location.href = "http://localhost:5173/register")
-              }
+              onClick={() => (window.location.href = "http://localhost:5173/register")}
               hoverShadow={true}
               optionalTailwind={
                 "shadow-[0.4rem_0.4rem_0px_black] mt-8 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[0.75rem_0.75rem_0px_black]"
@@ -137,18 +106,10 @@ export default function UpperCopy() {
           alt="Homepage copy"
         />
         <p className={"font-extrabold text-md mt-8 text-[#44b775] z-10"}>
-          Find{" "}
-          <span className={"underline underline-offset-2 relative z-10"}>
-            your
-          </span>{" "}
-          balance.
+          Find <span className={"underline underline-offset-2 relative z-10"}>your</span> balance.
         </p>
       </div>
-      <div
-        className={
-          "flex flex-row justify-start items-center relative mt-20 font-bold text-lg sm:text-[1.7rem]"
-        }
-      >
+      <div className={"flex flex-row justify-start items-center relative mt-20 font-bold text-lg sm:text-[1.7rem]"}>
         <img
           src="/src/assets/homepage-assets/homepage-highlight-3.png"
           className={"w-2 sm:w-5 mr-6 mb-3"}

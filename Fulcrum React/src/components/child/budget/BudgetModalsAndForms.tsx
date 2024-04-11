@@ -29,7 +29,6 @@ interface ModalsAndFormsProps {
   oldGroupBeingEdited: PreviousGroupBeingEdited;
   groupToDelete: string;
   categoryToDelete: string;
-
   currencySymbol: string;
 }
 
@@ -128,12 +127,6 @@ export default function BudgetModalsAndForms({
           optionTwoText="Confirm"
           optionTwoFunction={() => {
             changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmCategoryDeletionModalVisible", false);
-            // handleBudgetDeletion(categoryToDelete, setBudgetArray)
-            //   .then(async (response) => {
-            //     setBudgetArray(await getBudgetList());
-            //     console.log("Deletion successful", response);
-            //   })
-            //   .catch((error) => console.log("Deletion unsuccessful", error));
             deleteBudget(categoryToDelete);
           }}
           isVisible="isConfirmCategoryDeletionModalVisible"

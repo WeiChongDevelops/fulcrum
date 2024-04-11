@@ -8,13 +8,8 @@ interface FulcrumAnimationProps {
 /**
  * A budget-responsive visual representation of a scale, used to visualise the balance between budget and income.
  */
-export default function FulcrumAnimation({
-  lineAngle,
-  isDarkMode,
-}: FulcrumAnimationProps) {
-  const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState(
-    "/src/assets/fulcrum-animation/fulcrum-tri-red.webp",
-  );
+export default function FulcrumAnimation({ lineAngle, isDarkMode }: FulcrumAnimationProps) {
+  const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-tri-red.webp");
   const [leverEndXOffset, setLeverEndXOffset] = useState({
     leftEnd: 0,
     rightEnd: 0,
@@ -40,10 +35,7 @@ export default function FulcrumAnimation({
       leftEnd: Math.abs(lineAngle / 2.1),
       rightEnd: -Math.abs(lineAngle / 2.1),
     };
-    if (
-      newOffset.leftEnd !== leverEndXOffset.leftEnd ||
-      newOffset.rightEnd !== leverEndXOffset.rightEnd
-    ) {
+    if (newOffset.leftEnd !== leverEndXOffset.leftEnd || newOffset.rightEnd !== leverEndXOffset.rightEnd) {
       setLeverEndXOffset(newOffset);
     }
   }
@@ -68,10 +60,8 @@ export default function FulcrumAnimation({
       recalculateShadowDimensions();
       setShadowDimensions();
     }
-
-    window.addEventListener("resize", recalculateAnimationStyling);
-    return () =>
-      window.removeEventListener("resize", recalculateAnimationStyling);
+    document.addEventListener("resize", recalculateAnimationStyling);
+    return () => document.removeEventListener("resize", recalculateAnimationStyling);
   }, []);
 
   useEffect(() => {
@@ -80,10 +70,7 @@ export default function FulcrumAnimation({
 
   useEffect(() => {
     recalculateShadowDimensions();
-    // Show green fulcrum if scale is balanced, red otherwise
-    setActiveTriangleFulcrum(
-      `/src/assets/fulcrum-animation/fulcrum-tri-${lineAngle === 0 ? "green" : "red"}.webp`,
-    );
+    setActiveTriangleFulcrum(`/src/assets/fulcrum-animation/fulcrum-tri-${lineAngle === 0 ? "green" : "red"}.webp`);
   }, [lineAngle]);
 
   return (
@@ -91,26 +78,13 @@ export default function FulcrumAnimation({
       <div className="fulcrum-triangle-container">
         <img src={activeTriangleFulcrum} alt="Triangle fulcrum" />
         <div className="contact-shadow"></div>
-        <div
-          className="bowl-shadow-right"
-          style={bowlShadowDimensions.right}
-        ></div>
-        <div
-          className="bowl-shadow-left"
-          style={bowlShadowDimensions.left}
-        ></div>
+        <div className="bowl-shadow-right" style={bowlShadowDimensions.right}></div>
+        <div className="bowl-shadow-left" style={bowlShadowDimensions.left}></div>
       </div>
-      <div
-        className="rotating-container"
-        style={{ transform: `rotate(${-lineAngle}deg) translateX(-50%)` }}
-      >
+      <div className="rotating-container" style={{ transform: `rotate(${-lineAngle}deg) translateX(-50%)` }}>
         <div className="rotating-text-label-container">
-          <b className={`${isDarkMode ? "text-white" : "text-black"}`}>
-            BUDGET
-          </b>
-          <b className={`${isDarkMode ? "text-white" : "text-black"}`}>
-            INCOME
-          </b>
+          <b className={`${isDarkMode ? "text-white" : "text-black"}`}>BUDGET</b>
+          <b className={`${isDarkMode ? "text-white" : "text-black"}`}>INCOME</b>
         </div>
         <img
           src={`/src/assets/fulcrum-animation/fulcrum-rectangle-${isDarkMode ? "grey" : "black"}.png`}

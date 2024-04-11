@@ -54,10 +54,6 @@ export default function IncomeDisplay({ totalIncome, amountLeftToBudget, publicU
     });
   }, [totalIncome]);
 
-  // if (incomeMutation.isError) {
-  //   return <FulcrumErrorPage errors={[incomeMutation.error]} />;
-  // }
-
   return (
     <div className="flex flex-row w-full items-center mt-1">
       <div className="income-display monthly-income bg-[#17423f]" onClick={handleEditClick}>

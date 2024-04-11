@@ -115,7 +115,6 @@ suspend fun checkIfExpenseExists(expenseId: String): Boolean {
 
 suspend fun executeExpenseDeletion(expenseId: String, call: ApplicationCall): Boolean {
     return if (checkIfExpenseExists(expenseId)) {
-        println("Deleting expense, as requested.")
         val deletedExpense = SupabaseClient.supabase.postgrest["expenses"].delete {
             eq("expenseId", expenseId)
             eq("userId", getActiveUserId())

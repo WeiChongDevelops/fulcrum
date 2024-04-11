@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   CategoryToIconGroupAndColourMap,
   ExpenseFormVisibility,
@@ -40,14 +40,9 @@ export default function ExpenseMonthCarousel({
 }: ExpenseMonthCarouselProps) {
   const y2KMonth = Y2K.getMonth();
   const y2KYear = Y2K.getFullYear();
-
   const monthsFromY2KToNow = getMonthsFromToday(y2KMonth, y2KYear);
-
   const [monthPanelShowingIndex, setMonthPanelShowingIndex] = useState(0);
 
-  useEffect(() => {
-    console.log(`Month panel index: ${monthPanelShowingIndex}`);
-  }, [monthPanelShowingIndex]);
   return (
     <div className={"relative"}>
       <div

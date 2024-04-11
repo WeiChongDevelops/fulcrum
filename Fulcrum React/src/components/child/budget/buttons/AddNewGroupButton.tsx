@@ -1,4 +1,4 @@
-import { BudgetFormVisibility, SetFormVisibility } from "../../../../util.ts";
+import { BudgetFormVisibility, changeFormOrModalVisibility, SetFormVisibility } from "../../../../util.ts";
 
 interface AddNewGroupButtonProps {
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
@@ -10,10 +10,7 @@ interface AddNewGroupButtonProps {
  */
 export default function AddNewGroupButton({ setBudgetFormVisibility, isDarkMode }: AddNewGroupButtonProps) {
   async function handleClick() {
-    setBudgetFormVisibility((current) => ({
-      ...current,
-      isCreateGroupVisible: true,
-    }));
+    changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateGroupVisible", true);
   }
 
   return (

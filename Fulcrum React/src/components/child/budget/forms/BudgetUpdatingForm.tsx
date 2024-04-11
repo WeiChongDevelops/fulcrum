@@ -43,14 +43,6 @@ export default function BudgetUpdatingForm({
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateBudget } = useUpdateBudget();
 
-  useEffect(() => {
-    addIconSelectionFunctionality(setFormData, "category");
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateBudgetVisible", false);
   }
@@ -60,6 +52,15 @@ export default function BudgetUpdatingForm({
       hideForm();
     }
   };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    const removeIconEventListeners = addIconSelectionFunctionality(setFormData, "category");
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      removeIconEventListeners();
+    };
+  }, []);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     handleInputChangeOnFormWithAmount(e, setFormData);
@@ -71,12 +72,16 @@ export default function BudgetUpdatingForm({
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
     hideForm();
-
+    setFormData({
+      category: oldBudgetBeingEdited.oldCategory,
+      amount: oldBudgetBeingEdited.oldAmount,
+      iconPath: "",
+      group: oldBudgetBeingEdited.oldGroup,
+    });
     let defaultGroupItem: GroupItemEntity | undefined = undefined;
 
-    const updatedBudgetItem: BudgetItemEntity = { ...formData, iconPath: formData.iconPath, timestamp: new Date() };
+    const updatedBudgetItem: BudgetItemEntity = { ...formData, timestamp: new Date() };
 
     if (!groupArray.map((groupItem) => groupItem.group).includes(updatedBudgetItem.group)) {
       defaultGroupItem = {
@@ -90,13 +95,6 @@ export default function BudgetUpdatingForm({
       originalCategory: oldBudgetBeingEdited.oldCategory,
       updatedBudgetItem: updatedBudgetItem,
       newGroupItem: defaultGroupItem,
-    });
-
-    setFormData({
-      category: oldBudgetBeingEdited.oldCategory,
-      amount: oldBudgetBeingEdited.oldAmount,
-      iconPath: "",
-      group: oldBudgetBeingEdited.oldGroup,
     });
   }
 

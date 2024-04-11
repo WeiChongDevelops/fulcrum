@@ -25,7 +25,6 @@ interface ExpenseDayGroupProps {
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
-
   publicUserData: PublicUserData;
 }
 

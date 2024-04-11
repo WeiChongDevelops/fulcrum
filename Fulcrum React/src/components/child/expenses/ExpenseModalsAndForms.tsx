@@ -68,7 +68,6 @@ export default function ExpenseModalsAndForms({
       )}
       {expenseFormVisibility.isUpdateExpenseVisible && (
         <ExpenseUpdatingForm
-          // budgetArray={budgetArray}
           setExpenseFormVisibility={setExpenseFormVisibility}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           oldExpenseBeingEdited={oldExpenseBeingEdited}
@@ -99,14 +98,6 @@ export default function ExpenseModalsAndForms({
             }}
             optionTwoText={"Delete This and Future Repeats"}
             optionTwoFunction={() => {
-              // await removeAllInstancesOfRecurringExpenseAfterDate(
-              //   expenseItemToDelete!.recurringExpenseId!,
-              //   expenseArray,
-              //   setExpenseArray,
-              //   expenseItemToDelete!.timestamp,
-              //   setBlacklistedExpenseArray,
-              // );
-              // setExpenseArray(await getExpenseList());
               deleteExpense({
                 expenseItemToDelete: expenseItemToDelete!,
                 deletionScale: "FUTURE",
@@ -116,14 +107,6 @@ export default function ExpenseModalsAndForms({
             }}
             optionThreeText={"Delete All Repeats"}
             optionThreeFunction={() => {
-              // await removeAllInstancesOfRecurringExpenseAfterDate(
-              //   expenseItemToDelete!.recurringExpenseId!,
-              //   expenseArray,
-              //   setExpenseArray,
-              //   Y2K,
-              //   setBlacklistedExpenseArray,
-              // );
-              // setExpenseArray(await getExpenseList());
               console.log("expenseItemToDelete");
               console.log(expenseItemToDelete);
               deleteExpense({ expenseItemToDelete: expenseItemToDelete!, deletionScale: "ALL", expenseArray: expenseArray });

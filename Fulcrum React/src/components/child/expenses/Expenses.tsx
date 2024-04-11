@@ -17,6 +17,8 @@ import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 import useInitialExpenseData from "../../../hooks/initialisations/useInitialExpenseData.ts";
 import Loader from "../other/Loader.tsx";
 import { useMemo, useState } from "react";
+import useBatchDeleteExpenses from "../../../hooks/mutations/expense/useBatchDeleteExpenses.ts";
+import useCreateExpense from "../../../hooks/mutations/expense/useCreateExpense.ts";
 
 interface ExpensesProps {
   publicUserData: PublicUserData;
@@ -59,6 +61,9 @@ export default function Expenses({
   const [isLoading, setIsLoading] = useState(true);
   const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>();
 
+  const { mutate: batchDeleteExpenses } = useBatchDeleteExpenses();
+  const { mutate: createExpense } = useCreateExpense();
+
   useMemo(() => {
     const updateStructuredExpenseData = async () => {
       setStructuredExpenseData(await getStructuredExpenseData(expenseArray));
@@ -67,7 +72,13 @@ export default function Expenses({
   }, [expenseArray]);
 
   useMemo(() => {
-    updateRecurringExpenseInstances(recurringExpenseArray, expenseArray, blacklistedExpenseArray);
+    updateRecurringExpenseInstances(
+      recurringExpenseArray,
+      expenseArray,
+      blacklistedExpenseArray,
+      batchDeleteExpenses,
+      createExpense,
+    );
   }, [recurringExpenseArray]);
 
   if (isLoading) {

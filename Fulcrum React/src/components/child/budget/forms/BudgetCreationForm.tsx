@@ -15,6 +15,7 @@ import {
   changeFormOrModalVisibility,
   getRandomGroupColour,
   DEFAULT_CATEGORY_ICON,
+  DEFAULT_CATEGORY_GROUP,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import "../../../../css/Budget.css";
@@ -57,9 +58,10 @@ export default function BudgetCreationForm({
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-    addIconSelectionFunctionality(setFormData, "category");
+    const removeIconEventListeners = addIconSelectionFunctionality(setFormData, "category");
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      removeIconEventListeners();
     };
   }, []);
 
@@ -68,16 +70,22 @@ export default function BudgetCreationForm({
   }
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    hideForm();
+    setFormData({
+      category: "",
+      amount: 0,
+      iconPath: "",
+      group: groupNameOfNewItem,
+    });
+    let defaultGroupItem: GroupItemEntity | undefined = undefined;
 
     const newBudgetItem: BudgetItemEntity = {
       category: formData.category,
       amount: formData.amount ? parseFloat(String(formData.amount)) : 0,
       iconPath: formData.iconPath === "" ? DEFAULT_CATEGORY_ICON : formData.iconPath,
-      group: formData.group ? formData.group : "Miscellaneous",
+      group: formData.group ? formData.group : DEFAULT_CATEGORY_GROUP,
       timestamp: new Date(),
     };
-
-    let defaultGroupItem: GroupItemEntity | undefined = undefined;
 
     if (!groupArray.map((groupItem) => groupItem.group).includes(newBudgetItem.group)) {
       defaultGroupItem = {
@@ -91,19 +99,6 @@ export default function BudgetCreationForm({
       newBudgetItem: newBudgetItem,
       newGroupItem: defaultGroupItem,
     });
-
-    setFormData({
-      category: "",
-      amount: 0,
-      iconPath: "",
-      group: groupNameOfNewItem,
-    });
-
-    // setBudgetArray((current) => [...current, newBudgetItem]);
-
-    // await handleBudgetCreation(setBudgetArray, newBudgetItem);
-
-    hideForm();
   }
 
   function handleGroupInputChange(e: any) {
