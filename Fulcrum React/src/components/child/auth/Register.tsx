@@ -1,8 +1,10 @@
 import FulcrumButton from "../other/FulcrumButton.tsx";
 import "../../../css/App.css";
 import "../../../css/Auth.css";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { handleUserRegistration, RegisterFormData } from "../../../util.ts";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { RegisterFormData } from "../../../util.ts";
+import useRegisterUser from "../../../hooks/mutations/auth/useRegisterUser.ts";
+import Loader from "../other/Loader.tsx";
 
 /**
  * The registration page for the Fulcrum application.
@@ -18,12 +20,18 @@ export default function Register() {
     passwordAccepted: false,
     attemptedIgnore: false,
   });
+  const passwordField = useRef<HTMLInputElement>(null);
+  const confirmPasswordField = useRef<HTMLInputElement>(null);
+  const { isPending, mutate: registerUser } = useRegisterUser();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      confirmPasswordField.current?.classList.add("invalid");
+      setTimeout(() => {
+        confirmPasswordField.current?.classList.remove("invalid");
+      }, 500);
       return;
     } else {
       if (!getPasswordValidation(formData.password).passwordAccepted) {
@@ -31,12 +39,12 @@ export default function Register() {
           ...prevValidation,
           attemptedIgnore: true,
         }));
-        document.querySelector("#password")!.classList.add("invalid");
+        passwordField.current?.classList.add("invalid");
         setTimeout(() => {
-          document.querySelector("#password")!.classList.remove("invalid");
+          passwordField.current?.classList.remove("invalid");
         }, 500);
       } else {
-        await handleUserRegistration(formData.email, formData.password);
+        registerUser(formData);
       }
     }
   }
@@ -80,82 +88,89 @@ export default function Register() {
   }
 
   return (
-    <div className={"auth-page-container register-page"}>
-      <div className={"auth-page-left-column"}>
-        <div className={"flex-1"}>
-          <img
-            src="/src/assets/fulcrum-logos/fulcrum-long-white.webp"
-            className={"auth-standard-fulcrum-logo"}
-            alt="Fulcrum logo"
-          />
-        </div>
-        <div className={"auth-text"}>
-          <b className={"text-5xl"}>Register for an account.</b>
-          <p className={"text-xl ml-2 mt-8"}>Start saving for free today.</p>
-        </div>
-      </div>
-      <div className={"auth-page-right-column"}>
-        <div className={"flex-1"}>
-          <img
-            src="/src/assets/fulcrum-logos/fulcrum-long-white.webp"
-            className={"auth-mobile-fulcrum-logo"}
-            alt="Fulcrum logo"
-          />
-        </div>
-        <form className={"auth-form"} onSubmit={handleSubmit}>
-          <div className={"auth-label-input-pair"}>
-            <label htmlFor={"email"}>Email</label>
-            <input
-              type="email"
-              id="email"
-              placeholder={"name@example.com"}
-              value={formData.email}
-              onChange={handleChange}
-              autoComplete={"email"}
-              required
-              autoFocus
-            />
-          </div>
-          <div className={`auth-label-input-pair mt-10`}>
-            <label htmlFor={"password"}>Password</label>
-            <input
-              type="password"
-              id="password"
-              placeholder={"Your password"}
-              value={formData.password}
-              onChange={handleChange}
-              autoComplete={"new-password"}
-              required
-            />
-          </div>
-          <b
-            className={`mt-2 ${passwordValidation.passwordAccepted ? "text-green-500" : "text-red-500"} ${passwordValidation.attemptedIgnore && "underline"}`}
-          >
-            {passwordValidation.feedback}
-          </b>
-          <div className={"auth-label-input-pair my-10"}>
-            <label htmlFor={"password"}>Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              placeholder={"Confirmed password"}
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              autoComplete={"new-password"}
-              required
-            />
-          </div>
-          <div className={"flex flex-row justify-between items-center w-full"}>
-            <div className={"mr-8 text-xs font-medium"}>
-              <span>Already have an account? </span>
-              <a href="http://localhost:5173/login" className={"underline text-[#17423F] font-semibold"}>
-                Login
-              </a>
+    <>
+      <Loader isLoading={isPending} isDarkMode={false} />
+      <div className={`${isPending && "opacity-80 animate-pulse transition-opacity"}`}>
+        <div className={"auth-page-container register-page"}>
+          <div className={"auth-page-left-column"}>
+            <div className={"flex-1"}>
+              <img
+                src="/src/assets/fulcrum-logos/fulcrum-long-white.webp"
+                className={"auth-standard-fulcrum-logo"}
+                alt="Fulcrum logo"
+              />
             </div>
-            <FulcrumButton displayText={"Create account"} backgroundColour={"green"} />
+            <div className={"auth-text"}>
+              <b className={"text-5xl"}>Register for an account.</b>
+              <p className={"text-xl ml-2 mt-8"}>Start saving for free today.</p>
+            </div>
           </div>
-        </form>
+          <div className={"auth-page-right-column"}>
+            <div className={"flex-1"}>
+              <img
+                src="/src/assets/fulcrum-logos/fulcrum-long-white.webp"
+                className={"auth-mobile-fulcrum-logo"}
+                alt="Fulcrum logo"
+              />
+            </div>
+            <form className={"auth-form"} onSubmit={handleSubmit}>
+              <div className={"auth-label-input-pair"}>
+                <label htmlFor={"email"}>Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder={"name@example.com"}
+                  value={formData.email}
+                  onChange={handleChange}
+                  autoComplete={"email"}
+                  required
+                  autoFocus
+                />
+              </div>
+              <div className={`auth-label-input-pair mt-10`}>
+                <label htmlFor={"password"}>Password</label>
+                <input
+                  ref={passwordField}
+                  type="password"
+                  id="password"
+                  placeholder={"Your password"}
+                  value={formData.password}
+                  onChange={handleChange}
+                  autoComplete={"new-password"}
+                  required
+                />
+              </div>
+              <b
+                className={`mt-2 ${passwordValidation.passwordAccepted ? "text-green-500" : "text-red-500"} ${passwordValidation.attemptedIgnore && "underline"}`}
+              >
+                {passwordValidation.feedback}
+              </b>
+              <div className={"auth-label-input-pair my-10"}>
+                <label htmlFor={"password"}>Confirm Password</label>
+                <input
+                  ref={confirmPasswordField}
+                  type="password"
+                  id="confirmPassword"
+                  placeholder={"Confirmed password"}
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  autoComplete={"new-password"}
+                  required
+                />
+              </div>
+              <div className={"flex flex-row justify-between items-center w-full"}>
+                <div className={"mr-8 text-xs font-medium"}>
+                  <span>Already have an account? </span>
+                  <a href="http://localhost:5173/login" className={"underline text-[#17423F] font-semibold"}>
+                    Login
+                  </a>
+                </div>
+                <FulcrumButton displayText={"Create account"} backgroundColour={"green"} />
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

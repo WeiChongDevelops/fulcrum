@@ -219,6 +219,11 @@ export type FormVisibility =
 
 export type SetFormVisibility<T extends FormVisibility> = Dispatch<SetStateAction<T>>;
 
+export interface LoginFormData {
+  email: string;
+  password: string;
+}
+
 export interface RegisterFormData {
   email: string;
   password: string;
@@ -234,13 +239,6 @@ export interface SelectorOptionsFormattedData {
 export interface PublicUserData {
   currency: string;
   createdAt: Date;
-  darkModeEnabled: boolean;
-  accessibilityEnabled: boolean;
-  profileIconFileName: string;
-}
-
-export interface PublicUserDataUpdate {
-  currency: string;
   darkModeEnabled: boolean;
   accessibilityEnabled: boolean;
   profileIconFileName: string;
@@ -1154,9 +1152,8 @@ export async function handleUserRegistration(email: string, password: string): P
 /**
  * Attempts to log in a user with the provided email and password.
  * Redirects to the budget page on successful login.
- * Returns true if the login was successful, returns false otherwise.
  */
-export async function handleUserLogin(email: string, password: string): Promise<boolean> {
+export async function handleUserLogin(email: string, password: string): Promise<void> {
   try {
     const response = await fetch("http://localhost:8080/api/login", {
       method: "POST",
@@ -1171,22 +1168,16 @@ export async function handleUserLogin(email: string, password: string): Promise<
     if (response.status === 500) {
       console.error(`Credentials may be incorrect. HTTP error encountered when attempting login: ${response.status}`);
       window.alert("Please double-check your credentials.");
-      return false;
     } else {
       if (response.status === 400) {
         console.error(`User may already be logged in. HTTP error encountered when attempting login: ${response.status}`);
-        window.location.href = "/app/budget";
-        return true;
       } else {
         console.log("Login was successful.");
         console.log(response.json());
-        window.location.href = "/app/budget";
-        return true;
       }
     }
   } catch (e) {
     console.error(`Exception encountered when requesting user login: ${e}`);
-    return false;
   }
 }
 

@@ -1,14 +1,12 @@
 import {
   BudgetItemEntity,
-  checkForOpenModalOrForm,
   ExpenseItemEntity,
   getTotalAmountBudgeted,
-  getLineAngle,
   GroupItemEntity,
   PublicUserData,
   getCurrencySymbol,
 } from "../../../util.ts";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./main-data-hierarchy/GroupList.tsx";
@@ -33,7 +31,7 @@ interface BudgetProps {
  */
 export default function Budget({ publicUserData, expenseArray, budgetArray, groupArray }: BudgetProps) {
   const {
-    data: totalIncome,
+    totalIncome,
     budgetFormVisibility,
     setBudgetFormVisibility,
     budgetModalVisibility,
@@ -51,97 +49,98 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
     groupNameOfNewItem,
     setGroupNameOfNewItem,
     isBudgetFormOrModalOpen,
-    setIsBudgetFormOrModalOpen,
     lineAngle,
-    setLineAngle,
     perCategoryExpenditureMap,
     setPerCategoryExpenditureMap,
     isLoading,
     isError,
+    isSuccess,
     error,
   } = useInitialBudgetData();
 
-  useEffect(() => {
-    const categoryArray = budgetArray.map((budgetItem) => budgetItem.category);
-    categoryArray.forEach((category) => {
-      const thisCategoryExpenseArray = expenseArray.filter((expenseItem) => expenseItem.category === category);
-      const categoryExpenditure = thisCategoryExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
-      setPerCategoryExpenditureMap((previousMap) => new Map([...previousMap, [category, categoryExpenditure]]));
-    });
-  }, [budgetArray, expenseArray]);
+  const totalBudget = useMemo(() => {
+    return !!budgetArray ? getTotalAmountBudgeted(budgetArray) : 0;
+  }, [budgetArray]);
 
   useEffect(() => {
-    totalIncome && setAmountLeftToBudget(totalIncome - getTotalAmountBudgeted(budgetArray));
+    !!totalIncome && setAmountLeftToBudget(totalIncome - totalBudget);
   }, [budgetArray, totalIncome]);
 
   useEffect(() => {
-    totalIncome && setLineAngle(getLineAngle((amountLeftToBudget / totalIncome) * 100));
-  }, [amountLeftToBudget, totalIncome]);
-
-  useEffect(() => {
-    setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility));
-  }, [budgetFormVisibility, budgetModalVisibility]);
-
-  if (isLoading) {
-    return <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled ?? false} />;
-  }
+    if (!!budgetArray) {
+      const categoryArray = budgetArray.map((budgetItem) => budgetItem.category);
+      categoryArray.forEach((category) => {
+        const thisCategoryExpenseArray = expenseArray.filter((expenseItem) => expenseItem.category === category);
+        const categoryExpenditure = thisCategoryExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
+        setPerCategoryExpenditureMap((previousMap) => new Map([...previousMap, [category, categoryExpenditure]]));
+      });
+    }
+  }, [budgetArray, expenseArray]);
 
   if (isError) {
     return <FulcrumErrorPage errors={[error!]} />;
   }
 
-  return (
-    <div className="flex flex-row justify-center items-center relative">
-      <div>
-        <div
-          className={`justify-center items-center elementsBelowPopUpForm
+  if (isLoading) {
+    return <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled ?? false} />;
+  }
+
+  if (isSuccess)
+    return (
+      <div className="flex flex-row justify-center items-center relative">
+        <div>
+          <div
+            className={`justify-center items-center elementsBelowPopUpForm
                         ${isBudgetFormOrModalOpen && "blur"}`}
-        >
-          <IncomeDisplay
-            totalIncome={totalIncome!}
-            amountLeftToBudget={amountLeftToBudget}
-            publicUserData={publicUserData}
-          />
-
-          <FulcrumAnimation lineAngle={lineAngle} isDarkMode={publicUserData.darkModeEnabled} />
-
-          {groupArray?.length > 0 && (
-            <GroupList
-              budgetArray={budgetArray}
-              expenseArray={expenseArray}
-              setOldBudgetBeingEdited={setOldBudgetBeingEdited}
-              setOldGroupBeingEdited={setOldGroupBeingEdited}
-              groupArray={groupArray}
-              setGroupNameOfNewItem={setGroupNameOfNewItem}
-              setBudgetFormVisibility={setBudgetFormVisibility}
-              setGroupToDelete={setGroupToDelete}
-              setCategoryToDelete={setCategoryToDelete}
-              setModalFormVisibility={setBudgetModalVisibility}
-              perCategoryTotalExpenseArray={perCategoryExpenditureMap}
+          >
+            <IncomeDisplay
+              totalIncome={totalIncome!}
+              amountLeftToBudget={amountLeftToBudget}
               publicUserData={publicUserData}
             />
-          )}
 
-          <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility} isDarkMode={publicUserData.darkModeEnabled} />
+            <FulcrumAnimation lineAngle={lineAngle} isDarkMode={publicUserData.darkModeEnabled} />
+
+            {groupArray?.length > 0 && (
+              <GroupList
+                budgetArray={budgetArray}
+                expenseArray={expenseArray}
+                setOldBudgetBeingEdited={setOldBudgetBeingEdited}
+                setOldGroupBeingEdited={setOldGroupBeingEdited}
+                groupArray={groupArray}
+                setGroupNameOfNewItem={setGroupNameOfNewItem}
+                setBudgetFormVisibility={setBudgetFormVisibility}
+                setGroupToDelete={setGroupToDelete}
+                setCategoryToDelete={setCategoryToDelete}
+                setModalFormVisibility={setBudgetModalVisibility}
+                perCategoryTotalExpenseArray={perCategoryExpenditureMap}
+                publicUserData={publicUserData}
+              />
+            )}
+
+            <AddNewGroupButton
+              setBudgetFormVisibility={setBudgetFormVisibility}
+              isDarkMode={publicUserData.darkModeEnabled}
+            />
+          </div>
+
+          {isBudgetFormOrModalOpen && <ActiveFormClickShield />}
+
+          <BudgetModalsAndForms
+            budgetFormVisibility={budgetFormVisibility}
+            groupArray={groupArray}
+            groupNameOfNewItem={groupNameOfNewItem}
+            setBudgetFormVisibility={setBudgetFormVisibility}
+            oldBudgetBeingEdited={oldBudgetBeingEdited}
+            oldGroupBeingEdited={oldGroupBeingEdited}
+            groupToDelete={groupToDelete}
+            categoryToDelete={categoryToDelete}
+            budgetModalVisibility={budgetModalVisibility}
+            setBudgetModalVisibility={setBudgetModalVisibility}
+            currencySymbol={getCurrencySymbol(publicUserData.currency)}
+          />
         </div>
-
-        {isBudgetFormOrModalOpen && <ActiveFormClickShield />}
-
-        <BudgetModalsAndForms
-          budgetFormVisibility={budgetFormVisibility}
-          groupArray={groupArray}
-          groupNameOfNewItem={groupNameOfNewItem}
-          setBudgetFormVisibility={setBudgetFormVisibility}
-          oldBudgetBeingEdited={oldBudgetBeingEdited}
-          oldGroupBeingEdited={oldGroupBeingEdited}
-          groupToDelete={groupToDelete}
-          categoryToDelete={categoryToDelete}
-          budgetModalVisibility={budgetModalVisibility}
-          setBudgetModalVisibility={setBudgetModalVisibility}
-          currencySymbol={getCurrencySymbol(publicUserData.currency)}
-        />
+        )
       </div>
-      )
-    </div>
-  );
+    );
 }

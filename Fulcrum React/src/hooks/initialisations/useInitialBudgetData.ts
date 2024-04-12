@@ -1,8 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   BudgetFormVisibility,
   BudgetModalVisibility,
+  checkForOpenModalOrForm,
   EmailContext,
+  getLineAngle,
   getSessionEmailOrNull,
   getTotalIncome,
   PreviousBudgetBeingEdited,
@@ -40,6 +42,10 @@ export default function useInitialBudgetData() {
   const [lineAngle, setLineAngle] = useState(0);
   const [perCategoryExpenditureMap, setPerCategoryExpenditureMap] = useState<Map<string, number>>(new Map());
 
+  useEffect(() => {
+    setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility));
+  }, [budgetFormVisibility, budgetModalVisibility]);
+
   const email = useContext(EmailContext);
 
   async function retrieveInitialData() {
@@ -57,14 +63,24 @@ export default function useInitialBudgetData() {
     }
   }
 
-  const { data, isLoading, isError, error } = useQuery({
+  const {
+    data: totalIncome,
+    isLoading,
+    isError,
+    isSuccess,
+    error,
+  } = useQuery({
     queryKey: ["totalIncome", email],
     queryFn: retrieveInitialData,
     enabled: !!email,
   });
 
+  useEffect(() => {
+    totalIncome && setLineAngle(getLineAngle((amountLeftToBudget / totalIncome) * 100));
+  }, [amountLeftToBudget, totalIncome]);
+
   return {
-    data,
+    totalIncome,
     budgetFormVisibility,
     setBudgetFormVisibility,
     budgetModalVisibility,
@@ -82,13 +98,12 @@ export default function useInitialBudgetData() {
     groupNameOfNewItem,
     setGroupNameOfNewItem,
     isBudgetFormOrModalOpen,
-    setIsBudgetFormOrModalOpen,
     lineAngle,
-    setLineAngle,
     perCategoryExpenditureMap,
     setPerCategoryExpenditureMap,
     isLoading,
     isError,
+    isSuccess,
     error,
   };
 }

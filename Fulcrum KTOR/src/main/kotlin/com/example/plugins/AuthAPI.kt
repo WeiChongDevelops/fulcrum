@@ -7,6 +7,7 @@ import com.example.entities.user.*
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
 import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.gotrue.providers.builtin.Email
+import io.github.jan.supabase.gotrue.user.UserSession
 import io.github.jan.supabase.postgrest.postgrest
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -68,6 +69,7 @@ fun Application.configureAuthRouting() {
 
                 call.respondSuccess("User added successfully with all defaults.")
             } catch (e: Exception) {
+                application.log.error("Error while registering new user.", e)
                 call.respondError("Error while registering new user.")
             }
         }

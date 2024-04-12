@@ -19,6 +19,8 @@ import { EmailContext } from "../../util.ts";
  * The main application component, handling shared data retrieval, routing and rendering.
  */
 export default function App() {
+  const homePaths = ["/", "/home"];
+
   const {
     email,
     budgetArray,
@@ -45,15 +47,17 @@ export default function App() {
     <EmailContext.Provider value={email}>
       <Router>
         <Routes>
-          <Route path="/home/" element={<Home />}>
-            <Route index element={<Navigate replace to="about" />} />
-            <Route path="about" element={<About />} />
-            <Route path="contact" element={<Contact />} />
-            <Route path="pricing" element={<Pricing />} />
-          </Route>
+          {homePaths.map((path) => (
+            <Route key={path} path={path} element={<Home />}>
+              <Route index element={<Navigate replace to="about" />} />
+              <Route path="about" element={<About />} />
+              <Route path="contact" element={<Contact />} />
+              <Route path="pricing" element={<Pricing />} />
+            </Route>
+          ))}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/app/" element={<Fulcrum publicUserData={publicUserData} />}>
+          <Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>
             <Route index element={<Navigate replace to="budget" />} />
             <Route
               path="expenses"
