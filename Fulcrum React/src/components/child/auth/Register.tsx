@@ -165,7 +165,7 @@ export default function Register() {
                     Login
                   </a>
                 </div>
-                <FulcrumButton displayText={"Create account"} backgroundColour={"green"} />
+                <FulcrumButton displayText={"Create account"} backgroundColour={"green"} optionalTailwind={"mr-0"} />
               </div>
             </form>
           </div>

@@ -37,7 +37,7 @@
   justify-content: center;
   align-items: flex-start;
   height: 65vh;
-  padding: 0 0 10rem 13rem;
+  padding: 0 0 8rem 6rem;
 }
 
 .auth-page-right-column {
@@ -46,7 +46,7 @@
   justify-content: space-around;
   align-items: center;
   height: 35vh;
-  margin-right: 6rem;
+  margin-right: 4rem;
 }
 
 .auth-form {
@@ -56,8 +56,8 @@
   align-items: center;
   background-color: white;
   color: black;
-  padding: 4rem 3rem 2rem 3rem;
-  width: 37vw;
+  padding: 4rem 2.5rem 2rem 2.5rem;
+  min-width: 34rem;
   border-radius: 1rem;
 }
 

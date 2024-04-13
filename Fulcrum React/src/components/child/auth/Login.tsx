@@ -99,7 +99,7 @@ export default function Login() {
                     Register
                   </a>
                 </div>
-                <FulcrumButton displayText={"Log In"} backgroundColour={"green"} />
+                <FulcrumButton displayText={"Log In"} backgroundColour={"green"} optionalTailwind={"mr-0"} />
               </div>
             </form>
           </div>

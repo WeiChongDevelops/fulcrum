@@ -15,6 +15,7 @@ import Loader from "../child/other/Loader.tsx";
 import FulcrumErrorPage from "../child/other/FulcrumErrorPage.tsx";
 import { EmailContext } from "../../util.ts";
 import { ErrorBoundary } from "./ErrorBoundary.tsx";
+import { Toaster } from "sonner";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -47,6 +48,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <EmailContext.Provider value={email}>
+        <Toaster richColors />
         <Router>
           <Routes>
             {homePaths.map((path) => (

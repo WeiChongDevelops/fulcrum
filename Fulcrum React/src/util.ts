@@ -1,6 +1,7 @@
 import { ChangeEvent, createContext, Dispatch, SetStateAction } from "react";
 import { v4 as uuid } from "uuid";
 import { UseMutateFunction } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 // GLOBAL VARIABLES //
 
@@ -1167,12 +1168,13 @@ export async function handleUserRegistration(email: string, password: string): P
       console.error(
         `User with given email may already exist. HTTP error encountered when attempting user registration: ${response.status}`,
       );
+      toast.error("This email is already in use.");
       console.log(await response.json());
-      window.alert("Registration was unsuccessful. A user with this email may already exist.");
     } else {
-      console.log("Successful registration.");
-      console.log(await response.json());
-      window.location.href = "/login";
+      toast.success("Successful registration.");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1000);
     }
   } catch (error) {
     console.error("Error:", error);

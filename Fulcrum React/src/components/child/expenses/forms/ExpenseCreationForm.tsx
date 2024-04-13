@@ -17,7 +17,6 @@ import {
   DEFAULT_CATEGORY_GROUP,
 } from "../../../../util.ts";
 import { v4 as uuid } from "uuid";
-
 import Select from "react-select/creatable";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";

@@ -9,6 +9,7 @@ import {
 } from "../../../util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
+import { toast } from "sonner";
 
 export interface ExpenseCreationMutationProps {
   newExpenseItem: ExpenseItemEntity;
@@ -24,6 +25,7 @@ export default function useCreateExpense() {
       await handleExpenseCreation(expenseCreationMutationProps.newExpenseItem);
     },
     onMutate: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {
+      toast.success("Expense added.");
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
       await queryClient.cancelQueries({ queryKey: ["groupAndColourMap", email] });
       await queryClient.cancelQueries({ queryKey: ["recurringExpenseArray", email] });
@@ -70,6 +72,7 @@ export default function useCreateExpense() {
       };
     },
     onError: (_error, _variables, context) => {
+      toast.error("Data sync error encountered during expense creation.");
       queryClient.setQueryData(["budgetArray", email], context?.budgetArrayBeforeOptimisticUpdate);
       queryClient.setQueryData(["groupAndColourMap", email], context?.categoryDataMapBeforeOptimisticUpdate);
       queryClient.setQueryData(["expenseArray", email], context?.expenseArrayBeforeOptimisticUpdate);

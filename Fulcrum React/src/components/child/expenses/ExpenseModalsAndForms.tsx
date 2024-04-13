@@ -24,14 +24,11 @@ interface ExpenseModalsAndFormsProps {
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   expenseModalVisibility: ExpenseModalVisibility;
   setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
-
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
-
   publicUserData: PublicUserData;
   defaultCalendarDate: Date;
-
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   expenseItemToDelete: ExpenseItemEntity;
 }

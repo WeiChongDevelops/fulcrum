@@ -4,6 +4,7 @@ import NavbarUpper from "../child/navbar/NavbarUpper.tsx";
 import NavbarLower from "../child/navbar/NavbarLower.tsx";
 import Loader from "../child/other/Loader.tsx";
 import { ErrorBoundary } from "./ErrorBoundary.tsx";
+import { Toaster } from "sonner";
 
 interface FulcrumProps {
   publicUserData: PublicUserData;
@@ -29,6 +30,7 @@ export default function Fulcrum({ publicUserData, isAnyLoading }: FulcrumProps) 
       )}
 
       <ErrorBoundary>
+        <Toaster richColors />
         <Outlet />
       </ErrorBoundary>
     </div>
