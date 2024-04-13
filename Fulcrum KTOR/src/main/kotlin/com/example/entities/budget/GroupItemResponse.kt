@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 data class GroupItemResponse(
     val group: String,
     val colour: String,
-    @Contextual val dateCreated: Instant
+    @Contextual val timestamp: Instant
 )

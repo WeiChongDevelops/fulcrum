@@ -188,7 +188,7 @@ fun Application.configureBudgetRouting() {
         get("/api/getGroups") {
             try {
                 val groupList =
-                    supabase.postgrest["groups"].select(columns = Columns.list("group, colour, dateCreated")) {
+                    supabase.postgrest["groups"].select(columns = Columns.list("group, colour, timestamp")) {
                         eq("userId", getActiveUserId())
                     }.decodeList<GroupItemResponse>()
                 call.respond(HttpStatusCode.OK, groupList)

@@ -182,7 +182,17 @@
 
 /* ANIMATION */
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .fulcrum-animation-container {
+  animation: fadeIn 1100ms ease forwards;
   position: relative;
   padding-top: 14%;
   margin-top: 3%;
@@ -235,25 +245,17 @@
   top: 60%;
   left: 50%;
   transform-origin: 0 50%;
-  transition: all ease-out 500ms;
-}
-
-@keyframes textFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  transition: all ease-out 450ms;
 }
 
 .rotating-text-label-container {
-  animation: textFadeIn 1350ms ease forwards;
+  animation: fadeIn 1000ms ease-out forwards;
   display: flex;
   position: absolute;
   bottom: 2rem;
   flex-direction: row;
   justify-content: space-between;
+  transition: justify-content ease-out 200ms;
   user-select: none;
   width: 100%;
   font-size: 1.5em;

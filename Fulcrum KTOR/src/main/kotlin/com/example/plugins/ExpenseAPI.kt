@@ -25,6 +25,17 @@ fun Application.configureExpenseRouting() {
 
         // EXPENSE API //
 
+        suspend fun executeExpenseCreation(expenseItemResponse: ExpenseCreateRequestSent, call: ApplicationCall) {
+            val insertedItem = supabase.postgrest["expenses"].insert(
+                expenseItemResponse,
+                returning = Returning.REPRESENTATION
+            )
+
+            if (insertedItem.body == null) {
+                call.respondError("Expense creation failed.")
+            }
+        }
+
         post("/api/createExpense") {
             try {
                 val expenseCreateRequest = call.receive<ExpenseCreateRequestReceived>()
@@ -36,19 +47,42 @@ fun Application.configureExpenseRouting() {
                     timestamp = expenseCreateRequest.timestamp,
                     recurringExpenseId = expenseCreateRequest.recurringExpenseId
                 )
-                val insertedItem = supabase.postgrest["expenses"].insert(
-                    itemToInsert,
-                    returning = Returning.REPRESENTATION
-                )
+//                val insertedItem = supabase.postgrest["expenses"].insert(
+//                    itemToInsert,
+//                    returning = Returning.REPRESENTATION
+//                )
+//
+//                if (insertedItem.body == null) {
+//                    call.respondError("Expense creation failed.")
+//                } else {
+//                    call.respondSuccess("Expense creation successful.")
+//                }
 
-                if (insertedItem.body == null) {
-                    call.respondError("Expense creation failed.")
-                } else {
-                    call.respondSuccess("Expense creation successful.")
-                }
+                executeExpenseCreation(itemToInsert, call)
+                call.respondSuccess("Expense creation successful.")
             } catch (e: Exception) {
                 call.application.log.error("Error while creating expense", e)
                 call.respondError("Error while creating expense: $e")
+            }
+        }
+
+        post("/api/batchCreateExpenses") {
+            try {
+                val batchExpenseCreateRequest = call.receive<BatchExpenseCreateRequestReceived>()
+                for (expenseItem in batchExpenseCreateRequest.expensesToCreate) {
+                    val itemToInsert = ExpenseCreateRequestSent(
+                        userId = getActiveUserId(),
+                        category = expenseItem.category,
+                        amount = expenseItem.amount,
+                        timestamp = expenseItem.timestamp,
+                        recurringExpenseId = expenseItem.recurringExpenseId
+                    )
+                    executeExpenseCreation(itemToInsert, call)
+                }
+                call.respondSuccess("Batch expense creation succeeded.")
+            } catch (e: Exception) {
+                call.application.log.error("Error while batch creating expenses", e)
+                call.respondError("Error while batch creating expenses: $e")
             }
         }
 

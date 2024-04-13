@@ -1,78 +1,30 @@
-import { useEffect, useState } from "react";
-
 interface FulcrumAnimationProps {
   lineAngle: number;
   isDarkMode: boolean;
+  activeTriangleFulcrum: string;
+  bowlShadowDimensions: {
+    right: {
+      width: string;
+      height: string;
+      transform: string;
+    };
+    left: {
+      width: string;
+      height: string;
+      transform: string;
+    };
+  };
 }
 
 /**
  * A budget-responsive visual representation of a scale, used to visualise the balance between budget and income.
  */
-export default function FulcrumAnimation({ lineAngle, isDarkMode }: FulcrumAnimationProps) {
-  const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-tri-red.webp");
-  const [leverEndXOffset, setLeverEndXOffset] = useState({
-    leftEnd: 0,
-    rightEnd: 0,
-  });
-  const [bowlWidth, setBowlWidth] = useState(window.innerWidth * 0.07);
-  const [bowlShadowDimensions, setBowlShadowDimensions] = useState({
-    right: {
-      width: `${bowlWidth}px`,
-      height: `${bowlWidth / 12}px`,
-      transform: `translate(-50%, -50%) translateX(${leverEndXOffset.rightEnd}px)`,
-    },
-    left: {
-      width: `${bowlWidth}px`,
-      height: `${bowlWidth / 12}px`,
-      transform: `translate(50%, -50%) translateX(${leverEndXOffset.leftEnd}px)`,
-    },
-  });
-
-  function recalculateShadowDimensions() {
-    setBowlWidth(window.innerWidth * 0.07);
-
-    const newOffset = {
-      leftEnd: Math.abs(lineAngle / 2.1),
-      rightEnd: -Math.abs(lineAngle / 2.1),
-    };
-    if (newOffset.leftEnd !== leverEndXOffset.leftEnd || newOffset.rightEnd !== leverEndXOffset.rightEnd) {
-      setLeverEndXOffset(newOffset);
-    }
-  }
-
-  function setShadowDimensions() {
-    setBowlShadowDimensions({
-      right: {
-        width: `${bowlWidth + lineAngle * 2.7}px`,
-        height: `${(bowlWidth + lineAngle * 1.4) / 10}px`,
-        transform: `translate(-50%, -50%) translateX(${leverEndXOffset.rightEnd}px)`,
-      },
-      left: {
-        width: `${bowlWidth - lineAngle * 2.7}px`,
-        height: `${(bowlWidth - lineAngle * 1.4) / 10}px`,
-        transform: `translate(50%, -50%) translateX(${leverEndXOffset.leftEnd}px)`,
-      },
-    });
-  }
-
-  useEffect(() => {
-    function recalculateAnimationStyling() {
-      recalculateShadowDimensions();
-      setShadowDimensions();
-    }
-    document.addEventListener("resize", recalculateAnimationStyling);
-    return () => document.removeEventListener("resize", recalculateAnimationStyling);
-  }, []);
-
-  useEffect(() => {
-    setShadowDimensions();
-  }, [lineAngle, leverEndXOffset, bowlWidth]);
-
-  useEffect(() => {
-    recalculateShadowDimensions();
-    setActiveTriangleFulcrum(`/src/assets/fulcrum-animation/fulcrum-tri-${lineAngle === 0 ? "green" : "red"}.webp`);
-  }, [lineAngle]);
-
+export default function FulcrumAnimation({
+  lineAngle,
+  isDarkMode,
+  activeTriangleFulcrum,
+  bowlShadowDimensions,
+}: FulcrumAnimationProps) {
   return (
     <div className="fulcrum-animation-container">
       <div className="fulcrum-triangle-container">
@@ -81,7 +33,10 @@ export default function FulcrumAnimation({ lineAngle, isDarkMode }: FulcrumAnima
         <div className="bowl-shadow-right" style={bowlShadowDimensions.right}></div>
         <div className="bowl-shadow-left" style={bowlShadowDimensions.left}></div>
       </div>
-      <div className="rotating-container" style={{ transform: `rotate(${-lineAngle}deg) translateX(-50%)` }}>
+      <div
+        className="rotating-container -translate-x-1/2"
+        style={{ transform: `rotate(${-lineAngle}deg) translateX(-50%)` }}
+      >
         <div className="rotating-text-label-container">
           <b className={`${isDarkMode ? "text-white" : "text-black"}`}>BUDGET</b>
           <b className={`${isDarkMode ? "text-white" : "text-black"}`}>INCOME</b>

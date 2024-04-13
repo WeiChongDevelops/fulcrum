@@ -112,7 +112,7 @@ fun Application.configureOtherRouting() {
                 }
 
                 if (supabase.postgrest["groups"].select(
-                        columns = Columns.list("group, colour, dateCreated")
+                        columns = Columns.list("group, colour, timestamp")
                     ) {
                         eq("userId", getActiveUserId())
                     }.decodeSingleOrNull<GroupItemResponse>() != null

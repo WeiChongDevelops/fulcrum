@@ -24,14 +24,18 @@ export default function useCreateExpense() {
       await handleExpenseCreation(expenseCreationMutationProps.newExpenseItem);
     },
     onMutate: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {
-      await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
       await queryClient.cancelQueries({ queryKey: ["groupAndColourMap", email] });
+      await queryClient.cancelQueries({ queryKey: ["recurringExpenseArray", email] });
+      await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
 
       const budgetArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
-      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
-        return [...prevBudgetCache, { ...expenseCreationMutationProps.newBudgetItem }];
-      });
+
+      if (expenseCreationMutationProps.newBudgetItem) {
+        await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
+          return [...prevBudgetCache, { ...expenseCreationMutationProps.newBudgetItem }];
+        });
+      }
 
       const categoryDataMapBeforeOptimisticUpdate = await queryClient.getQueryData(["groupAndColourMap", email]);
       if (expenseCreationMutationProps.newBudgetItem) {
@@ -53,7 +57,10 @@ export default function useCreateExpense() {
 
       const expenseArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
       await queryClient.setQueryData(["expenseArray", email], (prevExpenseCache: ExpenseItemEntity[]) => {
-        return [expenseCreationMutationProps.newExpenseItem, ...prevExpenseCache];
+        const newExpenseTimestamp = new Date(expenseCreationMutationProps.newExpenseItem.timestamp);
+        return newExpenseTimestamp.toLocaleDateString() === new Date().toLocaleDateString()
+          ? [expenseCreationMutationProps.newExpenseItem, ...prevExpenseCache]
+          : [...prevExpenseCache, expenseCreationMutationProps.newExpenseItem];
       });
 
       return {

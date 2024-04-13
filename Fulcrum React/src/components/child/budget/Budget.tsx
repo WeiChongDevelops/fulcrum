@@ -18,6 +18,7 @@ import "../../../css/Budget.css";
 import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 import useInitialBudgetData from "../../../hooks/initialisations/useInitialBudgetData.ts";
 import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
+import useAnimationData from "../../../hooks/initialisations/useAnimationData.ts";
 
 interface BudgetProps {
   publicUserData: PublicUserData;
@@ -58,6 +59,8 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
     error,
   } = useInitialBudgetData();
 
+  const { animationDataIsLoading, activeTriangleFulcrum, bowlShadowDimensions } = useAnimationData(lineAngle);
+
   const totalBudget = useMemo(() => {
     return !!budgetArray ? getTotalAmountBudgeted(budgetArray) : 0;
   }, [budgetArray]);
@@ -81,8 +84,8 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
     return <FulcrumErrorPage errors={[error!]} />;
   }
 
-  if (isLoading) {
-    return <Loader isLoading={isLoading} isDarkMode={publicUserData.darkModeEnabled ?? false} />;
+  if (isLoading || animationDataIsLoading) {
+    return <Loader isLoading={isLoading || animationDataIsLoading} isDarkMode={publicUserData.darkModeEnabled ?? false} />;
   }
 
   if (isSuccess)
@@ -99,7 +102,12 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
               publicUserData={publicUserData}
             />
 
-            <FulcrumAnimation lineAngle={lineAngle} isDarkMode={publicUserData.darkModeEnabled} />
+            <FulcrumAnimation
+              lineAngle={lineAngle}
+              isDarkMode={publicUserData.darkModeEnabled}
+              activeTriangleFulcrum={activeTriangleFulcrum}
+              bowlShadowDimensions={bowlShadowDimensions}
+            />
 
             {groupArray?.length > 0 && (
               <GroupList

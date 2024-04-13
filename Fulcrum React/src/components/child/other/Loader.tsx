@@ -13,7 +13,7 @@ interface LoaderProps {
  */
 export default function Loader({ isLoading, isDarkMode, positioning, size }: LoaderProps) {
   return (
-    <div className={positioning ? positioning : "absolute top-[45vh] left-[50vw]"}>
+    <div className={positioning ? positioning : "fixed top-[45vh] left-[50vw]"}>
       <RotateLoader
         color={isDarkMode ? "#F1F5F9" : "black"}
         loading={isLoading}

@@ -99,7 +99,7 @@ export default function Contact() {
         <p className={"text-5xl font-bold mb-4"}>We're here to help.</p>
         <p className={"mt-2 font-bold"}>Reach out to our team for assistance or inquiries via the contact form.</p>
         {formStatus && (
-          <p className={"my-6 font-bold text-gray-600 contact-status w-40%"} key={statusAnimationKey}>
+          <p className={"my-6 font-bold text-green-500 contact-status w-40%"} key={statusAnimationKey}>
             {formStatus}
           </p>
         )}

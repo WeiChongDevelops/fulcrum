@@ -14,6 +14,7 @@ import { useGlobalAppData } from "../../hooks/initialisations/useGlobalAppData.t
 import Loader from "../child/other/Loader.tsx";
 import FulcrumErrorPage from "../child/other/FulcrumErrorPage.tsx";
 import { EmailContext } from "../../util.ts";
+import { ErrorBoundary } from "./ErrorBoundary.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -44,62 +45,64 @@ export default function App() {
   }
 
   return (
-    <EmailContext.Provider value={email}>
-      <Router>
-        <Routes>
-          {homePaths.map((path) => (
-            <Route key={path} path={path} element={<Home />}>
-              <Route index element={<Navigate replace to="about" />} />
-              <Route path="about" element={<About />} />
-              <Route path="contact" element={<Contact />} />
-              <Route path="pricing" element={<Pricing />} />
+    <ErrorBoundary>
+      <EmailContext.Provider value={email}>
+        <Router>
+          <Routes>
+            {homePaths.map((path) => (
+              <Route key={path} path={path} element={<Home />}>
+                <Route index element={<Navigate replace to="about" />} />
+                <Route path="about" element={<About />} />
+                <Route path="contact" element={<Contact />} />
+                <Route path="pricing" element={<Pricing />} />
+              </Route>
+            ))}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>
+              <Route index element={<Navigate replace to="budget" />} />
+              <Route
+                path="expenses"
+                element={
+                  <Expenses
+                    publicUserData={publicUserData}
+                    expenseArray={expenseArray}
+                    budgetArray={budgetArray}
+                    groupArray={groupArray}
+                    categoryDataMap={categoryDataMap}
+                    recurringExpenseArray={recurringExpenseArray}
+                    blacklistedExpenseArray={blacklistedExpenseArray}
+                  />
+                }
+              />
+              <Route
+                path="budget"
+                element={
+                  <Budget
+                    publicUserData={publicUserData}
+                    expenseArray={expenseArray}
+                    budgetArray={budgetArray}
+                    groupArray={groupArray}
+                  />
+                }
+              />
+              <Route
+                path="tools"
+                element={
+                  <Tools
+                    publicUserData={publicUserData}
+                    expenseArray={expenseArray}
+                    budgetArray={budgetArray}
+                    groupArray={groupArray}
+                    recurringExpenseArray={recurringExpenseArray}
+                    categoryDataMap={categoryDataMap}
+                  />
+                }
+              />
             </Route>
-          ))}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>
-            <Route index element={<Navigate replace to="budget" />} />
-            <Route
-              path="expenses"
-              element={
-                <Expenses
-                  publicUserData={publicUserData}
-                  expenseArray={expenseArray}
-                  budgetArray={budgetArray}
-                  groupArray={groupArray}
-                  categoryDataMap={categoryDataMap}
-                  recurringExpenseArray={recurringExpenseArray}
-                  blacklistedExpenseArray={blacklistedExpenseArray}
-                />
-              }
-            />
-            <Route
-              path="budget"
-              element={
-                <Budget
-                  publicUserData={publicUserData}
-                  expenseArray={expenseArray}
-                  budgetArray={budgetArray}
-                  groupArray={groupArray}
-                />
-              }
-            />
-            <Route
-              path="tools"
-              element={
-                <Tools
-                  publicUserData={publicUserData}
-                  expenseArray={expenseArray}
-                  budgetArray={budgetArray}
-                  groupArray={groupArray}
-                  recurringExpenseArray={recurringExpenseArray}
-                  categoryDataMap={categoryDataMap}
-                />
-              }
-            />
-          </Route>
-        </Routes>
-      </Router>
-    </EmailContext.Provider>
+          </Routes>
+        </Router>
+      </EmailContext.Provider>
+    </ErrorBoundary>
   );
 }

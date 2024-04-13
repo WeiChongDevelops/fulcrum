@@ -1,6 +1,5 @@
 import { ChangeEvent, createContext, Dispatch, SetStateAction } from "react";
 import { v4 as uuid } from "uuid";
-import { ExpenseCreationMutationProps } from "./hooks/mutations/expense/useCreateExpense.ts";
 import { UseMutateFunction } from "@tanstack/react-query";
 
 // GLOBAL VARIABLES //
@@ -446,7 +445,6 @@ export function formatDate(date: Date): string {
  * @param newExpenseItem - The new expense item to be added.
  */
 export async function handleExpenseCreation(newExpenseItem: ExpenseItemEntity): Promise<void> {
-  console.log(`Adding expense on day: ${newExpenseItem.timestamp}`);
   try {
     const response = await fetch("http://localhost:8080/api/createExpense", {
       method: "POST",
@@ -474,6 +472,33 @@ export async function handleExpenseCreation(newExpenseItem: ExpenseItemEntity): 
 }
 
 /**
+ * Handles the deletion of multiple expense items in a batch operation.
+ * @param expensesToCreate - An array of the expenses to be deleted.
+ */
+export async function handleBatchExpenseCreation(expensesToCreate: ExpenseItemEntity[]): Promise<void> {
+  try {
+    const response = await fetch("http://localhost:8080/api/batchCreateExpenses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        expensesToCreate: expensesToCreate,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error(`HTTP error encountered when attempting batch expense creation: ${response.status}`);
+      window.alert("Expense entry invalid.");
+    }
+    const responseData = await response.json();
+    console.log(responseData);
+  } catch (e) {
+    console.error(`Exception encountered when requesting batch expense creation: ${e}`);
+  }
+}
+
+/**
  * Retrieves the list of expense items from the server.
  * @returns A sorted array of expense items, or an empty array in case of an error.
  */
@@ -493,13 +518,14 @@ export async function getExpenseList(): Promise<ExpenseItemEntity[]> {
     }
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting expense list retrieval: ${response.status}`);
+      throw new Error(`A HTTP error occurred while fetching the expense list.`);
     }
     const responseData = await response.json();
     console.log({ Expense_List_Retrieved: responseData.sort(expenseSort) });
     return responseData.sort(expenseSort);
   } catch (e) {
     console.error(`Exception encountered when requesting expense list retrieval: ${e}`);
-    return [];
+    throw new Error(`An error occurred while fetching the expense list: ${e}.`);
   }
 }
 
@@ -633,13 +659,14 @@ export async function getBudgetList(): Promise<BudgetItemEntity[]> {
       });
     } else if (!response.ok) {
       console.error(`HTTP error encountered when attempting budget list retrieval: ${response.status}`);
+      throw new Error(`A HTTP error occurred while fetching the budget list.`);
     }
     const responseData = await response.json();
     console.log({ Budget_List_Retrieved: responseData.sort(budgetSort) });
     return responseData.sort(budgetSort);
   } catch (e) {
     console.error(`Exception encountered when requesting budget list retrieval: ${e}`);
-    return [];
+    throw new Error(`An error occurred while fetching the budget list: ${e}.`);
   }
 }
 
@@ -749,13 +776,14 @@ export async function getGroupList(): Promise<GroupItemEntity[]> {
     }
     if (!response.ok) {
       console.error(`HTTP error when attempting group list retrieval: ${response.status}`);
+      throw new Error(`A HTTP error occurred while fetching the group list.`);
     }
     const responseData = await response.json();
     console.log({ Groups_Retrieved: responseData.sort(groupSort) });
     return responseData.sort(groupSort);
   } catch (e) {
     console.error(`Exception encountered when requesting group list retrieval: ${e}`);
-    return [];
+    throw new Error(`An error occurred while fetching the group list: ${e}.`);
   }
 }
 
@@ -868,13 +896,14 @@ export async function getRecurringExpenseList(): Promise<RecurringExpenseItemEnt
     }
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting recurring expense list retrieval: ${response.status}`);
+      throw new Error(`A HTTP error occurred while fetching the recurring expense list}.`);
     }
     const responseData = await response.json();
     console.log({ Recurring_Expenses_Retrieved: responseData.sort(expenseSort) });
     return responseData.sort(expenseSort);
   } catch (e) {
     console.error(`Exception encountered when requesting recurring expense list retrieval: ${e}`);
-    return [];
+    throw new Error(`An error occurred while fetching the recurring expense list: ${e}.`);
   }
 }
 
@@ -1037,13 +1066,14 @@ export async function getTotalIncome(): Promise<number> {
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting total income retrieval: ${response.status}`);
+      throw new Error(`A HTTP error occurred while fetching total income.`);
     }
     const totalIncome = await response.json();
     console.log(totalIncome);
     return totalIncome.totalIncome;
   } catch (e) {
     console.error(`Exception encountered when requesting total income retrieval: ${e}`);
-    return 10000;
+    throw new Error(`An error occurred while fetching total income: ${e}.`);
   }
 }
 
@@ -1330,12 +1360,12 @@ export function groupSort(a: GroupItemEntity, b: GroupItemEntity): number {
 
 /**
  * Sorts expense items by their timestamps in descending order.
- * @param a - The first expense item for comparison.
- * @param b - The second expense item for comparison.
+ * @param expenseItemA - The first expense item for comparison.
+ * @param expenseItemB - The second expense item for comparison.
  * @returns Sorting order value.
  */
-function expenseSort(a: ExpenseItemEntity, b: ExpenseItemEntity): number {
-  return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+export function expenseSort(expenseItemA: ExpenseItemEntity, expenseItemB: ExpenseItemEntity): number {
+  return new Date(expenseItemB.timestamp).getTime() - new Date(expenseItemA.timestamp).getTime();
 }
 
 /**
@@ -1369,6 +1399,7 @@ export async function getPublicUserData(): Promise<any> {
       });
     } else if (!response.ok) {
       console.error(`HTTP error encountered when attempting public user data retrieval: ${response.status}`);
+      throw new Error(`A HTTP error occurred while fetching public user data.`);
     } else {
       const publicUserData = await response.json();
       console.log("Public User Data:");
@@ -1377,6 +1408,7 @@ export async function getPublicUserData(): Promise<any> {
     }
   } catch (e) {
     console.error(`Exception encountered when requesting public user data retrieval: ${e}`);
+    throw new Error(`An error occurred while fetching public user data: ${e}.`);
   }
 }
 
@@ -1961,28 +1993,33 @@ export function getRecurringExpenseInstancesOrNull(
  * @param expenseArray - The array of expense items.
  * @param blacklistedExpenseArray - The array of blacklisted (removed) recurring expense instances.
  * @param batchDeleteExpenses - The mutation that batch deletes expenses.
- * @param createExpense - The mutation that batch deletes expenses.
+ * @param batchCreateExpenses - The mutation that batch creates expenses.
  */
 export function updateRecurringExpenseInstances(
   recurringExpenseArray: RecurringExpenseItemEntity[],
   expenseArray: ExpenseItemEntity[],
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[],
   batchDeleteExpenses: UseMutateFunction<void, Error, string[]>,
-  createExpense: UseMutateFunction<void, Error, ExpenseCreationMutationProps>,
+  batchCreateExpenses: UseMutateFunction<void, Error, ExpenseItemEntity[]>,
+  expenseCreationIsSuccess: boolean,
 ): void {
-  const misplacedExpensesToRemove = new Set<string>();
-  recurringExpenseArray.forEach((recurringExpenseItem) => {
-    processRecurringExpenseInstances(
-      recurringExpenseItem,
-      expenseArray,
-      blacklistedExpenseArray,
-      misplacedExpensesToRemove,
-      createExpense,
-    );
-  });
-  if (misplacedExpensesToRemove.size !== 0) {
+  // const misplacedExpensesToRemove = new Set<string>();
+  // const newExpensesToAdd = new Array<ExpenseItemEntity>();
+  // const { misplacedExpensesToRemove, newExpensesToAdd } = ) => {
+  const { misplacedExpensesToRemove, newExpensesToAdd } = processRecurringExpenseInstances(
+    recurringExpenseArray,
+    expenseArray,
+    blacklistedExpenseArray,
+    // misplacedExpensesToRemove,
+    // newExpensesToAdd,
+  );
+  // newExpensesToAdd.length !== 0 && batchCreateExpenses([...newExpensesToAdd]);
+  // misplacedExpensesToRemove.size !== 0 && batchDeleteExpenses([...misplacedExpensesToRemove]);
+  // batchCreateExpenses([...newExpensesToAdd]);
+  newExpensesToAdd.length !== 0 && batchCreateExpenses(newExpensesToAdd);
+  (expenseCreationIsSuccess || newExpensesToAdd.length === 0) &&
+    misplacedExpensesToRemove.size !== 0 &&
     batchDeleteExpenses(Array.from(misplacedExpensesToRemove));
-  }
 }
 
 /**
@@ -1991,66 +2028,86 @@ export function updateRecurringExpenseInstances(
  * @param expenseArray - The array of expenses.
  * @param blacklistedExpenseInstances - The array of blacklisted recurring expense instances (manually user-deleted).
  * @param misplacedExpensesToRemove - The cumulative set of expense IDs to batch delete.
- * @param createExpense - The mutation that batch deletes expenses.
+ * @param newExpensesToAdd - The array of new expense items to create.
  */
 function processRecurringExpenseInstances(
-  recurringExpenseItem: RecurringExpenseItemEntity,
+  // recurringExpenseItem: RecurringExpenseItemEntity,
+  recurringExpenseArray: RecurringExpenseItemEntity[],
   expenseArray: ExpenseItemEntity[],
   blacklistedExpenseInstances: BlacklistedExpenseItemEntity[],
-  misplacedExpensesToRemove: Set<string>,
-  createExpense: UseMutateFunction<void, Error, ExpenseCreationMutationProps>,
-): void {
+  // misplacedExpensesToRemove: Set<string>,
+  // newExpensesToAdd: Array<ExpenseItemEntity>,
+): {
+  misplacedExpensesToRemove: Set<string>;
+  newExpensesToAdd: ExpenseItemEntity[];
+} {
   const today = new Date();
   today.setDate(today.getDate() + 1);
   today.setHours(0, 0, 0, 0);
-  let date = new Date(recurringExpenseItem.timestamp);
 
-  while (date < today) {
-    console.log(`Looking at date: ${date.toLocaleDateString()}`);
-    console.log(`Looking at date: ${date}`);
-    const expenseInstances = getRecurringExpenseInstancesOrNull(expenseArray, recurringExpenseItem.recurringExpenseId, date);
-    const isFrequencyMatch = recurringExpenseLandsOnDay(
-      recurringExpenseItem.timestamp,
-      recurringExpenseItem.frequency,
-      date,
-    );
-    const expenseInstanceIsBlacklisted = blacklistedExpenseInstances
-      ? matchingBlacklistEntryFound(blacklistedExpenseInstances, recurringExpenseItem, date)
-      : false;
-    // If recurring instance already exists on a day,
-    if (expenseInstances != null) {
-      let keepFirstInstance = true;
-      // And this instance shouldn't have landed on this day (can happen when freq is changed),
-      // Queue this and any duplicate instances on this day for removal
-      if (!isFrequencyMatch) {
-        keepFirstInstance = false;
-      }
-      // Otherwise only queue the duplicate instances on this day for removal
-      for (let i = keepFirstInstance ? 1 : 0; i < expenseInstances.length; i++) {
-        misplacedExpensesToRemove.add(expenseInstances[i].expenseId);
-      }
-    } else {
-      // If: (1) There is no instance on this day, (2) it matches frequency patterns, and (3) it's not blacklisted,
-      // Create an instance of this recurrence expense in the expense array
-      if (isFrequencyMatch && !expenseInstanceIsBlacklisted) {
-        const newExpenseItemLanded: ExpenseItemEntity = {
-          expenseId: uuid(),
-          category: recurringExpenseItem.category,
-          amount: recurringExpenseItem.amount,
-          timestamp: date,
-          recurringExpenseId: recurringExpenseItem.recurringExpenseId,
-        };
-        // handleExpenseCreation(newExpenseItemLanded);
-        createExpense({
-          newExpenseItem: {
+  const misplacedExpensesToRemove = new Set<string>();
+  const newExpensesToAdd = new Array<ExpenseItemEntity>();
+
+  recurringExpenseArray.forEach((recurringExpenseItem) => {
+    let date = new Date(recurringExpenseItem.timestamp);
+
+    while (date < today) {
+      // console.log(`Looking at date: ${date.toLocaleDateString()}`);
+      const expenseInstances = getRecurringExpenseInstancesOrNull(
+        expenseArray,
+        recurringExpenseItem.recurringExpenseId,
+        date,
+      );
+      const isFrequencyMatch = recurringExpenseLandsOnDay(
+        recurringExpenseItem.timestamp,
+        recurringExpenseItem.frequency,
+        date,
+      );
+      const expenseInstanceIsBlacklisted = blacklistedExpenseInstances
+        ? matchingBlacklistEntryFound(blacklistedExpenseInstances, recurringExpenseItem, date)
+        : false;
+      // If recurring instance already exists on a day,
+      if (expenseInstances != null) {
+        let keepFirstInstance = true;
+        // And this instance shouldn't have landed on this day (can happen when freq is changed),
+        // Queue this and any duplicate instances on this day for removal
+        if (!isFrequencyMatch) {
+          keepFirstInstance = false;
+        }
+        // Otherwise only queue the duplicate instances on this day for removal
+        for (let i = keepFirstInstance ? 1 : 0; i < expenseInstances.length; i++) {
+          misplacedExpensesToRemove.add(expenseInstances[i].expenseId);
+        }
+      } else {
+        // If: (1) There is no instance on this day, (2) it matches frequency patterns, and (3) it's not blacklisted,
+        // Create an instance of this recurrence expense in the expense array
+        if (isFrequencyMatch && !expenseInstanceIsBlacklisted) {
+          const newExpenseItemLanded: ExpenseItemEntity = {
+            expenseId: uuid(),
+            category: recurringExpenseItem.category,
+            amount: recurringExpenseItem.amount,
+            timestamp: date,
+            recurringExpenseId: recurringExpenseItem.recurringExpenseId,
+          };
+          // createExpense({
+          //   newExpenseItem: {
+          //     ...newExpenseItemLanded,
+          //     timestamp: new Date(newExpenseItemLanded.timestamp.getTime()),
+          //   },
+          // });
+          newExpensesToAdd.push({
             ...newExpenseItemLanded,
             timestamp: new Date(newExpenseItemLanded.timestamp.getTime()),
-          },
-        });
+          });
+        }
       }
+      date.setDate(date.getDate() + 1);
     }
-    date.setDate(date.getDate() + 1);
-  }
+  });
+  return {
+    misplacedExpensesToRemove,
+    newExpensesToAdd,
+  };
 }
 
 /**
@@ -2065,7 +2122,6 @@ export async function getRecurringExpenseInstancesAfterDate(
   expenseArray: ExpenseItemEntity[],
   startingFrom: Date,
 ): Promise<ExpenseItemEntity[]> {
-  console.log(`We're checking from ${startingFrom} onwards.`);
   const requestedExpenseList = new Set<ExpenseItemEntity>();
   for (const expenseItem of expenseArray) {
     if (

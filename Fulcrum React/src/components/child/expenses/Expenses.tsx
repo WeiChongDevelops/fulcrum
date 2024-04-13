@@ -18,7 +18,7 @@ import useInitialExpenseData from "../../../hooks/initialisations/useInitialExpe
 import Loader from "../other/Loader.tsx";
 import { useMemo, useState } from "react";
 import useBatchDeleteExpenses from "../../../hooks/mutations/expense/useBatchDeleteExpenses.ts";
-import useCreateExpense from "../../../hooks/mutations/expense/useCreateExpense.ts";
+import useBatchCreateExpenses from "../../../hooks/mutations/expense/useBatchCreateExpenses.ts";
 
 interface ExpensesProps {
   publicUserData: PublicUserData;
@@ -62,7 +62,7 @@ export default function Expenses({
   const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>();
 
   const { mutate: batchDeleteExpenses } = useBatchDeleteExpenses();
-  const { mutate: createExpense } = useCreateExpense();
+  const { mutate: batchCreateExpenses, isSuccess: expenseCreationIsSuccess } = useBatchCreateExpenses();
 
   useMemo(() => {
     const updateStructuredExpenseData = async () => {
@@ -77,7 +77,8 @@ export default function Expenses({
       expenseArray,
       blacklistedExpenseArray,
       batchDeleteExpenses,
-      createExpense,
+      batchCreateExpenses,
+      expenseCreationIsSuccess,
     );
   }, [recurringExpenseArray]);
 

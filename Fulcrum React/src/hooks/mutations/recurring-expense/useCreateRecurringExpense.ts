@@ -24,15 +24,17 @@ export default function useCreateRecurringExpense() {
       await handleRecurringExpenseCreation(recurringExpenseCreationMutationProps.newRecurringExpenseItem);
     },
     onMutate: async (recurringExpenseCreationMutationProps: RecurringExpenseCreationMutationProps) => {
-      await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
       await queryClient.cancelQueries({ queryKey: ["groupAndColourMap", email] });
       await queryClient.cancelQueries({ queryKey: ["recurringExpenseArray", email] });
+      await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
 
       const budgetArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
-      await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
-        return [...prevBudgetCache, { ...recurringExpenseCreationMutationProps.newBudgetItem }];
-      });
+      if (recurringExpenseCreationMutationProps.newBudgetItem) {
+        await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
+          return [...prevBudgetCache, { ...recurringExpenseCreationMutationProps.newBudgetItem }];
+        });
+      }
 
       const categoryDataMapBeforeOptimisticUpdate = await queryClient.getQueryData(["groupAndColourMap", email]);
       if (recurringExpenseCreationMutationProps.newBudgetItem) {
@@ -74,8 +76,9 @@ export default function useCreateRecurringExpense() {
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
       await queryClient.invalidateQueries({ queryKey: ["groupAndColourMap", email] });
-      await queryClient.invalidateQueries({ queryKey: ["recurringExpenseArray", email] });
-      await queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+      // await queryClient.invalidateQueries({ queryKey: ["recurringExpenseArray", email] });
+      // Invalidation of recurringExpenseArray excluded as it causes visual update bugs for optimistic updates
+      // Specifically, updateRecurringExpenseInstances is recalled while the first instance is still running.
     },
   });
 }

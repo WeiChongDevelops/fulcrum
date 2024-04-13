@@ -39,7 +39,7 @@ export default function useInitialBudgetData() {
   const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
   const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
   const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
-  const [lineAngle, setLineAngle] = useState(0);
+  const [lineAngle, setLineAngle] = useState(1);
   const [perCategoryExpenditureMap, setPerCategoryExpenditureMap] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {

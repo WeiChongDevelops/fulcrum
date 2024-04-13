@@ -3,6 +3,7 @@ import { PublicUserData } from "../../util.ts";
 import NavbarUpper from "../child/navbar/NavbarUpper.tsx";
 import NavbarLower from "../child/navbar/NavbarLower.tsx";
 import Loader from "../child/other/Loader.tsx";
+import { ErrorBoundary } from "./ErrorBoundary.tsx";
 
 interface FulcrumProps {
   publicUserData: PublicUserData;
@@ -26,7 +27,10 @@ export default function Fulcrum({ publicUserData, isAnyLoading }: FulcrumProps) 
       {!window.location.href.includes("tools") && (
         <div id="background" className={`${publicUserData.darkModeEnabled ? "bg-dark-2" : "bg-light"}`}></div>
       )}
-      <Outlet />
+
+      <ErrorBoundary>
+        <Outlet />
+      </ErrorBoundary>
     </div>
   );
 }
