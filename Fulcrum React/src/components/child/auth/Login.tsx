@@ -36,7 +36,6 @@ export default function Login() {
         email: "",
         password: "",
       });
-      window.location.href = "/app/budget";
     }
   }, [isSuccess]);
 

@@ -1,6 +1,7 @@
 import { BudgetItemEntity, EmailContext, GroupItemEntity, groupSort, handleBudgetUpdating } from "../../../util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
+import { toast } from "sonner";
 
 interface BudgetUpdatingMutationProps {
   originalCategory: string;
@@ -36,11 +37,15 @@ export default function useUpdateBudget() {
             : budgetItem,
         );
       });
+      toast.success("Budget updated.");
       return { budgetArrayBeforeOptimisticUpdate, groupArrayBeforeOptimisticUpdate };
     },
     onError: async (_error, _variables, context) => {
       await queryClient.setQueryData(["budgetArray", email], context?.budgetArrayBeforeOptimisticUpdate);
       await queryClient.setQueryData(["groupArray", email], context?.groupArrayBeforeOptimisticUpdate);
+      toast.error("Updated budget is invalid. The new budget name may be already in use.", {
+        duration: 7_000,
+      });
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });

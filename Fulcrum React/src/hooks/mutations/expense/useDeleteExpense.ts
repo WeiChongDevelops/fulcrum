@@ -11,6 +11,7 @@ import {
   handleExpenseDeletion,
   Y2K,
 } from "../../../util.ts";
+import { toast } from "sonner";
 
 type ExpenseDeletionScale = "THIS" | "FUTURE" | "ALL";
 
@@ -104,11 +105,18 @@ export default function useDeleteExpense() {
             !recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId).includes(expenseItem.expenseId),
         );
       });
+      toast.success("Expense removed.");
       return { expenseArrayBeforeOptimisticUpdate, blacklistExpenseArrayBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {
       queryClient.setQueryData(["expenseArray", email], context?.expenseArrayBeforeOptimisticUpdate);
       queryClient.setQueryData(["blacklistedExpenseArray", email], context?.blacklistExpenseArrayBeforeOptimisticUpdate);
+      toast.error(
+        "Oops! We couldn’t save your changes due to a network issue. We’ve restored your last settings. Please try again later.",
+        {
+          duration: 7_000,
+        },
+      );
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["blacklistedExpenseArray", email] });

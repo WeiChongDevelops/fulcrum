@@ -1,4 +1,4 @@
-import { TypeMatchConfirmationForm } from "./TypeMatchConfirmationForm.tsx";
+import { TypeMatchConfirmationForm } from "../../other/TypeMatchConfirmationForm.tsx";
 import TwoOptionModal from "../../other/TwoOptionModal.tsx";
 import {
   changeFormOrModalVisibility,

@@ -75,18 +75,22 @@ fun Application.configureAuthRouting() {
         }
 
         post("/api/login") {
-            val userCreds = call.receive<UserCredentials>()
-            val currentUser = supabase.gotrue.currentSessionOrNull()
-            if (currentUser == null) {
-                supabase.gotrue.loginWith(Email) {
-                    email = userCreds.email
-                    password = userCreds.password
+            try {
+                val userCreds = call.receive<UserCredentials>()
+                val currentUser = supabase.gotrue.currentSessionOrNull()
+                if (currentUser == null) {
+                    supabase.gotrue.loginWith(Email) {
+                        email = userCreds.email
+                        password = userCreds.password
+                    }
+                    supabase.gotrue.refreshCurrentSession()
+                    val loggedInUser = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
+                    call.respond(HttpStatusCode.OK, loggedInUser)
+                } else {
+                    call.respondSuccess("User already logged in.")
                 }
-                supabase.gotrue.refreshCurrentSession()
-                val loggedInUser = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
-                call.respond(HttpStatusCode.OK, loggedInUser)
-            } else {
-                call.respondSuccess("User already logged in.")
+            } catch (e: Exception) {
+                call.respondError("Credentials incorrect.")
             }
         }
 

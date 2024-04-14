@@ -5,6 +5,7 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { RegisterFormData } from "../../../util.ts";
 import useRegisterUser from "../../../hooks/mutations/auth/useRegisterUser.ts";
 import Loader from "../other/Loader.tsx";
+import { toast } from "sonner";
 
 /**
  * The registration page for the Fulcrum application.
@@ -28,6 +29,7 @@ export default function Register() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
+      toast.warning("Password does not match.");
       confirmPasswordField.current?.classList.add("invalid");
       setTimeout(() => {
         confirmPasswordField.current?.classList.remove("invalid");

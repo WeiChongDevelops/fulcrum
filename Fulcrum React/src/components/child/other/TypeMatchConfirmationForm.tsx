@@ -5,8 +5,9 @@ import {
   SetModalVisibility,
   SettingsFormVisibility,
   SettingsModalVisibility,
-} from "../../../../util.ts";
-import FulcrumButton from "../../other/FulcrumButton.tsx";
+} from "../../../util.ts";
+import FulcrumButton from "./FulcrumButton.tsx";
+import { toast } from "sonner";
 
 interface TypeMatchConfirmationFormProps {
   areYouSureMessage: string;
@@ -59,7 +60,7 @@ export function TypeMatchConfirmationForm({
       changeFormOrModalVisibility(setFormVisibility, formVisibility, false);
       changeFormOrModalVisibility(setModalVisibility, lastChanceModalVisibility, true);
     } else {
-      console.log("Input text not matching.");
+      toast.warning("Text does not match.");
     }
   }
 

@@ -72,7 +72,12 @@ export default function useCreateExpense() {
       };
     },
     onError: (_error, _variables, context) => {
-      toast.error("Data sync error encountered during expense creation.");
+      toast.error(
+        "Oops! We couldn’t save your changes due to a network issue. We’ve restored your last settings. Please try again later.",
+        {
+          duration: 7_000,
+        },
+      );
       queryClient.setQueryData(["budgetArray", email], context?.budgetArrayBeforeOptimisticUpdate);
       queryClient.setQueryData(["groupAndColourMap", email], context?.categoryDataMapBeforeOptimisticUpdate);
       queryClient.setQueryData(["expenseArray", email], context?.expenseArrayBeforeOptimisticUpdate);

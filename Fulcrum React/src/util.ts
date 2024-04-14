@@ -1,7 +1,6 @@
 import { ChangeEvent, createContext, Dispatch, SetStateAction } from "react";
 import { v4 as uuid } from "uuid";
 import { UseMutateFunction } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 // GLOBAL VARIABLES //
 
@@ -463,12 +462,13 @@ export async function handleExpenseCreation(newExpenseItem: ExpenseItemEntity): 
 
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting expense creation: ${response.status}`);
-      window.alert("Expense entry invalid.");
+      throw new Error(`HTTP error encountered when attempting expense creation: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
   } catch (e) {
     console.error(`Exception encountered when requesting expense creation: ${e}`);
+    throw e;
   }
 }
 
@@ -490,12 +490,13 @@ export async function handleBatchExpenseCreation(expensesToCreate: ExpenseItemEn
 
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting batch expense creation: ${response.status}`);
-      window.alert("Expense entry invalid.");
+      throw new Error(`HTTP error encountered when attempting batch expense creation: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
   } catch (e) {
     console.error(`Exception encountered when requesting batch expense creation: ${e}`);
+    throw e;
   }
 }
 
@@ -551,11 +552,13 @@ export async function handleExpenseUpdating(updatedExpenseItem: ExpenseItemEntit
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting expense update: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting expense update: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
   } catch (e) {
     console.error(`Exception encountered when requesting expense update: ${e}`);
+    throw e;
   }
 }
 
@@ -576,11 +579,13 @@ export async function handleExpenseDeletion(expenseId: string): Promise<void> {
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting expense deletion: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting expense deletion: ${response.status}`);
     } else {
       console.log(await response.json());
     }
   } catch (e) {
     console.error(`Exception encountered when requesting expense deletion: ${e}`);
+    throw e;
   }
 }
 
@@ -601,10 +606,12 @@ export async function handleBatchExpenseDeletion(expenseIdsToDelete: string[]): 
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when performing batch expense deletion: ${response.status}`);
+      throw new Error(`HTTP error encountered when performing batch expense deletion: ${response.status}`);
     }
     console.log(await response.json());
   } catch (e) {
     console.error(`Exception encountered when requesting batch expense deletion: ${e}`);
+    throw e;
   }
 }
 
@@ -632,12 +639,13 @@ export async function handleBudgetCreation(newBudgetItem: BudgetItemEntity): Pro
 
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting budget creation: ${response.status}`);
-      window.alert("Category name is invalid or already has assigned budget; or $999,999,999 limit exceeded.");
+      throw new Error(`HTTP error encountered when attempting budget creation: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
   } catch (e) {
     console.error(`Exception encountered when requesting budget creation: ${e}`);
+    throw e;
   }
 }
 
@@ -667,7 +675,7 @@ export async function getBudgetList(): Promise<BudgetItemEntity[]> {
     return responseData.sort(budgetSort);
   } catch (e) {
     console.error(`Exception encountered when requesting budget list retrieval: ${e}`);
-    throw new Error(`An error occurred while fetching the budget list: ${e}.`);
+    throw e;
   }
 }
 
@@ -693,13 +701,13 @@ export async function handleBudgetUpdating(originalCategory: string, updatedBudg
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting budget updating: ${response.status}`);
-      const responseData = await response.json();
-      console.log(responseData);
+      throw new Error(`HTTP error encountered when attempting budget updating: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
   } catch (e) {
     console.error(`Exception encountered when requesting budget updating: ${e}`);
+    throw e;
   }
 }
 
@@ -720,11 +728,13 @@ export async function handleBudgetDeletion(category: string): Promise<void> {
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting budget deletion: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting budget deletion: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
   } catch (e) {
     console.error(`Exception encountered when requesting budget deletion: ${e}`);
+    throw e;
   }
 }
 
@@ -748,12 +758,13 @@ export async function handleGroupCreation(newGroupItem: GroupItemEntity): Promis
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting group creation: ${response.status}`);
-      window.alert("Group name is invalid or already exists.");
+      throw new Error(`HTTP error encountered when attempting group creation: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
   } catch (e) {
     console.error(`Exception encountered when requesting group creation: ${e}`);
+    throw e;
   }
 }
 
@@ -774,8 +785,7 @@ export async function getGroupList(): Promise<GroupItemEntity[]> {
       logoutOnClick().then(() => {
         window.location.href !== "/login" && (window.location.href = "/login");
       });
-    }
-    if (!response.ok) {
+    } else if (!response.ok) {
       console.error(`HTTP error when attempting group list retrieval: ${response.status}`);
       throw new Error(`A HTTP error occurred while fetching the group list.`);
     }
@@ -784,7 +794,7 @@ export async function getGroupList(): Promise<GroupItemEntity[]> {
     return responseData.sort(groupSort);
   } catch (e) {
     console.error(`Exception encountered when requesting group list retrieval: ${e}`);
-    throw new Error(`An error occurred while fetching the group list: ${e}.`);
+    throw e;
   }
 }
 
@@ -808,12 +818,13 @@ export async function handleGroupUpdating(originalGroupName: string, updatedGrou
     });
     if (!response.ok) {
       console.error(`HTTP error when attempting group update: ${response.status}`);
-      window.alert("Group name is invalid or already exists.");
+      throw new Error(`HTTP error when attempting group update: ${response.status}`);
     } else {
       console.log("Group successfully updated.");
     }
   } catch (e) {
     console.error(`Exception encountered when requesting group update: ${e}`);
+    throw e;
   }
 }
 
@@ -836,11 +847,13 @@ export async function handleGroupDeletion(groupName: string, keepContainedBudget
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting group deletion: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting group deletion: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
   } catch (e) {
     console.error(`Exception encountered when requesting group deletion: ${e}`);
+    throw e;
   }
 }
 
@@ -868,12 +881,13 @@ export async function handleRecurringExpenseCreation(newRecurringExpenseItem: Re
 
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting recurring expense creation: ${response.status}`);
-      window.alert("Expense entry invalid.");
+      throw new Error(`HTTP error encountered when attempting recurring expense creation: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
   } catch (e) {
     console.error(`Exception encountered when requesting recurring expense creation: ${e}`);
+    throw e;
   }
 }
 
@@ -904,7 +918,7 @@ export async function getRecurringExpenseList(): Promise<RecurringExpenseItemEnt
     return responseData.sort(expenseSort);
   } catch (e) {
     console.error(`Exception encountered when requesting recurring expense list retrieval: ${e}`);
-    throw new Error(`An error occurred while fetching the recurring expense list: ${e}.`);
+    throw e;
   }
 }
 
@@ -931,11 +945,13 @@ export async function handleRecurringExpenseUpdating(
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting recurring expense deletion: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting recurring expense deletion: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
   } catch (e) {
     console.error(`Exception encountered when requesting recurring expense deletion: ${e}`);
+    throw e;
   }
 }
 
@@ -957,11 +973,13 @@ export async function handleRecurringExpenseDeletion(recurringExpenseId: string)
 
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting recurring expense deletion: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting recurring expense deletion: ${response.status}`);
     }
     const responseData = await response.json();
     console.log(responseData);
   } catch (e) {
     console.error(`Exception encountered when requesting recurring expense deletion: ${e}`);
+    throw e;
   }
 }
 
@@ -988,12 +1006,14 @@ export async function handleBlacklistedExpenseCreation(
 
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting blacklist entry creation: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting blacklist entry creation: ${response.status}`);
     } else {
       const responseData = await response.json();
       console.log(responseData);
     }
   } catch (e) {
     console.error(`Exception encountered when requesting blacklist entry creation: ${e}`);
+    throw e;
   }
 }
 
@@ -1019,16 +1039,18 @@ export async function handleBatchBlacklistedExpenseCreation(
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting batch blacklist entry creation: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting batch blacklist entry creation: ${response.status}`);
     }
     console.log(await response.json());
   } catch (e) {
     console.error(`Exception encountered when requesting batch blacklist entry creation: ${e}`);
+    throw e;
   }
 }
 
 /**
  * Retrieves the list of removed recurring expense instances from the server, for blacklist purposes.
- * @returns An array of removed recurring expense instances, or an empty array in case of an error.
+ * @returns An array of removed recurring expense instances.
  */
 export async function getBlacklistedExpenses(): Promise<BlacklistedExpenseItemEntity[]> {
   try {
@@ -1041,13 +1063,14 @@ export async function getBlacklistedExpenses(): Promise<BlacklistedExpenseItemEn
 
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting blacklist retrieval: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting blacklist retrieval: ${response.status}`);
     }
     const blacklistedExpenses = await response.json();
     console.log({ Blacklisted_Expenses_Retrieved: blacklistedExpenses });
     return blacklistedExpenses;
   } catch (e) {
     console.error(`Exception encountered when requesting blacklist retrieval: ${e}`);
-    return [];
+    throw e;
   }
 }
 
@@ -1067,14 +1090,14 @@ export async function getTotalIncome(): Promise<number> {
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting total income retrieval: ${response.status}`);
-      throw new Error(`A HTTP error occurred while fetching total income.`);
+      throw new Error(`HTTP error encountered when attempting total income retrieval: ${response.status}`);
     }
     const totalIncome = await response.json();
     console.log(totalIncome);
     return totalIncome.totalIncome;
   } catch (e) {
     console.error(`Exception encountered when requesting total income retrieval: ${e}`);
-    throw new Error(`An error occurred while fetching total income: ${e}.`);
+    throw e;
   }
 }
 
@@ -1095,11 +1118,13 @@ export async function handleTotalIncomeUpdating(newTotalIncome: number): Promise
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting total income wipe: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting total income wipe: ${response.status}`);
     } else {
       console.log(await response.json());
     }
   } catch (e) {
     console.error(`Exception encountered when requesting total income wipe: ${e}`);
+    throw e;
   }
 }
 
@@ -1118,10 +1143,12 @@ export async function handleWipeExpenses(): Promise<void> {
     });
     if (!response.ok) {
       console.error(`HTTP error when attempting expense wipe: ${response.status}`);
+      throw new Error(`HTTP error when attempting expense wipe: ${response.status}`);
     }
     console.log(await response.json());
   } catch (e) {
     console.error(`Exception encountered when requesting expense wipe: ${e}`);
+    throw e;
   }
 }
 
@@ -1138,10 +1165,12 @@ export async function handleWipeBudget(): Promise<void> {
     });
     if (!response.ok) {
       console.error(`HTTP error encountered when attempting budget wipe: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting budget wipe: ${response.status}`);
     }
     console.log(await response.json());
   } catch (e) {
     console.error(`Exception encountered when requesting budget wipe: ${e}`);
+    throw e;
   }
 }
 
@@ -1168,16 +1197,13 @@ export async function handleUserRegistration(email: string, password: string): P
       console.error(
         `User with given email may already exist. HTTP error encountered when attempting user registration: ${response.status}`,
       );
-      toast.error("This email is already in use.");
-      console.log(await response.json());
-    } else {
-      toast.success("Successful registration.");
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 1000);
+      throw new Error(
+        `User with given email may already exist. HTTP error encountered when attempting user registration: ${response.status}`,
+      );
     }
   } catch (error) {
     console.error("Error:", error);
+    throw e;
   }
 }
 
@@ -1197,19 +1223,13 @@ export async function handleUserLogin(email: string, password: string): Promise<
         password: password,
       }),
     });
-    if (response.status === 500) {
+    if (response.status === 400) {
       console.error(`Credentials may be incorrect. HTTP error encountered when attempting login: ${response.status}`);
-      window.alert("Please double-check your credentials.");
-    } else {
-      if (response.status === 400) {
-        console.error(`User may already be logged in. HTTP error encountered when attempting login: ${response.status}`);
-      } else {
-        console.log("Login was successful.");
-        console.log(response.json());
-      }
+      throw new Error(`Credentials may be incorrect. HTTP error encountered when attempting login: ${response.status}`);
     }
   } catch (e) {
     console.error(`Exception encountered when requesting user login: ${e}`);
+    throw e;
   }
 }
 

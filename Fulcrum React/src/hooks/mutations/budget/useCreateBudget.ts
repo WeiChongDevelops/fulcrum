@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { BudgetItemEntity, EmailContext, GroupItemEntity, groupSort, handleBudgetCreation } from "../../../util.ts";
+import { toast } from "sonner";
 
 export default function useCreateBudget() {
   const queryClient = useQueryClient();
@@ -28,12 +29,16 @@ export default function useCreateBudget() {
       await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
         return [...prevBudgetCache, budgetCreationMutationProps.newBudgetItem];
       });
+      toast.success("Budget created.");
 
       return { budgetArrayBeforeOptimisticUpdate, groupArrayBeforeOptimisticUpdate };
     },
     onError: async (_error, _variables, context) => {
       await queryClient.setQueryData(["budgetArray", email], context?.budgetArrayBeforeOptimisticUpdate);
       await queryClient.setQueryData(["groupArray", email], context?.groupArrayBeforeOptimisticUpdate);
+      toast.error("New budget is invalid. The new budget name may be already in use.", {
+        duration: 7_000,
+      });
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });

@@ -9,6 +9,7 @@ import {
   handleRecurringExpenseCreation,
   RecurringExpenseItemEntity,
 } from "../../../util.ts";
+import { toast } from "sonner";
 
 interface RecurringExpenseCreationMutationProps {
   newRecurringExpenseItem: RecurringExpenseItemEntity;
@@ -61,7 +62,7 @@ export default function useCreateRecurringExpense() {
           return [recurringExpenseCreationMutationProps.newRecurringExpenseItem, ...prevRecurringExpenseCache];
         },
       );
-
+      toast.success("Recurring expense created.");
       return {
         budgetArrayBeforeOptimisticUpdate,
         recurringExpenseArrayBeforeOptimisticUpdate,
@@ -72,11 +73,16 @@ export default function useCreateRecurringExpense() {
       await queryClient.setQueryData(["budgetArray", email], context?.budgetArrayBeforeOptimisticUpdate);
       await queryClient.setQueryData(["groupAndColourMap", email], context?.categoryDataMapBeforeOptimisticUpdate);
       queryClient.setQueryData(["recurringExpenseArray", email], context?.recurringExpenseArrayBeforeOptimisticUpdate);
+      toast.error(
+        "Oops! We couldn’t save your changes due to a network issue. We’ve restored your last settings. Please try again later.",
+        {
+          duration: 7_000,
+        },
+      );
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
       await queryClient.invalidateQueries({ queryKey: ["groupAndColourMap", email] });
-      // await queryClient.invalidateQueries({ queryKey: ["recurringExpenseArray", email] });
       // Invalidation of recurringExpenseArray excluded as it causes visual update bugs for optimistic updates
       // Specifically, updateRecurringExpenseInstances is recalled while the first instance is still running.
     },

@@ -1,6 +1,7 @@
 import { BudgetItemEntity, EmailContext, GroupItemEntity, handleGroupUpdating } from "../../../util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
+import { toast } from "sonner";
 
 interface GroupUpdatingMutationProps {
   originalGroupName: string;
@@ -34,11 +35,15 @@ export default function useUpdateGroup() {
             : budgetItem,
         );
       });
+      toast.success("Budget group updated.");
       return { groupArrayBeforeOptimisticUpdate, budgetBeforeOptimisticUpdate };
     },
     onError: async (_error, _variables, context) => {
       await queryClient.setQueryData(["groupArray", email], context?.groupArrayBeforeOptimisticUpdate);
       await queryClient.setQueryData(["budgetArray", email], context?.budgetBeforeOptimisticUpdate);
+      toast.error("Updated budget group is invalid. The new group name may be already in use.", {
+        duration: 7_000,
+      });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["groupArray", email] });

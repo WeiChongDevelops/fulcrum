@@ -47,16 +47,6 @@ fun Application.configureExpenseRouting() {
                     timestamp = expenseCreateRequest.timestamp,
                     recurringExpenseId = expenseCreateRequest.recurringExpenseId
                 )
-//                val insertedItem = supabase.postgrest["expenses"].insert(
-//                    itemToInsert,
-//                    returning = Returning.REPRESENTATION
-//                )
-//
-//                if (insertedItem.body == null) {
-//                    call.respondError("Expense creation failed.")
-//                } else {
-//                    call.respondSuccess("Expense creation successful.")
-//                }
 
                 executeExpenseCreation(itemToInsert, call)
                 call.respondSuccess("Expense creation successful.")

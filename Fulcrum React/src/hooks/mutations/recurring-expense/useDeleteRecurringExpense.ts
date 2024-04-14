@@ -9,6 +9,7 @@ import {
   Y2K,
 } from "../../../util.ts";
 import { useContext } from "react";
+import { toast } from "sonner";
 
 interface RecurringExpenseDeletionMutationProps {
   recurringExpenseId: string;
@@ -44,10 +45,17 @@ export default function useDeleteRecurringExpense() {
           );
         },
       );
+      toast.success("Recurring expense removed.");
       return { recurringExpenseArrayBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {
       queryClient.setQueryData(["recurringExpenseArray", email], context?.recurringExpenseArrayBeforeOptimisticUpdate);
+      toast.error(
+        "Oops! We couldn’t save your changes due to a network issue. We’ve restored your last settings. Please try again later.",
+        {
+          duration: 7_000,
+        },
+      );
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["recurringExpenseArray", email] });
