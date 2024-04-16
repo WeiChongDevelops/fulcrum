@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
+import { addFormExitListeners } from "../../../utility/util.ts";
+import FulcrumButton from "./FulcrumButton.tsx";
 import {
-  addFormExitListeners,
   BudgetModalVisibility,
   ExpenseModalVisibility,
   RecurringExpenseModalVisibility,
   SetModalVisibility,
   SettingsModalVisibility,
-} from "../../../util.ts";
-import FulcrumButton from "./FulcrumButton.tsx";
+} from "../../../utility/types.ts";
 
 interface TwoOptionModalProps {
   optionOneText: string;

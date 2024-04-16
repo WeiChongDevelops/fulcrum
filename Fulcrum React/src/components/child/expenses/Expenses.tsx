@@ -1,15 +1,4 @@
-import {
-  BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
-  ExpenseItemEntity,
-  GroupItemEntity,
-  PublicUserData,
-  BlacklistedExpenseItemEntity,
-  RecurringExpenseItemEntity,
-  MonthExpenseGroupEntity,
-  getStructuredExpenseData,
-  updateRecurringExpenseInstances,
-} from "../../../util.ts";
+import { getStructuredExpenseData, updateRecurringExpenseInstances } from "../../../utility/util.ts";
 import "../../../css/Expense.css";
 import ExpenseMonthCarousel from "./main-data-hierarchy/ExpenseMonthCarousel.tsx";
 import ExpenseModalsAndForms from "./ExpenseModalsAndForms.tsx";
@@ -19,6 +8,16 @@ import Loader from "../other/Loader.tsx";
 import { useMemo, useState } from "react";
 import useBatchDeleteExpenses from "../../../hooks/mutations/expense/useBatchDeleteExpenses.ts";
 import useBatchCreateExpenses from "../../../hooks/mutations/expense/useBatchCreateExpenses.ts";
+import {
+  BlacklistedExpenseItemEntity,
+  BudgetItemEntity,
+  CategoryToIconGroupAndColourMap,
+  ExpenseItemEntity,
+  GroupItemEntity,
+  MonthExpenseGroupEntity,
+  PublicUserData,
+  RecurringExpenseItemEntity,
+} from "../../../utility/types.ts";
 
 interface ExpensesProps {
   publicUserData: PublicUserData;

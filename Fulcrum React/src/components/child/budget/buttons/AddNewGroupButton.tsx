@@ -1,4 +1,5 @@
-import { BudgetFormVisibility, changeFormOrModalVisibility, SetFormVisibility } from "../../../../util.ts";
+import { BudgetFormVisibility, SetFormVisibility } from "../../../../utility/types.ts";
+import { changeFormOrModalVisibility } from "../../../../utility/util.ts";
 
 interface AddNewGroupButtonProps {
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;

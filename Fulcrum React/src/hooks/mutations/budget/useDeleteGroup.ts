@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
-import { EmailContext, GroupItemEntity, handleGroupDeletion } from "../../../util.ts";
 import { toast } from "sonner";
+import { EmailContext } from "../../../utility/util.ts";
+import { handleGroupDeletion } from "../../../utility/api.ts";
+import { GroupItemEntity } from "../../../utility/types.ts";
 
 interface GroupDeletionProps {
   groupToDelete: string;

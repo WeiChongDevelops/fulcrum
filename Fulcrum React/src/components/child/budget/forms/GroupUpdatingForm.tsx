@@ -2,15 +2,12 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
   addColourSelectionFunctionality,
   addFormExitListeners,
-  BasicGroupData,
-  BudgetFormVisibility,
   changeFormOrModalVisibility,
-  GroupItemEntity,
-  SetFormVisibility,
-} from "../../../../util.ts";
+} from "../../../../utility/util.ts";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
 import useUpdateGroup from "../../../../hooks/mutations/budget/useUpdateGroup.ts";
+import { BasicGroupData, BudgetFormVisibility, GroupItemEntity, SetFormVisibility } from "../../../../utility/types.ts";
 
 interface GroupUpdatingFormProps {
   oldGroupBeingEdited: { oldColour: string; oldGroupName: string };

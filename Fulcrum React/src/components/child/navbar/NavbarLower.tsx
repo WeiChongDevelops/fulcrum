@@ -1,4 +1,4 @@
-import { getWindowLocation } from "../../../util.ts";
+import { getWindowLocation } from "../../../utility/util.ts";
 import { useState } from "react";
 import PageSelectionButton from "./PageSelectionButton.tsx";
 

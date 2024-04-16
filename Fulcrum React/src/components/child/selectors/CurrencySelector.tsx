@@ -1,6 +1,7 @@
-import { currencyOptions, PublicUserData } from "../../../util.ts";
+import { currencyOptions } from "../../../utility/util.ts";
 import FulcrumButton from "../other/FulcrumButton.tsx";
 import useUpdatePublicUserData from "../../../hooks/mutations/other/useUpdatePublicUserData.ts";
+import { PublicUserData } from "../../../utility/types.ts";
 
 interface CurrencySelectorProps {
   publicUserData: PublicUserData;

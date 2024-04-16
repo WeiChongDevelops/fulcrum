@@ -1,7 +1,9 @@
-import { BudgetItemEntity, EmailContext, GroupItemEntity, groupSort, handleBudgetUpdating } from "../../../util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
+import { BudgetItemEntity, GroupItemEntity } from "../../../utility/types.ts";
+import { EmailContext, groupSort } from "../../../utility/util.ts";
+import { handleBudgetUpdating } from "../../../utility/api.ts";
 
 interface BudgetUpdatingMutationProps {
   originalCategory: string;

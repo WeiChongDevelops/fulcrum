@@ -1,15 +1,15 @@
 import { TypeMatchConfirmationForm } from "../../other/TypeMatchConfirmationForm.tsx";
 import TwoOptionModal from "../../other/TwoOptionModal.tsx";
+import { changeFormOrModalVisibility } from "../../../../utility/util.ts";
+import useWipeBudget from "../../../../hooks/mutations/budget/useWipeBudget.ts";
+import useWipeExpenses from "../../../../hooks/mutations/expense/useWipeExpenses.ts";
+import useResetBudget from "../../../../hooks/mutations/budget/useResetBudget.ts";
 import {
-  changeFormOrModalVisibility,
   SetFormVisibility,
   SetModalVisibility,
   SettingsFormVisibility,
   SettingsModalVisibility,
-} from "../../../../util.ts";
-import useWipeBudget from "../../../../hooks/mutations/budget/useWipeBudget.ts";
-import useWipeExpenses from "../../../../hooks/mutations/expense/useWipeExpenses.ts";
-import useResetBudget from "../../../../hooks/mutations/budget/useResetBudget.ts";
+} from "../../../../utility/types.ts";
 
 interface SettingsModalsAndFormsProps {
   settingsFormVisibility: SettingsFormVisibility;

@@ -13,7 +13,7 @@ import Home from "../child/home/Home.tsx";
 import { useGlobalAppData } from "../../hooks/initialisations/useGlobalAppData.ts";
 import Loader from "../child/other/Loader.tsx";
 import FulcrumErrorPage from "../child/other/FulcrumErrorPage.tsx";
-import { EmailContext } from "../../util.ts";
+import { EmailContext } from "../../utility/util.ts";
 import { ErrorBoundary } from "./ErrorBoundary.tsx";
 import { Toaster } from "sonner";
 

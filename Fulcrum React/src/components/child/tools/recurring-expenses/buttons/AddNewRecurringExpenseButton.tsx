@@ -1,4 +1,4 @@
-import { RecurringExpenseFormVisibility, SetFormVisibility } from "../../../../../util.ts";
+import { RecurringExpenseFormVisibility, SetFormVisibility } from "../../../../../utility/types.ts";
 
 interface AddNewRecurringExpenseButtonProps {
   setRecurringExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility>;

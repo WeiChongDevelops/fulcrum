@@ -3,20 +3,20 @@ import BudgetUpdatingForm from "./forms/BudgetUpdatingForm.tsx";
 import GroupCreationForm from "./forms/GroupCreationForm.tsx";
 import GroupUpdatingForm from "./forms/GroupUpdatingForm.tsx";
 import TwoOptionModal from "../other/TwoOptionModal.tsx";
+import { changeFormOrModalVisibility } from "../../../utility/util.ts";
+import useDeleteGroup from "../../../hooks/mutations/budget/useDeleteGroup.ts";
+import useDeleteBudget from "../../../hooks/mutations/budget/useDeleteBudget.ts";
+import Loader from "../other/Loader.tsx";
+import { useEffect } from "react";
 import {
   BudgetFormVisibility,
   BudgetModalVisibility,
-  changeFormOrModalVisibility,
   GroupItemEntity,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
   SetFormVisibility,
   SetModalVisibility,
-} from "../../../util.ts";
-import useDeleteGroup from "../../../hooks/mutations/budget/useDeleteGroup.ts";
-import useDeleteBudget from "../../../hooks/mutations/budget/useDeleteBudget.ts";
-import Loader from "../other/Loader.tsx";
-import { useEffect } from "react";
+} from "../../../utility/types.ts";
 
 interface ModalsAndFormsProps {
   budgetFormVisibility: BudgetFormVisibility;

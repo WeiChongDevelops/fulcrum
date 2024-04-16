@@ -1,16 +1,18 @@
 import "/src/css/Budget.css";
 import {
-  BudgetFormVisibility,
-  BudgetModalVisibility,
   changeFormOrModalVisibility,
   dynamicallySizeBudgetNumberDisplays,
   formatDollarAmountStatic,
+} from "../../../../utility/util.ts";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  BudgetFormVisibility,
+  BudgetModalVisibility,
   PreviousBudgetBeingEdited,
   PublicUserData,
   SetFormVisibility,
   SetModalVisibility,
-} from "../../../../util.ts";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+} from "../../../../utility/types.ts";
 
 interface BudgetTileProps {
   category: string;

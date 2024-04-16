@@ -1,23 +1,21 @@
 import ExpenseCreationForm from "./forms/ExpenseCreationForm.tsx";
-import {
-  BudgetItemEntity,
-  categoryListAsOptions,
-  ExpenseFormVisibility,
-  ExpenseItemEntity,
-  ExpenseModalVisibility,
-  getCurrencySymbol,
-  GroupItemEntity,
-  PreviousExpenseBeingEdited,
-  PublicUserData,
-  SetFormVisibility,
-  SetModalVisibility,
-  changeFormOrModalVisibility,
-} from "../../../util.ts";
+import { categoryListAsOptions, changeFormOrModalVisibility, getCurrencySymbol } from "../../../utility/util.ts";
 import ExpenseUpdatingForm from "./forms/ExpenseUpdatingForm.tsx";
 import RecurringExpenseInstanceUpdatingForm from "../tools/recurring-expenses/forms/RecurringExpenseInstanceUpdatingForm.tsx";
 import TwoOptionModal from "../other/TwoOptionModal.tsx";
 import ThreeOptionModal from "../other/ThreeOptionModal.tsx";
 import useDeleteExpense from "../../../hooks/mutations/expense/useDeleteExpense.ts";
+import {
+  BudgetItemEntity,
+  ExpenseFormVisibility,
+  ExpenseItemEntity,
+  ExpenseModalVisibility,
+  GroupItemEntity,
+  PreviousExpenseBeingEdited,
+  PublicUserData,
+  SetFormVisibility,
+  SetModalVisibility,
+} from "../../../utility/types.ts";
 
 interface ExpenseModalsAndFormsProps {
   expenseFormVisibility: ExpenseFormVisibility;

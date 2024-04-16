@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { handleUserLogin, LoginFormData } from "../../../util.ts";
 import { toast } from "sonner";
+import { LoginFormData } from "../../../utility/types.ts";
+import { handleUserLogin } from "../../../utility/api.ts";
 
 export default function useLoginUser() {
   return useMutation({

@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  checkForOpenModalOrForm,
-  ExpenseItemEntity,
-  ExpenseModalVisibility,
-  PreviousExpenseBeingEdited,
-} from "../../util.ts";
+import { checkForOpenModalOrForm } from "../../utility/util.ts";
+import { ExpenseItemEntity, ExpenseModalVisibility, PreviousExpenseBeingEdited } from "../../utility/types.ts";
 
 export default function useInitialExpenseData() {
   const [expenseFormVisibility, setExpenseFormVisibility] = useState({

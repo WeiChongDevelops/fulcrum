@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { PublicUserData } from "../../../util.ts";
 import useUpdatePublicUserData from "../../../hooks/mutations/other/useUpdatePublicUserData.ts";
+import { PublicUserData } from "../../../utility/types.ts";
 
 interface AccessibilityToggleProps {
   publicUserData: PublicUserData;

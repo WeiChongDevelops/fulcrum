@@ -1,24 +1,26 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
+  addFormExitListeners,
   addIconSelectionFunctionality,
-  BudgetFormVisibility,
-  BudgetItemEntity,
-  BudgetUpdatingFormData,
+  changeFormOrModalVisibility,
   colourStyles,
   getColourOfGroup,
-  groupListAsOptions,
-  GroupItemEntity,
-  handleInputChangeOnFormWithAmount,
-  SetFormVisibility,
-  changeFormOrModalVisibility,
-  PreviousBudgetBeingEdited,
   getRandomGroupColour,
-  addFormExitListeners,
-} from "../../../../util.ts";
+  groupListAsOptions,
+  handleInputChangeOnFormWithAmount,
+} from "../../../../utility/util.ts";
 import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
 import useUpdateBudget from "../../../../hooks/mutations/budget/useUpdateBudget.ts";
+import {
+  BudgetFormVisibility,
+  BudgetItemEntity,
+  BudgetUpdatingFormData,
+  GroupItemEntity,
+  PreviousBudgetBeingEdited,
+  SetFormVisibility,
+} from "../../../../utility/types.ts";
 interface BudgetUpdatingFormProps {
   oldBudgetBeingEdited: PreviousBudgetBeingEdited;
   groupArray: GroupItemEntity[];

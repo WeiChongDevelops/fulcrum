@@ -1,10 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import {
-  changeFormOrModalVisibility,
-  ExpenseFormVisibility,
-  MonthExpenseGroupEntity,
-  SetFormVisibility,
-} from "../../../../util.ts";
+import { changeFormOrModalVisibility } from "../../../../utility/util.ts";
+import { ExpenseFormVisibility, MonthExpenseGroupEntity, SetFormVisibility } from "../../../../utility/types.ts";
 
 interface AddNewExpenseButtonProps {
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;

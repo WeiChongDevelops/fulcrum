@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { EmailContext, handleTotalIncomeUpdating } from "../../../util.ts";
 import { useContext } from "react";
 import { toast } from "sonner";
+import { EmailContext } from "../../../utility/util.ts";
+import { handleTotalIncomeUpdating } from "../../../utility/api.ts";
 
 export default function useUpdateTotalIncome() {
   const queryClient = useQueryClient();

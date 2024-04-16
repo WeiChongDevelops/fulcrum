@@ -1,5 +1,6 @@
 import RotateLoader from "react-spinners/RotateLoader";
-import { loaderCssOverride } from "../../../util.ts";
+import {} from "../../../utility/util.ts";
+import { loaderCssOverride } from "../../../utility/types.ts";
 
 interface LoaderProps {
   isLoading: boolean;

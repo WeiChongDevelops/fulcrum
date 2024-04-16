@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { handleUserRegistration, RegisterFormData } from "../../../util.ts";
 import { toast } from "sonner";
+import { RegisterFormData } from "../../../utility/types.ts";
+import { handleUserRegistration } from "../../../utility/api.ts";
 
 export default function useRegisterUser() {
   return useMutation({

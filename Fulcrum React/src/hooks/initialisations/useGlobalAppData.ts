@@ -1,21 +1,23 @@
+import { getGroupAndColourMap } from "../../utility/util.ts";
+import { useQueries, useQuery, UseQueryResult } from "@tanstack/react-query";
+import {
+  getBlacklistedExpenses,
+  getBudgetList,
+  getExpenseList,
+  getGroupList,
+  getPublicUserData,
+  getRecurringExpenseList,
+  getSessionEmailOrNull,
+} from "../../utility/api.ts";
 import {
   BlacklistedExpenseItemEntity,
   BudgetItemEntity,
   CategoryToIconGroupAndColourMap,
   ExpenseItemEntity,
-  getBlacklistedExpenses,
-  getBudgetList,
-  getExpenseList,
-  getGroupAndColourMap,
-  getGroupList,
-  getPublicUserData,
-  getRecurringExpenseList,
-  getSessionEmailOrNull,
   GroupItemEntity,
   PublicUserData,
   RecurringExpenseItemEntity,
-} from "../../util.ts";
-import { useQueries, useQuery, UseQueryResult } from "@tanstack/react-query";
+} from "../../utility/types.ts";
 
 export function useGlobalAppData() {
   const sessionStoredProfileIcon = sessionStorage.getItem("profileIconFileName");

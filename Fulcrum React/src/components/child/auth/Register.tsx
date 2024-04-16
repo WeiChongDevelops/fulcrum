@@ -2,10 +2,10 @@ import FulcrumButton from "../other/FulcrumButton.tsx";
 import "../../../css/App.css";
 import "../../../css/Auth.css";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
-import { RegisterFormData } from "../../../util.ts";
 import useRegisterUser from "../../../hooks/mutations/auth/useRegisterUser.ts";
 import Loader from "../other/Loader.tsx";
 import { toast } from "sonner";
+import { RegisterFormData } from "../../../utility/types.ts";
 
 /**
  * The registration page for the Fulcrum application.

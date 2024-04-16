@@ -1,19 +1,18 @@
+import { formatDate, formatDollarAmountStatic } from "../../../../utility/util.ts";
+import { Dispatch, SetStateAction } from "react";
+import ExpenseList from "./ExpenseList.tsx";
+import "../../../../css/Expense.css";
 import {
   CategoryToIconGroupAndColourMap,
   DayExpenseGroupEntity,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseModalVisibility,
-  formatDate,
-  formatDollarAmountStatic,
   PreviousExpenseBeingEdited,
   PublicUserData,
   SetFormVisibility,
   SetModalVisibility,
-} from "../../../../util.ts";
-import { Dispatch, SetStateAction } from "react";
-import ExpenseList from "./ExpenseList.tsx";
-import "../../../../css/Expense.css";
+} from "../../../../utility/types.ts";
 
 interface ExpenseDayGroupProps {
   dayExpenseGroup: DayExpenseGroupEntity;

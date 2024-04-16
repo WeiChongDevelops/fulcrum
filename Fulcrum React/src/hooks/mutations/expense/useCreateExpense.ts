@@ -1,15 +1,9 @@
-import {
-  BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
-  DEFAULT_CATEGORY_ICON,
-  DEFAULT_GROUP_COLOUR,
-  EmailContext,
-  ExpenseItemEntity,
-  handleExpenseCreation,
-} from "../../../util.ts";
+import { DEFAULT_CATEGORY_ICON, DEFAULT_GROUP_COLOUR, EmailContext } from "../../../utility/util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
+import { BudgetItemEntity, CategoryToIconGroupAndColourMap, ExpenseItemEntity } from "../../../utility/types.ts";
+import { handleExpenseCreation } from "../../../utility/api.ts";
 
 export interface ExpenseCreationMutationProps {
   newExpenseItem: ExpenseItemEntity;

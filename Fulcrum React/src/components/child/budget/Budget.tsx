@@ -1,12 +1,4 @@
-import {
-  BudgetItemEntity,
-  ExpenseItemEntity,
-  getTotalAmountBudgeted,
-  GroupItemEntity,
-  PublicUserData,
-  getCurrencySymbol,
-  isCurrentMonth,
-} from "../../../util.ts";
+import { getTotalAmountBudgeted, getCurrencySymbol, isCurrentMonth } from "../../../utility/util.ts";
 import { useEffect, useMemo } from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
@@ -20,6 +12,7 @@ import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 import useInitialBudgetData from "../../../hooks/initialisations/useInitialBudgetData.ts";
 import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
 import useAnimationData from "../../../hooks/initialisations/useAnimationData.ts";
+import { BudgetItemEntity, ExpenseItemEntity, GroupItemEntity, PublicUserData } from "../../../utility/types.ts";
 
 interface BudgetProps {
   publicUserData: PublicUserData;

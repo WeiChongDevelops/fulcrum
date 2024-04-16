@@ -1,7 +1,9 @@
 import { useContext } from "react";
-import { EmailContext, ExpenseItemEntity, handleExpenseUpdating } from "../../../util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { ExpenseItemEntity } from "../../../utility/types.ts";
+import { EmailContext } from "../../../utility/util.ts";
+import { handleExpenseUpdating } from "../../../utility/api.ts";
 
 export default function useUpdateExpense() {
   const email = useContext(EmailContext);

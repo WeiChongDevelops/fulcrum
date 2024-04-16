@@ -1,22 +1,13 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
-  BudgetItemEntity,
-  ExpenseCreationFormData,
-  ExpenseItemEntity,
-  SelectorOptionsFormattedData,
-  colourStyles,
-  handleInputChangeOnFormWithAmount,
-  RecurringExpenseItemEntity,
   recurringFrequencyOptions,
-  Value,
-  RecurringExpenseFormVisibility,
-  ExpenseFormVisibility,
-  SetFormVisibility,
   DEFAULT_CATEGORY_ICON,
   DEFAULT_CATEGORY_GROUP,
   addFormExitListeners,
-} from "../../../../util.ts";
+  handleInputChangeOnFormWithAmount,
+  colourStyles,
+} from "../../../../utility/util.ts";
 import { v4 as uuid } from "uuid";
 import Select from "react-select/creatable";
 import DatePicker from "react-date-picker";
@@ -25,6 +16,17 @@ import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../selectors/CategorySelector.tsx";
 import useCreateExpense from "../../../../hooks/mutations/expense/useCreateExpense.ts";
 import useCreateRecurringExpense from "../../../../hooks/mutations/recurring-expense/useCreateRecurringExpense.ts";
+import {
+  BudgetItemEntity,
+  ExpenseCreationFormData,
+  ExpenseFormVisibility,
+  ExpenseItemEntity,
+  RecurringExpenseFormVisibility,
+  RecurringExpenseItemEntity,
+  SelectorOptionsFormattedData,
+  SetFormVisibility,
+  Value,
+} from "../../../../utility/types.ts";
 
 interface ExpenseCreationFormProps {
   setExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility> | SetFormVisibility<ExpenseFormVisibility>;

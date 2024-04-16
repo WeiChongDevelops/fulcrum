@@ -1,17 +1,15 @@
 import "/src/css/Budget.css";
+import { changeFormOrModalVisibility, DEFAULT_CATEGORY_GROUP, formatDollarAmountStatic } from "../../../../utility/util.ts";
+import { Dispatch, SetStateAction } from "react";
 import {
-  changeFormOrModalVisibility,
-  DEFAULT_CATEGORY_GROUP,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseModalVisibility,
-  formatDollarAmountStatic,
   PreviousExpenseBeingEdited,
   PublicUserData,
   SetFormVisibility,
   SetModalVisibility,
-} from "../../../../util.ts";
-import { Dispatch, SetStateAction } from "react";
+} from "../../../../utility/types.ts";
 
 interface ExpenseItemProps {
   expenseId: string;

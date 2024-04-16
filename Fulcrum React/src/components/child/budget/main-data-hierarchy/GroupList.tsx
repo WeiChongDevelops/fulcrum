@@ -1,3 +1,6 @@
+import {} from "../../../../utility/util.ts";
+import Group from "./Group.tsx";
+import { Dispatch, SetStateAction } from "react";
 import {
   BudgetFormVisibility,
   BudgetItemEntity,
@@ -9,9 +12,7 @@ import {
   PublicUserData,
   SetFormVisibility,
   SetModalVisibility,
-} from "../../../../util.ts";
-import Group from "./Group.tsx";
-import { Dispatch, SetStateAction } from "react";
+} from "../../../../utility/types.ts";
 
 interface GroupListProps {
   budgetArray: BudgetItemEntity[];

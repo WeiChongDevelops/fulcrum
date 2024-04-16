@@ -1,3 +1,8 @@
+import "../../../css/Tools.css";
+import { useState } from "react";
+import RecurringExpenses from "./recurring-expenses/RecurringExpenses.tsx";
+import Settings from "./settings/Settings.tsx";
+import ToolsHome from "./tools-home/ToolsHome.tsx";
 import {
   BudgetItemEntity,
   CategoryToIconGroupAndColourMap,
@@ -6,12 +11,7 @@ import {
   OpenToolsSection,
   PublicUserData,
   RecurringExpenseItemEntity,
-} from "../../../util.ts";
-import "../../../css/Tools.css";
-import { useState } from "react";
-import RecurringExpenses from "./recurring-expenses/RecurringExpenses.tsx";
-import Settings from "./settings/Settings.tsx";
-import ToolsHome from "./tools-home/ToolsHome.tsx";
+} from "../../../utility/types.ts";
 
 interface ToolsProps {
   publicUserData: PublicUserData;

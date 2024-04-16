@@ -1,7 +1,9 @@
-import { BudgetItemEntity, EmailContext, GroupItemEntity, handleGroupUpdating } from "../../../util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
+import { BudgetItemEntity, GroupItemEntity } from "../../../utility/types.ts";
+import { EmailContext } from "../../../utility/util.ts";
+import { handleGroupUpdating } from "../../../utility/api.ts";
 
 interface GroupUpdatingMutationProps {
   originalGroupName: string;

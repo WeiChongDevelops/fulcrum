@@ -6,13 +6,15 @@ import {
   formatDate,
   formatDollarAmountStatic,
   getNextRecurringInstance,
+} from "../../../../utility/util.ts";
+import { Dispatch, SetStateAction, useMemo } from "react";
+import {
   PreviousRecurringExpenseBeingEdited,
   PublicUserData,
   RecurringExpenseFormVisibility,
   RecurringExpenseFrequency,
   RecurringExpenseModalVisibility,
-} from "../../../../util.ts";
-import { Dispatch, SetStateAction, useMemo } from "react";
+} from "../../../../utility/types.ts";
 
 interface RecurringExpenseItemProps {
   recurringExpenseId: string;

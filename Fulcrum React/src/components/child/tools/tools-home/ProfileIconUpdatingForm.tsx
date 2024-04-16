@@ -1,15 +1,14 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { addIconSelectionFunctionality, changeFormOrModalVisibility } from "../../../../utility/util.ts";
+import FulcrumButton from "../../other/FulcrumButton.tsx";
+import ProfileIconSelector from "../../selectors/ProfileIconSelector.tsx";
+import useUpdatePublicUserData from "../../../../hooks/mutations/other/useUpdatePublicUserData.ts";
 import {
-  addIconSelectionFunctionality,
-  changeFormOrModalVisibility,
   ProfileIconUpdatingFormData,
   PublicUserData,
   SetFormVisibility,
   ToolsFormVisibility,
-} from "../../../../util.ts";
-import FulcrumButton from "../../other/FulcrumButton.tsx";
-import ProfileIconSelector from "../../selectors/ProfileIconSelector.tsx";
-import useUpdatePublicUserData from "../../../../hooks/mutations/other/useUpdatePublicUserData.ts";
+} from "../../../../utility/types.ts";
 interface ProfileIconUpdatingFormProps {
   oldIconFileName: string;
   setToolsFormVisibility: SetFormVisibility<ToolsFormVisibility>;

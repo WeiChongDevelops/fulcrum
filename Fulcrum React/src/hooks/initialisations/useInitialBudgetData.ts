@@ -1,16 +1,13 @@
 import { useContext, useEffect, useState } from "react";
+import { checkForOpenModalOrForm, EmailContext, getLineAngle } from "../../utility/util.ts";
+import { useQuery } from "@tanstack/react-query";
 import {
   BudgetFormVisibility,
   BudgetModalVisibility,
-  checkForOpenModalOrForm,
-  EmailContext,
-  getLineAngle,
-  getSessionEmailOrNull,
-  getTotalIncome,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
-} from "../../util.ts";
-import { useQuery } from "@tanstack/react-query";
+} from "../../utility/types.ts";
+import { getSessionEmailOrNull, getTotalIncome } from "../../utility/api.ts";
 
 export default function useInitialBudgetData() {
   const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({

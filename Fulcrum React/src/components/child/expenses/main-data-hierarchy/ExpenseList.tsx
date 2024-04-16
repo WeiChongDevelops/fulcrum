@@ -1,3 +1,6 @@
+import {} from "../../../../utility/util.ts";
+import ExpenseItem from "./ExpenseItem.tsx";
+import { Dispatch, SetStateAction } from "react";
 import {
   CategoryToIconGroupAndColourMap,
   ExpenseFormVisibility,
@@ -7,9 +10,7 @@ import {
   PublicUserData,
   SetFormVisibility,
   SetModalVisibility,
-} from "../../../../util.ts";
-import ExpenseItem from "./ExpenseItem.tsx";
-import { Dispatch, SetStateAction } from "react";
+} from "../../../../utility/types.ts";
 
 interface ExpenseListProps {
   dayExpenseArray: ExpenseItemEntity[];

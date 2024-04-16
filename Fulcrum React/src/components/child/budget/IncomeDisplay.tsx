@@ -1,6 +1,7 @@
-import { formatDollarAmountDynamic, formatDollarAmountStatic, PublicUserData } from "../../../util.ts";
+import { formatDollarAmountDynamic, formatDollarAmountStatic } from "../../../utility/util.ts";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import useUpdateTotalIncome from "../../../hooks/mutations/budget/useUpdateTotalIncome.ts";
+import { PublicUserData } from "../../../utility/types.ts";
 
 interface IncomeDisplayProps {
   totalIncome: number;

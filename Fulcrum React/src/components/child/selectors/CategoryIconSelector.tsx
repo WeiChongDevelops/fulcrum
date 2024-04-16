@@ -1,4 +1,4 @@
-import { categoryIconArray } from "../../../util.ts";
+import { categoryIconArray } from "../../../utility/util.ts";
 import "../../../css/Budget.css";
 
 /**

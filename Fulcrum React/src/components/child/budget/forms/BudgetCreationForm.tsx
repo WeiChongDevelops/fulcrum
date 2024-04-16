@@ -2,26 +2,28 @@ import FulcrumButton from "../../other/FulcrumButton.tsx";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
   addIconSelectionFunctionality,
-  BudgetFormVisibility,
-  BudgetItemEntity,
-  capitaliseFirstLetter,
-  colourStyles,
-  getColourOfGroup,
-  groupListAsOptions,
-  GroupItemEntity,
-  BudgetCreationFormData,
-  handleInputChangeOnFormWithAmount,
-  SetFormVisibility,
   changeFormOrModalVisibility,
   getRandomGroupColour,
   DEFAULT_CATEGORY_ICON,
   DEFAULT_CATEGORY_GROUP,
   addFormExitListeners,
-} from "../../../../util.ts";
+  handleInputChangeOnFormWithAmount,
+  capitaliseFirstLetter,
+  getColourOfGroup,
+  groupListAsOptions,
+  colourStyles,
+} from "../../../../utility/util.ts";
 import CreatableSelect from "react-select/creatable";
 import "../../../../css/Budget.css";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
 import useCreateBudget from "../../../../hooks/mutations/budget/useCreateBudget.ts";
+import {
+  BudgetCreationFormData,
+  BudgetFormVisibility,
+  BudgetItemEntity,
+  GroupItemEntity,
+  SetFormVisibility,
+} from "../../../../utility/types.ts";
 
 interface BudgetCreationFormProps {
   groupArray: GroupItemEntity[];

@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
-import { EmailContext, GroupItemEntity, groupSort, handleGroupCreation } from "../../../util.ts";
 import { toast } from "sonner";
+import { EmailContext, groupSort } from "../../../utility/util.ts";
+import { GroupItemEntity } from "../../../utility/types.ts";
+import { handleGroupCreation } from "../../../utility/api.ts";
 
 export default function useCreateGroup() {
   const queryClient = useQueryClient();

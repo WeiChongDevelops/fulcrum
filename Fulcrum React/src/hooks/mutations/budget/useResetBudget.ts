@@ -1,7 +1,8 @@
 import { useContext } from "react";
-import { EmailContext, handleRestoreDefaultBudget, handleWipeBudget } from "../../../util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { EmailContext } from "../../../utility/util.ts";
+import { handleRestoreDefaultBudget, handleWipeBudget } from "../../../utility/api.ts";
 
 export default function useResetBudget() {
   const email = useContext(EmailContext);

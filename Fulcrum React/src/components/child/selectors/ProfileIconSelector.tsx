@@ -1,4 +1,4 @@
-import { profileIconArray } from "../../../util.ts";
+import { profileIconArray } from "../../../utility/util.ts";
 import "../../../css/Tools.css";
 
 /**

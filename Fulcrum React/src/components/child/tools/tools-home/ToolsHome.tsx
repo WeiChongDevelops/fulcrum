@@ -1,14 +1,9 @@
-import {
-  changeFormOrModalVisibility,
-  EmailContext,
-  logoutOnClick,
-  OpenToolsSection,
-  PublicUserData,
-  ToolsFormVisibility,
-} from "../../../../util.ts";
+import { changeFormOrModalVisibility, EmailContext } from "../../../../utility/util.ts";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import ProfileIconUpdatingForm from "./ProfileIconUpdatingForm.tsx";
+import { OpenToolsSection, PublicUserData, ToolsFormVisibility } from "../../../../utility/types.ts";
+import { logoutOnClick } from "../../../../utility/api.ts";
 
 interface ToolsHomeProps {
   publicUserData: PublicUserData;

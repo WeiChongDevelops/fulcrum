@@ -1,20 +1,13 @@
 import FulcrumButton from "../../../other/FulcrumButton.tsx";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
-  SelectorOptionsFormattedData,
-  colourStyles,
-  handleInputChangeOnFormWithAmount,
-  RecurringExpenseItemEntity,
-  PreviousRecurringExpenseBeingEdited,
-  RecurringExpenseUpdatingFormData,
-  recurringFrequencyOptions,
-  capitaliseFirstLetter,
-  RecurringExpenseFormVisibility,
-  Value,
-  SetFormVisibility,
   changeFormOrModalVisibility,
   addFormExitListeners,
-} from "../../../../../util.ts";
+  handleInputChangeOnFormWithAmount,
+  capitaliseFirstLetter,
+  recurringFrequencyOptions,
+  colourStyles,
+} from "../../../../../utility/util.ts";
 import Select from "react-select";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
@@ -22,6 +15,15 @@ import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../../selectors/CategorySelector.tsx";
 import { v4 as uuid } from "uuid";
 import useUpdateRecurringExpense from "../../../../../hooks/mutations/recurring-expense/useUpdateRecurringExpense.ts";
+import {
+  PreviousRecurringExpenseBeingEdited,
+  RecurringExpenseFormVisibility,
+  RecurringExpenseItemEntity,
+  RecurringExpenseUpdatingFormData,
+  SelectorOptionsFormattedData,
+  SetFormVisibility,
+  Value,
+} from "../../../../../utility/types.ts";
 
 interface RecurringExpenseUpdatingFormProps {
   setRecurringExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility>;

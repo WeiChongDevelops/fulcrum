@@ -1,10 +1,7 @@
-import {
-  colourStyles,
-  ContactFormData,
-  queryTypeOptions,
-} from "../../../util.ts";
+import { colourStyles, queryTypeOptions } from "../../../utility/util.ts";
 import Select from "react-select";
 import { Dispatch, SetStateAction } from "react";
+import { ContactFormData } from "../../../utility/types.ts";
 
 interface QueryTypeSelectorProps {
   setFormData: Dispatch<SetStateAction<ContactFormData>>;
@@ -13,9 +10,7 @@ interface QueryTypeSelectorProps {
 /**
  * A creatable selector for the user to select a category for an expense.
  */
-export default function QueryTypeSelector({
-  setFormData,
-}: QueryTypeSelectorProps) {
+export default function QueryTypeSelector({ setFormData }: QueryTypeSelectorProps) {
   function handleInputChange(e: any) {
     setFormData((currentFormData: any) => ({
       ...currentFormData,

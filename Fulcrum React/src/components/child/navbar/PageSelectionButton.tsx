@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useMemo } from "react";
-import { capitaliseFirstLetter } from "../../../util.ts";
+import { capitaliseFirstLetter } from "../../../utility/util.ts";
 import PageSelectionButtonIcon from "./PageSelectionButtonIcon.tsx";
 
 interface PageSelectionButtonProps {

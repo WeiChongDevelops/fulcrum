@@ -1,7 +1,9 @@
 import { useContext } from "react";
-import { EmailContext, handlePublicUserDataUpdating, PublicUserData } from "../../../util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { EmailContext } from "../../../utility/util.ts";
+import { PublicUserData } from "../../../utility/types.ts";
+import { handlePublicUserDataUpdating } from "../../../utility/api.ts";
 
 export default function useUpdatePublicUserData() {
   const email = useContext(EmailContext);

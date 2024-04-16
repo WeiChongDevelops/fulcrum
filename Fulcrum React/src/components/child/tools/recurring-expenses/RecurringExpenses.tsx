@@ -1,13 +1,4 @@
-import {
-  BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
-  checkForOpenModalOrForm,
-  ExpenseItemEntity,
-  GroupItemEntity,
-  OpenToolsSection,
-  PublicUserData,
-  RecurringExpenseItemEntity,
-} from "../../../../util.ts";
+import { checkForOpenModalOrForm } from "../../../../utility/util.ts";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import AddNewRecurringExpenseButton from "./buttons/AddNewRecurringExpenseButton.tsx";
@@ -15,6 +6,15 @@ import RecurringExpenseModalsAndForms from "./RecurringExpenseModalsAndForms.tsx
 import ActiveFormClickShield from "../../other/ActiveFormClickShield.tsx";
 import RecurringExpenseItem from "./RecurringExpenseItem.tsx";
 import useInitialRecurringExpenseData from "../../../../hooks/initialisations/useInitialRecurringExpenseData.ts";
+import {
+  BudgetItemEntity,
+  CategoryToIconGroupAndColourMap,
+  ExpenseItemEntity,
+  GroupItemEntity,
+  OpenToolsSection,
+  PublicUserData,
+  RecurringExpenseItemEntity,
+} from "../../../../utility/types.ts";
 
 interface RecurringExpensesProps {
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;

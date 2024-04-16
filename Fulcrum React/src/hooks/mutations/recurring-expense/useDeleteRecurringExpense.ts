@@ -1,15 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  EmailContext,
-  ExpenseItemEntity,
-  getRecurringExpenseInstancesAfterDate,
-  handleBatchExpenseDeletion,
-  handleRecurringExpenseDeletion,
-  RecurringExpenseItemEntity,
-  Y2K,
-} from "../../../util.ts";
+import { EmailContext, getRecurringExpenseInstancesAfterDate, Y2K } from "../../../utility/util.ts";
 import { useContext } from "react";
 import { toast } from "sonner";
+import { ExpenseItemEntity, RecurringExpenseItemEntity } from "../../../utility/types.ts";
+import { handleBatchExpenseDeletion, handleRecurringExpenseDeletion } from "../../../utility/api.ts";
 
 interface RecurringExpenseDeletionMutationProps {
   recurringExpenseId: string;

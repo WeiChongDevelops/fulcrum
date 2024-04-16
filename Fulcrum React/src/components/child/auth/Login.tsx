@@ -2,9 +2,9 @@ import FulcrumButton from "../other/FulcrumButton.tsx";
 import "../../../css/App.css";
 import "../../../css/Auth.css";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { LoginFormData } from "../../../util.ts";
 import useLoginUser from "../../../hooks/mutations/auth/useLoginUser.ts";
 import Loader from "../other/Loader.tsx";
+import { LoginFormData } from "../../../utility/types.ts";
 
 /**
  * The login page for the Fulcrum application.

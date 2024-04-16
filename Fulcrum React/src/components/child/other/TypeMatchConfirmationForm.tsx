@@ -1,14 +1,13 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { addFormExitListeners, changeFormOrModalVisibility } from "../../../utility/util.ts";
+import FulcrumButton from "./FulcrumButton.tsx";
+import { toast } from "sonner";
 import {
-  addFormExitListeners,
-  changeFormOrModalVisibility,
   SetFormVisibility,
   SetModalVisibility,
   SettingsFormVisibility,
   SettingsModalVisibility,
-} from "../../../util.ts";
-import FulcrumButton from "./FulcrumButton.tsx";
-import { toast } from "sonner";
+} from "../../../utility/types.ts";
 
 interface TypeMatchConfirmationFormProps {
   areYouSureMessage: string;

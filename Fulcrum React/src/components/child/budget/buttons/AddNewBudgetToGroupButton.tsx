@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import { BudgetFormVisibility, changeFormOrModalVisibility, SetFormVisibility } from "../../../../util.ts";
-
+import { BudgetFormVisibility, SetFormVisibility } from "../../../../utility/types.ts";
+import { changeFormOrModalVisibility } from "../../../../utility/util.ts";
 interface AddNewBudgetToGroupButtonProps {
   setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
   groupNameOfNewItem: string;

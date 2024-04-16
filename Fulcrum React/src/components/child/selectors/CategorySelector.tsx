@@ -1,5 +1,9 @@
+import { colourStyles } from "../../../utility/util.ts";
+import CreatableSelect from "react-select/creatable";
+import { Dispatch, SetStateAction } from "react";
+import { components } from "react-select";
+import { InputProps } from "react-select";
 import {
-  colourStyles,
   ExpenseCreationFormData,
   ExpenseUpdatingFormData,
   PreviousExpenseBeingEdited,
@@ -7,11 +11,7 @@ import {
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
   SelectorOptionsFormattedData,
-} from "../../../util.ts";
-import CreatableSelect from "react-select/creatable";
-import { Dispatch, SetStateAction } from "react";
-import { components } from "react-select";
-import { InputProps } from "react-select";
+} from "../../../utility/types.ts";
 
 interface CategorySelectorProps {
   categoryOptions: SelectorOptionsFormattedData[];

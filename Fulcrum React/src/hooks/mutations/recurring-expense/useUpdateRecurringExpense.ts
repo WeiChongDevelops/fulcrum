@@ -1,7 +1,9 @@
 import { useContext } from "react";
-import { EmailContext, handleRecurringExpenseUpdating, RecurringExpenseItemEntity } from "../../../util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { EmailContext } from "../../../utility/util.ts";
+import { RecurringExpenseItemEntity } from "../../../utility/types.ts";
+import { handleRecurringExpenseUpdating } from "../../../utility/api.ts";
 
 export default function useUpdateRecurringExpense() {
   const email = useContext(EmailContext);

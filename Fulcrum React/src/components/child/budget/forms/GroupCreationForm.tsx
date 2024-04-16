@@ -2,18 +2,15 @@ import FulcrumButton from "../../other/FulcrumButton.tsx";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
   addColourSelectionFunctionality,
-  BasicGroupData,
-  BudgetFormVisibility,
-  capitaliseFirstLetter,
-  GroupItemEntity,
-  getRandomGroupColour,
-  SetFormVisibility,
   changeFormOrModalVisibility,
   addFormExitListeners,
-} from "../../../../util.ts";
+  getRandomGroupColour,
+  capitaliseFirstLetter,
+} from "../../../../utility/util.ts";
 import "../../../../css/Budget.css";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
 import useCreateGroup from "../../../../hooks/mutations/budget/useCreateGroup.ts";
+import { BasicGroupData, BudgetFormVisibility, GroupItemEntity, SetFormVisibility } from "../../../../utility/types.ts";
 
 interface GroupCreationFormProps {
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;

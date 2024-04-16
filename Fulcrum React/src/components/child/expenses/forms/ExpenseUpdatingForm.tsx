@@ -1,22 +1,24 @@
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
-  ExpenseItemEntity,
-  SelectorOptionsFormattedData,
-  ExpenseUpdatingFormData,
-  handleInputChangeOnFormWithAmount,
-  PreviousExpenseBeingEdited,
-  Value,
-  ExpenseFormVisibility,
-  SetFormVisibility,
   changeFormOrModalVisibility,
   addFormExitListeners,
-} from "../../../../util.ts";
+  handleInputChangeOnFormWithAmount,
+} from "../../../../utility/util.ts";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../selectors/CategorySelector.tsx";
 import useUpdateExpense from "../../../../hooks/mutations/expense/useUpdateExpense.ts";
+import {
+  ExpenseFormVisibility,
+  ExpenseItemEntity,
+  ExpenseUpdatingFormData,
+  PreviousExpenseBeingEdited,
+  SelectorOptionsFormattedData,
+  SetFormVisibility,
+  Value,
+} from "../../../../utility/types.ts";
 interface ExpenseUpdatingFormProps {
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   categoryOptions: SelectorOptionsFormattedData[];

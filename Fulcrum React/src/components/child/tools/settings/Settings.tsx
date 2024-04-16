@@ -1,17 +1,17 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import {
-  checkForOpenModalOrForm,
-  OpenToolsSection,
-  PublicUserData,
-  SettingsFormVisibility,
-  SettingsModalVisibility,
-} from "../../../../util.ts";
+import { checkForOpenModalOrForm } from "../../../../utility/util.ts";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import DarkModeToggle from "../../toggles/DarkModeToggle.tsx";
 import AccessibilityToggle from "../../toggles/AccessibilityToggle.tsx";
 import CurrencySelector from "../../selectors/CurrencySelector.tsx";
 import ActiveFormClickShield from "../../other/ActiveFormClickShield.tsx";
 import SettingsModalsAndForms from "./SettingsModalsAndForms.tsx";
+import {
+  OpenToolsSection,
+  PublicUserData,
+  SettingsFormVisibility,
+  SettingsModalVisibility,
+} from "../../../../utility/types.ts";
 
 interface SettingsProps {
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;

@@ -1,18 +1,17 @@
 import { Dispatch, SetStateAction, useState } from "react";
+import { getMonthsFromToday, Y2K } from "../../../../utility/util.ts";
+import { ExpenseMonthGroup } from "./ExpenseMonthGroup.tsx";
 import {
   CategoryToIconGroupAndColourMap,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseModalVisibility,
-  getMonthsFromToday,
   MonthExpenseGroupEntity,
   PreviousExpenseBeingEdited,
   PublicUserData,
   SetFormVisibility,
   SetModalVisibility,
-  Y2K,
-} from "../../../../util.ts";
-import { ExpenseMonthGroup } from "./ExpenseMonthGroup.tsx";
+} from "../../../../utility/types.ts";
 
 interface ExpenseMonthCarouselProps {
   structuredExpenseData: MonthExpenseGroupEntity[];
