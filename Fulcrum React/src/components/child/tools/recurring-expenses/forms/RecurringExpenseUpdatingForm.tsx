@@ -13,6 +13,7 @@ import {
   Value,
   SetFormVisibility,
   changeFormOrModalVisibility,
+  addFormExitListeners,
 } from "../../../../../util.ts";
 import Select from "react-select";
 import DatePicker from "react-date-picker";
@@ -47,22 +48,16 @@ export default function RecurringExpenseUpdatingForm({
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateRecurringExpense } = useUpdateRecurringExpense();
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   function hideForm() {
     changeFormOrModalVisibility(setRecurringExpenseFormVisibility, "isUpdateRecurringExpenseVisible", false);
   }
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (formRef.current && !formRef.current.contains(e.target as Node)) {
-      hideForm();
-    }
-  };
+  useEffect(() => {
+    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
+    return () => {
+      removeFormExitEventListeners();
+    };
+  }, []);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     handleInputChangeOnFormWithAmount(e, setFormData);
@@ -119,7 +114,9 @@ export default function RecurringExpenseUpdatingForm({
           <DatePicker onChange={onDateInputChange} value={formData.timestamp} />
         </div>
 
-        <label htmlFor="frequency">Frequency</label>
+        <label htmlFor="frequency" className={"mt-4"}>
+          Frequency
+        </label>
         <Select
           id="frequency"
           name="frequency"
@@ -154,6 +151,7 @@ export default function RecurringExpenseUpdatingForm({
             name="amount"
             id="amount"
             className="mb-3"
+            autoComplete={"off"}
             required
           />
         </div>

@@ -119,6 +119,7 @@ fun Application.configureOtherRouting() {
                 ) {
                     val wipeRequestSent = supabase.postgrest["groups"].delete() {
                         eq("userId", getActiveUserId())
+                        neq("group", "Miscellaneous")
                     }
                     if (wipeRequestSent.body == null) {
                         call.respondError("Items not wiped.")

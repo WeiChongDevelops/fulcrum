@@ -9,15 +9,8 @@ export default function CategoryIconSelector() {
     <div id="icon-selector" className="my-2">
       {categoryIconArray.map((iconFileName, key) => {
         return (
-          <button
-            data-value={iconFileName}
-            className="category-icon-selectable"
-            key={key}
-          >
-            <img
-              src={`/src/assets/category-icons/${iconFileName}`}
-              alt="Icon option"
-            />
+          <button data-value={iconFileName} className="category-icon-selectable" key={key}>
+            <img src={`/src/assets/category-icons/${iconFileName}`} alt="Icon option" />
           </button>
         );
       })}

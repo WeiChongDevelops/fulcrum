@@ -67,6 +67,7 @@ export default function IncomeDisplay({ totalIncome, amountLeftToBudget, publicU
               onChange={handleInputChange}
               onBlur={handleInputBlur}
               value={incomeFormData.income}
+              autoComplete={"off"}
               autoFocus
             />
           </form>

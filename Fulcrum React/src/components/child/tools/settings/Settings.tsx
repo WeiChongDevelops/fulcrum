@@ -26,11 +26,13 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
     typeDeleteMyExpensesForm: false,
     typeDeleteMyBudgetForm: false,
     typeDeleteMyDataForm: false,
+    typeResetMyAccountForm: false,
   });
   const [settingsModalVisibility, setSettingsModalVisibility] = useState<SettingsModalVisibility>({
     isConfirmExpenseWipeModalVisible: false,
     isConfirmBudgetWipeModalVisible: false,
     isConfirmAllDataWipeModalVisible: false,
+    isConfirmBudgetResetModalVisible: false,
   });
   const [isSettingsFormOrModalOpen, setIsSettingsFormOrModalOpen] = useState<boolean>(false);
 
@@ -114,23 +116,23 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
             hoverShadow={true}
           />
           <FulcrumButton
-            displayText={"Wipe Budget"}
-            backgroundColour={"red"}
-            onClick={() =>
-              setSettingsFormVisibility((prevVisibility) => ({
-                ...prevVisibility,
-                typeDeleteMyBudgetForm: true,
-              }))
-            }
-            hoverShadow={true}
-          />
-          <FulcrumButton
-            displayText={"Wipe All Data"}
+            displayText={"Wipe All Account Data"}
             backgroundColour={"red"}
             onClick={() =>
               setSettingsFormVisibility((prevVisibility) => ({
                 ...prevVisibility,
                 typeDeleteMyDataForm: true,
+              }))
+            }
+            hoverShadow={true}
+          />
+          <FulcrumButton
+            displayText={"Reset Account Data to Defaults"}
+            backgroundColour={"red"}
+            onClick={() =>
+              setSettingsFormVisibility((prevVisibility) => ({
+                ...prevVisibility,
+                typeResetMyAccountForm: true,
               }))
             }
             hoverShadow={true}

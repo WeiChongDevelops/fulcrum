@@ -11,7 +11,7 @@ export default function useRegisterUser() {
       toast.success("Successful registration.");
       setTimeout(() => {
         window.location.href = "/login";
-      }, 1000);
+      }, 850);
     },
     onError: () => {
       toast.error("This email is already in use.");

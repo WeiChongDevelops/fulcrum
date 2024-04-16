@@ -9,6 +9,7 @@ import {
   SelectorOptionsFormattedData,
   SetFormVisibility,
   changeFormOrModalVisibility,
+  addFormExitListeners,
 } from "../../../../../util.ts";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
@@ -38,22 +39,16 @@ export default function RecurringExpenseInstanceUpdatingForm({
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateExpense } = useUpdateExpense();
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   function hideForm() {
     changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateRecurringExpenseInstanceVisible", false);
   }
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (formRef.current && !formRef.current.contains(e.target as Node)) {
-      hideForm();
-    }
-  };
+  useEffect(() => {
+    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
+    return () => {
+      removeFormExitEventListeners();
+    };
+  }, []);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     handleInputChangeOnFormWithAmount(e, setFormData);
@@ -112,13 +107,14 @@ export default function RecurringExpenseInstanceUpdatingForm({
             name="amount"
             id="amount"
             className="mb-3"
+            autoComplete={"off"}
             required
           />
         </div>
 
         <div className={"mt-2 text-sm"}>
           <p className={"mb-2"}>You are only editing this particular repeat of your recurring expense.</p>
-          <p>To manage your recurring expenses, please see the 'Tools' section.</p>
+          <p>To manage your recurring expenses further, please see the 'Tools' section.</p>
         </div>
 
         <FulcrumButton displayText="Update Expense" optionalTailwind={"mt-8"} />

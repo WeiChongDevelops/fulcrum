@@ -1,4 +1,4 @@
-import { ChangeEvent, createContext, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, createContext, Dispatch, RefObject, SetStateAction } from "react";
 import { v4 as uuid } from "uuid";
 import { UseMutateFunction } from "@tanstack/react-query";
 
@@ -178,12 +178,14 @@ export interface SettingsModalVisibility {
   isConfirmExpenseWipeModalVisible: boolean;
   isConfirmBudgetWipeModalVisible: boolean;
   isConfirmAllDataWipeModalVisible: boolean;
+  isConfirmBudgetResetModalVisible: boolean;
 }
 
 export interface SettingsFormVisibility {
   typeDeleteMyExpensesForm: boolean;
   typeDeleteMyBudgetForm: boolean;
   typeDeleteMyDataForm: boolean;
+  typeResetMyAccountForm: boolean;
 }
 
 export interface BlacklistedExpenseItemEntity {
@@ -1174,6 +1176,28 @@ export async function handleWipeBudget(): Promise<void> {
   }
 }
 
+/**
+ * Resets all budget records to default settings.
+ */
+export async function handleRestoreDefaultBudget(): Promise<void> {
+  try {
+    const response = await fetch("http://localhost:8080/api/restoreDefaultBudget", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      console.error(`HTTP error encountered when attempting budget default restore: ${response.status}`);
+      throw new Error(`HTTP error encountered when attempting budget default restore: ${response.status}`);
+    }
+    console.log(await response.json());
+  } catch (e) {
+    console.error(`Exception encountered when requesting budget default restore: ${e}`);
+    throw e;
+  }
+}
+
 // AUTH API CALL FUNCTIONS //
 
 /**
@@ -1201,8 +1225,8 @@ export async function handleUserRegistration(email: string, password: string): P
         `User with given email may already exist. HTTP error encountered when attempting user registration: ${response.status}`,
       );
     }
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (e) {
+    console.error("Error:", e);
     throw e;
   }
 }
@@ -1738,6 +1762,18 @@ export function getGroupBudgetTotal(filteredBudgetArray: BudgetItemEntity[]): nu
 }
 
 /**
+ * Checks if a given timestamp falls in the current month.
+ * @param timestamp - The date to check against the current month.
+ * @returns true if the date is within the current month.
+ */
+export function isCurrentMonth(timestamp: Date): boolean {
+  return (
+    new Date(timestamp).getMonth() === new Date().getMonth() &&
+    new Date(timestamp).getFullYear() === new Date().getFullYear()
+  );
+}
+
+/**
  * Get the total expenditure within a budget category group.
  * @param expenseArray - An array of expense items within a given group.
  * @param filteredBudgetArray - An array of the budget items in a given group.
@@ -1749,7 +1785,10 @@ export function getGroupExpenditureTotal(
 ): number {
   const categoriesInGroup = filteredBudgetArray.map((expenseItem) => expenseItem.category);
   const filteredExpenseArray = expenseArray.filter((expenseItem) => categoriesInGroup.includes(expenseItem.category));
-  return filteredExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
+  return filteredExpenseArray.reduce(
+    (acc, expenseItem) => acc + (isCurrentMonth(expenseItem.timestamp) ? expenseItem.amount : 0),
+    0,
+  );
 }
 
 /**
@@ -2016,6 +2055,7 @@ export function getRecurringExpenseInstancesOrNull(
  * @param blacklistedExpenseArray - The array of blacklisted (removed) recurring expense instances.
  * @param batchDeleteExpenses - The mutation that batch deletes expenses.
  * @param batchCreateExpenses - The mutation that batch creates expenses.
+ * @param expenseCreationIsSuccess - Whether the expense creation has completed without error.
  */
 export function updateRecurringExpenseInstances(
   recurringExpenseArray: RecurringExpenseItemEntity[],
@@ -2025,19 +2065,11 @@ export function updateRecurringExpenseInstances(
   batchCreateExpenses: UseMutateFunction<void, Error, ExpenseItemEntity[]>,
   expenseCreationIsSuccess: boolean,
 ): void {
-  // const misplacedExpensesToRemove = new Set<string>();
-  // const newExpensesToAdd = new Array<ExpenseItemEntity>();
-  // const { misplacedExpensesToRemove, newExpensesToAdd } = ) => {
   const { misplacedExpensesToRemove, newExpensesToAdd } = processRecurringExpenseInstances(
     recurringExpenseArray,
     expenseArray,
     blacklistedExpenseArray,
-    // misplacedExpensesToRemove,
-    // newExpensesToAdd,
   );
-  // newExpensesToAdd.length !== 0 && batchCreateExpenses([...newExpensesToAdd]);
-  // misplacedExpensesToRemove.size !== 0 && batchDeleteExpenses([...misplacedExpensesToRemove]);
-  // batchCreateExpenses([...newExpensesToAdd]);
   newExpensesToAdd.length !== 0 && batchCreateExpenses(newExpensesToAdd);
   (expenseCreationIsSuccess || newExpensesToAdd.length === 0) &&
     misplacedExpensesToRemove.size !== 0 &&
@@ -2046,19 +2078,14 @@ export function updateRecurringExpenseInstances(
 
 /**
  * Takes a recurring expense, checks dates from its creation to today, then performs creation and deletion on instances as needed.
- * @param recurringExpenseItem - The recurring expense of which instances are processed.
+ * @param recurringExpenseArray - The array of recurring expenses.
  * @param expenseArray - The array of expenses.
  * @param blacklistedExpenseInstances - The array of blacklisted recurring expense instances (manually user-deleted).
- * @param misplacedExpensesToRemove - The cumulative set of expense IDs to batch delete.
- * @param newExpensesToAdd - The array of new expense items to create.
  */
 function processRecurringExpenseInstances(
-  // recurringExpenseItem: RecurringExpenseItemEntity,
   recurringExpenseArray: RecurringExpenseItemEntity[],
   expenseArray: ExpenseItemEntity[],
   blacklistedExpenseInstances: BlacklistedExpenseItemEntity[],
-  // misplacedExpensesToRemove: Set<string>,
-  // newExpensesToAdd: Array<ExpenseItemEntity>,
 ): {
   misplacedExpensesToRemove: Set<string>;
   newExpensesToAdd: ExpenseItemEntity[];
@@ -2111,12 +2138,6 @@ function processRecurringExpenseInstances(
             timestamp: date,
             recurringExpenseId: recurringExpenseItem.recurringExpenseId,
           };
-          // createExpense({
-          //   newExpenseItem: {
-          //     ...newExpenseItemLanded,
-          //     timestamp: new Date(newExpenseItemLanded.timestamp.getTime()),
-          //   },
-          // });
           newExpensesToAdd.push({
             ...newExpenseItemLanded,
             timestamp: new Date(newExpenseItemLanded.timestamp.getTime()),
@@ -2177,4 +2198,30 @@ export function changeFormOrModalVisibility<T extends FormVisibility, U extends 
   showNotHide: boolean,
 ): void {
   setVisibility((prevVisibility: any) => ({ ...prevVisibility, [visibilityAttribute]: showNotHide }));
+}
+
+/**
+ * Enables form exit on 'Esc' keystroke or click outside form.
+ * @param hideForm - The function that hides the form.
+ * @param formRef - The reference of the form.
+ */
+export function addFormExitListeners(hideForm: () => void, formRef: RefObject<HTMLDivElement>) {
+  const handleClickOutside = (e: MouseEvent) => {
+    if (formRef.current && !formRef.current.contains(e.target as Node)) {
+      hideForm();
+    }
+  };
+
+  const handleEscPress = (e: KeyboardEvent) => {
+    if (e.key == "Escape") {
+      hideForm();
+    }
+  };
+  document.addEventListener("mousedown", handleClickOutside);
+  document.addEventListener("keydown", handleEscPress);
+
+  return () => {
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscPress);
+  };
 }

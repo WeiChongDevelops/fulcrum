@@ -15,6 +15,7 @@ import {
   SetFormVisibility,
   DEFAULT_CATEGORY_ICON,
   DEFAULT_CATEGORY_GROUP,
+  addFormExitListeners,
 } from "../../../../util.ts";
 import { v4 as uuid } from "uuid";
 import Select from "react-select/creatable";
@@ -63,16 +64,10 @@ export default function ExpenseCreationForm({
     }));
   }
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (formRef.current && !formRef.current.contains(e.target as Node)) {
-      hideForm();
-    }
-  };
-
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      removeFormExitEventListeners();
     };
   }, []);
 
@@ -163,6 +158,7 @@ export default function ExpenseCreationForm({
             name="amount"
             id="amount"
             className="mb-3 text-black"
+            autoComplete={"off"}
             required
           />
         </div>
@@ -172,7 +168,9 @@ export default function ExpenseCreationForm({
           <DatePicker onChange={onDateInputChange} value={formData.timestamp} />
         </div>
 
-        <label htmlFor="frequency">Repeat Frequency</label>
+        <label htmlFor="frequency" className={"mt-4"}>
+          Repeat Frequency
+        </label>
         <Select
           id="frequency"
           name="frequency"

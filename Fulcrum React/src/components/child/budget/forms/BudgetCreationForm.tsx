@@ -16,6 +16,7 @@ import {
   getRandomGroupColour,
   DEFAULT_CATEGORY_ICON,
   DEFAULT_CATEGORY_GROUP,
+  addFormExitListeners,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import "../../../../css/Budget.css";
@@ -50,18 +51,13 @@ export default function BudgetCreationForm({
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateBudgetVisible", false);
   }
-  const handleClickOutside = (e: MouseEvent) => {
-    if (formRef.current && !formRef.current.contains(e.target as Node)) {
-      hideForm();
-    }
-  };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
     const removeIconEventListeners = addIconSelectionFunctionality(setFormData, "category");
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
       removeIconEventListeners();
+      removeFormExitEventListeners();
     };
   }, []);
 
@@ -130,6 +126,7 @@ export default function BudgetCreationForm({
           id="category"
           className="mb-3"
           maxLength={18}
+          autoComplete={"off"}
           required
         />
         <label htmlFor="amount">Amount</label>
@@ -142,6 +139,7 @@ export default function BudgetCreationForm({
             name="amount"
             id="amount"
             className="mb-3"
+            autoComplete={"off"}
             required
           />
         </div>

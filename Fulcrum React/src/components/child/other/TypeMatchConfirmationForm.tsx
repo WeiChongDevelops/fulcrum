@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
+  addFormExitListeners,
   changeFormOrModalVisibility,
   SetFormVisibility,
   SetModalVisibility,
@@ -33,23 +34,18 @@ export function TypeMatchConfirmationForm({
   const formRef = useRef<HTMLDivElement>(null);
   const typeMatchInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    typeMatchInputRef.current?.focus();
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   function hideForm() {
     changeFormOrModalVisibility(setFormVisibility, formVisibility, false);
   }
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (formRef.current && !formRef.current.contains(e.target as Node)) {
-      hideForm();
-    }
-  };
+  useEffect(() => {
+    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
+    typeMatchInputRef.current?.focus();
+    return () => {
+      removeFormExitEventListeners();
+    };
+  }, []);
+
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setTypeMatchInput(e.target.value);
   }
@@ -75,7 +71,7 @@ export function TypeMatchConfirmationForm({
 
       <p className={"mt-6"}>{areYouSureMessage}</p>
 
-      <p>Enter {typeMatchString} below to proceed.</p>
+      <p>Enter '{typeMatchString}' below to proceed.</p>
       <form className={"flex flex-col"} onSubmit={handleSubmit}>
         <input
           type="text"
@@ -85,6 +81,7 @@ export function TypeMatchConfirmationForm({
           value={typeMatchInput}
           className={"my-6"}
           ref={typeMatchInputRef}
+          autoComplete={"off"}
         />
         <FulcrumButton displayText={"Confirm"} backgroundColour={"red"} />
       </form>

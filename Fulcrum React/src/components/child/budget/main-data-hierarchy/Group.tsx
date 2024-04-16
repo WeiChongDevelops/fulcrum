@@ -12,6 +12,7 @@ import {
   getGroupExpenditureTotal,
   GroupItemEntity,
   handleGroupDeletion,
+  monthStringArray,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
   PublicUserData,
@@ -39,7 +40,7 @@ interface GroupProps {
 
   setGroupToDelete: Dispatch<SetStateAction<string>>;
   setCategoryToDelete: Dispatch<SetStateAction<string>>;
-  perCategoryTotalExpenseArray: Map<string, number>;
+  perCategoryExpenseTotalThisMonth: Map<string, number>;
   publicUserData: PublicUserData;
 }
 
@@ -58,7 +59,7 @@ export default function Group({
   setGroupToDelete,
   setCategoryToDelete,
   setModalFormVisibility,
-  perCategoryTotalExpenseArray,
+  perCategoryExpenseTotalThisMonth,
   publicUserData,
 }: GroupProps) {
   const queryClient = useQueryClient();
@@ -91,7 +92,9 @@ export default function Group({
   });
 
   const [groupBudgetTotal, setGroupBudgetTotal] = useState(getGroupBudgetTotal(filteredBudgetArray));
-  const [groupExpenditureTotal, setGroupExpenditureTotal] = useState(getGroupBudgetTotal(filteredBudgetArray));
+  const [groupExpenditureTotal, setGroupExpenditureTotal] = useState(
+    getGroupExpenditureTotal(expenseArray, filteredBudgetArray),
+  );
 
   function handleEditClick() {
     setOldGroupBeingEdited({ oldGroupName: groupName, oldColour: groupColour });
@@ -117,6 +120,7 @@ export default function Group({
 
   const currency = publicUserData.currency;
   const isMiscellaneous = groupName === DEFAULT_CATEGORY_GROUP;
+  const currentMonth = monthStringArray[new Date().getMonth()];
 
   return (
     <div
@@ -142,7 +146,7 @@ export default function Group({
         </div>
         <p className={`${isMiscellaneous ? "text-white" : "text-black"} font-bold mr-4 text-3xl`}>
           Spent: {formatDollarAmountStatic(groupExpenditureTotal, currency)} of{" "}
-          {formatDollarAmountStatic(groupBudgetTotal, currency)}
+          {formatDollarAmountStatic(groupBudgetTotal, currency)} ({currentMonth})
         </p>
       </div>
       <div className="flex flex-row flex-wrap flex-shrink-0 basis-0 justify-start">
@@ -157,7 +161,7 @@ export default function Group({
               setBudgetFormVisibility={setBudgetFormVisibility}
               setModalFormVisibility={setModalFormVisibility}
               setCategoryToDelete={setCategoryToDelete}
-              perCategoryTotalExpenseArray={perCategoryTotalExpenseArray}
+              perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
               publicUserData={publicUserData}
               key={key}
             />

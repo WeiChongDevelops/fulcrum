@@ -27,7 +27,7 @@ interface GroupListProps {
   setGroupToDelete: Dispatch<SetStateAction<string>>;
   setCategoryToDelete: Dispatch<SetStateAction<string>>;
 
-  perCategoryTotalExpenseArray: Map<string, number>;
+  perCategoryExpenseTotalThisMonth: Map<string, number>;
   publicUserData: PublicUserData;
 }
 
@@ -45,7 +45,7 @@ export default function GroupList({
   setGroupToDelete,
   setModalFormVisibility,
   setCategoryToDelete,
-  perCategoryTotalExpenseArray,
+  perCategoryExpenseTotalThisMonth,
   publicUserData,
 }: GroupListProps) {
   return (
@@ -67,7 +67,7 @@ export default function GroupList({
             setGroupToDelete={setGroupToDelete}
             setCategoryToDelete={setCategoryToDelete}
             setModalFormVisibility={setModalFormVisibility}
-            perCategoryTotalExpenseArray={perCategoryTotalExpenseArray}
+            perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
             publicUserData={publicUserData}
             key={key}
           />

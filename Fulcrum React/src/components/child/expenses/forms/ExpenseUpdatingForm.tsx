@@ -10,6 +10,7 @@ import {
   ExpenseFormVisibility,
   SetFormVisibility,
   changeFormOrModalVisibility,
+  addFormExitListeners,
 } from "../../../../util.ts";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
@@ -44,16 +45,10 @@ export default function ExpenseUpdatingForm({
     changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateExpenseVisible", false);
   }
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (formRef.current && !formRef.current.contains(e.target as Node)) {
-      hideForm();
-    }
-  };
-
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      removeFormExitEventListeners();
     };
   }, []);
 
@@ -115,6 +110,7 @@ export default function ExpenseUpdatingForm({
             name="amount"
             id="amount"
             className="mb-3"
+            autoComplete={"off"}
             required
           />
         </div>

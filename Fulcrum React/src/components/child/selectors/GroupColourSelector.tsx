@@ -9,13 +9,9 @@ interface GroupColourSelectorProps {
 /**
  * A visual selector for the user to choose a colour for a budget category group.
  */
-export default function GroupColourSelector({
-  oldColour,
-}: GroupColourSelectorProps) {
+export default function GroupColourSelector({ oldColour }: GroupColourSelectorProps) {
   useEffect(() => {
-    const oldColourSelectable = document.querySelector(
-      `div[data-value="${oldColour}"]`,
-    );
+    const oldColourSelectable = document.querySelector(`div[data-value="${oldColour}"]`);
     oldColourSelectable?.classList.add("selectedColour");
   }, []);
 
@@ -24,11 +20,7 @@ export default function GroupColourSelector({
       {groupColourArray.map((colour, key) => {
         return (
           <div className={"group-colour-selectable-container"} key={key}>
-            <div
-              className={"group-colour-triangle"}
-              style={{ backgroundColor: colour }}
-              data-value={colour}
-            ></div>
+            <div className={"group-colour-triangle"} style={{ backgroundColor: colour }} data-value={colour}></div>
           </div>
         );
       })}

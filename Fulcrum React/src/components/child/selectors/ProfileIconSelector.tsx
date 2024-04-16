@@ -9,15 +9,8 @@ export default function ProfileIconSelector() {
     <div id="icon-selector" className="my-2">
       {profileIconArray.map((profileIconName, key) => {
         return (
-          <button
-            data-value={profileIconName}
-            className={"profile-icon-selectable"}
-            key={key}
-          >
-            <img
-              src={`/src/assets/profile-icons/${profileIconName.slice(0, -4)}-white.svg`}
-              alt="Profile icon option"
-            />
+          <button data-value={profileIconName} className={"profile-icon-selectable"} key={key}>
+            <img src={`/src/assets/profile-icons/${profileIconName.slice(0, -4)}-white.svg`} alt="Profile icon option" />
           </button>
         );
       })}

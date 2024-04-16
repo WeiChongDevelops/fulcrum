@@ -5,6 +5,7 @@ import {
   GroupItemEntity,
   PublicUserData,
   getCurrencySymbol,
+  isCurrentMonth,
 } from "../../../util.ts";
 import { useEffect, useMemo } from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
@@ -51,8 +52,8 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
     setGroupNameOfNewItem,
     isBudgetFormOrModalOpen,
     lineAngle,
-    perCategoryExpenditureMap,
-    setPerCategoryExpenditureMap,
+    perCategoryExpenseTotalThisMonth,
+    setPerCategoryExpenseTotalThisMonth,
     isLoading,
     isError,
     isSuccess,
@@ -74,8 +75,11 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
       const categoryArray = budgetArray.map((budgetItem) => budgetItem.category);
       categoryArray.forEach((category) => {
         const thisCategoryExpenseArray = expenseArray.filter((expenseItem) => expenseItem.category === category);
-        const categoryExpenditure = thisCategoryExpenseArray.reduce((acc, expenseItem) => acc + expenseItem.amount, 0);
-        setPerCategoryExpenditureMap((previousMap) => new Map([...previousMap, [category, categoryExpenditure]]));
+        const categoryExpenditure = thisCategoryExpenseArray.reduce(
+          (acc, expenseItem) => acc + (isCurrentMonth(expenseItem.timestamp) ? expenseItem.amount : 0),
+          0,
+        );
+        setPerCategoryExpenseTotalThisMonth((previousMap) => new Map([...previousMap, [category, categoryExpenditure]]));
       });
     }
   }, [budgetArray, expenseArray]);
@@ -121,7 +125,7 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
                 setGroupToDelete={setGroupToDelete}
                 setCategoryToDelete={setCategoryToDelete}
                 setModalFormVisibility={setBudgetModalVisibility}
-                perCategoryTotalExpenseArray={perCategoryExpenditureMap}
+                perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                 publicUserData={publicUserData}
               />
             )}

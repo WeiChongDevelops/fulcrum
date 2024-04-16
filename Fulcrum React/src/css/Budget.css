@@ -89,6 +89,10 @@
   border-radius: 0.35rem;
 }
 
+.create-budget-button:focus {
+  outline: none;
+}
+
 /* GROUP */
 
 .group {
@@ -113,6 +117,10 @@
   border-radius: 0.35rem;
 }
 
+.create-group-button:focus {
+  outline: none;
+}
+
 /* BUDGET ICON SELECTOR */
 
 .budget-icon {
@@ -131,7 +139,8 @@
 .category-icon-selectable {
   display: flex;
   flex: 0 0 15%;
-  margin: 8px 0;
+  margin: 0.1em 0;
+  padding: 0.5em 0.25em;
   justify-content: center;
   border: none;
   background-color: transparent;
@@ -228,8 +237,8 @@
   transform: translate(-50%, -50%);
   transition: all ease-in-out 750ms;
   top: 736%;
-  /*max-width: 8rem;*/
-  /*min-width: 3rem;*/
+  max-width: 8rem;
+  min-width: 3rem;
 }
 
 .bowl-shadow-right {
@@ -261,24 +270,22 @@
   font-size: 1.5em;
 }
 
-.fulcrum-bowl-left {
-  position: absolute;
-  top: 275%;
-  left: 0.5%;
-  transform: translate(-50%, -50%);
-  width: 14%;
-  transform-origin: top center;
-  transition: all ease 1300ms;
-}
-
+.fulcrum-bowl-left,
 .fulcrum-bowl-right {
   position: absolute;
   top: 275%;
-  left: 99.5%;
   transform: translate(-50%, -50%);
   width: 14%;
   transform-origin: top center;
-  transition: all ease 1300ms;
+  transition: all ease 900ms;
+}
+
+.fulcrum-bowl-left {
+  left: 0.5%;
+}
+
+.fulcrum-bowl-right {
+  left: 99.5%;
 }
 
 /* INCOME DISPLAY */
@@ -338,6 +345,21 @@
   }
   #group-colour-selector {
     grid-template-columns: repeat(2, minmax(70px, 1fr));
+  }
+  .budget-tile {
+    min-width: 110px;
+    min-height: 135px;
+  }
+  .create-budget-button {
+    min-width: 110px;
+    min-height: 135px;
+  }
+}
+
+@media (max-width: 730px) {
+  .bowl-shadow-left,
+  .bowl-shadow-right {
+    display: none;
   }
 }
 

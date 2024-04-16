@@ -9,6 +9,7 @@ import {
   getRandomGroupColour,
   SetFormVisibility,
   changeFormOrModalVisibility,
+  addFormExitListeners,
 } from "../../../../util.ts";
 import "../../../../css/Budget.css";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
@@ -33,17 +34,11 @@ export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCrea
     changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateGroupVisible", false);
   }
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (formRef.current && !formRef.current.contains(e.target as Node)) {
-      hideForm();
-    }
-  };
-
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
     const removeColourEventListeners = addColourSelectionFunctionality(setFormData);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      removeFormExitEventListeners();
       removeColourEventListeners();
     };
   }, []);
@@ -79,7 +74,7 @@ export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCrea
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="close-form-or-modal-button mb-6 font-bold text-3xl">New Category Group</p>
+      <p className="mt-4 close-form-or-modal-button mb-6 font-bold text-3xl">New Category Group</p>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="Group Name">Group Name</label>
         <input
@@ -90,6 +85,7 @@ export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCrea
           id="group"
           className="mb-3"
           maxLength={22}
+          autoComplete={"off"}
           required
         />
 

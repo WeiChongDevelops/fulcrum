@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
   addColourSelectionFunctionality,
+  addFormExitListeners,
   BasicGroupData,
   BudgetFormVisibility,
   changeFormOrModalVisibility,
@@ -31,17 +32,11 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
     changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", false);
   }
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (formRef.current && !formRef.current.contains(e.target as Node)) {
-      hideForm();
-    }
-  };
-
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
     const removeColourEventListeners = addColourSelectionFunctionality(setFormData);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      removeFormExitEventListeners();
       removeColourEventListeners();
     };
   }, []);
@@ -79,10 +74,17 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
         backgroundColour="grey"
       ></FulcrumButton>
 
-      <p className="mb-6 font-bold text-3xl">Updating Category Group {oldGroupBeingEdited.oldGroupName}</p>
+      <p className="mb-6 mt-4 font-bold text-3xl">Updating Category Group {oldGroupBeingEdited.oldGroupName}</p>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
         <label htmlFor="groupName">Group Name</label>
-        <input type="text" name="group" id="group" value={formData.group} onChange={handleInputChange} />
+        <input
+          type="text"
+          name="group"
+          id="group"
+          value={formData.group}
+          onChange={handleInputChange}
+          autoComplete={"off"}
+        />
 
         <GroupColourSelector oldColour={oldGroupBeingEdited.oldColour} />
 

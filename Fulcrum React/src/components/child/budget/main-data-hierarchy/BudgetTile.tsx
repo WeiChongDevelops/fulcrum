@@ -21,7 +21,7 @@ interface BudgetTileProps {
   setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>;
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
   setModalFormVisibility: SetModalVisibility<BudgetModalVisibility>;
-  perCategoryTotalExpenseArray: Map<string, number>;
+  perCategoryExpenseTotalThisMonth: Map<string, number>;
   setCategoryToDelete: Dispatch<SetStateAction<string>>;
   publicUserData: PublicUserData;
 }
@@ -38,10 +38,10 @@ export default function BudgetTile({
   setBudgetFormVisibility,
   setModalFormVisibility,
   setCategoryToDelete,
-  perCategoryTotalExpenseArray,
+  perCategoryExpenseTotalThisMonth,
   publicUserData,
 }: BudgetTileProps) {
-  const spent = perCategoryTotalExpenseArray.get(category)!;
+  const spent = perCategoryExpenseTotalThisMonth.get(category)!;
   const [budgetExceeded, setBudgetExceeded] = useState(spent > amount);
 
   function handleEditClick() {
@@ -57,7 +57,7 @@ export default function BudgetTile({
   useEffect(() => {
     setBudgetExceeded(spent > amount);
     dynamicallySizeBudgetNumberDisplays();
-  }, [amount, perCategoryTotalExpenseArray]);
+  }, [amount, perCategoryExpenseTotalThisMonth]);
 
   function handleDeleteClick(e: React.MouseEvent) {
     e.stopPropagation();

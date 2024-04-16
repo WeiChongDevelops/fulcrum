@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import {
+  addFormExitListeners,
   BudgetModalVisibility,
   ExpenseModalVisibility,
   RecurringExpenseModalVisibility,
@@ -36,23 +37,20 @@ export default function TwoOptionModal({
 }: TwoOptionModalProps) {
   const formRef = useRef<HTMLDivElement>(null);
   const rightButtonRef = useRef<HTMLButtonElement>(null);
+  const hideForm = () => {
+    setModalVisibility((current: any) => ({
+      ...current,
+      [`${isVisible}`]: false,
+    }));
+  };
 
   useEffect(() => {
     rightButtonRef.current?.focus();
-    document.addEventListener("mousedown", handleClickOutside);
+    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      removeFormExitEventListeners();
     };
   }, []);
-
-  const handleClickOutside = (e: MouseEvent) => {
-    if (formRef.current && !formRef.current.contains(e.target as Node)) {
-      setModalVisibility((current: any) => ({
-        ...current,
-        [`${isVisible}`]: false,
-      }));
-    }
-  };
 
   return (
     <div className="fulcrum-modal" ref={formRef}>

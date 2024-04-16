@@ -58,8 +58,7 @@ fun Application.configureBudgetRouting() {
                 val budgetList =
                     supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp")) {
                         eq("userId", getActiveUserId())
-                    }
-                        .decodeList<BudgetItemResponse>()
+                    }.decodeList<BudgetItemResponse>()
                 call.respond(HttpStatusCode.OK, budgetList)
             } catch (e: UnauthorizedRestException) {
                 call.application.log.error("Not authorised - JWT token likely expired.", e)

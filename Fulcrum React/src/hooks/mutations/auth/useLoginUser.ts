@@ -11,7 +11,7 @@ export default function useLoginUser() {
       toast.success("Login successful.");
       setTimeout(() => {
         window.location.href = "/app/budget";
-      }, 1000);
+      }, 850);
     },
     onError: () => {
       toast.error("User not found. Please check your credentials.");

@@ -1,15 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useAnimationData(lineAngle: number) {
-  const [animationDataLoadingStatus, setAnimationDataLoadingStatus] = useState({
-    setShadows: true,
-    calculateShadows: true,
-  });
   const [animationDataIsLoading, setAnimationDataIsLoading] = useState(true);
-
-  useEffect(() => {
-    setAnimationDataIsLoading(animationDataLoadingStatus.setShadows || animationDataLoadingStatus.calculateShadows);
-  }, [animationDataLoadingStatus]);
 
   const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-tri-red.webp");
   const [leverEndXOffset, setLeverEndXOffset] = useState({
@@ -57,25 +49,22 @@ export default function useAnimationData(lineAngle: number) {
     });
   }
 
-  useMemo(() => {
-    async function recalculateAnimationStyling() {
-      await recalculateShadowDimensions();
-      await setShadowDimensions();
-    }
-    document.addEventListener("resize", recalculateAnimationStyling);
-    return () => document.removeEventListener("resize", recalculateAnimationStyling);
-  }, []);
+  useEffect(() => {
+    setShadowDimensions().then(() => setAnimationDataIsLoading(false));
+  }, [bowlWidth, leverEndXOffset]);
 
-  useMemo(async () => {
-    await setShadowDimensions();
-    setAnimationDataLoadingStatus((curr) => ({ ...curr, setShadows: false }));
+  useEffect(() => {
+    recalculateShadowDimensions();
   }, [lineAngle, leverEndXOffset, bowlWidth]);
 
-  useMemo(async () => {
-    await recalculateShadowDimensions();
-    setAnimationDataLoadingStatus((curr) => ({ ...curr, calculateShadows: false }));
+  useEffect(() => {
     setActiveTriangleFulcrum(`/src/assets/fulcrum-animation/fulcrum-tri-${lineAngle !== 0 ? "red" : "green"}.webp`);
   }, [lineAngle]);
+
+  useEffect(() => {
+    window.addEventListener("resize", recalculateShadowDimensions);
+    return () => window.removeEventListener("resize", recalculateShadowDimensions);
+  }, []);
 
   return {
     animationDataIsLoading,

@@ -5,8 +5,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: "Quicksand", Inter, system-ui, Avenir, Helvetica, Arial,
-    sans-serif;
+  font-family: "Quicksand", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -49,17 +48,12 @@ body label {
   font-weight: bold;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button:focus {
+  outline: 3px solid white;
+}
+
+input:focus {
+  outline: 3px solid #1c5b57;
 }
 
 @media (max-width: 3200px) {

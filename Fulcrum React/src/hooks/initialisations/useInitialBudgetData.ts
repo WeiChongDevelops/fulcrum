@@ -40,7 +40,7 @@ export default function useInitialBudgetData() {
   const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
   const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
   const [lineAngle, setLineAngle] = useState(1);
-  const [perCategoryExpenditureMap, setPerCategoryExpenditureMap] = useState<Map<string, number>>(new Map());
+  const [perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
     setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility));
@@ -99,8 +99,8 @@ export default function useInitialBudgetData() {
     setGroupNameOfNewItem,
     isBudgetFormOrModalOpen,
     lineAngle,
-    perCategoryExpenditureMap,
-    setPerCategoryExpenditureMap,
+    perCategoryExpenseTotalThisMonth,
+    setPerCategoryExpenseTotalThisMonth,
     isLoading,
     isError,
     isSuccess,

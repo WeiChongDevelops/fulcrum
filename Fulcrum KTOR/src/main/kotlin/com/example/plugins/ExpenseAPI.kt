@@ -294,9 +294,11 @@ fun Application.configureExpenseRouting() {
                 call.respond(HttpStatusCode.OK, blacklistedExpensesList)
             } catch (e: UnauthorizedRestException) {
                 call.respondAuthError("Not authorised - JWT token likely expired.")
+            } catch (e: IllegalStateException) {
+                call.respondAuthError("Session not found.")
             } catch (e: Exception) {
-                call.application.log.error("Error while reading removed recurring expenses", e)
-                call.respondError("Error while reading removed recurring expenses: $e")
+                call.application.log.error("Error while reading recurring expenses", e)
+                call.respondError("Error while reading recurring expenses: $e")
             }
         }
     }

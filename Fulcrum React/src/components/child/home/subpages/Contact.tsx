@@ -130,6 +130,7 @@ export default function Contact() {
                 name={"firstName"}
                 onChange={handleInputChange}
                 className={"mt-2 py-1.5 px-3"}
+                autoComplete={"off"}
                 required
               />
             </div>
@@ -146,6 +147,7 @@ export default function Contact() {
                 name={"email"}
                 onChange={handleInputChange}
                 className={"mt-2 py-1.5 px-3"}
+                autoComplete={"email"}
                 required
               />
             </div>
@@ -162,6 +164,7 @@ export default function Contact() {
             placeholder={getActivePlaceholder(formData.queryType)}
             onChange={handleInputChange}
             className={"mt-2 py-1.5 px-3"}
+            autoComplete={"off"}
             required
           />
 
@@ -175,6 +178,7 @@ export default function Contact() {
             placeholder={"Please include all information relevant to your issue."}
             onChange={handleInputChange}
             className={"mt-2 py-1.5 px-3 mb-3.5"}
+            autoComplete={"off"}
             required
           />
           <FulcrumButton displayText={"Send"} backgroundColour={"grey"} hoverShadow={true} />

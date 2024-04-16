@@ -167,13 +167,14 @@
 
 /* MEDIA QUERIES */
 
-@media (max-width: 880px) {
+@media (max-width: 888px) {
   .currency-selector {
     display: grid;
+    margin-inline: auto;
+    width: 65%;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: repeat(2, minmax(0, 1fr));
-    column-gap: 0;
-    row-gap: 0.5rem;
+    row-gap: 2rem;
     justify-items: center;
   }
   .currency-selector-row {
@@ -188,5 +189,8 @@
 @media (max-width: 518px) {
   .recurring-expenses-title {
     font-size: 2rem;
+  }
+  .currency-selector {
+    width: 75%;
   }
 }

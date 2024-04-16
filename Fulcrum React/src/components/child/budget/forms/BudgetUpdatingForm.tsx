@@ -14,6 +14,7 @@ import {
   changeFormOrModalVisibility,
   PreviousBudgetBeingEdited,
   getRandomGroupColour,
+  addFormExitListeners,
 } from "../../../../util.ts";
 import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
@@ -47,17 +48,11 @@ export default function BudgetUpdatingForm({
     changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateBudgetVisible", false);
   }
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (formRef.current && !formRef.current.contains(e.target as Node)) {
-      hideForm();
-    }
-  };
-
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
     const removeIconEventListeners = addIconSelectionFunctionality(setFormData, "category");
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      removeFormExitEventListeners();
       removeIconEventListeners();
     };
   }, []);
@@ -111,7 +106,7 @@ export default function BudgetUpdatingForm({
 
       <p className="mb-6 font-bold text-3xl">Updating Budget for '{oldBudgetBeingEdited.oldCategory}'</p>
       <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
-        <label htmlFor="category">Category Name</label>
+        <label htmlFor="category">Category</label>
         <input
           type="text"
           onChange={handleInputChange}
@@ -119,6 +114,7 @@ export default function BudgetUpdatingForm({
           name="category"
           id="category"
           maxLength={18}
+          autoComplete={"off"}
           required
         />
 
@@ -134,6 +130,7 @@ export default function BudgetUpdatingForm({
             name="amount"
             id="amount"
             className="mb-3"
+            autoComplete={"off"}
             required
           />
         </div>
