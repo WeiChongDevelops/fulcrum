@@ -105,12 +105,22 @@
   user-select: none;
 }
 
-.navigate-left:hover {
+.navigate-left:hover > img {
   outline: none;
   animation: bounceLeft 1200ms ease-in-out infinite;
 }
 
-.navigate-right:hover {
+.navigate-right:hover > img {
+  outline: none;
+  animation: bounceRight 1200ms ease-out infinite;
+}
+
+.left-nav-arrow {
+  outline: none;
+  animation: bounceLeft 1200ms ease-in-out infinite;
+}
+
+.right-nav-arrow {
   outline: none;
   animation: bounceRight 1200ms ease-out infinite;
 }

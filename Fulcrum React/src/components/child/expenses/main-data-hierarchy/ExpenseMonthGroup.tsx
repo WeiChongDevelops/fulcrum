@@ -13,6 +13,7 @@ import {
 import { Dispatch, memo, SetStateAction } from "react";
 import ExpenseDayGroup from "./ExpenseDayGroup.tsx";
 import AddNewExpenseButton from "../buttons/AddNewExpenseButton.tsx";
+import FulcrumButton from "../../other/FulcrumButton.tsx";
 
 interface ExpenseMonthGroupProps {
   monthExpenseGroupItem: MonthExpenseGroupEntity;
@@ -53,27 +54,47 @@ export const ExpenseMonthGroup = memo(
       setMonthPanelShowingIndex((prevIndex) => prevIndex + 1);
     }
 
+    const currentMonth = monthStringArray[new Date().getMonth()];
+
     return (
       <div className={"flex flex-col items-center"}>
-        <div
-          className={
-            "flex flex-row justify-around items-center min-w-[25vw] py-2 my-4 bg-[#17423f] rounded-3xl text-white select-none"
-          }
-        >
-          <button
-            onClick={scrollLeft}
-            className={`month-navigation-option navigate-left ${monthPanelShowingIndex === -monthsFromY2KToNow && "opacity-0 pointer-events-none"}`}
+        <div className={"flex flex-row justify-center items-center relative w-full"}>
+          <div
+            className={
+              "flex flex-row justify-around items-center w-[40vw] py-2 my-4 bg-[#17423f] rounded-3xl text-white select-none"
+            }
           >
-            <img src="/src/assets/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
-          </button>
-          <p className={"text-4xl"}>
-            {monthStringArray[monthExpenseGroupItem.monthIndex] + " " + monthExpenseGroupItem.year.toString()}
-          </p>
+            <button
+              onClick={scrollLeft}
+              className={`month-navigation-option navigate-left ${monthPanelShowingIndex === -monthsFromY2KToNow && "opacity-0 pointer-events-none"}`}
+            >
+              <img src="/src/assets/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
+            </button>
+            <p className={"text-4xl"}>
+              {monthStringArray[monthExpenseGroupItem.monthIndex] + " " + monthExpenseGroupItem.year.toString()}
+            </p>
+            <button
+              onClick={scrollRight}
+              className={`month-navigation-option navigate-right ${monthPanelShowingIndex === 12 && "opacity-0 pointer-events-none"}`}
+            >
+              <img src="/src/assets/UI-icons/right-navigation-arrow.svg" alt="Right navigation arrow" />
+            </button>
+          </div>
           <button
-            onClick={scrollRight}
-            className={`month-navigation-option navigate-right ${monthPanelShowingIndex === 12 && "opacity-0 pointer-events-none"}`}
+            onClick={() => setMonthPanelShowingIndex(0)}
+            className={`flex gap-2 flex-row justify-center items-center fulcrum-button absolute bg-[#3f4240] text-white font-bold rounded-2xl mx-2 py-[0.5em] px-[1em] text-center hover:opacity-90 ${monthPanelShowingIndex > 0 ? "left-0" : monthPanelShowingIndex < 0 ? "right-0" : "hidden"}`}
           >
-            <img src="/src/assets/UI-icons/right-navigation-arrow.svg" alt="Right navigation arrow" />
+            <img
+              src="/src/assets/UI-icons/left-navigation-arrow.svg"
+              alt="Left navigation arrow"
+              className={`h-4 w-3 left-nav-arrow opacity-0 ${monthPanelShowingIndex > 0 && "opacity-100"}`}
+            />
+            <span>Back to {currentMonth}</span>
+            <img
+              src="/src/assets/UI-icons/right-navigation-arrow.svg"
+              alt="Right navigation arrow"
+              className={`h-4 w-3 right-nav-arrow opacity-0 ${monthPanelShowingIndex < 0 && "opacity-100"}`}
+            />
           </button>
         </div>
 
