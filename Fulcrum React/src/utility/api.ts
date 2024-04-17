@@ -607,6 +607,25 @@ export async function handleUserLogin(email: string, password: string): Promise<
 }
 
 /**
+ * Attempts to log in a user with the provided email and password.
+ * Redirects to the budget page on successful login.
+ */
+export async function handleUserOAuthLogin(email: string, password: string): Promise<void> {
+  try {
+    await apiClient.post("/oAuthLogin", {
+      email: email,
+      password: password,
+    });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when attempting login: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when attempting login.");
+    }
+  }
+}
+
+/**
  * Logs out the current user and redirects to the login page.
  */
 export async function handleUserLogout(): Promise<void> {

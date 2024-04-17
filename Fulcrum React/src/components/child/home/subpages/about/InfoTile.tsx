@@ -46,7 +46,7 @@ export default function InfoTile({
   }
 
   return (
-    <div className={"single-tile-container hide-tile"} ref={tileRef}>
+    <div className={"single-tile-container hide-tile select-none"} ref={tileRef}>
       <div
         className={"mid-copy-animation-tile"}
         style={{
@@ -56,14 +56,8 @@ export default function InfoTile({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div
-          className={`absolute flex flex-col justify-center items-center ${isHovered ? "hidden" : "block"}`}
-        >
-          <img
-            src={iconPathFront}
-            alt="Info tile icon"
-            className={"w-16 h-auto mb-6"}
-          />
+        <div className={`absolute flex flex-col justify-center items-center ${isHovered ? "hidden" : "block"}`}>
+          <img src={iconPathFront} alt="Info tile icon" className={"w-16 h-auto mb-6"} />
           <b className={"lg:text-lg text-sm"}>{initialDisplayText}</b>
           <p className={"text-xs mt-2"}>(Hover/Tap to Learn More)</p>
         </div>
@@ -71,11 +65,7 @@ export default function InfoTile({
           className={`absolute flex flex-col justify-center items-center p-5 font-medium ${isHovered ? "block" : "hidden"}`}
         >
           <p className={"text-md"}>{hoverDisplayText}</p>
-          <img
-            src={iconPathBack}
-            alt="Info tile icon"
-            className={"w-6 h-auto mt-6"}
-          />
+          <img src={iconPathBack} alt="Info tile icon" className={"w-6 h-auto mt-6"} />
         </div>
       </div>
     </div>

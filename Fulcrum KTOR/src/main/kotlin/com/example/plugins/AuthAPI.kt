@@ -109,6 +109,14 @@ fun Application.configureAuthRouting() {
             }
         }
 
+        post("/api/oAuthLogin") {
+            try {
+                supabase.gotrue.loginWith("Google")
+            } catch (e: Exception) {
+                call.respondError("OAuth login failed: $e")
+            }
+        }
+
         post("/api/logout") {
             try {
                 val currentUser = supabase.gotrue.currentSessionOrNull()
