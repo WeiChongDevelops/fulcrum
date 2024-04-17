@@ -10,8 +10,10 @@ import com.example.entities.successFeedback.ErrorResponseSent
 import com.example.entities.successFeedback.SuccessResponseSent
 import com.example.entities.user.*
 import com.example.getActiveUserId
+import com.example.respondAuthError
 import com.example.respondError
 import com.example.respondSuccess
+import io.github.jan.supabase.exceptions.UnauthorizedRestException
 import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
@@ -20,6 +22,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import java.lang.IllegalStateException
 import kotlin.reflect.KClass
 
 fun Application.configureOtherRouting() {
@@ -149,6 +152,12 @@ fun Application.configureOtherRouting() {
                         eq("userId", getActiveUserId())
                     }.decodeSingle<PublicUserDataResponse>()
                 call.respond(HttpStatusCode.OK, userData)
+            } catch (e: UnauthorizedRestException) {
+                call.application.log.error("Not authorised - JWT token likely expired.", e)
+                call.respondAuthError("Not authorised - JWT token likely expired: $e")
+            } catch (e: IllegalStateException) {
+                call.application.log.error("Session not found.", e)
+                call.respondAuthError("Session not found: $e")
             } catch (e: Exception) {
                 call.application.log.error("Error while retrieving public user data", e)
                 call.respondError("Error while retrieving public user data: $e")

@@ -16,6 +16,8 @@ import {
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../utility/types.ts";
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
 
 interface ExpenseModalsAndFormsProps {
   expenseFormVisibility: ExpenseFormVisibility;
@@ -47,7 +49,22 @@ export default function ExpenseModalsAndForms({
   oldExpenseBeingEdited,
   expenseItemToDelete,
 }: ExpenseModalsAndFormsProps) {
-  const { mutate: deleteExpense } = useDeleteExpense();
+  const [toastId, setToastId] = useState<string | number>();
+  const { mutate: deleteExpense, isPending } = useDeleteExpense();
+  useEffect(() => {
+    if (isPending) {
+      setToastId(
+        toast.loading("Syncing data, please wait.", {
+          description: "Large deletions may take a bit longer.",
+          style: {
+            textAlign: "left",
+          },
+        }),
+      );
+    } else {
+      !!toastId && toast.dismiss(toastId);
+    }
+  }, [isPending]);
 
   return (
     <div className={"z-40"}>

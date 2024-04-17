@@ -100,6 +100,10 @@
   transition: all 300ms ease-out;
 }
 
+.month-navigation-option:focus {
+  outline: none;
+}
+
 .month-navigation-option img {
   width: 2rem;
   user-select: none;

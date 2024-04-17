@@ -5,6 +5,8 @@ import Loader from "../child/other/Loader.tsx";
 import { ErrorBoundary } from "./ErrorBoundary.tsx";
 import { Toaster } from "sonner";
 import { PublicUserData } from "../../utility/types.ts";
+import { useEffect } from "react";
+import { getSessionEmailOrNull } from "../../utility/api.ts";
 
 interface FulcrumProps {
   publicUserData: PublicUserData;
@@ -18,6 +20,12 @@ export default function Fulcrum({ publicUserData, isAnyLoading }: FulcrumProps) 
   if (isAnyLoading) {
     return <Loader isLoading={isAnyLoading} isDarkMode={publicUserData.darkModeEnabled} />;
   }
+
+  useEffect(() => {
+    getSessionEmailOrNull()
+      .then((result) => result === null && (window.location.href = "/login"))
+      .catch(() => (window.location.href = "/login"));
+  }, []);
 
   return (
     <div

@@ -159,7 +159,7 @@ export default function ExpenseCreationForm({
             value={formData.amount === 0 ? "" : formData.amount}
             name="amount"
             id="amount"
-            className="mb-3 text-black"
+            className="mb-3 text-black text-center"
             autoComplete={"off"}
             required
           />

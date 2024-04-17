@@ -21,6 +21,8 @@ import { Toaster } from "sonner";
  * The main application component, handling shared data retrieval, routing and rendering.
  */
 export default function App() {
+  // window.console.log = () => {};
+
   const homePaths = ["/", "/home"];
 
   const {
@@ -47,7 +49,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <EmailContext.Provider value={email}>
+      <EmailContext.Provider value={email!}>
         <Toaster richColors />
         <Router>
           <Routes>

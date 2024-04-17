@@ -3,7 +3,7 @@ import FulcrumButton from "../other/FulcrumButton.tsx";
 import { EmailContext } from "../../../utility/util.ts";
 import { useContext } from "react";
 import { PublicUserData } from "../../../utility/types.ts";
-import { logoutOnClick } from "../../../utility/api.ts";
+import { handleUserLogout } from "../../../utility/api.ts";
 
 interface NavbarUpperProps {
   publicUserData: PublicUserData;
@@ -39,7 +39,7 @@ export default function NavbarUpper({ publicUserData }: NavbarUpperProps) {
             alt="Profile icon"
           />
           {email != "" ? (
-            <FulcrumButton displayText="Log Out" onClick={logoutOnClick} />
+            <FulcrumButton displayText="Log Out" onClick={handleUserLogout} />
           ) : (
             <FulcrumButton displayText="Register" onClick={() => (window.location.href = "/register")} />
           )}

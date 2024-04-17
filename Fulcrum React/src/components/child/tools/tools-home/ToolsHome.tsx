@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useContext, useState } from "react";
 import FulcrumButton from "../../other/FulcrumButton.tsx";
 import ProfileIconUpdatingForm from "./ProfileIconUpdatingForm.tsx";
 import { OpenToolsSection, PublicUserData, ToolsFormVisibility } from "../../../../utility/types.ts";
-import { logoutOnClick } from "../../../../utility/api.ts";
+import { handleUserLogout } from "../../../../utility/api.ts";
 
 interface ToolsHomeProps {
   publicUserData: PublicUserData;
@@ -59,7 +59,7 @@ export default function ToolsHome({ publicUserData, setOpenToolsSection }: Tools
       </div>
       <p className={"font-bold text-2xl text-white mb-5"}>{email}</p>
       <div>
-        <FulcrumButton displayText={"Sign Out"} backgroundColour={"white"} onClick={logoutOnClick} />
+        <FulcrumButton displayText={"Sign Out"} backgroundColour={"white"} onClick={handleUserLogout} />
       </div>
 
       {toolsFormVisibility.isUpdateProfileIconFormVisible && (

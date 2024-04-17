@@ -62,11 +62,22 @@
   color: white;
 }
 
-.fulcrum-form input {
+.fulcrum-form form input {
   text-align: center;
 }
 
-#react-select-3-input {
+#react-select-1-input,
+#react-select-2-input,
+#react-select-3-input,
+#react-select-4-input,
+#react-select-5-input,
+#react-select-6-input,
+#react-select-7-input,
+#react-select-8-input,
+#react-select-9-input,
+#react-select-10-input,
+#react-select-11-input,
+#react-select-12-input {
   text-align: left;
 }
 

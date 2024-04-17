@@ -60,7 +60,7 @@ export const ExpenseMonthGroup = memo(
         <div className={"flex flex-row justify-center items-center relative w-full"}>
           <div
             className={
-              "flex flex-row justify-around items-center w-[40vw] py-2 my-4 bg-[#17423f] rounded-3xl text-white select-none"
+              "flex flex-row justify-between items-center w-[40vw] sm:w-[35vw] md:w-[32vw] lg:w-[30vw] py-2 my-4 bg-[#17423f] rounded-3xl text-white select-none"
             }
           >
             <button
@@ -69,7 +69,7 @@ export const ExpenseMonthGroup = memo(
             >
               <img src="/src/assets/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
             </button>
-            <p className={"text-4xl"}>
+            <p className={"text-3xl"}>
               {monthStringArray[monthExpenseGroupItem.monthIndex] + " " + monthExpenseGroupItem.year.toString()}
             </p>
             <button

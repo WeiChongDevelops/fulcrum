@@ -140,7 +140,7 @@ export default function BudgetCreationForm({
             value={formData.amount === 0 ? "" : formData.amount}
             name="amount"
             id="amount"
-            className="mb-3"
+            className="mb-3 text-center"
             autoComplete={"off"}
             required
           />

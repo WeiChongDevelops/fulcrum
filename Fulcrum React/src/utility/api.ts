@@ -1,4 +1,4 @@
-// EXPENSE API CALL FUNCTIONS //
+// Expense API //
 
 import {
   BlacklistedExpenseItemEntity,
@@ -9,6 +9,25 @@ import {
   RecurringExpenseItemEntity,
 } from "./types.ts";
 import { budgetSort, DEFAULT_CATEGORY_GROUP, DEFAULT_CATEGORY_ICON, expenseSort, groupSort } from "./util.ts";
+import axios from "axios";
+
+const apiClient = axios.create({
+  baseURL: "http://localhost:8080/api",
+  headers: { "Content-Type": "application/json" },
+});
+
+apiClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.log("Session expired or not valid, redirecting to login...");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  },
+);
 
 /**
  * Handles the creation of a new expense item.
@@ -16,57 +35,40 @@ import { budgetSort, DEFAULT_CATEGORY_GROUP, DEFAULT_CATEGORY_ICON, expenseSort,
  */
 export async function handleExpenseCreation(newExpenseItem: ExpenseItemEntity): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/createExpense", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        expenseId: newExpenseItem.expenseId,
-        category: newExpenseItem.category,
-        amount: newExpenseItem.amount,
-        timestamp: newExpenseItem.timestamp,
-        recurringExpenseId: newExpenseItem.recurringExpenseId,
-      }),
+    const response = await apiClient.post("/createExpense", {
+      expenseId: newExpenseItem.expenseId,
+      category: newExpenseItem.category,
+      amount: newExpenseItem.amount,
+      timestamp: newExpenseItem.timestamp,
+      recurringExpenseId: newExpenseItem.recurringExpenseId,
     });
 
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting expense creation: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting expense creation: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw Error(`Error encountered when requesting expense creation: ${error.message}`);
+    } else {
+      throw Error("Error encountered when requesting expense creation.");
     }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (e) {
-    console.error(`Exception encountered when requesting expense creation: ${e}`);
-    throw e;
   }
 }
 
 /**
- * Handles the deletion of multiple expense items in a batch operation.
- * @param expensesToCreate - An array of the expenses to be deleted.
+ * Handles the creation of multiple expense items in a batch operation.
+ * @param expensesToCreate - An array of expenses to be created.
  */
 export async function handleBatchExpenseCreation(expensesToCreate: ExpenseItemEntity[]): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/batchCreateExpenses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        expensesToCreate: expensesToCreate,
-      }),
+    const response = await apiClient.post("/batchCreateExpenses", {
+      expensesToCreate: expensesToCreate,
     });
-
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting batch expense creation: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting batch expense creation: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting batch expense creation: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting batch expense creation.");
     }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (e) {
-    console.error(`Exception encountered when requesting batch expense creation: ${e}`);
-    throw e;
   }
 }
 
@@ -76,28 +78,15 @@ export async function handleBatchExpenseCreation(expensesToCreate: ExpenseItemEn
  */
 export async function getExpenseList(): Promise<ExpenseItemEntity[]> {
   try {
-    const response = await fetch("http://localhost:8080/api/getExpenses", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (response.status === 401) {
-      console.error("JWT token expiry detected. Logging out.");
-      logoutOnClick().then(() => {
-        window.location.href !== "/login" && (window.location.href = "/login");
-      });
+    const response = await apiClient.get("/getExpenses");
+    console.log({ Expense_List_Retrieved: response.data.sort(expenseSort) });
+    return response.data.sort(expenseSort);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`An error occurred while fetching the expense list: ${error.message}.`);
+    } else {
+      throw new Error("Unknown error encountered when requesting expense list retrieval.");
     }
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting expense list retrieval: ${response.status}`);
-      throw new Error(`A HTTP error occurred while fetching the expense list.`);
-    }
-    const responseData = await response.json();
-    console.log({ Expense_List_Retrieved: responseData.sort(expenseSort) });
-    return responseData.sort(expenseSort);
-  } catch (e) {
-    console.error(`Exception encountered when requesting expense list retrieval: ${e}`);
-    throw new Error(`An error occurred while fetching the expense list: ${e}.`);
   }
 }
 
@@ -107,28 +96,20 @@ export async function getExpenseList(): Promise<ExpenseItemEntity[]> {
  */
 export async function handleExpenseUpdating(updatedExpenseItem: ExpenseItemEntity): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/updateExpense", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        expenseId: updatedExpenseItem.expenseId,
-        category: updatedExpenseItem.category,
-        amount: updatedExpenseItem.amount,
-        timestamp: updatedExpenseItem.timestamp,
-        recurringExpenseId: updatedExpenseItem.recurringExpenseId,
-      }),
+    const response = await apiClient.put("/updateExpense", {
+      expenseId: updatedExpenseItem.expenseId,
+      category: updatedExpenseItem.category,
+      amount: updatedExpenseItem.amount,
+      timestamp: updatedExpenseItem.timestamp,
+      recurringExpenseId: updatedExpenseItem.recurringExpenseId,
     });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting expense update: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting expense update: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting expense update: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting expense update.");
     }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (e) {
-    console.error(`Exception encountered when requesting expense update: ${e}`);
-    throw e;
   }
 }
 
@@ -138,24 +119,16 @@ export async function handleExpenseUpdating(updatedExpenseItem: ExpenseItemEntit
  */
 export async function handleExpenseDeletion(expenseId: string): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/deleteExpense", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        expenseId: expenseId,
-      }),
+    const response = await apiClient.delete("/deleteExpense", {
+      data: { expenseId: expenseId },
     });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting expense deletion: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting expense deletion: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting expense deletion: ${error.message}`);
     } else {
-      console.log(await response.json());
+      throw new Error("Unknown error encountered when requesting expense deletion.");
     }
-  } catch (e) {
-    console.error(`Exception encountered when requesting expense deletion: ${e}`);
-    throw e;
   }
 }
 
@@ -165,27 +138,20 @@ export async function handleExpenseDeletion(expenseId: string): Promise<void> {
  */
 export async function handleBatchExpenseDeletion(expenseIdsToDelete: string[]): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/batchDeleteExpenses", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        expenseIdsToDelete: expenseIdsToDelete,
-      }),
+    const response = await apiClient.delete("/batchDeleteExpenses", {
+      data: { expenseIdsToDelete: expenseIdsToDelete },
     });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when performing batch expense deletion: ${response.status}`);
-      throw new Error(`HTTP error encountered when performing batch expense deletion: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting batch expense deletion: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting batch expense deletion.");
     }
-    console.log(await response.json());
-  } catch (e) {
-    console.error(`Exception encountered when requesting batch expense deletion: ${e}`);
-    throw e;
   }
 }
 
-// BUDGET API CALL FUNCTIONS //
+// Budget API //
 
 /**
  * Creates a new budget item and updates the budget array state.
@@ -194,28 +160,19 @@ export async function handleBatchExpenseDeletion(expenseIdsToDelete: string[]): 
 export async function handleBudgetCreation(newBudgetItem: BudgetItemEntity): Promise<void> {
   try {
     console.log(`Found path: ${newBudgetItem.iconPath}`);
-    const response = await fetch("http://localhost:8080/api/createBudget", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        category: newBudgetItem.category.trim(),
-        amount: newBudgetItem.amount ? newBudgetItem.amount : 0,
-        iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : DEFAULT_CATEGORY_ICON,
-        group: newBudgetItem.group ? newBudgetItem.group.trim() : DEFAULT_CATEGORY_GROUP,
-      }),
+    const response = await apiClient.post("/createBudget", {
+      category: newBudgetItem.category.trim(),
+      amount: newBudgetItem.amount ? newBudgetItem.amount : 0,
+      iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : DEFAULT_CATEGORY_ICON,
+      group: newBudgetItem.group ? newBudgetItem.group.trim() : DEFAULT_CATEGORY_GROUP,
     });
-
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting budget creation: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting budget creation: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting budget creation: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting budget creation.");
     }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (e) {
-    console.error(`Exception encountered when requesting budget creation: ${e}`);
-    throw e;
   }
 }
 
@@ -225,27 +182,15 @@ export async function handleBudgetCreation(newBudgetItem: BudgetItemEntity): Pro
  */
 export async function getBudgetList(): Promise<BudgetItemEntity[]> {
   try {
-    const response = await fetch("http://localhost:8080/api/getBudget", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (response.status === 401) {
-      console.error("JWT token expiry detected. Logging out.");
-      logoutOnClick().then(() => {
-        window.location.href !== "/login" && (window.location.href = "/login");
-      });
-    } else if (!response.ok) {
-      console.error(`HTTP error encountered when attempting budget list retrieval: ${response.status}`);
-      throw new Error(`A HTTP error occurred while fetching the budget list.`);
+    const response = await apiClient.get("/getBudget");
+    console.log({ Budget_List_Retrieved: response.data.sort(budgetSort) });
+    return response.data.sort(budgetSort);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`An error occurred while fetching the budget list: ${error.message}.`);
+    } else {
+      throw new Error("Unknown error encountered when requesting budget list retrieval.");
     }
-    const responseData = await response.json();
-    console.log({ Budget_List_Retrieved: responseData.sort(budgetSort) });
-    return responseData.sort(budgetSort);
-  } catch (e) {
-    console.error(`Exception encountered when requesting budget list retrieval: ${e}`);
-    throw e;
   }
 }
 
@@ -256,28 +201,20 @@ export async function getBudgetList(): Promise<BudgetItemEntity[]> {
  */
 export async function handleBudgetUpdating(originalCategory: string, updatedBudgetItem: BudgetItemEntity): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/updateBudget", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        category: originalCategory,
-        newCategoryName: updatedBudgetItem.category.trim(),
-        amount: updatedBudgetItem.amount,
-        group: updatedBudgetItem.group.trim(),
-        iconPath: updatedBudgetItem.iconPath,
-      }),
+    const response = await apiClient.put("/updateBudget", {
+      category: originalCategory,
+      newCategoryName: updatedBudgetItem.category.trim(),
+      amount: updatedBudgetItem.amount,
+      group: updatedBudgetItem.group.trim(),
+      iconPath: updatedBudgetItem.iconPath,
     });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting budget updating: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting budget updating: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting budget updating: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting budget updating.");
     }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (e) {
-    console.error(`Exception encountered when requesting budget updating: ${e}`);
-    throw e;
   }
 }
 
@@ -287,28 +224,20 @@ export async function handleBudgetUpdating(originalCategory: string, updatedBudg
  */
 export async function handleBudgetDeletion(category: string): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/deleteBudget", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        category: category,
-      }),
+    const response = await apiClient.delete("/deleteBudget", {
+      data: { category: category },
     });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting budget deletion: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting budget deletion: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting budget deletion: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting budget deletion.");
     }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (e) {
-    console.error(`Exception encountered when requesting budget deletion: ${e}`);
-    throw e;
   }
 }
 
-// GROUP API CALL FUNCTIONS //
+// Group API //
 
 /**
  * Creates a new budget category group.
@@ -316,25 +245,17 @@ export async function handleBudgetDeletion(category: string): Promise<void> {
  */
 export async function handleGroupCreation(newGroupItem: GroupItemEntity): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/createGroup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        group: newGroupItem.group,
-        colour: newGroupItem.colour,
-      }),
+    const response = await apiClient.post("/createGroup", {
+      group: newGroupItem.group,
+      colour: newGroupItem.colour,
     });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting group creation: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting group creation: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting group creation: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting group creation.");
     }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (e) {
-    console.error(`Exception encountered when requesting group creation: ${e}`);
-    throw e;
   }
 }
 
@@ -344,27 +265,15 @@ export async function handleGroupCreation(newGroupItem: GroupItemEntity): Promis
  */
 export async function getGroupList(): Promise<GroupItemEntity[]> {
   try {
-    const response = await fetch("http://localhost:8080/api/getGroups", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (response.status === 401) {
-      console.error("JWT token expiry detected. Logging out.");
-      logoutOnClick().then(() => {
-        window.location.href !== "/login" && (window.location.href = "/login");
-      });
-    } else if (!response.ok) {
-      console.error(`HTTP error when attempting group list retrieval: ${response.status}`);
-      throw new Error(`A HTTP error occurred while fetching the group list.`);
+    const response = await apiClient.get("/getGroups");
+    console.log({ Groups_Retrieved: response.data.sort(groupSort) });
+    return response.data.sort(groupSort);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`An error occurred while fetching the group list: ${error.message}.`);
+    } else {
+      throw new Error("Unknown error encountered when requesting group list retrieval.");
     }
-    const responseData = await response.json();
-    console.log({ Groups_Retrieved: responseData.sort(groupSort) });
-    return responseData.sort(groupSort);
-  } catch (e) {
-    console.error(`Exception encountered when requesting group list retrieval: ${e}`);
-    throw e;
   }
 }
 
@@ -375,26 +284,18 @@ export async function getGroupList(): Promise<GroupItemEntity[]> {
  */
 export async function handleGroupUpdating(originalGroupName: string, updatedGroupItem: GroupItemEntity): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/updateGroup", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        originalGroupName: originalGroupName,
-        newGroupName: updatedGroupItem.group.trim(),
-        newColour: updatedGroupItem.colour ? updatedGroupItem.colour : "",
-      }),
+    await apiClient.put("/updateGroup", {
+      originalGroupName: originalGroupName,
+      newGroupName: updatedGroupItem.group.trim(),
+      newColour: updatedGroupItem.colour ? updatedGroupItem.colour : "",
     });
-    if (!response.ok) {
-      console.error(`HTTP error when attempting group update: ${response.status}`);
-      throw new Error(`HTTP error when attempting group update: ${response.status}`);
+    console.log("Group successfully updated.");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting group update: ${error.message}`);
     } else {
-      console.log("Group successfully updated.");
+      throw new Error("Unknown error encountered when requesting group update.");
     }
-  } catch (e) {
-    console.error(`Exception encountered when requesting group update: ${e}`);
-    throw e;
   }
 }
 
@@ -405,29 +306,23 @@ export async function handleGroupUpdating(originalGroupName: string, updatedGrou
  */
 export async function handleGroupDeletion(groupName: string, keepContainedBudgets: boolean): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/deleteGroup", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    const response = await apiClient.delete("/deleteGroup", {
+      data: {
         group: groupName,
         keepContainedBudgets: keepContainedBudgets,
-      }),
+      },
     });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting group deletion: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting group deletion: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting group deletion: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting group deletion.");
     }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (e) {
-    console.error(`Exception encountered when requesting group deletion: ${e}`);
-    throw e;
   }
 }
 
-/// RECURRING EXPENSES API CALL FUNCTIONS //
+/// Recurring Expense API //
 
 /**
  * Handles the creation of a new recurring expense.
@@ -435,29 +330,20 @@ export async function handleGroupDeletion(groupName: string, keepContainedBudget
  */
 export async function handleRecurringExpenseCreation(newRecurringExpenseItem: RecurringExpenseItemEntity): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/createRecurringExpense", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        recurringExpenseId: newRecurringExpenseItem.recurringExpenseId,
-        category: newRecurringExpenseItem.category,
-        amount: newRecurringExpenseItem.amount,
-        timestamp: newRecurringExpenseItem.timestamp,
-        frequency: newRecurringExpenseItem.frequency as String,
-      }),
+    const response = await apiClient.post("/createRecurringExpense", {
+      recurringExpenseId: newRecurringExpenseItem.recurringExpenseId,
+      category: newRecurringExpenseItem.category,
+      amount: newRecurringExpenseItem.amount,
+      timestamp: newRecurringExpenseItem.timestamp,
+      frequency: newRecurringExpenseItem.frequency as string,
     });
-
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting recurring expense creation: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting recurring expense creation: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting recurring expense creation: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting recurring expense creation.");
     }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (e) {
-    console.error(`Exception encountered when requesting recurring expense creation: ${e}`);
-    throw e;
   }
 }
 
@@ -467,28 +353,15 @@ export async function handleRecurringExpenseCreation(newRecurringExpenseItem: Re
  */
 export async function getRecurringExpenseList(): Promise<RecurringExpenseItemEntity[]> {
   try {
-    const response = await fetch("http://localhost:8080/api/getRecurringExpenses", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (response.status === 401) {
-      console.error("JWT token expiry detected. Logging out.");
-      logoutOnClick().then(() => {
-        window.location.href !== "/login" && (window.location.href = "/login");
-      });
+    const response = await apiClient.get("/getRecurringExpenses");
+    console.log({ Recurring_Expenses_Retrieved: response.data.sort(expenseSort) });
+    return response.data.sort(expenseSort);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`An error occurred while fetching the recurring expense list: ${error.message}.`);
+    } else {
+      throw new Error("Unknown error encountered while fetching the recurring expense list.");
     }
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting recurring expense list retrieval: ${response.status}`);
-      throw new Error(`A HTTP error occurred while fetching the recurring expense list}.`);
-    }
-    const responseData = await response.json();
-    console.log({ Recurring_Expenses_Retrieved: responseData.sort(expenseSort) });
-    return responseData.sort(expenseSort);
-  } catch (e) {
-    console.error(`Exception encountered when requesting recurring expense list retrieval: ${e}`);
-    throw e;
   }
 }
 
@@ -500,28 +373,20 @@ export async function handleRecurringExpenseUpdating(
   updatedRecurringExpenseItem: RecurringExpenseItemEntity,
 ): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/updateRecurringExpense", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        recurringExpenseId: updatedRecurringExpenseItem.recurringExpenseId,
-        category: updatedRecurringExpenseItem.category,
-        amount: updatedRecurringExpenseItem.amount,
-        timestamp: updatedRecurringExpenseItem.timestamp,
-        frequency: updatedRecurringExpenseItem.frequency,
-      }),
+    const response = await apiClient.put("/updateRecurringExpense", {
+      recurringExpenseId: updatedRecurringExpenseItem.recurringExpenseId,
+      category: updatedRecurringExpenseItem.category,
+      amount: updatedRecurringExpenseItem.amount,
+      timestamp: updatedRecurringExpenseItem.timestamp,
+      frequency: updatedRecurringExpenseItem.frequency,
     });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting recurring expense deletion: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting recurring expense deletion: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting recurring expense update: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting recurring expense update.");
     }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (e) {
-    console.error(`Exception encountered when requesting recurring expense deletion: ${e}`);
-    throw e;
   }
 }
 
@@ -531,27 +396,20 @@ export async function handleRecurringExpenseUpdating(
  */
 export async function handleRecurringExpenseDeletion(recurringExpenseId: string): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/deleteRecurringExpense", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        recurringExpenseId: recurringExpenseId,
-      }),
+    const response = await apiClient.delete("/deleteRecurringExpense", {
+      data: { recurringExpenseId: recurringExpenseId },
     });
-
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting recurring expense deletion: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting recurring expense deletion: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting recurring expense deletion: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting recurring expense deletion.");
     }
-    const responseData = await response.json();
-    console.log(responseData);
-  } catch (e) {
-    console.error(`Exception encountered when requesting recurring expense deletion: ${e}`);
-    throw e;
   }
 }
+
+// Blacklist API //
 
 /**
  * Creates a record for a removed instance of a recurring expense, for blacklist purposes.
@@ -563,27 +421,17 @@ export async function handleBlacklistedExpenseCreation(
   timestampOfRemovedInstance: Date,
 ): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/createBlacklistedExpense", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        recurringExpenseId: recurringExpenseId!,
-        timestampOfRemovedInstance: timestampOfRemovedInstance,
-      }),
+    const response = await apiClient.post("/createBlacklistedExpense", {
+      recurringExpenseId: recurringExpenseId,
+      timestampOfRemovedInstance: timestampOfRemovedInstance,
     });
-
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting blacklist entry creation: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting blacklist entry creation: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting blacklist entry creation: ${error.message}`);
     } else {
-      const responseData = await response.json();
-      console.log(responseData);
+      throw new Error("Unknown error encountered when requesting blacklist entry creation.");
     }
-  } catch (e) {
-    console.error(`Exception encountered when requesting blacklist entry creation: ${e}`);
-    throw e;
   }
 }
 
@@ -597,24 +445,17 @@ export async function handleBatchBlacklistedExpenseCreation(
   timestampsToBlacklist: Date[],
 ): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/batchCreateBlacklistedExpenses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        recurringExpenseId: recurringExpenseId,
-        timestampsToBlacklist: timestampsToBlacklist,
-      }),
+    const response = await apiClient.post("/batchCreateBlacklistedExpenses", {
+      recurringExpenseId: recurringExpenseId,
+      timestampsToBlacklist: timestampsToBlacklist,
     });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting batch blacklist entry creation: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting batch blacklist entry creation: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting batch blacklist entry creation: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting batch blacklist entry creation.");
     }
-    console.log(await response.json());
-  } catch (e) {
-    console.error(`Exception encountered when requesting batch blacklist entry creation: ${e}`);
-    throw e;
   }
 }
 
@@ -624,27 +465,19 @@ export async function handleBatchBlacklistedExpenseCreation(
  */
 export async function getBlacklistedExpenses(): Promise<BlacklistedExpenseItemEntity[]> {
   try {
-    const response = await fetch("http://localhost:8080/api/getBlacklistedExpenses", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting blacklist retrieval: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting blacklist retrieval: ${response.status}`);
+    const response = await apiClient.get("/getBlacklistedExpenses");
+    console.log({ Blacklisted_Expenses_Retrieved: response.data });
+    return response.data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting blacklist retrieval: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting blacklist retrieval.");
     }
-    const blacklistedExpenses = await response.json();
-    console.log({ Blacklisted_Expenses_Retrieved: blacklistedExpenses });
-    return blacklistedExpenses;
-  } catch (e) {
-    console.error(`Exception encountered when requesting blacklist retrieval: ${e}`);
-    throw e;
   }
 }
 
-// TOTAL INCOME API CALLS //
+// Total Income API //
 
 /**
  * Retrieves the total income from the server.
@@ -652,22 +485,15 @@ export async function getBlacklistedExpenses(): Promise<BlacklistedExpenseItemEn
  */
 export async function getTotalIncome(): Promise<number> {
   try {
-    const response = await fetch("http://localhost:8080/api/getTotalIncome", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting total income retrieval: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting total income retrieval: ${response.status}`);
+    const response = await apiClient.get("/getTotalIncome");
+    console.log(response.data);
+    return response.data.totalIncome;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting total income retrieval: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting total income retrieval.");
     }
-    const totalIncome = await response.json();
-    console.log(totalIncome);
-    return totalIncome.totalIncome;
-  } catch (e) {
-    console.error(`Exception encountered when requesting total income retrieval: ${e}`);
-    throw e;
   }
 }
 
@@ -677,48 +503,34 @@ export async function getTotalIncome(): Promise<number> {
  */
 export async function handleTotalIncomeUpdating(newTotalIncome: number): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/updateTotalIncome", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        totalIncome: newTotalIncome,
-      }),
+    const response = await apiClient.put("/updateTotalIncome", {
+      totalIncome: newTotalIncome,
     });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting total income wipe: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting total income wipe: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting total income update: ${error.message}`);
     } else {
-      console.log(await response.json());
+      throw new Error("Unknown error encountered when requesting total income update.");
     }
-  } catch (e) {
-    console.error(`Exception encountered when requesting total income wipe: ${e}`);
-    throw e;
   }
 }
 
-// BROADER DESTRUCTIVE API CALL FUNCTIONS //
+// Broad Destructive API //
 
 /**
  * Deletes all user expense records.
  */
 export async function handleWipeExpenses(): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/wipeExpenses", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      console.error(`HTTP error when attempting expense wipe: ${response.status}`);
-      throw new Error(`HTTP error when attempting expense wipe: ${response.status}`);
+    const response = await apiClient.delete("/wipeExpenses");
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting expense wipe: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting expense wipe.");
     }
-    console.log(await response.json());
-  } catch (e) {
-    console.error(`Exception encountered when requesting expense wipe: ${e}`);
-    throw e;
   }
 }
 
@@ -727,20 +539,14 @@ export async function handleWipeExpenses(): Promise<void> {
  */
 export async function handleWipeBudget(): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/wipeBudget", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting budget wipe: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting budget wipe: ${response.status}`);
+    const response = await apiClient.delete("/wipeBudget");
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting budget wipe: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting budget wipe.");
     }
-    console.log(await response.json());
-  } catch (e) {
-    console.error(`Exception encountered when requesting budget wipe: ${e}`);
-    throw e;
   }
 }
 
@@ -749,24 +555,18 @@ export async function handleWipeBudget(): Promise<void> {
  */
 export async function handleRestoreDefaultBudget(): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/restoreDefaultBudget", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting budget default restore: ${response.status}`);
-      throw new Error(`HTTP error encountered when attempting budget default restore: ${response.status}`);
+    const response = await apiClient.post("/restoreDefaultBudget");
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when attempting budget default restore: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when attempting budget default restore.");
     }
-    console.log(await response.json());
-  } catch (e) {
-    console.error(`Exception encountered when requesting budget default restore: ${e}`);
-    throw e;
   }
 }
 
-// AUTH API CALL FUNCTIONS //
+// Auth API //
 
 /**
  * Attempts to register a new user with the provided email and password.
@@ -774,28 +574,16 @@ export async function handleRestoreDefaultBudget(): Promise<void> {
  */
 export async function handleUserRegistration(email: string, password: string): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
+    await apiClient.post("/register", {
+      email: email,
+      password: password,
     });
-
-    if (!response.ok) {
-      console.error(
-        `User with given email may already exist. HTTP error encountered when attempting user registration: ${response.status}`,
-      );
-      throw new Error(
-        `User with given email may already exist. HTTP error encountered when attempting user registration: ${response.status}`,
-      );
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when attempting user registration: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when attempting user registration.");
     }
-  } catch (e) {
-    console.error("Error:", e);
-    throw e;
   }
 }
 
@@ -805,45 +593,35 @@ export async function handleUserRegistration(email: string, password: string): P
  */
 export async function handleUserLogin(email: string, password: string): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
+    await apiClient.post("/login", {
+      email: email,
+      password: password,
     });
-    if (response.status === 400) {
-      console.error(`Credentials may be incorrect. HTTP error encountered when attempting login: ${response.status}`);
-      throw new Error(`Credentials may be incorrect. HTTP error encountered when attempting login: ${response.status}`);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when attempting login: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when attempting login.");
     }
-  } catch (e) {
-    console.error(`Exception encountered when requesting user login: ${e}`);
-    throw e;
   }
 }
 
 /**
  * Logs out the current user and redirects to the login page.
  */
-export async function logoutOnClick(): Promise<void> {
+export async function handleUserLogout(): Promise<void> {
   try {
     sessionStorage.removeItem("email");
-    const response = await fetch("http://localhost:8080/api/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ jwt: localStorage.getItem("jwt") }),
-    });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting logout: ${response.status}`);
-    }
     window.location.href = "/login";
-  } catch (e) {
-    console.error(`Exception encountered when requesting logout: ${e}`);
+    await apiClient.post("/logout", {
+      jwt: localStorage.getItem("jwt"),
+    });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when attempting logout: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when attempting logout.");
+    }
   }
 }
 
@@ -851,57 +629,36 @@ export async function logoutOnClick(): Promise<void> {
  * Retrieves the email address of the active user, or null if no user is currently authenticated.
  * @return - The active email, or null if there is no active user
  */
-export async function getSessionEmailOrNull(): Promise<any> {
+export async function getSessionEmailOrNull(): Promise<string | null> {
   try {
-    const response = await fetch("http://localhost:8080/api/getActiveUserEmailOrNull", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when requesting session email: ${response.status}`);
+    const response = await apiClient.get("/getActiveUserEmailOrNull");
+    return response.data.email;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting session email: ${error.message}`);
     } else {
-      const responseData = await response.json();
-      console.log(responseData);
-      return responseData.email;
+      throw new Error("Unknown error encountered when requesting session email.");
     }
-  } catch (e) {
-    console.error(`Exception encountered when requesting session email: ${e}`);
-    return null;
   }
 }
 
-// PUBLIC USER DATA API CALLS //
+// Public User Data API //
 
 /**
  * Retrieves public user data.
  */
-export async function getPublicUserData(): Promise<any> {
+export async function getPublicUserData(): Promise<PublicUserData> {
   try {
-    const response = await fetch("http://localhost:8080/api/getPublicUserData", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (response.status === 401) {
-      console.error("JWT token expiry detected. Logging out.");
-      logoutOnClick().then(() => {
-        window.location.href !== "/login" && (window.location.href = "/login");
-      });
-    } else if (!response.ok) {
-      console.error(`HTTP error encountered when attempting public user data retrieval: ${response.status}`);
-      throw new Error(`A HTTP error occurred while fetching public user data.`);
+    const response = await apiClient.get("/getPublicUserData");
+    console.log("Public User Data:");
+    console.log(response.data);
+    return response.data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`An error occurred while fetching public user data: ${error.message}`);
     } else {
-      const publicUserData = await response.json();
-      console.log("Public User Data:");
-      console.log(publicUserData);
-      return publicUserData;
+      throw new Error("Unknown error encountered while fetching public user data.");
     }
-  } catch (e) {
-    console.error(`Exception encountered when requesting public user data retrieval: ${e}`);
-    throw new Error(`An error occurred while fetching public user data: ${e}.`);
   }
 }
 
@@ -909,28 +666,20 @@ export async function getPublicUserData(): Promise<any> {
  * Updates public user data with the specified settings.
  * @param updatedPublicUserData - The updated public user data.
  */
-export async function handlePublicUserDataUpdating(updatedPublicUserData: PublicUserData) {
+export async function handlePublicUserDataUpdating(updatedPublicUserData: PublicUserData): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/updatePublicUserData", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        currency: updatedPublicUserData.currency,
-        darkModeEnabled: updatedPublicUserData.darkModeEnabled,
-        accessibilityEnabled: updatedPublicUserData.accessibilityEnabled,
-        profileIconFileName: updatedPublicUserData.profileIconFileName,
-      }),
+    const response = await apiClient.put("/updatePublicUserData", {
+      currency: updatedPublicUserData.currency,
+      darkModeEnabled: updatedPublicUserData.darkModeEnabled,
+      accessibilityEnabled: updatedPublicUserData.accessibilityEnabled,
+      profileIconFileName: updatedPublicUserData.profileIconFileName,
     });
-    if (!response.ok) {
-      console.error(`HTTP error encountered when attempting public user data update: ${response.status}`);
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting public user data update: ${error.message}`);
     } else {
-      const publicUserData = await response.json();
-      console.log(publicUserData);
-      return publicUserData;
+      throw new Error("Unknown error encountered when requesting public user data update.");
     }
-  } catch (e) {
-    console.log(`Exception encountered when requesting public user data retrieval: ${e}`);
   }
 }

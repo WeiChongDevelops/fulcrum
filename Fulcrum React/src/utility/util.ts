@@ -941,9 +941,9 @@ function processRecurringExpenseInstances(
   misplacedExpensesToRemove: Set<string>;
   newExpensesToAdd: ExpenseItemEntity[];
 } {
-  const oneYearFromNow = new Date();
-  oneYearFromNow.setDate(oneYearFromNow.getDate() + 365);
-  oneYearFromNow.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setDate(today.getDate() + 1);
+  today.setHours(0, 0, 0, 0);
 
   const misplacedExpensesToRemove = new Set<string>();
   const newExpensesToAdd = new Array<ExpenseItemEntity>();
@@ -951,7 +951,7 @@ function processRecurringExpenseInstances(
   recurringExpenseArray.forEach((recurringExpenseItem) => {
     let date = new Date(recurringExpenseItem.timestamp);
 
-    while (date < oneYearFromNow) {
+    while (date < today) {
       const expenseInstances = getRecurringExpenseInstancesOrNull(
         expenseArray,
         recurringExpenseItem.recurringExpenseId,

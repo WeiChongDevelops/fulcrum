@@ -102,7 +102,6 @@ export default function useDeleteExpense() {
             !recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId).includes(expenseItem.expenseId),
         );
       });
-      toast.success("Expense removed.");
       return { expenseArrayBeforeOptimisticUpdate, blacklistExpenseArrayBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {
@@ -118,6 +117,7 @@ export default function useDeleteExpense() {
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["blacklistedExpenseArray", email] });
       await queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+      toast.success("Expense removed.");
     },
   });
 }
