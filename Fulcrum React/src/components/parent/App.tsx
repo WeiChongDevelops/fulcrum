@@ -16,6 +16,8 @@ import FulcrumErrorPage from "../child/other/FulcrumErrorPage.tsx";
 import { EmailContext } from "../../utility/util.ts";
 import { ErrorBoundary } from "./ErrorBoundary.tsx";
 import { Toaster } from "sonner";
+import OAuthRedirect from "../child/auth/OAuthRedirect.tsx";
+import PrivacyPolicy from "../child/other/PrivacyPolicy.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -63,6 +65,8 @@ export default function App() {
             ))}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>
               <Route index element={<Navigate replace to="budget" />} />
               <Route

@@ -574,10 +574,11 @@ export async function handleRestoreDefaultBudget(): Promise<void> {
  */
 export async function handleUserRegistration(email: string, password: string): Promise<void> {
   try {
-    await apiClient.post("/register", {
+    const response = await apiClient.post("/register", {
       email: email,
       password: password,
     });
+    console.log(response.data);
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(`Error encountered when attempting user registration: ${error.message}`);
@@ -593,10 +594,11 @@ export async function handleUserRegistration(email: string, password: string): P
  */
 export async function handleUserLogin(email: string, password: string): Promise<void> {
   try {
-    await apiClient.post("/login", {
+    const response = await apiClient.post("/login", {
       email: email,
       password: password,
     });
+    console.log(response.data);
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(`Error encountered when attempting login: ${error.message}`);
@@ -610,17 +612,50 @@ export async function handleUserLogin(email: string, password: string): Promise<
  * Attempts to log in a user with the provided email and password.
  * Redirects to the budget page on successful login.
  */
-export async function handleUserOAuthLogin(email: string, password: string): Promise<void> {
+export async function handleUserOAuthLoginPrompt(provider: string): Promise<void> {
   try {
-    await apiClient.post("/oAuthLogin", {
-      email: email,
-      password: password,
+    const response = await apiClient.post("/oAuthLoginPrompt", {
+      provider: provider,
     });
+    console.log(response.data);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error(`Error encountered when attempting login: ${error.message}`);
+      throw new Error(`Error encountered when requesting oauth login: ${error.message}`);
     } else {
-      throw new Error("Unknown error encountered when attempting login.");
+      throw new Error("Unknown error encountered when requesting oauth login.");
+    }
+  }
+}
+
+/**
+ * Attempts to log in a user with the provided email and password.
+ * Redirects to the budget page on successful login.
+ */
+export async function handleUserOAuthLoginAttempt(accessToken: string, refreshToken: string): Promise<void> {
+  try {
+    const response = await apiClient.post("/oAuthLoginAttempt", {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    });
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when attempting oauth login: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when attempting oauth login.");
+    }
+  }
+}
+
+export async function handleUserOAuthInit(): Promise<void> {
+  try {
+    const response = await apiClient.post("/oAuthDataInitialisation");
+    console.log(response.data);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting oauth init: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting oauth init.");
     }
   }
 }

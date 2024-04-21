@@ -45,7 +45,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  height: 35vh;
+  /*height: 50vh;*/
   margin-right: 4rem;
 }
 
@@ -67,11 +67,12 @@
   justify-content: center;
   align-items: flex-start;
   width: 100%;
+  font-size: 0.9rem;
 }
 
 .auth-label-input-pair input {
   width: 100%;
-  padding: 0.5rem 1rem 0.5rem 1rem;
+  padding: 0.4rem 0.75rem 0.4rem 0.75rem;
   border-radius: 0.4rem;
   border: 1px solid #989ca2;
   margin-top: 2px;
@@ -128,6 +129,23 @@
 input.invalid {
   animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   border-color: red;
+}
+
+.oauth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+.oauth-divider::before,
+.oauth-divider::after {
+  content: "";
+  flex-grow: 1;
+  border-bottom: 1px solid #ccc;
+}
+.oauth-divider span {
+  padding: 0 10px;
+  background: white;
 }
 
 @media (max-width: 670px) {

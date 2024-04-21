@@ -6,7 +6,11 @@ import com.example.entities.budget.*
 import com.example.entities.user.*
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
 import io.github.jan.supabase.gotrue.gotrue
+import io.github.jan.supabase.gotrue.parseSessionFromUrl
+import io.github.jan.supabase.gotrue.providers.Facebook
+import io.github.jan.supabase.gotrue.providers.Google
 import io.github.jan.supabase.gotrue.providers.builtin.Email
+import io.github.jan.supabase.gotrue.providers.builtin.IDToken
 import io.github.jan.supabase.gotrue.user.UserSession
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
@@ -15,7 +19,8 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.lang.IllegalStateException
+import kotlinx.serialization.Serializable
+
 
 fun Application.configureAuthRouting() {
 
@@ -109,11 +114,110 @@ fun Application.configureAuthRouting() {
             }
         }
 
-        post("/api/oAuthLogin") {
+        post("/api/oAuthLoginPrompt") {
             try {
-                supabase.gotrue.loginWith("Google")
+                val oAuthLoginPromptRequestReceived = call.receive<OAuthLoginPromptRequestReceived>()
+                val provider = if (oAuthLoginPromptRequestReceived.provider == "facebook") {
+                    Facebook
+                } else {
+                    Google
+                }
+
+                supabase.gotrue.loginWith(provider, redirectUrl = "http://localhost:5173/oAuthSuccess") {
+                    scopes.add("email")
+                }
+
+//                supabase.gotrue.signUpWith()
+
+//                val url = supabase.gotrue.oAuthUrl(
+//                    provider = Google,
+//                    redirectUrl = "http://localhost:5173/oAuthSuccess",
+//                ) {
+//                    scopes.addAll(listOf("openid", "email"))
+////                    queryParams["redirect_uri"] = "http://localhost:5173/oAuthSuccess"
+//                    queryParams["response_type"] = "code"
+//                    queryParams["nonce"] = java.util.UUID.randomUUID().toString()
+//                    queryParams["state"] = java.util.UUID.randomUUID().toString()
+//                }
+//                println(url)
+
+//                supabase.gotrue.exchangeCodeForSession()
+
+//                val url = supabase.gotrue.oAuthUrl(
+//                    provider = Google,
+//                    redirectUrl = "http://localhost:5173/oAuthSuccess",
+//                ) {
+//                    queryParams["scope"] = "openid%20email"
+//                    queryParams["redirect_url"] = "http://localhost:5173/oAuthSuccess"
+//                    queryParams["response_type"] = "code"
+//                    queryParams["nonce"] = java.util.UUID.randomUUID().toString()
+//                    queryParams["state"] = java.util.UUID.randomUUID().toString()
+//                }
+                call.respondSuccess("OAuth login prompt successful.")
             } catch (e: Exception) {
-                call.respondError("OAuth login failed: $e")
+                application.log.error("Error during OAuth prompt.", e)
+                call.respondError("Error during OAuth prompt: $e")
+            }
+        }
+
+        post("/api/oAuthLoginAttempt") {
+            try {
+                val oAuthLoginAttemptRequest = call.receive<OAuthLoginAttemptRequest>()
+
+                val accessToken = oAuthLoginAttemptRequest.accessToken
+                val refreshToken = oAuthLoginAttemptRequest.refreshToken
+
+                println("Access Token")
+                println(accessToken)
+                println("Refresh Token")
+                println(refreshToken)
+
+                supabase.gotrue.importSession(
+                    UserSession(
+                        accessToken = accessToken,
+                        refreshToken = refreshToken,
+                        expiresIn = 3600,
+                        tokenType = "bearer",
+                        user = null
+                    ),
+                    true
+                )
+                supabase.gotrue.refreshCurrentSession()
+                val loggedInUser = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
+                call.respond(HttpStatusCode.OK, loggedInUser)
+            } catch (e: Exception) {
+                application.log.error("Error during OAuth login attempt.", e)
+                call.respondError("Error during OAuth login attempt: $e")
+            }
+        }
+
+        post("/api/oAuthDataInitialisation") {
+            try {
+                val publicUserDataNotFound = supabase.postgrest["public_user_data"].select(
+                    columns = Columns.list(
+                        "createdAt, currency, darkModeEnabled, accessibilityEnabled, profileIconFileName"
+                    )
+                ).decodeSingleOrNull<PublicUserDataResponse>() == null
+                val totalIncomeNotFound =
+                    supabase.postgrest["total_income"].select(columns = Columns.list("totalIncome"))
+                        .decodeSingleOrNull<TotalIncomeResponse>() == null
+
+                if (publicUserDataNotFound) {
+                    initialiseDefaultPublicUserData(call)
+                }
+
+                if (totalIncomeNotFound) {
+                    initialiseDefaultIncome(call)
+                }
+
+                if (publicUserDataNotFound && totalIncomeNotFound) {
+                    initialiseDefaultBudgets(call, false)
+                }
+
+                call.respondSuccess("OAuth init successful.")
+            } catch (e: Exception) {
+                application.log.error("Error during OAuth data init.", e)
+                call.respondError("Error during OAuth data init: $e")
             }
         }
 
@@ -141,7 +245,7 @@ fun Application.configureAuthRouting() {
                 val userStatus = if (currentUser == null) {
                     UserEmailOrNull(email = null)
                 } else {
-                    UserEmailOrNull(email = currentUser.user?.email!!)
+                    UserEmailOrNull(email = currentUser.user?.email)
                 }
                 call.respond(HttpStatusCode.OK, userStatus)
             } catch (e: UnauthorizedRestException) {

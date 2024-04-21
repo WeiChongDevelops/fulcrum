@@ -5,6 +5,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import useLoginUser from "../../../hooks/mutations/auth/useLoginUser.ts";
 import Loader from "../other/Loader.tsx";
 import { LoginFormData } from "../../../utility/types.ts";
+import OAuthLoginButton from "../../OAuthLoginButton.tsx";
 
 /**
  * The login page for the Fulcrum application.
@@ -79,7 +80,7 @@ export default function Login() {
                   autoFocus
                 />
               </div>
-              <div className={"auth-label-input-pair my-10"}>
+              <div className={"auth-label-input-pair my-6"}>
                 <label htmlFor={"password"}>Password</label>
                 <input
                   type="password"
@@ -91,7 +92,7 @@ export default function Login() {
                   required
                 />
               </div>
-              <div className={"flex flex-row justify-between items-center w-full"}>
+              <div className={"flex flex-row justify-between items-end w-full"}>
                 <div className={"mr-8 text-xs font-medium"}>
                   <span>Don't have an account? </span>
                   <a href="http://localhost:5173/register" className={"underline text-[#17423F] font-semibold"}>
@@ -99,6 +100,33 @@ export default function Login() {
                   </a>
                 </div>
                 <FulcrumButton displayText={"Log In"} backgroundColour={"green"} optionalTailwind={"mr-0"} />
+              </div>
+              <div className={"flex flex-col justify-start mt-5 items-center gap-3 w-full"}>
+                <div className="oauth-divider my-2 text-xs">
+                  <span>Or</span>
+                </div>
+                <OAuthLoginButton
+                  backgroundColour={"white"}
+                  buttonText={"Continue with Google"}
+                  textColour={"black"}
+                  borderColour={"#ccc"}
+                  provider={"google"}
+                  socialIconPath={"/src/assets/auth-icons/google-icon-colour.svg"}
+                />
+                <OAuthLoginButton
+                  backgroundColour={"#1977F2"}
+                  buttonText={"Continue with Facebook"}
+                  textColour={"white"}
+                  borderColour={"#1977F2"}
+                  provider={"facebook"}
+                  socialIconPath={"/src/assets/auth-icons/facebook-icon-inverted.png"}
+                />
+              </div>
+              <div className={"mt-6 text-xs"}>
+                <span>See our </span>
+                <a href="http://localhost:5173/home/privacy" className={"underline text-[#17423F] font-semibold"}>
+                  Privacy Policy
+                </a>
               </div>
             </form>
           </div>

@@ -9,11 +9,7 @@ interface HomeFooterProps {
  */
 export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
   return (
-    <div
-      className={
-        "relative w-screen z-30 text-black h-48 py-8 mb-24 sm:mb-12 sm:px-8"
-      }
-    >
+    <div className={"relative w-screen z-30 text-black pt-12 mb-24 sm:mb-16 sm:px-8"}>
       {backgroundPath && (
         <img
           src={backgroundPath}
@@ -21,11 +17,7 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
           alt="Pricing background"
         />
       )}
-      <div
-        className={
-          "homepage-footer grid grid-cols-3 grid-rows-8 justify-items-start items-end gap-y-1"
-        }
-      >
+      <div className={"homepage-footer grid grid-cols-3 grid-rows-8 justify-items-start items-end gap-y-1"}>
         <img
           className={"row-start-1 row-end-5 col-start-1 w-20 ml-[10vw]"}
           src={"/src/assets/fulcrum-logos/fulcrum-icon.png"}
@@ -38,50 +30,31 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
           backgroundColour={"green"}
           hoverShadow={true}
         />
-        <div
-          className={
-            "row-start-[8] col-start-1 pl-[9vw] text-[0.55rem] text-left"
-          }
-        >
+        <div className={"row-start-[8] col-start-1 pl-[9vw] text-[0.55rem] text-left"}>
           Copyright © {new Date().getFullYear()}, Fulcrum. All Rights Reserved.
         </div>
 
         <b className={"row-start-5 col-start-2 pl-[10vw] pb-1"}>Navigation</b>
-        <p
-          className={"row-start-6 col-start-2 pl-[10vw]"}
-          onClick={() => (window.location.href = "/home/about")}
-        >
+        <p className={"row-start-6 col-start-2 pl-[10vw]"} onClick={() => (window.location.href = "/home/about")}>
           About
         </p>
-        <p
-          className={"row-start-7 col-start-2 pl-[10vw]"}
-          onClick={() => (window.location.href = "/home/pricing")}
-        >
+        <p className={"row-start-7 col-start-2 pl-[10vw]"} onClick={() => (window.location.href = "/home/pricing")}>
           Pricing
         </p>
-        <p
-          className={"row-start-[8] col-start-2 pl-[10vw]"}
-          onClick={() => (window.location.href = "/home/contact")}
-        >
+        <p className={"row-start-[8] col-start-2 pl-[10vw]"} onClick={() => (window.location.href = "/home/contact")}>
           Contact
         </p>
 
         <b className={"row-start-5 col-start-3 pl-[10vw] pb-1"}>Additional</b>
         <p
           className={"row-start-6 col-start-3 pl-[10vw]"}
-          onClick={() =>
-            (window.location.href =
-              "https://github.com/WeiChongDevelops/Fulcrum")
-          }
+          onClick={() => (window.location.href = "https://github.com/WeiChongDevelops/Fulcrum")}
         >
           GitHub
         </p>
         <p
           className={"row-start-7 col-start-3 pl-[10vw]"}
-          onClick={() =>
-            (window.location.href =
-              "https://github.com/WeiChongDevelops/Fulcrum/blob/main/LICENSE")
-          }
+          onClick={() => (window.location.href = "https://github.com/WeiChongDevelops/Fulcrum/blob/main/LICENSE")}
         >
           License
         </p>
@@ -90,6 +63,12 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
           onClick={() => (window.location.href = "https://weichong.dev/")}
         >
           More from Developer
+        </p>
+        <p
+          className={"row-start-[9] col-start-3 pl-[10vw]"}
+          onClick={() => (window.location.href = "http://localhost:5173/privacy")}
+        >
+          Privacy Policy
         </p>
       </div>
     </div>

@@ -49,7 +49,7 @@ export function useGlobalAppData() {
         initialData: {
           createdAt: new Date(),
           currency: "AUD",
-          profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "",
+          profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "profile-icon-default",
           darkModeEnabled: sessionStoredDarkMode === "true",
           accessibilityEnabled: sessionStoredAccessibilityMode === "true",
         },

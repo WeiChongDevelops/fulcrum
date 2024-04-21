@@ -6,6 +6,7 @@ import useRegisterUser from "../../../hooks/mutations/auth/useRegisterUser.ts";
 import Loader from "../other/Loader.tsx";
 import { toast } from "sonner";
 import { RegisterFormData } from "../../../utility/types.ts";
+import OAuthLoginButton from "../../OAuthLoginButton.tsx";
 
 /**
  * The registration page for the Fulcrum application.
@@ -129,7 +130,7 @@ export default function Register() {
                   autoFocus
                 />
               </div>
-              <div className={`auth-label-input-pair mt-10`}>
+              <div className={`auth-label-input-pair my-6`}>
                 <label htmlFor={"password"}>Password</label>
                 <input
                   ref={passwordField}
@@ -143,11 +144,11 @@ export default function Register() {
                 />
               </div>
               <b
-                className={`mt-2 ${passwordValidation.passwordAccepted ? "text-green-500" : "text-red-500"} ${passwordValidation.attemptedIgnore && "underline"}`}
+                className={`${passwordValidation.passwordAccepted ? "text-green-500" : "text-red-500"} ${passwordValidation.attemptedIgnore && "underline"}`}
               >
                 {passwordValidation.feedback}
               </b>
-              <div className={"auth-label-input-pair my-10"}>
+              <div className={"auth-label-input-pair mb-8"}>
                 <label htmlFor={"password"}>Confirm Password</label>
                 <input
                   ref={confirmPasswordField}
@@ -160,7 +161,7 @@ export default function Register() {
                   required
                 />
               </div>
-              <div className={"flex flex-row justify-between items-center w-full"}>
+              <div className={"flex flex-row justify-between items-end w-full"}>
                 <div className={"mr-8 text-xs font-medium"}>
                   <span>Already have an account? </span>
                   <a href="http://localhost:5173/login" className={"underline text-[#17423F] font-semibold"}>
@@ -168,6 +169,33 @@ export default function Register() {
                   </a>
                 </div>
                 <FulcrumButton displayText={"Create account"} backgroundColour={"green"} optionalTailwind={"mr-0"} />
+              </div>
+              <div className={"flex flex-col justify-start mt-5 items-center gap-3 w-full"}>
+                <div className="oauth-divider my-2 text-xs">
+                  <span>Or</span>
+                </div>
+                <OAuthLoginButton
+                  backgroundColour={"white"}
+                  buttonText={"Continue with Google"}
+                  textColour={"black"}
+                  borderColour={"#ccc"}
+                  provider={"google"}
+                  socialIconPath={"/src/assets/auth-icons/google-icon-colour.svg"}
+                />
+                <OAuthLoginButton
+                  backgroundColour={"#1977F2"}
+                  buttonText={"Continue with Facebook"}
+                  textColour={"white"}
+                  borderColour={"#1977F2"}
+                  provider={"facebook"}
+                  socialIconPath={"/src/assets/auth-icons/facebook-icon-inverted.png"}
+                />
+              </div>
+              <div className={"mt-6 text-xs"}>
+                <span>See our </span>
+                <a href="http://localhost:5173/home/privacy" className={"underline text-[#17423F] font-semibold"}>
+                  Privacy Policy
+                </a>
               </div>
             </form>
           </div>

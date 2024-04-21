@@ -334,6 +334,24 @@ export function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetIte
   return new Date(budgetItemA.timestamp!).getTime() - new Date(budgetItemB.timestamp!).getTime();
 }
 
+/**
+ * Groups category options in the selector, by group.
+ */
+export function categoryOptionSort(
+  optionA: { value: string; label: string; colour: string | null },
+  optionB: { value: string; label: string; colour: string | null },
+) {
+  if (!!optionA.colour && !!optionB.colour) {
+    if (optionA.colour > optionB.colour) {
+      return -1;
+    }
+    if (optionA.colour < optionB.colour) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
 // SELECTOR OPTIONS AND STYLING //
 
 export const recurringFrequencyOptions = [
@@ -427,14 +445,16 @@ export function groupListAsOptions(groupArray: GroupItemEntity[]): SelectorOptio
  * @param groupArray - The array of budget category groups.
  */
 export function categoryListAsOptions(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
-  return budgetArray.map((budgetItemEntity) => {
-    const groupOfCategory = getGroupOfCategory(budgetArray, budgetItemEntity.category);
-    return {
-      value: budgetItemEntity.category,
-      label: budgetItemEntity.category,
-      colour: groupOfCategory ? getColourOfGroup(groupOfCategory, groupArray) : "#17423f",
-    };
-  });
+  return budgetArray
+    .map((budgetItemEntity) => {
+      const groupOfCategory = getGroupOfCategory(budgetArray, budgetItemEntity.category);
+      return {
+        value: budgetItemEntity.category,
+        label: budgetItemEntity.category,
+        colour: groupOfCategory ? getColourOfGroup(groupOfCategory, groupArray) : "#17423f",
+      };
+    })
+    .sort(categoryOptionSort);
 }
 
 export const currencyOptions = [
@@ -455,6 +475,11 @@ export const queryTypeOptions = [
   {
     value: "accountInquiry",
     label: "Account Inquiry",
+    colour: "black",
+  },
+  {
+    value: "deleteAccount",
+    label: "Account Deletion Request",
     colour: "black",
   },
   {
