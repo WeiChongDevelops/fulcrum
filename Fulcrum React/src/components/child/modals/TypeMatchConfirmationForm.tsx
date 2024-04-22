@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { addFormExitListeners, changeFormOrModalVisibility } from "../../../utility/util.ts";
-import FulcrumButton from "./FulcrumButton.tsx";
+import FulcrumButton from "../buttons/FulcrumButton.tsx";
 import { toast } from "sonner";
 import {
   SetFormVisibility,

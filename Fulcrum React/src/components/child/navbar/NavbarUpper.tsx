@@ -1,5 +1,5 @@
 import DarkModeToggle from "../toggles/DarkModeToggle.tsx";
-import FulcrumButton from "../other/FulcrumButton.tsx";
+import FulcrumButton from "../buttons/FulcrumButton.tsx";
 import { EmailContext } from "../../../utility/util.ts";
 import { useContext } from "react";
 import { PublicUserData } from "../../../utility/types.ts";

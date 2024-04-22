@@ -2,8 +2,8 @@ import ExpenseCreationForm from "./forms/ExpenseCreationForm.tsx";
 import { categoryListAsOptions, changeFormOrModalVisibility, getCurrencySymbol } from "../../../utility/util.ts";
 import ExpenseUpdatingForm from "./forms/ExpenseUpdatingForm.tsx";
 import RecurringExpenseInstanceUpdatingForm from "../tools/recurring-expenses/forms/RecurringExpenseInstanceUpdatingForm.tsx";
-import TwoOptionModal from "../other/TwoOptionModal.tsx";
-import ThreeOptionModal from "../other/ThreeOptionModal.tsx";
+import TwoOptionModal from "../modals/TwoOptionModal.tsx";
+import ThreeOptionModal from "../modals/ThreeOptionModal.tsx";
 import useDeleteExpense from "../../../hooks/mutations/expense/useDeleteExpense.ts";
 import {
   BudgetItemEntity,

@@ -1,6 +1,6 @@
 import { checkForOpenModalOrForm } from "../../../../utility/util.ts";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import FulcrumButton from "../../other/FulcrumButton.tsx";
+import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import AddNewRecurringExpenseButton from "./buttons/AddNewRecurringExpenseButton.tsx";
 import RecurringExpenseModalsAndForms from "./RecurringExpenseModalsAndForms.tsx";
 import ActiveFormClickShield from "../../other/ActiveFormClickShield.tsx";

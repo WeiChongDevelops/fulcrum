@@ -113,14 +113,14 @@ export default function ExpenseItem({
           <button className="circle-button" onClick={handleEditClick}>
             <img
               src={`/src/assets/UI-icons/edit-pencil-${isMiscellaneous ? "white" : "black"}-icon.svg`}
-              alt="Edit icon"
+              alt="Expense edit icon"
               className="mx-1 w-6 h-6"
             />
           </button>
           <button className="circle-button" onClick={handleDeleteClick}>
             <img
               src={`/src/assets/UI-icons/delete-trash-${isMiscellaneous ? "white" : "black"}-icon.svg`}
-              alt="Delete icon"
+              alt="Expense delete icon"
               className="mx-1 w-6 h-6"
             />
           </button>

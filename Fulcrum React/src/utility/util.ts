@@ -525,15 +525,17 @@ export function dynamicallySizeBudgetNameDisplays(): void {
 export function dynamicallySizeBudgetNumberDisplays(): void {
   const budgetNumberElements = document.querySelectorAll(".budgeting-values-container") as NodeListOf<HTMLElement>;
   budgetNumberElements.forEach((budgetNumberElement) => {
-    let dynamicFontSize = "";
+    let dynamicFontSize = "0.6rem";
     const budgetNumberFirstLine = budgetNumberElement.firstChild! as HTMLElement;
-    const budgetNumberLength = budgetNumberFirstLine.innerText.length;
-    if (budgetNumberLength <= 28) {
-      dynamicFontSize = "0.875rem";
-    } else if (budgetNumberLength <= 32) {
-      dynamicFontSize = "0.78rem";
-    } else if (budgetNumberLength <= 40) {
-      dynamicFontSize = "0.68rem";
+    const budgetNumberLength = budgetNumberFirstLine.textContent?.length;
+    if (budgetNumberLength) {
+      if (budgetNumberLength <= 28) {
+        dynamicFontSize = "0.875rem";
+      } else if (budgetNumberLength <= 32) {
+        dynamicFontSize = "0.78rem";
+      } else if (budgetNumberLength <= 40) {
+        dynamicFontSize = "0.68rem";
+      }
     }
     budgetNumberElement.style.fontSize = dynamicFontSize;
   });

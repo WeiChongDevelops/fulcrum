@@ -1,5 +1,5 @@
-import { TypeMatchConfirmationForm } from "../../other/TypeMatchConfirmationForm.tsx";
-import TwoOptionModal from "../../other/TwoOptionModal.tsx";
+import { TypeMatchConfirmationForm } from "../../modals/TypeMatchConfirmationForm.tsx";
+import TwoOptionModal from "../../modals/TwoOptionModal.tsx";
 import { changeFormOrModalVisibility } from "../../../../utility/util.ts";
 import useWipeBudget from "../../../../hooks/mutations/budget/useWipeBudget.ts";
 import useWipeExpenses from "../../../../hooks/mutations/expense/useWipeExpenses.ts";

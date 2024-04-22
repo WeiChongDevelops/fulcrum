@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import QueryTypeSelector from "../../selectors/QueryTypeSelector.tsx";
 import emailjs from "@emailjs/browser";
-import FulcrumButton from "../../other/FulcrumButton.tsx";
+import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import Loader from "../../other/Loader.tsx";
 
 /**

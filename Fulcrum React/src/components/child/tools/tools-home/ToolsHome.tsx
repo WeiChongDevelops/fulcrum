@@ -1,6 +1,6 @@
 import { changeFormOrModalVisibility, EmailContext } from "../../../../utility/util.ts";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
-import FulcrumButton from "../../other/FulcrumButton.tsx";
+import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import ProfileIconUpdatingForm from "./ProfileIconUpdatingForm.tsx";
 import { OpenToolsSection, PublicUserData, ToolsFormVisibility } from "../../../../utility/types.ts";
 import { handleUserLogout } from "../../../../utility/api.ts";

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { checkForOpenModalOrForm } from "../../../../utility/util.ts";
-import FulcrumButton from "../../other/FulcrumButton.tsx";
+import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import DarkModeToggle from "../../toggles/DarkModeToggle.tsx";
 import AccessibilityToggle from "../../toggles/AccessibilityToggle.tsx";
 import CurrencySelector from "../../selectors/CurrencySelector.tsx";

@@ -1,4 +1,4 @@
-import FulcrumButton from "../../../other/FulcrumButton.tsx";
+import FulcrumButton from "../../../buttons/FulcrumButton.tsx";
 import { useEffect, useRef } from "react";
 
 /**

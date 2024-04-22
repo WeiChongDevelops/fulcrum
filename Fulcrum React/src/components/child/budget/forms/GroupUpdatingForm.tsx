@@ -4,7 +4,7 @@ import {
   addFormExitListeners,
   changeFormOrModalVisibility,
 } from "../../../../utility/util.ts";
-import FulcrumButton from "../../other/FulcrumButton.tsx";
+import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
 import useUpdateGroup from "../../../../hooks/mutations/budget/useUpdateGroup.ts";
 import { BasicGroupData, BudgetFormVisibility, GroupItemEntity, SetFormVisibility } from "../../../../utility/types.ts";

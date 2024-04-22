@@ -1,5 +1,5 @@
 import { currencyOptions } from "../../../utility/util.ts";
-import FulcrumButton from "../other/FulcrumButton.tsx";
+import FulcrumButton from "../buttons/FulcrumButton.tsx";
 import useUpdatePublicUserData from "../../../hooks/mutations/other/useUpdatePublicUserData.ts";
 import { PublicUserData } from "../../../utility/types.ts";
 

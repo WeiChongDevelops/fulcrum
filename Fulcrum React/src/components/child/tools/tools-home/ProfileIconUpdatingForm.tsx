@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { addIconSelectionFunctionality, changeFormOrModalVisibility } from "../../../../utility/util.ts";
-import FulcrumButton from "../../other/FulcrumButton.tsx";
+import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import ProfileIconSelector from "../../selectors/ProfileIconSelector.tsx";
 import useUpdatePublicUserData from "../../../../hooks/mutations/other/useUpdatePublicUserData.ts";
 import {

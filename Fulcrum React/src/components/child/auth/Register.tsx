@@ -1,4 +1,4 @@
-import FulcrumButton from "../other/FulcrumButton.tsx";
+import FulcrumButton from "../buttons/FulcrumButton.tsx";
 import "../../../css/App.css";
 import "../../../css/Auth.css";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
@@ -6,7 +6,7 @@ import useRegisterUser from "../../../hooks/mutations/auth/useRegisterUser.ts";
 import Loader from "../other/Loader.tsx";
 import { toast } from "sonner";
 import { RegisterFormData } from "../../../utility/types.ts";
-import OAuthLoginButton from "../../OAuthLoginButton.tsx";
+import OAuthLoginButton from "../buttons/OAuthLoginButton.tsx";
 
 /**
  * The registration page for the Fulcrum application.

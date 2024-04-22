@@ -1,4 +1,4 @@
-import "/src/css/Budget.css";
+import "../../../../css/Budget.css";
 import {
   changeFormOrModalVisibility,
   dynamicallySizeBudgetNumberDisplays,
@@ -89,10 +89,10 @@ export default function BudgetTile({
       </div>
       <div className="flex flex-row mb-2">
         <button className="circle-button" onClick={handleEditClick}>
-          <img src="/src/assets/UI-icons/edit-pencil-white-icon.svg" alt="Edit icon" className="mx-1 w-5 h-5" />
+          <img src="/src/assets/UI-icons/edit-pencil-white-icon.svg" alt="Budget edit icon" className="mx-1 w-5 h-5" />
         </button>
         <button className="circle-button" onClick={handleDeleteClick}>
-          <img src="/src/assets/UI-icons/delete-trash-white-icon.svg" alt="Delete icon" className="mx-1 w-5 h-5" />
+          <img src="/src/assets/UI-icons/delete-trash-white-icon.svg" alt="Budget delete icon" className="mx-1 w-5 h-5" />
         </button>
       </div>
     </div>

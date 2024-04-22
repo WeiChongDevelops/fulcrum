@@ -1,4 +1,4 @@
-import { handleUserOAuthLoginPrompt } from "../utility/api.ts";
+import { handleUserOAuthLoginPrompt } from "../../../utility/api.ts";
 
 interface OAuthLoginButtonProps {
   socialIconPath: string;

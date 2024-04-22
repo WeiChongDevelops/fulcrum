@@ -125,14 +125,14 @@ export default function RecurringExpenseItem({
           <button className="circle-button" onClick={handleEditClick}>
             <img
               src={`/src/assets/UI-icons/edit-pencil-${isMiscellaneous ? "white" : "black"}-icon.svg`}
-              alt="Edit icon"
+              alt="Recurring edit icon"
               className="mx-1 w-6 h-6"
             />
           </button>
           <button className="circle-button" onClick={handleDeleteClick}>
             <img
               src={`/src/assets/UI-icons/delete-trash-${isMiscellaneous ? "white" : "black"}-icon.svg`}
-              alt="Delete icon"
+              alt="Recurring delete icon"
               className="mx-1 w-6 h-6"
             />
           </button>

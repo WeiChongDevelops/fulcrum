@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { addFormExitListeners } from "../../../utility/util.ts";
-import FulcrumButton from "./FulcrumButton.tsx";
+import FulcrumButton from "../buttons/FulcrumButton.tsx";
 import {
   BudgetModalVisibility,
   ExpenseModalVisibility,

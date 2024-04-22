@@ -2,7 +2,7 @@ import BudgetCreationForm from "./forms/BudgetCreationForm.tsx";
 import BudgetUpdatingForm from "./forms/BudgetUpdatingForm.tsx";
 import GroupCreationForm from "./forms/GroupCreationForm.tsx";
 import GroupUpdatingForm from "./forms/GroupUpdatingForm.tsx";
-import TwoOptionModal from "../other/TwoOptionModal.tsx";
+import TwoOptionModal from "../modals/TwoOptionModal.tsx";
 import { changeFormOrModalVisibility } from "../../../utility/util.ts";
 import useDeleteGroup from "../../../hooks/mutations/budget/useDeleteGroup.ts";
 import useDeleteBudget from "../../../hooks/mutations/budget/useDeleteBudget.ts";
