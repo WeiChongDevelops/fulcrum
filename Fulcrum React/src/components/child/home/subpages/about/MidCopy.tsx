@@ -26,7 +26,7 @@ export default function MidCopy() {
       <div className={"flex flex-row justify-center items-center mb-20"}>
         <InfoTile
           initialDisplayText={"Simplify Your Finances"}
-          hoverDisplayText={"No confusing UI or features - nothing more or less than what you need."}
+          hoverDisplayText={"No confusing features - nothing more or less than what you need."}
           backgroundColour={"#84cbe3"}
           iconPathFront={"/src/assets/homepage-assets/tile-icon-simplify-front.svg"}
           iconPathBack={"/src/assets/homepage-assets/tile-icon-simplify-back.svg"}
@@ -41,7 +41,7 @@ export default function MidCopy() {
         <InfoTile
           initialDisplayText={"Master Your Finances"}
           hoverDisplayText={
-            "Finally figure out where last week's paycheck disappeared off to (it was Uber Eats - let's be honest)."
+            "Finally figure out where last week's paycheck disappeared off to (let's be honest, it was Uber Eats)."
           }
           backgroundColour={"#29297b"}
           textColor={"white"}

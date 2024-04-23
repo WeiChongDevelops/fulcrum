@@ -142,12 +142,12 @@ export default function Register() {
                   autoComplete={"new-password"}
                   required
                 />
+                <b
+                  className={`mt-3 ${passwordValidation.passwordAccepted ? "text-green-500" : "text-red-500"} ${passwordValidation.attemptedIgnore && "underline"}`}
+                >
+                  {passwordValidation.feedback}
+                </b>
               </div>
-              <b
-                className={`${passwordValidation.passwordAccepted ? "text-green-500" : "text-red-500"} ${passwordValidation.attemptedIgnore && "underline"}`}
-              >
-                {passwordValidation.feedback}
-              </b>
               <div className={"auth-label-input-pair mb-8"}>
                 <label htmlFor={"password"}>Confirm Password</label>
                 <input
