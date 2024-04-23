@@ -13,7 +13,7 @@ export default function NavbarLower({ darkModeEnabled }: NavbarLowerProps) {
   const [hoveredNavButton, setHoveredNavButton] = useState("");
 
   return (
-    <nav className="text-white font-bold z-10">
+    <nav className="text-white font-bold z-10 ">
       <div className="flex flex-row justify-center items-center">
         <div className="flex flex-1 justify-around border-4 border-black bg-black">
           <PageSelectionButton

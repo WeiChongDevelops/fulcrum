@@ -33,7 +33,8 @@ export default function PageSelectionButton({
       id={fulcrumPage}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`lower-navbar-button ${isCurrentWindowLocation ? "bg-[#17423F]" : "bg-black"} hover:text-black ${darkModeEnabled ? "hover:bg-gray-400" : "hover:bg-white"} border-y-2 border-x-4`}
+      className={`lower-navbar-button ${isCurrentWindowLocation ? "bg-[#17423F]" : "bg-black"} hover:text-black ${darkModeEnabled ? "hover:bg-gray-400" : "hover:bg-white"} 
+      focus:outline-none border-y-2 border-x-4`}
       onClick={() => (window.location.href = `/app/${fulcrumPage}`)}
     >
       <PageSelectionButtonIcon

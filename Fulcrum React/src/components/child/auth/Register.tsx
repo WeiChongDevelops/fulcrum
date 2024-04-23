@@ -193,7 +193,11 @@ export default function Register() {
               </div>
               <div className={"mt-6 text-xs"}>
                 <span>See our </span>
-                <a href="http://localhost:5173/home/privacy" className={"underline text-[#17423F] font-semibold"}>
+                <a
+                  href="#"
+                  className={"underline text-[#17423F] font-semibold"}
+                  onClick={() => window.open("http://localhost:5173/privacy", "_blank")}
+                >
                   Privacy Policy
                 </a>
               </div>

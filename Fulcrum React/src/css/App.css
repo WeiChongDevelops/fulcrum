@@ -35,6 +35,10 @@
   opacity: 60%;
 }
 
+.circle-button:focus {
+  outline: none;
+}
+
 .error-message {
   position: absolute;
   font-size: 1.25rem;

@@ -48,25 +48,22 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
         <b className={"row-start-5 col-start-3 pl-[10vw] pb-1"}>Additional</b>
         <p
           className={"row-start-6 col-start-3 pl-[10vw]"}
-          onClick={() => (window.location.href = "https://github.com/WeiChongDevelops/Fulcrum")}
+          onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum", "_blank")}
         >
           GitHub
         </p>
         <p
           className={"row-start-7 col-start-3 pl-[10vw]"}
-          onClick={() => (window.location.href = "https://github.com/WeiChongDevelops/Fulcrum/blob/main/LICENSE")}
+          onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/LICENSE", "_blank")}
         >
           License
         </p>
-        <p
-          className={"row-start-[8] col-start-3 pl-[10vw]"}
-          onClick={() => (window.location.href = "https://weichong.dev/")}
-        >
+        <p className={"row-start-[8] col-start-3 pl-[10vw]"} onClick={() => window.open("https://weichong.dev/", "_blank")}>
           More from Developer
         </p>
         <p
           className={"row-start-[9] col-start-3 pl-[10vw]"}
-          onClick={() => (window.location.href = "http://localhost:5173/privacy")}
+          onClick={() => window.open("http://localhost:5173/privacy", "_blank")}
         >
           Privacy Policy
         </p>

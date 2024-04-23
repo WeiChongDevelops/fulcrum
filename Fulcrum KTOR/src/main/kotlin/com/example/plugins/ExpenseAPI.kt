@@ -254,6 +254,8 @@ fun Application.configureExpenseRouting() {
                     )
                 ) {
                     call.respondSuccess("Blacklist entry already exists.")
+                } else {
+                    call.respondSuccess("Blacklist entry creation successful.")
                 }
             } catch (e: Exception) {
                 call.application.log.error("Error while creating blacklist entry.", e)

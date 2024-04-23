@@ -1081,6 +1081,7 @@ export function changeFormOrModalVisibility<T extends FormVisibility, U extends 
  * Enables form exit on 'Esc' keystroke or click outside form.
  * @param hideForm - The function that hides the form.
  * @param formRef - The reference of the form.
+ * @returns The cleanup function that dismounts added event listeners.
  */
 export function addFormExitListeners(hideForm: () => void, formRef: RefObject<HTMLDivElement>) {
   const handleClickOutside = (e: MouseEvent) => {
@@ -1101,4 +1102,19 @@ export function addFormExitListeners(hideForm: () => void, formRef: RefObject<HT
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscPress);
   };
+}
+
+/**
+ * Provides given parameter values from the url given.
+ * Function presumes url has fragment symbol.
+ * @param url - The url from which to extract parameter values
+ * @param paramKey - The parameter key, of which to find the value
+ * @returns Request parameter.
+ */
+export function getParamFromFragmentURL(url: string, paramKey: string): string | null {
+  const hashIndex = url.indexOf("#");
+  if (hashIndex === -1) return null;
+
+  const params = new URLSearchParams(url.slice(hashIndex + 1));
+  return params.get(paramKey);
 }

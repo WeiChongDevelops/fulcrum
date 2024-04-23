@@ -127,32 +127,6 @@ fun Application.configureAuthRouting() {
                     scopes.add("email")
                 }
 
-//                supabase.gotrue.signUpWith()
-
-//                val url = supabase.gotrue.oAuthUrl(
-//                    provider = Google,
-//                    redirectUrl = "http://localhost:5173/oAuthSuccess",
-//                ) {
-//                    scopes.addAll(listOf("openid", "email"))
-////                    queryParams["redirect_uri"] = "http://localhost:5173/oAuthSuccess"
-//                    queryParams["response_type"] = "code"
-//                    queryParams["nonce"] = java.util.UUID.randomUUID().toString()
-//                    queryParams["state"] = java.util.UUID.randomUUID().toString()
-//                }
-//                println(url)
-
-//                supabase.gotrue.exchangeCodeForSession()
-
-//                val url = supabase.gotrue.oAuthUrl(
-//                    provider = Google,
-//                    redirectUrl = "http://localhost:5173/oAuthSuccess",
-//                ) {
-//                    queryParams["scope"] = "openid%20email"
-//                    queryParams["redirect_url"] = "http://localhost:5173/oAuthSuccess"
-//                    queryParams["response_type"] = "code"
-//                    queryParams["nonce"] = java.util.UUID.randomUUID().toString()
-//                    queryParams["state"] = java.util.UUID.randomUUID().toString()
-//                }
                 call.respondSuccess("OAuth login prompt successful.")
             } catch (e: Exception) {
                 application.log.error("Error during OAuth prompt.", e)
@@ -166,11 +140,6 @@ fun Application.configureAuthRouting() {
 
                 val accessToken = oAuthLoginAttemptRequest.accessToken
                 val refreshToken = oAuthLoginAttemptRequest.refreshToken
-
-                println("Access Token")
-                println(accessToken)
-                println("Refresh Token")
-                println(refreshToken)
 
                 supabase.gotrue.importSession(
                     UserSession(

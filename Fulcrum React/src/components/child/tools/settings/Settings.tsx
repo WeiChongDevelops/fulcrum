@@ -98,6 +98,16 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
           />
         </div>
 
+        <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
+          <b>Privacy Policy</b>
+          <FulcrumButton
+            displayText={"See Privacy Policy"}
+            backgroundColour={"white"}
+            optionalTailwind={"m-0"}
+            onClick={() => window.open("http://localhost:5173/privacy", "_blank")}
+          />
+        </div>
+
         <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
           <b>Account Created:</b>
           <p>{new Date(publicUserData.createdAt).toLocaleDateString()}</p>
