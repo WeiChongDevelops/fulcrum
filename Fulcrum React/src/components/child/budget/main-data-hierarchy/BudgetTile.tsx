@@ -76,7 +76,7 @@ export default function BudgetTile({
       onClick={handleEditClick}
     >
       <div className="tile-icon-container">
-        <img className="budget-tile-icon" src={`/src/assets/category-icons/${icon}`} alt="Category icon" />
+        <img className="budget-tile-icon" src={`/static/assets/category-icons/${icon}`} alt="Category icon" />
       </div>
       <div className="budget-name-container line-clamp-2">
         <p className="budget-name">{category.toUpperCase()}</p>
@@ -89,10 +89,10 @@ export default function BudgetTile({
       </div>
       <div className="flex flex-row mb-2">
         <button className="circle-button" onClick={handleEditClick}>
-          <img src="/src/assets/UI-icons/edit-pencil-white-icon.svg" alt="Budget edit icon" className="mx-1 w-5 h-5" />
+          <img src="/static/assets/UI-icons/edit-pencil-white-icon.svg" alt="Budget edit icon" className="mx-1 w-5 h-5" />
         </button>
         <button className="circle-button" onClick={handleDeleteClick}>
-          <img src="/src/assets/UI-icons/delete-trash-white-icon.svg" alt="Budget delete icon" className="mx-1 w-5 h-5" />
+          <img src="/static/assets/UI-icons/delete-trash-white-icon.svg" alt="Budget delete icon" className="mx-1 w-5 h-5" />
         </button>
       </div>
     </div>

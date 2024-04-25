@@ -14,6 +14,7 @@ interface BudgetUpdatingMutationProps {
 export default function useUpdateBudget() {
   const queryClient = useQueryClient();
   const email = useContext(EmailContext);
+
   return useMutation({
     mutationFn: (budgetUpdatingMutationProps: BudgetUpdatingMutationProps) => {
       return handleBudgetUpdating(
@@ -22,6 +23,11 @@ export default function useUpdateBudget() {
       );
     },
     onMutate: async (budgetUpdatingMutationProps: BudgetUpdatingMutationProps) => {
+      console.log("Updated budget item");
+      console.log({
+        ...budgetUpdatingMutationProps.updatedBudgetItem,
+      });
+
       if (!!budgetUpdatingMutationProps.newGroupItem) {
         await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
         await queryClient.setQueryData(["groupArray", email], (prevGroupCache: GroupItemEntity[]) => {
@@ -35,7 +41,10 @@ export default function useUpdateBudget() {
       await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
         return prevBudgetCache.map((budgetItem) =>
           budgetItem.category === budgetUpdatingMutationProps.originalCategory
-            ? budgetUpdatingMutationProps.updatedBudgetItem
+            ? {
+                ...budgetUpdatingMutationProps.updatedBudgetItem,
+                amount: budgetUpdatingMutationProps.updatedBudgetItem.amount,
+              }
             : budgetItem,
         );
       });

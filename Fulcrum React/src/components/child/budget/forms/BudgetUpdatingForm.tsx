@@ -39,7 +39,7 @@ export default function BudgetUpdatingForm({
 }: BudgetUpdatingFormProps) {
   const [formData, setFormData] = useState<BudgetUpdatingFormData>({
     category: oldBudgetBeingEdited.oldCategory,
-    amount: oldBudgetBeingEdited.oldAmount,
+    amount: oldBudgetBeingEdited.oldAmount.toString(),
     iconPath: oldBudgetBeingEdited.oldIconPath,
     group: oldBudgetBeingEdited.oldGroup,
   });
@@ -70,15 +70,9 @@ export default function BudgetUpdatingForm({
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     hideForm();
-    setFormData({
-      category: oldBudgetBeingEdited.oldCategory,
-      amount: oldBudgetBeingEdited.oldAmount,
-      iconPath: "",
-      group: oldBudgetBeingEdited.oldGroup,
-    });
     let defaultGroupItem: GroupItemEntity | undefined = undefined;
 
-    const updatedBudgetItem: BudgetItemEntity = { ...formData, timestamp: new Date() };
+    const updatedBudgetItem: BudgetItemEntity = { ...formData, amount: parseFloat(formData.amount), timestamp: new Date() };
 
     if (!groupArray.map((groupItem) => groupItem.group).includes(updatedBudgetItem.group)) {
       defaultGroupItem = {
@@ -92,6 +86,13 @@ export default function BudgetUpdatingForm({
       originalCategory: oldBudgetBeingEdited.oldCategory,
       updatedBudgetItem: updatedBudgetItem,
       newGroupItem: defaultGroupItem,
+    });
+
+    setFormData({
+      category: oldBudgetBeingEdited.oldCategory,
+      amount: oldBudgetBeingEdited.oldAmount.toString(),
+      iconPath: "",
+      group: oldBudgetBeingEdited.oldGroup,
     });
   }
 

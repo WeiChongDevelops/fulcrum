@@ -24,11 +24,11 @@
 }
 
 .register-page:before {
-  background-image: url("/src/assets/other-assets/register-bg-4.webp");
+  background-image: url("/static/assets/other-assets/register-bg-4.webp");
 }
 
 .login-page:before {
-  background-image: url("/src/assets/other-assets/login-bg.webp");
+  background-image: url("/static/assets/other-assets/login-bg.webp");
 }
 
 .auth-page-left-column {

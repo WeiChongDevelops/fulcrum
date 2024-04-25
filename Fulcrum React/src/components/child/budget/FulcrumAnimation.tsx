@@ -42,12 +42,12 @@ export default function FulcrumAnimation({
           <b className={`${isDarkMode ? "text-white" : "text-black"}`}>INCOME</b>
         </div>
         <img
-          src={`/src/assets/fulcrum-animation/fulcrum-rectangle-${isDarkMode ? "grey" : "black"}.png`}
+          src={`/static/assets/fulcrum-animation/fulcrum-rectangle-${isDarkMode ? "grey" : "black"}.png`}
           className="fulcrum-rectangle"
           alt="Fulcrum lever"
         />
         <img
-          src={`/src/assets/fulcrum-animation/fulcrum-basket-${isDarkMode ? "grey" : "black"}.webp`}
+          src={`/static/assets/fulcrum-animation/fulcrum-basket-${isDarkMode ? "grey" : "black"}.webp`}
           alt="Fulcrum bowl"
           className="fulcrum-bowl-left"
           style={{
@@ -55,7 +55,7 @@ export default function FulcrumAnimation({
           }}
         />
         <img
-          src={`/src/assets/fulcrum-animation/fulcrum-basket-${isDarkMode ? "grey" : "black"}.webp`}
+          src={`/static/assets/fulcrum-animation/fulcrum-basket-${isDarkMode ? "grey" : "black"}.webp`}
           alt="Fulcrum bowl"
           className="fulcrum-bowl-right"
           style={{

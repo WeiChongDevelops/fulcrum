@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 export default function useAnimationData(lineAngle: number) {
   const [animationDataIsLoading, setAnimationDataIsLoading] = useState(true);
 
-  const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState("/src/assets/fulcrum-animation/fulcrum-tri-red.webp");
+  const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState(
+    "/static/assets/fulcrum-animation/fulcrum-tri-red.webp",
+  );
   const [leverEndXOffset, setLeverEndXOffset] = useState({
     leftEnd: 0,
     rightEnd: 0,
@@ -58,7 +60,7 @@ export default function useAnimationData(lineAngle: number) {
   }, [lineAngle, leverEndXOffset, bowlWidth]);
 
   useEffect(() => {
-    setActiveTriangleFulcrum(`/src/assets/fulcrum-animation/fulcrum-tri-${lineAngle !== 0 ? "red" : "green"}.webp`);
+    setActiveTriangleFulcrum(`/static/assets/fulcrum-animation/fulcrum-tri-${lineAngle !== 0 ? "red" : "green"}.webp`);
   }, [lineAngle]);
 
   useEffect(() => {

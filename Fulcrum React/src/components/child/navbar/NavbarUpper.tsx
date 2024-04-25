@@ -23,7 +23,7 @@ export default function NavbarUpper({ publicUserData }: NavbarUpperProps) {
         <DarkModeToggle publicUserData={publicUserData} />
       </div>
       <img
-        src={`/src/assets/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`}
+        src={`/static/assets/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`}
         alt="Fulcrum logo in navbar"
         className="app-navbar-fulcrum-logo"
         onClick={() => (window.location.href = "/budget")}
@@ -34,7 +34,7 @@ export default function NavbarUpper({ publicUserData }: NavbarUpperProps) {
             {email}
           </p>
           <img
-            src={`/src/assets/profile-icons/${publicUserData.profileIconFileName.slice(0, -4)}-${publicUserData.darkModeEnabled ? "white" : "black"}.svg`}
+            src={`/static/assets/profile-icons/${publicUserData.profileIconFileName.slice(0, -4)}-${publicUserData.darkModeEnabled ? "white" : "black"}.svg`}
             className="profile-icon h-12"
             alt="Profile icon"
           />

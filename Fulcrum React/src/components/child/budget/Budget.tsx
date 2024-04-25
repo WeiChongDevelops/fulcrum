@@ -9,9 +9,9 @@ import Loader from "../other/Loader.tsx";
 import "../../../css/App.css";
 import "../../../css/Budget.css";
 import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
-import useInitialBudgetData from "../../../hooks/initialisations/useInitialBudgetData.ts";
+import useInitialBudgetData from "../../../hooks/queries/useInitialBudgetData.ts";
 import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
-import useAnimationData from "../../../hooks/initialisations/useAnimationData.ts";
+import useAnimationData from "../../../hooks/queries/useAnimationData.ts";
 import { BudgetItemEntity, ExpenseItemEntity, GroupItemEntity, PublicUserData } from "../../../utility/types.ts";
 
 interface BudgetProps {

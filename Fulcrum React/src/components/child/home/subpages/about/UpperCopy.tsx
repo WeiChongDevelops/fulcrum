@@ -32,17 +32,17 @@ export default function UpperCopy() {
       <div className={"upper-copy-first-row"}>
         <div className={"upper-copy-left-col mr-8 sm:mr-32"}>
           <img
-            src="/src/assets/homepage-assets/homepage-highlight-1.png"
+            src="/static/assets/homepage-assets/homepage-highlight-1.png"
             className={"w-8 absolute left-[100%] top-0"}
             alt="Page highlight"
           />
           <p className={"text-5xl text-left font-bold"}>It's time to start paying yourself first.</p>
           <p className={"my-6 font-bold"}>180,000 others have found their balance.</p>
           <div className={"flex flex-row justify-start items-center mb-8"}>
-            <img src="/src/assets/homepage-assets/testimonials.svg" alt="Testimonials" className={"w-32"} />
+            <img src="/static/assets/homepage-assets/testimonials.svg" alt="Testimonials" className={"w-32"} />
             <div className={"flex flex-row justify-start items-center rounded-full bg-[#F7FFFAFF] py-2 pl-2.5 pr-6 ml-2"}>
               <img
-                src="/src/assets/homepage-assets/kylie.png"
+                src="/static/assets/homepage-assets/kylie.png"
                 className={
                   "rounded-full border-4 border-white w-20 hover:scale-110 transition-transform ease-out duration-150"
                 }
@@ -79,14 +79,14 @@ export default function UpperCopy() {
             <FulcrumButton
               displayText={"Start Saving"}
               backgroundColour={"green"}
-              onClick={() => (window.location.href = "http://localhost:5173/register")}
+              onClick={() => (window.location.href = "http://localhost:80/register")}
               hoverShadow={true}
               optionalTailwind={
                 "shadow-[0.4rem_0.4rem_0px_black] mt-8 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[0.75rem_0.75rem_0px_black]"
               }
             />
             <img
-              src="/src/assets/homepage-assets/homepage-highlight-2.png"
+              src="/static/assets/homepage-assets/homepage-highlight-2.png"
               className={"w-8 absolute left-[90%] bottom-0"}
               alt="Page highlight"
             />
@@ -101,7 +101,7 @@ export default function UpperCopy() {
       >
         <div className={"circle-spotlight"} ref={spotlightRef}></div>
         <img
-          src="/src/assets/homepage-assets/complicated.png"
+          src="/static/assets/homepage-assets/complicated.png"
           className={"w-[30rem] sm:w-[42rem] mb-3 relative z-10"}
           alt="Homepage copy"
         />
@@ -111,7 +111,7 @@ export default function UpperCopy() {
       </div>
       <div className={"flex flex-row justify-start items-center relative mt-20 font-bold text-lg sm:text-[1.7rem]"}>
         <img
-          src="/src/assets/homepage-assets/homepage-highlight-3.png"
+          src="/static/assets/homepage-assets/homepage-highlight-3.png"
           className={"w-2 sm:w-5 mr-6 mb-3"}
           alt="Page highlight"
         />
@@ -120,7 +120,7 @@ export default function UpperCopy() {
           <div className={"flex flex-col items-center sm:ml-1"}>
             <p>forever.</p>
             <img
-              src="/src/assets/homepage-assets/homepage-highlight-4.png"
+              src="/static/assets/homepage-assets/homepage-highlight-4.png"
               className={"w-20 sm:w-[6.5rem] -bottom-[1rem]"}
               alt="Page highlight"
             />

@@ -612,12 +612,13 @@ export async function handleUserLogin(email: string, password: string): Promise<
  * Attempts to log in a user with the provided email and password.
  * Redirects to the budget page on successful login.
  */
-export async function handleUserOAuthLoginPrompt(provider: string): Promise<void> {
+export async function handleUserOAuthLoginPrompt(provider: string): Promise<string> {
   try {
     const response = await apiClient.post("/oAuthLoginPrompt", {
       provider: provider,
     });
     console.log(response.data);
+    return response.data;
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(`Error encountered when requesting oauth login: ${error.message}`);

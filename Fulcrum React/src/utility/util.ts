@@ -716,13 +716,16 @@ export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], grou
 
 /**
  * Get the line angle of the Fulcrum scale animation.
- * @param percentageIncomeRemaining - The percentage of income remaining.
+ * @param amountLeftToBudget - The amount of income yet to be budgeted.
+ * @param totalIncome - The total monthly income of the user.
  * @returns The line angle of the animation.
  */
-export function getLineAngle(percentageIncomeRemaining: number): number {
+export function getLineAngle(amountLeftToBudget: number, totalIncome: number): number {
+  const percentageIncomeRemaining = (amountLeftToBudget / totalIncome) * 100;
+
   const functionalPercentageIncomeRemaining =
     percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining;
-  return functionalPercentageIncomeRemaining <= -100
+  return functionalPercentageIncomeRemaining === -100
     ? 14.5
     : functionalPercentageIncomeRemaining === 100
       ? -14.5
@@ -822,14 +825,15 @@ export function getMonthsFromToday(month: number, year: number): number {
  * @returns The structured expense data.
  */
 export async function getStructuredExpenseData(expenseArray: ExpenseItemEntity[]) {
-  return populateStructuredExpenseData(expenseArray, initialiseStructuredExpenseData());
+  const structuredExpenseData = await initialiseStructuredExpenseData();
+  return populateStructuredExpenseData(expenseArray, structuredExpenseData);
 }
 
 /**
  * Initialises the stratified expense data structure from Y2K to a year from today; no expense data is populated.
  * @returns The initialised structured expense data.
  */
-function initialiseStructuredExpenseData(): MonthExpenseGroupEntity[] {
+async function initialiseStructuredExpenseData(): Promise<MonthExpenseGroupEntity[]> {
   let newStructuredExpenseData: MonthExpenseGroupEntity[] = [];
 
   const y2KMonth = Y2K.getMonth();
@@ -863,37 +867,39 @@ function populateStructuredExpenseData(
   expenseArray: ExpenseItemEntity[],
   newStructuredExpenseData: MonthExpenseGroupEntity[],
 ): MonthExpenseGroupEntity[] {
-  for (const expenseItem of expenseArray) {
-    for (let monthExpenseGroupItem of newStructuredExpenseData) {
-      if (
-        monthExpenseGroupItem.monthIndex === new Date(expenseItem.timestamp).getMonth() &&
-        monthExpenseGroupItem.year === new Date(expenseItem.timestamp).getFullYear()
-      ) {
-        let matchingDayGroupExists = false;
-        for (let dayExpenseGroupItem of monthExpenseGroupItem.monthExpenseArray) {
-          if (
-            new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString() ===
-            new Date(expenseItem.timestamp).toLocaleDateString()
-          ) {
-            // console.log(`Adding expense to old group on ${new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString()}`);
-            dayExpenseGroupItem.dayExpenseArray = [...dayExpenseGroupItem.dayExpenseArray, expenseItem];
-            matchingDayGroupExists = true;
+  if (!!expenseArray && expenseArray.length !== 0) {
+    for (const expenseItem of expenseArray) {
+      for (let monthExpenseGroupItem of newStructuredExpenseData) {
+        if (
+          monthExpenseGroupItem.monthIndex === new Date(expenseItem.timestamp).getMonth() &&
+          monthExpenseGroupItem.year === new Date(expenseItem.timestamp).getFullYear()
+        ) {
+          let matchingDayGroupExists = false;
+          for (let dayExpenseGroupItem of monthExpenseGroupItem.monthExpenseArray) {
+            if (
+              new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString() ===
+              new Date(expenseItem.timestamp).toLocaleDateString()
+            ) {
+              // console.log(`Adding expense to old group on ${new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString()}`);
+              dayExpenseGroupItem.dayExpenseArray = [...dayExpenseGroupItem.dayExpenseArray, expenseItem];
+              matchingDayGroupExists = true;
+              break;
+            }
+          }
+          if (matchingDayGroupExists) {
             break;
           }
-        }
-        if (matchingDayGroupExists) {
-          break;
-        }
-        // Otherwise, make a new DayExpenseGroupEntity for the expenseItem's day and add it in.
-        // console.log(`Adding expense item to new group on ${new Date(expenseItem.timestamp).toLocaleDateString()}`);
-        const startOfDayCalendarDate = new Date(expenseItem.timestamp);
-        startOfDayCalendarDate.setHours(0, 0, 0, 0);
+          // Otherwise, make a new DayExpenseGroupEntity for the expenseItem's day and add it in.
+          // console.log(`Adding expense item to new group on ${new Date(expenseItem.timestamp).toLocaleDateString()}`);
+          const startOfDayCalendarDate = new Date(expenseItem.timestamp);
+          startOfDayCalendarDate.setHours(0, 0, 0, 0);
 
-        const newDayExpenseGroup: DayExpenseGroupEntity = {
-          calendarDate: startOfDayCalendarDate,
-          dayExpenseArray: [expenseItem],
-        };
-        monthExpenseGroupItem.monthExpenseArray = [...monthExpenseGroupItem.monthExpenseArray, newDayExpenseGroup];
+          const newDayExpenseGroup: DayExpenseGroupEntity = {
+            calendarDate: startOfDayCalendarDate,
+            dayExpenseArray: [expenseItem],
+          };
+          monthExpenseGroupItem.monthExpenseArray = [...monthExpenseGroupItem.monthExpenseArray, newDayExpenseGroup];
+        }
       }
     }
   }
@@ -975,55 +981,56 @@ function processRecurringExpenseInstances(
   const misplacedExpensesToRemove = new Set<string>();
   const newExpensesToAdd = new Array<ExpenseItemEntity>();
 
-  recurringExpenseArray.forEach((recurringExpenseItem) => {
-    let date = new Date(recurringExpenseItem.timestamp);
+  !!recurringExpenseArray &&
+    recurringExpenseArray.forEach((recurringExpenseItem) => {
+      let date = new Date(recurringExpenseItem.timestamp);
 
-    while (date < today) {
-      const expenseInstances = getRecurringExpenseInstancesOrNull(
-        expenseArray,
-        recurringExpenseItem.recurringExpenseId,
-        date,
-      );
-      const isFrequencyMatch = recurringExpenseLandsOnDay(
-        recurringExpenseItem.timestamp,
-        recurringExpenseItem.frequency,
-        date,
-      );
-      const expenseInstanceIsBlacklisted = blacklistedExpenseInstances
-        ? matchingBlacklistEntryFound(blacklistedExpenseInstances, recurringExpenseItem, date)
-        : false;
-      // If recurring instance already exists on a day,
-      if (expenseInstances != null) {
-        let keepFirstInstance = true;
-        // And this instance shouldn't have landed on this day (can happen when freq is changed),
-        // Queue this and any duplicate instances on this day for removal
-        if (!isFrequencyMatch) {
-          keepFirstInstance = false;
+      while (date < today) {
+        const expenseInstances = getRecurringExpenseInstancesOrNull(
+          expenseArray,
+          recurringExpenseItem.recurringExpenseId,
+          date,
+        );
+        const isFrequencyMatch = recurringExpenseLandsOnDay(
+          recurringExpenseItem.timestamp,
+          recurringExpenseItem.frequency,
+          date,
+        );
+        const expenseInstanceIsBlacklisted = blacklistedExpenseInstances
+          ? matchingBlacklistEntryFound(blacklistedExpenseInstances, recurringExpenseItem, date)
+          : false;
+        // If recurring instance already exists on a day,
+        if (expenseInstances != null) {
+          let keepFirstInstance = true;
+          // And this instance shouldn't have landed on this day (can happen when freq is changed),
+          // Queue this and any duplicate instances on this day for removal
+          if (!isFrequencyMatch) {
+            keepFirstInstance = false;
+          }
+          // Otherwise only queue the duplicate instances on this day for removal
+          for (let i = keepFirstInstance ? 1 : 0; i < expenseInstances.length; i++) {
+            misplacedExpensesToRemove.add(expenseInstances[i].expenseId);
+          }
+        } else {
+          // If: (1) There is no instance on this day, (2) it matches frequency patterns, and (3) it's not blacklisted,
+          // Create an instance of this recurrence expense in the expense array
+          if (isFrequencyMatch && !expenseInstanceIsBlacklisted) {
+            const newExpenseItemLanded: ExpenseItemEntity = {
+              expenseId: uuid(),
+              category: recurringExpenseItem.category,
+              amount: recurringExpenseItem.amount,
+              timestamp: date,
+              recurringExpenseId: recurringExpenseItem.recurringExpenseId,
+            };
+            newExpensesToAdd.push({
+              ...newExpenseItemLanded,
+              timestamp: new Date(newExpenseItemLanded.timestamp.getTime()),
+            });
+          }
         }
-        // Otherwise only queue the duplicate instances on this day for removal
-        for (let i = keepFirstInstance ? 1 : 0; i < expenseInstances.length; i++) {
-          misplacedExpensesToRemove.add(expenseInstances[i].expenseId);
-        }
-      } else {
-        // If: (1) There is no instance on this day, (2) it matches frequency patterns, and (3) it's not blacklisted,
-        // Create an instance of this recurrence expense in the expense array
-        if (isFrequencyMatch && !expenseInstanceIsBlacklisted) {
-          const newExpenseItemLanded: ExpenseItemEntity = {
-            expenseId: uuid(),
-            category: recurringExpenseItem.category,
-            amount: recurringExpenseItem.amount,
-            timestamp: date,
-            recurringExpenseId: recurringExpenseItem.recurringExpenseId,
-          };
-          newExpensesToAdd.push({
-            ...newExpenseItemLanded,
-            timestamp: new Date(newExpenseItemLanded.timestamp.getTime()),
-          });
-        }
+        date.setDate(date.getDate() + 1);
       }
-      date.setDate(date.getDate() + 1);
-    }
-  });
+    });
   return {
     misplacedExpensesToRemove,
     newExpensesToAdd,
@@ -1052,15 +1059,6 @@ export async function getRecurringExpenseInstancesAfterDate(
     }
   }
   return Array.from(requestedExpenseList);
-}
-
-/**
- * Locates the expense item with the given expense ID.
- * @param expenseId - The expense ID to search for.
- * @param expenseArray - To array of expense items in which to search.
- */
-export function findExpenseWithId(expenseId: string, expenseArray: ExpenseItemEntity[]) {
-  return expenseArray.find((expenseItem) => expenseItem.expenseId === expenseId);
 }
 
 /**

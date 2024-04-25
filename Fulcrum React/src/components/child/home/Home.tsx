@@ -13,7 +13,7 @@ export default function Home() {
       <Outlet />
       <HomeFooter
         backgroundPath={
-          getWindowLocation() === "contact" ? "/src/assets/homepage-assets/footer-background-contact.png" : undefined
+          getWindowLocation() === "contact" ? "/static/assets/homepage-assets/footer-background-contact.png" : undefined
         }
       />
     </>

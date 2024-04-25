@@ -28,15 +28,15 @@ export default function MidCopy() {
           initialDisplayText={"Simplify Your Finances"}
           hoverDisplayText={"No confusing features - nothing more or less than what you need."}
           backgroundColour={"#84cbe3"}
-          iconPathFront={"/src/assets/homepage-assets/tile-icon-simplify-front.svg"}
-          iconPathBack={"/src/assets/homepage-assets/tile-icon-simplify-back.svg"}
+          iconPathFront={"/static/assets/homepage-assets/tile-icon-simplify-front.svg"}
+          iconPathBack={"/static/assets/homepage-assets/tile-icon-simplify-back.svg"}
         />
         <InfoTile
           initialDisplayText={"Adapt Your Finances"}
           hoverDisplayText={"Flexible budgets designed to change alongside you."}
           backgroundColour={"#3d97e1"}
-          iconPathFront={"/src/assets/homepage-assets/tile-icon-adapt-front.svg"}
-          iconPathBack={"/src/assets/homepage-assets/tile-icon-adapt-back.svg"}
+          iconPathFront={"/static/assets/homepage-assets/tile-icon-adapt-front.svg"}
+          iconPathBack={"/static/assets/homepage-assets/tile-icon-adapt-back.svg"}
         />
         <InfoTile
           initialDisplayText={"Master Your Finances"}
@@ -45,8 +45,8 @@ export default function MidCopy() {
           }
           backgroundColour={"#29297b"}
           textColor={"white"}
-          iconPathFront={"/src/assets/homepage-assets/tile-icon-master-front.svg"}
-          iconPathBack={"/src/assets/homepage-assets/tile-icon-master-back.svg"}
+          iconPathFront={"/static/assets/homepage-assets/tile-icon-master-front.svg"}
+          iconPathBack={"/static/assets/homepage-assets/tile-icon-master-back.svg"}
         />
       </div>
       <div className={"divider-dots-container"}>

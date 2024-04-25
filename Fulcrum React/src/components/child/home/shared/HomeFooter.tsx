@@ -20,7 +20,7 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
       <div className={"homepage-footer grid grid-cols-3 grid-rows-8 justify-items-start items-end gap-y-1"}>
         <img
           className={"row-start-1 row-end-5 col-start-1 w-20 ml-[10vw]"}
-          src={"/src/assets/fulcrum-logos/fulcrum-icon.png"}
+          src={"/static/assets/fulcrum-logos/fulcrum-icon.png"}
           alt={"icon"}
         ></img>
         <FulcrumButton
@@ -63,7 +63,7 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
         </p>
         <p
           className={"row-start-[9] col-start-3 pl-[10vw]"}
-          onClick={() => window.open("http://localhost:5173/privacy", "_blank")}
+          onClick={() => window.open("http://localhost:80/privacy", "_blank")}
         >
           Privacy Policy
         </p>

@@ -5,7 +5,7 @@ import AddNewRecurringExpenseButton from "./buttons/AddNewRecurringExpenseButton
 import RecurringExpenseModalsAndForms from "./RecurringExpenseModalsAndForms.tsx";
 import ActiveFormClickShield from "../../other/ActiveFormClickShield.tsx";
 import RecurringExpenseItem from "./RecurringExpenseItem.tsx";
-import useInitialRecurringExpenseData from "../../../../hooks/initialisations/useInitialRecurringExpenseData.ts";
+import useInitialRecurringExpenseData from "../../../../hooks/queries/useInitialRecurringExpenseData.ts";
 import {
   BudgetItemEntity,
   CategoryToIconGroupAndColourMap,
@@ -15,6 +15,7 @@ import {
   PublicUserData,
   RecurringExpenseItemEntity,
 } from "../../../../utility/types.ts";
+import "../../../../css/Expense.css";
 
 interface RecurringExpensesProps {
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
@@ -75,9 +76,9 @@ export default function RecurringExpenses({
                 />
               </div>
 
-              <img className={"w-12 h-auto"} src="/src/assets/UI-icons/tools-recurring-icon-white.svg" alt="Cycle icon" />
+              <img className={"w-12 h-auto"} src="/static/assets/UI-icons/tools-recurring-icon-white.svg" alt="Cycle icon" />
               <h1 className="recurring-expenses-title text-white font-bold mx-8">Recurring Expenses</h1>
-              <img className={"w-12 h-auto"} src="/src/assets/UI-icons/tools-recurring-icon-white.svg" alt="Cycle icon" />
+              <img className={"w-12 h-auto"} src="/static/assets/UI-icons/tools-recurring-icon-white.svg" alt="Cycle icon" />
               <div className="flex-grow flex flex-row justify-end">
                 <FulcrumButton
                   displayText={"Go Back"}

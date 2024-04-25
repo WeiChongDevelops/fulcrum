@@ -21,7 +21,7 @@ export default function useUpdateRecurringExpense() {
         (prevRecurringExpenseCache: RecurringExpenseItemEntity[]) => {
           return prevRecurringExpenseCache.map((recurringExpenseItem) =>
             recurringExpenseItem.recurringExpenseId === updatedRecurringExpenseItem.recurringExpenseId
-              ? updatedRecurringExpenseItem
+              ? { ...updatedRecurringExpenseItem }
               : recurringExpenseItem,
           );
         },

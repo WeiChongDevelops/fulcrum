@@ -83,7 +83,7 @@ export default function ExpenseItem({
     <div className="expense-item" style={{ backgroundColor: groupColour }} onClick={handleEditClick} data-value={expenseId}>
       <div className="flex flex-row items-center">
         <div className="rounded-full bg-[#1b1c1c] p-3">
-          <img src={`/src/assets/category-icons/${iconPath}`} alt="Category icon" className="w-8 h-auto" />
+          <img src={`/static/assets/category-icons/${iconPath}`} alt="Category icon" className="w-8 h-auto" />
         </div>
         <div
           className="flex flex-col items-start ml-2"
@@ -103,7 +103,7 @@ export default function ExpenseItem({
       >
         {recurringExpenseId && (
           <img
-            src={`/src/assets/UI-icons/tools-recurring-icon-${isMiscellaneous ? "white" : "black"}.svg`}
+            src={`/static/assets/UI-icons/tools-recurring-icon-${isMiscellaneous ? "white" : "black"}.svg`}
             alt="Cycle icon"
             className={"w-8 h-8 mr-6"}
           />
@@ -112,14 +112,14 @@ export default function ExpenseItem({
         <div className="flex flex-row items-center ml-2">
           <button className="circle-button" onClick={handleEditClick}>
             <img
-              src={`/src/assets/UI-icons/edit-pencil-${isMiscellaneous ? "white" : "black"}-icon.svg`}
+              src={`/static/assets/UI-icons/edit-pencil-${isMiscellaneous ? "white" : "black"}-icon.svg`}
               alt="Expense edit icon"
               className="mx-1 w-6 h-6"
             />
           </button>
           <button className="circle-button" onClick={handleDeleteClick}>
             <img
-              src={`/src/assets/UI-icons/delete-trash-${isMiscellaneous ? "white" : "black"}-icon.svg`}
+              src={`/static/assets/UI-icons/delete-trash-${isMiscellaneous ? "white" : "black"}-icon.svg`}
               alt="Expense delete icon"
               className="mx-1 w-6 h-6"
             />

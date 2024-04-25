@@ -34,7 +34,7 @@ export default function AccessibilityToggle({ publicUserData }: AccessibilityTog
         className={`rounded-full w-7 h-7 p-1 select-none transition-all ease-in-out ${isAccessibilityMode ? "toggle-right-shift bg-black" : "bg-white "}`}
       >
         <img
-          src={`/src/assets/UI-icons/${isAccessibilityMode ? "contrast-mode" : "colour-mode"}.svg`}
+          src={`/static/assets/UI-icons/${isAccessibilityMode ? "contrast-mode" : "colour-mode"}.svg`}
           alt="Accessibility mode icon"
         />
       </div>

@@ -7,7 +7,6 @@ import { changeFormOrModalVisibility } from "../../../utility/util.ts";
 import useDeleteGroup from "../../../hooks/mutations/budget/useDeleteGroup.ts";
 import useDeleteBudget from "../../../hooks/mutations/budget/useDeleteBudget.ts";
 import Loader from "../other/Loader.tsx";
-import { useEffect } from "react";
 import {
   BudgetFormVisibility,
   BudgetModalVisibility,
@@ -52,10 +51,6 @@ export default function BudgetModalsAndForms({
 }: ModalsAndFormsProps) {
   const { isPending, mutate: deleteGroup } = useDeleteGroup();
   const { mutate: deleteBudget } = useDeleteBudget();
-
-  useEffect(() => {
-    console.log(`isPending: ${isPending}`);
-  }, [isPending]);
 
   return (
     <>

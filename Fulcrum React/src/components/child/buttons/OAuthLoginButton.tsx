@@ -1,5 +1,3 @@
-import { handleUserOAuthLoginPrompt } from "../../../utility/api.ts";
-
 interface OAuthLoginButtonProps {
   socialIconPath: string;
   backgroundColour: string;
@@ -7,6 +5,7 @@ interface OAuthLoginButtonProps {
   borderColour: string;
   buttonText: string;
   provider: string;
+  openOAuthLogin: (provider: string) => void;
 }
 
 export default function OAuthLoginButton({
@@ -16,11 +15,16 @@ export default function OAuthLoginButton({
   borderColour,
   buttonText,
   provider,
+  openOAuthLogin,
 }: OAuthLoginButtonProps) {
+  function handleOAuthLoginClick() {
+    openOAuthLogin(provider);
+  }
+
   return (
     <button
       type={"button"}
-      onClick={() => handleUserOAuthLoginPrompt(provider)}
+      onClick={handleOAuthLoginClick}
       className={"w-72 text-left rounded-3xl font-bold flex items-center px-[1.5em] py-[0.5em] gap-4"}
       style={{ backgroundColor: backgroundColour, border: `2px solid ${borderColour}`, color: textColour }}
     >

@@ -27,6 +27,8 @@ private fun Application.serverConfig() {
         allowCredentials = true
         allowNonSimpleContentTypes = true
 
+        allowHost("frontend", schemes = listOf("http"))
+        allowHost("localhost", schemes = listOf("http"))
         allowHost("localhost:5173", schemes = listOf("http"))
     }
 
@@ -40,7 +42,7 @@ private fun Application.serverConfig() {
 
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "localhost") {
+    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         serverConfig()
     }.start(wait = true)
 }

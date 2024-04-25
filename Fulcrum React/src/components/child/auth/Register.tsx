@@ -7,6 +7,7 @@ import Loader from "../other/Loader.tsx";
 import { toast } from "sonner";
 import { RegisterFormData } from "../../../utility/types.ts";
 import OAuthLoginButton from "../buttons/OAuthLoginButton.tsx";
+import useOAuthLoginUrl from "../../../hooks/mutations/auth/useOAuthLoginUrl.ts";
 
 /**
  * The registration page for the Fulcrum application.
@@ -24,7 +25,9 @@ export default function Register() {
   });
   const passwordField = useRef<HTMLInputElement>(null);
   const confirmPasswordField = useRef<HTMLInputElement>(null);
-  const { isPending, mutate: registerUser } = useRegisterUser();
+
+  const { isPending: isRegistrationPending, mutate: registerUser } = useRegisterUser();
+  const { isPending: isOAuthURLPending, mutate: openOAuthLogin } = useOAuthLoginUrl();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -92,13 +95,13 @@ export default function Register() {
 
   return (
     <>
-      <Loader isLoading={isPending} isDarkMode={false} />
-      <div className={`${isPending && "opacity-80 animate-pulse transition-opacity"}`}>
+      <Loader isLoading={isRegistrationPending || isOAuthURLPending} isDarkMode={false} />
+      <div className={`${(isRegistrationPending || isOAuthURLPending) && "opacity-80 animate-pulse transition-opacity"}`}>
         <div className={"auth-page-container register-page"}>
           <div className={"auth-page-left-column"}>
             <div className={"flex-1"}>
               <img
-                src="/src/assets/fulcrum-logos/fulcrum-long-white.webp"
+                src="/static/assets/fulcrum-logos/fulcrum-long-white.webp"
                 className={"auth-standard-fulcrum-logo"}
                 alt="Fulcrum logo"
               />
@@ -111,7 +114,7 @@ export default function Register() {
           <div className={"auth-page-right-column"}>
             <div className={"flex-1"}>
               <img
-                src="/src/assets/fulcrum-logos/fulcrum-long-white.webp"
+                src="/static/assets/fulcrum-logos/fulcrum-long-white.webp"
                 className={"auth-mobile-fulcrum-logo"}
                 alt="Fulcrum logo"
               />
@@ -164,7 +167,7 @@ export default function Register() {
               <div className={"flex flex-row justify-between items-end w-full"}>
                 <div className={"mr-8 text-xs font-medium"}>
                   <span>Already have an account? </span>
-                  <a href="http://localhost:5173/login" className={"underline text-[#17423F] font-semibold"}>
+                  <a href="http://localhost:80/login" className={"underline text-[#17423F] font-semibold"}>
                     Login
                   </a>
                 </div>
@@ -180,7 +183,8 @@ export default function Register() {
                   textColour={"black"}
                   borderColour={"#ccc"}
                   provider={"google"}
-                  socialIconPath={"/src/assets/auth-icons/google-icon-colour.svg"}
+                  socialIconPath={"/static/assets/auth-icons/google-icon-colour.svg"}
+                  openOAuthLogin={openOAuthLogin}
                 />
                 <OAuthLoginButton
                   backgroundColour={"#1977F2"}
@@ -188,7 +192,8 @@ export default function Register() {
                   textColour={"white"}
                   borderColour={"#1977F2"}
                   provider={"facebook"}
-                  socialIconPath={"/src/assets/auth-icons/facebook-icon-inverted.png"}
+                  socialIconPath={"/static/assets/auth-icons/facebook-icon-inverted.png"}
+                  openOAuthLogin={openOAuthLogin}
                 />
               </div>
               <div className={"mt-6 text-xs"}>
@@ -196,7 +201,7 @@ export default function Register() {
                 <a
                   href="#"
                   className={"underline text-[#17423F] font-semibold"}
-                  onClick={() => window.open("http://localhost:5173/privacy", "_blank")}
+                  onClick={() => window.open("http://localhost:80/privacy", "_blank")}
                 >
                   Privacy Policy
                 </a>

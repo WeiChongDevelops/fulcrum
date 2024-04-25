@@ -123,11 +123,9 @@ fun Application.configureAuthRouting() {
                     Google
                 }
 
-                supabase.gotrue.loginWith(provider, redirectUrl = "http://localhost:5173/oAuthSuccess") {
-                    scopes.add("email")
-                }
-
-                call.respondSuccess("OAuth login prompt successful.")
+                val oAuthLoginURL =
+                    supabase.gotrue.oAuthUrl(provider, redirectUrl = "http://localhost:80/oAuthSuccess")
+                call.respond(HttpStatusCode.OK, oAuthLoginURL);
             } catch (e: Exception) {
                 application.log.error("Error during OAuth prompt.", e)
                 call.respondError("Error during OAuth prompt: $e")

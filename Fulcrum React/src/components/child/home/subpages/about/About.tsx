@@ -30,7 +30,7 @@ export default function About() {
   return (
     <div className={"about-container bg-[#e0eddf] relative"}>
       <img
-        src="/src/assets/homepage-assets/scroll-arrow.svg"
+        src="/static/assets/homepage-assets/scroll-arrow.svg"
         className={`fixed top-[95vh] animate-bounce left-[48vw] w-[2vw] h-[2vw] z-50 opacity-60 ${showArrow ? "block" : "hidden"}`}
       ></img>
       <UpperCopy />

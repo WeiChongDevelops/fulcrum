@@ -1,7 +1,7 @@
 import { handleUserOAuthLoginAttempt } from "../../../utility/api.ts";
 import { toast } from "sonner";
 import { useEffect } from "react";
-import useInitOAuthAccount from "../../../hooks/mutations/auth/useInitOAuthAccount.tsx";
+import useInitOAuthAccount from "../../../hooks/mutations/auth/useInitOAuthAccount.ts";
 import { getParamFromFragmentURL } from "../../../utility/util.ts";
 
 export default function OAuthRedirect() {
@@ -18,9 +18,10 @@ export default function OAuthRedirect() {
   }, []);
 
   return (
-    <div className={"flex flex-col justify-center items-center h-screen gap-14 text-black font-bold"}>
-      <p className={"font-bold text-black text-4xl"}>Login successful!</p>
-      <img src="/src/assets/fulcrum-logos/fulcrum-icon.png" className={"w-10 h-10"} alt="Fulcrum icon" />
+    <div className={"flex flex-col justify-center items-center h-screen gap-8 text-black"}>
+      <p className={"font-bold text-5xl "}>Login successful!</p>
+      <p className={"font-medium text-xl"}>Please wait to be redirected...</p>
+      <img src="/static/assets/fulcrum-logos/fulcrum-icon.png" className={"w-12 h-12 animate-bounce"} alt="Fulcrum icon" />
     </div>
   );
 }

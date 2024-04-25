@@ -6,6 +6,7 @@ import useLoginUser from "../../../hooks/mutations/auth/useLoginUser.ts";
 import Loader from "../other/Loader.tsx";
 import { LoginFormData } from "../../../utility/types.ts";
 import OAuthLoginButton from "../buttons/OAuthLoginButton.tsx";
+import useOAuthLoginUrl from "../../../hooks/mutations/auth/useOAuthLoginUrl.ts";
 
 /**
  * The login page for the Fulcrum application.
@@ -15,7 +16,9 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const { isSuccess, isPending, mutate: loginUser } = useLoginUser();
+
+  const { isSuccess: isLoginSuccess, isPending: isUserLoginPending, mutate: loginUser } = useLoginUser();
+  const { isPending: isOAuthURLPending, mutate: openOAuthLogin } = useOAuthLoginUrl();
 
   async function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setFormData((prevFormData) => ({
@@ -31,24 +34,24 @@ export default function Login() {
   }
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isLoginSuccess) {
       sessionStorage.setItem("email", formData.email);
       setFormData({
         email: "",
         password: "",
       });
     }
-  }, [isSuccess]);
+  }, [isLoginSuccess]);
 
   return (
     <>
-      <Loader isLoading={isPending} isDarkMode={false} />
-      <div className={`${isPending && "opacity-80 animate-pulse transition-opacity"}`}>
+      <Loader isLoading={isUserLoginPending || isOAuthURLPending} isDarkMode={false} />
+      <div className={`${(isUserLoginPending || isOAuthURLPending) && "opacity-80 animate-pulse transition-opacity"}`}>
         <div className={"auth-page-container login-page"}>
           <div className={"auth-page-left-column"}>
             <div className={"flex-1"}>
               <img
-                src="/src/assets/fulcrum-logos/fulcrum-long-white.webp"
+                src="/static/assets/fulcrum-logos/fulcrum-long-white.webp"
                 className={"auth-standard-fulcrum-logo"}
                 alt="Fulcrum logo"
               />
@@ -61,7 +64,7 @@ export default function Login() {
           <div className={"auth-page-right-column"}>
             <div className={"flex-1"}>
               <img
-                src="/src/assets/fulcrum-logos/fulcrum-long-white.webp"
+                src="/static/assets/fulcrum-logos/fulcrum-long-white.webp"
                 className={"auth-mobile-fulcrum-logo"}
                 alt="Fulcrum logo"
               />
@@ -95,7 +98,7 @@ export default function Login() {
               <div className={"flex flex-row justify-between items-end w-full"}>
                 <div className={"mr-8 text-xs font-medium"}>
                   <span>Don't have an account? </span>
-                  <a href="http://localhost:5173/register" className={"underline text-[#17423F] font-semibold"}>
+                  <a href="http://localhost:80/register" className={"underline text-[#17423F] font-semibold"}>
                     Register
                   </a>
                 </div>
@@ -111,7 +114,8 @@ export default function Login() {
                   textColour={"black"}
                   borderColour={"#ccc"}
                   provider={"google"}
-                  socialIconPath={"/src/assets/auth-icons/google-icon-colour.svg"}
+                  socialIconPath={"/static/assets/auth-icons/google-icon-colour.svg"}
+                  openOAuthLogin={openOAuthLogin}
                 />
                 <OAuthLoginButton
                   backgroundColour={"#1977F2"}
@@ -119,15 +123,16 @@ export default function Login() {
                   textColour={"white"}
                   borderColour={"#1977F2"}
                   provider={"facebook"}
-                  socialIconPath={"/src/assets/auth-icons/facebook-icon-inverted.png"}
+                  socialIconPath={"/static/assets/auth-icons/facebook-icon-inverted.png"}
+                  openOAuthLogin={openOAuthLogin}
                 />
               </div>
               <div className={"mt-6 text-xs"}>
                 <span>See our </span>
                 <a
-                  href="http://localhost:5173/home/privacy"
+                  href="http://localhost:80/home/privacy"
                   className={"underline text-[#17423F] font-semibold"}
-                  onClick={() => window.open("http://localhost:5173/privacy", "_blank")}
+                  onClick={() => window.open("http://localhost:80/privacy", "_blank")}
                 >
                   Privacy Policy
                 </a>

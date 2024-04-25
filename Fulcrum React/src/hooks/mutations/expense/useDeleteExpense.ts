@@ -117,7 +117,7 @@ export default function useDeleteExpense() {
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["blacklistedExpenseArray", email] });
       await queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
-      toast.success("Expense removed.");
+      toast.success("Expense(s) removed.");
     },
   });
 }

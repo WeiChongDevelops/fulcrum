@@ -1,7 +1,7 @@
 export default function PrivacyPolicy() {
   return (
     <div className={"prose prose-lg prose-indigo m-auto mt-12 text-left max-w-[60vw]"}>
-      <img src="/src/assets/fulcrum-logos/fulcrum-icon.png" alt="Fulcrum icon" className={"w-24"} />
+      <img src="/static/assets/fulcrum-logos/fulcrum-icon.png" alt="Fulcrum icon" className={"w-24"} />
       <h1>Fulcrum Finance | Privacy Policy</h1>
       <p>Last updated: April 20, 2024</p>
       <p>
@@ -312,8 +312,8 @@ export default function PrivacyPolicy() {
       <h2>Contact Us</h2>
       <p>
         If you have any questions about this Privacy Policy, You can contact us: By visiting this page on our website:{" "}
-        <a href="http://localhost:5173/home/contact" rel="external nofollow noopener" target="_blank">
-          http://localhost:5173/home/contact
+        <a href="http://localhost:80/home/contact" rel="external nofollow noopener" target="_blank">
+          http://localhost:80/home/contact
         </a>
       </p>
     </div>

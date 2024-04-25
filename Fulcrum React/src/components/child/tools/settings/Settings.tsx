@@ -59,9 +59,9 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
             />
           </div>
 
-          <img className={"w-12 h-auto"} src="/src/assets/UI-icons/tools-settings-icon-white.svg" alt="Settings icon" />
+          <img className={"w-12 h-auto"} src="/static/assets/UI-icons/tools-settings-icon-white.svg" alt="Settings icon" />
           <h1 className="text-white font-bold mx-8">Settings</h1>
-          <img className={"w-12 h-auto"} src="/src/assets/UI-icons/tools-settings-icon-white.svg" alt="Settings icon" />
+          <img className={"w-12 h-auto"} src="/static/assets/UI-icons/tools-settings-icon-white.svg" alt="Settings icon" />
 
           <div className="flex-grow flex flex-row justify-end">
             <FulcrumButton
@@ -104,7 +104,7 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
             displayText={"See Privacy Policy"}
             backgroundColour={"white"}
             optionalTailwind={"m-0"}
-            onClick={() => window.open("http://localhost:5173/privacy", "_blank")}
+            onClick={() => window.open("http://localhost:80/privacy", "_blank")}
           />
         </div>
 

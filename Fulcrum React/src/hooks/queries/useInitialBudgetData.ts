@@ -36,7 +36,8 @@ export default function useInitialBudgetData() {
   const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
   const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
   const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
-  const [lineAngle, setLineAngle] = useState(1);
+
+  const [lineAngle, setLineAngle] = useState(0);
   const [perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function useInitialBudgetData() {
 
   async function retrieveInitialData() {
     try {
-      const isLoggedIn = (await getSessionEmailOrNull()).email !== null;
+      const isLoggedIn = (await getSessionEmailOrNull()) !== null;
       if (isLoggedIn) {
         console.log("User logged in.");
       } else {
@@ -73,7 +74,7 @@ export default function useInitialBudgetData() {
   });
 
   useEffect(() => {
-    totalIncome && setLineAngle(getLineAngle((amountLeftToBudget / totalIncome) * 100));
+    totalIncome && setLineAngle(getLineAngle(amountLeftToBudget, totalIncome));
   }, [amountLeftToBudget, totalIncome]);
 
   return {

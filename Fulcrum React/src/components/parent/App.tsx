@@ -3,21 +3,21 @@ import Register from "../child/auth/Register.tsx";
 import Login from "../child/auth/Login.tsx";
 import Budget from "../child/budget/Budget.tsx";
 import Fulcrum from "./Fulcrum.tsx";
-import Expenses from "../child/expenses/Expenses.tsx";
 import Tools from "../child/tools/Tools.tsx";
 import "../../css/App.css";
 import About from "../child/home/subpages/about/About.tsx";
 import Contact from "../child/home/subpages/Contact.tsx";
 import Pricing from "../child/home/subpages/Pricing.tsx";
 import Home from "../child/home/Home.tsx";
-import { useGlobalAppData } from "../../hooks/initialisations/useGlobalAppData.ts";
+import { useGlobalAppData } from "../../hooks/queries/useGlobalAppData.ts";
 import Loader from "../child/other/Loader.tsx";
 import FulcrumErrorPage from "../child/other/FulcrumErrorPage.tsx";
 import { EmailContext } from "../../utility/util.ts";
-import { ErrorBoundary } from "./ErrorBoundary.tsx";
+import { ErrorBoundary } from "../child/other/ErrorBoundary.tsx";
 import { Toaster } from "sonner";
 import OAuthRedirect from "../child/auth/OAuthRedirect.tsx";
 import PrivacyPolicy from "../child/other/PrivacyPolicy.tsx";
+import Expenses from "../child/expenses/Expenses.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.

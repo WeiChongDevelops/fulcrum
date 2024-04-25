@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "1.9.10"
     id("io.ktor.plugin") version "2.3.3"
     kotlin("plugin.serialization") version "1.9.10"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "com.example"
@@ -24,7 +25,6 @@ repositories {
 
 dependencies {
     runtimeOnly("org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.5.0")
-
 
     implementation("io.ktor:ktor-server-cors-jvm:2.3.6")
 

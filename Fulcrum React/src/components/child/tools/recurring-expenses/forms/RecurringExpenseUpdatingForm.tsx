@@ -13,7 +13,6 @@ import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import CategorySelector from "../../../selectors/CategorySelector.tsx";
-import { v4 as uuid } from "uuid";
 import useUpdateRecurringExpense from "../../../../../hooks/mutations/recurring-expense/useUpdateRecurringExpense.ts";
 import {
   PreviousRecurringExpenseBeingEdited,
@@ -72,19 +71,20 @@ export default function RecurringExpenseUpdatingForm({
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     hideForm();
+
+    const updatedRecurringExpenseItem: RecurringExpenseItemEntity = {
+      ...formData,
+      recurringExpenseId: oldRecurringExpenseBeingEdited.recurringExpenseId,
+      timestamp: formData.timestamp as Date,
+    };
+    updateRecurringExpense(updatedRecurringExpenseItem);
+
     setFormData({
       category: oldRecurringExpenseBeingEdited.oldCategory,
       amount: oldRecurringExpenseBeingEdited.oldAmount,
       timestamp: oldRecurringExpenseBeingEdited.oldTimestamp,
       frequency: oldRecurringExpenseBeingEdited.oldFrequency,
     });
-
-    const updatedRecurringExpenseItem: RecurringExpenseItemEntity = {
-      ...formData,
-      recurringExpenseId: uuid(),
-      timestamp: formData.timestamp as Date,
-    };
-    updateRecurringExpense(updatedRecurringExpenseItem);
   }
 
   function onDateInputChange(newValue: Value) {

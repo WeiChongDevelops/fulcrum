@@ -1,11 +1,8 @@
 {
   "dependencies": {
-    "@emailjs/browser": "^4.3.3",
     "@remotion/cli": "^4.0.118",
     "axios": "^1.6.8",
-    "react-date-picker": "^10.6.0",
-    "react-router-dom": "^6.21.0",
-    "react-select": "^5.8.0"
+    "react-router-dom": "^6.21.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.4.0",

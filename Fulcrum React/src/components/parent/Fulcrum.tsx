@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import NavbarUpper from "../child/navbar/NavbarUpper.tsx";
 import NavbarLower from "../child/navbar/NavbarLower.tsx";
 import Loader from "../child/other/Loader.tsx";
-import { ErrorBoundary } from "./ErrorBoundary.tsx";
+import { ErrorBoundary } from "../child/other/ErrorBoundary.tsx";
 import { Toaster } from "sonner";
 import { PublicUserData } from "../../utility/types.ts";
 import { useEffect } from "react";

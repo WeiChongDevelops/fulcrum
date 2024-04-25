@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import FulcrumErrorPage from "../child/other/FulcrumErrorPage.tsx";
+import FulcrumErrorPage from "./FulcrumErrorPage.tsx";
 
 interface ErrorBoundaryProps {
   children: ReactNode;

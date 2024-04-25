@@ -138,10 +138,10 @@ export default function Group({
           {!isMiscellaneous && (
             <div className="flex flex-row justify-center items-center ml-2 relative top-0.5">
               <div className="circle-button" onClick={handleEditClick}>
-                <img src="/src/assets/UI-icons/edit-pencil-black-icon.svg" alt="Group edit icon" className="w-5 h-5" />
+                <img src="/static/assets/UI-icons/edit-pencil-black-icon.svg" alt="Group edit icon" className="w-5 h-5" />
               </div>
               <div className="circle-button" onClick={handleDeleteClick}>
-                <img src="/src/assets/UI-icons/delete-trash-black-icon.svg" alt="Group delete icon" className="w-5 h-5" />
+                <img src="/static/assets/UI-icons/delete-trash-black-icon.svg" alt="Group delete icon" className="w-5 h-5" />
               </div>
             </div>
           )}

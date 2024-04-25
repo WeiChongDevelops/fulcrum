@@ -3,9 +3,9 @@ import "../../../css/Expense.css";
 import ExpenseMonthCarousel from "./main-data-hierarchy/ExpenseMonthCarousel.tsx";
 import ExpenseModalsAndForms from "./ExpenseModalsAndForms.tsx";
 import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
-import useInitialExpenseData from "../../../hooks/initialisations/useInitialExpenseData.ts";
+import useInitialExpenseData from "../../../hooks/queries/useInitialExpenseData.ts";
 import Loader from "../other/Loader.tsx";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useBatchDeleteExpenses from "../../../hooks/mutations/expense/useBatchDeleteExpenses.ts";
 import useBatchCreateExpenses from "../../../hooks/mutations/expense/useBatchCreateExpenses.ts";
 import {
@@ -63,7 +63,7 @@ export default function Expenses({
   const { mutate: batchDeleteExpenses } = useBatchDeleteExpenses();
   const { mutate: batchCreateExpenses, isSuccess: expenseCreationIsSuccess } = useBatchCreateExpenses();
 
-  useMemo(() => {
+  useEffect(() => {
     const updateStructuredExpenseData = async () => {
       setStructuredExpenseData(await getStructuredExpenseData(expenseArray));
     };

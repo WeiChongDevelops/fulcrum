@@ -13,7 +13,7 @@ export default function FulcrumErrorPage({ errors }: FulcrumErrorPage) {
             <p className={"text-gray-500 text-xs max-w-[60vw]"}>{error.stack}</p>
           </div>
         ))}
-      <img src="/src/assets/fulcrum-logos/fulcrum-icon.png" className={"w-10 h-10"} alt="Fulcrum icon" />
+      <img src="/static/assets/fulcrum-logos/fulcrum-icon.png" className={"w-10 h-10"} alt="Fulcrum icon" />
     </div>
   );
 }
