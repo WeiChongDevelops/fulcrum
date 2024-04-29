@@ -2,7 +2,7 @@
 
 Welcome to Fulcrum, a free budgeting and expense tracking web application.
 
-The intention behind Fulcrum was to make the (often tedious) process of creating a budget and keeping track of expenses, as simple and intuitive as possible. This sentiment is reflected in the front-end design, with the user interface focused on clarity and satisfaction, and the feature set focused on the essentials for practical use.
+Fulcrum is designed to make the (often tedious) process of creating a budget and keeping track of expenses, as simple and intuitive as possible. This sentiment is reflected in the front-end design, with the user interface focused on clarity and satisfaction, and the feature set focused on the essentials for practical use.
 
 
 
@@ -44,6 +44,11 @@ PostgreSQL was preferred for its data integrity, schema enforcement and performa
 The scalability of Google Firebase’s NoSQL databases was deemed superfluous for this project.
 
 AWS RDS was avoided due to unnecessary cost implications.
+
+
+## Express JS
+
+Express JS is utilised to leverage the docker network for API communication and serving static files.
 
 
 ## Docker

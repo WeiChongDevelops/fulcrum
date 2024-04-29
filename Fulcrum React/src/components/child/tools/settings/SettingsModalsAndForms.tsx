@@ -3,7 +3,7 @@ import TwoOptionModal from "../../modals/TwoOptionModal.tsx";
 import { changeFormOrModalVisibility } from "../../../../utility/util.ts";
 import useWipeBudget from "../../../../hooks/mutations/budget/useWipeBudget.ts";
 import useWipeExpenses from "../../../../hooks/mutations/expense/useWipeExpenses.ts";
-import useResetBudget from "../../../../hooks/mutations/budget/useResetBudget.ts";
+import useResetAccountData from "../../../../hooks/mutations/budget/useResetAccountData.ts";
 import {
   SetFormVisibility,
   SetModalVisibility,
@@ -29,7 +29,7 @@ export default function SettingsModalsAndForms({
 }: SettingsModalsAndFormsProps) {
   const { mutate: wipeExpenses } = useWipeExpenses();
   const { mutate: wipeBudget } = useWipeBudget();
-  const { mutate: resetBudget } = useResetBudget();
+  const { mutate: resetBudget } = useResetAccountData();
 
   return (
     <div className="z-40">
@@ -60,7 +60,7 @@ export default function SettingsModalsAndForms({
           areYouSureMessage={
             "Are you sure you would like to reset your account data to defaults? This decision is irreversible."
           }
-          typeMatchString={"Reset My Budget"}
+          typeMatchString={"Reset Account"}
           setFormVisibility={setSettingsFormVisibility}
           setModalVisibility={setSettingsModalVisibility}
           formVisibility={"typeResetMyAccountForm"}

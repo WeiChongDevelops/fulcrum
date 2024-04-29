@@ -47,6 +47,7 @@ export default function Login() {
     <>
       <Loader isLoading={isUserLoginPending || isOAuthURLPending} isDarkMode={false} />
       <div className={`${(isUserLoginPending || isOAuthURLPending) && "opacity-80 animate-pulse transition-opacity"}`}>
+        <img src="/static/assets/other-assets/login-bg-cmp.webp" className={"hidden"} />
         <div className={"auth-page-container login-page"}>
           <div className={"auth-page-left-column"}>
             <div className={"flex-1"}>
@@ -58,7 +59,7 @@ export default function Login() {
             </div>
             <div className={"auth-text"}>
               <b className={"text-5xl"}>Log into your account.</b>
-              <p className={"text-xl ml-2 mt-8"}>Every dollar deserves a job.</p>
+              <p className={"text-lg ml-2 mt-8"}>Every dollar deserves a job.</p>
             </div>
           </div>
           <div className={"auth-page-right-column"}>
@@ -87,7 +88,7 @@ export default function Login() {
                 <label htmlFor={"password"}>Password</label>
                 <input
                   type="password"
-                  placeholder={"Your password"}
+                  placeholder={"Your password..."}
                   id={"password"}
                   value={formData.password}
                   onChange={handleChange}
@@ -98,11 +99,16 @@ export default function Login() {
               <div className={"flex flex-row justify-between items-end w-full"}>
                 <div className={"mr-8 text-xs font-medium"}>
                   <span>Don't have an account? </span>
-                  <a href="http://localhost:80/register" className={"underline text-[#17423F] font-semibold"}>
+                  <a href={window.location.origin + "/register"} className={"underline text-[#17423F] font-semibold"}>
                     Register
                   </a>
                 </div>
-                <FulcrumButton displayText={"Log In"} backgroundColour={"green"} optionalTailwind={"mr-0"} />
+                <FulcrumButton
+                  displayText={"Log in"}
+                  backgroundColour={"green"}
+                  optionalTailwind={"mr-0 text-sm"}
+                  hoverShadow={true}
+                />
               </div>
               <div className={"flex flex-col justify-start mt-5 items-center gap-3 w-full"}>
                 <div className="oauth-divider my-2 text-xs">
@@ -114,7 +120,7 @@ export default function Login() {
                   textColour={"black"}
                   borderColour={"#ccc"}
                   provider={"google"}
-                  socialIconPath={"/static/assets/auth-icons/google-icon-colour.svg"}
+                  socialIconPath={"/static/assets/auth-icons/google-icon.svg"}
                   openOAuthLogin={openOAuthLogin}
                 />
                 <OAuthLoginButton
@@ -130,9 +136,9 @@ export default function Login() {
               <div className={"mt-6 text-xs"}>
                 <span>See our </span>
                 <a
-                  href="http://localhost:80/home/privacy"
+                  href={window.location.origin + "/privacy"}
                   className={"underline text-[#17423F] font-semibold"}
-                  onClick={() => window.open("http://localhost:80/privacy", "_blank")}
+                  onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
                 >
                   Privacy Policy
                 </a>

@@ -54,7 +54,7 @@ export default function ExpenseModalsAndForms({
   useEffect(() => {
     if (isPending) {
       setToastId(
-        toast.loading("Syncing data, please wait.", {
+        toast.loading("Syncing changes, please wait.", {
           description: "Large deletions may take a bit longer.",
           style: {
             textAlign: "left",

@@ -25,7 +25,7 @@ export default function OAuthLoginButton({
     <button
       type={"button"}
       onClick={handleOAuthLoginClick}
-      className={"w-72 text-left rounded-3xl font-bold flex items-center px-[1.5em] py-[0.5em] gap-4"}
+      className={"w-64 text-sm text-left rounded-3xl font-bold flex items-center px-[1.5em] py-[0.5em] gap-4"}
       style={{ backgroundColor: backgroundColour, border: `2px solid ${borderColour}`, color: textColour }}
     >
       <img src={socialIconPath} alt="Social icon" className={"w-[10%]"} />

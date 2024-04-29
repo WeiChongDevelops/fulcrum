@@ -3,8 +3,8 @@ services:
   frontend:
     image: weichongdevelops/fulcrum-frontend:1.0
     ports:
-      - "80:80"
-    restart: "no"
+      - "3001:3001"
+    restart: "on-failure"
     networks:
       - app-network
     depends_on:
@@ -16,11 +16,8 @@ services:
     restart: "no"
     networks:
       - app-network
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
     environment:
       - SUPABASE_KEY=${SUPABASE_KEY}
-      - DISPLAY=host.docker.internal:0
 networks:
   app-network:
     driver: bridge

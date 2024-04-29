@@ -24,11 +24,11 @@
 }
 
 .register-page:before {
-  background-image: url("/static/assets/other-assets/register-bg-4.webp");
+  background-image: url("/static/assets/other-assets/register-bg-cmp.webp");
 }
 
 .login-page:before {
-  background-image: url("/static/assets/other-assets/login-bg.webp");
+  background-image: url("/static/assets/other-assets/login-bg-cmp.webp");
 }
 
 .auth-page-left-column {
@@ -56,7 +56,7 @@
   align-items: center;
   background-color: white;
   color: black;
-  padding: 4rem 2.5rem 2rem 2.5rem;
+  padding: 2.5rem 2.5rem 1.5rem 2.5rem;
   min-width: 34rem;
   border-radius: 1rem;
 }

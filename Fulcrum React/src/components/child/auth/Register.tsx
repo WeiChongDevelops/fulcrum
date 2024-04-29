@@ -97,6 +97,7 @@ export default function Register() {
     <>
       <Loader isLoading={isRegistrationPending || isOAuthURLPending} isDarkMode={false} />
       <div className={`${(isRegistrationPending || isOAuthURLPending) && "opacity-80 animate-pulse transition-opacity"}`}>
+        <img src="/static/assets/other-assets/register-bg-cmp.webp" className={"hidden"} />
         <div className={"auth-page-container register-page"}>
           <div className={"auth-page-left-column"}>
             <div className={"flex-1"}>
@@ -108,7 +109,7 @@ export default function Register() {
             </div>
             <div className={"auth-text"}>
               <b className={"text-5xl"}>Register for an account.</b>
-              <p className={"text-xl ml-2 mt-8"}>Start saving for free today.</p>
+              <p className={"text-lg ml-2 mt-8"}>Start saving for free today.</p>
             </div>
           </div>
           <div className={"auth-page-right-column"}>
@@ -133,31 +134,31 @@ export default function Register() {
                   autoFocus
                 />
               </div>
-              <div className={`auth-label-input-pair my-6`}>
+              <div className={`auth-label-input-pair my-5`}>
                 <label htmlFor={"password"}>Password</label>
                 <input
                   ref={passwordField}
                   type="password"
                   id="password"
-                  placeholder={"Your password"}
+                  placeholder={"Create password..."}
                   value={formData.password}
                   onChange={handleChange}
                   autoComplete={"new-password"}
                   required
                 />
                 <b
-                  className={`mt-3 ${passwordValidation.passwordAccepted ? "text-green-500" : "text-red-500"} ${passwordValidation.attemptedIgnore && "underline"}`}
+                  className={`mt-2 ${passwordValidation.passwordAccepted ? "text-green-500" : "text-red-500"} ${passwordValidation.attemptedIgnore && "underline"}`}
                 >
                   {passwordValidation.feedback}
                 </b>
               </div>
-              <div className={"auth-label-input-pair mb-8"}>
+              <div className={"auth-label-input-pair mb-6"}>
                 <label htmlFor={"password"}>Confirm Password</label>
                 <input
                   ref={confirmPasswordField}
                   type="password"
                   id="confirmPassword"
-                  placeholder={"Confirmed password"}
+                  placeholder={"Confirm password..."}
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   autoComplete={"new-password"}
@@ -167,11 +168,16 @@ export default function Register() {
               <div className={"flex flex-row justify-between items-end w-full"}>
                 <div className={"mr-8 text-xs font-medium"}>
                   <span>Already have an account? </span>
-                  <a href="http://localhost:80/login" className={"underline text-[#17423F] font-semibold"}>
+                  <a href={window.location.origin + "/login"} className={"underline text-[#17423F] font-semibold"}>
                     Login
                   </a>
                 </div>
-                <FulcrumButton displayText={"Create account"} backgroundColour={"green"} optionalTailwind={"mr-0"} />
+                <FulcrumButton
+                  displayText={"Create account"}
+                  backgroundColour={"green"}
+                  optionalTailwind={"mr-0 text-sm"}
+                  hoverShadow={true}
+                />
               </div>
               <div className={"flex flex-col justify-start mt-5 items-center gap-3 w-full"}>
                 <div className="oauth-divider my-2 text-xs">
@@ -183,7 +189,7 @@ export default function Register() {
                   textColour={"black"}
                   borderColour={"#ccc"}
                   provider={"google"}
-                  socialIconPath={"/static/assets/auth-icons/google-icon-colour.svg"}
+                  socialIconPath={"/static/assets/auth-icons/google-icon.svg"}
                   openOAuthLogin={openOAuthLogin}
                 />
                 <OAuthLoginButton
@@ -201,7 +207,7 @@ export default function Register() {
                 <a
                   href="#"
                   className={"underline text-[#17423F] font-semibold"}
-                  onClick={() => window.open("http://localhost:80/privacy", "_blank")}
+                  onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
                 >
                   Privacy Policy
                 </a>

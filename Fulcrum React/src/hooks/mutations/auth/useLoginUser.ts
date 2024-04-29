@@ -9,7 +9,7 @@ export default function useLoginUser() {
       await handleUserLogin(formData.email, formData.password);
     },
     onSuccess: () => {
-      toast.success("Login successful.");
+      toast.success("Login successful!");
       setTimeout(() => {
         window.location.href = "/app/budget";
       }, 750);

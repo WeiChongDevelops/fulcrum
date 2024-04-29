@@ -10,6 +10,8 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import kotlinx.coroutines.launch
 
+const val PORT = 8080;
+
 private fun Application.serverConfig() {
     install(ContentNegotiation) {
         json()
@@ -28,7 +30,9 @@ private fun Application.serverConfig() {
         allowNonSimpleContentTypes = true
 
         allowHost("frontend", schemes = listOf("http"))
+        allowHost("frontend:3001", schemes = listOf("http"))
         allowHost("localhost", schemes = listOf("http"))
+        allowHost("localhost:3001", schemes = listOf("http"))
         allowHost("localhost:5173", schemes = listOf("http"))
     }
 
@@ -42,7 +46,8 @@ private fun Application.serverConfig() {
 
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
+    embeddedServer(Netty, port = PORT, host = "0.0.0.0") {
         serverConfig()
     }.start(wait = true)
+    println("Server running on port $PORT")
 }

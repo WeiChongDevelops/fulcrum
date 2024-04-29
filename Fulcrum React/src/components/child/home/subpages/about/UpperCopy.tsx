@@ -79,7 +79,7 @@ export default function UpperCopy() {
             <FulcrumButton
               displayText={"Start Saving"}
               backgroundColour={"green"}
-              onClick={() => (window.location.href = "http://localhost:80/register")}
+              onClick={() => (window.location.href = window.location.origin + "/register")}
               hoverShadow={true}
               optionalTailwind={
                 "shadow-[0.4rem_0.4rem_0px_black] mt-8 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[0.75rem_0.75rem_0px_black]"

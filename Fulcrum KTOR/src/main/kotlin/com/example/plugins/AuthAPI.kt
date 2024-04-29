@@ -29,11 +29,22 @@ fun Application.configureAuthRouting() {
         suspend fun initialiseDefaultPublicUserData(call: ApplicationCall) {
             val uid = getActiveUserId()
 
+            if (supabase.postgrest["public_user_data"].select(
+                    columns = Columns.list("currency, createdAt, darkModeEnabled, accessibilityEnabled, profileIconFileName")
+                ) {
+                    eq("userId", uid)
+                }.decodeSingleOrNull<PublicUserDataResponse>() != null
+            ) {
+                supabase.postgrest["public_user_data"].delete() {
+                    eq("userId", uid)
+                }
+            }
+
             val newUserInfo = PublicUserDataCreateRequestSent(
                 userId = uid
             )
             val userInfoInserted = supabase.postgrest["public_user_data"].insert(
-                newUserInfo
+                newUserInfo, upsert = true
             )
             if (userInfoInserted.body == null) {
                 call.respondError("Default public user data initialisation failed.")
@@ -41,14 +52,12 @@ fun Application.configureAuthRouting() {
         }
 
         suspend fun initialiseDefaultIncome(call: ApplicationCall) {
-            val uid = getActiveUserId()
-
             val initialisedTotalIncome = IncomeCreateRequestSent(
-                userId = uid,
+                userId = getActiveUserId(),
                 totalIncome = 10000.00
             )
             val initialisedTotalIncomeInserted = supabase.postgrest["total_income"].insert(
-                initialisedTotalIncome
+                initialisedTotalIncome, upsert = true
             )
             if (initialisedTotalIncomeInserted.body == null) {
                 call.respondError("Default total income initialisation failed.")
@@ -124,7 +133,10 @@ fun Application.configureAuthRouting() {
                 }
 
                 val oAuthLoginURL =
-                    supabase.gotrue.oAuthUrl(provider, redirectUrl = "http://localhost:80/oAuthSuccess")
+                    supabase.gotrue.oAuthUrl(
+                        provider,
+                        redirectUrl = "${oAuthLoginPromptRequestReceived.urlOrigin}/oAuthSuccess"
+                    )
                 call.respond(HttpStatusCode.OK, oAuthLoginURL);
             } catch (e: Exception) {
                 application.log.error("Error during OAuth prompt.", e)
@@ -225,13 +237,15 @@ fun Application.configureAuthRouting() {
             }
         }
 
-        post("/api/restoreDefaultBudget") {
+        post("/api/resetAccountData") {
             try {
                 initialiseDefaultBudgets(call, true)
-                call.respondSuccess("Successfully restored default budget.")
+                initialiseDefaultPublicUserData(call)
+                initialiseDefaultIncome(call)
+                call.respondSuccess("Successfully reset account.")
             } catch (e: Exception) {
-                call.application.log.error("Error while restoring default budget.", e)
-                call.respondError("Error while restoring default budget: $e")
+                call.application.log.error("Error while resetting account.", e)
+                call.respondError("Error while resetting account: $e")
             }
         }
     }

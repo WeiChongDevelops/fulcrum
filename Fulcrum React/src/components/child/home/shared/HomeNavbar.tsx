@@ -13,18 +13,18 @@ export default function HomeNavbar() {
             src={`/static/assets/fulcrum-logos/fulcrum-long-black.webp`}
             alt="Fulcrum logo in navbar"
             className="w-full h-auto"
-            onClick={() => (window.location.href = "/home/about")}
+            onClick={() => (window.location.href = window.location.origin + "/home/about")}
           />
         </div>
       </div>
       <div className={"flex flex-row flex-1 justify-center items-center text-black font-semibold text-lg"}>
-        <a href={"http://localhost:80/home/about"} className={"homepage-navbar-link"}>
+        <a href={window.location.origin + "/home/about"} className={"homepage-navbar-link"}>
           About
         </a>
-        <a href={"http://localhost:80/home/pricing"} className={"mx-12 homepage-navbar-link"}>
+        <a href={window.location.origin + "/home/pricing"} className={"mx-12 homepage-navbar-link"}>
           Pricing
         </a>
-        <a href={"http://localhost:80/home/contact"} className={"homepage-navbar-link"}>
+        <a href={window.location.origin + "/home/contact"} className={"homepage-navbar-link"}>
           Contact
         </a>
       </div>
@@ -32,7 +32,7 @@ export default function HomeNavbar() {
         <FulcrumButton
           displayText={"Sign Up for Free"}
           backgroundColour={"green"}
-          onClick={() => (window.location.href = "http://localhost:80/register")}
+          onClick={() => (window.location.href = window.location.origin + "/register")}
           hoverShadow={true}
         />
       </div>

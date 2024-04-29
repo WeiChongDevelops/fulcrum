@@ -6,15 +6,12 @@ import com.example.entities.budget.GroupItemResponse
 import com.example.entities.expense.ExpenseItemResponse
 import com.example.entities.recurringExpense.BlacklistedExpenseItemResponse
 import com.example.entities.recurringExpense.RecurringExpenseItemResponse
-import com.example.entities.successFeedback.ErrorResponseSent
-import com.example.entities.successFeedback.SuccessResponseSent
 import com.example.entities.user.*
 import com.example.getActiveUserId
 import com.example.respondAuthError
 import com.example.respondError
 import com.example.respondSuccess
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
-import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.ktor.http.*
@@ -23,7 +20,6 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.lang.IllegalStateException
-import kotlin.reflect.KClass
 
 fun Application.configureOtherRouting() {
 

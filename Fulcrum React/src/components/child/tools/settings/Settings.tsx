@@ -104,7 +104,7 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
             displayText={"See Privacy Policy"}
             backgroundColour={"white"}
             optionalTailwind={"m-0"}
-            onClick={() => window.open("http://localhost:80/privacy", "_blank")}
+            onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
           />
         </div>
 

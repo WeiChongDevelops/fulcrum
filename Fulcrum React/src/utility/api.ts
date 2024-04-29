@@ -12,7 +12,7 @@ import { budgetSort, DEFAULT_CATEGORY_GROUP, DEFAULT_CATEGORY_ICON, expenseSort,
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: window.location.origin + "/api",
   headers: { "Content-Type": "application/json" },
 });
 
@@ -36,7 +36,6 @@ apiClient.interceptors.response.use(
 export async function handleExpenseCreation(newExpenseItem: ExpenseItemEntity): Promise<void> {
   try {
     const response = await apiClient.post("/createExpense", {
-      expenseId: newExpenseItem.expenseId,
       category: newExpenseItem.category,
       amount: newExpenseItem.amount,
       timestamp: newExpenseItem.timestamp,
@@ -553,7 +552,7 @@ export async function handleWipeBudget(): Promise<void> {
 /**
  * Resets all budget records to default settings.
  */
-export async function handleRestoreDefaultBudget(): Promise<void> {
+export async function handleResetAccountData(): Promise<void> {
   try {
     const response = await apiClient.post("/restoreDefaultBudget");
     console.log(response.data);
@@ -611,11 +610,14 @@ export async function handleUserLogin(email: string, password: string): Promise<
 /**
  * Attempts to log in a user with the provided email and password.
  * Redirects to the budget page on successful login.
+ * @param provider - The authentication provider
+ * @param urlOrigin - The base of the url
  */
-export async function handleUserOAuthLoginPrompt(provider: string): Promise<string> {
+export async function handleUserOAuthLoginPrompt(provider: string, urlOrigin: string): Promise<string> {
   try {
     const response = await apiClient.post("/oAuthLoginPrompt", {
       provider: provider,
+      urlOrigin: urlOrigin,
     });
     console.log(response.data);
     return response.data;

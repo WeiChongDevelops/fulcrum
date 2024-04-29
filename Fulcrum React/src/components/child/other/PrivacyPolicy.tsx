@@ -312,8 +312,8 @@ export default function PrivacyPolicy() {
       <h2>Contact Us</h2>
       <p>
         If you have any questions about this Privacy Policy, You can contact us: By visiting this page on our website:{" "}
-        <a href="http://localhost:80/home/contact" rel="external nofollow noopener" target="_blank">
-          http://localhost:80/home/contact
+        <a href={window.location.origin + "/home/contact"} target="_blank" className={"mb-8"}>
+          Contact Us
         </a>
       </p>
     </div>

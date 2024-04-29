@@ -13,7 +13,7 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
       {backgroundPath && (
         <img
           src={backgroundPath}
-          className={"absolute -top-6 left-1/2 -translate-x-1/2 -z-10 w-screen"}
+          className={"absolute -top-6 left-1/2 -translate-x-1/2 -z-10 w-screen h-[150%]"}
           alt="Pricing background"
         />
       )}
@@ -63,7 +63,7 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
         </p>
         <p
           className={"row-start-[9] col-start-3 pl-[10vw]"}
-          onClick={() => window.open("http://localhost:80/privacy", "_blank")}
+          onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
         >
           Privacy Policy
         </p>

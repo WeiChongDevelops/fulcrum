@@ -6,19 +6,24 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --verbose
 
-# Copy the whole project and build it
+# Copy and build project
 COPY . .
 RUN npm run build --verbose
 
-# Copy static files into the build directory for easy transfer to the next stage
-COPY ./static /app/dist/static
+# Copy static files into build directory
+COPY public/static /app/dist/static
 
-# Production stage to serve static files using Nginx
-FROM nginx:1.21-alpine
-COPY nginx.conf /etc/nginx/nginx.conf
+# Production stage to serve static files and run Express server
+FROM node:16-alpine
+WORKDIR /app
 
-# Ensure both built application files and static files are copied to Nginx root
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+# Copy built static files and other files
+COPY --from=build-stage /app/dist /app/dist
+COPY server /app/server
+COPY package*.json /app/
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Install production dependencies
+RUN npm install --production --verbose
+
+EXPOSE 3001
+CMD ["node", "server/server.js"]

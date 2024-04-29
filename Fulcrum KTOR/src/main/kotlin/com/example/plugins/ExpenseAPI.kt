@@ -4,10 +4,7 @@ import com.example.*
 import com.example.SupabaseClient.supabase
 import com.example.entities.expense.*
 import com.example.entities.recurringExpense.*
-import com.example.entities.successFeedback.ErrorResponseSent
-import com.example.entities.successFeedback.SuccessResponseSent
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
-import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
@@ -16,7 +13,6 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.datetime.Instant
 import java.lang.IllegalStateException
 
 fun Application.configureExpenseRouting() {
@@ -41,6 +37,7 @@ fun Application.configureExpenseRouting() {
                 val expenseCreateRequest = call.receive<ExpenseCreateRequestReceived>()
 
                 val itemToInsert = ExpenseCreateRequestSent(
+                    expenseId = expenseCreateRequest.expenseId,
                     userId = getActiveUserId(),
                     category = expenseCreateRequest.category,
                     amount = expenseCreateRequest.amount,
@@ -61,6 +58,7 @@ fun Application.configureExpenseRouting() {
                 val batchExpenseCreateRequest = call.receive<BatchExpenseCreateRequestReceived>()
                 for (expenseItem in batchExpenseCreateRequest.expensesToCreate) {
                     val itemToInsert = ExpenseCreateRequestSent(
+                        expenseId = expenseItem.expenseId,
                         userId = getActiveUserId(),
                         category = expenseItem.category,
                         amount = expenseItem.amount,

@@ -9,7 +9,7 @@ export default function useRegisterUser() {
       await handleUserRegistration(formData.email, formData.password);
     },
     onSuccess: () => {
-      toast.success("Successful registration.");
+      toast.success("Registration successful!");
       setTimeout(() => {
         window.location.href = "/login";
       }, 750);
