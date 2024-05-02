@@ -16,7 +16,7 @@ export default function useUpdatePublicUserData() {
       await queryClient.cancelQueries({ queryKey: ["publicUserData", email] });
       const publicUserDataBeforeOptimisticUpdate = queryClient.getQueryData(["publicUserData", email]);
       await queryClient.setQueryData(["publicUserData", email], updatedPublicUserData);
-      toast.success("User preferences updated.");
+      toast.success("User preferences updated!");
       return { publicUserDataBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {

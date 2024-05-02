@@ -18,6 +18,10 @@ import { Toaster } from "sonner";
 import OAuthRedirect from "../child/auth/OAuthRedirect.tsx";
 import PrivacyPolicy from "../child/other/PrivacyPolicy.tsx";
 import Expenses from "../child/expenses/Expenses.tsx";
+import FAQs from "../child/home/subpages/FAQ/FAQs.tsx";
+import ComeOnMark from "../child/other/ComeOnMark.tsx";
+import Wall from "../temp/Wall.tsx";
+import DataVis from "../child/budget/DataVis.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -61,12 +65,79 @@ export default function App() {
                 <Route path="about" element={<About />} />
                 <Route path="contact" element={<Contact />} />
                 <Route path="pricing" element={<Pricing />} />
+                <Route path="faq" element={<FAQs />} />
               </Route>
             ))}
+            <Route
+              path="/vis"
+              element={
+                <DataVis
+                  budgetArray={[
+                    {
+                      category: "Groceries",
+                      amount: 150,
+                      iconPath: "/icons/groceries.png",
+                      group: "Household",
+                      timestamp: new Date("2024-05-01"),
+                    },
+                    {
+                      category: "Transport",
+                      amount: 80,
+                      iconPath: "/icons/transport.png",
+                      group: "Personal",
+                      timestamp: new Date("2024-05-02"),
+                    },
+                    {
+                      category: "Utilities",
+                      amount: 120,
+                      iconPath: "/icons/utilities.png",
+                      group: "Bills",
+                      timestamp: new Date("2024-05-01"),
+                    },
+                    {
+                      category: "Dining",
+                      amount: 75,
+                      iconPath: "/icons/dining.png",
+                      group: "Entertainment",
+                      timestamp: null,
+                    },
+                    {
+                      category: "Health",
+                      amount: 200,
+                      iconPath: "/icons/health.png",
+                      group: "Personal",
+                      timestamp: new Date("2024-05-03"),
+                    },
+                    {
+                      category: "Education",
+                      amount: 300,
+                      iconPath: "/icons/education.png",
+                      group: "Personal",
+                      timestamp: null,
+                    },
+                    {
+                      category: "Gifts",
+                      amount: 100,
+                      iconPath: "/icons/gifts.png",
+                      group: "Personal",
+                      timestamp: new Date("2024-05-04"),
+                    },
+                    {
+                      category: "Miscellaneous",
+                      amount: 50,
+                      iconPath: "/icons/miscellaneous.png",
+                      group: "Personal",
+                      timestamp: null,
+                    },
+                  ]}
+                />
+              }
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
             <Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>
               <Route index element={<Navigate replace to="budget" />} />
               <Route
@@ -108,6 +179,12 @@ export default function App() {
                 }
               />
             </Route>
+            <Route path="/3753b177" element={<Wall user={"Louise"} />} />
+            <Route path="/432e9aa2" element={<Wall user={"Julian"} />} />
+            <Route path="/11e2e386" element={<Wall user={"Saaiq"} />} />
+            <Route path="/86419f8c" element={<Wall user={"Colin"} />} />
+            <Route path="/4799f130" element={<Wall user={"Thomas"} />} />
+            <Route path="/7763fcm3" element={<Wall user={"Matthew"} />} />
           </Routes>
         </Router>
       </EmailContext.Provider>

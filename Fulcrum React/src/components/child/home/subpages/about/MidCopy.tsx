@@ -40,9 +40,7 @@ export default function MidCopy() {
         />
         <InfoTile
           initialDisplayText={"Master Your Finances"}
-          hoverDisplayText={
-            "Finally figure out where last week's paycheck disappeared off to (let's be honest, it was Uber Eats)."
-          }
+          hoverDisplayText={"Finally figure out where last week's paycheck disappeared off to."}
           backgroundColour={"#29297b"}
           textColor={"white"}
           iconPathFront={"/static/assets/homepage-assets/tile-icon-master-front.svg"}
@@ -51,7 +49,7 @@ export default function MidCopy() {
       </div>
       <div className={"divider-dots-container"}>
         <div></div>
-        <div className={"mx-3"}></div>
+        <div></div>
         <div></div>
       </div>
     </div>

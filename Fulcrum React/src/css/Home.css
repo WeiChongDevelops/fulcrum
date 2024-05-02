@@ -189,9 +189,10 @@
   content: "";
   width: 25%;
   height: 0.1rem;
+
   background-color: black;
   left: auto;
-  bottom: 10%;
+  bottom: 7%;
 }
 
 .show-tile:nth-of-type(3) > .mid-copy-animation-tile:after {
@@ -200,14 +201,15 @@
 
 .divider-dots-container {
   display: flex;
+  gap: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
 .divider-dots-container > div {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 6px;
+  height: 6px;
   border-radius: 100vw;
   background-color: #282d33;
 }
@@ -300,6 +302,22 @@
   display: flex;
   flex-direction: column;
   max-width: 45vw;
+}
+
+@keyframes bouncing {
+  0%,
+  100% {
+    transform: translateY(-25%) translateX(-75%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0) translateX(-75%);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.bouncy-arrow {
+  animation: bouncing 1s infinite;
 }
 
 /* MEDIA QUERIES */

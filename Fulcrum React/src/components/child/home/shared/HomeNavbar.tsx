@@ -17,15 +17,18 @@ export default function HomeNavbar() {
           />
         </div>
       </div>
-      <div className={"flex flex-row flex-1 justify-center items-center text-black font-semibold text-lg"}>
+      <div className={"flex flex-row flex-1 justify-center items-center text-black font-semibold text-lg gap-8"}>
         <a href={window.location.origin + "/home/about"} className={"homepage-navbar-link"}>
           About
         </a>
-        <a href={window.location.origin + "/home/pricing"} className={"mx-12 homepage-navbar-link"}>
+        <a href={window.location.origin + "/home/pricing"} className={"homepage-navbar-link"}>
           Pricing
         </a>
         <a href={window.location.origin + "/home/contact"} className={"homepage-navbar-link"}>
           Contact
+        </a>
+        <a href={window.location.origin + "/home/faq"} className={"homepage-navbar-link"}>
+          FAQ
         </a>
       </div>
       <div className={"flex-1 flex flex-row justify-end mr-4 sm:mr-16"}>

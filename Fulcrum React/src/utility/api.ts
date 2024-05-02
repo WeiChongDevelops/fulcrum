@@ -554,13 +554,13 @@ export async function handleWipeBudget(): Promise<void> {
  */
 export async function handleResetAccountData(): Promise<void> {
   try {
-    const response = await apiClient.post("/restoreDefaultBudget");
+    const response = await apiClient.post("/resetAccountData");
     console.log(response.data);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error(`Error encountered when attempting budget default restore: ${error.message}`);
+      throw new Error(`Error encountered when attempting default reset: ${error.message}`);
     } else {
-      throw new Error("Unknown error encountered when attempting budget default restore.");
+      throw new Error("Unknown error encountered when attempting default reset.");
     }
   }
 }
@@ -611,13 +611,12 @@ export async function handleUserLogin(email: string, password: string): Promise<
  * Attempts to log in a user with the provided email and password.
  * Redirects to the budget page on successful login.
  * @param provider - The authentication provider
- * @param urlOrigin - The base of the url
+ * @returns The url for OAuth
  */
-export async function handleUserOAuthLoginPrompt(provider: string, urlOrigin: string): Promise<string> {
+export async function handleUserOAuthLoginPrompt(provider: string): Promise<string> {
   try {
     const response = await apiClient.post("/oAuthLoginPrompt", {
       provider: provider,
-      urlOrigin: urlOrigin,
     });
     console.log(response.data);
     return response.data;

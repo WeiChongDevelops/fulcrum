@@ -21,7 +21,7 @@ export default function useUpdateExpense() {
           expenseItem.expenseId === updatedExpenseItem.expenseId ? updatedExpenseItem : expenseItem,
         );
       });
-      toast.success("Expense updated.");
+      toast.success("Expense updated!");
       return { dataBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {

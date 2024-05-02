@@ -26,7 +26,7 @@ export default function NavbarUpper({ publicUserData }: NavbarUpperProps) {
         src={`/static/assets/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`}
         alt="Fulcrum logo in navbar"
         className="app-navbar-fulcrum-logo"
-        onClick={() => (window.location.href = "/budget")}
+        onClick={() => (window.location.href = "/home/about")}
       />
       <div className="flex-1 text-right">
         <div className="flex justify-end items-center mr-8">
@@ -38,11 +38,7 @@ export default function NavbarUpper({ publicUserData }: NavbarUpperProps) {
             className="profile-icon h-12"
             alt="Profile icon"
           />
-          {email != "" ? (
-            <FulcrumButton displayText="Log Out" onClick={handleUserLogout} />
-          ) : (
-            <FulcrumButton displayText="Register" onClick={() => (window.location.href = "/register")} />
-          )}
+          <FulcrumButton displayText="Log Out" onClick={handleUserLogout} optionalTailwind={"text-sm"} />
         </div>
       </div>
     </nav>

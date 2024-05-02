@@ -4,8 +4,8 @@ import { handleUserOAuthLoginPrompt } from "../../../utility/api.ts";
 export default function useOAuthLoginUrl() {
   return useMutation({
     mutationFn: (provider: string) => {
-      return handleUserOAuthLoginPrompt(provider, window.location.origin);
+      return handleUserOAuthLoginPrompt(provider);
     },
-    onSuccess: (data) => window.open(data, "_blank"),
+    onSuccess: (data) => (window.location.href = data),
   });
 }

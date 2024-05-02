@@ -48,7 +48,7 @@ export default function useUpdateBudget() {
             : budgetItem,
         );
       });
-      toast.success("Budget updated.");
+      toast.success("Budget updated!");
       return { budgetArrayBeforeOptimisticUpdate, groupArrayBeforeOptimisticUpdate };
     },
     onError: async (_error, _variables, context) => {
