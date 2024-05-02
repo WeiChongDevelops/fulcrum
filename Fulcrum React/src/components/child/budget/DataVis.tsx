@@ -1,6 +1,6 @@
-import { PieArcSeries, PieArcLabel, PieChart, PieArc, ChartTooltip, TooltipTemplate, formatValue } from "reaviz";
+import { PieArcSeries, PieArcLabel, PieChart } from "reaviz";
 import { BudgetItemEntity } from "../../../utility/types.ts";
-import FulcrumButton from "../buttons/FulcrumButton.tsx";
+
 interface DataVisProps {
   budgetArray: BudgetItemEntity[];
 }
