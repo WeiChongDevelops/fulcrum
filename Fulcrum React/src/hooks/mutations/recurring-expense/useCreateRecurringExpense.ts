@@ -56,7 +56,7 @@ export default function useCreateRecurringExpense() {
           return [recurringExpenseCreationMutationProps.newRecurringExpenseItem, ...prevRecurringExpenseCache];
         },
       );
-      toast.success("Recurring expense created.");
+      toast.success("Recurring expense created!");
       return {
         budgetArrayBeforeOptimisticUpdate,
         recurringExpenseArrayBeforeOptimisticUpdate,

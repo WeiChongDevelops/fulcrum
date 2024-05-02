@@ -26,7 +26,7 @@ export default function useUpdateRecurringExpense() {
           );
         },
       );
-      toast.success("Recurring expense updated.");
+      toast.success("Recurring expense updated!");
       return { recurringExpenseArrayBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {

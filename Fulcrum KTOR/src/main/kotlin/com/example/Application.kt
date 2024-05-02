@@ -31,9 +31,6 @@ private fun Application.serverConfig() {
 
         allowHost("frontend", schemes = listOf("http"))
         allowHost("frontend:3001", schemes = listOf("http"))
-        allowHost("localhost", schemes = listOf("http"))
-        allowHost("localhost:3001", schemes = listOf("http"))
-        allowHost("localhost:5173", schemes = listOf("http"))
     }
 
     launch {

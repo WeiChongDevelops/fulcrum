@@ -45,6 +45,18 @@ export default function InfoTile({
     setIsHovered(false);
   }
 
+  function handleTouch() {
+    setIsHovered(!isHovered);
+  }
+
+  useEffect(() => {
+    if (isHovered) {
+      tileRef.current?.classList.add("budget-tile-raise-flip");
+    } else {
+      tileRef.current?.classList.remove("budget-tile-raise-flip");
+    }
+  }, [isHovered]);
+
   return (
     <div className={"single-tile-container hide-tile select-none"} ref={tileRef}>
       <div
@@ -55,6 +67,7 @@ export default function InfoTile({
         }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouch}
       >
         <div className={`absolute flex flex-col justify-center items-center ${isHovered ? "hidden" : "block"}`}>
           <img src={iconPathFront} alt="Info tile icon" className={"w-16 h-auto mb-6"} />
@@ -64,8 +77,8 @@ export default function InfoTile({
         <div
           className={`absolute flex flex-col justify-center items-center p-5 font-medium ${isHovered ? "block" : "hidden"}`}
         >
-          <p className={"text-md"}>{hoverDisplayText}</p>
-          <img src={iconPathBack} alt="Info tile icon" className={"w-6 h-auto mt-6"} />
+          <p className={"text-sm"}>{hoverDisplayText}</p>
+          <img src={iconPathBack} alt="Info tile icon" className={"w-6 h-auto mt-4"} />
         </div>
       </div>
     </div>

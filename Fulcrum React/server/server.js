@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = 3001;
 
+app.enable("trust proxy");
 app.use(express.json());
 
 // Serve static files from build

@@ -63,6 +63,16 @@ input:focus {
   outline: 3px solid #1c5b57;
 }
 
+@keyframes flashToWhite {
+  50% {
+    color: white;
+  }
+}
+
+.flash {
+  animation: flashToWhite 600ms ease-out;
+}
+
 @media (max-width: 3200px) {
   :root {
     font-size: 18px;

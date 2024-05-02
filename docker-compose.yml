@@ -1,9 +1,8 @@
-version: '3.8'
 services:
   frontend:
     image: weichongdevelops/fulcrum-frontend:1.0
     ports:
-      - "3001:3001"
+      - "80:3001"
     restart: "on-failure"
     networks:
       - app-network
@@ -13,7 +12,7 @@ services:
     image: weichongdevelops/fulcrum-backend:1.0
     ports:
       - "8080:8080"
-    restart: "no"
+    restart: "on-failure"
     networks:
       - app-network
     environment:

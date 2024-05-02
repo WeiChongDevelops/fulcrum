@@ -42,7 +42,7 @@ export default function UpperCopy() {
             <img src="/static/assets/homepage-assets/testimonials.svg" alt="Testimonials" className={"w-32"} />
             <div className={"flex flex-row justify-start items-center rounded-full bg-[#F7FFFAFF] py-2 pl-2.5 pr-6 ml-2"}>
               <img
-                src="/static/assets/homepage-assets/kylie.png"
+                src="/static/assets/homepage-assets/kylie.webp"
                 className={
                   "rounded-full border-4 border-white w-20 hover:scale-110 transition-transform ease-out duration-150"
                 }

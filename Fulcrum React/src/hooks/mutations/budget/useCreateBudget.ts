@@ -31,7 +31,7 @@ export default function useCreateBudget() {
       await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
         return [...prevBudgetCache, budgetCreationMutationProps.newBudgetItem];
       });
-      toast.success("Budget created.");
+      toast.success("Budget added!");
 
       return { budgetArrayBeforeOptimisticUpdate, groupArrayBeforeOptimisticUpdate };
     },

@@ -354,6 +354,31 @@ export function categoryOptionSort(
 
 // SELECTOR OPTIONS AND STYLING //
 
+export const faqData = [
+  {
+    question: "How do I sign up for Fulcrum?",
+    answer: "You can sign up through our website by clicking on the 'Sign Up for Free' button!",
+  },
+  {
+    question: "What is Fulcrum used for?",
+    answer:
+      "Fulcrum offers budget construction and organisation, as well as expense logging, for one-time and recurring expenses.",
+  },
+  {
+    question: "How do I contact customer support?",
+    answer: "You can contact our customer support team through our contact form on the website.",
+  },
+  {
+    question: "Is there a mobile app available?",
+    answer: "No, Fulcrum doesn't have a mobile app available yet - development of an iOS app for the App Store is underway!",
+  },
+  {
+    question: "How do I delete my account?",
+    answer:
+      "To delete your account, please contact our customer support team directly through our contact form on the website.",
+  },
+];
+
 export const recurringFrequencyOptions = [
   {
     value: "never",

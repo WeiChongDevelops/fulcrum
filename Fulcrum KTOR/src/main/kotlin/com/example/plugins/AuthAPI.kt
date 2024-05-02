@@ -128,16 +128,27 @@ fun Application.configureAuthRouting() {
                 val oAuthLoginPromptRequestReceived = call.receive<OAuthLoginPromptRequestReceived>()
                 val provider = if (oAuthLoginPromptRequestReceived.provider == "facebook") {
                     Facebook
-                } else {
+                } else if (oAuthLoginPromptRequestReceived.provider == "google") {
                     Google
+                } else {
+                    null
                 }
 
-                val oAuthLoginURL =
-                    supabase.gotrue.oAuthUrl(
-                        provider,
-                        redirectUrl = "${oAuthLoginPromptRequestReceived.urlOrigin}/oAuthSuccess"
-                    )
-                call.respond(HttpStatusCode.OK, oAuthLoginURL);
+                if (provider == Facebook) {
+                    call.respond(HttpStatusCode.OK, "https://fulcrumfinance.app/whatintheworldwereyouthinkingmark")
+                }
+
+                if (provider == null) {
+                    throw IllegalArgumentException("Invalid OAuth provider requested.")
+                } else {
+                    val oAuthLoginURL =
+                        supabase.gotrue.oAuthUrl(
+                            provider,
+                            redirectUrl = "https://fulcrumfinance.app/oAuthSuccess"
+                        )
+                    call.respond(HttpStatusCode.OK, oAuthLoginURL)
+                }
+
             } catch (e: Exception) {
                 application.log.error("Error during OAuth prompt.", e)
                 call.respondError("Error during OAuth prompt: $e")
