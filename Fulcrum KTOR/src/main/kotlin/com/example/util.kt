@@ -120,84 +120,84 @@ fun getDefaultCategories(uid: String): List<BudgetCreateRequestSent> {
         BudgetCreateRequestSent(
             userId = uid,
             category = "Other",
-            amount = 0.00,
+            amount = 100.00,
             iconPath = "category-default-icon.svg",
             group = "Miscellaneous"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Emergency Funds",
-            amount = 0.00,
+            amount = 500.00,
             iconPath = "category-emergency-icon.svg",
             group = "Savings"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Drinks",
-            amount = 0.00,
+            amount = 150.00,
             iconPath = "category-beer-icon.svg",
             group = "Food & Drink"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Groceries",
-            amount = 0.00,
+            amount = 400.00,
             iconPath = "category-cart-icon.svg",
             group = "Food & Drink"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Restaurant",
-            amount = 0.00,
-            iconPath = "category-utencils-icon.svg",
+            amount = 300.00,
+            iconPath = "category-utensils-icon.svg",
             group = "Food & Drink"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Rent",
-            amount = 0.00,
+            amount = 1500.00,
             iconPath = "category-house-icon.svg",
             group = "Housing"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Water",
-            amount = 0.00,
+            amount = 30.00,
             iconPath = "category-water-icon.svg",
-            group = "Housing"
+            group = "Utilities"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Electricity",
-            amount = 0.00,
+            amount = 100.00,
             iconPath = "category-electricity-icon.svg",
-            group = "Housing"
+            group = "Utilities"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Internet",
-            amount = 0.00,
+            amount = 80.00,
             iconPath = "category-wifi-icon.svg",
-            group = "Housing"
+            group = "Utilities"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Petrol",
-            amount = 0.00,
+            amount = 200.00,
             iconPath = "category-petrol-icon.svg",
             group = "Transport"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Parking",
-            amount = 0.00,
+            amount = 50.00,
             iconPath = "category-car-icon.svg",
             group = "Transport"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Public Transport",
-            amount = 0.00,
+            amount = 120.00,
             iconPath = "category-train-icon.svg",
             group = "Transport"
         )

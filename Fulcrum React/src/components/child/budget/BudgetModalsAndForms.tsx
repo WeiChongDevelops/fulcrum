@@ -9,6 +9,7 @@ import useDeleteBudget from "../../../hooks/mutations/budget/useDeleteBudget.ts"
 import Loader from "../other/Loader.tsx";
 import {
   BudgetFormVisibility,
+  BudgetItemEntity,
   BudgetModalVisibility,
   GroupItemEntity,
   PreviousBudgetBeingEdited,
@@ -16,6 +17,7 @@ import {
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../utility/types.ts";
+import BudgetVis from "./BudgetVis.tsx";
 
 interface ModalsAndFormsProps {
   budgetFormVisibility: BudgetFormVisibility;
@@ -24,6 +26,7 @@ interface ModalsAndFormsProps {
   budgetModalVisibility: BudgetModalVisibility;
   setBudgetModalVisibility: SetModalVisibility<BudgetModalVisibility>;
 
+  budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
   groupNameOfNewItem: string;
   oldBudgetBeingEdited: PreviousBudgetBeingEdited;
@@ -38,6 +41,7 @@ interface ModalsAndFormsProps {
  */
 export default function BudgetModalsAndForms({
   budgetFormVisibility,
+  budgetArray,
   groupArray,
   groupNameOfNewItem,
   setBudgetFormVisibility,
@@ -136,6 +140,9 @@ export default function BudgetModalsAndForms({
             }}
             isVisible="isConfirmCategoryDeletionModalVisible"
           />
+        )}
+        {budgetModalVisibility.isDataVisVisible && (
+          <BudgetVis budgetArray={budgetArray} setBudgetModalVisibility={setBudgetModalVisibility} />
         )}
       </div>
     </>

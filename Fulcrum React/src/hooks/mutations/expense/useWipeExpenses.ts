@@ -14,6 +14,7 @@ export default function useWipeExpenses() {
       queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
     },
     onSuccess: () => {
+      toast.dismiss();
       toast.success("Expenses wiped.");
     },
     onError: () => {

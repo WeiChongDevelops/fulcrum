@@ -55,12 +55,7 @@ export default function TwoOptionModal({
   return (
     <div className="fulcrum-modal" ref={formRef}>
       <FulcrumButton
-        onClick={() => {
-          setModalVisibility((current: any) => ({
-            ...current,
-            [`${isVisible}`]: false,
-          }));
-        }}
+        onClick={hideForm}
         displayText={"Cancel"}
         optionalTailwind={"ml-auto mb-auto"}
         backgroundColour="grey"

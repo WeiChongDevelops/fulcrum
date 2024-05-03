@@ -21,7 +21,6 @@ import Expenses from "../child/expenses/Expenses.tsx";
 import FAQs from "../child/home/subpages/FAQ/FAQs.tsx";
 import ComeOnMark from "../child/other/ComeOnMark.tsx";
 import Wall from "../temp/Wall.tsx";
-import DataVis from "../child/budget/DataVis.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -68,71 +67,6 @@ export default function App() {
                 <Route path="faq" element={<FAQs />} />
               </Route>
             ))}
-            <Route
-              path="/vis"
-              element={
-                <DataVis
-                  budgetArray={[
-                    {
-                      category: "Groceries",
-                      amount: 150,
-                      iconPath: "/icons/groceries.png",
-                      group: "Household",
-                      timestamp: new Date("2024-05-01"),
-                    },
-                    {
-                      category: "Transport",
-                      amount: 80,
-                      iconPath: "/icons/transport.png",
-                      group: "Personal",
-                      timestamp: new Date("2024-05-02"),
-                    },
-                    {
-                      category: "Utilities",
-                      amount: 120,
-                      iconPath: "/icons/utilities.png",
-                      group: "Bills",
-                      timestamp: new Date("2024-05-01"),
-                    },
-                    {
-                      category: "Dining",
-                      amount: 75,
-                      iconPath: "/icons/dining.png",
-                      group: "Entertainment",
-                      timestamp: null,
-                    },
-                    {
-                      category: "Health",
-                      amount: 200,
-                      iconPath: "/icons/health.png",
-                      group: "Personal",
-                      timestamp: new Date("2024-05-03"),
-                    },
-                    {
-                      category: "Education",
-                      amount: 300,
-                      iconPath: "/icons/education.png",
-                      group: "Personal",
-                      timestamp: null,
-                    },
-                    {
-                      category: "Gifts",
-                      amount: 100,
-                      iconPath: "/icons/gifts.png",
-                      group: "Personal",
-                      timestamp: new Date("2024-05-04"),
-                    },
-                    {
-                      category: "Miscellaneous",
-                      amount: 50,
-                      iconPath: "/icons/miscellaneous.png",
-                      group: "Personal",
-                      timestamp: null,
-                    },
-                  ]}
-                />
-              }
-            />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/oAuthSuccess" element={<OAuthRedirect />} />

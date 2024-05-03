@@ -36,7 +36,6 @@ app.use("/api", async (req, res) => {
   }
 });
 
-// Delegate routing to SPA setup
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../dist", "index.html"));
 });
