@@ -1,4 +1,9 @@
-import { getTotalAmountBudgeted, getCurrencySymbol, isCurrentMonth } from "../../../utility/util.ts";
+import {
+  getTotalAmountBudgeted,
+  getCurrencySymbol,
+  isCurrentMonth,
+  changeFormOrModalVisibility,
+} from "../../../utility/util.ts";
 import { useEffect, useMemo } from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
@@ -13,6 +18,7 @@ import useInitialBudgetData from "../../../hooks/queries/useInitialBudgetData.ts
 import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
 import useAnimationData from "../../../hooks/queries/useAnimationData.ts";
 import { BudgetItemEntity, ExpenseItemEntity, GroupItemEntity, PublicUserData } from "../../../utility/types.ts";
+import FulcrumButton from "../buttons/FulcrumButton.tsx";
 
 interface BudgetProps {
   publicUserData: PublicUserData;
@@ -99,6 +105,14 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
               publicUserData={publicUserData}
             />
 
+            <FulcrumButton
+              displayText={"Visualise Budget"}
+              onClick={() => changeFormOrModalVisibility(setBudgetModalVisibility, "isDataVisVisible", true)}
+              hoverShadow
+              backgroundColour={"white"}
+              optionalTailwind={"mt-4 shadow-[0.3rem_0.3rem_0px_black]"}
+            />
+
             <FulcrumAnimation
               lineAngle={lineAngle}
               isDarkMode={publicUserData.darkModeEnabled}
@@ -133,6 +147,7 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
 
           <BudgetModalsAndForms
             budgetFormVisibility={budgetFormVisibility}
+            budgetArray={budgetArray}
             groupArray={groupArray}
             groupNameOfNewItem={groupNameOfNewItem}
             setBudgetFormVisibility={setBudgetFormVisibility}

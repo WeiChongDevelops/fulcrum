@@ -20,6 +20,7 @@ export default function useInitialBudgetData() {
     isDeleteOptionsModalVisible: false,
     isConfirmGroupDeletionModalVisible: false,
     isConfirmCategoryDeletionModalVisible: false,
+    isDataVisVisible: false,
   });
   const [groupToDelete, setGroupToDelete] = useState<string>("");
   const [categoryToDelete, setCategoryToDelete] = useState<string>("");

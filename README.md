@@ -8,7 +8,7 @@ Fulcrum is designed to make the (often tedious) process of creating a budget and
 
 # Getting Started
 
-Try Fulcrum today.
+Try Fulcrum today at https://fulcrumfinance.app/!
 
 The homepage provides further information, to help get you hitting the ground running as quick and easy as possible.
 
