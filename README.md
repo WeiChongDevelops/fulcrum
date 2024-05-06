@@ -2,7 +2,7 @@
 
 Welcome to Fulcrum, a free budgeting and expense tracking web application.
 
-Fulcrum is designed to make the (often tedious) process of creating a budget and keeping track of expenses, as simple and intuitive as possible. This sentiment is reflected in the front-end design, with the user interface focused on clarity and satisfaction, and the feature set focused on the essentials for practical use.
+Fulcrum is designed to make the (often tedious) process of creating a budget and keeping track of expenses, as simple and intuitive as possible. This sentiment is reflected in the app design, with the user interface focused on clarity and satisfaction, and the feature set focused on the essentials for practical use.
 
 
 
@@ -10,7 +10,7 @@ Fulcrum is designed to make the (often tedious) process of creating a budget and
 
 Try Fulcrum today at https://fulcrumfinance.app/!
 
-The homepage provides further information, to help get you hitting the ground running as quick and easy as possible.
+The homepage provides further info, to help get you hitting the ground running as fast as possible.
 
 
 # Technologies Used
@@ -48,19 +48,19 @@ AWS RDS was avoided due to unnecessary cost implications.
 
 ## Express JS
 
-Express JS is utilised to leverage the docker network for API communication and serving static files.
+Express JS was utilised to leverage the docker network for API communication and serving static files.
 
 
 ## Docker
 
-Docker was used to containerise the application, providing a consistent and reproducible deployment environment.
+Docker was used to containerise the front and back end and coordinate them via Docker Compose, providing a consistent and reproducible deployment environment.
 
 It allows for easy packaging and distribution of the application along with its dependencies, ensuring that the application runs smoothly across different systems.
 
 
 ## Amazon Web Services (AWS)
 
-AWS was utilised for reliably hosting and deploying the Fulcrum application; EC2 in particular.
+AWS was utilised for reliably hosting and deploying the Fulcrum application (EC2, ELB, Route 53, ACM)
 
 
 ## Prettier
