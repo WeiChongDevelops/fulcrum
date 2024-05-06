@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Register from "../child/auth/Register.tsx";
 import Login from "../child/auth/Login.tsx";
 import Budget from "../child/budget/Budget.tsx";
@@ -12,7 +12,7 @@ import Home from "../child/home/Home.tsx";
 import { useGlobalAppData } from "../../hooks/queries/useGlobalAppData.ts";
 import Loader from "../child/other/Loader.tsx";
 import FulcrumErrorPage from "../child/other/FulcrumErrorPage.tsx";
-import { EmailContext } from "../../utility/util.ts";
+import { EmailContext, LocationContext } from "../../utility/util.ts";
 import { ErrorBoundary } from "../child/other/ErrorBoundary.tsx";
 import { Toaster } from "sonner";
 import OAuthRedirect from "../child/auth/OAuthRedirect.tsx";
@@ -26,7 +26,7 @@ import Wall from "../temp/Wall.tsx";
  * The main application component, handling shared data retrieval, routing and rendering.
  */
 export default function App() {
-  // window.console.log = () => {};
+  window.console.log = () => {};
 
   const homePaths = ["/", "/home"];
 
@@ -44,6 +44,8 @@ export default function App() {
     errors,
   } = useGlobalAppData();
 
+  const location = useLocation();
+
   if (isAnyError) {
     return <FulcrumErrorPage errors={errors} />;
   }
@@ -55,72 +57,74 @@ export default function App() {
   return (
     <ErrorBoundary>
       <EmailContext.Provider value={email!}>
-        <Toaster richColors />
-        <Router>
-          <Routes>
-            {homePaths.map((path) => (
-              <Route key={path} path={path} element={<Home />}>
-                <Route index element={<Navigate replace to="about" />} />
-                <Route path="about" element={<About />} />
-                <Route path="contact" element={<Contact />} />
-                <Route path="pricing" element={<Pricing />} />
-                <Route path="faq" element={<FAQs />} />
+        <LocationContext.Provider value={location}>
+          <Toaster richColors />
+          <BrowserRouter>
+            <Routes>
+              {homePaths.map((path) => (
+                <Route key={path} path={path} element={<Home />}>
+                  <Route index element={<Navigate replace to="about" />} />
+                  <Route path="about" element={<About />} />
+                  <Route path="contact" element={<Contact />} />
+                  <Route path="pricing" element={<Pricing />} />
+                  <Route path="faq" element={<FAQs />} />
+                </Route>
+              ))}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
+              <Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>
+                <Route index element={<Navigate replace to="budget" />} />
+                <Route
+                  path="expenses"
+                  element={
+                    <Expenses
+                      publicUserData={publicUserData}
+                      expenseArray={expenseArray}
+                      budgetArray={budgetArray}
+                      groupArray={groupArray}
+                      categoryDataMap={categoryDataMap}
+                      recurringExpenseArray={recurringExpenseArray}
+                      blacklistedExpenseArray={blacklistedExpenseArray}
+                    />
+                  }
+                />
+                <Route
+                  path="budget"
+                  element={
+                    <Budget
+                      publicUserData={publicUserData}
+                      expenseArray={expenseArray}
+                      budgetArray={budgetArray}
+                      groupArray={groupArray}
+                    />
+                  }
+                />
+                <Route
+                  path="tools"
+                  element={
+                    <Tools
+                      publicUserData={publicUserData}
+                      expenseArray={expenseArray}
+                      budgetArray={budgetArray}
+                      groupArray={groupArray}
+                      recurringExpenseArray={recurringExpenseArray}
+                      categoryDataMap={categoryDataMap}
+                    />
+                  }
+                />
               </Route>
-            ))}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
-            <Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>
-              <Route index element={<Navigate replace to="budget" />} />
-              <Route
-                path="expenses"
-                element={
-                  <Expenses
-                    publicUserData={publicUserData}
-                    expenseArray={expenseArray}
-                    budgetArray={budgetArray}
-                    groupArray={groupArray}
-                    categoryDataMap={categoryDataMap}
-                    recurringExpenseArray={recurringExpenseArray}
-                    blacklistedExpenseArray={blacklistedExpenseArray}
-                  />
-                }
-              />
-              <Route
-                path="budget"
-                element={
-                  <Budget
-                    publicUserData={publicUserData}
-                    expenseArray={expenseArray}
-                    budgetArray={budgetArray}
-                    groupArray={groupArray}
-                  />
-                }
-              />
-              <Route
-                path="tools"
-                element={
-                  <Tools
-                    publicUserData={publicUserData}
-                    expenseArray={expenseArray}
-                    budgetArray={budgetArray}
-                    groupArray={groupArray}
-                    recurringExpenseArray={recurringExpenseArray}
-                    categoryDataMap={categoryDataMap}
-                  />
-                }
-              />
-            </Route>
-            <Route path="/3753b177" element={<Wall user={"Louise"} />} />
-            <Route path="/432e9aa2" element={<Wall user={"Julian"} />} />
-            <Route path="/11e2e386" element={<Wall user={"Saaiq"} />} />
-            <Route path="/86419f8c" element={<Wall user={"Colin"} />} />
-            <Route path="/4799f130" element={<Wall user={"Thomas"} />} />
-            <Route path="/7763fcm3" element={<Wall user={"Matthew"} />} />
-          </Routes>
-        </Router>
+              <Route path="/3753b177" element={<Wall user={"Louise"} />} />
+              <Route path="/432e9aa2" element={<Wall user={"Julian"} />} />
+              <Route path="/11e2e386" element={<Wall user={"Saaiq"} />} />
+              <Route path="/86419f8c" element={<Wall user={"Colin"} />} />
+              <Route path="/4799f130" element={<Wall user={"Thomas"} />} />
+              <Route path="/7763fcm3" element={<Wall user={"Matthew"} />} />
+            </Routes>
+          </BrowserRouter>
+        </LocationContext.Provider>
       </EmailContext.Provider>
     </ErrorBoundary>
   );

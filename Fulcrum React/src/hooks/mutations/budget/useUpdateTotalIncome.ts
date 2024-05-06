@@ -14,7 +14,7 @@ export default function useUpdateTotalIncome() {
       await queryClient.cancelQueries({ queryKey: ["totalIncome", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["totalIncome", email]);
       await queryClient.setQueryData(["totalIncome", email], newTotalIncomeData);
-      toast.success("Income updated.");
+      toast.success("Income updated!");
       return { dataBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {

@@ -16,6 +16,10 @@
   transition: width 225ms ease-in-out;
 }
 
+.homepage-navbar-link:hover {
+  cursor: pointer;
+}
+
 .homepage-navbar-link:hover:after {
   width: 100%;
 }

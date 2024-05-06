@@ -4,7 +4,7 @@
 }
 
 .profile-icon-display {
-  background: url("../../public/static/assets/UI-icons/green-triangle-background-inverted.webp") bottom / contain no-repeat;
+  background: url("/static/assets/UI-icons/green-triangle-background-inverted.webp") bottom / contain no-repeat;
   width: 18vw;
   height: 18vw;
   position: relative;
@@ -24,8 +24,8 @@
 
 .tools-tile {
   box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 1);
-  width: 16rem;
-  height: 16rem;
+  width: 14rem;
+  height: 14rem;
   display: flex;
   margin-bottom: 2rem;
   flex-direction: column;
@@ -35,8 +35,8 @@
 }
 
 .tools-tile img {
-  width: 70%;
-  height: 70%;
+  width: 68%;
+  height: 68%;
 }
 
 .tools-tile p {
@@ -51,7 +51,7 @@
 }
 
 .tools-text-container {
-  width: 80%;
+  width: 83%;
   height: 15%;
   display: flex;
   padding-bottom: 0.25rem;
@@ -66,7 +66,7 @@
   align-items: center;
   width: 100%;
   height: auto;
-  margin-top: 4rem;
+  margin-top: 3.25rem;
 }
 
 @media (max-width: 1056px) {
@@ -179,6 +179,10 @@
   }
   .currency-selector-row {
     height: 12rem;
+  }
+  .tools-tile {
+    width: 10rem;
+    height: 10rem;
   }
 }
 

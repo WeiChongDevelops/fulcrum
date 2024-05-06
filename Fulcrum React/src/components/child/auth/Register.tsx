@@ -204,13 +204,12 @@ export default function Register() {
               </div>
               <div className={"mt-6 text-xs"}>
                 <span>See our </span>
-                <a
-                  href="#"
+                <span
                   className={"underline text-[#17423F] font-semibold"}
                   onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
                 >
                   Privacy Policy
-                </a>
+                </span>
               </div>
             </form>
           </div>

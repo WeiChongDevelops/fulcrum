@@ -30,7 +30,7 @@ export default function NavbarUpper({ publicUserData }: NavbarUpperProps) {
       />
       <div className="flex-1 text-right">
         <div className="flex justify-end items-center mr-8">
-          <p className={`navbar-email select-none ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
+          <p className={`navbar-email text-sm select-none ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
             {email}
           </p>
           <img

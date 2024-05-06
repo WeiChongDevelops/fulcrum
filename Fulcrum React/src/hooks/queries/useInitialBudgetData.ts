@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { checkForOpenModalOrForm, EmailContext, getLineAngle } from "../../utility/util.ts";
+import { checkForOpenModalOrForm, EmailContext, getLineAngle, LocationContext } from "../../utility/util.ts";
 import { useQuery } from "@tanstack/react-query";
 import {
   BudgetFormVisibility,
@@ -8,6 +8,7 @@ import {
   PreviousGroupBeingEdited,
 } from "../../utility/types.ts";
 import { getSessionEmailOrNull, getTotalIncome } from "../../utility/api.ts";
+import { useNavigate } from "react-router-dom";
 
 export default function useInitialBudgetData() {
   const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
@@ -43,9 +44,10 @@ export default function useInitialBudgetData() {
 
   useEffect(() => {
     setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility));
-  }, [budgetFormVisibility, budgetModalVisibility]);
+  }, [budgetFormVisibility, budgetModalVisibility, location]);
 
   const email = useContext(EmailContext);
+  const navigate = useNavigate();
 
   async function retrieveInitialData() {
     try {
@@ -54,7 +56,7 @@ export default function useInitialBudgetData() {
         console.log("User logged in.");
       } else {
         console.log("User not logged in, login redirect initiated.");
-        window.location.href = "/login";
+        navigate("/login");
       }
       return getTotalIncome();
     } catch (error) {
@@ -74,9 +76,11 @@ export default function useInitialBudgetData() {
     enabled: !!email,
   });
 
+  const routerLocation = useContext(LocationContext);
+
   useEffect(() => {
     totalIncome && setLineAngle(getLineAngle(amountLeftToBudget, totalIncome));
-  }, [amountLeftToBudget, totalIncome]);
+  }, [amountLeftToBudget, totalIncome, routerLocation]);
 
   return {
     totalIncome,

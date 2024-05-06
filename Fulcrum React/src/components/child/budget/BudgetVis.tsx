@@ -23,9 +23,10 @@ export default function BudgetVis({ budgetArray, setBudgetModalVisibility }: Dat
   useEffect(() => {
     function resizeChart() {
       const body = document.querySelector("body");
-      console.log(body?.getBoundingClientRect().width! / 2);
-      setChartWidth(body?.getBoundingClientRect().width! / 2);
+      console.log(body?.getBoundingClientRect().width! / 1.5);
+      setChartWidth(body?.getBoundingClientRect().width! / 1.6);
     }
+    resizeChart();
     window.addEventListener("resize", resizeChart);
     return () => window.removeEventListener("resize", resizeChart);
   }, []);
@@ -44,7 +45,7 @@ export default function BudgetVis({ budgetArray, setBudgetModalVisibility }: Dat
   return (
     <div
       className={
-        "fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl p-6 bg-[#17423f] font-bold text-white opacity-90 flex flex-col justify-start items-center"
+        "fixed left-1/2 top-[57%] -translate-x-1/2 -translate-y-1/2 rounded-3xl p-3 bg-[#17423f] font-bold text-white bg-opacity-90 flex flex-col justify-start items-center"
       }
       ref={modalRef}
     >
@@ -52,12 +53,12 @@ export default function BudgetVis({ budgetArray, setBudgetModalVisibility }: Dat
         onClick={hideForm}
         displayText={"Close"}
         optionalTailwind={"ml-auto mb-auto"}
-        backgroundColour="grey"
+        backgroundColour="white"
       ></FulcrumButton>
       <div>
         <PieChart
           width={chartWidth}
-          height={chartWidth / 1.6}
+          height={chartWidth / 1.75}
           data={donutDataFromBudgetArray(budgetArray)}
           series={
             <PieArcSeries

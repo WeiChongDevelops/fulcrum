@@ -15,8 +15,11 @@ export default function useResetAccountData() {
     },
     onMutate: () => {
       queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
+      toast.dismiss();
+      toast.loading("Restoring defaults...");
     },
     onSuccess: () => {
+      toast.dismiss();
       toast.success("Account data reset.");
     },
     onError: () => {

@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useMemo } from "react";
 import { capitaliseFirstLetter } from "../../../utility/util.ts";
 import PageSelectionButtonIcon from "./PageSelectionButtonIcon.tsx";
+import { useNavigate } from "react-router-dom";
 
 interface PageSelectionButtonProps {
   darkModeEnabled: boolean;
@@ -19,6 +20,7 @@ export default function PageSelectionButton({
 }: PageSelectionButtonProps) {
   const isCurrentWindowLocation = useMemo(() => windowLocation === fulcrumPage, [windowLocation, fulcrumPage]);
   const isHoveredWindowLocation = useMemo(() => hoveredNavButton === fulcrumPage, [hoveredNavButton, fulcrumPage]);
+  const navigate = useNavigate();
 
   function handleMouseEnter() {
     setHoveredNavButton(fulcrumPage);
@@ -35,7 +37,7 @@ export default function PageSelectionButton({
       onMouseLeave={handleMouseLeave}
       className={`lower-navbar-button ${isCurrentWindowLocation ? "bg-[#17423F]" : "bg-black"} hover:text-black ${darkModeEnabled ? "hover:bg-gray-400" : "hover:bg-white"} 
       focus:outline-none border-y-2 border-x-4`}
-      onClick={() => (window.location.href = `/app/${fulcrumPage}`)}
+      onClick={() => navigate(`/app/${fulcrumPage}`)}
     >
       <PageSelectionButtonIcon
         fulcrumPage={fulcrumPage}

@@ -36,6 +36,7 @@ apiClient.interceptors.response.use(
 export async function handleExpenseCreation(newExpenseItem: ExpenseItemEntity): Promise<void> {
   try {
     const response = await apiClient.post("/createExpense", {
+      expenseId: newExpenseItem.expenseId,
       category: newExpenseItem.category,
       amount: newExpenseItem.amount,
       timestamp: newExpenseItem.timestamp,

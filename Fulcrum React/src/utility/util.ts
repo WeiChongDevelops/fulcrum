@@ -22,6 +22,7 @@ import {
   SetFormVisibility,
   SetModalVisibility,
 } from "./types.ts";
+import { Location } from "react-router-dom";
 
 // GLOBAL VARIABLES //
 
@@ -33,6 +34,7 @@ export const DEFAULT_CATEGORY_GROUP = "Miscellaneous";
 // CONTEXT //
 
 export const EmailContext = createContext<string>("");
+export const LocationContext = createContext<Location | null>(null);
 
 // SELECTOR CONTENT ARRAYS //
 
@@ -84,7 +86,7 @@ export const categoryIconArray = [
   "category-phone-icon.svg",
   "category-soccer-icon.svg",
   "category-tv-icon.svg",
-  "category-utencils-icon.svg",
+  "category-utensils-icon.svg",
   "category-wifi-icon.svg",
 ];
 

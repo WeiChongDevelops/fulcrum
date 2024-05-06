@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { LocationContext } from "../../utility/util.ts";
 
 export default function useAnimationData(lineAngle: number) {
   const [animationDataIsLoading, setAnimationDataIsLoading] = useState(true);
@@ -51,22 +52,24 @@ export default function useAnimationData(lineAngle: number) {
     });
   }
 
+  const routerLocation = useContext(LocationContext);
+
   useEffect(() => {
     setShadowDimensions().then(() => setAnimationDataIsLoading(false));
-  }, [bowlWidth, leverEndXOffset]);
+  }, [bowlWidth, leverEndXOffset, routerLocation]);
 
   useEffect(() => {
     recalculateShadowDimensions();
-  }, [lineAngle, leverEndXOffset, bowlWidth]);
+  }, [lineAngle, leverEndXOffset, bowlWidth, routerLocation]);
 
   useEffect(() => {
     setActiveTriangleFulcrum(`/static/assets/fulcrum-animation/fulcrum-tri-${lineAngle !== 0 ? "red" : "green"}.webp`);
-  }, [lineAngle]);
+  }, [lineAngle, routerLocation]);
 
   useEffect(() => {
     window.addEventListener("resize", recalculateShadowDimensions);
     return () => window.removeEventListener("resize", recalculateShadowDimensions);
-  }, []);
+  }, [routerLocation]);
 
   return {
     animationDataIsLoading,

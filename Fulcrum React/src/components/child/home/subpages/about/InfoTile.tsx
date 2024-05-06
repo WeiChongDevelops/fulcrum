@@ -58,7 +58,7 @@ export default function InfoTile({
   }, [isHovered]);
 
   return (
-    <div className={"single-tile-container hide-tile select-none"} ref={tileRef}>
+    <div className={"single-tile-container hide-tile select-none hover:cursor-default"} ref={tileRef}>
       <div
         className={"mid-copy-animation-tile"}
         style={{

@@ -3,8 +3,9 @@ import {
   getCurrencySymbol,
   isCurrentMonth,
   changeFormOrModalVisibility,
+  LocationContext,
 } from "../../../utility/util.ts";
-import { useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import IncomeDisplay from "./IncomeDisplay.tsx";
 import FulcrumAnimation from "./FulcrumAnimation.tsx";
 import GroupList from "./main-data-hierarchy/GroupList.tsx";
@@ -58,6 +59,7 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
     isSuccess,
     error,
   } = useInitialBudgetData();
+  const routerLocation = useContext(LocationContext);
 
   const { animationDataIsLoading, activeTriangleFulcrum, bowlShadowDimensions } = useAnimationData(lineAngle);
 
@@ -67,7 +69,7 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
 
   useEffect(() => {
     !!totalIncome && setAmountLeftToBudget(totalIncome - totalBudget);
-  }, [budgetArray, totalIncome]);
+  }, [budgetArray, totalIncome, routerLocation]);
 
   useEffect(() => {
     if (!!budgetArray) {
@@ -81,7 +83,7 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
         setPerCategoryExpenseTotalThisMonth((previousMap) => new Map([...previousMap, [category, categoryExpenditure]]));
       });
     }
-  }, [budgetArray, expenseArray]);
+  }, [budgetArray, expenseArray, routerLocation]);
 
   if (isError) {
     return <FulcrumErrorPage errors={[error!]} />;

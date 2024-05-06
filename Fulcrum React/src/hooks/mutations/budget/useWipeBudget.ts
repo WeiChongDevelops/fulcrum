@@ -12,6 +12,8 @@ export default function useWipeBudget() {
     mutationFn: handleWipeBudget,
     onMutate: () => {
       queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
+      toast.dismiss();
+      toast.loading("Wiping budget...");
     },
     onSuccess: () => {
       toast.success("Budget wiped.");

@@ -3,7 +3,7 @@ import TwoOptionModal from "../../modals/TwoOptionModal.tsx";
 import { changeFormOrModalVisibility } from "../../../../utility/util.ts";
 import useWipeBudget from "../../../../hooks/mutations/budget/useWipeBudget.ts";
 import useWipeExpenses from "../../../../hooks/mutations/expense/useWipeExpenses.ts";
-import useResetAccountData from "../../../../hooks/mutations/budget/useResetAccountData.ts";
+import useResetAccountData from "../../../../hooks/mutations/other/useResetAccountData.ts";
 import {
   SetFormVisibility,
   SetModalVisibility,

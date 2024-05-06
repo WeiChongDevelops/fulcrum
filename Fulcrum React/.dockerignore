@@ -38,3 +38,10 @@ out/
 # Operating system generated files
 .DS_Store
 Thumbs.db
+
+#Other
+.eslintrc.cjs
+__mocks__/
+src/components/__tests__/
+jest.config.cjs
+stats.html

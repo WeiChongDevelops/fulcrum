@@ -12,6 +12,8 @@ export default function useWipeExpenses() {
     mutationFn: handleWipeExpenses,
     onMutate: () => {
       queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
+      toast.dismiss();
+      toast.loading("Wiping expenses...");
     },
     onSuccess: () => {
       toast.dismiss();

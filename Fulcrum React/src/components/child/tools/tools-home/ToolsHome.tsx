@@ -4,6 +4,7 @@ import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import ProfileIconUpdatingForm from "./ProfileIconUpdatingForm.tsx";
 import { OpenToolsSection, PublicUserData, ToolsFormVisibility } from "../../../../utility/types.ts";
 import { handleUserLogout } from "../../../../utility/api.ts";
+import ActiveFormClickShield from "../../other/ActiveFormClickShield.tsx";
 
 interface ToolsHomeProps {
   publicUserData: PublicUserData;
@@ -46,7 +47,7 @@ export default function ToolsHome({ publicUserData, setOpenToolsSection }: Tools
   return (
     <div className="tools flex flex-col justify-center items-center bg-[#455259] p-10">
       <div
-        className="profile-icon-display mb-2"
+        className="profile-icon-display mb-1"
         onClick={openProfileIconSelector}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -57,14 +58,12 @@ export default function ToolsHome({ publicUserData, setOpenToolsSection }: Tools
         />
         {isChangeIconMessageVisible && <b className={"absolute z-4 mt-[87.5%] text-xs"}>Change Icon</b>}
       </div>
-      <p className={"font-bold text-2xl text-white mb-5"}>{email}</p>
+      <p className={"font-bold text-xl text-white mb-4"}>{email}</p>
       <div>
         <FulcrumButton displayText={"Sign Out"} backgroundColour={"white"} onClick={handleUserLogout} />
       </div>
 
-      {toolsFormVisibility.isUpdateProfileIconFormVisible && (
-        <div className="absolute w-[80vw] h-[80vh] bg-transparent z-3"></div>
-      )}
+      {toolsFormVisibility.isUpdateProfileIconFormVisible && <ActiveFormClickShield />}
 
       <div className="tools-tile-container">
         <div
