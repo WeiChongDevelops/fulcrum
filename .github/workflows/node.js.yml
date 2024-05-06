@@ -1,12 +1,21 @@
 name: CI
+
 on: [push, pull_request]
+
 jobs:
-  test:
+  frontend_test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
       with:
         node-version: '20.3.0'
-    - run: npm install
-    - run: npm test
+
+    - name: Install dependencies (Fulcrum React)
+      run: npm install
+      working-directory: ./Fulcrum\ React
+
+    - name: Run tests (Fulcrum React)
+      run: npm test
+      working-directory: ./Fulcrum\ React
