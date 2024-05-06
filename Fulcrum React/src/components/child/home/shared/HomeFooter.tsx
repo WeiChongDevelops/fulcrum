@@ -17,10 +17,13 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
           alt="Pricing background"
         />
       )}
-      <div className={"homepage-footer grid grid-cols-3 grid-rows-8 justify-items-start items-end gap-y-1"}>
+      <div className={"homepage-footer grid grid-cols-3 grid-rows-9 justify-items-start items-end gap-y-1"}>
         <img
-          className={"row-start-1 row-end-5 col-start-1 w-20 ml-[10vw]"}
+          className={
+            "row-start-1 row-end-5 col-start-1 w-20 ml-[10vw] hover:cursor-pointer hover:-rotate-12 hover:scale-110 transition-all ease-out duration-300"
+          }
           src={"/static/assets/fulcrum-logos/fulcrum-icon.png"}
+          onClick={() => (window.location.href = window.location.origin + "/home/about")}
           alt={"icon"}
         ></img>
         <FulcrumButton

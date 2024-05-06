@@ -39,12 +39,13 @@ export default function useInitialBudgetData() {
   const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
   const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
 
+  const routerLocation = useContext(LocationContext);
   const [lineAngle, setLineAngle] = useState(0);
   const [perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
     setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility));
-  }, [budgetFormVisibility, budgetModalVisibility, location]);
+  }, [budgetFormVisibility, budgetModalVisibility, routerLocation]);
 
   const email = useContext(EmailContext);
   const navigate = useNavigate();
@@ -75,8 +76,6 @@ export default function useInitialBudgetData() {
     queryFn: retrieveInitialData,
     enabled: !!email,
   });
-
-  const routerLocation = useContext(LocationContext);
 
   useEffect(() => {
     totalIncome && setLineAngle(getLineAngle(amountLeftToBudget, totalIncome));

@@ -3,8 +3,9 @@ import {
   changeFormOrModalVisibility,
   dynamicallySizeBudgetNumberDisplays,
   formatDollarAmountStatic,
+  LocationContext,
 } from "../../../../utility/util.ts";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import {
   BudgetFormVisibility,
   BudgetModalVisibility,
@@ -45,6 +46,7 @@ export default function BudgetTile({
 }: BudgetTileProps) {
   const spent = perCategoryExpenseTotalThisMonth.get(category)!;
   const [budgetExceeded, setBudgetExceeded] = useState(spent > amount);
+  const routerLocation = useContext(LocationContext);
 
   function handleEditClick() {
     setOldBudgetBeingEdited({
@@ -59,7 +61,7 @@ export default function BudgetTile({
   useEffect(() => {
     setBudgetExceeded(spent > amount);
     dynamicallySizeBudgetNumberDisplays();
-  }, [amount, perCategoryExpenseTotalThisMonth]);
+  }, [amount, perCategoryExpenseTotalThisMonth, routerLocation]);
 
   function handleDeleteClick(e: React.MouseEvent) {
     e.stopPropagation();

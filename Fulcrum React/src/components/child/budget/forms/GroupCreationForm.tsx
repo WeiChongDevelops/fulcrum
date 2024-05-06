@@ -1,11 +1,12 @@
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   addColourSelectionFunctionality,
   changeFormOrModalVisibility,
   addFormExitListeners,
   getRandomGroupColour,
   capitaliseFirstLetter,
+  LocationContext,
 } from "../../../../utility/util.ts";
 import "../../../../css/Budget.css";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
@@ -26,6 +27,7 @@ export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCrea
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: createGroup } = useCreateGroup();
+  const routerLocation = useContext(LocationContext);
 
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateGroupVisible", false);
@@ -38,7 +40,7 @@ export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCrea
       removeFormExitEventListeners();
       removeColourEventListeners();
     };
-  }, []);
+  }, [routerLocation]);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     setFormData((oldFormData) => {

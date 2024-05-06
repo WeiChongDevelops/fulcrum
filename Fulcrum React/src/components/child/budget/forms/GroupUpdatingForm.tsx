@@ -1,8 +1,9 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   addColourSelectionFunctionality,
   addFormExitListeners,
   changeFormOrModalVisibility,
+  LocationContext,
 } from "../../../../utility/util.ts";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
@@ -24,6 +25,7 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateGroup } = useUpdateGroup();
+  const routerLocation = useContext(LocationContext);
 
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", false);
@@ -36,7 +38,7 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
       removeFormExitEventListeners();
       removeColourEventListeners();
     };
-  }, []);
+  }, [routerLocation]);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     setFormData((currentFormData) => {

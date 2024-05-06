@@ -20,7 +20,7 @@ export default function FAQItem({ question, answer }: FAQItemProps) {
     <div className={`relative flex flex-col items-center ${!toggleOpen && "border-b-2 border-gray-700"}`}>
       <div
         className={
-          "z-40 font-bold outline-2 bg-white w-full flex flex-row justify-between items-center px-8 hover:cursor-pointer hover:bg-gray-100"
+          "z-40 font-bold outline-2 bg-white w-full flex flex-row justify-between items-center px-8 hover:cursor-pointer hover:bg-[#f9fbfb]"
         }
         onClick={handleToggle}
       >

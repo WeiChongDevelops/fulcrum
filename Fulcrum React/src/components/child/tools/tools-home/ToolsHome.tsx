@@ -45,7 +45,9 @@ export default function ToolsHome({ publicUserData, setOpenToolsSection }: Tools
   const email = useContext(EmailContext);
 
   return (
-    <div className="tools flex flex-col justify-center items-center bg-[#455259] p-10">
+    <div
+      className={`tools flex flex-col justify-center items-center p-10 ${publicUserData.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
+    >
       <div
         className="profile-icon-display mb-1"
         onClick={openProfileIconSelector}

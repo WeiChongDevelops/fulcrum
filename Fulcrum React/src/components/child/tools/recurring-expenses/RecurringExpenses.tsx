@@ -1,5 +1,5 @@
-import { checkForOpenModalOrForm } from "../../../../utility/util.ts";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { checkForOpenModalOrForm, LocationContext } from "../../../../utility/util.ts";
+import { Dispatch, SetStateAction, useContext, useEffect } from "react";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import AddNewRecurringExpenseButton from "./buttons/AddNewRecurringExpenseButton.tsx";
 import RecurringExpenseModalsAndForms from "./RecurringExpenseModalsAndForms.tsx";
@@ -39,6 +39,7 @@ export default function RecurringExpenses({
   categoryDataMap,
   recurringExpenseArray,
 }: RecurringExpensesProps) {
+  const routerLocation = useContext(LocationContext);
   const {
     recurringExpenseModalVisibility,
     setRecurringExpenseModalVisibility,
@@ -56,11 +57,13 @@ export default function RecurringExpenses({
     setIsRecurringExpenseFormOrModalOpen(
       checkForOpenModalOrForm(recurringExpenseFormVisibility, recurringExpenseModalVisibility),
     );
-  }, [recurringExpenseFormVisibility, recurringExpenseModalVisibility]);
+  }, [recurringExpenseFormVisibility, recurringExpenseModalVisibility, routerLocation]);
 
   return (
     <>
-      <div className="justify-start items-center bg-[#455259] min-h-screen relative">
+      <div
+        className={`justify-start items-center min-h-screen relative ${publicUserData.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
+      >
         <div>
           <div
             className={`justify-center items-center w-[100vw] elementsBelowPopUpForm

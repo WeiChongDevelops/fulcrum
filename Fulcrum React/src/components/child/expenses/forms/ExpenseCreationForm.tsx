@@ -1,5 +1,5 @@
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   recurringFrequencyOptions,
   DEFAULT_CATEGORY_ICON,
@@ -7,6 +7,7 @@ import {
   addFormExitListeners,
   handleInputChangeOnFormWithAmount,
   colourStyles,
+  LocationContext,
 } from "../../../../utility/util.ts";
 import { v4 as uuid } from "uuid";
 import Select from "react-select/creatable";
@@ -50,6 +51,7 @@ export default function ExpenseCreationForm({
 }: ExpenseCreationFormProps) {
   const { mutate: createExpense } = useCreateExpense();
   const { mutate: createRecurringExpense } = useCreateRecurringExpense();
+  const routerLocation = useContext(LocationContext);
 
   const [formData, setFormData] = useState<ExpenseCreationFormData>({
     category: "",
@@ -71,7 +73,7 @@ export default function ExpenseCreationForm({
     return () => {
       removeFormExitEventListeners();
     };
-  }, []);
+  }, [routerLocation]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

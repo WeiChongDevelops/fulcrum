@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { addFormExitListeners } from "../../../utility/util.ts";
+import { useContext, useEffect, useRef } from "react";
+import { addFormExitListeners, LocationContext } from "../../../utility/util.ts";
 import FulcrumButton from "../buttons/FulcrumButton.tsx";
 import {
   BudgetModalVisibility,
@@ -37,6 +37,7 @@ export default function TwoOptionModal({
 }: TwoOptionModalProps) {
   const formRef = useRef<HTMLDivElement>(null);
   const rightButtonRef = useRef<HTMLButtonElement>(null);
+  const routerLocation = useContext(LocationContext);
   const hideForm = () => {
     setModalVisibility((current: any) => ({
       ...current,
@@ -50,7 +51,7 @@ export default function TwoOptionModal({
     return () => {
       removeFormExitEventListeners();
     };
-  }, []);
+  }, [routerLocation]);
 
   return (
     <div className="fulcrum-modal" ref={formRef}>

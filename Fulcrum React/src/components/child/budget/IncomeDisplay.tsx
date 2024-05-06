@@ -1,5 +1,5 @@
-import { formatDollarAmountDynamic, formatDollarAmountStatic } from "../../../utility/util.ts";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { formatDollarAmountDynamic, formatDollarAmountStatic, LocationContext } from "../../../utility/util.ts";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import useUpdateTotalIncome from "../../../hooks/mutations/budget/useUpdateTotalIncome.ts";
 import { PublicUserData } from "../../../utility/types.ts";
 
@@ -18,6 +18,7 @@ export default function IncomeDisplay({ totalIncome, amountLeftToBudget, publicU
   const [incomeFormData, setIncomeFormData] = useState({
     income: totalIncome ? formatDollarAmountDynamic(totalIncome.toString()) : "8000",
   });
+  const routerLocation = useContext(LocationContext);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -53,7 +54,7 @@ export default function IncomeDisplay({ totalIncome, amountLeftToBudget, publicU
     setIncomeFormData({
       income: totalIncome ? formatDollarAmountDynamic(totalIncome.toString()) : "8000",
     });
-  }, [totalIncome]);
+  }, [totalIncome, routerLocation]);
 
   return (
     <div className="flex flex-row w-full items-center mt-1">

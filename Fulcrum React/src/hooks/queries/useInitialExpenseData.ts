@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { checkForOpenModalOrForm } from "../../utility/util.ts";
+import { useContext, useEffect, useState } from "react";
+import { checkForOpenModalOrForm, LocationContext } from "../../utility/util.ts";
 import { ExpenseItemEntity, ExpenseModalVisibility, PreviousExpenseBeingEdited } from "../../utility/types.ts";
 
 export default function useInitialExpenseData() {
@@ -27,10 +27,11 @@ export default function useInitialExpenseData() {
     recurringExpenseId: null,
   });
   const [defaultCalendarDate, setDefaultCalendarDate] = useState(new Date());
+  const routerLocation = useContext(LocationContext);
 
   useEffect(() => {
     setIsExpenseFormOrModalOpen(checkForOpenModalOrForm(expenseFormVisibility, expenseModalVisibility));
-  }, [expenseFormVisibility, expenseModalVisibility]);
+  }, [expenseFormVisibility, expenseModalVisibility, routerLocation]);
 
   return {
     expenseFormVisibility,

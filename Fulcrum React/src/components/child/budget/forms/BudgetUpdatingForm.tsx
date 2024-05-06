@@ -1,5 +1,5 @@
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   addFormExitListeners,
   addIconSelectionFunctionality,
@@ -9,6 +9,7 @@ import {
   getRandomGroupColour,
   groupListAsOptions,
   handleInputChangeOnFormWithAmount,
+  LocationContext,
 } from "../../../../utility/util.ts";
 import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
@@ -45,6 +46,7 @@ export default function BudgetUpdatingForm({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateBudget } = useUpdateBudget();
+  const routerLocation = useContext(LocationContext);
 
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateBudgetVisible", false);
@@ -57,7 +59,7 @@ export default function BudgetUpdatingForm({
       removeFormExitEventListeners();
       removeIconEventListeners();
     };
-  }, []);
+  }, [routerLocation]);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     handleInputChangeOnFormWithAmount(e, setFormData);

@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import InfoTile from "./InfoTile.tsx";
+import { LocationContext } from "../../../../../utility/util.ts";
 
 /**
  * Mid-page component displaying sales copy on interactive tiles for key benefits.
  */
 export default function MidCopy() {
+  const routerLocation = useContext(LocationContext);
+
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -19,7 +22,7 @@ export default function MidCopy() {
     tiles.forEach((tile) => observer.observe(tile));
 
     return () => observer.disconnect();
-  }, []);
+  }, [routerLocation]);
 
   return (
     <div className={"relative z-20 top-[25vw] h-0"}>

@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Register from "../child/auth/Register.tsx";
 import Login from "../child/auth/Login.tsx";
 import Budget from "../child/budget/Budget.tsx";
@@ -59,71 +59,69 @@ export default function App() {
       <EmailContext.Provider value={email!}>
         <LocationContext.Provider value={location}>
           <Toaster richColors />
-          <BrowserRouter>
-            <Routes>
-              {homePaths.map((path) => (
-                <Route key={path} path={path} element={<Home />}>
-                  <Route index element={<Navigate replace to="about" />} />
-                  <Route path="about" element={<About />} />
-                  <Route path="contact" element={<Contact />} />
-                  <Route path="pricing" element={<Pricing />} />
-                  <Route path="faq" element={<FAQs />} />
-                </Route>
-              ))}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
-              <Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>
-                <Route index element={<Navigate replace to="budget" />} />
-                <Route
-                  path="expenses"
-                  element={
-                    <Expenses
-                      publicUserData={publicUserData}
-                      expenseArray={expenseArray}
-                      budgetArray={budgetArray}
-                      groupArray={groupArray}
-                      categoryDataMap={categoryDataMap}
-                      recurringExpenseArray={recurringExpenseArray}
-                      blacklistedExpenseArray={blacklistedExpenseArray}
-                    />
-                  }
-                />
-                <Route
-                  path="budget"
-                  element={
-                    <Budget
-                      publicUserData={publicUserData}
-                      expenseArray={expenseArray}
-                      budgetArray={budgetArray}
-                      groupArray={groupArray}
-                    />
-                  }
-                />
-                <Route
-                  path="tools"
-                  element={
-                    <Tools
-                      publicUserData={publicUserData}
-                      expenseArray={expenseArray}
-                      budgetArray={budgetArray}
-                      groupArray={groupArray}
-                      recurringExpenseArray={recurringExpenseArray}
-                      categoryDataMap={categoryDataMap}
-                    />
-                  }
-                />
+          <Routes>
+            {homePaths.map((path) => (
+              <Route key={path} path={path} element={<Home />}>
+                <Route index element={<Navigate replace to="about" />} />
+                <Route path="about" element={<About />} />
+                <Route path="contact" element={<Contact />} />
+                <Route path="pricing" element={<Pricing />} />
+                <Route path="faq" element={<FAQs />} />
               </Route>
-              <Route path="/3753b177" element={<Wall user={"Louise"} />} />
-              <Route path="/432e9aa2" element={<Wall user={"Julian"} />} />
-              <Route path="/11e2e386" element={<Wall user={"Saaiq"} />} />
-              <Route path="/86419f8c" element={<Wall user={"Colin"} />} />
-              <Route path="/4799f130" element={<Wall user={"Thomas"} />} />
-              <Route path="/7763fcm3" element={<Wall user={"Matthew"} />} />
-            </Routes>
-          </BrowserRouter>
+            ))}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
+            <Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>
+              <Route index element={<Navigate replace to="budget" />} />
+              <Route
+                path="expenses"
+                element={
+                  <Expenses
+                    publicUserData={publicUserData}
+                    expenseArray={expenseArray}
+                    budgetArray={budgetArray}
+                    groupArray={groupArray}
+                    categoryDataMap={categoryDataMap}
+                    recurringExpenseArray={recurringExpenseArray}
+                    blacklistedExpenseArray={blacklistedExpenseArray}
+                  />
+                }
+              />
+              <Route
+                path="budget"
+                element={
+                  <Budget
+                    publicUserData={publicUserData}
+                    expenseArray={expenseArray}
+                    budgetArray={budgetArray}
+                    groupArray={groupArray}
+                  />
+                }
+              />
+              <Route
+                path="tools"
+                element={
+                  <Tools
+                    publicUserData={publicUserData}
+                    expenseArray={expenseArray}
+                    budgetArray={budgetArray}
+                    groupArray={groupArray}
+                    recurringExpenseArray={recurringExpenseArray}
+                    categoryDataMap={categoryDataMap}
+                  />
+                }
+              />
+            </Route>
+            <Route path="/3753b177" element={<Wall user={"Louise"} />} />
+            <Route path="/432e9aa2" element={<Wall user={"Julian"} />} />
+            <Route path="/11e2e386" element={<Wall user={"Saaiq"} />} />
+            <Route path="/86419f8c" element={<Wall user={"Colin"} />} />
+            <Route path="/4799f130" element={<Wall user={"Thomas"} />} />
+            <Route path="/7763fcm3" element={<Wall user={"Matthew"} />} />
+          </Routes>
         </LocationContext.Provider>
       </EmailContext.Provider>
     </ErrorBoundary>

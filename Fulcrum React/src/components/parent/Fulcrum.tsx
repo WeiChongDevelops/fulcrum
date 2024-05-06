@@ -5,8 +5,9 @@ import Loader from "../child/other/Loader.tsx";
 import { ErrorBoundary } from "../child/other/ErrorBoundary.tsx";
 import { Toaster } from "sonner";
 import { PublicUserData } from "../../utility/types.ts";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { getSessionEmailOrNull } from "../../utility/api.ts";
+import { LocationContext } from "../../utility/util.ts";
 
 interface FulcrumProps {
   publicUserData: PublicUserData;
@@ -17,6 +18,7 @@ interface FulcrumProps {
  * The Fulcrum component which renders the navigation bars and the active application section.
  */
 export default function Fulcrum({ publicUserData, isAnyLoading }: FulcrumProps) {
+  const routerLocation = useContext(LocationContext);
   if (isAnyLoading) {
     return <Loader isLoading={isAnyLoading} isDarkMode={publicUserData.darkModeEnabled} />;
   }
@@ -25,7 +27,7 @@ export default function Fulcrum({ publicUserData, isAnyLoading }: FulcrumProps) 
     getSessionEmailOrNull()
       .then((result) => result === null && (window.location.href = "/login"))
       .catch(() => (window.location.href = "/login"));
-  }, []);
+  }, [routerLocation]);
 
   return (
     <div

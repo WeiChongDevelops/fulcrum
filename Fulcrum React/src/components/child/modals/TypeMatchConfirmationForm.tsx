@@ -1,5 +1,5 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { addFormExitListeners, changeFormOrModalVisibility } from "../../../utility/util.ts";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { addFormExitListeners, changeFormOrModalVisibility, LocationContext } from "../../../utility/util.ts";
 import FulcrumButton from "../buttons/FulcrumButton.tsx";
 import { toast } from "sonner";
 import {
@@ -32,6 +32,7 @@ export function TypeMatchConfirmationForm({
   const [typeMatchInput, setTypeMatchInput] = useState("");
   const formRef = useRef<HTMLDivElement>(null);
   const typeMatchInputRef = useRef<HTMLInputElement>(null);
+  const routerLocation = useContext(LocationContext);
 
   function hideForm() {
     changeFormOrModalVisibility(setFormVisibility, formVisibility, false);
@@ -43,7 +44,7 @@ export function TypeMatchConfirmationForm({
     return () => {
       removeFormExitEventListeners();
     };
-  }, []);
+  }, [routerLocation]);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setTypeMatchInput(e.target.value);

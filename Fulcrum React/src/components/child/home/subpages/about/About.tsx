@@ -1,7 +1,8 @@
 import UpperCopy from "./UpperCopy.tsx";
 import MidCopy from "./MidCopy.tsx";
 import LowerCopy from "./LowerCopy.tsx";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { LocationContext } from "../../../../../utility/util.ts";
 
 /**
  * The About section of the Fulcrum homepage.
@@ -9,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 export default function About() {
   const [showArrow, setShowArrow] = useState(true);
   const scrollHideRef = useRef<HTMLDivElement>(null);
+  const routerLocation = useContext(LocationContext);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -25,7 +27,7 @@ export default function About() {
         observer.unobserve(scrollHideRef.current);
       }
     };
-  }, []);
+  }, [routerLocation]);
 
   return (
     <div className={"about-container bg-[#e0eddf] relative"}>

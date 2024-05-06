@@ -205,7 +205,7 @@ export default function Register() {
               <div className={"mt-6 text-xs"}>
                 <span>See our </span>
                 <span
-                  className={"underline text-[#17423F] font-semibold"}
+                  className={"underline text-[#17423F] font-semibold hover:cursor-pointer"}
                   onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
                 >
                   Privacy Policy

@@ -1,6 +1,6 @@
 import "../../../css/Budget.css";
-import { useEffect } from "react";
-import { groupColourArray } from "../../../utility/util.ts";
+import { useContext, useEffect } from "react";
+import { groupColourArray, LocationContext } from "../../../utility/util.ts";
 
 interface GroupColourSelectorProps {
   oldColour?: string;
@@ -10,10 +10,11 @@ interface GroupColourSelectorProps {
  * A visual selector for the user to choose a colour for a budget category group.
  */
 export default function GroupColourSelector({ oldColour }: GroupColourSelectorProps) {
+  const routerLocation = useContext(LocationContext);
   useEffect(() => {
     const oldColourSelectable = document.querySelector(`div[data-value="${oldColour}"]`);
     oldColourSelectable?.classList.add("selectedColour");
-  }, []);
+  }, [routerLocation]);
 
   return (
     <div id="group-colour-selector">

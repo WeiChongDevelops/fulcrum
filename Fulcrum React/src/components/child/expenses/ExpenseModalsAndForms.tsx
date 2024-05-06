@@ -1,5 +1,10 @@
 import ExpenseCreationForm from "./forms/ExpenseCreationForm.tsx";
-import { categoryListAsOptions, changeFormOrModalVisibility, getCurrencySymbol } from "../../../utility/util.ts";
+import {
+  categoryListAsOptions,
+  changeFormOrModalVisibility,
+  getCurrencySymbol,
+  LocationContext,
+} from "../../../utility/util.ts";
 import ExpenseUpdatingForm from "./forms/ExpenseUpdatingForm.tsx";
 import RecurringExpenseInstanceUpdatingForm from "../tools/recurring-expenses/forms/RecurringExpenseInstanceUpdatingForm.tsx";
 import TwoOptionModal from "../modals/TwoOptionModal.tsx";
@@ -17,7 +22,7 @@ import {
   SetModalVisibility,
 } from "../../../utility/types.ts";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 interface ExpenseModalsAndFormsProps {
   expenseFormVisibility: ExpenseFormVisibility;
@@ -51,6 +56,8 @@ export default function ExpenseModalsAndForms({
 }: ExpenseModalsAndFormsProps) {
   const [toastId, setToastId] = useState<string | number>();
   const { mutate: deleteExpense, isPending } = useDeleteExpense();
+  const routerLocation = useContext(LocationContext);
+
   useEffect(() => {
     if (isPending) {
       setToastId(
@@ -64,7 +71,7 @@ export default function ExpenseModalsAndForms({
     } else {
       !!toastId && toast.dismiss(toastId);
     }
-  }, [isPending]);
+  }, [isPending, routerLocation]);
 
   return (
     <div className={"z-40"}>

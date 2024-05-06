@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { addFormExitListeners } from "../../../utility/util.ts";
+import { useContext, useEffect, useRef } from "react";
+import { addFormExitListeners, LocationContext } from "../../../utility/util.ts";
 import FulcrumButton from "../buttons/FulcrumButton.tsx";
 import {
   BudgetModalVisibility,
@@ -39,6 +39,7 @@ export default function ThreeOptionModal({
   isVisible,
   title,
 }: ThreeOptionModalProps) {
+  const routerLocation = useContext(LocationContext);
   const formRef = useRef<HTMLDivElement>(null);
 
   const hideForm = () => {
@@ -53,7 +54,7 @@ export default function ThreeOptionModal({
     return () => {
       removeFormExitEventListeners();
     };
-  }, []);
+  }, [routerLocation]);
 
   return (
     <div className="fulcrum-modal" ref={formRef}>

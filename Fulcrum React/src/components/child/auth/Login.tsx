@@ -1,12 +1,13 @@
 import FulcrumButton from "../buttons/FulcrumButton.tsx";
 import "../../../css/App.css";
 import "../../../css/Auth.css";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import useLoginUser from "../../../hooks/mutations/auth/useLoginUser.ts";
 import Loader from "../other/Loader.tsx";
 import { LoginFormData } from "../../../utility/types.ts";
 import OAuthLoginButton from "../buttons/OAuthLoginButton.tsx";
 import useOAuthLoginUrl from "../../../hooks/mutations/auth/useOAuthLoginUrl.ts";
+import { LocationContext } from "../../../utility/util.ts";
 
 /**
  * The login page for the Fulcrum application.
@@ -16,6 +17,7 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const routerLocation = useContext(LocationContext);
 
   const { isSuccess: isLoginSuccess, isPending: isUserLoginPending, mutate: loginUser } = useLoginUser();
   const { isPending: isOAuthURLPending, mutate: openOAuthLogin } = useOAuthLoginUrl();
@@ -41,7 +43,7 @@ export default function Login() {
         password: "",
       });
     }
-  }, [isLoginSuccess]);
+  }, [isLoginSuccess, routerLocation]);
 
   return (
     <>
@@ -136,7 +138,7 @@ export default function Login() {
               <div className={"mt-6 text-xs"}>
                 <span>See our </span>
                 <span
-                  className={"underline text-[#17423F] font-semibold"}
+                  className={"underline text-[#17423F] font-semibold hover:cursor-pointer"}
                   onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
                 >
                   Privacy Policy

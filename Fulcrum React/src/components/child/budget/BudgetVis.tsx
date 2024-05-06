@@ -1,7 +1,7 @@
 import { PieArcSeries, PieArcLabel, PieChart } from "reaviz";
 import { BudgetItemEntity, BudgetModalVisibility, SetModalVisibility } from "../../../utility/types.ts";
-import { useEffect, useRef, useState } from "react";
-import { addFormExitListeners, changeFormOrModalVisibility } from "../../../utility/util.ts";
+import { useContext, useEffect, useRef, useState } from "react";
+import { addFormExitListeners, changeFormOrModalVisibility, LocationContext } from "../../../utility/util.ts";
 import FulcrumButton from "../buttons/FulcrumButton.tsx";
 
 interface DataVisProps {
@@ -16,6 +16,7 @@ export default function BudgetVis({ budgetArray, setBudgetModalVisibility }: Dat
       data: budgetItem.amount,
     }));
   }
+  const routerLocation = useContext(LocationContext);
 
   const modalRef = useRef<HTMLDivElement>(null);
   const [chartWidth, setChartWidth] = useState(850);
@@ -29,7 +30,7 @@ export default function BudgetVis({ budgetArray, setBudgetModalVisibility }: Dat
     resizeChart();
     window.addEventListener("resize", resizeChart);
     return () => window.removeEventListener("resize", resizeChart);
-  }, []);
+  }, [routerLocation]);
 
   const hideForm = () => {
     changeFormOrModalVisibility(setBudgetModalVisibility, "isDataVisVisible", false);
@@ -40,7 +41,7 @@ export default function BudgetVis({ budgetArray, setBudgetModalVisibility }: Dat
     return () => {
       removeFormExitEventListeners();
     };
-  }, []);
+  }, [routerLocation]);
 
   return (
     <div

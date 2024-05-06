@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { LocationContext } from "../../../../../utility/util.ts";
 
 interface InfoTileProps {
   initialDisplayText: string;
@@ -22,6 +23,7 @@ export default function InfoTile({
 }: InfoTileProps) {
   const tileRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const routerLocation = useContext(LocationContext);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -35,7 +37,7 @@ export default function InfoTile({
     });
     observer.observe(tileRef.current!);
     return () => observer.disconnect();
-  }, []);
+  }, [routerLocation]);
 
   function handleMouseEnter() {
     setIsHovered(true);
@@ -55,7 +57,7 @@ export default function InfoTile({
     } else {
       tileRef.current?.classList.remove("budget-tile-raise-flip");
     }
-  }, [isHovered]);
+  }, [isHovered, routerLocation]);
 
   return (
     <div className={"single-tile-container hide-tile select-none hover:cursor-default"} ref={tileRef}>

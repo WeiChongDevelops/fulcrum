@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { checkForOpenModalOrForm } from "../../../../utility/util.ts";
+import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { checkForOpenModalOrForm, LocationContext } from "../../../../utility/util.ts";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import DarkModeToggle from "../../toggles/DarkModeToggle.tsx";
 import AccessibilityToggle from "../../toggles/AccessibilityToggle.tsx";
@@ -35,15 +35,17 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
     isConfirmBudgetResetModalVisible: false,
   });
   const [isSettingsFormOrModalOpen, setIsSettingsFormOrModalOpen] = useState<boolean>(false);
-
   const elementsBelowPopUpForm = useRef<HTMLDivElement>(null);
+  const routerLocation = useContext(LocationContext);
 
   useEffect(() => {
     setIsSettingsFormOrModalOpen(checkForOpenModalOrForm(settingsFormVisibility, settingsModalVisibility));
-  }, [settingsFormVisibility, settingsModalVisibility]);
+  }, [settingsFormVisibility, settingsModalVisibility, routerLocation]);
 
   return (
-    <div className="flex flex-col justify-start items-center bg-[#455259] min-h-screen relative">
+    <div
+      className={`flex flex-col justify-start items-center min-h-screen relative ${publicUserData.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
+    >
       <div
         className={`w-[100vw] px-8 elementsBelowPopUpForm
                 ${isSettingsFormOrModalOpen && "blur"}`}

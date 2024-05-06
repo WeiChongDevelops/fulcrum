@@ -1,9 +1,10 @@
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import {
   changeFormOrModalVisibility,
   addFormExitListeners,
   handleInputChangeOnFormWithAmount,
+  LocationContext,
 } from "../../../../utility/util.ts";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
@@ -42,6 +43,7 @@ export default function ExpenseUpdatingForm({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateExpense } = useUpdateExpense();
+  const routerLocation = useContext(LocationContext);
 
   function hideForm() {
     changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateExpenseVisible", false);
@@ -52,7 +54,7 @@ export default function ExpenseUpdatingForm({
     return () => {
       removeFormExitEventListeners();
     };
-  }, []);
+  }, [routerLocation]);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     handleInputChangeOnFormWithAmount(e, setFormData);

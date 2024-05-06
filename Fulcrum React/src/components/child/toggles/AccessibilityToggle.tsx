@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import useUpdatePublicUserData from "../../../hooks/mutations/other/useUpdatePublicUserData.ts";
 import { PublicUserData } from "../../../utility/types.ts";
+import { LocationContext } from "../../../utility/util.ts";
 
 interface AccessibilityToggleProps {
   publicUserData: PublicUserData;
@@ -12,6 +13,7 @@ interface AccessibilityToggleProps {
 export default function AccessibilityToggle({ publicUserData }: AccessibilityToggleProps) {
   const [isAccessibilityMode, setIsAccessibilityMode] = useState(publicUserData.accessibilityEnabled);
   const { mutate: updatePublicUserData } = useUpdatePublicUserData();
+  const routerLocation = useContext(LocationContext);
 
   async function handleAccessibilityToggle() {
     const newIsAccessibilityMode = !isAccessibilityMode;
@@ -23,7 +25,7 @@ export default function AccessibilityToggle({ publicUserData }: AccessibilityTog
 
   useEffect(() => {
     setIsAccessibilityMode(publicUserData.accessibilityEnabled);
-  }, [publicUserData.accessibilityEnabled]);
+  }, [publicUserData.accessibilityEnabled, routerLocation]);
 
   return (
     <div
