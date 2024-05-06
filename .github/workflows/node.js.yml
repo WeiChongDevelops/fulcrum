@@ -14,8 +14,8 @@ jobs:
 
     - name: Install dependencies (Fulcrum React)
       run: npm install
-      working-directory: ./Fulcrum\ React
+      working-directory: 'Fulcrum React'
 
     - name: Run tests (Fulcrum React)
       run: npm test
-      working-directory: ./Fulcrum\ React
+      working-directory: 'Fulcrum React'
