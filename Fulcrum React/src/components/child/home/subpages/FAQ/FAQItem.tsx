@@ -27,7 +27,7 @@ export default function FAQItem({ question, answer }: FAQItemProps) {
         <p>{question}</p>
         <img
           src="/static/assets/homepage-assets/scroll-arrow.svg"
-          className={`w-6 h-6 select-none transition-transform 150ms ease-out ${toggleOpen && "rotate-180"}`}
+          className={`w-6 h-6 transition-transform 150ms ease-out ${toggleOpen && "rotate-180"}`}
           alt="Toggle arrow"
         />
       </div>
@@ -36,7 +36,7 @@ export default function FAQItem({ question, answer }: FAQItemProps) {
         style={{ height: toggleOpen ? `${height}` : "0px", overflow: "hidden" }}
         className="z-0 text-sm font-medium w-full bg-[#bce3c8] text-black flex flex-row justify-center items-center transition-all ease-out duration-150"
       >
-        <p className={"select-none"}>{answer}</p>
+        <p>{answer}</p>
       </div>
     </div>
   );

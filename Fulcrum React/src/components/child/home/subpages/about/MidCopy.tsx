@@ -29,7 +29,7 @@ export default function MidCopy() {
       <div className={"flex flex-row justify-center items-center mb-20"}>
         <InfoTile
           initialDisplayText={"Simplify Your Finances"}
-          hoverDisplayText={"No confusing features - nothing more or less than what you need."}
+          hoverDisplayText={"No confusing features. Nothing more or less than what you need."}
           backgroundColour={"#17423F"}
           iconPathFront={"/static/assets/homepage-assets/tile-icon-simplify-front.svg"}
           iconPathBack={"/static/assets/homepage-assets/tile-icon-simplify-back.svg"}

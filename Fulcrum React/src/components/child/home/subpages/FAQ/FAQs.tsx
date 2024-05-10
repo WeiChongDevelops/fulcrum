@@ -19,9 +19,12 @@ export default function FAQs() {
           ))}
         </div>
       </div>
-      <p className={"font-medium mt-12"}>
-        Still have questions? Contact our customer support team through the contact form on our website.
-      </p>
+      <div className={"flex flex-row justify-center items-center mt-8 gap-4"}>
+        <img src="/static/assets/homepage-assets/homepage-highlight-3.png" className={"w-4"} alt="" />
+        <p className={"font-medium"}>
+          Still have questions? Contact our customer support team through the contact form on our website.
+        </p>
+      </div>
     </div>
   );
 }
