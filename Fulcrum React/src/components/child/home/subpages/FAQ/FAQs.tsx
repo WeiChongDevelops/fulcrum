@@ -5,7 +5,7 @@ export default function FAQs() {
   return (
     <div className={"prose mx-auto max-w-[80vw] my-16 relative"}>
       <img
-        src="/public/static/assets/homepage-assets/homepage-highlight-5.png"
+        src="/static/assets-v2/homepage-assets/homepage-highlight-5.png"
         className={"w-12 absolute top-8 -left-10 rotate-[125deg]"}
         alt=""
       />
@@ -20,7 +20,7 @@ export default function FAQs() {
         </div>
       </div>
       <div className={"flex flex-row justify-center items-center mt-8 gap-4"}>
-        <img src="/static/assets/homepage-assets/homepage-highlight-3.png" className={"w-4"} alt="" />
+        <img src="/static/assets-v2/homepage-assets/homepage-highlight-3.png" className={"w-4"} alt="" />
         <p className={"font-medium"}>
           Still have questions? Contact our customer support team through the contact form on our website.
         </p>

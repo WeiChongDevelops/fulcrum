@@ -22,12 +22,17 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
           className={
             "row-start-1 row-end-5 col-start-1 w-20 ml-[10vw] hover:cursor-pointer hover:-rotate-12 hover:scale-110 transition-all ease-out duration-300"
           }
-          src={"/static/assets/fulcrum-logos/fulcrum-icon.png"}
+          src={"/static/assets-v2/fulcrum-logos/fulcrum-icon.png"}
           onClick={() => (window.location.href = "/home/about")}
           alt={"icon"}
         ></img>
         <a href={"/register"} className={"row-start-5 row-end-7 col-start-1 ml-[8.5vw] mt-5"}>
-          <FulcrumButton displayText={"Sign Up for Free"} backgroundColour={"green"} hoverShadow={true} />
+          <FulcrumButton
+            displayText={"Sign Up for Free"}
+            backgroundColour={"green"}
+            optionalTailwind={"homepage-button"}
+            hoverShadow={true}
+          />
         </a>
         <div className={"row-start-[8] col-start-1 pl-[9vw] text-[0.55rem] text-left"}>
           Copyright © {new Date().getFullYear()}, Fulcrum. All Rights Reserved.

@@ -11,7 +11,7 @@ export default function PageSelectionButtonIcon({
 }: PageSelectionButtonIconProps) {
   return (
     <img
-      src={`/static/assets/navbar-icons/${fulcrumPage}-icon-${isCurrentWindowLocation ? "white" : "black"}.svg`}
+      src={`/static/assets-v2/navbar-icons/${fulcrumPage}-icon-${isCurrentWindowLocation ? "white" : "black"}.svg`}
       className={`w-6 transition-opacity duration-300 ${isCurrentWindowLocation && isHoveredWindowLocation && "opacity-0"}`}
       alt="Navigation icon"
     />

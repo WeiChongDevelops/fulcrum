@@ -669,7 +669,7 @@ export async function handleUserOAuthInit(): Promise<void> {
  */
 export async function handleUserLogout(): Promise<void> {
   try {
-    sessionStorage.removeItem("email");
+    sessionStorage.clear();
     window.location.href = "/login";
     await apiClient.post("/logout", {
       jwt: localStorage.getItem("jwt"),

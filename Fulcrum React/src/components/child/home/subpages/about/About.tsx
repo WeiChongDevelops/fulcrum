@@ -32,7 +32,7 @@ export default function About() {
   return (
     <div className={"z-10 bg-[#e0eddf] relative"}>
       <img
-        src="/static/assets/homepage-assets/scroll-arrow.svg"
+        src="/static/assets-v2/homepage-assets/scroll-arrow.svg"
         className={`fixed top-[95vh] bouncy-arrow left-[50vw] w-[2vw] h-[2vw] z-50 opacity-75 ${showArrow ? "block" : "hidden"}`}
         alt={"scroll indicator"}
       ></img>

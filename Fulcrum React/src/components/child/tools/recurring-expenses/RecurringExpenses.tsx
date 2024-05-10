@@ -79,9 +79,17 @@ export default function RecurringExpenses({
                 />
               </div>
 
-              <img className={"w-12 h-auto"} src="/static/assets/UI-icons/tools-recurring-icon-white.svg" alt="Cycle icon" />
+              <img
+                className={"w-12 h-auto"}
+                src="/static/assets-v2/UI-icons/tools-recurring-icon-white.svg"
+                alt="Cycle icon"
+              />
               <h1 className="recurring-expenses-title text-white font-bold mx-8">Recurring Expenses</h1>
-              <img className={"w-12 h-auto"} src="/static/assets/UI-icons/tools-recurring-icon-white.svg" alt="Cycle icon" />
+              <img
+                className={"w-12 h-auto"}
+                src="/static/assets-v2/UI-icons/tools-recurring-icon-white.svg"
+                alt="Cycle icon"
+              />
               <div className="flex-grow flex flex-row justify-end">
                 <FulcrumButton
                   displayText={"Go Back"}

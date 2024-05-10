@@ -31,7 +31,7 @@
 }
 
 .tile-icon-container {
-  background: url("/static/assets/UI-icons/green-triangle-background.webp") center / contain no-repeat;
+  background: url("/static/assets-v2/UI-icons/green-triangle-background.webp") center / contain no-repeat;
   min-width: 105px;
   min-height: 60px;
   display: flex;

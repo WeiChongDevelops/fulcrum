@@ -36,7 +36,7 @@ export default function DarkModeToggle({ publicUserData }: DarkModeToggleProps) 
         className={`rounded-full w-7 h-7 p-1 select-none transition-all ease-in-out ${isDarkMode ? "toggle-right-shift bg-black" : "bg-white "}`}
       >
         <img
-          src={`/static/assets/UI-icons/${isDarkMode ? "dark-mode-moon" : "light-mode-sun"}.svg`}
+          src={`/static/assets-v2/UI-icons/${isDarkMode ? "dark-mode-moon" : "light-mode-sun"}.svg`}
           alt="Dark or light mode icon"
         />
       </div>

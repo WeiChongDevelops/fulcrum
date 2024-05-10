@@ -26,7 +26,7 @@ export default function FAQItem({ question, answer }: FAQItemProps) {
       >
         <p>{question}</p>
         <img
-          src="/static/assets/homepage-assets/scroll-arrow.svg"
+          src="/static/assets-v2/homepage-assets/scroll-arrow.svg"
           className={`w-6 h-6 transition-transform 150ms ease-out ${toggleOpen && "rotate-180"}`}
           alt="Toggle arrow"
         />

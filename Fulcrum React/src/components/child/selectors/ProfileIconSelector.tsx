@@ -10,7 +10,10 @@ export default function ProfileIconSelector() {
       {profileIconArray.map((profileIconName, key) => {
         return (
           <button data-value={profileIconName} className={"profile-icon-selectable"} key={key}>
-            <img src={`/static/assets/profile-icons/${profileIconName.slice(0, -4)}-white.svg`} alt="Profile icon option" />
+            <img
+              src={`/static/assets-v2/profile-icons/${profileIconName.slice(0, -4)}-white.svg`}
+              alt="Profile icon option"
+            />
           </button>
         );
       })}

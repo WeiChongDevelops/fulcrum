@@ -67,7 +67,7 @@ export const ExpenseMonthGroup = memo(
               onClick={scrollLeft}
               className={`month-navigation-option navigate-left ${monthPanelShowingIndex === -monthsFromY2KToNow && "opacity-0 pointer-events-none"}`}
             >
-              <img src="/static/assets/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
+              <img src="/static/assets-v2/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
             </button>
             <p className={"text-3xl"}>
               {monthStringArray[monthExpenseGroupItem.monthIndex] + " " + monthExpenseGroupItem.year.toString()}
@@ -76,7 +76,7 @@ export const ExpenseMonthGroup = memo(
               onClick={scrollRight}
               className={`month-navigation-option navigate-right ${monthPanelShowingIndex === 12 && "opacity-0 pointer-events-none"}`}
             >
-              <img src="/static/assets/UI-icons/right-navigation-arrow.svg" alt="Right navigation arrow" />
+              <img src="/static/assets-v2/UI-icons/right-navigation-arrow.svg" alt="Right navigation arrow" />
             </button>
           </div>
           <button
@@ -84,13 +84,13 @@ export const ExpenseMonthGroup = memo(
             className={`flex gap-2 flex-row justify-center items-center fulcrum-button absolute bg-[#3f4240] text-white font-bold rounded-2xl mx-2 py-[0.5em] px-[1em] text-center hover:opacity-90 ${monthPanelShowingIndex > 0 ? "left-0" : monthPanelShowingIndex < 0 ? "right-0" : "hidden"}`}
           >
             <img
-              src="/static/assets/UI-icons/left-navigation-arrow.svg"
+              src="/static/assets-v2/UI-icons/left-navigation-arrow.svg"
               alt="Left navigation arrow"
               className={`h-4 w-3 left-nav-arrow opacity-0 ${monthPanelShowingIndex > 0 && "opacity-100"}`}
             />
             <span>Back to {currentMonth}</span>
             <img
-              src="/static/assets/UI-icons/right-navigation-arrow.svg"
+              src="/static/assets-v2/UI-icons/right-navigation-arrow.svg"
               alt="Right navigation arrow"
               className={`h-4 w-3 right-nav-arrow opacity-0 ${monthPanelShowingIndex < 0 && "opacity-100"}`}
             />

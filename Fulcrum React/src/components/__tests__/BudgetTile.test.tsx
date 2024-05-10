@@ -58,7 +58,7 @@ describe("BudgetTile", () => {
     expect(screen.getByText("Left: $-50.00")).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "Category icon" })).toHaveAttribute(
       "src",
-      "/static/assets/category-icons/grocery-icon.svg",
+      "/static/assets-v2/category-icons/grocery-icon.svg",
     );
     expect(screen.getByRole("button", { name: "Budget edit icon" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Budget delete icon" })).toBeInTheDocument();

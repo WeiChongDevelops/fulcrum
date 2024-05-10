@@ -61,9 +61,17 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
             />
           </div>
 
-          <img className={"w-12 h-auto"} src="/static/assets/UI-icons/tools-settings-icon-white.svg" alt="Settings icon" />
+          <img
+            className={"w-12 h-auto"}
+            src="/static/assets-v2/UI-icons/tools-settings-icon-white.svg"
+            alt="Settings icon"
+          />
           <h1 className="text-white font-bold mx-8">Settings</h1>
-          <img className={"w-12 h-auto"} src="/static/assets/UI-icons/tools-settings-icon-white.svg" alt="Settings icon" />
+          <img
+            className={"w-12 h-auto"}
+            src="/static/assets-v2/UI-icons/tools-settings-icon-white.svg"
+            alt="Settings icon"
+          />
 
           <div className="flex-grow flex flex-row justify-end">
             <FulcrumButton

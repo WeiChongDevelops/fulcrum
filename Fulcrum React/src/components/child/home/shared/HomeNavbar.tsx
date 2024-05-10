@@ -11,7 +11,7 @@ export default function HomeNavbar() {
         <div className={"flex flex-row justify-start w-40 transition-all cursor-pointer hover:-rotate-3 hover:scale-110"}>
           <a href={"/home/about"}>
             <img
-              src={`/static/assets/fulcrum-logos/fulcrum-long-black.webp`}
+              src={`/static/assets-v2/fulcrum-logos/fulcrum-long-black.webp`}
               alt="Fulcrum logo in navbar"
               className="w-full h-auto"
             />
@@ -34,7 +34,12 @@ export default function HomeNavbar() {
       </div>
       <div className={"flex-1 flex flex-row justify-end mr-4 sm:mr-16"}>
         <a href={window.location.origin + "/register"}>
-          <FulcrumButton displayText={"Sign Up for Free"} backgroundColour={"green"} hoverShadow={true} />
+          <FulcrumButton
+            displayText={"Sign Up for Free"}
+            backgroundColour={"green"}
+            optionalTailwind={"homepage-button"}
+            hoverShadow={true}
+          />
         </a>
       </div>
     </div>

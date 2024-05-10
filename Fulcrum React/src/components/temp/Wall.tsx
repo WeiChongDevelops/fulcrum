@@ -51,14 +51,18 @@ export default function Wall({ user }: WallProps) {
         ref={spotlightRef}
       ></div>
 
-      <img src="/static/assets/other-assets/web-tl.png" alt="?" className={"absolute -left-10 -top-10 w-[30vw] h-[30vw]"} />
-      <img src="/static/assets/other-assets/web-tr.png" alt="?" className={"absolute right-0 -top-2"} />
       <img
-        src="/static/assets/other-assets/web-bl.png"
+        src="/static/assets-v2/other-assets/web-tl.png"
+        alt="?"
+        className={"absolute -left-10 -top-10 w-[30vw] h-[30vw]"}
+      />
+      <img src="/static/assets-v2/other-assets/web-tr.png" alt="?" className={"absolute right-0 -top-2"} />
+      <img
+        src="/static/assets-v2/other-assets/web-bl.png"
         alt="?"
         className={"absolute -left-24 bottom-12 -rotate-90 max-w-[26vw]"}
       />
-      <img src="/static/assets/other-assets/web-br.png" alt="?" className={"absolute -right-8 -bottom-12 rotate-180"} />
+      <img src="/static/assets-v2/other-assets/web-br.png" alt="?" className={"absolute -right-8 -bottom-12 rotate-180"} />
       <p
         className={
           "font-serif text-black text-[4vw] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none"

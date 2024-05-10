@@ -4,7 +4,7 @@
 }
 
 .profile-icon-display {
-  background: url("/static/assets/UI-icons/green-triangle-background-inverted.webp") bottom / contain no-repeat;
+  background: url("/static/assets-v2/UI-icons/green-triangle-background-inverted.webp") bottom / contain no-repeat;
   width: 18vw;
   height: 18vw;
   position: relative;

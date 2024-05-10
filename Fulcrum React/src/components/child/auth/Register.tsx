@@ -97,12 +97,12 @@ export default function Register() {
     <>
       <Loader isLoading={isRegistrationPending || isOAuthURLPending} isDarkMode={false} />
       <div className={`${(isRegistrationPending || isOAuthURLPending) && "opacity-80 animate-pulse transition-opacity"}`}>
-        <img src="/static/assets/other-assets/register-bg-cmp.webp" className={"hidden"} />
+        <img src="/static/assets-v2/other-assets/register-bg-cmp.webp" className={"hidden"} />
         <div className={"auth-page-container register-page"}>
           <div className={"auth-page-left-column"}>
             <div className={"flex-1"}>
               <img
-                src="/static/assets/fulcrum-logos/fulcrum-long-white.webp"
+                src="/static/assets-v2/fulcrum-logos/fulcrum-long-white.webp"
                 className={"auth-standard-fulcrum-logo"}
                 alt="Fulcrum logo"
               />
@@ -115,7 +115,7 @@ export default function Register() {
           <div className={"auth-page-right-column"}>
             <div className={"flex-1"}>
               <img
-                src="/static/assets/fulcrum-logos/fulcrum-long-white.webp"
+                src="/static/assets-v2/fulcrum-logos/fulcrum-long-white.webp"
                 className={"auth-mobile-fulcrum-logo"}
                 alt="Fulcrum logo"
               />
@@ -189,7 +189,7 @@ export default function Register() {
                   textColour={"black"}
                   borderColour={"#ccc"}
                   provider={"google"}
-                  socialIconPath={"/static/assets/auth-icons/google-icon.svg"}
+                  socialIconPath={"/static/assets-v2/auth-icons/google-icon.svg"}
                   openOAuthLogin={openOAuthLogin}
                 />
                 <OAuthLoginButton
@@ -198,7 +198,7 @@ export default function Register() {
                   textColour={"white"}
                   borderColour={"#1977F2"}
                   provider={"facebook"}
-                  socialIconPath={"/static/assets/auth-icons/facebook-icon-inverted.png"}
+                  socialIconPath={"/static/assets-v2/auth-icons/facebook-icon-inverted.png"}
                   openOAuthLogin={openOAuthLogin}
                 />
               </div>

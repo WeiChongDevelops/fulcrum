@@ -108,13 +108,15 @@ fun Application.configureAuthRouting() {
                 val userCreds = call.receive<UserCredentials>()
                 val currentUser = supabase.gotrue.currentSessionOrNull()
                 if (currentUser == null) {
-                    supabase.gotrue.loginWith(Email) {
+                    val whatIsThis = supabase.gotrue.loginWith(Email) {
                         email = userCreds.email
                         password = userCreds.password
                     }
                     supabase.gotrue.refreshCurrentSession()
-                    val loggedInUser = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
-                    call.respond(HttpStatusCode.OK, loggedInUser)
+//                    val loggedInUser = supabase.gotrue.retrieveUserForCurrentSession(updateSession = true)
+                    val jwt = supabase.gotrue.currentSessionOrNull()!!.accessToken;
+                    println(jwt)
+                    call.respond(HttpStatusCode.OK, jwt)
                 } else {
                     call.respondSuccess("User already logged in.")
                 }

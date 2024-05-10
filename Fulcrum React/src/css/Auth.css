@@ -24,11 +24,11 @@
 }
 
 .register-page:before {
-  background-image: url("/static/assets/other-assets/register-bg-cmp.webp");
+  background-image: url("/static/assets-v2/other-assets/register-bg-cmp.webp");
 }
 
 .login-page:before {
-  background-image: url("/static/assets/other-assets/login-bg-cmp.webp");
+  background-image: url("/static/assets-v2/other-assets/login-bg-cmp.webp");
 }
 
 .auth-page-left-column {

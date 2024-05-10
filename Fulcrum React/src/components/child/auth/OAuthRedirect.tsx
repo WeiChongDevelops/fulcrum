@@ -22,7 +22,11 @@ export default function OAuthRedirect() {
     <div className={"flex flex-col justify-center items-center h-screen gap-8 text-black"}>
       <p className={"font-bold text-5xl "}>Login successful!</p>
       <p className={"font-medium text-xl"}>Please wait to be redirected...</p>
-      <img src="/static/assets/fulcrum-logos/fulcrum-icon.png" className={"w-12 h-12 animate-bounce"} alt="Fulcrum icon" />
+      <img
+        src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png"
+        className={"w-12 h-12 animate-bounce"}
+        alt="Fulcrum icon"
+      />
     </div>
   );
 }

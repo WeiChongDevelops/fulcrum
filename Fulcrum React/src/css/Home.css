@@ -28,6 +28,10 @@
   color: #27433d;
 }
 
+.homepage-button:focus {
+  outline: none;
+}
+
 /* HOMEPAGE FOOTER */
 
 .homepage-footer .homepage-footer-link {

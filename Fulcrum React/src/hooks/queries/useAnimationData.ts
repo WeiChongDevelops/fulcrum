@@ -5,7 +5,7 @@ export default function useAnimationData(lineAngle: number) {
   const [animationDataIsLoading, setAnimationDataIsLoading] = useState(true);
 
   const [activeTriangleFulcrum, setActiveTriangleFulcrum] = useState(
-    "/static/assets/fulcrum-animation/fulcrum-tri-red.webp",
+    "/static/assets-v2/fulcrum-animation/fulcrum-tri-red.webp",
   );
   const [leverEndXOffset, setLeverEndXOffset] = useState({
     leftEnd: 0,
@@ -63,7 +63,7 @@ export default function useAnimationData(lineAngle: number) {
   }, [lineAngle, leverEndXOffset, bowlWidth, routerLocation]);
 
   useEffect(() => {
-    setActiveTriangleFulcrum(`/static/assets/fulcrum-animation/fulcrum-tri-${lineAngle !== 0 ? "red" : "green"}.webp`);
+    setActiveTriangleFulcrum(`/static/assets-v2/fulcrum-animation/fulcrum-tri-${lineAngle !== 0 ? "red" : "green"}.webp`);
   }, [lineAngle, routerLocation]);
 
   useEffect(() => {
