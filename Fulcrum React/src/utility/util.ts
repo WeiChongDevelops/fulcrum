@@ -368,7 +368,7 @@ export const faqData = [
   },
   {
     question: "How do I contact customer support?",
-    answer: "You can contact our customer support team through our contact form on the website.",
+    answer: "You can contact our customer support team through the contact form on our website.",
   },
   {
     question: "Is there a mobile app available?",

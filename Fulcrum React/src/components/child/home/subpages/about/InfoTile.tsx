@@ -5,7 +5,6 @@ interface InfoTileProps {
   initialDisplayText: string;
   hoverDisplayText: string;
   backgroundColour: string;
-  textColor?: string;
   iconPathFront: string;
   iconPathBack: string;
 }
@@ -17,7 +16,6 @@ export default function InfoTile({
   initialDisplayText,
   hoverDisplayText,
   backgroundColour,
-  textColor,
   iconPathFront,
   iconPathBack,
 }: InfoTileProps) {
@@ -65,7 +63,6 @@ export default function InfoTile({
         className={"mid-copy-animation-tile"}
         style={{
           backgroundColor: backgroundColour,
-          color: textColor ? textColor : "black",
         }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -79,7 +76,7 @@ export default function InfoTile({
         <div
           className={`absolute flex flex-col justify-center items-center p-5 font-medium ${isHovered ? "block" : "hidden"}`}
         >
-          <p className={"text-sm"}>{hoverDisplayText}</p>
+          <p className={"text-lg"}>{hoverDisplayText}</p>
           <img src={iconPathBack} alt="Info tile icon" className={"w-6 h-auto mt-4"} />
         </div>
       </div>

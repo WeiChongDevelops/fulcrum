@@ -78,15 +78,16 @@ export default function UpperCopy() {
             <p>Watch as your savings grow and your financial stress fade away.</p>
           </div>
           <div>
-            <FulcrumButton
-              displayText={"Start Saving"}
-              backgroundColour={"green"}
-              onClick={() => (window.location.href = window.location.origin + "/register")}
-              hoverShadow={true}
-              optionalTailwind={
-                "shadow-[0.4rem_0.4rem_0px_black] mt-8 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[0.75rem_0.75rem_0px_black]"
-              }
-            />
+            <a href={"/register"}>
+              <FulcrumButton
+                displayText={"Start Saving"}
+                backgroundColour={"green"}
+                hoverShadow={true}
+                optionalTailwind={
+                  "shadow-[0.4rem_0.4rem_0px_black] mt-8 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[0.75rem_0.75rem_0px_black]"
+                }
+              />
+            </a>
             <img
               src="/static/assets/homepage-assets/homepage-highlight-2.png"
               className={"w-8 absolute left-[90%] bottom-0"}

@@ -8,7 +8,7 @@ import { getWindowLocation } from "../../../utility/util.ts";
  */
 export default function Home() {
   return (
-    <>
+    <div className={"relative"}>
       <HomeNavbar />
       <Outlet />
       <HomeFooter
@@ -16,6 +16,6 @@ export default function Home() {
           getWindowLocation() === "contact" ? "/static/assets/homepage-assets/footer-background-contact.png" : undefined
         }
       />
-    </>
+    </div>
   );
 }

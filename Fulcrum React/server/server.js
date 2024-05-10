@@ -2,6 +2,7 @@ import express from "express";
 import axios from "axios";
 import path from "path";
 import { fileURLToPath } from "url";
+import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,11 +13,16 @@ const PORT = 3001;
 app.enable("trust proxy");
 app.use(express.json());
 
-// Serve static files from build
+const corsOptions = {
+  origin: ["http://localhost:5173", "http://localhost:3001", "https://fulcrumfinance.app"],
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 const serveStatic = express.static(path.join(__dirname, "../dist"));
 app.use((req, res, next) => {
   if (req.path.endsWith(".jpg") || req.path.endsWith(".png") || req.path.endsWith(".svg") || req.path.endsWith(".webp")) {
-    res.set("Cache-Control", "public, max-age=31557600"); // 1 year
+    res.set("Cache-Control", "public, max-age=31557600");
   }
   next();
 });
@@ -26,7 +32,7 @@ app.use("/api", async (req, res) => {
   try {
     const response = await axios({
       method: req.method,
-      url: `http://backend:8080/api${req.url}`,
+      url: `http://localhost:8080/api${req.url}`,
       data: req.body,
     });
     res.send(response.data);

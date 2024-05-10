@@ -19,6 +19,7 @@ export default function Wall({ user }: WallProps) {
     setTimeout(() => {
       document.addEventListener("mousemove", shiftCursorSpotlight);
     }, 1000);
+
     return () => {
       document.removeEventListener("mousemove", shiftCursorSpotlight);
     };

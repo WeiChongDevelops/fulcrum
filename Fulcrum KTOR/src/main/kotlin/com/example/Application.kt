@@ -31,6 +31,9 @@ private fun Application.serverConfig() {
 
         allowHost("frontend", schemes = listOf("http"))
         allowHost("frontend:3001", schemes = listOf("http"))
+
+        allowHost("localhost", schemes = listOf("http"))
+        allowHost("localhost:3001", schemes = listOf("http"))
     }
 
     launch {
@@ -43,8 +46,8 @@ private fun Application.serverConfig() {
 
 
 fun main() {
+    println("Server running on port $PORT")
     embeddedServer(Netty, port = PORT, host = "0.0.0.0") {
         serverConfig()
     }.start(wait = true)
-    println("Server running on port $PORT")
 }

@@ -101,7 +101,7 @@ export default function Login() {
               <div className={"flex flex-row justify-between items-end w-full"}>
                 <div className={"mr-8 text-xs font-medium"}>
                   <span>Don't have an account? </span>
-                  <a href={window.location.origin + "/register"} className={"underline text-[#17423F] font-semibold"}>
+                  <a href={"/register"} className={"underline text-[#17423F] font-semibold"}>
                     Register
                   </a>
                 </div>
@@ -137,12 +137,9 @@ export default function Login() {
               </div>
               <div className={"mt-6 text-xs"}>
                 <span>See our </span>
-                <span
-                  className={"underline text-[#17423F] font-semibold hover:cursor-pointer"}
-                  onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
-                >
+                <a href={"/privacy"} className={"underline text-[#17423F] font-semibold hover:cursor-pointer"}>
                   Privacy Policy
-                </span>
+                </a>
               </div>
             </form>
           </div>

@@ -1,16 +1,19 @@
 // vite.config.ts or vite.config.js
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { visualizer } from 'rollup-plugin-visualizer';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
+  server: {
+    port: 5173,
+  },
   plugins: [
     react(),
     visualizer({
       open: true,
-      filename: 'stats.html',
+      filename: "stats.html",
       gzipSize: true,
-      brotliSize: true
-    })
-  ]
+      brotliSize: true,
+    }),
+  ],
 });

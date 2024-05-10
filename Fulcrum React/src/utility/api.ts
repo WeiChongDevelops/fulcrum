@@ -12,7 +12,8 @@ import { budgetSort, DEFAULT_CATEGORY_GROUP, DEFAULT_CATEGORY_ICON, expenseSort,
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: window.location.origin + "/api",
+  baseURL: "http://localhost:3001/api",
+  // baseURL: window.location.origin + "/api",
   headers: { "Content-Type": "application/json" },
 });
 

@@ -23,53 +23,46 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
             "row-start-1 row-end-5 col-start-1 w-20 ml-[10vw] hover:cursor-pointer hover:-rotate-12 hover:scale-110 transition-all ease-out duration-300"
           }
           src={"/static/assets/fulcrum-logos/fulcrum-icon.png"}
-          onClick={() => (window.location.href = window.location.origin + "/home/about")}
+          onClick={() => (window.location.href = "/home/about")}
           alt={"icon"}
         ></img>
-        <FulcrumButton
-          displayText={"Register for Free"}
-          optionalTailwind={"row-start-5 row-end-7 col-start-1 ml-[8.5vw] mt-5"}
-          onClick={() => (window.location.href = "/register")}
-          backgroundColour={"green"}
-          hoverShadow={true}
-        />
+        <a href={"/register"} className={"row-start-5 row-end-7 col-start-1 ml-[8.5vw] mt-5"}>
+          <FulcrumButton displayText={"Sign Up for Free"} backgroundColour={"green"} hoverShadow={true} />
+        </a>
         <div className={"row-start-[8] col-start-1 pl-[9vw] text-[0.55rem] text-left"}>
           Copyright © {new Date().getFullYear()}, Fulcrum. All Rights Reserved.
         </div>
 
         <b className={"row-start-5 col-start-2 pl-[10vw] pb-1"}>Navigation</b>
-        <p className={"row-start-6 col-start-2 pl-[10vw]"} onClick={() => (window.location.href = "/home/about")}>
+        <a href={"/home/about"} className={"homepage-footer-link row-start-6 col-start-2 pl-[10vw]"}>
           About
-        </p>
-        <p className={"row-start-7 col-start-2 pl-[10vw]"} onClick={() => (window.location.href = "/home/pricing")}>
+        </a>
+        <a href={"/home/pricing"} className={"homepage-footer-link row-start-7 col-start-2 pl-[10vw]"}>
           Pricing
-        </p>
-        <p className={"row-start-[8] col-start-2 pl-[10vw]"} onClick={() => (window.location.href = "/home/contact")}>
+        </a>
+        <a href={"/home/contact"} className={"homepage-footer-link row-start-[8] col-start-2 pl-[10vw]"}>
           Contact
-        </p>
+        </a>
 
         <b className={"row-start-5 col-start-3 pl-[10vw] pb-1"}>Additional</b>
-        <p
-          className={"row-start-6 col-start-3 pl-[10vw]"}
-          onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum", "_blank")}
+        <a
+          href={"https://github.com/WeiChongDevelops/Fulcrum"}
+          className={"homepage-footer-link row-start-6 col-start-3 pl-[10vw]"}
         >
           GitHub
-        </p>
-        <p
-          className={"row-start-7 col-start-3 pl-[10vw]"}
-          onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/LICENSE", "_blank")}
+        </a>
+        <a
+          href={"https://github.com/WeiChongDevelops/Fulcrum/blob/main/LICENSE"}
+          className={"homepage-footer-link row-start-7 col-start-3 pl-[10vw]"}
         >
           License
-        </p>
-        <p className={"row-start-[8] col-start-3 pl-[10vw]"} onClick={() => window.open("https://weichong.dev/", "_blank")}>
+        </a>
+        <a href={"https://weichong.dev/"} className={"homepage-footer-link row-start-[8] col-start-3 pl-[10vw]"}>
           More from Developer
-        </p>
-        <p
-          className={"row-start-[9] col-start-3 pl-[10vw]"}
-          onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
-        >
+        </a>
+        <a href={"/privacy"} className={"homepage-footer-link row-start-[9] col-start-3 pl-[10vw]"}>
           Privacy Policy
-        </p>
+        </a>
       </div>
     </div>
   );

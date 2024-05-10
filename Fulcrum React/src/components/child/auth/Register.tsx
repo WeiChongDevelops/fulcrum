@@ -168,7 +168,7 @@ export default function Register() {
               <div className={"flex flex-row justify-between items-end w-full"}>
                 <div className={"mr-8 text-xs font-medium"}>
                   <span>Already have an account? </span>
-                  <a href={window.location.origin + "/login"} className={"underline text-[#17423F] font-semibold"}>
+                  <a href={"/login"} className={"underline text-[#17423F] font-semibold"}>
                     Login
                   </a>
                 </div>

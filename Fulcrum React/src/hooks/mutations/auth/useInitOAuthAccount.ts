@@ -7,7 +7,7 @@ export default function useInitOAuthAccount() {
     mutationFn: handleUserOAuthInit,
     onSuccess: () => {
       toast.dismiss();
-      window.location.href = window.location.origin + "/app";
+      window.location.href = "/app";
     },
   });
 }
