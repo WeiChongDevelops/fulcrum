@@ -88,7 +88,7 @@ export default function Expenses({
 
   return (
     <div className="flex flex-col justify-center items-center relative">
-      <div className={""}>
+      <div>
         <div
           className={`justify-center items-center elementsBelowPopUpForm
                     ${isExpenseFormOrModalOpen && "blur"}`}

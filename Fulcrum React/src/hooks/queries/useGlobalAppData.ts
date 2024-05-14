@@ -1,4 +1,4 @@
-import { getGroupAndColourMap } from "../../utility/util.ts";
+import { getGroupAndColourMap } from "@/utility/util.ts";
 import { useQueries, useQuery, UseQueryResult } from "@tanstack/react-query";
 import {
   getBlacklistedExpenses,
@@ -8,7 +8,7 @@ import {
   getPublicUserData,
   getRecurringExpenseList,
   getSessionEmailOrNull,
-} from "../../utility/api.ts";
+} from "@/utility/api.ts";
 import {
   BlacklistedExpenseItemEntity,
   BudgetItemEntity,
@@ -17,7 +17,7 @@ import {
   GroupItemEntity,
   PublicUserData,
   RecurringExpenseItemEntity,
-} from "../../utility/types.ts";
+} from "@/utility/types.ts";
 
 export function useGlobalAppData() {
   const sessionStoredProfileIcon = sessionStorage.getItem("profileIconFileName");

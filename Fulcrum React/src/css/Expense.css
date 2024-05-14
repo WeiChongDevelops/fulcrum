@@ -41,7 +41,7 @@
   border: black 2px dashed;
   color: black;
   padding: 1rem 0;
-  width: 94vw;
+  width: 95%;
   margin-top: 1rem;
   border-radius: 1rem;
   transition: all 200ms ease-out;
@@ -105,7 +105,7 @@
 }
 
 .month-navigation-option img {
-  width: 2rem;
+  width: 1.5rem;
   user-select: none;
 }
 
@@ -135,18 +135,18 @@
 }
 
 @media (max-width: 800px) {
-  .create-expense-button {
-    width: 92vw;
-  }
+  /*.create-expense-button {*/
+  /*  width: 92vw;*/
+  /*}*/
   .expense-item {
     width: 92vw;
   }
 }
 
 @media (max-width: 600px) {
-  .create-expense-button {
-    width: 90vw;
-  }
+  /*.create-expense-button {*/
+  /*  width: 90vw;*/
+  /*}*/
   .expense-item {
     width: 90vw;
   }

@@ -485,12 +485,12 @@ export function categoryListAsOptions(budgetArray: BudgetItemEntity[], groupArra
 }
 
 export const currencyOptions = [
-  { symbol: "$AUD", code: "AUD" },
-  { symbol: "$USD", code: "USD" },
-  { symbol: "£GBP", code: "GBP" },
-  { symbol: "₩KRW", code: "KRW" },
-  { symbol: "¥JPY", code: "JPY" },
-  { symbol: "¥CNY", code: "CNY" },
+  { label: "$AUD", value: "AUD" },
+  { label: "$USD", value: "USD" },
+  { label: "£GBP", value: "GBP" },
+  { label: "₩KRW", value: "KRW" },
+  { label: "¥JPY", value: "JPY" },
+  { label: "¥CNY", value: "CNY" },
 ];
 
 export const queryTypeOptions = [

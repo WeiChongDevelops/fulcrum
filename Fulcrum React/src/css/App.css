@@ -116,15 +116,15 @@
 /* TOGGLES */
 
 .toggle-right-shift {
-  transform: translateX(150%);
+  transform: translateX(130%);
 }
 
 .sun-glow {
-  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 12px 5px rgba(255, 255, 255, 0.2);
 }
 
 .moon-shadow {
-  box-shadow: 0 0 15px 5px rgba(10, 10, 18, 0.2);
+  box-shadow: 0 0 12px 5px rgba(10, 10, 18, 0.2);
 }
 
 @keyframes rainbowGlow {

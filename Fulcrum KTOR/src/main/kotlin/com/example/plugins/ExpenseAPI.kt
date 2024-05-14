@@ -5,6 +5,7 @@ import com.example.SupabaseClient.supabase
 import com.example.entities.expense.*
 import com.example.entities.recurringExpense.*
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
+import io.github.jan.supabase.exceptions.UnknownRestException
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
@@ -83,6 +84,8 @@ fun Application.configureExpenseRouting() {
                 }.decodeList<ExpenseItemResponse>()
                 call.respond(HttpStatusCode.OK, expenseList)
             } catch (e: UnauthorizedRestException) {
+                call.respondAuthError("Not authorised - JWT token likely expired.")
+            } catch (e: UnknownRestException) {
                 call.respondAuthError("Not authorised - JWT token likely expired.")
             } catch (e: IllegalStateException) {
                 call.respondAuthError("Session not found.")
@@ -186,6 +189,8 @@ fun Application.configureExpenseRouting() {
 
                 call.respond(HttpStatusCode.OK, recurringExpenseList)
             } catch (e: UnauthorizedRestException) {
+                call.respondAuthError("Not authorised - JWT token likely expired.")
+            } catch (e: UnknownRestException) {
                 call.respondAuthError("Not authorised - JWT token likely expired.")
             } catch (e: IllegalStateException) {
                 call.respondAuthError("Session not found.")
@@ -293,6 +298,8 @@ fun Application.configureExpenseRouting() {
 
                 call.respond(HttpStatusCode.OK, blacklistedExpensesList)
             } catch (e: UnauthorizedRestException) {
+                call.respondAuthError("Not authorised - JWT token likely expired.")
+            } catch (e: UnknownRestException) {
                 call.respondAuthError("Not authorised - JWT token likely expired.")
             } catch (e: IllegalStateException) {
                 call.respondAuthError("Session not found.")

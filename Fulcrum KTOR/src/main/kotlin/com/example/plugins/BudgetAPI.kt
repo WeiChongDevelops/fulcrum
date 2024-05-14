@@ -7,6 +7,7 @@ import com.example.respondAuthError
 import com.example.respondError
 import com.example.respondSuccess
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
+import io.github.jan.supabase.exceptions.UnknownRestException
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
@@ -61,6 +62,9 @@ fun Application.configureBudgetRouting() {
                     }.decodeList<BudgetItemResponse>()
                 call.respond(HttpStatusCode.OK, budgetList)
             } catch (e: UnauthorizedRestException) {
+                call.application.log.error("Not authorised - JWT token likely expired.", e)
+                call.respondAuthError("Not authorised - JWT token likely expired: $e")
+            } catch (e: UnknownRestException) {
                 call.application.log.error("Not authorised - JWT token likely expired.", e)
                 call.respondAuthError("Not authorised - JWT token likely expired: $e")
             } catch (e: IllegalStateException) {
@@ -129,6 +133,8 @@ fun Application.configureBudgetRouting() {
                 call.respond(HttpStatusCode.OK, totalIncome)
             } catch (e: UnauthorizedRestException) {
                 call.respondAuthError("Not authorised - JWT token likely expired.")
+            } catch (e: UnknownRestException) {
+                call.respondAuthError("Not authorised - JWT token likely expired.")
             } catch (e: IllegalStateException) {
                 call.respondAuthError("Session not found.")
             } catch (e: Exception) {
@@ -192,6 +198,8 @@ fun Application.configureBudgetRouting() {
                     }.decodeList<GroupItemResponse>()
                 call.respond(HttpStatusCode.OK, groupList)
             } catch (e: UnauthorizedRestException) {
+                call.respondAuthError("Not authorised - JWT token likely expired.")
+            } catch (e: UnknownRestException) {
                 call.respondAuthError("Not authorised - JWT token likely expired.")
             } catch (e: IllegalStateException) {
                 call.respondAuthError("Session not found.")
