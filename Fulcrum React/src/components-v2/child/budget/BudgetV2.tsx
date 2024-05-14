@@ -1,5 +1,6 @@
 import { BudgetItemEntity, ExpenseItemEntity, GroupItemEntity, PublicUserData } from "@/utility/types.ts";
 import BudgetHeaderV2 from "@/components-v2/child/budget/BudgetHeaderV2.tsx";
+import FulcrumAnimationV2 from "@/components-v2/child/budget/FulcrumAnimationV2.tsx";
 
 interface BudgetV2Props {
   publicUserData: PublicUserData;
@@ -26,8 +27,9 @@ export default function BudgetV2({
       {/*</div>*/}
       <BudgetHeaderV2 navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} publicUserData={publicUserData} />
       <div className="flex flex-row w-full gap-8">
-        <div className="w-[65%] h-96 bg-blue-500"></div>
-        <div className="flex-grow h-96 bg-yellow-500"></div>
+        {/*<div className="w-[65%] h-96 bg-blue-500"></div>*/}
+        <FulcrumAnimationV2 totalIncome={10_000} budgetTotal={8_000} />
+        <div className="flex-grow bg-yellow-500 flex justify-center items-center font-bold text-2xl">New Graph</div>
       </div>
       <div className="flex flex-col w-full gap-4">
         <div className="h-28 w-full bg-indigo-500"></div>

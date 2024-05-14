@@ -56,7 +56,7 @@ export default function ExpenseHeaderV2({
         }
       >
         <button onClick={prevSlide} disabled={activeCarouselIndex < 1} className={"month-navigation-option navigate-left"}>
-          <img src="/assets-v2/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
+          <img src="/static/assets-v2/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
         </button>
         <p className={"text-xl"}>
           {!!activeMonthAndYear ? activeMonthAndYear.month + " " + activeMonthAndYear.year.toString() : "Loading..."}
@@ -66,7 +66,7 @@ export default function ExpenseHeaderV2({
           disabled={activeCarouselIndex >= startingIndex + 12}
           className={"month-navigation-option navigate-right"}
         >
-          <img src="/assets-v2/UI-icons/right-navigation-arrow.svg" alt="Right navigation arrow" />
+          <img src="/static/assets-v2/UI-icons/right-navigation-arrow.svg" alt="Right navigation arrow" />
         </button>
       </div>
       {activeCarouselIndex !== startingIndex && (
