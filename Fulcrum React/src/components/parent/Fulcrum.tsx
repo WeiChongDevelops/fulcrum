@@ -3,10 +3,10 @@ import NavbarUpper from "../child/navbar/NavbarUpper.tsx";
 import NavbarLower from "../child/navbar/NavbarLower.tsx";
 import Loader from "../child/other/Loader.tsx";
 import { ErrorBoundary } from "../child/other/ErrorBoundary.tsx";
-import { PublicUserData } from "../../utility/types.ts";
+import { PublicUserData } from "@/utility/types.ts";
 import { useContext, useEffect } from "react";
-import { getSessionEmailOrNull } from "../../utility/api.ts";
-import { LocationContext } from "../../utility/util.ts";
+import { getSessionEmailOrNull } from "@/utility/api.ts";
+import { LocationContext } from "@/utility/util.ts";
 
 interface FulcrumProps {
   publicUserData: PublicUserData;

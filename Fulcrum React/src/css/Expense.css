@@ -18,7 +18,7 @@
 .expense-item {
   box-shadow: 0.3rem 0.3rem 0 0 black;
   transition: all ease-out 250ms;
-  width: 94vw;
+  width: 100%;
   display: flex;
   padding: 0.375rem 0.625rem;
   margin: 0.85rem 0;
@@ -42,9 +42,12 @@
   color: black;
   padding: 1rem 0;
   width: 95%;
-  margin-top: 1rem;
   border-radius: 1rem;
   transition: all 200ms ease-out;
+}
+
+.create-recurring-expense-button {
+  width: 100%;
 }
 
 .create-expense-button:hover {
@@ -134,22 +137,26 @@
   filter: motionBlur(200px);
 }
 
+.fadeOut {
+  opacity: 0;
+}
+
 @media (max-width: 800px) {
   /*.create-expense-button {*/
   /*  width: 92vw;*/
   /*}*/
-  .expense-item {
-    width: 92vw;
-  }
+  /*.expense-item {*/
+  /*  width: 92vw;*/
+  /*}*/
 }
 
 @media (max-width: 600px) {
   /*.create-expense-button {*/
   /*  width: 90vw;*/
   /*}*/
-  .expense-item {
-    width: 90vw;
-  }
+  /*.expense-item {*/
+  /*  width: 90vw;*/
+  /*}*/
 }
 
 @media (max-width: 460px) {

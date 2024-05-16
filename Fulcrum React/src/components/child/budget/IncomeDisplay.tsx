@@ -40,14 +40,14 @@ export default function IncomeDisplay({ totalIncome, amountLeftToBudget, publicU
     setIsEditing(false);
   };
 
-  const { mutate } = useUpdateTotalIncome();
+  const { mutate: updateTotalIncome } = useUpdateTotalIncome();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsEditing(false);
 
     const newTotalIncomeData = parseFloat(incomeFormData.income);
-    mutate(newTotalIncomeData);
+    updateTotalIncome(newTotalIncomeData);
   };
 
   useEffect(() => {

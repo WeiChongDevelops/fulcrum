@@ -1,10 +1,10 @@
 import { PublicUserData, SettingsFormVisibility, SettingsModalVisibility } from "@/utility/types.ts";
 import { useContext, useEffect, useRef, useState } from "react";
 import { checkForOpenModalOrForm, LocationContext } from "@/utility/util.ts";
-import SettingsHeaderV2 from "@/components-v2/child/settings/SettingsHeaderV2.tsx";
-import CurrencySelectorV2 from "@/components-v2/child/selectors/CurrencySelectorV2.tsx";
-import DarkModeToggleV2 from "@/components-v2/child/toggles/DarkModeToggleV2.tsx";
-import AccessibilityToggleV2 from "@/components-v2/child/toggles/AccessibilityToggleV2.tsx";
+import SettingsHeaderV2 from "@/components-v2/subcomponents/settings/SettingsHeaderV2.tsx";
+import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
+import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
+import AccessibilityToggleV2 from "@/components-v2/subcomponents/toggles/AccessibilityToggleV2.tsx";
 import FulcrumButton from "@/components/child/buttons/FulcrumButton.tsx";
 import ActiveFormClickShield from "@/components/child/other/ActiveFormClickShield.tsx";
 import SettingsModalsAndForms from "@/components/child/tools/settings/SettingsModalsAndForms.tsx";

@@ -20,7 +20,10 @@ export default function AddNewRecurringExpenseButton({
   }
 
   return (
-    <button className={`create-expense-button ${isDarkMode && "create-expense-button-dark"}`} onClick={handleClick}>
+    <button
+      className={`create-expense-button create-recurring-expense-button ${isDarkMode && "create-expense-button-dark"}`}
+      onClick={handleClick}
+    >
       <p className="text-2xl font-bold">+</p>
     </button>
   );

@@ -1,0 +1,57 @@
+import { formatDollarAmountDynamic, formatDollarAmountStatic, handleInputChangeOnFormWithAmount } from "@/utility/util.ts";
+import { PublicUserData } from "@/utility/types.ts";
+import { Button } from "@/components/ui/button.tsx";
+import { cn } from "@/lib/utils.ts";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Label } from "@/components/ui/label.tsx";
+import { getTotalIncome } from "@/utility/api.ts";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import useUpdateTotalIncome from "@/hooks/mutations/budget/useUpdateTotalIncome.ts";
+
+interface MonthlyIncomeV2Props {
+  publicUserData: PublicUserData;
+  className?: string;
+  totalIncome: number;
+}
+
+export default function MonthlyIncomeV2({ publicUserData, className, totalIncome }: MonthlyIncomeV2Props) {
+  const [formData, setFormData] = useState({ amount: totalIncome });
+  const [incomeFormIsVisible, setIncomeFormIsVisible] = useState(false);
+
+  const { mutate: updateTotalIncome } = useUpdateTotalIncome();
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    updateTotalIncome(formData.amount);
+    setIncomeFormIsVisible(false);
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    handleInputChangeOnFormWithAmount(e, setFormData);
+  };
+
+  return (
+    <div
+      className={cn(`flex flex-row justify-between items-center p-5 w-[35%] h-[85%] bg-pink-500 rounded-xl ${className}`)}
+    >
+      <span>{`Monthly Income: ${!!totalIncome ? formatDollarAmountStatic(totalIncome, publicUserData.currency) : "Loading..."}`}</span>
+      <Sheet open={incomeFormIsVisible} onOpenChange={setIncomeFormIsVisible}>
+        <SheetTrigger>Edit</SheetTrigger>
+        <SheetContent className="w-[400px] sm:w-[540px]">
+          <SheetHeader>
+            <SheetTitle>Edit Total Income</SheetTitle>
+            <SheetDescription>Estimate your total monthly income.</SheetDescription>
+          </SheetHeader>
+          <form onSubmit={handleSubmit}>
+            <div className={"flex flex-row justify-center items-center gap-2 my-4"}>
+              <Label htmlFor="amount">Income</Label>
+              <Input onChange={handleChange} type={"number"} name={"amount"} value={formData.amount} id="amount" />
+            </div>
+            <Button>Save</Button>
+          </form>
+        </SheetContent>
+      </Sheet>
+    </div>
+  );
+}

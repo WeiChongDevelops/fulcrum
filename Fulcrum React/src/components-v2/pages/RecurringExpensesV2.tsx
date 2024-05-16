@@ -13,7 +13,7 @@ import useInitialRecurringExpenseData from "@/hooks/queries/useInitialRecurringE
 import RecurringExpenseItem from "@/components/child/tools/recurring-expenses/RecurringExpenseItem.tsx";
 import ActiveFormClickShield from "@/components/child/other/ActiveFormClickShield.tsx";
 import RecurringExpenseModalsAndForms from "@/components/child/tools/recurring-expenses/RecurringExpenseModalsAndForms.tsx";
-import RecurringExpensesHeaderV2 from "@/components-v2/child/recurring/RecurringExpensesHeaderV2.tsx";
+import RecurringExpensesHeaderV2 from "@/components-v2/subcomponents/recurring/RecurringExpensesHeaderV2.tsx";
 
 interface RecurringExpensesV2Props {
   publicUserData: PublicUserData;
@@ -60,14 +60,52 @@ export default function RecurringExpensesV2({
   }, [recurringExpenseFormVisibility, recurringExpenseModalVisibility, routerLocation]);
 
   return (
-    <div className={"flex flex-col h-screen w-full"}>
+    <div className={"flex flex-col justify-start items-center h-screen"}>
       <RecurringExpensesHeaderV2 navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} publicUserData={publicUserData} />
-      <div className={"bg-cyan-400 w-full h-[94%]"}>
+      <div className={"mt-8 w-[97%] h-[94%]"}>
         <AddNewRecurringExpenseButton
           setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
-          isDarkMode={true}
+          isDarkMode={publicUserData.darkModeEnabled}
         />
+        <div className={"mt-6 w-full"}>
+          {recurringExpenseArray.length > 0 ? (
+            recurringExpenseArray.map((recurringExpenseItem, key) => {
+              return (
+                <RecurringExpenseItem
+                  recurringExpenseId={recurringExpenseItem.recurringExpenseId}
+                  category={recurringExpenseItem.category}
+                  amount={recurringExpenseItem.amount}
+                  iconPath={categoryDataMap.get(recurringExpenseItem.category)!.iconPath}
+                  timestamp={recurringExpenseItem.timestamp}
+                  frequency={recurringExpenseItem.frequency}
+                  groupName={categoryDataMap.get(recurringExpenseItem.category)!.group}
+                  groupColour={categoryDataMap.get(recurringExpenseItem.category)!.colour}
+                  setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
+                  setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
+                  setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}
+                  setRecurringExpenseIdToDelete={setRecurringExpenseIdToDelete}
+                  publicUserData={publicUserData}
+                  key={key}
+                />
+              );
+            })
+          ) : (
+            <p className={"text-2xl mt-48"}>Add recurring expenses for transactions you expect to arise regularly.</p>
+          )}
+        </div>
       </div>
+      <RecurringExpenseModalsAndForms
+        recurringExpenseModalVisibility={recurringExpenseModalVisibility}
+        recurringExpenseFormVisibility={recurringExpenseFormVisibility}
+        expenseArray={expenseArray}
+        groupArray={groupArray}
+        setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
+        setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
+        recurringExpenseIdToDelete={recurringExpenseIdToDelete}
+        publicUserData={publicUserData}
+        budgetArray={budgetArray}
+        oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
+      />
     </div>
     // <>
     //   <div

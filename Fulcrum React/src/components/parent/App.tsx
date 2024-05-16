@@ -21,13 +21,14 @@ import Expenses from "../child/expenses/Expenses.tsx";
 import FAQs from "../child/home/subpages/FAQ/FAQs.tsx";
 import ComeOnMark from "../child/other/ComeOnMark.tsx";
 import Wall from "../temp/Wall.tsx";
-import ExpensesV2 from "../../components-v2/child/expenses/ExpensesV2.tsx";
-import FulcrumV2 from "../../components-v2/parent/FulcrumV2.tsx";
+import ExpensesV2 from "@/components-v2/pages/ExpensesV2.tsx";
+import FulcrumV2 from "../../components-v2/root/FulcrumV2.tsx";
 import { useState } from "react";
 import RecurringExpenses from "@/components/child/tools/recurring-expenses/RecurringExpenses.tsx";
-import RecurringExpensesV2 from "@/components-v2/child/recurring/RecurringExpensesV2.tsx";
-import SettingsV2 from "@/components-v2/child/settings/SettingsV2.tsx";
-import BudgetV2 from "@/components-v2/child/budget/BudgetV2.tsx";
+import RecurringExpensesV2 from "@/components-v2/pages/RecurringExpensesV2.tsx";
+import SettingsV2 from "@/components-v2/pages/SettingsV2.tsx";
+import BudgetV2 from "@/components-v2/pages/BudgetV2.tsx";
+import "@/css/global.css";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -87,7 +88,10 @@ export default function App() {
             <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
-            <Route path="/app/" element={<FulcrumV2 navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} />}>
+            <Route
+              path="/app/"
+              element={<FulcrumV2 publicUserData={publicUserData} navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} />}
+            >
               <Route index element={<Navigate replace to="budget" />} />
               {/*<Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>*/}
               {/*  <Route index element={<Navigate replace to="budget" />} />*/}
@@ -194,10 +198,8 @@ export default function App() {
               {/*/>*/}
             </Route>
             <Route path="/3753b177" element={<Wall user={"Louise"} />} />
-            <Route path="/432e9aa2" element={<Wall user={"Julian"} />} />
             <Route path="/11e2e386" element={<Wall user={"Saaiq"} />} />
             <Route path="/86419f8c" element={<Wall user={"Colin"} />} />
-            <Route path="/4799f130" element={<Wall user={"Thomas"} />} />
             <Route path="/7763fcm3" element={<Wall user={"Matthew"} />} />
           </Routes>
         </LocationContext.Provider>

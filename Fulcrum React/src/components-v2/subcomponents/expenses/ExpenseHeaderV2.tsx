@@ -3,14 +3,12 @@ import { monthStringArray } from "@/utility/util.ts";
 import { useEffect, useState } from "react";
 import { EmblaCarouselType } from "embla-carousel";
 import { MonthExpenseGroupEntity, PublicUserData } from "@/utility/types.ts";
-import DarkModeToggleV2 from "@/components-v2/child/toggles/DarkModeToggleV2.tsx";
+import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
 
 interface ExpenseHeaderV2Props {
   carouselAPI: EmblaCarouselType;
   structuredExpenseData: MonthExpenseGroupEntity[] | undefined;
   startingIndex: number;
-  navMenuOpen: boolean;
-  toggleNavMenu: () => void;
   publicUserData: PublicUserData;
 }
 
@@ -18,8 +16,6 @@ export default function ExpenseHeaderV2({
   carouselAPI,
   structuredExpenseData,
   startingIndex,
-  navMenuOpen,
-  toggleNavMenu,
   publicUserData,
 }: ExpenseHeaderV2Props) {
   const [activeCarouselIndex, setActiveCarouselIndex] = useState(startingIndex);
@@ -48,8 +44,7 @@ export default function ExpenseHeaderV2({
   }, [structuredExpenseData, activeCarouselIndex]);
 
   return (
-    <div className={"flex flex-row gap-4 justify-start items-center bg-pink-500 w-full h-[6%]"}>
-      {!navMenuOpen && <Button onClick={toggleNavMenu}>{">>"}</Button>}
+    <div className={"fixed flex flex-row z-20 gap-4 justify-start items-center bg-gray-400 w-[calc(100vw-16rem)] h-[6vh]"}>
       <div
         className={
           "flex flex-row justify-between items-center ml-6 w-[40vw] sm:w-[35vw] md:w-[32vw] lg:w-[30vw] py-1 my-4 bg-[#17423f] rounded-3xl text-white select-none"
@@ -58,12 +53,12 @@ export default function ExpenseHeaderV2({
         <button onClick={prevSlide} disabled={activeCarouselIndex < 1} className={"month-navigation-option navigate-left"}>
           <img src="/static/assets-v2/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
         </button>
-        <p className={"text-xl"}>
+        <p className={"text-xl font-medium"}>
           {!!activeMonthAndYear ? activeMonthAndYear.month + " " + activeMonthAndYear.year.toString() : "Loading..."}
         </p>
         <button
           onClick={nextSlide}
-          disabled={activeCarouselIndex >= startingIndex + 12}
+          disabled={activeCarouselIndex === startingIndex + 12}
           className={"month-navigation-option navigate-right"}
         >
           <img src="/static/assets-v2/UI-icons/right-navigation-arrow.svg" alt="Right navigation arrow" />
@@ -75,9 +70,7 @@ export default function ExpenseHeaderV2({
         </Button>
       )}
       <div className={"flex flex-row justify-center items-center gap-4 ml-auto mr-2"}>
-        <img src="https://github.com/shadcn.png" alt="Navigate to Expenses" className={"size-8"} />
         <p className={"mx-8 font-bold text-xl"}>Expenses</p>
-        <img src="https://github.com/shadcn.png" alt="Navigate to Expenses" className={"size-8"} />
         <DarkModeToggleV2 publicUserData={publicUserData} />
         <Button>Help</Button>
       </div>
