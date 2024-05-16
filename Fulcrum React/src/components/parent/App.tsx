@@ -90,7 +90,14 @@ export default function App() {
             <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
             <Route
               path="/app/"
-              element={<FulcrumV2 publicUserData={publicUserData} navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} />}
+              element={
+                <FulcrumV2
+                  publicUserData={publicUserData}
+                  navMenuOpen={navMenuOpen}
+                  toggleNavMenu={toggleNavMenu}
+                  isAnyLoading={isAnyLoading}
+                />
+              }
             >
               <Route index element={<Navigate replace to="budget" />} />
               {/*<Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>*/}

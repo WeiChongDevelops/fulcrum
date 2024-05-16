@@ -36,7 +36,7 @@ export default function useInitialBudgetData() {
     oldGroupName: "",
   });
   const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
-  const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("");
+  const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("Miscellaneous");
   const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
 
   const routerLocation = useContext(LocationContext);

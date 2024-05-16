@@ -37,8 +37,12 @@ app.use("/api", async (req, res) => {
     });
     res.send(response.data);
   } catch (error) {
-    console.error("Proxy error:", error);
-    res.status(500).send("Error in proxying request");
+    if (error.response) {
+      const statusCode = error.response.status;
+      res.status(statusCode).send(`${statusCode} Error: ${error}`);
+    } else {
+      res.status(500).send("Error in proxying request");
+    }
   }
 });
 

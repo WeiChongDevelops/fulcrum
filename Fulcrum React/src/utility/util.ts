@@ -709,8 +709,8 @@ export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: st
  * @returns The colour of the given group, or null if not found.
  */
 export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]): string | null {
-  const group = groupArray.filter((groupItemEntity) => groupItemEntity.group === groupName)[0];
-  return group.colour ? group.colour : null;
+  const group = groupArray.find((groupItemEntity) => groupItemEntity.group === groupName);
+  return !!group ? group.colour : null;
 }
 
 /**
