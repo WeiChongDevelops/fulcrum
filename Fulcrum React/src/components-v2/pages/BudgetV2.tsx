@@ -25,9 +25,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { useContext, useEffect } from "react";
-import AddNewBudgetToGroupButtonV2 from "@/components-v2/subcomponents/budget/AddNewBudgetToGroupButtonV2.tsx";
 import BudgetModalsAndForms from "@/components/child/budget/BudgetModalsAndForms.tsx";
-import BudgetTileV2 from "@/components-v2/subcomponents/budget/BudgetTileV2.tsx";
+import { Skeleton } from "@/components/ui/skeleton.tsx";
+import GroupV2 from "@/components-v2/subcomponents/budget/GroupV2.tsx";
+
+import AddNewGroupButton from "@/components/child/budget/buttons/AddNewGroupButton.tsx";
 
 interface BudgetV2Props {
   publicUserData: PublicUserData;
@@ -99,67 +101,44 @@ export default function BudgetV2({
   }
 
   return (
-    <div className="flex flex-col justify-start w-full gap-8">
-      {/*<div className="flex flex-row justify-between w-full">*/}
-      {/*  <div className="w-96 h-20 bg-red-500"></div>*/}
-      {/*  <div className="w-64 h-20 bg-green-500"></div>*/}
-      {/*</div>*/}
+    <div className="flex flex-col justify-start gap-8">
       <BudgetHeaderV2
         navMenuOpen={navMenuOpen}
         toggleNavMenu={toggleNavMenu}
         publicUserData={publicUserData}
         totalIncome={totalIncome!}
       />
-      <div className={"flex flex-col gap-8 pt-[6vh] px-6"}>
-        <div className="flex flex-row w-full gap-8 mt-6">
-          {/*<div className="w-[65%] h-96 bg-blue-500"></div>*/}
+      <div className={"grid pt-[6vh] gap-4 px-6  ml-[15px]"}>
+        <div className="budget-v2-upper-content grid w-full gap-6 mt-6 place-items-stretch">
           <FulcrumAnimationV2 totalIncome={totalIncome!} totalBudget={getTotalAmountBudgeted(budgetArray)} />
-          <div className="flex-grow bg-yellow-500 flex justify-center items-center font-bold text-2xl">New Graph</div>
+          <div className="flex row justify-center items-center gap-8 bg-violet-300 rounded-xl font-bold text-2xl min-h-96">
+            <Skeleton className="size-[200px] rounded-full" />
+            <div className={"flex flex-col justify-center items-start gap-4"}>
+              <Skeleton className="w-44 h-12" />
+              <Skeleton className="w-36 h-8" />
+              <Skeleton className="w-36 h-8" />
+              <Skeleton className="w-36 h-8" />
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col w-full gap-4">
+        <div className="flex flex-col w-full gap-2">
+          <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility} isDarkMode={publicUserData.darkModeEnabled} />
           {groupArray.map((group, index) => (
-            <Accordion
-              type="single"
-              className="rounded-xl"
-              style={{ backgroundColor: group.colour }}
-              collapsible
-              key={index}
-            >
-              <AccordionItem value={`item-${index}`}>
-                <AccordionTrigger className={"px-8"}>
-                  <p className={"font-bold text-lg"}>{group.group}</p>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className={"flex flex-row justify-start items-center"}>
-                    {!!budgetArray &&
-                      budgetArray
-                        .filter((budgetItem) => budgetItem.group === group.group)
-                        .map((filteredBudgetItem, index) => (
-                          <div key={index}>
-                            <BudgetTileV2
-                              filteredBudgetItem={filteredBudgetItem}
-                              publicUserData={publicUserData}
-                              perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-                              setBudgetFormVisibility={setBudgetFormVisibility}
-                              setBudgetModalVisibility={setBudgetModalVisibility}
-                              setOldBudgetBeingEdited={setOldBudgetBeingEdited}
-                              setCategoryToDelete={setCategoryToDelete}
-                            />
-                          </div>
-                        ))}
-                    <AddNewBudgetToGroupButtonV2
-                      setGroupNameOfNewItem={setGroupNameOfNewItem}
-                      groupNameOfNewItem={groupNameOfNewItem}
-                      setBudgetFormVisibility={setBudgetFormVisibility}
-                    />
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+            <div key={index}>
+              <GroupV2
+                group={group}
+                setOldBudgetBeingEdited={setOldBudgetBeingEdited}
+                budgetArray={budgetArray}
+                setBudgetFormVisibility={setBudgetFormVisibility}
+                setBudgetModalVisibility={setBudgetModalVisibility}
+                perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
+                groupNameOfNewItem={groupNameOfNewItem}
+                setGroupNameOfNewItem={setGroupNameOfNewItem}
+                publicUserData={publicUserData}
+                setCategoryToDelete={setCategoryToDelete}
+              />
+            </div>
           ))}
-          <div className="h-28 w-full bg-indigo-500"></div>
-          <div className="h-28 w-full bg-purple-500"></div>
-          <div className="h-28 w-full bg-pink-500"></div>
         </div>
       </div>
       <BudgetModalsAndForms

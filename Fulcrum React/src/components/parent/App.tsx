@@ -23,12 +23,13 @@ import ComeOnMark from "../child/other/ComeOnMark.tsx";
 import Wall from "../temp/Wall.tsx";
 import ExpensesV2 from "@/components-v2/pages/ExpensesV2.tsx";
 import FulcrumV2 from "../../components-v2/root/FulcrumV2.tsx";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RecurringExpenses from "@/components/child/tools/recurring-expenses/RecurringExpenses.tsx";
 import RecurringExpensesV2 from "@/components-v2/pages/RecurringExpensesV2.tsx";
 import SettingsV2 from "@/components-v2/pages/SettingsV2.tsx";
 import BudgetV2 from "@/components-v2/pages/BudgetV2.tsx";
 import "@/css/global.css";
+import autoAnimate from "@formkit/auto-animate";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -56,6 +57,12 @@ export default function App() {
 
   const [navMenuOpen, setNavMenuOpen] = useState(true);
 
+  const parent = useRef(null);
+
+  useEffect(() => {
+    parent.current && autoAnimate(parent.current);
+  }, [parent]);
+
   const toggleNavMenu = () => {
     setNavMenuOpen(!navMenuOpen);
   };
@@ -72,143 +79,145 @@ export default function App() {
     <ErrorBoundary>
       <EmailContext.Provider value={email!}>
         <LocationContext.Provider value={location}>
-          <Toaster richColors />
-          <Routes>
-            {homePaths.map((path) => (
-              <Route key={path} path={path} element={<Home />}>
-                <Route index element={<Navigate replace to="about" />} />
-                <Route path="about" element={<About />} />
-                <Route path="contact" element={<Contact />} />
-                <Route path="pricing" element={<Pricing />} />
-                <Route path="faq" element={<FAQs />} />
-              </Route>
-            ))}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
-            <Route
-              path="/app/"
-              element={
-                <FulcrumV2
-                  publicUserData={publicUserData}
-                  navMenuOpen={navMenuOpen}
-                  toggleNavMenu={toggleNavMenu}
-                  isAnyLoading={isAnyLoading}
+          <div ref={parent}>
+            <Toaster richColors />
+            <Routes>
+              {homePaths.map((path) => (
+                <Route key={path} path={path} element={<Home />}>
+                  <Route index element={<Navigate replace to="about" />} />
+                  <Route path="about" element={<About />} />
+                  <Route path="contact" element={<Contact />} />
+                  <Route path="pricing" element={<Pricing />} />
+                  <Route path="faq" element={<FAQs />} />
+                </Route>
+              ))}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
+              <Route
+                path="/app/"
+                element={
+                  <FulcrumV2
+                    publicUserData={publicUserData}
+                    navMenuOpen={navMenuOpen}
+                    toggleNavMenu={toggleNavMenu}
+                    isAnyLoading={isAnyLoading}
+                  />
+                }
+              >
+                <Route index element={<Navigate replace to="budget" />} />
+                {/*<Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>*/}
+                {/*  <Route index element={<Navigate replace to="budget" />} />*/}
+                {/*<Route*/}
+                {/*  path="expenses"*/}
+                {/*  element={*/}
+                {/*    <Expenses*/}
+                {/*      publicUserData={publicUserData}*/}
+                {/*      expenseArray={expenseArray}*/}
+                {/*      budgetArray={budgetArray}*/}
+                {/*      groupArray={groupArray}*/}
+                {/*      categoryDataMap={categoryDataMap}*/}
+                {/*      recurringExpenseArray={recurringExpenseArray}*/}
+                {/*      blacklistedExpenseArray={blacklistedExpenseArray}*/}
+                {/*    />*/}
+                {/*  }*/}
+                {/*/>*/}
+                {/*<Route*/}
+                {/*  path="budget"*/}
+                {/*  element={*/}
+                {/*    <Budget*/}
+                {/*      publicUserData={publicUserData}*/}
+                {/*      expenseArray={expenseArray}*/}
+                {/*      budgetArray={budgetArray}*/}
+                {/*      groupArray={groupArray}*/}
+                {/*    />*/}
+                {/*  }*/}
+                {/*/>*/}
+                {/*<Route*/}
+                {/*  path="tools"*/}
+                {/*  element={*/}
+                {/*    <Tools*/}
+                {/*      publicUserData={publicUserData}*/}
+                {/*      expenseArray={expenseArray}*/}
+                {/*      budgetArray={budgetArray}*/}
+                {/*      groupArray={groupArray}*/}
+                {/*      recurringExpenseArray={recurringExpenseArray}*/}
+                {/*      categoryDataMap={categoryDataMap}*/}
+                {/*    />*/}
+                {/*  }*/}
+                {/*/>*/}
+                <Route
+                  path="expenses"
+                  element={
+                    <ExpensesV2
+                      publicUserData={publicUserData}
+                      expenseArray={expenseArray}
+                      budgetArray={budgetArray}
+                      groupArray={groupArray}
+                      categoryDataMap={categoryDataMap}
+                      recurringExpenseArray={recurringExpenseArray}
+                      blacklistedExpenseArray={blacklistedExpenseArray}
+                      navMenuOpen={navMenuOpen}
+                      toggleNavMenu={toggleNavMenu}
+                    />
+                  }
                 />
-              }
-            >
-              <Route index element={<Navigate replace to="budget" />} />
-              {/*<Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>*/}
-              {/*  <Route index element={<Navigate replace to="budget" />} />*/}
-              {/*<Route*/}
-              {/*  path="expenses"*/}
-              {/*  element={*/}
-              {/*    <Expenses*/}
-              {/*      publicUserData={publicUserData}*/}
-              {/*      expenseArray={expenseArray}*/}
-              {/*      budgetArray={budgetArray}*/}
-              {/*      groupArray={groupArray}*/}
-              {/*      categoryDataMap={categoryDataMap}*/}
-              {/*      recurringExpenseArray={recurringExpenseArray}*/}
-              {/*      blacklistedExpenseArray={blacklistedExpenseArray}*/}
-              {/*    />*/}
-              {/*  }*/}
-              {/*/>*/}
-              {/*<Route*/}
-              {/*  path="budget"*/}
-              {/*  element={*/}
-              {/*    <Budget*/}
-              {/*      publicUserData={publicUserData}*/}
-              {/*      expenseArray={expenseArray}*/}
-              {/*      budgetArray={budgetArray}*/}
-              {/*      groupArray={groupArray}*/}
-              {/*    />*/}
-              {/*  }*/}
-              {/*/>*/}
-              {/*<Route*/}
-              {/*  path="tools"*/}
-              {/*  element={*/}
-              {/*    <Tools*/}
-              {/*      publicUserData={publicUserData}*/}
-              {/*      expenseArray={expenseArray}*/}
-              {/*      budgetArray={budgetArray}*/}
-              {/*      groupArray={groupArray}*/}
-              {/*      recurringExpenseArray={recurringExpenseArray}*/}
-              {/*      categoryDataMap={categoryDataMap}*/}
-              {/*    />*/}
-              {/*  }*/}
-              {/*/>*/}
-              <Route
-                path="expenses"
-                element={
-                  <ExpensesV2
-                    publicUserData={publicUserData}
-                    expenseArray={expenseArray}
-                    budgetArray={budgetArray}
-                    groupArray={groupArray}
-                    categoryDataMap={categoryDataMap}
-                    recurringExpenseArray={recurringExpenseArray}
-                    blacklistedExpenseArray={blacklistedExpenseArray}
-                    navMenuOpen={navMenuOpen}
-                    toggleNavMenu={toggleNavMenu}
-                  />
-                }
-              />
-              <Route
-                path="recurring"
-                element={
-                  <RecurringExpensesV2
-                    publicUserData={publicUserData}
-                    expenseArray={expenseArray}
-                    budgetArray={budgetArray}
-                    groupArray={groupArray}
-                    categoryDataMap={categoryDataMap}
-                    recurringExpenseArray={recurringExpenseArray}
-                    navMenuOpen={navMenuOpen}
-                    toggleNavMenu={toggleNavMenu}
-                  />
-                }
-              />
-              <Route
-                path="settings"
-                element={
-                  <SettingsV2 navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} publicUserData={publicUserData} />
-                }
-              />
-              <Route
-                path="budget"
-                element={
-                  <BudgetV2
-                    publicUserData={publicUserData}
-                    expenseArray={expenseArray}
-                    budgetArray={budgetArray}
-                    groupArray={groupArray}
-                    navMenuOpen={navMenuOpen}
-                    toggleNavMenu={toggleNavMenu}
-                  />
-                }
-              />
-              {/*<Route*/}
-              {/*  path="tools"*/}
-              {/*  element={*/}
-              {/*    <ToolsV2*/}
-              {/*      publicUserData={publicUserData}*/}
-              {/*      expenseArray={expenseArray}*/}
-              {/*      budgetArray={budgetArray}*/}
-              {/*      groupArray={groupArray}*/}
-              {/*      recurringExpenseArray={recurringExpenseArray}*/}
-              {/*      categoryDataMap={categoryDataMap}*/}
-              {/*    />*/}
-              {/*  }*/}
-              {/*/>*/}
-            </Route>
-            <Route path="/3753b177" element={<Wall user={"Louise"} />} />
-            <Route path="/11e2e386" element={<Wall user={"Saaiq"} />} />
-            <Route path="/86419f8c" element={<Wall user={"Colin"} />} />
-            <Route path="/7763fcm3" element={<Wall user={"Matthew"} />} />
-          </Routes>
+                <Route
+                  path="recurring"
+                  element={
+                    <RecurringExpensesV2
+                      publicUserData={publicUserData}
+                      expenseArray={expenseArray}
+                      budgetArray={budgetArray}
+                      groupArray={groupArray}
+                      categoryDataMap={categoryDataMap}
+                      recurringExpenseArray={recurringExpenseArray}
+                      navMenuOpen={navMenuOpen}
+                      toggleNavMenu={toggleNavMenu}
+                    />
+                  }
+                />
+                <Route
+                  path="settings"
+                  element={
+                    <SettingsV2 navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} publicUserData={publicUserData} />
+                  }
+                />
+                <Route
+                  path="budget"
+                  element={
+                    <BudgetV2
+                      publicUserData={publicUserData}
+                      expenseArray={expenseArray}
+                      budgetArray={budgetArray}
+                      groupArray={groupArray}
+                      navMenuOpen={navMenuOpen}
+                      toggleNavMenu={toggleNavMenu}
+                    />
+                  }
+                />
+                {/*<Route*/}
+                {/*  path="tools"*/}
+                {/*  element={*/}
+                {/*    <ToolsV2*/}
+                {/*      publicUserData={publicUserData}*/}
+                {/*      expenseArray={expenseArray}*/}
+                {/*      budgetArray={budgetArray}*/}
+                {/*      groupArray={groupArray}*/}
+                {/*      recurringExpenseArray={recurringExpenseArray}*/}
+                {/*      categoryDataMap={categoryDataMap}*/}
+                {/*    />*/}
+                {/*  }*/}
+                {/*/>*/}
+              </Route>
+              <Route path="/3753b177" element={<Wall user={"Louise"} />} />
+              <Route path="/11e2e386" element={<Wall user={"Saaiq"} />} />
+              <Route path="/86419f8c" element={<Wall user={"Colin"} />} />
+              <Route path="/7763fcm3" element={<Wall user={"Matthew"} />} />
+            </Routes>
+          </div>
         </LocationContext.Provider>
       </EmailContext.Provider>
     </ErrorBoundary>

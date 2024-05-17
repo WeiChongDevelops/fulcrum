@@ -133,7 +133,7 @@ export default function ExpensesV2({
   }
 
   return (
-    <div className={"flex flex-col justify-start items-end h-screen w-full relative overflow-y-scroll"}>
+    <div className={"flex flex-col justify-start items-end relative overflow-y-scroll "}>
       <ExpenseHeaderV2
         carouselAPI={api!}
         structuredExpenseData={structuredExpenseData}

@@ -39,7 +39,7 @@ export default function BudgetTileV2({
 
   return (
     <Card
-      className="size-48 px-1 m-6"
+      className="size-44 outline"
       onClick={() => {
         const oldBudgetBeingEdited: PreviousBudgetBeingEdited = {
           oldAmount: filteredBudgetItem.amount,
@@ -51,8 +51,8 @@ export default function BudgetTileV2({
         changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateBudgetVisible", true);
       }}
     >
-      <CardHeader className={"py-4"}>
-        <CardTitle className={"text-base font-bold"}>{filteredBudgetItem.category}</CardTitle>
+      <CardHeader className={"py-3"}>
+        <CardTitle className={"text-sm font-bold"}>{filteredBudgetItem.category}</CardTitle>
         {/*<CardDescription>Deploy your new project in one-click.</CardDescription>*/}
       </CardHeader>
       <CardContent className={"flex flex-col gap-4 pb-2 justify-center items-center"}>

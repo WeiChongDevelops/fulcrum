@@ -71,15 +71,16 @@ export default function FulcrumAnimationV2({ totalIncome, totalBudget }: Fulcrum
   };
 
   const activeTriangleFulcrum = `/static/assets-v2/fulcrum-animation/fulcrum-tri-${lineAngle === 0 ? "green" : "red"}.webp`;
+  const baseShadowWidth = bowlWidth * 0.85;
 
   return (
-    <div className={"relative w-[55%] bg-blue-500 py-64"} ref={containerRef}>
-      <div className={"absolute top-0 gap-2 flex flex-row justify-center items-center"}>
-        <Button onClick={turnClockwise}>Clockwise</Button>
-        <Button onClick={turnAntiClockwise}>Anti-Clockwise</Button>
-        <Button onClick={resetLever}>Reset</Button>
-        <Button onClick={updateRect}>Update</Button>
-      </div>
+    <div className={"relative min-h-18 p-40 bg-blue-300 rounded-xl"} ref={containerRef}>
+      {/*<div className={"absolute top-0 gap-2 flex flex-row justify-center items-center"}>*/}
+      {/*  <Button onClick={turnClockwise}>Clockwise</Button>*/}
+      {/*  <Button onClick={turnAntiClockwise}>Anti-Clockwise</Button>*/}
+      {/*  <Button onClick={resetLever}>Reset</Button>*/}
+      {/*  <Button onClick={updateRect}>Update</Button>*/}
+      {/*</div>*/}
 
       {/*<div*/}
       {/*  ref={leverRef}*/}
@@ -90,27 +91,27 @@ export default function FulcrumAnimationV2({ totalIncome, totalBudget }: Fulcrum
       {/*></div>*/}
       <div
         className={
-          "absolute flex flex-row justify-center z-20 bottom-[35%] left-1/2 w-full origin-top transition-transform ease-out duration-300"
+          "absolute flex flex-row justify-center z-20 bottom-[7.5rem] 2xl:bottom-24 left-1/2 w-[90%] origin-top transition-transform ease-out duration-300"
         }
         style={{ transform: `translateX(-50%) rotate(${lineAngle}deg)` }}
       >
         <img
           src={`/static/assets-v2/fulcrum-animation/fulcrum-basket-black.webp`}
           alt="Fulcrum bowl"
-          className="w-28 -mr-14 z-20 transition-transform origin-top duration-1000"
+          className="w-20 2xl:w-28 -mr-10 2xl:-mr-14 z-20 transition-transform origin-top duration-1000"
           style={{ transform: `rotate(${-lineAngle}deg` }}
         />
-        <div ref={leverRef} className={"w-[75%] z-10 h-4 rounded-md bg-black"}></div>
+        <div ref={leverRef} className={"w-[75%] z-10 2xl:h-4 h-3 rounded-md bg-black"}></div>
         <img
           ref={bowlRef}
           src={`/static/assets-v2/fulcrum-animation/fulcrum-basket-black.webp`}
           alt="Fulcrum bowl"
-          className="w-28 -ml-14 z-20 transition-transform origin-top duration-700"
+          className="w-20 2xl:w-28 -ml-10 2xl:-ml-14 z-20 transition-transform origin-top duration-700"
           style={{ transform: `rotate(${-lineAngle}deg` }}
         />
       </div>
-      <div className={"absolute z-10 bottom-[12%] left-1/2 -translate-x-1/2"}>
-        <img src={activeTriangleFulcrum} className={"w-52"} alt="Triangle fulcrum" />
+      <div className={"absolute z-10 bottom-10 left-1/2 -translate-x-1/2"}>
+        <img src={activeTriangleFulcrum} className={"w-36"} alt="Triangle fulcrum" />
       </div>
 
       {/*<div*/}
@@ -122,8 +123,8 @@ export default function FulcrumAnimationV2({ totalIncome, totalBudget }: Fulcrum
         className={"absolute bottom-[10.6%] bg-black rounded-[50%] transition-all ease-out"}
         style={{
           left: leftOffset,
-          width: bowlWidth + lineAngle * 2,
-          height: (bowlWidth + lineAngle * 2) / 6,
+          width: baseShadowWidth + lineAngle * 2,
+          height: (baseShadowWidth + lineAngle * 2) / 10,
           transform: `translate(-50%, 50%) scale(${100 + lineAngle}%)`,
         }}
       ></div>
@@ -137,8 +138,8 @@ export default function FulcrumAnimationV2({ totalIncome, totalBudget }: Fulcrum
         className={"absolute bottom-[10.6%] bg-black rounded-[50%] transition-all ease-out -translate-x-1/2 "}
         style={{
           left: rightOffset,
-          width: bowlWidth - lineAngle * 2,
-          height: (bowlWidth + lineAngle * 2) / 6,
+          width: baseShadowWidth - lineAngle * 2,
+          height: (baseShadowWidth + lineAngle * 2) / 10,
           transform: `translate(-50%, 50%) scale(${100 - lineAngle}%)`,
         }}
       ></div>

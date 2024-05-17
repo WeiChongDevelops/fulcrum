@@ -33,7 +33,9 @@ export default function MonthlyIncomeV2({ publicUserData, className, totalIncome
 
   return (
     <div
-      className={cn(`flex flex-row justify-between items-center p-5 w-[35%] h-[85%] bg-pink-500 rounded-xl ${className}`)}
+      className={cn(
+        `flex flex-row justify-between items-center px-4 py-2 w-[35%] bg-emerald-600 rounded-xl text-sm ${className}`,
+      )}
     >
       <span>{`Monthly Income: ${!!totalIncome ? formatDollarAmountStatic(totalIncome, publicUserData.currency) : "Loading..."}`}</span>
       <Sheet open={incomeFormIsVisible} onOpenChange={setIncomeFormIsVisible}>

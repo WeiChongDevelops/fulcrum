@@ -42,7 +42,11 @@ export default function UpperCopy() {
           <p className={"my-6 font-bold"}>180,000 others have found their balance.</p>
           <div className={"flex flex-row justify-start items-center mb-8"}>
             <img src="/static/assets-v2/homepage-assets/testimonials.svg" alt="Testimonials" className={"w-32"} />
-            <div className={"flex flex-row justify-start items-center rounded-full bg-[#F7FFFAFF] py-2 pl-2.5 pr-6 ml-2"}>
+            <div
+              className={
+                "flex flex-row justify-start items-center rounded-full bg-[#F7FFFAFF] py-2 pl-2.5 pr-6 ml-2 relative"
+              }
+            >
               <img
                 src="/static/assets-v2/homepage-assets/kylie.webp"
                 className={

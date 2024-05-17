@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, RefObject, SetStateAction } from "react";
 import { BudgetFormVisibility, SetFormVisibility } from "@/utility/types.ts";
 import { changeFormOrModalVisibility } from "@/utility/util.ts";
 
