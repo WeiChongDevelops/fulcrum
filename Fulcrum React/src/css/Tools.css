@@ -93,6 +93,7 @@
 }
 
 .settings-row {
+  color: white;
   display: flex;
   padding: 1rem 2rem;
   margin-bottom: 1.5rem;

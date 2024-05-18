@@ -9,6 +9,7 @@ import FulcrumButton from "@/components/child/buttons/FulcrumButton.tsx";
 import ActiveFormClickShield from "@/components/child/other/ActiveFormClickShield.tsx";
 import SettingsModalsAndForms from "@/components/child/tools/settings/SettingsModalsAndForms.tsx";
 import "@/css/Tools.css";
+import { Button } from "@/components-v2/ui/button.tsx";
 
 interface SettingsV2Props {
   publicUserData: PublicUserData;
@@ -41,11 +42,11 @@ export default function SettingsV2({ publicUserData, navMenuOpen, toggleNavMenu 
   }, [settingsFormVisibility, settingsModalVisibility, routerLocation]);
 
   return (
-    <div className={"flex flex-col h-screen w-full"}>
+    <div className={"flex flex-col h-screen"}>
       <SettingsHeaderV2 navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} publicUserData={publicUserData} />
-      <div className={"flex flex-col justify-start items-center bg-violet-500 w-full h-[94%] relative pt-8"}>
+      <div className={"flex flex-col justify-start items-center w-full h-[94%] relative pt-8"}>
         <div
-          className={`w-[100vw] px-8 elementsBelowPopUpForm
+          className={`px-8 elementsBelowPopUpForm
                 ${isSettingsFormOrModalOpen && "blur"}`}
           ref={elementsBelowPopUpForm}
         >
@@ -67,22 +68,26 @@ export default function SettingsV2({ publicUserData, navMenuOpen, toggleNavMenu 
 
           <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
             <b>Public License</b>
-            <FulcrumButton
-              displayText={"See Public License"}
-              backgroundColour={"white"}
-              optionalTailwind={"m-0"}
-              onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}
-            />
+            {/*<FulcrumButton*/}
+            {/*  displayText={"See Public License"}*/}
+            {/*  backgroundColour={"white"}*/}
+            {/*  optionalTailwind={"m-0"}*/}
+            {/*  onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}*/}
+            {/*/>*/}
+            <Button onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}>
+              See Public License
+            </Button>
           </div>
 
           <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
             <b>Privacy Policy</b>
-            <FulcrumButton
-              displayText={"See Privacy Policy"}
-              backgroundColour={"white"}
-              optionalTailwind={"m-0"}
-              onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
-            />
+            {/*<FulcrumButton*/}
+            {/*  displayText={"See Privacy Policy"}*/}
+            {/*  backgroundColour={"white"}*/}
+            {/*  optionalTailwind={"m-0"}*/}
+            {/*  onClick={() => window.open(window.location.origin + "/privacy", "_blank")}*/}
+            {/*/>*/}
+            <Button onClick={() => window.open(window.location.origin + "/privacy", "_blank")}>See Privacy Policy</Button>
           </div>
 
           <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
@@ -91,39 +96,36 @@ export default function SettingsV2({ publicUserData, navMenuOpen, toggleNavMenu 
           </div>
 
           <div className={"settings-row wipe-options"}>
-            <FulcrumButton
-              displayText={"Wipe Expenses"}
-              backgroundColour={"red"}
+            <Button
               onClick={() =>
                 setSettingsFormVisibility((prevVisibility) => ({
                   ...prevVisibility,
                   typeDeleteMyExpensesForm: true,
                 }))
               }
-              hoverShadow={true}
-            />
-            <FulcrumButton
-              displayText={"Wipe All Account Data"}
-              backgroundColour={"red"}
+            >
+              Wipe Expenses
+            </Button>
+            <Button
               onClick={() =>
                 setSettingsFormVisibility((prevVisibility) => ({
                   ...prevVisibility,
                   typeDeleteMyDataForm: true,
                 }))
               }
-              hoverShadow={true}
-            />
-            <FulcrumButton
-              displayText={"Reset Account Data to Defaults"}
-              backgroundColour={"red"}
+            >
+              Wipe All Account Data
+            </Button>
+            <Button
               onClick={() =>
                 setSettingsFormVisibility((prevVisibility) => ({
                   ...prevVisibility,
                   typeResetMyAccountForm: true,
                 }))
               }
-              hoverShadow={true}
-            />
+            >
+              Reset Account Data to Defaults
+            </Button>
           </div>
 
           {isSettingsFormOrModalOpen && <ActiveFormClickShield />}

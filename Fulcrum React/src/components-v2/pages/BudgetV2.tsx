@@ -1,35 +1,17 @@
-import {
-  BudgetItemEntity,
-  ExpenseItemEntity,
-  GroupItemEntity,
-  PreviousBudgetBeingEdited,
-  PublicUserData,
-} from "@/utility/types.ts";
+import { BudgetItemEntity, ExpenseItemEntity, GroupItemEntity, PublicUserData } from "@/utility/types.ts";
 import BudgetHeaderV2 from "@/components-v2/subcomponents/budget/BudgetHeaderV2.tsx";
 import FulcrumAnimationV2 from "@/components-v2/subcomponents/budget/FulcrumAnimationV2.tsx";
 import useInitialBudgetData from "@/hooks/queries/useInitialBudgetData.ts";
 import FulcrumErrorPage from "@/components/child/other/FulcrumErrorPage.tsx";
 import Loader from "@/components/child/other/Loader.tsx";
-import {
-  changeFormOrModalVisibility,
-  formatDollarAmountStatic,
-  getCurrencySymbol,
-  getTotalAmountBudgeted,
-  isCurrentMonth,
-  LocationContext,
-} from "@/utility/util.ts";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card.tsx";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { Input } from "@/components/ui/input.tsx";
-import { useContext, useEffect } from "react";
+import { getCurrencySymbol, getTotalAmountBudgeted, isCurrentMonth, LocationContext } from "@/utility/util.ts";
+import { useContext, useEffect, useRef } from "react";
 import BudgetModalsAndForms from "@/components/child/budget/BudgetModalsAndForms.tsx";
-import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { Skeleton } from "@/components-v2/ui/skeleton.tsx";
 import GroupV2 from "@/components-v2/subcomponents/budget/GroupV2.tsx";
 
 import AddNewGroupButton from "@/components/child/budget/buttons/AddNewGroupButton.tsx";
+import BudgetPieChart from "@/components-v2/subcomponents/budget/PieChart.tsx";
 
 interface BudgetV2Props {
   publicUserData: PublicUserData;
@@ -92,6 +74,17 @@ export default function BudgetV2({
     }
   }, [budgetArray, expenseArray, routerLocation]);
 
+  const budgetContainer = useRef<HTMLDivElement>(null);
+
+  const fadeBudget = () => {
+    budgetContainer.current?.classList.add("fadeOut");
+    setTimeout(() => {
+      budgetContainer.current?.classList.remove("fadeOut");
+    }, 450);
+  };
+
+  useEffect(fadeBudget, [navMenuOpen]);
+
   if (isError) {
     return <FulcrumErrorPage errors={[error!]} />;
   }
@@ -108,53 +101,68 @@ export default function BudgetV2({
         publicUserData={publicUserData}
         totalIncome={totalIncome!}
       />
-      <div className={"grid pt-[6vh] gap-4 px-6  ml-[15px]"}>
-        <div className="budget-v2-upper-content grid w-full gap-6 mt-6 place-items-stretch">
-          <FulcrumAnimationV2 totalIncome={totalIncome!} totalBudget={getTotalAmountBudgeted(budgetArray)} />
-          <div className="flex row justify-center items-center gap-8 bg-violet-300 rounded-xl font-bold text-2xl min-h-96">
-            <Skeleton className="size-[200px] rounded-full" />
-            <div className={"flex flex-col justify-center items-start gap-4"}>
-              <Skeleton className="w-44 h-12" />
-              <Skeleton className="w-36 h-8" />
-              <Skeleton className="w-36 h-8" />
-              <Skeleton className="w-36 h-8" />
+      <div className={"transition-all"} ref={budgetContainer}>
+        {/*<div className={"grid pt-[6vh] gap-4 px-5 2xl:px-7"}>*/}
+        <div className={"grid pt-[6vh] gap-4 px-6  ml-[15px]"}>
+          <div className="budget-v2-upper-content grid w-full gap-6 mt-6 place-items-stretch">
+            <FulcrumAnimationV2
+              navMenuOpen={navMenuOpen}
+              totalIncome={totalIncome!}
+              totalBudget={getTotalAmountBudgeted(budgetArray)}
+            />
+            <div className="flex flex-row justify-center items-center gap-2 bg-violet-100 rounded-xl font-bold h-96 w-full">
+              {/*<Skeleton className="size-[200px] rounded-full" />*/}
+              <div className={"h-full w-[34rem] md:w-[30rem]"}>
+                <BudgetPieChart budgetArray={budgetArray} />
+              </div>
+              <div className={"flex flex-col justify-center items-start gap-4 mr-[8%] max-[1800px]:mr-[13%]"}>
+                <Skeleton className="w-40 h-8" />
+                <Skeleton className="w-32 h-6" />
+                <Skeleton className="w-32 h-6" />
+                <Skeleton className="w-32 h-6" />
+                <Skeleton className="w-32 h-6" />
+                <Skeleton className="w-32 h-6" />
+              </div>
             </div>
           </div>
+          <div className="flex flex-col w-full gap-2">
+            <AddNewGroupButton
+              setBudgetFormVisibility={setBudgetFormVisibility}
+              isDarkMode={publicUserData.darkModeEnabled}
+            />
+            {groupArray.map((group, index) => (
+              <div key={index}>
+                <GroupV2
+                  group={group}
+                  setOldBudgetBeingEdited={setOldBudgetBeingEdited}
+                  budgetArray={budgetArray}
+                  setBudgetFormVisibility={setBudgetFormVisibility}
+                  setBudgetModalVisibility={setBudgetModalVisibility}
+                  perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
+                  groupNameOfNewItem={groupNameOfNewItem}
+                  setGroupNameOfNewItem={setGroupNameOfNewItem}
+                  publicUserData={publicUserData}
+                  setCategoryToDelete={setCategoryToDelete}
+                />
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="flex flex-col w-full gap-2">
-          <AddNewGroupButton setBudgetFormVisibility={setBudgetFormVisibility} isDarkMode={publicUserData.darkModeEnabled} />
-          {groupArray.map((group, index) => (
-            <div key={index}>
-              <GroupV2
-                group={group}
-                setOldBudgetBeingEdited={setOldBudgetBeingEdited}
-                budgetArray={budgetArray}
-                setBudgetFormVisibility={setBudgetFormVisibility}
-                setBudgetModalVisibility={setBudgetModalVisibility}
-                perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-                groupNameOfNewItem={groupNameOfNewItem}
-                setGroupNameOfNewItem={setGroupNameOfNewItem}
-                publicUserData={publicUserData}
-                setCategoryToDelete={setCategoryToDelete}
-              />
-            </div>
-          ))}
-        </div>
+        <BudgetModalsAndForms
+          budgetFormVisibility={budgetFormVisibility}
+          budgetArray={budgetArray}
+          groupArray={groupArray}
+          groupNameOfNewItem={groupNameOfNewItem}
+          setBudgetFormVisibility={setBudgetFormVisibility}
+          oldBudgetBeingEdited={oldBudgetBeingEdited}
+          oldGroupBeingEdited={oldGroupBeingEdited}
+          groupToDelete={groupToDelete}
+          categoryToDelete={categoryToDelete}
+          budgetModalVisibility={budgetModalVisibility}
+          setBudgetModalVisibility={setBudgetModalVisibility}
+          currencySymbol={getCurrencySymbol(publicUserData.currency)}
+        />
       </div>
-      <BudgetModalsAndForms
-        budgetFormVisibility={budgetFormVisibility}
-        budgetArray={budgetArray}
-        groupArray={groupArray}
-        groupNameOfNewItem={groupNameOfNewItem}
-        setBudgetFormVisibility={setBudgetFormVisibility}
-        oldBudgetBeingEdited={oldBudgetBeingEdited}
-        oldGroupBeingEdited={oldGroupBeingEdited}
-        groupToDelete={groupToDelete}
-        categoryToDelete={categoryToDelete}
-        budgetModalVisibility={budgetModalVisibility}
-        setBudgetModalVisibility={setBudgetModalVisibility}
-        currencySymbol={getCurrencySymbol(publicUserData.currency)}
-      />
     </div>
   );
 }

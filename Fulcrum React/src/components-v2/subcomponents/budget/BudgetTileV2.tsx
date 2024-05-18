@@ -8,8 +8,8 @@ import {
   SetModalVisibility,
 } from "@/utility/types.ts";
 import { changeFormOrModalVisibility, formatDollarAmountStatic } from "@/utility/util.ts";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card.tsx";
-import { Button } from "@/components/ui/button.tsx";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components-v2/ui/card.tsx";
+import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, SetStateAction } from "react";
 
 interface BudgetTileV2Props {

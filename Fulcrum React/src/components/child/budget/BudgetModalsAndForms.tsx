@@ -17,7 +17,6 @@ import {
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../utility/types.ts";
-import BudgetVis from "./BudgetVis.tsx";
 
 interface ModalsAndFormsProps {
   budgetFormVisibility: BudgetFormVisibility;

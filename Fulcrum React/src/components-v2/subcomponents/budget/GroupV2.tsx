@@ -1,4 +1,4 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion.tsx";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components-v2/ui/accordion.tsx";
 import BudgetTileV2 from "@/components-v2/subcomponents/budget/BudgetTileV2.tsx";
 import AddNewBudgetToGroupButtonV2 from "@/components-v2/subcomponents/budget/AddNewBudgetToGroupButtonV2.tsx";
 import {
@@ -12,7 +12,7 @@ import {
   SetModalVisibility,
 } from "@/utility/types.ts";
 import { Dispatch, SetStateAction } from "react";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components-v2/ui/button.tsx";
 import { changeFormOrModalVisibility } from "@/utility/util.ts";
 
 interface GroupV2Props {
@@ -55,11 +55,11 @@ export default function GroupV2({
       <AccordionItem value={`item`}>
         <AccordionTrigger className={"px-8"}>
           <p className={"font-bold text-lg"}>{group.group}</p>
-          <Button className={"ml-auto mr-4"} onClick={handleEditClick}>
+          <Button asChild className={"ml-auto mr-4"} onClick={handleEditClick}>
             Edit
           </Button>
         </AccordionTrigger>
-        <AccordionContent className={"pt-4 pl-4 pr-2"}>
+        <AccordionContent className={"pt-4 pl-6 pr-2"}>
           <div className={"flex flex-row gap-4 justify-start items-center flex-wrap"}>
             {!!budgetArray &&
               budgetArray

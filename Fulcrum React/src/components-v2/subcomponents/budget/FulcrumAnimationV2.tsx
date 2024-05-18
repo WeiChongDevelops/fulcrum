@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button.tsx";
 import { getLineAngle } from "@/utility/util.ts";
 
 interface FulcrumAnimationV2Props {
   totalIncome: number;
   totalBudget: number;
+  navMenuOpen: boolean;
 }
 
-export default function FulcrumAnimationV2({ totalIncome, totalBudget }: FulcrumAnimationV2Props) {
+export default function FulcrumAnimationV2({ totalIncome, totalBudget, navMenuOpen }: FulcrumAnimationV2Props) {
   const [lineAngle, setLineAngle] = useState(0);
   const leverRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -23,17 +23,15 @@ export default function FulcrumAnimationV2({ totalIncome, totalBudget }: Fulcrum
   const [bowlWidth, setBowlWidth] = useState(0);
 
   const updateRect = () => {
-    setTimeout(() => {
-      const leverRect = leverRef.current?.getBoundingClientRect();
-      if (!!leverRect) {
-        setLeverLeft(leverRect.left);
-      }
+    const leverRect = leverRef.current?.getBoundingClientRect();
+    if (!!leverRect) {
+      setLeverLeft(leverRect.left);
+    }
 
-      const containerRect = containerRef.current?.getBoundingClientRect();
-      if (!!containerRect) {
-        setContainerLeft(containerRect.left);
-      }
-    }, 250);
+    const containerRect = containerRef.current?.getBoundingClientRect();
+    if (!!containerRect) {
+      setContainerLeft(containerRect.left);
+    }
   };
 
   useEffect(() => {
@@ -42,11 +40,15 @@ export default function FulcrumAnimationV2({ totalIncome, totalBudget }: Fulcrum
   }, []);
 
   useEffect(() => {
+    setTimeout(updateRect, 225);
+  }, [navMenuOpen]);
+
+  useEffect(() => {
     setLineAngle(getLineAngle(totalBudget - totalIncome, totalIncome));
   }, [totalIncome, totalBudget]);
 
   useEffect(() => {
-    updateRect();
+    setTimeout(updateRect, 250);
     !!bowlRef.current && setBowlWidth(bowlRef.current.getBoundingClientRect().width);
     console.log(lineAngle);
     console.log(totalBudget);
@@ -74,7 +76,7 @@ export default function FulcrumAnimationV2({ totalIncome, totalBudget }: Fulcrum
   const baseShadowWidth = bowlWidth * 0.85;
 
   return (
-    <div className={"relative min-h-18 p-40 bg-blue-300 rounded-xl"} ref={containerRef}>
+    <div className={"relative z-10 px-32 py-40 bg-slate-200 rounded-xl"} ref={containerRef}>
       {/*<div className={"absolute top-0 gap-2 flex flex-row justify-center items-center"}>*/}
       {/*  <Button onClick={turnClockwise}>Clockwise</Button>*/}
       {/*  <Button onClick={turnAntiClockwise}>Anti-Clockwise</Button>*/}
@@ -91,27 +93,27 @@ export default function FulcrumAnimationV2({ totalIncome, totalBudget }: Fulcrum
       {/*></div>*/}
       <div
         className={
-          "absolute flex flex-row justify-center z-20 bottom-[7.5rem] 2xl:bottom-24 left-1/2 w-[90%] origin-top transition-transform ease-out duration-300"
+          "absolute flex flex-row justify-center z-20 bottom-[7.4rem] left-1/2 w-[90%] origin-top transition-transform ease-out duration-300"
         }
         style={{ transform: `translateX(-50%) rotate(${lineAngle}deg)` }}
       >
         <img
           src={`/static/assets-v2/fulcrum-animation/fulcrum-basket-black.webp`}
           alt="Fulcrum bowl"
-          className="w-20 2xl:w-28 -mr-10 2xl:-mr-14 z-20 transition-transform origin-top duration-1000"
+          className="w-20 -mr-10 z-20 transition-transform origin-top duration-1000"
           style={{ transform: `rotate(${-lineAngle}deg` }}
         />
-        <div ref={leverRef} className={"w-[75%] z-10 2xl:h-4 h-3 rounded-md bg-black"}></div>
+        <div ref={leverRef} className={"w-[68%] lg:w-[70%] xl:w-[75%] z-10 h-3 rounded-md bg-black"}></div>
         <img
           ref={bowlRef}
           src={`/static/assets-v2/fulcrum-animation/fulcrum-basket-black.webp`}
           alt="Fulcrum bowl"
-          className="w-20 2xl:w-28 -ml-10 2xl:-ml-14 z-20 transition-transform origin-top duration-700"
+          className="w-20 -ml-10 z-20 transition-transform origin-top duration-700"
           style={{ transform: `rotate(${-lineAngle}deg` }}
         />
       </div>
-      <div className={"absolute z-10 bottom-10 left-1/2 -translate-x-1/2"}>
-        <img src={activeTriangleFulcrum} className={"w-36"} alt="Triangle fulcrum" />
+      <div className={"absolute z-10 bottom-12 left-1/2 -translate-x-1/2"}>
+        <img src={activeTriangleFulcrum} className={"w-32"} alt="Triangle fulcrum" />
       </div>
 
       {/*<div*/}

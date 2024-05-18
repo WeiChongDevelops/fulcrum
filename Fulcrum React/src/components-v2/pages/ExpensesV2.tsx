@@ -23,7 +23,7 @@ import Loader from "../../components/child/other/Loader.tsx";
 import ActiveFormClickShield from "../../components/child/other/ActiveFormClickShield.tsx";
 import ExpenseModalsAndForms from "../../components/child/expenses/ExpenseModalsAndForms.tsx";
 import ExpenseMonthCarouselV2 from "../subcomponents/expenses/ExpenseMonthCarouselV2.tsx";
-import { CarouselApi } from "@/components/ui/carousel.tsx";
+import { CarouselApi } from "@/components-v2/ui/carousel.tsx";
 import ExpenseHeaderV2 from "@/components-v2/subcomponents/expenses/ExpenseHeaderV2.tsx";
 import "@/css/Expense.css";
 

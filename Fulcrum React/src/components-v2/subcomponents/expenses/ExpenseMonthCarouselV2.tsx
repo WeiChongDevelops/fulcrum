@@ -11,7 +11,7 @@ import {
 } from "@/utility/types.ts";
 import { Dispatch, SetStateAction } from "react";
 import { ExpenseMonthGroupV2 } from "./ExpenseMonthGroupV2.tsx";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel.tsx";
+import { Carousel, CarouselContent, CarouselItem } from "@/components-v2/ui/carousel.tsx";
 import { EmblaCarouselType } from "embla-carousel";
 
 interface ExpenseMonthCarouselV2Props {

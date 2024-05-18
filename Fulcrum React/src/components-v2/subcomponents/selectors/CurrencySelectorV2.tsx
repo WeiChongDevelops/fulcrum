@@ -1,9 +1,9 @@
 import { PublicUserData } from "@/utility/types.ts";
 import useUpdatePublicUserData from "@/hooks/mutations/other/useUpdatePublicUserData.ts";
 import { cn } from "@/lib/utils.ts";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command.tsx";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover.tsx";
-import { Button } from "@/components/ui/button.tsx";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components-v2/ui/command.tsx";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popover.tsx";
+import { Button } from "@/components-v2/ui/button.tsx";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 import { currencyOptions } from "@/utility/util.ts";
@@ -18,25 +18,26 @@ interface CurrencySelectorV2Props {
 export default function CurrencySelectorV2({ publicUserData }: CurrencySelectorV2Props) {
   const { mutate: updatePublicUserData } = useUpdatePublicUserData();
 
-  async function handleCurrencySelection(e: React.MouseEvent) {
-    const target = e.target as HTMLDivElement;
-    const newCurrencySetting = target.innerText.slice(1);
-
-    const updatedPublicUserData: PublicUserData = { ...publicUserData, currency: newCurrencySetting };
-    updatePublicUserData(updatedPublicUserData);
-  }
-
   const [open, setOpen] = useState(false);
-  const [currencyValue, setCurrencyValue] = useState("");
+  const [currencyValue, setCurrencyValue] = useState(publicUserData.currency);
 
-  console.log(currencyOptions);
+  const handleSelect = (currentValue: string) => {
+    setCurrencyValue(currentValue === currencyValue ? "" : currentValue);
+    setOpen(false);
+
+    const updatedPublicUserData: PublicUserData = { ...publicUserData, currency: currentValue };
+    updatePublicUserData(updatedPublicUserData);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild className={"text-black font-bold"}>
         <Button variant="outline" role="combobox" aria-expanded={open} className="w-[200px] justify-between">
+          {/*{currencyValue*/}
+          {/*  ? currencyOptions.find((currency) => currency.label === currencyValue)?.label*/}
+          {/*  : "Select currency..."}*/}
           {currencyValue
-            ? currencyOptions.find((currency) => currency.value === currencyValue)?.label
+            ? currencyOptions.find((currencyOption) => currencyOption.value === currencyValue)?.label
             : "Select currency..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -48,14 +49,7 @@ export default function CurrencySelectorV2({ publicUserData }: CurrencySelectorV
           <CommandGroup>
             <CommandList>
               {currencyOptions.map((currency) => (
-                <CommandItem
-                  key={currency.value}
-                  value={currency.value}
-                  onSelect={(currentValue) => {
-                    setCurrencyValue(currentValue === currencyValue ? "" : currentValue);
-                    setOpen(false);
-                  }}
-                >
+                <CommandItem key={currency.value} value={currency.value} onSelect={handleSelect}>
                   <Check className={cn("mr-2 h-4 w-4", currencyValue === currency.value ? "opacity-100" : "opacity-0")} />
                   {currency.label}
                 </CommandItem>

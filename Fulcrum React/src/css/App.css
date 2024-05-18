@@ -47,6 +47,10 @@
   top: 45vh;
 }
 
+.popover input:focus {
+  outline: none;
+}
+
 /* FORMS AND MODALS */
 
 .fulcrum-form {
@@ -203,4 +207,9 @@
   width: 33.33%;
   border-color: black;
   transition: all 300ms ease-out;
+}
+
+.fadeOut {
+  opacity: 0;
+  filter: blur(10px);
 }

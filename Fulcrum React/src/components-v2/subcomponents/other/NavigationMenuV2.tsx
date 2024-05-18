@@ -1,9 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
-import { Button } from "@/components/ui/button.tsx";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components-v2/ui/avatar.tsx";
+import { Button } from "@/components-v2/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useRef, useState } from "react";
 import { EmailContext, LocationContext } from "@/utility/util.ts";
 import { PublicUserData } from "@/utility/types.ts";
+import { handleUserLogout } from "@/utility/api.ts";
 
 interface NavigationMenuV2Props {
   publicUserData: PublicUserData;
@@ -43,7 +44,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, toggleNa
     bg-gray-800 text-gray-300 overflow-hidden
      transition-all duration-200 ease-out ${navMenuOpen ? "w-full" : "w-2"}`}
         >
-          <div className={"flex flex-row justify-start gap-3 items-center text-left m-4"}>
+          <div className={"flex flex-row justify-start gap-3 items-start text-left m-4"}>
             <Avatar className={"size-8"}>
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>
@@ -55,7 +56,8 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, toggleNa
                 <p className={"text-lg font-bold"}>Personal</p>
                 <Button onClick={toggleNavMenu}>{"<<"}</Button>
               </div>
-              <p className={"text-xs font-medium truncate w-full"}>{activeEmail}</p>
+              <p className={"text-xs font-medium truncate w-full mb-3"}>{activeEmail}</p>
+              <Button onClick={handleUserLogout}>Log Out</Button>
             </div>
           </div>
           <div className={"flex flex-col justify-start mt-8 gap-4 text-base select-none m-4"}>

@@ -137,10 +137,6 @@
   filter: motionBlur(200px);
 }
 
-.fadeOut {
-  opacity: 0;
-}
-
 @media (max-width: 800px) {
   /*.create-expense-button {*/
   /*  width: 92vw;*/

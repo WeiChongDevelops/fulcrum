@@ -17,6 +17,7 @@ import io.ktor.server.response.*
 import kotlinx.datetime.Instant
 
 suspend fun getActiveUserId(): String {
+    SupabaseClient.supabase.gotrue.refreshCurrentSession()
     return SupabaseClient.supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id
 }
 
@@ -104,14 +105,19 @@ suspend fun executeExpenseDeletion(expenseId: String, call: ApplicationCall): Bo
 
 fun getDefaultGroups(uid: String, miscellaneousExists: Boolean): List<GroupCreateRequestSent> {
     val groups = mutableListOf(
-        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#9fd5be"),
-        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#f1afa1"),
-        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#7c86bf"),
-        GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#fbf5ab"),
-        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#dfcde3")
+        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#fee2e2"),
+        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#d1fae5"),
+        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#dbeafe"),
+        GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#cffafe"),
+        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#fef3c7"),
+//        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#9fd5be"),
+//        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#f1afa1"),
+//        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#7c86bf"),
+//        GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#fbf5ab"),
+//        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#dfcde3")
     )
     if (!miscellaneousExists) {
-        groups.add(GroupCreateRequestSent(userId = uid, group = "Miscellaneous", colour = "#3f4240"))
+        groups.add(GroupCreateRequestSent(userId = uid, group = "Miscellaneous", colour = "#292524"))
     }
     return groups
 }

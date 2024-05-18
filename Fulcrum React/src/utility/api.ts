@@ -21,10 +21,10 @@ apiClient.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  async (error) => {
     if (error.response && error.response.status === 401) {
       console.log("Session expired or not valid, redirecting to login...");
-      window.location.href = "/login";
+      await handleUserLogout();
     }
     return Promise.reject(error);
   },
@@ -670,10 +670,11 @@ export async function handleUserOAuthInit(): Promise<void> {
 export async function handleUserLogout(): Promise<void> {
   try {
     sessionStorage.clear();
-    window.location.href = "/login";
     await apiClient.post("/logout", {
       jwt: localStorage.getItem("jwt"),
     });
+    console.log("Logging out.");
+    window.location.href = "/login";
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(`Error encountered when attempting logout: ${error.message}`);

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components-v2/ui/button.tsx";
 import { monthStringArray } from "@/utility/util.ts";
 import { useEffect, useState } from "react";
 import { EmblaCarouselType } from "embla-carousel";
