@@ -1,13 +1,11 @@
 package com.example.plugins
 
+import com.example.*
 import com.example.SupabaseClient.supabase
 import com.example.entities.budget.*
-import com.example.getActiveUserId
-import com.example.respondAuthError
-import com.example.respondError
-import com.example.respondSuccess
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
 import io.github.jan.supabase.exceptions.UnknownRestException
+import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
@@ -56,6 +54,7 @@ fun Application.configureBudgetRouting() {
 
         get("/api/getBudget") {
             try {
+                supabase.gotrue.refreshCurrentSession()
                 val budgetList =
                     supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp")) {
                         eq("userId", getActiveUserId())
@@ -172,7 +171,8 @@ fun Application.configureBudgetRouting() {
                 val itemToInsert = GroupCreateRequestSent(
                     userId = getActiveUserId(),
                     group = groupCreateRequest.group,
-                    colour = groupCreateRequest.colour
+                    colour = groupCreateRequest.colour,
+                    id = groupCreateRequest.id
                 )
                 val insertedItem = supabase.postgrest["groups"].insert(
                     itemToInsert,
@@ -193,7 +193,7 @@ fun Application.configureBudgetRouting() {
         get("/api/getGroups") {
             try {
                 val groupList =
-                    supabase.postgrest["groups"].select(columns = Columns.list("group, colour, timestamp")) {
+                    supabase.postgrest["groups"].select(columns = Columns.list("group, colour, timestamp, id")) {
                         eq("userId", getActiveUserId())
                     }.decodeList<GroupItemResponse>()
                 call.respond(HttpStatusCode.OK, groupList)
@@ -213,7 +213,7 @@ fun Application.configureBudgetRouting() {
             try {
                 val groupUpdateRequest = call.receive<GroupUpdateRequestReceived>()
 
-                val updatedGroupName = supabase.postgrest["groups"].update(
+                val updatedGroup = supabase.postgrest["groups"].update(
                     {
                         set("colour", groupUpdateRequest.newColour)
                         set("group", groupUpdateRequest.newGroupName)
@@ -223,7 +223,7 @@ fun Application.configureBudgetRouting() {
                     eq("userId", getActiveUserId())
                 }
 
-                if (updatedGroupName.body == null) {
+                if (updatedGroup.body == null) {
                     call.respondError("Group update failed.")
                 } else {
                     call.respondSuccess("Group update successful.")
@@ -231,6 +231,30 @@ fun Application.configureBudgetRouting() {
             } catch (e: Exception) {
                 call.application.log.error("Error while updating group.", e)
                 call.respondError("Error while updating group: $e.")
+            }
+        }
+
+        put("/api/reorderGroups") {
+            try {
+                val groupReorderRequest = call.receive<GroupReorderRequestReceived>()
+
+                for (groupItem in groupReorderRequest.reorderedGroupArray) {
+                    val updatedGroup = supabase.postgrest["groups"].update(
+                        {
+                            set("id", groupItem.id)
+                        }
+                    ) {
+                        eq("group", groupItem.group)
+                        eq("userId", getActiveUserId())
+                    }
+                    if (updatedGroup.body == null) {
+                        call.respondError("Group update failed.")
+                    }
+                }
+                call.respondSuccess("Group update successful.")
+            } catch (e: Exception) {
+                call.application.log.error("Error while reordering groups.", e)
+                call.respondError("Error while reordering groups: $e.")
             }
         }
 

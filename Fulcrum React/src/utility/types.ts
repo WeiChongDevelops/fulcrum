@@ -85,6 +85,7 @@ export interface GroupItemEntity {
   group: string;
   colour: string;
   timestamp: Date;
+  id: number;
 }
 
 export interface BasicGroupData {

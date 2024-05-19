@@ -118,9 +118,18 @@
   transition: all 400ms ease-out;
 }
 
+@keyframes downRampFade {
+  0%,
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .enableFadeIn {
-  opacity: 0;
-  /*background-color: indianred;*/
+  animation: downRampFade 950ms ease-out;
 }
 
 /* ADD NEW GROUP BUTTON */

@@ -30,6 +30,8 @@ import SettingsV2 from "@/components-v2/pages/SettingsV2.tsx";
 import BudgetV2 from "@/components-v2/pages/BudgetV2.tsx";
 import "@/css/global.css";
 import autoAnimate from "@formkit/auto-animate";
+import Playground from "@/components-v2/subcomponents/budget/Playground.tsx";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -57,15 +59,11 @@ export default function App() {
 
   const [navMenuOpen, setNavMenuOpen] = useState(true);
 
-  const parent = useRef(null);
-
-  useEffect(() => {
-    parent.current && autoAnimate(parent.current);
-  }, [parent]);
-
   const toggleNavMenu = () => {
     setNavMenuOpen(!navMenuOpen);
   };
+
+  const [autoAnimateRef] = useAutoAnimate();
 
   if (isAnyError) {
     return <FulcrumErrorPage errors={errors} />;
@@ -79,7 +77,7 @@ export default function App() {
     <ErrorBoundary>
       <EmailContext.Provider value={email!}>
         <LocationContext.Provider value={location}>
-          <div ref={parent}>
+          <div ref={autoAnimateRef}>
             <Toaster richColors />
             <Routes>
               {homePaths.map((path) => (
@@ -96,6 +94,7 @@ export default function App() {
               <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
+              <Route path="/playground" element={<Playground />} />
               <Route
                 path="/app/"
                 element={

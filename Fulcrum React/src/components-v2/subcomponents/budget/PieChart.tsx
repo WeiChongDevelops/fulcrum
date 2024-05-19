@@ -1,19 +1,5 @@
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  PieChart,
-  Pie,
-  ResponsiveContainer,
-  Sector,
-  Cell,
-} from "recharts";
+import { PieChart, Pie, ResponsiveContainer, Sector, Cell } from "recharts";
 import { useState } from "react";
-import { budgetSort, expenseSort } from "@/utility/util.ts";
 import { BudgetItemEntity } from "@/utility/types.ts";
 
 const renderActiveShape = (props: any) => {
@@ -102,8 +88,8 @@ export default function BudgetPieChart({ budgetArray }: BudgetPieChartProps) {
       <PieChart width={730} height={250}>
         {/*<Pie data={data01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={50} fill="red" />*/}
         <Pie
-          animationBegin={250}
-          animationDuration={1100}
+          animationBegin={125}
+          animationDuration={600}
           animationEasing={"ease-out"}
           onMouseEnter={handlePieEnter}
           data={budgetArray.sort(budgetSizeSort)}

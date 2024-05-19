@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GroupCreateRequestReceived(
     val group: String,
-    val colour: String
+    val colour: String,
+    val id: Int
 )

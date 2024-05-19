@@ -26,7 +26,7 @@ import { Location } from "react-router-dom";
 
 // GLOBAL VARIABLES //
 
-export const Y2K = new Date("2000-01-01T00:00:00Z");
+export const expenseStartDate = new Date("2020-01-01T00:00:00Z");
 export const DEFAULT_GROUP_COLOUR = "#3f4240";
 export const DEFAULT_CATEGORY_ICON = "category-default-icon.svg";
 export const DEFAULT_CATEGORY_GROUP = "Miscellaneous";
@@ -304,15 +304,16 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
 // SORTING FUNCTIONS //
 
 /**
- * Sorts group items, placing the default category group at the end and others by their timestamps in ascending order.
+ * Sorts group items, placing the default category group at the end.
  * @param a - The first group item for comparison.
  * @param b - The second group item for comparison.
  * @returns Sorting order value.
  */
 export function groupSort(a: GroupItemEntity, b: GroupItemEntity): number {
-  if (a.group === DEFAULT_CATEGORY_GROUP) return 1;
-  if (b.group === DEFAULT_CATEGORY_GROUP) return -1;
-  return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+  // if (a.group === DEFAULT_CATEGORY_GROUP) return 1;
+  // if (b.group === DEFAULT_CATEGORY_GROUP) return -1;
+  // return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+  return a.id < b.id ? -1 : 1;
 }
 
 /**
@@ -674,6 +675,24 @@ export function isCurrentMonth(timestamp: Date): boolean {
 }
 
 /**
+ * Identifies the highest group sorting index excluding Miscellaneous.
+ * @param groupArray - The group array.
+ * @returns The largest sort index.
+ */
+export function getHighestGroupSortIndex(groupArray: GroupItemEntity[]) {
+  return maxNumber(groupArray.map((groupItem) => groupItem.id));
+}
+
+/**
+ * Returns the largest numerical value in a specified array, given that the value is below 999.
+ * @param numArray - The array in which to search for the largest value.
+ * @returns The largest value
+ */
+function maxNumber(numArray: number[]) {
+  return numArray.reduce((max, num) => (num > max && num < 999 ? num : max), numArray[0]);
+}
+
+/**
  * Get the total expenditure within a budget category group.
  * @param expenseArray - An array of expense items within a given group.
  * @param filteredBudgetArray - An array of the budget items in a given group.
@@ -857,14 +876,14 @@ export async function getStructuredExpenseData(expenseArray: ExpenseItemEntity[]
 }
 
 /**
- * Initialises the stratified expense data structure from Y2K to a year from today; no expense data is populated.
+ * Initialises the stratified expense data structure from expenseStartDate to a year from today; no expense data is populated.
  * @returns The initialised structured expense data.
  */
 async function initialiseStructuredExpenseData(): Promise<MonthExpenseGroupEntity[]> {
   let newStructuredExpenseData: MonthExpenseGroupEntity[] = [];
 
-  const y2KMonth = Y2K.getMonth();
-  const y2KYear = Y2K.getFullYear();
+  const y2KMonth = expenseStartDate.getMonth();
+  const y2KYear = expenseStartDate.getFullYear();
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   const monthsFromY2KToNow = getMonthsFromToday(y2KMonth, y2KYear);

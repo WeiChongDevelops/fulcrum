@@ -3,7 +3,7 @@ import BudgetUpdatingForm from "./forms/BudgetUpdatingForm.tsx";
 import GroupCreationForm from "./forms/GroupCreationForm.tsx";
 import GroupUpdatingForm from "./forms/GroupUpdatingForm.tsx";
 import TwoOptionModal from "../modals/TwoOptionModal.tsx";
-import { changeFormOrModalVisibility } from "../../../utility/util.ts";
+import { changeFormOrModalVisibility, getHighestGroupSortIndex } from "../../../utility/util.ts";
 import useDeleteGroup from "../../../hooks/mutations/budget/useDeleteGroup.ts";
 import useDeleteBudget from "../../../hooks/mutations/budget/useDeleteBudget.ts";
 import Loader from "../other/Loader.tsx";
@@ -76,7 +76,10 @@ export default function BudgetModalsAndForms({
           />
         )}
         {budgetFormVisibility.isCreateGroupVisible && (
-          <GroupCreationForm setBudgetFormVisibility={setBudgetFormVisibility} />
+          <GroupCreationForm
+            setBudgetFormVisibility={setBudgetFormVisibility}
+            highestSortIndex={getHighestGroupSortIndex(groupArray)}
+          />
         )}
         {budgetFormVisibility.isUpdateGroupVisible && (
           <GroupUpdatingForm oldGroupBeingEdited={oldGroupBeingEdited} setBudgetFormVisibility={setBudgetFormVisibility} />

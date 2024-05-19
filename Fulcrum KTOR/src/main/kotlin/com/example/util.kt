@@ -17,7 +17,6 @@ import io.ktor.server.response.*
 import kotlinx.datetime.Instant
 
 suspend fun getActiveUserId(): String {
-    SupabaseClient.supabase.gotrue.refreshCurrentSession()
     return SupabaseClient.supabase.gotrue.retrieveUserForCurrentSession(updateSession = true).id
 }
 
@@ -105,11 +104,11 @@ suspend fun executeExpenseDeletion(expenseId: String, call: ApplicationCall): Bo
 
 fun getDefaultGroups(uid: String, miscellaneousExists: Boolean): List<GroupCreateRequestSent> {
     val groups = mutableListOf(
-        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#fee2e2"),
-        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#d1fae5"),
-        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#dbeafe"),
-        GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#cffafe"),
-        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#fef3c7"),
+        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#fee2e2", id = 1),
+        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#d1fae5", id = 2),
+        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#dbeafe", id = 3),
+        GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#cffafe", id = 4),
+        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#fef3c7", id = 5),
 //        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#9fd5be"),
 //        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#f1afa1"),
 //        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#7c86bf"),
@@ -117,7 +116,7 @@ fun getDefaultGroups(uid: String, miscellaneousExists: Boolean): List<GroupCreat
 //        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#dfcde3")
     )
     if (!miscellaneousExists) {
-        groups.add(GroupCreateRequestSent(userId = uid, group = "Miscellaneous", colour = "#292524"))
+        groups.add(GroupCreateRequestSent(userId = uid, group = "Miscellaneous", colour = "#292524", id = 999))
     }
     return groups
 }

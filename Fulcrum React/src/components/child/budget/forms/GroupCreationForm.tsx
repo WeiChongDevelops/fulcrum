@@ -15,12 +15,13 @@ import { BasicGroupData, BudgetFormVisibility, GroupItemEntity, SetFormVisibilit
 
 interface GroupCreationFormProps {
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
+  highestSortIndex: number;
 }
 
 /**
  * A form for creating a new budget category group.
  */
-export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCreationFormProps) {
+export default function GroupCreationForm({ setBudgetFormVisibility, highestSortIndex }: GroupCreationFormProps) {
   const [formData, setFormData] = useState<BasicGroupData>({
     group: "",
     colour: "",
@@ -57,6 +58,7 @@ export default function GroupCreationForm({ setBudgetFormVisibility }: GroupCrea
       group: formData.group,
       colour: formData.colour ? formData.colour : getRandomGroupColour(),
       timestamp: new Date(),
+      id: highestSortIndex + 1,
     };
 
     createGroup(newGroupItem);

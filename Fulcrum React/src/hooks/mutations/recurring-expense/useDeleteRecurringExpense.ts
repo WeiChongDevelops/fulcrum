@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { EmailContext, getRecurringExpenseInstancesAfterDate, Y2K } from "../../../utility/util.ts";
+import { EmailContext, getRecurringExpenseInstancesAfterDate, expenseStartDate } from "../../../utility/util.ts";
 import { useContext } from "react";
 import { toast } from "sonner";
 import { ExpenseItemEntity, RecurringExpenseItemEntity } from "../../../utility/types.ts";
@@ -21,7 +21,7 @@ export default function useDeleteRecurringExpense() {
         const recurringInstancesToDelete = await getRecurringExpenseInstancesAfterDate(
           recurringExpenseDeletionMutationProps.recurringExpenseId,
           recurringExpenseDeletionMutationProps.expenseArray,
-          Y2K,
+          expenseStartDate,
         );
         await handleBatchExpenseDeletion(recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId));
       }

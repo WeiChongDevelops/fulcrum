@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { getMonthsFromToday, Y2K } from "../../../../utility/util.ts";
+import { getMonthsFromToday, expenseStartDate } from "../../../../utility/util.ts";
 import { ExpenseMonthGroup } from "./ExpenseMonthGroup.tsx";
 import {
   CategoryToIconGroupAndColourMap,
@@ -37,8 +37,8 @@ export default function ExpenseMonthCarousel({
   publicUserData,
   setDefaultCalendarDate,
 }: ExpenseMonthCarouselProps) {
-  const y2KMonth = Y2K.getMonth();
-  const y2KYear = Y2K.getFullYear();
+  const y2KMonth = expenseStartDate.getMonth();
+  const y2KYear = expenseStartDate.getFullYear();
   const monthsFromY2KToNow = getMonthsFromToday(y2KMonth, y2KYear);
   const [monthPanelShowingIndex, setMonthPanelShowingIndex] = useState(0);
 

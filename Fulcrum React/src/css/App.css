@@ -213,3 +213,11 @@
   opacity: 0;
   filter: blur(10px);
 }
+
+.shadcn-accordion__button:focus {
+  outline: none;
+}
+
+/** {*/
+/*  outline: 2px solid red;*/
+/*}*/

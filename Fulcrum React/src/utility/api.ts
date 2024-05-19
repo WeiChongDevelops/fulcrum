@@ -249,6 +249,7 @@ export async function handleGroupCreation(newGroupItem: GroupItemEntity): Promis
     const response = await apiClient.post("/createGroup", {
       group: newGroupItem.group,
       colour: newGroupItem.colour,
+      sortIndex: newGroupItem.id,
     });
     console.log(response.data);
   } catch (error: unknown) {
@@ -296,6 +297,25 @@ export async function handleGroupUpdating(originalGroupName: string, updatedGrou
       throw new Error(`Error encountered when requesting group update: ${error.message}`);
     } else {
       throw new Error("Unknown error encountered when requesting group update.");
+    }
+  }
+}
+
+/**
+ * Reorders the groups by reassigning their sort indexes.
+ * @param reorderedGroupArray - The array of the groups with updated sort indexes.
+ */
+export async function handleGroupReorder(reorderedGroupArray: GroupItemEntity[]) {
+  try {
+    await apiClient.put("/reorderGroups", {
+      reorderedGroupArray: reorderedGroupArray,
+    });
+    console.log("Groups successfully reordered.");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting group reorder: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting group reorder.");
     }
   }
 }
@@ -599,7 +619,7 @@ export async function handleUserLogin(email: string, password: string): Promise<
       email: email,
       password: password,
     });
-    console.log(response.data);
+    // console.log(response.data);
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(`Error encountered when attempting login: ${error.message}`);

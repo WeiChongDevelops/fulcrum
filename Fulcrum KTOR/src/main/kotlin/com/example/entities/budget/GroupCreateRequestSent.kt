@@ -9,4 +9,5 @@ data class GroupCreateRequestSent(
     val userId: String?, // Nullable for registration default db entries
     val group: String,
     val colour: String,
+    val id: Int
 )

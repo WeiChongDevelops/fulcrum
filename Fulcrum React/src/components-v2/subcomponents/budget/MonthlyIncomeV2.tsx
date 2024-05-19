@@ -1,12 +1,11 @@
-import { formatDollarAmountDynamic, formatDollarAmountStatic, handleInputChangeOnFormWithAmount } from "@/utility/util.ts";
+import { formatDollarAmountStatic, handleInputChangeOnFormWithAmount } from "@/utility/util.ts";
 import { PublicUserData } from "@/utility/types.ts";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { cn } from "@/lib/utils.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
-import { getTotalIncome } from "@/utility/api.ts";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import useUpdateTotalIncome from "@/hooks/mutations/budget/useUpdateTotalIncome.ts";
 
 interface MonthlyIncomeV2Props {

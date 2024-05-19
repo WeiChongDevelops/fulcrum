@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
-import { EmailContext, getRecurringExpenseInstancesAfterDate, Y2K } from "../../../utility/util.ts";
+import { EmailContext, getRecurringExpenseInstancesAfterDate, expenseStartDate } from "../../../utility/util.ts";
 import { toast } from "sonner";
 import {
   handleBatchBlacklistedExpenseCreation,
@@ -44,7 +44,7 @@ export default function useDeleteExpense() {
           recurringInstancesToDelete = await getRecurringExpenseInstancesAfterDate(
             expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
             expenseDeletionMutationProps.expenseArray,
-            Y2K,
+            expenseStartDate,
           );
         }
         await handleBatchBlacklistedExpenseCreation(
@@ -78,7 +78,7 @@ export default function useDeleteExpense() {
         recurringInstancesToDelete = await getRecurringExpenseInstancesAfterDate(
           expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
           expenseDeletionMutationProps.expenseArray,
-          Y2K,
+          expenseStartDate,
         );
       }
 

@@ -1,4 +1,4 @@
-import { Dispatch, RefObject, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { BudgetFormVisibility, SetFormVisibility } from "@/utility/types.ts";
 import { changeFormOrModalVisibility } from "@/utility/util.ts";
 
@@ -23,7 +23,7 @@ export default function AddNewBudgetToGroupButtonV2({
 
   return (
     <button
-      className="size-48 rounded-xl border-2 border-dashed border-black hover:rounded-md hover:bg-[#DEDEDE33] transition-all duration-200 ease-out"
+      className="size-44 rounded-xl border-2 border-dashed border-black hover:rounded-md hover:bg-[#DEDEDE33] transition-all duration-200 ease-out"
       onClick={handleClick}
     >
       <b>+</b>

@@ -15,7 +15,7 @@ import {
   getStructuredExpenseData,
   LocationContext,
   updateRecurringExpenseInstances,
-  Y2K,
+  expenseStartDate,
 } from "@/utility/util.ts";
 import useBatchDeleteExpenses from "../../hooks/mutations/expense/useBatchDeleteExpenses.ts";
 import useBatchCreateExpenses from "../../hooks/mutations/expense/useBatchCreateExpenses.ts";
@@ -79,7 +79,7 @@ export default function ExpensesV2({
   const { mutate: batchDeleteExpenses } = useBatchDeleteExpenses();
   const { mutate: batchCreateExpenses, isSuccess: expenseCreationIsSuccess } = useBatchCreateExpenses();
 
-  const startingIndex = getMonthsFromToday(Y2K.getMonth(), Y2K.getFullYear());
+  const startingIndex = getMonthsFromToday(expenseStartDate.getMonth(), expenseStartDate.getFullYear());
 
   useEffect(() => {
     const updateStructuredExpenseData = async () => {

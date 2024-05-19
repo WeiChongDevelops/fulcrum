@@ -4,13 +4,11 @@ import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeTogg
 import MonthlyIncomeV2 from "@/components-v2/subcomponents/budget/MonthlyIncomeV2.tsx";
 
 interface BudgetHeaderV2Props {
-  navMenuOpen: boolean;
-  toggleNavMenu: () => void;
   publicUserData: PublicUserData;
   totalIncome: number;
 }
 
-export default function BudgetHeaderV2({ navMenuOpen, toggleNavMenu, publicUserData, totalIncome }: BudgetHeaderV2Props) {
+export default function BudgetHeaderV2({ publicUserData, totalIncome }: BudgetHeaderV2Props) {
   return (
     <div
       className={

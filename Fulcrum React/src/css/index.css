@@ -55,9 +55,9 @@ body label {
   font-weight: bold;
 }
 
-button:focus {
-  outline: 3px solid white;
-}
+/*button:focus {*/
+/*  outline: 3px solid white;*/
+/*}*/
 
 input:focus {
   outline: 3px solid #1c5b57;
