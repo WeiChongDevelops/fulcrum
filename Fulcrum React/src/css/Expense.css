@@ -74,7 +74,7 @@
     transform: translateX(0px);
   }
   50% {
-    transform: translateX(-4px);
+    transform: translateX(-2px);
   }
   100% {
     transform: translateX(0px);
@@ -86,7 +86,7 @@
     transform: translateX(0px);
   }
   50% {
-    transform: translateX(4px);
+    transform: translateX(2px);
   }
   100% {
     transform: translateX(0px);
@@ -112,25 +112,23 @@
   user-select: none;
 }
 
-.navigate-left:hover > img {
-  outline: none;
-  animation: bounceLeft 1200ms ease-in-out infinite;
+.enabled-bounce-left:hover > img {
+  animation: bounceLeft 1800ms ease-in-out infinite;
 }
 
-.navigate-right:hover > img {
-  outline: none;
-  animation: bounceRight 1200ms ease-out infinite;
+.enabled-bounce-right:hover > img {
+  animation: bounceRight 1800ms ease-in-out infinite;
 }
 
-.left-nav-arrow {
-  outline: none;
-  animation: bounceLeft 1200ms ease-in-out infinite;
-}
+/*.left-nav-arrow {*/
+/*  outline: none;*/
+/*  animation: bounceLeft 1200ms ease-in-out infinite;*/
+/*}*/
 
-.right-nav-arrow {
-  outline: none;
-  animation: bounceRight 1200ms ease-out infinite;
-}
+/*.right-nav-arrow {*/
+/*  outline: none;*/
+/*  animation: bounceRight 1200ms ease-out infinite;*/
+/*}*/
 
 .expense-carousel {
   transition: transform 250ms ease-out;

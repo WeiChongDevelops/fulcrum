@@ -36,7 +36,7 @@ export default function FulcrumV2({ publicUserData, navMenuOpen, toggleNavMenu, 
         <div className={"flex flex-row"}>
           <NavigationMenuV2 publicUserData={publicUserData} navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} />
           <div
-            className={`absolute right-0 top-0 min-h-screen transition-all duration-200 ease-out ${navMenuOpen ? "w-[calc(100vw-16rem)]" : "w-full"}`}
+            className={`absolute right-0 top-0 min-h-screen transition-all duration-200 ease-out ${navMenuOpen ? "w-[calc(100vw-14rem)]" : "w-full"}`}
           >
             <Outlet />
           </div>

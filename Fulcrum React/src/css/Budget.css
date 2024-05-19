@@ -2,7 +2,7 @@
 
 .budget-v2-upper-content {
   /*grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));*/
-  grid-template-columns: 7fr 8fr;
+  grid-template-columns: 6fr 5fr;
 }
 
 /* BUDGET TILE */
@@ -348,12 +348,6 @@
 
 /* MEDIA QUERIES */
 
-@media (max-width: 1800px) {
-  .budget-v2-upper-content {
-    grid-template-columns: 1fr;
-  }
-}
-
 @media (max-width: 1650px) {
   #group-colour-selector {
     grid-template-columns: repeat(4, minmax(70px, 1fr));
@@ -365,6 +359,13 @@
     flex-basis: auto;
   }
 }
+
+@media (max-width: 1480px) {
+  .budget-v2-upper-content {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 1315px) {
   .fulcrum-animation-container {
     margin-top: 40px;

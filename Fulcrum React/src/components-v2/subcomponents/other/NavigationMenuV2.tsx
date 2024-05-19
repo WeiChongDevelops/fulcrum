@@ -29,7 +29,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, toggleNa
   }, [routerLocation]);
 
   return (
-    <div className={"fixed flex flex-col w-64 h-screen overflow-x-visible z-30"}>
+    <div className={"fixed flex flex-col w-[14rem] h-screen overflow-x-visible z-30"}>
       <div className={"flex justify-start items-center h-[6vh] w-full bg-gray-400"}>
         <img
           src={`/static/assets-v2/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`}
@@ -60,7 +60,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, toggleNa
               <Button onClick={handleUserLogout}>Log Out</Button>
             </div>
           </div>
-          <div className={"flex flex-col justify-start mt-8 gap-4 text-base select-none m-4"}>
+          <div className={"flex flex-col justify-start mt-8 gap-4 text-sm select-none m-4"}>
             <div
               ref={budgetLinkRef}
               className={`flex flex-row justify-start items-center gap-3 hover:cursor-pointer ${currentPage === "budget" ? "font-bold underline" : "font-medium"}`}

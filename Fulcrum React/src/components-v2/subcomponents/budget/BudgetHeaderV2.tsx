@@ -12,7 +12,7 @@ export default function BudgetHeaderV2({ publicUserData, totalIncome }: BudgetHe
   return (
     <div
       className={
-        "fixed flex flex-row z-20 gap-4 justify-start items-center self-end bg-gray-400 w-[calc(100vw-16rem)] h-[6vh]"
+        "fixed flex flex-row z-20 gap-4 justify-start items-center self-end bg-gray-400 w-[calc(100vw-14rem)] h-[6vh]"
       }
     >
       <MonthlyIncomeV2 publicUserData={publicUserData} className={"ml-8"} totalIncome={totalIncome} />

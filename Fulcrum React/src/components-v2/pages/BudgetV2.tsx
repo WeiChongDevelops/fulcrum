@@ -32,6 +32,8 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-ki
 import { handleGroupReorder } from "@/utility/api.ts";
 import Playground, { PlaygroundGroup } from "@/components-v2/subcomponents/budget/Playground.tsx";
 import useReorderGroups from "@/hooks/mutations/budget/useReorderGroups.ts";
+import { Separator } from "@/components-v2/ui/separator.tsx";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 interface BudgetV2Props {
   publicUserData: PublicUserData;
@@ -141,12 +143,7 @@ export default function BudgetV2({
 
   return (
     <div className="flex flex-col justify-start gap-8">
-      <BudgetHeaderV2
-        navMenuOpen={navMenuOpen}
-        toggleNavMenu={toggleNavMenu}
-        publicUserData={publicUserData}
-        totalIncome={totalIncome!}
-      />
+      <BudgetHeaderV2 publicUserData={publicUserData} totalIncome={totalIncome!} />
       <div ref={budgetContainer}>
         {/*<div className={"grid pt-[6vh] gap-4 px-5 2xl:px-7"}>*/}
         <div className={"grid pt-[6vh] gap-4 px-6  ml-[15px]"}>
@@ -160,37 +157,19 @@ export default function BudgetV2({
             </div>
             <div className="flex flex-row justify-center items-center gap-2 bg-violet-100 rounded-xl font-bold h-96 w-full">
               {/*<Skeleton className="size-[200px] rounded-full" />*/}
-              <div className={"h-full w-[34rem] md:w-[30rem]"}>
+              <div className={"relative h-full w-[34rem] md:w-[30rem] pt-4"}>
+                <p className={"absolute top-4 left-8"}>Budget Distribution by Category</p>
                 <BudgetPieChart budgetArray={budgetArray} />
-              </div>
-              <div className={"flex flex-col justify-center items-start gap-4 mr-[8%] max-[1800px]:mr-[13%]"}>
-                {/*<Skeleton className="w-40 h-8" />*/}
-                {/*<Skeleton className="w-32 h-6" />*/}
-                {/*<Skeleton className="w-32 h-6" />*/}
-                {/*<Skeleton className="w-32 h-6" />*/}
-                {/*<Skeleton className="w-32 h-6" />*/}
-                {/*<Skeleton className="w-32 h-6" />*/}
-                <p className={"text-xl font-medium mb-1"}>Category Groups</p>
-                <div>
-                  {groupArray.map((groupItem, index) => (
-                    <div className={"grid"} style={{ gridTemplateColumns: "1fr 1fr" }} key={index}>
-                      <div className={"flex flex-row justify-start items-center gap-2"} key={index}>
-                        <div
-                          className={"rounded-[50%] size-2 brightness-90"}
-                          style={{ backgroundColor: groupItem.colour }}
-                        ></div>
-                        <p>{groupItem.group}</p>
-                      </div>
-                      <div
-                        className={"text-right"}
-                      >{`${((getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === groupItem.group)) / budgetTotal) * 100).toFixed(0)}%`}</div>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <Separator />
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+            modifiers={[restrictToVerticalAxis]}
+          >
             <div className="flex flex-col w-full gap-4">
               <AddNewGroupButton
                 setBudgetFormVisibility={setBudgetFormVisibility}
@@ -226,6 +205,34 @@ export default function BudgetV2({
           {/*  </SortableContext>*/}
           {/*</DndContext>*/}
           {/*<Playground />*/}
+          <Separator />
+          <div className={"flex flex-row justify-center items-center bg-gray-200 rounded-xl py-8 mb-4"}>
+            <div className={"flex flex-col justify-center items-start gap-4 mr-[8%] max-[1800px]:mr-[12%]"}>
+              {/*<Skeleton className="w-40 h-8" />*/}
+              {/*<Skeleton className="w-32 h-6" />*/}
+              {/*<Skeleton className="w-32 h-6" />*/}
+              {/*<Skeleton className="w-32 h-6" />*/}
+              {/*<Skeleton className="w-32 h-6" />*/}
+              {/*<Skeleton className="w-32 h-6" />*/}
+              <p className={"font-medium mb-1"}>Category Groups</p>
+              <div>
+                {groupArray.map((groupItem, index) => (
+                  <div className={"grid text-sm font-bold"} style={{ gridTemplateColumns: "1fr 1fr" }} key={index}>
+                    <div className={"flex flex-row justify-start items-center gap-2 text-left"} key={index}>
+                      <div
+                        className={"rounded-[50%] size-2 brightness-90"}
+                        style={{ backgroundColor: groupItem.colour }}
+                      ></div>
+                      <p>{groupItem.group}</p>
+                    </div>
+                    <div
+                      className={"text-right"}
+                    >{`${((getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === groupItem.group)) / budgetTotal) * 100).toFixed(0)}%`}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
         <BudgetModalsAndForms
           budgetFormVisibility={budgetFormVisibility}

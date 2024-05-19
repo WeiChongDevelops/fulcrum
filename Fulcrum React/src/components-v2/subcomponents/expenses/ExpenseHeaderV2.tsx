@@ -50,7 +50,11 @@ export default function ExpenseHeaderV2({
           "flex flex-row justify-between items-center ml-6 w-[40vw] sm:w-[35vw] md:w-[32vw] lg:w-[30vw] py-1 my-4 bg-[#17423f] rounded-3xl text-white select-none"
         }
       >
-        <button onClick={prevSlide} disabled={activeCarouselIndex < 1} className={"month-navigation-option navigate-left"}>
+        <button
+          onClick={prevSlide}
+          disabled={activeCarouselIndex < 1}
+          className={`month-navigation-option ${activeCarouselIndex >= 1 && "enabled-bounce-left"} disabled:opacity-50`}
+        >
           <img src="/static/assets-v2/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
         </button>
         <p className={"text-xl font-medium"}>
@@ -59,7 +63,7 @@ export default function ExpenseHeaderV2({
         <button
           onClick={nextSlide}
           disabled={activeCarouselIndex === startingIndex + 12}
-          className={"month-navigation-option navigate-right"}
+          className={`month-navigation-option ${activeCarouselIndex !== startingIndex + 12 && "enabled-bounce-right"} disabled:opacity-50`}
         >
           <img src="/static/assets-v2/UI-icons/right-navigation-arrow.svg" alt="Right navigation arrow" />
         </button>
