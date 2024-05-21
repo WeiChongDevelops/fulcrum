@@ -88,8 +88,8 @@ export default function BudgetPieChart({ budgetArray }: BudgetPieChartProps) {
       <PieChart width={730} height={250}>
         {/*<Pie data={data01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={50} fill="red" />*/}
         <Pie
-          animationBegin={125}
-          animationDuration={600}
+          animationBegin={250}
+          animationDuration={1300}
           animationEasing={"ease-out"}
           onMouseEnter={handlePieEnter}
           data={budgetArray.sort(budgetSizeSort)}

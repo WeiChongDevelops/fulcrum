@@ -38,7 +38,6 @@ interface ExpensesV2Props {
   categoryDataMap: CategoryToIconGroupAndColourMap;
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[];
   navMenuOpen: boolean;
-  toggleNavMenu: () => void;
 }
 
 /**
@@ -53,7 +52,6 @@ export default function ExpensesV2({
   blacklistedExpenseArray,
   recurringExpenseArray,
   navMenuOpen,
-  toggleNavMenu,
 }: ExpensesV2Props) {
   const {
     expenseFormVisibility,
@@ -139,6 +137,7 @@ export default function ExpensesV2({
         structuredExpenseData={structuredExpenseData}
         startingIndex={startingIndex}
         publicUserData={publicUserData}
+        navMenuOpen={navMenuOpen}
       />
       <ExpenseMonthCarouselV2
         structuredExpenseData={structuredExpenseData!}

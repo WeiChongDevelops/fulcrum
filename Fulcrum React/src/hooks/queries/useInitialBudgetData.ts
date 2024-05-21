@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { checkForOpenModalOrForm, EmailContext, getLineAngle, LocationContext } from "../../utility/util.ts";
+import { checkForOpenModalOrForm, EmailContext, LocationContext } from "../../utility/util.ts";
 import { useQuery } from "@tanstack/react-query";
 import {
   BudgetFormVisibility,
@@ -34,13 +34,13 @@ export default function useInitialBudgetData() {
   const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState<PreviousGroupBeingEdited>({
     oldColour: "",
     oldGroupName: "",
+    oldId: -1,
   });
   const [amountLeftToBudget, setAmountLeftToBudget] = useState<number>(0);
   const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("Miscellaneous");
   const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
 
   const routerLocation = useContext(LocationContext);
-  const [lineAngle, setLineAngle] = useState(0);
   const [perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
@@ -77,10 +77,6 @@ export default function useInitialBudgetData() {
     enabled: !!email,
   });
 
-  useEffect(() => {
-    totalIncome && setLineAngle(getLineAngle(amountLeftToBudget, totalIncome));
-  }, [amountLeftToBudget, totalIncome, routerLocation]);
-
   return {
     totalIncome,
     budgetFormVisibility,
@@ -100,7 +96,6 @@ export default function useInitialBudgetData() {
     groupNameOfNewItem,
     setGroupNameOfNewItem,
     isBudgetFormOrModalOpen,
-    lineAngle,
     perCategoryExpenseTotalThisMonth,
     setPerCategoryExpenseTotalThisMonth,
     isLoading,

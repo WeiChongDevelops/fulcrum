@@ -69,12 +69,6 @@ export default function BudgetTileV2({
           </p>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-center items-center pb-2">
-        <Button variant={"ghost"} onClick={handleDeleteClick}>
-          {/*<button className="circle-button" onClick={handleDeleteClick}>*/}
-          <img src="/static/assets-v2/UI-icons/delete-trash-black-icon.svg" alt="Budget delete icon" className="size-6" />
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

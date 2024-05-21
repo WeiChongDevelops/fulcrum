@@ -23,7 +23,6 @@ interface RecurringExpensesV2Props {
   recurringExpenseArray: RecurringExpenseItemEntity[];
   categoryDataMap: CategoryToIconGroupAndColourMap;
   navMenuOpen: boolean;
-  toggleNavMenu: () => void;
 }
 
 /**
@@ -37,7 +36,6 @@ export default function RecurringExpensesV2({
   categoryDataMap,
   recurringExpenseArray,
   navMenuOpen,
-  toggleNavMenu,
 }: RecurringExpensesV2Props) {
   const routerLocation = useContext(LocationContext);
   const {
@@ -61,7 +59,7 @@ export default function RecurringExpensesV2({
 
   return (
     <div className={"flex flex-col justify-start items-center h-screen"}>
-      <RecurringExpensesHeaderV2 navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} publicUserData={publicUserData} />
+      <RecurringExpensesHeaderV2 navMenuOpen={navMenuOpen} publicUserData={publicUserData} />
       <div className={"mt-8 w-[97%] h-[94%]"}>
         <AddNewRecurringExpenseButton
           setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}

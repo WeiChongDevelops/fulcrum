@@ -96,6 +96,7 @@ export interface BasicGroupData {
 export interface PreviousGroupBeingEdited {
   oldColour: string;
   oldGroupName: string;
+  oldId: number;
 }
 
 // FORM AND MODAL VISIBILITY ENTITIES //

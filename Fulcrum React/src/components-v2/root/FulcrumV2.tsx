@@ -1,23 +1,24 @@
 import { ErrorBoundary } from "../../components/child/other/ErrorBoundary.tsx";
 import { Outlet } from "react-router-dom";
 import NavigationMenuV2 from "@/components-v2/subcomponents/other/NavigationMenuV2.tsx";
-import { useContext, useEffect } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect } from "react";
 import { PublicUserData } from "@/utility/types.ts";
 import Loader from "@/components/child/other/Loader.tsx";
 import { getSessionEmailOrNull } from "@/utility/api.ts";
 import { LocationContext } from "@/utility/util.ts";
+import { Toaster } from "sonner";
 
 interface FulcrumV2Props {
   publicUserData: PublicUserData;
   navMenuOpen: boolean;
-  toggleNavMenu: () => void;
+  setNavMenuOpen: Dispatch<SetStateAction<boolean>>;
   isAnyLoading: boolean;
 }
 
 /**
  * The Fulcrum component which renders the navigation bars and the active application section.
  */
-export default function FulcrumV2({ publicUserData, navMenuOpen, toggleNavMenu, isAnyLoading }: FulcrumV2Props) {
+export default function FulcrumV2({ publicUserData, navMenuOpen, setNavMenuOpen, isAnyLoading }: FulcrumV2Props) {
   const routerLocation = useContext(LocationContext);
 
   if (isAnyLoading) {
@@ -34,9 +35,9 @@ export default function FulcrumV2({ publicUserData, navMenuOpen, toggleNavMenu, 
     <ErrorBoundary>
       <>
         <div className={"flex flex-row"}>
-          <NavigationMenuV2 publicUserData={publicUserData} navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} />
+          <NavigationMenuV2 publicUserData={publicUserData} navMenuOpen={navMenuOpen} setNavMenuOpen={setNavMenuOpen} />
           <div
-            className={`absolute right-0 top-0 min-h-screen transition-all duration-200 ease-out ${navMenuOpen ? "w-[calc(100vw-14rem)]" : "w-full"}`}
+            className={`absolute right-0 top-0 min-h-screen transition-all duration-200 ease-out ${navMenuOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"}`}
           >
             <Outlet />
           </div>

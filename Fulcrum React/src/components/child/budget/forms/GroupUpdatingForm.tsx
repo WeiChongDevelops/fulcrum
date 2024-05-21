@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import {
   addColourSelectionFunctionality,
   addFormExitListeners,
@@ -8,17 +8,28 @@ import {
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
 import useUpdateGroup from "../../../../hooks/mutations/budget/useUpdateGroup.ts";
-import { BasicGroupData, BudgetFormVisibility, GroupItemEntity, SetFormVisibility } from "../../../../utility/types.ts";
+import {
+  BasicGroupData,
+  BudgetFormVisibility,
+  GroupItemEntity,
+  PreviousGroupBeingEdited,
+  SetFormVisibility,
+} from "../../../../utility/types.ts";
 
 interface GroupUpdatingFormProps {
-  oldGroupBeingEdited: { oldColour: string; oldGroupName: string };
+  oldGroupBeingEdited: PreviousGroupBeingEdited;
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
+  setLocalisedGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
 }
 
 /**
  * A form for updating an existing budget category group.
  */
-export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVisibility }: GroupUpdatingFormProps) {
+export default function GroupUpdatingForm({
+  oldGroupBeingEdited,
+  setBudgetFormVisibility,
+  setLocalisedGroupArray,
+}: GroupUpdatingFormProps) {
   const [formData, setFormData] = useState<BasicGroupData>({
     colour: oldGroupBeingEdited.oldColour,
     group: oldGroupBeingEdited.oldGroupName,
@@ -54,7 +65,20 @@ export default function GroupUpdatingForm({ oldGroupBeingEdited, setBudgetFormVi
       group: oldGroupBeingEdited.oldGroupName,
     });
 
-    const updatedGroupItem: GroupItemEntity = { ...formData, colour: formData.colour!, timestamp: new Date() };
+    setLocalisedGroupArray((prevLocalisedGroupArray) =>
+      prevLocalisedGroupArray.map((groupItem) =>
+        groupItem.group === oldGroupBeingEdited.oldGroupName
+          ? { group: formData.group, colour: formData.colour!, timestamp: new Date(), id: oldGroupBeingEdited.oldId }
+          : groupItem,
+      ),
+    );
+
+    const updatedGroupItem: GroupItemEntity = {
+      ...formData,
+      colour: formData.colour!,
+      timestamp: new Date(),
+      id: oldGroupBeingEdited.oldId,
+    };
 
     updateGroup({
       originalGroupName: oldGroupBeingEdited.oldGroupName,

@@ -59,10 +59,6 @@ export default function App() {
 
   const [navMenuOpen, setNavMenuOpen] = useState(true);
 
-  const toggleNavMenu = () => {
-    setNavMenuOpen(!navMenuOpen);
-  };
-
   const [autoAnimateRef] = useAutoAnimate();
 
   if (isAnyError) {
@@ -77,8 +73,8 @@ export default function App() {
     <ErrorBoundary>
       <EmailContext.Provider value={email!}>
         <LocationContext.Provider value={location}>
+          <Toaster richColors />
           <div ref={autoAnimateRef}>
-            <Toaster richColors />
             <Routes>
               {homePaths.map((path) => (
                 <Route key={path} path={path} element={<Home />}>
@@ -101,8 +97,8 @@ export default function App() {
                   <FulcrumV2
                     publicUserData={publicUserData}
                     navMenuOpen={navMenuOpen}
-                    toggleNavMenu={toggleNavMenu}
                     isAnyLoading={isAnyLoading}
+                    setNavMenuOpen={setNavMenuOpen}
                   />
                 }
               >
@@ -159,7 +155,6 @@ export default function App() {
                       recurringExpenseArray={recurringExpenseArray}
                       blacklistedExpenseArray={blacklistedExpenseArray}
                       navMenuOpen={navMenuOpen}
-                      toggleNavMenu={toggleNavMenu}
                     />
                   }
                 />
@@ -174,16 +169,10 @@ export default function App() {
                       categoryDataMap={categoryDataMap}
                       recurringExpenseArray={recurringExpenseArray}
                       navMenuOpen={navMenuOpen}
-                      toggleNavMenu={toggleNavMenu}
                     />
                   }
                 />
-                <Route
-                  path="settings"
-                  element={
-                    <SettingsV2 navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} publicUserData={publicUserData} />
-                  }
-                />
+                <Route path="settings" element={<SettingsV2 publicUserData={publicUserData} />} />
                 <Route
                   path="budget"
                   element={
@@ -193,7 +182,6 @@ export default function App() {
                       budgetArray={budgetArray}
                       groupArray={groupArray}
                       navMenuOpen={navMenuOpen}
-                      toggleNavMenu={toggleNavMenu}
                     />
                   }
                 />

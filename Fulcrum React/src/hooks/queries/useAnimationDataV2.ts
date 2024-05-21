@@ -23,15 +23,16 @@ export default function useAnimationDataV2({ navMenuOpen, totalIncome, totalBudg
   const [bowlWidth, setBowlWidth] = useState(0);
 
   const updateRect = () => {
-    const leverRect = leverRef.current?.getBoundingClientRect();
-    if (!!leverRect) {
-      setLeverLeft(leverRect.left);
-    }
-
-    const containerRect = containerRef.current?.getBoundingClientRect();
-    if (!!containerRect) {
-      setContainerLeft(containerRect.left);
-    }
+    setTimeout(() => {
+      const leverRect = leverRef.current?.getBoundingClientRect();
+      if (!!leverRect) {
+        setLeverLeft(leverRect.left);
+      }
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      if (!!containerRect) {
+        setContainerLeft(containerRect.left);
+      }
+    }, 250);
   };
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function useAnimationDataV2({ navMenuOpen, totalIncome, totalBudg
   }, []);
 
   useEffect(() => {
-    setTimeout(updateRect, 225);
+    updateRect();
   }, [navMenuOpen]);
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function useAnimationDataV2({ navMenuOpen, totalIncome, totalBudg
   }, [totalIncome, totalBudget]);
 
   useEffect(() => {
-    setTimeout(updateRect, 250);
+    updateRect();
     !!bowlRef.current && setBowlWidth(bowlRef.current.getBoundingClientRect().width);
   }, [lineAngle]);
 

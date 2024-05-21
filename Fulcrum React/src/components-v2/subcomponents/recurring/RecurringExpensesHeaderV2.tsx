@@ -4,18 +4,14 @@ import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeTogg
 
 interface RecurringExpensesHeaderV2 {
   navMenuOpen: boolean;
-  toggleNavMenu: () => void;
   publicUserData: PublicUserData;
 }
 
-export default function RecurringExpensesHeaderV2({
-  navMenuOpen,
-  toggleNavMenu,
-  publicUserData,
-}: RecurringExpensesHeaderV2) {
+export default function RecurringExpensesHeaderV2({ navMenuOpen, publicUserData }: RecurringExpensesHeaderV2) {
   return (
-    <div className={"flex flex-row gap-4 justify-start items-center bg-gray-400 w-full h-[6%]"}>
-      {!navMenuOpen && <Button onClick={toggleNavMenu}>{">>"}</Button>}
+    <div
+      className={`flex flex-row gap-4 justify-start items-center bg-gray-400 w-full ${navMenuOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6%]`}
+    >
       <div className={"flex flex-row justify-center items-center gap-4 ml-auto mr-2"}>
         <p className={"mx-8 font-bold text-xl"}>Recurring Expenses</p>
         <DarkModeToggleV2 publicUserData={publicUserData} />

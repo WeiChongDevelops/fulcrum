@@ -10,6 +10,7 @@ interface ExpenseHeaderV2Props {
   structuredExpenseData: MonthExpenseGroupEntity[] | undefined;
   startingIndex: number;
   publicUserData: PublicUserData;
+  navMenuOpen: boolean;
 }
 
 export default function ExpenseHeaderV2({
@@ -17,6 +18,7 @@ export default function ExpenseHeaderV2({
   structuredExpenseData,
   startingIndex,
   publicUserData,
+  navMenuOpen,
 }: ExpenseHeaderV2Props) {
   const [activeCarouselIndex, setActiveCarouselIndex] = useState(startingIndex);
   const [activeMonthAndYear, setActiveMonthAndYear] = useState<{
@@ -44,7 +46,9 @@ export default function ExpenseHeaderV2({
   }, [structuredExpenseData, activeCarouselIndex]);
 
   return (
-    <div className={"fixed flex flex-row z-20 gap-4 justify-start items-center bg-gray-400 w-[calc(100vw-16rem)] h-[6vh]"}>
+    <div
+      className={`fixed flex flex-row z-20 gap-4 justify-start items-center bg-gray-400 ${navMenuOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
+    >
       <div
         className={
           "flex flex-row justify-between items-center ml-6 w-[40vw] sm:w-[35vw] md:w-[32vw] lg:w-[30vw] py-1 my-4 bg-[#17423f] rounded-3xl text-white select-none"

@@ -6,6 +6,7 @@ import {
   changeFormOrModalVisibility,
   colourStyles,
   getColourOfGroup,
+  getHighestGroupSortIndex,
   getRandomGroupColour,
   groupListAsOptions,
   handleInputChangeOnFormWithAmount,
@@ -17,15 +18,18 @@ import useUpdateBudget from "../../../../hooks/mutations/budget/useUpdateBudget.
 import {
   BudgetFormVisibility,
   BudgetItemEntity,
+  BudgetModalVisibility,
   BudgetUpdatingFormData,
   GroupItemEntity,
   PreviousBudgetBeingEdited,
   SetFormVisibility,
+  SetModalVisibility,
 } from "../../../../utility/types.ts";
 interface BudgetUpdatingFormProps {
   oldBudgetBeingEdited: PreviousBudgetBeingEdited;
   groupArray: GroupItemEntity[];
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
+  setBudgetModalVisibility: SetModalVisibility<BudgetModalVisibility>;
   currencySymbol: string;
 }
 
@@ -37,6 +41,8 @@ export default function BudgetUpdatingForm({
   oldBudgetBeingEdited,
   setBudgetFormVisibility,
   currencySymbol,
+
+  setBudgetModalVisibility,
 }: BudgetUpdatingFormProps) {
   const [formData, setFormData] = useState<BudgetUpdatingFormData>({
     category: oldBudgetBeingEdited.oldCategory,
@@ -81,6 +87,7 @@ export default function BudgetUpdatingForm({
         group: updatedBudgetItem.group,
         colour: getRandomGroupColour(),
         timestamp: new Date(),
+        id: getHighestGroupSortIndex(groupArray) + 1,
       };
     }
 
@@ -171,7 +178,18 @@ export default function BudgetUpdatingForm({
 
         <CategoryIconSelector />
         <input type="hidden" id="iconPath" name="iconPath" value="" />
-        <FulcrumButton displayText="Update Budget" />
+        <div className={"flex flex-row gap-4"}>
+          <FulcrumButton displayText="Update Budget" />
+          <FulcrumButton
+            backgroundColour={"red"}
+            displayText={"Delete Budget"}
+            onClick={(e: React.MouseEvent) => {
+              e.preventDefault();
+              changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmCategoryDeletionModalVisible", true);
+              hideForm();
+            }}
+          />
+        </div>
       </form>
     </div>
   );

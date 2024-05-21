@@ -211,13 +211,9 @@
 
 .fadeOut {
   opacity: 0;
-  filter: blur(10px);
+  filter: blur(15px);
 }
 
-.shadcn-accordion__button:focus {
-  outline: none;
+.standard-edit-delete-button:hover > div {
+  transform: scale(120%);
 }
-
-/** {*/
-/*  outline: 2px solid red;*/
-/*}*/

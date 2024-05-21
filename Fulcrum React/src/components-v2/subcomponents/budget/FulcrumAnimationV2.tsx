@@ -17,7 +17,7 @@ export default function FulcrumAnimationV2({ navMenuOpen, totalIncome, totalBudg
   const baseShadowWidth = bowlWidth * 0.85;
 
   return (
-    <div className={"relative z-10 px-32 py-40 bg-slate-200 rounded-xl transition-opacity enableFadeIn"} ref={containerRef}>
+    <div className={"z-10 px-32 py-40 bg-slate-200 rounded-xl transition-opacity enableFadeIn"} ref={containerRef}>
       <div
         className={
           "absolute flex flex-row justify-center z-20 bottom-[7.4rem] left-1/2 w-[90%] origin-top transition-transform ease-out duration-300"
@@ -50,8 +50,8 @@ export default function FulcrumAnimationV2({ navMenuOpen, totalIncome, totalBudg
         className={"absolute bottom-[12%] bg-black rounded-[50%] transition-all ease-out "}
         style={{
           left: leftOffset,
-          width: baseShadowWidth + lineAngle * 2,
-          height: (baseShadowWidth + lineAngle * 2) / 10,
+          width: baseShadowWidth + lineAngle * 1.5,
+          height: (baseShadowWidth + lineAngle * 1.5) / 10,
           transform: `translate(-50%, 50%) scale(${100 + lineAngle}%)`,
         }}
       ></div>
@@ -63,12 +63,12 @@ export default function FulcrumAnimationV2({ navMenuOpen, totalIncome, totalBudg
         className={"absolute bottom-[12%] bg-black rounded-[50%] transition-all ease-out -translate-x-1/2 "}
         style={{
           left: rightOffset,
-          width: baseShadowWidth - lineAngle * 2,
-          height: (baseShadowWidth + lineAngle * 2) / 10,
+          width: baseShadowWidth - lineAngle * 1.5,
+          height: (baseShadowWidth + lineAngle * 1.5) / 10,
           transform: `translate(-50%, 50%) scale(${100 - lineAngle}%)`,
         }}
       ></div>
-      <div className={"absolute bottom-[11.8%] bg-black rounded-[50%] left-1/2 w-6 h-2 -translate-x-1/2 "}></div>)
+      <div className={"absolute bottom-[10.8%] bg-black rounded-[50%] left-1/2 w-6 h-2 -translate-x-1/2 "}></div>
     </div>
   );
 }

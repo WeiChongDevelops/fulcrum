@@ -13,14 +13,12 @@ import { Button } from "@/components-v2/ui/button.tsx";
 
 interface SettingsV2Props {
   publicUserData: PublicUserData;
-  navMenuOpen: boolean;
-  toggleNavMenu: () => void;
 }
 
 /**
  * The root component for the settings page.
  */
-export default function SettingsV2({ publicUserData, navMenuOpen, toggleNavMenu }: SettingsV2Props) {
+export default function SettingsV2({ publicUserData }: SettingsV2Props) {
   const [settingsFormVisibility, setSettingsFormVisibility] = useState<SettingsFormVisibility>({
     typeDeleteMyExpensesForm: false,
     typeDeleteMyBudgetForm: false,
@@ -43,7 +41,7 @@ export default function SettingsV2({ publicUserData, navMenuOpen, toggleNavMenu 
 
   return (
     <div className={"flex flex-col h-screen"}>
-      <SettingsHeaderV2 navMenuOpen={navMenuOpen} toggleNavMenu={toggleNavMenu} publicUserData={publicUserData} />
+      <SettingsHeaderV2 publicUserData={publicUserData} />
       <div className={"flex flex-col justify-start items-center w-full h-[94%] relative pt-8"}>
         <div
           className={`px-8 elementsBelowPopUpForm
