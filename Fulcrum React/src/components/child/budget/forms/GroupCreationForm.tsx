@@ -90,7 +90,7 @@ export default function GroupCreationForm({ setBudgetFormVisibility, highestSort
           required
         />
 
-        <GroupColourSelector />
+        <GroupColourSelector setFormData={setFormData} />
 
         <FulcrumButton displayText="Add New Category Group" />
       </form>

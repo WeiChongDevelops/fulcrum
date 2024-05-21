@@ -39,22 +39,22 @@ export const LocationContext = createContext<Location | null>(null);
 // SELECTOR CONTENT ARRAYS //
 
 export const groupColourArray = [
-  "#fbb39a",
-  "#fbdee0",
-  "#f8b2bc",
-  "#f1afa1",
-  "#fbf5ab",
-  "#e6eda0",
-  "#9fd5be",
-  "#c3e6df",
-  "#9dc7b9",
-  "#acbfa1",
-  "#c6e2ba",
-  "#a6c7ea",
-  "#7c86bf",
-  "#b2b4da",
-  "#dfcde3",
-  "#ceb4d9",
+  "#fee2e2",
+  "#ffedd5",
+  "#fef3c7",
+  "#fef9c3",
+  "#ecfccb",
+  "#dcfce7",
+  "#d1fae5",
+  "#ccfbf1",
+  "#cffafe",
+  "#e0f2fe",
+  "#dbeafe",
+  "#e0e7ff",
+  "#ede9fe",
+  "#f3e8ff",
+  "#fae8ff",
+  "#e3e3e3",
 ];
 
 export const categoryIconArray = [
@@ -304,7 +304,7 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
 // SORTING FUNCTIONS //
 
 /**
- * Sorts group items, placing the default category group at the end.
+ * Sorts group items based on custom indexing, placing the default category group at the end.
  * @param a - The first group item for comparison.
  * @param b - The second group item for comparison.
  * @returns Sorting order value.
@@ -433,15 +433,19 @@ const dot = (color = "transparent") => ({
 export const colourStyles = {
   control: (styles: any) => ({
     ...styles,
-    fontWeight: "bold",
+    fontSize: 12,
+    fontWeight: "medium",
     backgroundColor: "white",
     maxHeight: "0.5rem",
+    borderRadius: "calc(var(--radius) - 2px)",
+    borderWidth: "0.5px",
   }),
   option: (styles: any, { data }: any) => {
     return {
       ...styles,
       color: data.colour,
-      fontWeight: "bold",
+      fontSize: 12,
+      fontWeight: "medium",
       filter: "brightness(65%)",
     };
   },
@@ -451,6 +455,7 @@ export const colourStyles = {
     ...styles,
     ...dot(data.colour),
   }),
+  valueContainer: (styles: any) => ({ ...styles, padding: 0, margin: 0 }),
 };
 
 /**

@@ -189,7 +189,6 @@
   display: grid;
   grid-template-columns: repeat(8, minmax(70px, 1fr));
   gap: 5px;
-  padding: 15px;
 }
 
 .group-colour-selectable-container {

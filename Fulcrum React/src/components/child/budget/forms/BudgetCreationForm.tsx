@@ -29,8 +29,8 @@ import {
 interface BudgetCreationFormProps {
   groupArray: GroupItemEntity[];
   groupNameOfNewItem: string;
-  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
   currencySymbol: string;
+  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
 }
 
 /**
@@ -39,8 +39,8 @@ interface BudgetCreationFormProps {
 export default function BudgetCreationForm({
   groupArray,
   groupNameOfNewItem,
-  setBudgetFormVisibility,
   currencySymbol,
+  setBudgetFormVisibility,
 }: BudgetCreationFormProps) {
   const [formData, setFormData] = useState<BudgetCreationFormData>({
     category: "",

@@ -7,6 +7,7 @@ import Loader from "@/components/child/other/Loader.tsx";
 import {
   getCurrencySymbol,
   getGroupBudgetTotal,
+  getHighestGroupSortIndex,
   getTotalAmountBudgeted,
   isCurrentMonth,
   LocationContext,
@@ -42,6 +43,9 @@ import {
   DrawerTrigger,
 } from "@/components-v2/ui/drawer.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
+import UpdateGroupFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateGroupFormV2.tsx";
+import CreateGroupFormV2 from "@/components-v2/subcomponents/budget/forms/CreateGroupFormV2.tsx";
+import Playground from "@/components-v2/subcomponents/budget/Playground.tsx";
 
 interface BudgetV2Props {
   publicUserData: PublicUserData;
@@ -121,10 +125,23 @@ export default function BudgetV2({ publicUserData, budgetArray, expenseArray, gr
 
     if (active.id === over?.id) return;
 
-    setLocalisedGroupArray((prevLocalisedGroupArray) => {
-      const reorderedArray = arrayMove(prevLocalisedGroupArray, getIndexOf(active.id), getIndexOf(over!.id));
+    // setLocalisedGroupArray((prevLocalisedGroupArray) => {
+    //   const reorderedArray = arrayMove(prevLocalisedGroupArray, getIndexOf(active.id), getIndexOf(over!.id));
+    //
+    //   return reorderedArray.map((groupItem, index) => ({ ...groupItem, id: index + 1 }));
+    // });
+    // setTimeout(() => {
+    //   setLocalisedGroupArray((prevLocalisedGroupArray) => {
+    //     const oldIndex = getIndexOf(active.id);
+    //     const newIndex = getIndexOf(over!.id);
+    //     return arrayMove(prevLocalisedGroupArray, oldIndex, newIndex);
+    //   });
+    // }, 100);
 
-      return reorderedArray.map((groupItem, index) => ({ ...groupItem, id: index + 1 }));
+    setLocalisedGroupArray((prevLocalisedGroupArray) => {
+      const oldIndex = getIndexOf(active.id);
+      const newIndex = getIndexOf(over!.id);
+      return arrayMove(prevLocalisedGroupArray, oldIndex, newIndex);
     });
   };
 
@@ -136,16 +153,19 @@ export default function BudgetV2({ publicUserData, budgetArray, expenseArray, gr
     } else {
       reorderGroups(localisedGroupArray);
     }
+    console.log(localisedGroupArray);
   }, [localisedGroupArray]);
 
   const [budgetLayoutIsSideBySide, setBudgetLayoutIsSideBySide] = useState(false);
 
   useEffect(() => {
     const updateBudgetLayout = () => {
-      if (!!budgetContainer.current) {
-        const containerWidth = budgetContainer.current.getBoundingClientRect().width;
-        setBudgetLayoutIsSideBySide(containerWidth > 700);
-      }
+      setTimeout(() => {
+        if (!!budgetContainer.current) {
+          const containerWidth = budgetContainer.current.getBoundingClientRect().width;
+          setBudgetLayoutIsSideBySide(containerWidth > 700);
+        }
+      }, 300);
     };
     updateBudgetLayout();
     window.addEventListener("resize", updateBudgetLayout);
@@ -178,13 +198,9 @@ export default function BudgetV2({ publicUserData, budgetArray, expenseArray, gr
         setLocalisedGroupArray={setLocalisedGroupArray}
         currencySymbol={getCurrencySymbol(publicUserData.currency)}
       />
-      <div className={"transition-all"} ref={budgetContainer}>
-        {/*<div className={"grid pt-[6vh] gap-4 px-5 2xl:px-7"}>*/}
-        <div className={"grid pt-[6vh] gap-4 px-6  ml-[15px]"}>
-          <div
-            className="budget-v2-upper-content grid w-full gap-6 mt-6"
-            style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}
-          >
+      <div className={"transition-all mt-[5.5vh] min-h-screen "} ref={budgetContainer}>
+        <div className={"grid gap-4 pl-3 pr-5 ml-[15px]"}>
+          <div className="grid w-full gap-6" style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}>
             <div className={"relative z-10 bg-slate-200 rounded-xl"}>
               <FulcrumAnimationV2
                 navMenuOpen={navMenuOpen}
@@ -194,9 +210,79 @@ export default function BudgetV2({ publicUserData, budgetArray, expenseArray, gr
             </div>
             <div className="flex flex-row justify-center items-center relative gap-2 bg-violet-100 rounded-xl font-bold h-96 w-full">
               {/*<Skeleton className="size-[200px] rounded-full" />*/}
-              <p className={"absolute top-5 left-8 z-20"}>Budget Distribution by Category</p>
+              <p className={"absolute top-5 left-7"}>Budget Distribution by Category</p>
               <div className={"relative h-full w-[34rem] md:w-[30rem] pt-4"}>
                 <BudgetPieChart budgetArray={budgetArray} />
+              </div>
+              <div className={"absolute top-3 right-3"}>
+                <Drawer>
+                  <DrawerTrigger asChild>
+                    <Button variant="default" className={"text-xs px-2.5"}>
+                      Details
+                    </Button>
+                  </DrawerTrigger>
+                  <DrawerContent>
+                    <div className="mx-auto w-full max-w-sm">
+                      <DrawerHeader>
+                        <DrawerTitle>Budget Distribution by Group</DrawerTitle>
+                        <DrawerDescription>See your budget distribution by category groups.</DrawerDescription>
+                      </DrawerHeader>
+                      <div className="p-4 pb-0">
+                        <div className="flex items-center justify-center space-x-2">
+                          <div className="flex-1 text-center">
+                            {/*<div className="text-7xl font-bold tracking-tighter">Goal</div>*/}
+                            {/*<div className="text-[0.70rem] uppercase text-muted-foreground">Calories/day</div>*/}
+                            <div className={"flex flex-row justify-center items-center mb-6"}>
+                              <div
+                                className={"flex flex-col justify-center items-start gap-4 mr-[8%] max-[1800px]:mr-[12%]"}
+                              >
+                                {/*<Skeleton className="w-40 h-8" />*/}
+                                {/*<Skeleton className="w-32 h-6" />*/}
+                                {/*<Skeleton className="w-32 h-6" />*/}
+                                {/*<Skeleton className="w-32 h-6" />*/}
+                                {/*<Skeleton className="w-32 h-6" />*/}
+                                {/*<Skeleton className="w-32 h-6" />*/}
+                                <div>
+                                  {groupArray
+                                    .sort((a, b) =>
+                                      getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === a.group)) <
+                                      getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === b.group))
+                                        ? 1
+                                        : -1,
+                                    )
+                                    .map((groupItem, index) => (
+                                      // {groupArray.sort((a,b) => ((getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === a.group))) > (getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === b.group))) ? 1 : -1)).map((groupItem, index) => (
+                                      <div
+                                        className={"grid text-sm font-bold"}
+                                        style={{ gridTemplateColumns: "1fr 1fr" }}
+                                        key={index}
+                                      >
+                                        <div className={"flex flex-row justify-start items-center gap-2 text-left"}>
+                                          <div
+                                            className={"rounded-[50%] size-2 brightness-90"}
+                                            style={{ backgroundColor: groupItem.colour }}
+                                          ></div>
+                                          <p>{groupItem.group}</p>
+                                        </div>
+                                        <div
+                                          className={"text-right"}
+                                        >{`${((getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === groupItem.group)) / budgetTotal) * 100).toFixed(0)}%`}</div>
+                                      </div>
+                                    ))}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <DrawerFooter>
+                        <DrawerClose asChild>
+                          <Button>Close</Button>
+                        </DrawerClose>
+                      </DrawerFooter>
+                    </div>
+                  </DrawerContent>
+                </Drawer>
               </div>
             </div>
           </div>
@@ -208,90 +294,39 @@ export default function BudgetV2({ publicUserData, budgetArray, expenseArray, gr
             modifiers={[restrictToVerticalAxis]}
           >
             <div className="flex flex-col w-full gap-4">
-              <AddNewGroupButton
-                setBudgetFormVisibility={setBudgetFormVisibility}
-                isDarkMode={publicUserData.darkModeEnabled}
+              <CreateGroupFormV2
+                publicUserData={publicUserData}
+                highestSortIndex={getHighestGroupSortIndex(groupArray)}
+                setLocalisedGroupArray={setLocalisedGroupArray}
               />
+
               <SortableContext items={localisedGroupArray} strategy={verticalListSortingStrategy}>
-                {localisedGroupArray.map((group, index) => (
-                  <GroupV2
-                    group={group}
-                    setOldBudgetBeingEdited={setOldBudgetBeingEdited}
-                    budgetArray={budgetArray}
-                    setBudgetFormVisibility={setBudgetFormVisibility}
-                    setBudgetModalVisibility={setBudgetModalVisibility}
-                    perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-                    groupNameOfNewItem={groupNameOfNewItem}
-                    setGroupNameOfNewItem={setGroupNameOfNewItem}
-                    publicUserData={publicUserData}
-                    setCategoryToDelete={setCategoryToDelete}
-                    setGroupToDelete={setGroupToDelete}
-                    setOldGroupBeingEdited={setOldGroupBeingEdited}
-                    key={index}
-                  />
-                ))}
+                {!!localisedGroupArray &&
+                  localisedGroupArray.map((group) => (
+                    <GroupV2
+                      group={group}
+                      groupArray={groupArray}
+                      setOldBudgetBeingEdited={setOldBudgetBeingEdited}
+                      budgetArray={budgetArray}
+                      setBudgetFormVisibility={setBudgetFormVisibility}
+                      setBudgetModalVisibility={setBudgetModalVisibility}
+                      perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
+                      groupNameOfNewItem={groupNameOfNewItem}
+                      setGroupNameOfNewItem={setGroupNameOfNewItem}
+                      publicUserData={publicUserData}
+                      setCategoryToDelete={setCategoryToDelete}
+                      setGroupToDelete={setGroupToDelete}
+                      setOldGroupBeingEdited={setOldGroupBeingEdited}
+                      setLocalisedGroupArray={setLocalisedGroupArray}
+                      oldGroupBeingEdited={oldGroupBeingEdited}
+                      key={group.id}
+                    />
+                  ))}
               </SortableContext>
             </div>
           </DndContext>
 
-          <Drawer>
-            <DrawerTrigger asChild>
-              <Button variant="default" className={"mb-6"}>
-                Open Drawer
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent>
-              <div className="mx-auto w-full max-w-sm">
-                <DrawerHeader>
-                  <DrawerTitle>Budget Distribution by Group</DrawerTitle>
-                  <DrawerDescription>See your budget distribution by category groups.</DrawerDescription>
-                </DrawerHeader>
-                <div className="p-4 pb-0">
-                  <div className="flex items-center justify-center space-x-2">
-                    <div className="flex-1 text-center">
-                      {/*<div className="text-7xl font-bold tracking-tighter">Goal</div>*/}
-                      {/*<div className="text-[0.70rem] uppercase text-muted-foreground">Calories/day</div>*/}
-                      <div className={"flex flex-row justify-center items-center mb-6"}>
-                        <div className={"flex flex-col justify-center items-start gap-4 mr-[8%] max-[1800px]:mr-[12%]"}>
-                          {/*<Skeleton className="w-40 h-8" />*/}
-                          {/*<Skeleton className="w-32 h-6" />*/}
-                          {/*<Skeleton className="w-32 h-6" />*/}
-                          {/*<Skeleton className="w-32 h-6" />*/}
-                          {/*<Skeleton className="w-32 h-6" />*/}
-                          {/*<Skeleton className="w-32 h-6" />*/}
-                          <div>
-                            {groupArray.map((groupItem, index) => (
-                              <div
-                                className={"grid text-sm font-bold"}
-                                style={{ gridTemplateColumns: "1fr 1fr" }}
-                                key={index}
-                              >
-                                <div className={"flex flex-row justify-start items-center gap-2 text-left"}>
-                                  <div
-                                    className={"rounded-[50%] size-2 brightness-90"}
-                                    style={{ backgroundColor: groupItem.colour }}
-                                  ></div>
-                                  <p>{groupItem.group}</p>
-                                </div>
-                                <div
-                                  className={"text-right"}
-                                >{`${((getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === groupItem.group)) / budgetTotal) * 100).toFixed(0)}%`}</div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <DrawerFooter>
-                  <DrawerClose asChild>
-                    <Button>Close</Button>
-                  </DrawerClose>
-                </DrawerFooter>
-              </div>
-            </DrawerContent>
-          </Drawer>
+          {/*<Playground />*/}
         </div>
       </div>
     </div>

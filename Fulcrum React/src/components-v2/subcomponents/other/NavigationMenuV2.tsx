@@ -77,8 +77,8 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
             <div className={"flex flex-row w-full justify-between items-center ml-1.5 mt-2.5"}>
               <img
                 src={`/static/assets-v2/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`}
-                className={`transition-all ${navMenuOpen ? "w-32" : "w-0"}`}
-                onClick={() => (window.location.href = "/app/budget")}
+                className={`transition-all ease-out ${navMenuOpen ? "w-32" : "w-0"}`}
+                onClick={() => (window.location.href = "/home/about")}
                 alt="Fulcrum logo"
               />
               <Button variant={"ghost"} onClick={toggleNavMenu} className={"px-3 py-0"}>

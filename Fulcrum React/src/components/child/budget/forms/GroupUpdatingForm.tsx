@@ -26,7 +26,11 @@ interface GroupUpdatingFormProps {
  * A form for updating an existing budget category group.
  */
 export default function GroupUpdatingForm({
-  oldGroupBeingEdited,
+  oldGroupBeingEdited = {
+    oldColour: "#fff",
+    oldGroupName: "Miscellaneous",
+    oldId: 0,
+  },
   setBudgetFormVisibility,
   setLocalisedGroupArray,
 }: GroupUpdatingFormProps) {

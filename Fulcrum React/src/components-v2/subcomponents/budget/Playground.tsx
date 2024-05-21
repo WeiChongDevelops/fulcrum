@@ -37,7 +37,9 @@ export function PlaygroundGroup({ groupItem }: PlaygroundGroupProps) {
   }
 
   const id = groupItem.id;
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ animateLayoutChanges, id });
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id,
+  });
 
   const style = {
     transition,
@@ -53,12 +55,12 @@ export function PlaygroundGroup({ groupItem }: PlaygroundGroupProps) {
 
   return (
     <div
-      className={"flex flex-row justify-around items-center bg-fuchsia-300 rounded-lg w-[90vw] h-20 focus:outline"}
+      className={"flex flex-row justify-around items-center text-white font-bold rounded-lg w-[90vw] h-20 focus:outline"}
       key={groupItem.id}
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      style={style}
+      style={{ ...style, backgroundColor: groupItem.colour, filter: "saturate(35%)" }}
     >
       <p>{groupItem.group}</p>
       <p>Index: {groupItem.id}</p>

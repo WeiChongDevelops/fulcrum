@@ -249,7 +249,7 @@ export async function handleGroupCreation(newGroupItem: GroupItemEntity): Promis
     const response = await apiClient.post("/createGroup", {
       group: newGroupItem.group,
       colour: newGroupItem.colour,
-      sortIndex: newGroupItem.id,
+      id: newGroupItem.id,
     });
     console.log(response.data);
   } catch (error: unknown) {

@@ -10,13 +10,12 @@ export default function useReorderGroups() {
 
   return useMutation({
     mutationFn: (reorderedGroupArray: GroupItemEntity[]) => {
-      console.log({ updated: reorderedGroupArray });
       return handleGroupReorder(reorderedGroupArray);
     },
-    // onMutate: (reorderedGroupArray: GroupItemEntity[]) => {
-    //   query.cancelQueries({ queryKey: ["groupArray", email] });
-    //   query.setQueryData(["groupArray", email], reorderedGroupArray);
-    // },
+    onMutate: (reorderedGroupArray: GroupItemEntity[]) => {
+      query.cancelQueries({ queryKey: ["groupArray", email] });
+      query.setQueryData(["groupArray", email], reorderedGroupArray);
+    },
     onSuccess: () => {
       query.invalidateQueries({ queryKey: ["groupArray", email] });
     },
