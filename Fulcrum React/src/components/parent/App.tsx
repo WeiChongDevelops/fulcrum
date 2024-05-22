@@ -177,6 +177,7 @@ export default function App() {
                     budgetArray={budgetArray}
                     groupArray={groupArray}
                     navMenuOpen={navMenuOpen}
+                    categoryDataMap={categoryDataMap}
                   />
                 }
               />

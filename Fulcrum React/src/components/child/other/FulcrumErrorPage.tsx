@@ -11,7 +11,7 @@ export default function FulcrumErrorPage({ errors }: FulcrumErrorPage) {
           errors.map((error, key) => (
             <div key={key}>
               <p className={"text-red-500"}>{error.message}</p>
-              <p className={"text-gray-500 text-xs max-w-[60vw]"}>{error.stack}</p>
+              <p className={"text-gray-500 text-xs max-h-64"}>{error.stack}</p>
             </div>
           ))}
       </div>

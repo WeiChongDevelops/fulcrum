@@ -119,8 +119,8 @@ export default function GroupV2({
           <AccordionTrigger className={"px-8 select-none"}>
             <p className={"font-bold text-lg"}>{group.group}</p>
           </AccordionTrigger>
-          <AccordionContent className={"py-4 pl-6 pr-2"}>
-            <div className={"flex flex-row gap-4 justify-start items-center flex-wrap"}>
+          <AccordionContent className={"pt-3 pb-6 pl-6 pr-2"}>
+            <div className={"flex flex-row gap-5 justify-start items-center flex-wrap"}>
               {budgetArray.length > 0 &&
                 budgetArray
                   .filter((budgetItem) => budgetItem.group === group.group)

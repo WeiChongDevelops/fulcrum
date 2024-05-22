@@ -88,28 +88,54 @@ export default function CreateGroupFormV2({
       <SheetContent>
         <SheetHeader>
           <SheetTitle>New Category Group</SheetTitle>
-          <SheetDescription></SheetDescription>
-          <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4 mb-auto">
-            <Label htmlFor="group">Group Name</Label>
-            <Input
-              type="text"
-              onChange={handleInputChange}
-              value={capitaliseFirstLetter(formData.group)}
-              name="group"
-              id="group"
-              className="mb-3"
-              maxLength={22}
-              autoComplete={"off"}
-              required
-            />
+          <SheetDescription>Create a new group to organise your budget categories.</SheetDescription>
+          <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+            <div className={"grid grid-cols-4 items-center gap-5"}>
+              <Label htmlFor="group" className={"text-right"}>
+                Name
+              </Label>
+              <Input
+                type="text"
+                onChange={handleInputChange}
+                value={capitaliseFirstLetter(formData.group)}
+                name="group"
+                id="group"
+                className="col-span-3"
+                maxLength={22}
+                autoComplete={"off"}
+                required
+              />
+            </div>
 
-            <Label htmlFor="group" className={"mt-4"}>
-              Colour
-            </Label>
-            <GroupColourSelector oldColour={""} setFormData={setFormData} />
-
-            <FulcrumButton displayText="Create Group" />
+            <div className={"grid grid-cols-4 items-center gap-5 my-3"}>
+              <Label htmlFor="group" className={"text-right"}>
+                Colour
+              </Label>
+              <GroupColourSelector setFormData={setFormData} className={"col-span-3"} />
+            </div>
+            <Button>Create Group</Button>
           </form>
+          {/*<form onSubmit={handleSubmit} className="flex flex-col items-center gap-4 mb-auto">*/}
+          {/*  <Label htmlFor="group">Group Name</Label>*/}
+          {/*  <Input*/}
+          {/*    type="text"*/}
+          {/*    onChange={handleInputChange}*/}
+          {/*    value={capitaliseFirstLetter(formData.group)}*/}
+          {/*    name="group"*/}
+          {/*    id="group"*/}
+          {/*    className="mb-3"*/}
+          {/*    maxLength={22}*/}
+          {/*    autoComplete={"off"}*/}
+          {/*    required*/}
+          {/*  />*/}
+
+          {/*  <Label htmlFor="group" className={"mt-4"}>*/}
+          {/*    Colour*/}
+          {/*  </Label>*/}
+          {/*  <GroupColourSelector oldColour={""} setFormData={setFormData} />*/}
+
+          {/*  <FulcrumButton displayText="Create Group" />*/}
+          {/*</form>*/}
         </SheetHeader>
       </SheetContent>
     </Sheet>
