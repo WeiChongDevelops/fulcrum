@@ -64,7 +64,7 @@ export default function BudgetDataBento({ budgetArray, groupArray, budgetTotal, 
     <div className="flex flex-row justify-center items-center relative gap-2 bg-violet-100 rounded-xl font-bold h-96 w-full">
       {/*<p className={"absolute top-5 left-7"}>{`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`}</p>*/}
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-[32ch] absolute top-3 left-4 z-50 bg-primary-foreground text-xs font-medium">
+        <SelectTrigger className="w-[32ch] absolute top-3 left-4 z-30 bg-primary-foreground text-xs font-medium">
           <SelectValue placeholder={`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`} />
         </SelectTrigger>
         <SelectContent>

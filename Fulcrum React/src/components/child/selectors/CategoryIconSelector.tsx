@@ -21,7 +21,7 @@ import {
   Train,
   Orange,
   ShoppingCart,
-  Asterisk,
+  FireExtinguisher,
   BowlFood,
   Barbell,
   Pill,
@@ -31,13 +31,21 @@ import {
   Television,
   ForkKnife,
   WifiHigh,
+  CoinVertical,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils.ts";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { BudgetCreationFormData, BudgetUpdatingFormData } from "@/utility/types.ts";
+
+interface CategoryIconSelectorProps {
+  setFormData: Dispatch<SetStateAction<BudgetCreationFormData>> | Dispatch<SetStateAction<BudgetUpdatingFormData>>;
+  className: string;
+}
 
 /**
  * A visual selector for the user to choose an icon for a budget category.
  */
-export default function CategoryIconSelector({ className }: { className: string }) {
+export default function CategoryIconSelector({ setFormData, className }: CategoryIconSelectorProps) {
   const iconComponents = [
     HandHeart,
     Drop,
@@ -59,7 +67,7 @@ export default function CategoryIconSelector({ className }: { className: string 
     Train,
     Orange,
     ShoppingCart,
-    Asterisk,
+    FireExtinguisher,
     BowlFood,
     Barbell,
     Pill,
@@ -70,10 +78,35 @@ export default function CategoryIconSelector({ className }: { className: string 
     ForkKnife,
     WifiHigh,
   ];
+
+  const DEFAULT_CATEGORY_ICON = CoinVertical;
+
+  const [isActive, setIsActive] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState(DEFAULT_CATEGORY_ICON.displayName);
+  const selectorRef = useRef<HTMLDivElement>(null);
+
+  const handleIconSelection = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setSelectedIcon(e.currentTarget.getAttribute("data-value")!);
+    setFormData((prevFormData: any) => ({ ...prevFormData, iconPath: e.currentTarget.getAttribute("data-value")! }));
+    setIsActive(true);
+  };
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (!!selectorRef.current && !selectorRef.current.contains(e.target as Node)) {
+        setIsActive(false);
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, []);
+
   return (
     <div
+      ref={selectorRef}
       className={cn(
-        `grid grid-cols-6 place-items-center gap-4 outline outline-1 shadow outline-gray-200 p-4 rounded-lg`,
+        `grid grid-cols-6 max-[1130px]:grid-cols-5 place-items-center gap-5 outline outline-1 shadow outline-gray-200 p-4 rounded-lg ${isActive ? "outline-black" : "outline-gray-200"}`,
         className,
       )}
     >
@@ -86,7 +119,14 @@ export default function CategoryIconSelector({ className }: { className: string 
       {/*})}*/}
 
       {iconComponents.map((IconComponent, index) => (
-        <IconComponent key={index} size={32} weight={"regular"} data-value={IconComponent} />
+        <button
+          data-value={IconComponent.displayName}
+          key={index}
+          onClick={handleIconSelection}
+          className={`flex justify-center items-center size-12 p-1.5 transition-all duration-100 ease-out rounded-full outline-primary outline-2 ${selectedIcon === IconComponent.displayName && "outline"}`}
+        >
+          <IconComponent size={28} weight={"regular"} />
+        </button>
       ))}
     </div>
   );

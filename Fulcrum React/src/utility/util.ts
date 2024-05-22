@@ -22,13 +22,47 @@ import {
   SetFormVisibility,
   SetModalVisibility,
 } from "./types.ts";
+import {
+  HandHeart,
+  Drop,
+  PiggyBank,
+  Martini,
+  CarProfile,
+  Money,
+  Lightning,
+  Gift,
+  Heartbeat,
+  HouseLine,
+  FilmStrip,
+  MusicNotes,
+  PawPrint,
+  GasPump,
+  AirplaneTilt,
+  TShirt,
+  Wrench,
+  Train,
+  Orange,
+  ShoppingCart,
+  FireExtinguisher,
+  BowlFood,
+  Barbell,
+  Pill,
+  Users,
+  Devices,
+  Volleyball,
+  Television,
+  ForkKnife,
+  WifiHigh,
+  Coin,
+} from "@phosphor-icons/react";
 import { Location } from "react-router-dom";
 
 // GLOBAL VARIABLES //
 
 export const expenseStartDate = new Date("2020-01-01T00:00:00Z");
 export const DEFAULT_GROUP_COLOUR = "#3f4240";
-export const DEFAULT_CATEGORY_ICON = "category-default-icon.svg";
+// export const DEFAULT_CATEGORY_ICON = "category-default-icon.svg";
+export const DEFAULT_CATEGORY_ICON = "Coin";
 export const DEFAULT_CATEGORY_GROUP = "Miscellaneous";
 
 // CONTEXT //
@@ -521,6 +555,40 @@ export const queryTypeOptions = [
     colour: "black",
   },
 ];
+
+export const categoryIconComponentMap: { [key: string]: React.FC } = {
+  HandHeart,
+  Drop,
+  PiggyBank,
+  Martini,
+  CarProfile,
+  Money,
+  Lightning,
+  Gift,
+  Heartbeat,
+  HouseLine,
+  FilmStrip,
+  MusicNotes,
+  PawPrint,
+  GasPump,
+  AirplaneTilt,
+  TShirt,
+  Wrench,
+  Train,
+  Orange,
+  ShoppingCart,
+  FireExtinguisher,
+  BowlFood,
+  Barbell,
+  Pill,
+  Users,
+  Devices,
+  Volleyball,
+  Television,
+  ForkKnife,
+  WifiHigh,
+  Coin,
+};
 
 // DYNAMIC SIZING FUNCTIONS //
 

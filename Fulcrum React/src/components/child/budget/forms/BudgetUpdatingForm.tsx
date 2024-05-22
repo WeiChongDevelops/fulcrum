@@ -41,7 +41,6 @@ export default function BudgetUpdatingForm({
   oldBudgetBeingEdited,
   setBudgetFormVisibility,
   currencySymbol,
-
   setBudgetModalVisibility,
 }: BudgetUpdatingFormProps) {
   const [formData, setFormData] = useState<BudgetUpdatingFormData>({

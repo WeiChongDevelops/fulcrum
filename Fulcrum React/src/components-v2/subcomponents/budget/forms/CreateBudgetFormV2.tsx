@@ -1,4 +1,12 @@
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components-v2/ui/sheet.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
@@ -14,6 +22,7 @@ import {
   getHighestGroupSortIndex,
   getRandomGroupColour,
   groupListAsOptions,
+  groupSort,
   handleInputChangeOnFormWithAmount,
   LocationContext,
 } from "@/utility/util.ts";
@@ -103,12 +112,26 @@ export default function CreateBudgetFormV2({ groupArray, groupNameOfNewItem, cur
     });
   }
 
+  useEffect(() => {
+    setFormData({
+      category: "",
+      amount: 0,
+      iconPath: "",
+      group: groupNameOfNewItem,
+    });
+  }, [formIsOpen]);
+
   function handleGroupInputChange(e: any) {
     setFormData((currentFormData: BudgetCreationFormData) => ({
       ...currentFormData,
       group: e.value,
     }));
   }
+
+  const handleGroupSelectChange = (group: string) => {
+    setFormData((prevFormData) => ({ ...prevFormData, group: group }));
+  };
+
   return (
     <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>
       <SheetTrigger>
@@ -123,145 +146,70 @@ export default function CreateBudgetFormV2({ groupArray, groupNameOfNewItem, cur
       <SheetContent>
         <SheetHeader>
           <SheetTitle>New Budget Item</SheetTitle>
-          <SheetDescription></SheetDescription>
-          <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-            <div className={"grid grid-cols-4 items-center gap-5"}>
-              <Label htmlFor="category" className={"text-right"}>
-                Category
-              </Label>
-              <Input
-                type="text"
-                className={"col-span-3"}
-                onChange={handleInputChange}
-                value={capitaliseFirstLetter(formData.category)}
-                name="category"
-                id="category"
-                maxLength={18}
-                autoComplete={"off"}
-                required
-              />
-            </div>
-
-            <div className={"grid grid-cols-4 items-center gap-5 relative"}>
-              <Label htmlFor="amount" className={"text-right"}>
-                Amount
-              </Label>
-              <b className="absolute inset-y-0 left-[6.4rem] flex items-center text-black">{currencySymbol}</b>
-              <Input
-                type="text"
-                className={"col-span-3"}
-                onChange={handleInputChange}
-                value={formData.amount === 0 ? "" : formData.amount}
-                name="amount"
-                id="amount"
-                autoComplete={"off"}
-                required
-              />
-            </div>
-
-            <div className={"grid grid-cols-4 items-center gap-5"}>
-              <Label htmlFor="group" className={"text-right"}>
-                Group
-              </Label>
-              <Select>
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Theme" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className={"grid grid-cols-4 items-center gap-5"}>
-              <Label htmlFor="group" className={"text-right"}>
-                Icon
-              </Label>
-              <CategoryIconSelector className={"col-span-3"} />
-              <input type="hidden" id="iconPath" name="iconPath" value="test" />
-            </div>
-            <Button>Insert Budget</Button>
-          </form>
-          {/*<form onSubmit={handleSubmit} className="flex flex-col gap-2 justify-start items-end mb-auto ">*/}
-          {/*  <div className={"flex flex-row items-center gap-6"}>*/}
-          {/*    <Label htmlFor="category">Category</Label>*/}
-          {/*    <Input*/}
-          {/*      type="text"*/}
-          {/*      onChange={handleInputChange}*/}
-          {/*      value={capitaliseFirstLetter(formData.category)}*/}
-          {/*      name="category"*/}
-          {/*      id="category"*/}
-          {/*      maxLength={18}*/}
-          {/*      autoComplete={"off"}*/}
-          {/*      required*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*  <div className={"flex flex-row items-center gap-6 relative "}>*/}
-          {/*    <Label htmlFor="amount">Amount</Label>*/}
-          {/*    <b className="absolute left-[5.5rem] text-black">{currencySymbol}</b>*/}
-          {/*    <Input*/}
-          {/*      type="text"*/}
-          {/*      onChange={handleInputChange}*/}
-          {/*      value={formData.amount === 0 ? "" : formData.amount}*/}
-          {/*      name="amount"*/}
-          {/*      id="amount"*/}
-          {/*      className="text-center"*/}
-          {/*      autoComplete={"off"}*/}
-          {/*      required*/}
-          {/*    />*/}
-          {/*  </div>*/}
-
-          {/*  <div className={"flex flex-row items-center gap-6 relative "}>*/}
-          {/*    <Label htmlFor="group">Group</Label>*/}
-          {/*    <Select>*/}
-          {/*      <SelectTrigger className="w-[13.75rem]">*/}
-          {/*        <SelectValue placeholder="Theme" />*/}
-          {/*      </SelectTrigger>*/}
-          {/*      <SelectContent>*/}
-          {/*        <SelectItem value="light">Light</SelectItem>*/}
-          {/*        <SelectItem value="dark">Dark</SelectItem>*/}
-          {/*        <SelectItem value="system">System</SelectItem>*/}
-          {/*      </SelectContent>*/}
-          {/*    </Select>*/}
-          {/*  </div>*/}
-
-          {/*  <CategoryIconSelector />*/}
-          {/*  <input type="hidden" id="iconPath" name="iconPath" value="test" />*/}
-          {/*  <FulcrumButton displayText="Insert Budget" />*/}
-          {/*</form>*/}
+          <SheetDescription>Create a new budgeting category.</SheetDescription>
         </SheetHeader>
-      </SheetContent>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4">
+          <div className={"grid grid-cols-4 items-center gap-5"}>
+            <Label htmlFor="category" className={"text-right"}>
+              Category
+            </Label>
+            <Input
+              type="text"
+              className={"col-span-3"}
+              onChange={handleInputChange}
+              value={capitaliseFirstLetter(formData.category)}
+              name="category"
+              id="category"
+              maxLength={18}
+              autoComplete={"off"}
+              required
+            />
+          </div>
 
-      {/*<CreatableSelect*/}
-      {/*  className={"shadow rounded-md "}*/}
-      {/*  id="group"*/}
-      {/*  name="group"*/}
-      {/*  defaultValue={{*/}
-      {/*    label: groupNameOfNewItem,*/}
-      {/*    value: groupNameOfNewItem,*/}
-      {/*    colour: getColourOfGroup(groupNameOfNewItem, groupArray),*/}
-      {/*  }}*/}
-      {/*  options={groupListAsOptions(groupArray).map((option) => {*/}
-      {/*    return {*/}
-      {/*      label: option.label,*/}
-      {/*      value: option.value,*/}
-      {/*      colour: option.colour!!,*/}
-      {/*    };*/}
-      {/*  })}*/}
-      {/*  onChange={handleGroupInputChange}*/}
-      {/*  styles={colourStyles}*/}
-      {/*  theme={(theme) => ({*/}
-      {/*    ...theme,*/}
-      {/*    borderRadius: 0,*/}
-      {/*    colors: {*/}
-      {/*      ...theme.colors,*/}
-      {/*      primary25: "rgba(201,223,201,0.1)",*/}
-      {/*      primary: "rgba(34,237,34,0.18)",*/}
-      {/*    },*/}
-      {/*  })}*/}
-      {/*/>*/}
+          <div className={"grid grid-cols-4 items-center gap-5 relative"}>
+            <Label htmlFor="amount" className={"text-right"}>
+              Amount
+            </Label>
+            <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-black text-sm">{currencySymbol}</b>
+            <Input
+              type="text"
+              className={"col-span-3 pl-8"}
+              onChange={handleInputChange}
+              value={formData.amount === 0 ? "" : formData.amount}
+              name="amount"
+              id="amount"
+              autoComplete={"off"}
+              required
+            />
+          </div>
+
+          <div className={"grid grid-cols-4 items-center gap-5"}>
+            <Label htmlFor="group" className={"text-right"}>
+              Group
+            </Label>
+            <Select value={formData.group} onValueChange={handleGroupSelectChange}>
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder="Select..." />
+              </SelectTrigger>
+              <SelectContent>
+                {groupArray.sort(groupSort).map((groupItem, index) => (
+                  <SelectItem value={groupItem.group} key={index}>
+                    {groupItem.group}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className={"grid grid-cols-4 items-center gap-5"}>
+            <Label htmlFor="iconPath" className={"text-right"}>
+              Icon
+            </Label>
+            <CategoryIconSelector setFormData={setFormData} className={"col-span-3"} />
+          </div>
+          <Button className={"mt-2 self-end"}>Insert Budget</Button>
+        </form>
+      </SheetContent>
     </Sheet>
   );
 }

@@ -104,9 +104,9 @@ suspend fun executeExpenseDeletion(expenseId: String, call: ApplicationCall): Bo
 
 fun getDefaultGroups(uid: String, miscellaneousExists: Boolean): List<GroupCreateRequestSent> {
     val groups = mutableListOf(
-        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#fee2e2", id = 1),
-        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#d1fae5", id = 2),
-        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#dbeafe", id = 3),
+        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#d1fae5", id = 1),
+        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#dbeafe", id = 2),
+        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#fee2e2", id = 3),
         GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#cffafe", id = 4),
         GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#fef3c7", id = 5),
 //        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#9fd5be"),
@@ -127,84 +127,84 @@ fun getDefaultCategories(uid: String): List<BudgetCreateRequestSent> {
             userId = uid,
             category = "Other",
             amount = 100.00,
-            iconPath = "category-default-icon.svg",
+            iconPath = "Coin",
             group = "Miscellaneous"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Emergency Funds",
             amount = 500.00,
-            iconPath = "category-emergency-icon.svg",
+            iconPath = "FireExtinguisher",
             group = "Savings"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Drinks",
             amount = 150.00,
-            iconPath = "category-beer-icon.svg",
+            iconPath = "Martini",
             group = "Food & Drink"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Groceries",
             amount = 400.00,
-            iconPath = "category-cart-icon.svg",
+            iconPath = "ShoppingCart",
             group = "Food & Drink"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Restaurant",
             amount = 300.00,
-            iconPath = "category-utensils-icon.svg",
+            iconPath = "ForkKnife",
             group = "Food & Drink"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Rent",
             amount = 1500.00,
-            iconPath = "category-house-icon.svg",
+            iconPath = "HouseLine",
             group = "Housing"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Water",
             amount = 30.00,
-            iconPath = "category-water-icon.svg",
+            iconPath = "Drop",
             group = "Utilities"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Electricity",
             amount = 100.00,
-            iconPath = "category-electricity-icon.svg",
+            iconPath = "Lightning",
             group = "Utilities"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Internet",
             amount = 80.00,
-            iconPath = "category-wifi-icon.svg",
+            iconPath = "WifiHigh",
             group = "Utilities"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Petrol",
             amount = 200.00,
-            iconPath = "category-petrol-icon.svg",
+            iconPath = "GasPump",
             group = "Transport"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Parking",
             amount = 50.00,
-            iconPath = "category-car-icon.svg",
+            iconPath = "CarProfile",
             group = "Transport"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Public Transport",
             amount = 120.00,
-            iconPath = "category-train-icon.svg",
+            iconPath = "Train",
             group = "Transport"
         )
     )

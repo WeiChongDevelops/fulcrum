@@ -214,6 +214,6 @@
   filter: blur(15px);
 }
 
-.standard-edit-delete-button:hover > div {
+.standard-edit-delete-button:hover svg {
   transform: scale(120%);
 }

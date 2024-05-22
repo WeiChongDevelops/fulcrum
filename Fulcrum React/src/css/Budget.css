@@ -74,6 +74,12 @@
   font-weight: 600;
 }
 
+.update-budget-trigger:hover + * {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 1);
+  cursor: pointer;
+}
+
 /* ADD NEW BUDGET BUTTON */
 
 .create-budget-button {

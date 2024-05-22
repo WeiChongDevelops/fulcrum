@@ -8,7 +8,15 @@ import {
   getRandomGroupColour,
   LocationContext,
 } from "@/utility/util.ts";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components-v2/ui/sheet.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
@@ -41,6 +49,13 @@ export default function CreateGroupFormV2({
     // changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateGroupVisible", false);
     setFormIsOpen(false);
   }
+
+  useEffect(() => {
+    setFormData({
+      group: "",
+      colour: "",
+    });
+  }, [formIsOpen]);
 
   useEffect(() => {
     const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
@@ -89,54 +104,33 @@ export default function CreateGroupFormV2({
         <SheetHeader>
           <SheetTitle>New Category Group</SheetTitle>
           <SheetDescription>Create a new group to organise your budget categories.</SheetDescription>
-          <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-            <div className={"grid grid-cols-4 items-center gap-5"}>
-              <Label htmlFor="group" className={"text-right"}>
-                Name
-              </Label>
-              <Input
-                type="text"
-                onChange={handleInputChange}
-                value={capitaliseFirstLetter(formData.group)}
-                name="group"
-                id="group"
-                className="col-span-3"
-                maxLength={22}
-                autoComplete={"off"}
-                required
-              />
-            </div>
-
-            <div className={"grid grid-cols-4 items-center gap-5 my-3"}>
-              <Label htmlFor="group" className={"text-right"}>
-                Colour
-              </Label>
-              <GroupColourSelector setFormData={setFormData} className={"col-span-3"} />
-            </div>
-            <Button>Create Group</Button>
-          </form>
-          {/*<form onSubmit={handleSubmit} className="flex flex-col items-center gap-4 mb-auto">*/}
-          {/*  <Label htmlFor="group">Group Name</Label>*/}
-          {/*  <Input*/}
-          {/*    type="text"*/}
-          {/*    onChange={handleInputChange}*/}
-          {/*    value={capitaliseFirstLetter(formData.group)}*/}
-          {/*    name="group"*/}
-          {/*    id="group"*/}
-          {/*    className="mb-3"*/}
-          {/*    maxLength={22}*/}
-          {/*    autoComplete={"off"}*/}
-          {/*    required*/}
-          {/*  />*/}
-
-          {/*  <Label htmlFor="group" className={"mt-4"}>*/}
-          {/*    Colour*/}
-          {/*  </Label>*/}
-          {/*  <GroupColourSelector oldColour={""} setFormData={setFormData} />*/}
-
-          {/*  <FulcrumButton displayText="Create Group" />*/}
-          {/*</form>*/}
         </SheetHeader>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4">
+          <div className={"grid grid-cols-4 items-center gap-5"}>
+            <Label htmlFor="group" className={"text-right"}>
+              Name
+            </Label>
+            <Input
+              type="text"
+              onChange={handleInputChange}
+              value={capitaliseFirstLetter(formData.group)}
+              name="group"
+              id="group"
+              className="col-span-3"
+              maxLength={22}
+              autoComplete={"off"}
+              required
+            />
+          </div>
+
+          <div className={"grid grid-cols-4 items-center gap-5 my-3"}>
+            <Label htmlFor="group" className={"text-right"}>
+              Colour
+            </Label>
+            <GroupColourSelector setFormData={setFormData} className={"col-span-3"} />
+          </div>
+          <Button className={"mt-2 self-end"}>Create Group</Button>
+        </form>
       </SheetContent>
     </Sheet>
   );

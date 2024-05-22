@@ -46,7 +46,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
 
   return (
     <div
-      className={"fixed flex flex-col w-[14rem] h-screen overflow-x-visible z-30 transition-all duration-400 ease-out"}
+      className={"fixed flex flex-col w-[14rem] h-screen overflow-x-visible z-50 transition-all duration-400 ease-out"}
       ref={autoAnimateRef}
     >
       {/*<div className={"flex justify-start items-center h-[6vh] w-full bg-gray-700"}>*/}

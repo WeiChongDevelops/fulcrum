@@ -179,7 +179,7 @@ export default function BudgetV2({
       setTimeout(() => {
         if (!!budgetContainer.current) {
           const containerWidth = budgetContainer.current.getBoundingClientRect().width;
-          setBudgetLayoutIsSideBySide(containerWidth > 700);
+          setBudgetLayoutIsSideBySide(containerWidth > 820);
         }
       }, 500);
     };
@@ -197,7 +197,7 @@ export default function BudgetV2({
   }
 
   return (
-    <ScrollArea className="flex flex-col justify-start gap-8">
+    <div className="flex flex-col justify-start">
       <BudgetHeaderV2 publicUserData={publicUserData} totalIncome={totalIncome!} navMenuOpen={navMenuOpen} />
       <BudgetModalsAndForms
         budgetFormVisibility={budgetFormVisibility}
@@ -214,8 +214,8 @@ export default function BudgetV2({
         setLocalisedGroupArray={setLocalisedGroupArray}
         currencySymbol={getCurrencySymbol(publicUserData.currency)}
       />
-      <div className={"transition-all mt-[calc(6vh+1.5rem)] min-h-screen "} ref={budgetContainer}>
-        <div className={"grid gap-4 pl-3 pr-5 ml-[15px]"}>
+      <div className={"transition-all mt-[calc(6vh+1.2rem)] pb-8 min-h-screen "} ref={budgetContainer}>
+        <div className={"grid gap-4 px-4 ml-[15px]"}>
           <div className="grid w-full gap-6" style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}>
             <div className={"relative z-10 bg-slate-200 rounded-xl"}>
               <FulcrumAnimationV2
@@ -238,7 +238,7 @@ export default function BudgetV2({
             onDragEnd={handleDragEnd}
             modifiers={[restrictToVerticalAxis]}
           >
-            <div className="flex flex-col w-full gap-4">
+            <div className="flex flex-col w-full gap-3">
               <CreateGroupFormV2
                 publicUserData={publicUserData}
                 highestSortIndex={getHighestGroupSortIndex(groupArray)}
@@ -262,6 +262,7 @@ export default function BudgetV2({
                       setCategoryToDelete={setCategoryToDelete}
                       setGroupToDelete={setGroupToDelete}
                       setOldGroupBeingEdited={setOldGroupBeingEdited}
+                      oldBudgetBeingEdited={oldBudgetBeingEdited}
                       setLocalisedGroupArray={setLocalisedGroupArray}
                       oldGroupBeingEdited={oldGroupBeingEdited}
                       key={group.id}
@@ -272,8 +273,6 @@ export default function BudgetV2({
           </DndContext>
         </div>
       </div>
-      <ScrollBar orientation={"horizontal"} />
-      <ScrollBar orientation={"vertical"} />
-    </ScrollArea>
+    </div>
   );
 }

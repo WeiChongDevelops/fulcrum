@@ -1,5 +1,5 @@
 import "../../../css/Budget.css";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { groupColourArray } from "../../../utility/util.ts";
 import { BasicGroupData } from "@/utility/types.ts";
 import { cn } from "@/lib/utils.ts";
@@ -15,10 +15,24 @@ interface GroupColourSelectorProps {
  */
 export default function GroupColourSelector({ oldColour = "#fff", setFormData, className }: GroupColourSelectorProps) {
   const [selectedColour, setSelectedColour] = useState(oldColour);
+  const [isActive, setIsActive] = useState(false);
+  const selectorRef = useRef<HTMLDivElement>(null);
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleColourSelection = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
     setSelectedColour(e.currentTarget.getAttribute("data-value")!);
+    setIsActive(true);
   };
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (!!selectorRef.current && !selectorRef.current.contains(e.target as Node)) {
+        setIsActive(false);
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, []);
 
   useEffect(() => {
     setFormData((prevFormData) => ({ ...prevFormData, colour: selectedColour }));
@@ -26,18 +40,20 @@ export default function GroupColourSelector({ oldColour = "#fff", setFormData, c
 
   return (
     <div
+      ref={selectorRef}
       className={cn(
-        `grid grid-cols-4 place-items-center gap-4 outline outline-1 shadow outline-gray-200 p-4 rounded-lg  ${className}`,
+        `grid grid-cols-4 place-items-center gap-6 outline outline-1 transition-all duration-100 ease-out shadow p-6 rounded-lg ${isActive ? "outline-black" : "outline-gray-200"}`,
+        className,
       )}
     >
       {groupColourArray.map((colour, key) => {
         return (
           <div
             data-value={colour}
-            className={`transition-all duration-250 ease-out size-10 rounded-full origin-center hover:cursor-pointer ${selectedColour === colour && "outline outline-2 outline-offset-[3px]"}`}
+            className={`transition-all duration-250 ease-out size-10 rounded-full origin-center hover:cursor-pointer ${selectedColour === colour && "outline outline-2 outline-offset-4"}`}
             style={{ backgroundColor: colour, outlineColor: colour, filter: "brightness(98%) saturate(150%)" }}
             key={key}
-            onClick={handleClick}
+            onClick={handleColourSelection}
           ></div>
         );
       })}
