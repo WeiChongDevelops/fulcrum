@@ -25,8 +25,10 @@ import {
 } from "@/utility/util.ts";
 import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
 import UpdateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/UpdateExpenseFormV2.tsx";
+import UpdateRecurringFormV2 from "@/components-v2/subcomponents/recurring/forms/UpdateRecurringFormV2.tsx";
 
 interface RecurringItemV2Props {
+  categoryOptions: DropdownSelectorOption[];
   recurringExpenseId: string;
   category: string;
   amount: number;
@@ -41,6 +43,7 @@ interface RecurringItemV2Props {
   setRecurringExpenseModalVisibility: Dispatch<SetStateAction<RecurringExpenseModalVisibility>>;
 
   setOldRecurringExpenseBeingEdited: Dispatch<SetStateAction<PreviousRecurringExpenseBeingEdited>>;
+  oldRecurringExpenseBeingEdited: PreviousRecurringExpenseBeingEdited;
   setRecurringExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 
   publicUserData: PublicUserData;
@@ -50,6 +53,7 @@ interface RecurringItemV2Props {
  * A single interactive expense log.
  */
 export default function RecurringItemV2({
+  categoryOptions,
   recurringExpenseId,
   category,
   amount,
@@ -61,6 +65,7 @@ export default function RecurringItemV2({
   setRecurringExpenseFormVisibility,
   setRecurringExpenseModalVisibility,
   setOldRecurringExpenseBeingEdited,
+  oldRecurringExpenseBeingEdited,
   setRecurringExpenseIdToDelete,
   publicUserData,
 }: RecurringItemV2Props) {
@@ -89,6 +94,17 @@ export default function RecurringItemV2({
 
   return (
     <div className={"w-[95%] relative mx-auto"}>
+      <UpdateRecurringFormV2
+        recurringExpenseId={recurringExpenseId}
+        category={category}
+        amount={amount}
+        timestamp={timestamp}
+        frequency={frequency}
+        currencySymbol={getCurrencySymbol(publicUserData.currency)}
+        setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}
+        categoryOptions={categoryOptions}
+        oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
+      />
       <div className="expense-item relative" style={{ backgroundColor: groupColour }} data-value={recurringExpenseId}>
         <div className="flex flex-row items-center">
           <div className="rounded-full bg-primary text-primary-foreground p-3">

@@ -28,6 +28,7 @@ import CategoryIconSelector from "@/components/child/selectors/CategoryIconSelec
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { cn } from "@/lib/utils.ts";
 import * as React from "react";
+import { toast } from "sonner";
 
 interface UpdateBudgetFormV2Props {
   oldBudgetBeingEdited: PreviousBudgetBeingEdited;
@@ -204,7 +205,18 @@ export default function UpdateBudgetFormV2({
               </Label>
               <CategoryIconSelector setFormData={setFormData} className={"col-span-3"} />
             </div>
-            <Button className={"mt-2 self-end"}>Save Changes</Button>
+
+            <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>
+              <Button
+                className={"col-start-3 col-span-3"}
+                variant={"destructive"}
+                onClick={() => toast.warning("Uh oh.")}
+                type={"button"}
+              >
+                Delete
+              </Button>
+              <Button className={"col-start-6 col-span-3"}>Save Changes</Button>
+            </div>
           </form>
         </SheetContent>
       </Sheet>

@@ -9,6 +9,7 @@ import {
   ExpenseUpdatingFormData,
   PreviousExpenseBeingEdited,
   PreviousRecurringExpenseBeingEdited,
+  RecurringExpenseFrequency,
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
   SelectorOptionsFormattedData,
@@ -30,14 +31,22 @@ interface FrequencySelectorProps {
     | Dispatch<SetStateAction<ExpenseCreationFormData>>;
   mustBeRecurring: boolean;
   className?: string;
+  initialFrequency?: RecurringExpenseFrequency;
 }
 
 /**
  * A creatable selector for the user to select a category for an expense.
  */
-export default function FrequencySelector({ setFormData, className, mustBeRecurring }: FrequencySelectorProps) {
+export default function FrequencySelector({
+  setFormData,
+  className,
+  mustBeRecurring,
+  initialFrequency,
+}: FrequencySelectorProps) {
   const [open, setOpen] = useState(false);
-  const [selectedFrequency, setSelectedFrequency] = useState(mustBeRecurring ? "monthly" : "never");
+  const [selectedFrequency, setSelectedFrequency] = useState(
+    initialFrequency ? initialFrequency : mustBeRecurring ? "monthly" : "never",
+  );
 
   useEffect(() => {
     setFormData((currentFormData: any) => ({

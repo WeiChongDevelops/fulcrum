@@ -8,7 +8,7 @@ import {
   RecurringExpenseItemEntity,
 } from "@/utility/types.ts";
 import { useContext, useEffect } from "react";
-import { checkForOpenModalOrForm, LocationContext } from "@/utility/util.ts";
+import { capitaliseFirstLetter, checkForOpenModalOrForm, LocationContext } from "@/utility/util.ts";
 import useInitialRecurringExpenseData from "@/hooks/queries/useInitialRecurringExpenseData.ts";
 import RecurringExpenseItem from "@/components/child/tools/recurring-expenses/RecurringExpenseItem.tsx";
 import ActiveFormClickShield from "@/components/child/other/ActiveFormClickShield.tsx";
@@ -60,10 +60,19 @@ export default function RecurringExpensesV2({
     );
   }, [recurringExpenseFormVisibility, recurringExpenseModalVisibility, routerLocation]);
 
+  const categoryOptions = budgetArray.map((budgetItem) => {
+    const dataMapEntry = categoryDataMap.get(budgetItem.category);
+    return {
+      value: budgetItem.category,
+      label: capitaliseFirstLetter(budgetItem.category),
+      colour: !!dataMapEntry && !!dataMapEntry.colour ? dataMapEntry.colour : "black",
+    };
+  });
+
   return (
     <div className={"flex flex-col justify-start items-center h-screen"}>
       <RecurringExpensesHeaderV2 navMenuOpen={navMenuOpen} publicUserData={publicUserData} />
-      <ScrollArea className={"w-full h-[94vh] pt-6"}>
+      <ScrollArea className={"w-full h-[94vh] pt-8"}>
         <CreateExpenseFormV2
           categoryDataMap={categoryDataMap}
           budgetArray={budgetArray}
@@ -76,6 +85,7 @@ export default function RecurringExpensesV2({
             recurringExpenseArray.map((recurringExpenseItem, key) => {
               return (
                 <RecurringItemV2
+                  categoryOptions={categoryOptions}
                   recurringExpenseId={recurringExpenseItem.recurringExpenseId}
                   category={recurringExpenseItem.category}
                   amount={recurringExpenseItem.amount}
@@ -87,6 +97,7 @@ export default function RecurringExpensesV2({
                   setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
                   setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
                   setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}
+                  oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
                   setRecurringExpenseIdToDelete={setRecurringExpenseIdToDelete}
                   publicUserData={publicUserData}
                   key={key}
