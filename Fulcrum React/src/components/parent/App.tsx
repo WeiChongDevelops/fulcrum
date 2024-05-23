@@ -61,7 +61,7 @@ export default function App() {
     return <FulcrumErrorPage errors={errors} />;
   }
 
-  if (isAnyLoading) {
+  if (isAnyLoading || !budgetArray) {
     return <Loader isLoading={isAnyLoading} isDarkMode={false} />;
   }
 

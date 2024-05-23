@@ -1,4 +1,5 @@
 import {
+  BudgetItemEntity,
   CategoryToIconGroupAndColourMap,
   ExpenseFormVisibility,
   ExpenseItemEntity,
@@ -12,8 +13,10 @@ import {
 import { Dispatch, memo, SetStateAction } from "react";
 import AddNewExpenseButton from "../../../components/child/expenses/buttons/AddNewExpenseButton.tsx";
 import ExpenseDayGroupV2 from "@/components-v2/subcomponents/expenses/ExpenseDayGroupV2.tsx";
+import CreateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/CreateExpenseFormV2.tsx";
 
 interface ExpenseMonthGroupV2Props {
+  budgetArray: BudgetItemEntity[];
   monthExpenseGroupItem: MonthExpenseGroupEntity;
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
@@ -29,6 +32,7 @@ interface ExpenseMonthGroupV2Props {
  */
 export const ExpenseMonthGroupV2 = memo(
   ({
+    budgetArray,
     monthExpenseGroupItem,
     setExpenseFormVisibility,
     setExpenseModalVisibility,
@@ -39,12 +43,13 @@ export const ExpenseMonthGroupV2 = memo(
     setDefaultCalendarDate,
   }: ExpenseMonthGroupV2Props) => {
     return (
-      <div className={"flex flex-col items-center w-full"}>
-        <AddNewExpenseButton
-          setExpenseFormVisibility={setExpenseFormVisibility}
-          isDarkMode={publicUserData.darkModeEnabled}
-          setDefaultCalendarDate={setDefaultCalendarDate}
-          monthExpenseGroupItem={monthExpenseGroupItem}
+      <div className={"flex flex-col items-center w-full pt-8"}>
+        <CreateExpenseFormV2
+          categoryDataMap={categoryDataMap}
+          budgetArray={budgetArray}
+          defaultCalendarDate={new Date()}
+          mustBeRecurring={false}
+          publicUserData={publicUserData}
         />
 
         {monthExpenseGroupItem.monthExpenseArray.length > 0 ? (

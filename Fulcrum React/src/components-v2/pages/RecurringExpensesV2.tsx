@@ -14,6 +14,7 @@ import RecurringExpenseItem from "@/components/child/tools/recurring-expenses/Re
 import ActiveFormClickShield from "@/components/child/other/ActiveFormClickShield.tsx";
 import RecurringExpenseModalsAndForms from "@/components/child/tools/recurring-expenses/RecurringExpenseModalsAndForms.tsx";
 import RecurringExpensesHeaderV2 from "@/components-v2/subcomponents/recurring/RecurringExpensesHeaderV2.tsx";
+import { ScrollArea } from "@/components-v2/ui/scroll-area.tsx";
 
 interface RecurringExpensesV2Props {
   publicUserData: PublicUserData;
@@ -60,7 +61,7 @@ export default function RecurringExpensesV2({
   return (
     <div className={"flex flex-col justify-start items-center h-screen"}>
       <RecurringExpensesHeaderV2 navMenuOpen={navMenuOpen} publicUserData={publicUserData} />
-      <div className={"mt-8 w-[97%] h-[94%]"}>
+      <ScrollArea className={"flex flex-row justify-center p-6 w-full h-[94vh]"}>
         <AddNewRecurringExpenseButton
           setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
           isDarkMode={publicUserData.darkModeEnabled}
@@ -91,7 +92,7 @@ export default function RecurringExpensesV2({
             <p className={"text-2xl mt-48"}>Add recurring expenses for transactions you expect to arise regularly.</p>
           )}
         </div>
-      </div>
+      </ScrollArea>
       <RecurringExpenseModalsAndForms
         recurringExpenseModalVisibility={recurringExpenseModalVisibility}
         recurringExpenseFormVisibility={recurringExpenseFormVisibility}

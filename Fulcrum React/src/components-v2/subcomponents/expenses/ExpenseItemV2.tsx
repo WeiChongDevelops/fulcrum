@@ -9,6 +9,7 @@ import {
 } from "@/utility/types.ts";
 import { Dispatch, SetStateAction } from "react";
 import { changeFormOrModalVisibility, DEFAULT_CATEGORY_GROUP, formatDollarAmountStatic } from "@/utility/util.ts";
+import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
 
 interface ExpenseItemV2Props {
   expenseId: string;
@@ -81,8 +82,8 @@ export default function ExpenseItemV2({
   return (
     <div className="expense-item" style={{ backgroundColor: groupColour }} onClick={handleEditClick} data-value={expenseId}>
       <div className="flex flex-row items-center">
-        <div className="rounded-full bg-[#1b1c1c] p-3">
-          <img src={`/static/assets-v2/category-icons/${iconPath}`} alt="Category icon" className="w-8 h-auto" />
+        <div className="rounded-full bg-primary text-primary-foreground p-3">
+          <DynamicIconComponent componentName={iconPath} props={{ size: 26 }} className={""} />
         </div>
         <div
           className="flex flex-col items-start ml-2"

@@ -7,6 +7,7 @@ import Loader from "@/components/child/other/Loader.tsx";
 import { getSessionEmailOrNull } from "@/utility/api.ts";
 import { LocationContext } from "@/utility/util.ts";
 import { Toaster } from "sonner";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 interface FulcrumV2Props {
   publicUserData: PublicUserData;
@@ -34,10 +35,11 @@ export default function FulcrumV2({ publicUserData, navMenuOpen, setNavMenuOpen,
   return (
     <ErrorBoundary>
       <>
-        <div className={"flex flex-row"}>
+        <div className={"flex flex-row relative transition-all"}>
+          <div className={"fixed top-0 w-screen bg-gray-400 h-[6vh]"}></div>
           <NavigationMenuV2 publicUserData={publicUserData} navMenuOpen={navMenuOpen} setNavMenuOpen={setNavMenuOpen} />
           <div
-            className={`absolute right-0 top-0 min-h-screen transition-all duration-200 ease-out ${navMenuOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"}`}
+            className={`absolute top-0 right-0 min-h-screen z-40 ${navMenuOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"}`}
           >
             <Outlet />
           </div>

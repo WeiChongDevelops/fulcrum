@@ -10,6 +10,7 @@ import {
 } from "@/utility/types";
 import { Dispatch, SetStateAction } from "react";
 import ExpenseItem from "@/components/child/expenses/main-data-hierarchy/ExpenseItem.tsx";
+import ExpenseItemV2 from "@/components-v2/subcomponents/expenses/ExpenseItemV2.tsx";
 
 interface ExpenseListV2Props {
   dayExpenseArray: ExpenseItemEntity[];
@@ -41,7 +42,7 @@ export default function ExpenseListV2({
       {dayExpenseArray.map((expenseElement, key) => {
         return (
           expenseElement && (
-            <ExpenseItem
+            <ExpenseItemV2
               expenseId={expenseElement.expenseId}
               category={expenseElement.category}
               amount={expenseElement.amount}

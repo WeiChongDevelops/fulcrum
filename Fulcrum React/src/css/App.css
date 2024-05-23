@@ -211,7 +211,7 @@
 
 .fadeOut {
   opacity: 0;
-  filter: blur(15px);
+  filter: blur(10px);
 }
 
 .standard-edit-delete-button:hover svg {

@@ -19,6 +19,40 @@ import { GroupItemEntity } from "@/utility/types.ts";
 import { useState } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components-v2/ui/button.tsx";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components-v2/ui/sheet.tsx";
+import { Label } from "@/components-v2/ui/label.tsx";
+import { Input } from "@/components-v2/ui/input.tsx";
+import { ScrollArea, ScrollBar } from "@/components-v2/ui/scroll-area";
+import { Separator } from "@/components-v2/ui/separator";
+
+const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`);
+
+export function ScrollAreaDemo() {
+  return (
+    <ScrollArea className="h-72 w-48 rounded-md border">
+      <div className="p-4">
+        <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4>
+        {tags.map((tag) => (
+          <>
+            <div key={tag} className="text-sm">
+              {tag}
+            </div>
+            <Separator className="my-2" />
+          </>
+        ))}
+      </div>
+    </ScrollArea>
+  );
+}
 
 interface PlaygroundGroupProps {
   groupItem: GroupItemEntity;
@@ -121,37 +155,23 @@ export default function Playground() {
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
 
   return (
-    <div className={"flex flex-col justify-start items-center"}>
-      <Button
-        onClick={() => setGroupArray((prevGroupArray) => prevGroupArray.filter((item) => item.id !== prevGroupArray[0].id))}
-      >
-        Take
-      </Button>
-      <Button
-        onClick={() =>
-          setGroupArray([
-            {
-              group: "Group 6",
-              colour: "purple",
-              timestamp: new Date(),
-              id: groupArray[0].id - 1,
-            },
-            ...groupArray,
-          ])
-        }
-      >
-        Give
-      </Button>
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <h1 className={"font-bold text-xl my-12"}>Category Groups</h1>
-        <SortableContext items={groupArray} strategy={verticalListSortingStrategy}>
-          <div className={"flex flex-col justify-start items-center gap-4 transition-all"}>
-            {groupArray.map((groupItem, index) => (
-              <PlaygroundGroup groupItem={groupItem} key={index} />
-            ))}
-          </div>
-        </SortableContext>
-      </DndContext>
-    </div>
+    // <div className={"flex flex-col justify-start items-center"}>
+    // <ScrollAreaDemo />
+    // </div>
+
+    <ScrollArea className="h-screen w-screen bg-emerald-200 border-8 border-fuchsia-200">
+      <ScrollBar orientation={"vertical"} />
+      <div className="p-4">
+        <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4>
+        {tags.map((tag) => (
+          <>
+            <div key={tag} className="text-sm outline outline-slate-700">
+              {tag}
+            </div>
+            <Separator className="my-2" />
+          </>
+        ))}
+      </div>
+    </ScrollArea>
   );
 }

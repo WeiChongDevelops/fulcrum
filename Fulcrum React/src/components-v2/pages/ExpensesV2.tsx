@@ -26,6 +26,9 @@ import ExpenseMonthCarouselV2 from "../subcomponents/expenses/ExpenseMonthCarous
 import { CarouselApi } from "@/components-v2/ui/carousel.tsx";
 import ExpenseHeaderV2 from "@/components-v2/subcomponents/expenses/ExpenseHeaderV2.tsx";
 import "@/css/Expense.css";
+import { ScrollAreaDemo } from "@/components-v2/subcomponents/budget/Playground.tsx";
+import { Separator } from "@/components-v2/ui/separator.tsx";
+import { ScrollArea } from "@/components-v2/ui/scroll-area.tsx";
 
 interface ExpensesV2Props {
   publicUserData: PublicUserData;
@@ -131,7 +134,7 @@ export default function ExpensesV2({
   }
 
   return (
-    <div className={"flex flex-col justify-start items-end relative overflow-y-scroll "}>
+    <div className={"flex flex-col justify-start items-end relative"}>
       <ExpenseHeaderV2
         carouselAPI={api!}
         structuredExpenseData={structuredExpenseData}
@@ -140,6 +143,7 @@ export default function ExpensesV2({
         navMenuOpen={navMenuOpen}
       />
       <ExpenseMonthCarouselV2
+        budgetArray={budgetArray}
         structuredExpenseData={structuredExpenseData!}
         setExpenseFormVisibility={setExpenseFormVisibility}
         setExpenseModalVisibility={setExpenseModalVisibility}
@@ -164,45 +168,6 @@ export default function ExpensesV2({
         oldExpenseBeingEdited={oldExpenseBeingEdited}
         expenseItemToDelete={expenseItemToDelete}
       />
-      {/*<div className={"bg-red-500 h-[94%] relative"}>*/}
-      {/*  <div className="flex flex-col justify-center items-center relative">*/}
-      {/*    <div>*/}
-      {/*      <div*/}
-      {/*        className={`justify-center items-center elementsBelowPopUpForm*/}
-      {/*              ${isExpenseFormOrModalOpen && "blur"}`}*/}
-      {/*      >*/}
-      {/*        <ExpenseMonthCarouselV2*/}
-      {/*          structuredExpenseData={structuredExpenseData!}*/}
-      {/*          setExpenseFormVisibility={setExpenseFormVisibility}*/}
-      {/*          setExpenseModalVisibility={setExpenseModalVisibility}*/}
-      {/*          setOldExpenseBeingEdited={setOldExpenseBeingEdited}*/}
-      {/*          setExpenseItemToDelete={setExpenseItemToDelete}*/}
-      {/*          categoryDataMap={categoryDataMap}*/}
-      {/*          publicUserData={publicUserData}*/}
-      {/*          setDefaultCalendarDate={setDefaultCalendarDate}*/}
-      {/*          setApi={setApi}*/}
-      {/*          startingIndex={startingIndex}*/}
-      {/*        />*/}
-      {/*      </div>*/}
-
-      {/*      {isExpenseFormOrModalOpen && <ActiveFormClickShield />}*/}
-
-      {/*      <ExpenseModalsAndForms*/}
-      {/*        expenseFormVisibility={expenseFormVisibility}*/}
-      {/*        setExpenseFormVisibility={setExpenseFormVisibility}*/}
-      {/*        expenseModalVisibility={expenseModalVisibility}*/}
-      {/*        setExpenseModalVisibility={setExpenseModalVisibility}*/}
-      {/*        expenseArray={expenseArray}*/}
-      {/*        budgetArray={budgetArray}*/}
-      {/*        groupArray={groupArray}*/}
-      {/*        publicUserData={publicUserData}*/}
-      {/*        defaultCalendarDate={defaultCalendarDate}*/}
-      {/*        oldExpenseBeingEdited={oldExpenseBeingEdited}*/}
-      {/*        expenseItemToDelete={expenseItemToDelete}*/}
-      {/*      />*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
     </div>
   );
 }

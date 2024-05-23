@@ -61,7 +61,7 @@ export default function BudgetDataBento({ budgetArray, groupArray, budgetTotal, 
   };
 
   return (
-    <div className="flex flex-row justify-center items-center relative gap-2 bg-violet-100 rounded-xl font-bold h-96 w-full">
+    <div className="flex flex-row justify-center items-center relative gap-2 bg-violet-100 rounded-xl font-bold h-96 w-full pt-2">
       {/*<p className={"absolute top-5 left-7"}>{`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`}</p>*/}
       <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-[32ch] absolute top-3 left-4 z-30 bg-primary-foreground text-xs font-medium">
@@ -142,7 +142,7 @@ export default function BudgetDataBento({ budgetArray, groupArray, budgetTotal, 
                               >
                                 <div className={"flex flex-row justify-start items-center gap-2 text-left"}>
                                   <div
-                                    className={"rounded-[50%] size-1.5 brightness-90"}
+                                    className={"rounded-[50%] size-1.5 brightness-90 saturate-200"}
                                     style={{
                                       backgroundColor: categoryDataMap.get(budgetItem.category)?.colour ?? "black",
                                     }}

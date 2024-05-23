@@ -47,7 +47,7 @@ export default function ExpenseHeaderV2({
 
   return (
     <div
-      className={`fixed flex flex-row z-20 gap-4 justify-start items-center bg-gray-400 ${navMenuOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
+      className={`fixed flex flex-row z-20 gap-4 justify-start items-center bg-gray-400 transition-all duration-600 ease-out ${navMenuOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
     >
       <div
         className={

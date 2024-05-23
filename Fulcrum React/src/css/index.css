@@ -9,7 +9,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  overflow-y: scroll;
+  /*overflow-y: scroll;*/
 
   margin: 0 auto;
   text-align: center;
@@ -56,10 +56,6 @@ body textarea {
 body label {
   font-weight: bold;
 }
-
-/*button:focus {*/
-/*  outline: 3px solid white;*/
-/*}*/
 
 input:focus {
   outline: 3px solid #1c5b57;
@@ -108,5 +104,14 @@ input:focus {
 @media (max-width: 400px) {
   :root {
     font-size: 7px;
+  }
+}
+
+@keyframes menuSlide {
+  0% {
+    width: calc(100vw - 14rem);
+  }
+  100% {
+    width: calc(100vw - 5rem);
   }
 }

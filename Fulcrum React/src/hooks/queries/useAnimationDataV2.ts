@@ -32,7 +32,7 @@ export default function useAnimationDataV2({ navMenuOpen, totalIncome, totalBudg
       if (!!containerRect) {
         setContainerLeft(containerRect.left);
       }
-    }, 250);
+    }, 350);
   };
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function useAnimationDataV2({ navMenuOpen, totalIncome, totalBudg
 
   useEffect(() => {
     updateRect();
-  }, [navMenuOpen]);
+  }, [navMenuOpen, containerRef.current?.getBoundingClientRect().left]);
 
   useEffect(() => {
     setLineAngle(getLineAngle(totalBudget - totalIncome, totalIncome));

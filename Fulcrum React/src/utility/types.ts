@@ -250,3 +250,9 @@ export interface ContactFormData {
   firstName: string;
   email: string;
 }
+
+export interface DropdownSelectorOption {
+  value: string;
+  label: string;
+  colour: string;
+}

@@ -122,7 +122,7 @@ export default function BudgetV2({
     budgetContainer.current?.classList.add("fadeOut");
     setTimeout(() => {
       budgetContainer.current?.classList.remove("fadeOut");
-    }, 450);
+    }, 400);
   };
 
   useEffect(fadeBudget, [navMenuOpen]);
@@ -214,8 +214,8 @@ export default function BudgetV2({
         setLocalisedGroupArray={setLocalisedGroupArray}
         currencySymbol={getCurrencySymbol(publicUserData.currency)}
       />
-      <div className={"transition-all mt-[calc(6vh+1.2rem)] pb-8 min-h-screen "} ref={budgetContainer}>
-        <div className={"grid gap-4 px-4 ml-[15px]"}>
+      <ScrollArea className={"transition-all ease-[cubic-bezier(0.9, 0, 0.4, 1)] mt-[6vh] h-[94vh]"} ref={budgetContainer}>
+        <div className={"grid gap-4 px-6 pt-6 pb-8"}>
           <div className="grid w-full gap-6" style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}>
             <div className={"relative z-10 bg-slate-200 rounded-xl"}>
               <FulcrumAnimationV2
@@ -272,7 +272,7 @@ export default function BudgetV2({
             </div>
           </DndContext>
         </div>
-      </div>
+      </ScrollArea>
     </div>
   );
 }
