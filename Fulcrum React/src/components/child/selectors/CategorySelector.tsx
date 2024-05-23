@@ -30,6 +30,7 @@ interface CategorySelectorProps {
     | Dispatch<SetStateAction<ExpenseUpdatingFormData>>
     | Dispatch<SetStateAction<ExpenseCreationFormData>>;
   className?: string;
+  defaultCategory?: string;
 }
 
 /**
@@ -40,9 +41,10 @@ export default function CategorySelector({
   oldExpenseBeingEdited,
   setFormData,
   className,
+  defaultCategory = "Other",
 }: CategorySelectorProps) {
   const [open, setOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("Other");
+  const [selectedCategory, setSelectedCategory] = useState(defaultCategory);
 
   useEffect(() => {
     setFormData((currentFormData: any) => ({

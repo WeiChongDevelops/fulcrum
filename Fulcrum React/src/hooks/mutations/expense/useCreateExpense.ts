@@ -1,4 +1,4 @@
-import { DEFAULT_CATEGORY_ICON, DEFAULT_GROUP_COLOUR, EmailContext } from "../../../utility/util.ts";
+import { DEFAULT_CATEGORY_ICON, DEFAULT_GROUP_COLOUR, EmailContext, useEmail } from "../../../utility/util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
@@ -12,7 +12,7 @@ export interface ExpenseCreationMutationProps {
 
 export default function useCreateExpense() {
   const queryClient = useQueryClient();
-  const email = useContext(EmailContext);
+  const email = useEmail();
 
   return useMutation({
     mutationFn: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {

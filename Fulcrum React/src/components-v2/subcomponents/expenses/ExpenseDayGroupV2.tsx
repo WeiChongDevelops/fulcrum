@@ -1,11 +1,13 @@
 import {
   CategoryToIconGroupAndColourMap,
   DayExpenseGroupEntity,
+  DropdownSelectorOption,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
   PublicUserData,
+  SelectorOptionsFormattedData,
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types.ts";
@@ -24,6 +26,8 @@ interface ExpenseDayGroupV2Props {
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
   publicUserData: PublicUserData;
+  oldExpenseBeingEdited: PreviousExpenseBeingEdited;
+  categoryOptions: DropdownSelectorOption[];
 }
 
 /**
@@ -37,6 +41,8 @@ export default function ExpenseDayGroupV2({
   setExpenseItemToDelete,
   categoryDataMap,
   publicUserData,
+  oldExpenseBeingEdited,
+  categoryOptions,
 }: ExpenseDayGroupV2Props) {
   const expenseDayGroupCalendarDate = new Date(dayExpenseGroup.calendarDate).toLocaleDateString();
   const dateStringToday = new Date().toLocaleDateString();
@@ -72,6 +78,8 @@ export default function ExpenseDayGroupV2({
           setExpenseItemToDelete={setExpenseItemToDelete}
           categoryDataMap={categoryDataMap}
           publicUserData={publicUserData}
+          oldExpenseBeingEdited={oldExpenseBeingEdited}
+          categoryOptions={categoryOptions}
         />
       )}
     </div>

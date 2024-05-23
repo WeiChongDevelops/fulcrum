@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { LocationContext } from "../../../../../utility/util.ts";
+import { LocationContext, useLocation } from "../../../../../utility/util.ts";
 
 interface InfoTileProps {
   initialDisplayText: string;
@@ -21,7 +21,7 @@ export default function InfoTile({
 }: InfoTileProps) {
   const tileRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {

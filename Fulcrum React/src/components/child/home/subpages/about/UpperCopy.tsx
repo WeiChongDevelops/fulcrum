@@ -1,6 +1,6 @@
 import FulcrumButton from "../../../buttons/FulcrumButton.tsx";
 import { useContext, useEffect, useRef } from "react";
-import { LocationContext } from "../../../../../utility/util.ts";
+import { LocationContext, useLocation } from "../../../../../utility/util.ts";
 
 /**
  * Upper-page component displaying sales copy and a concise version of the user steps.
@@ -9,7 +9,7 @@ export default function UpperCopy() {
   const spotlightContainerRef = useRef<HTMLDivElement>(null);
   const spotlightRef = useRef<HTMLDivElement>(null);
   const body = document.querySelector("body")!;
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   useEffect(() => {
     function shiftCursorSpotlight(e: MouseEvent) {

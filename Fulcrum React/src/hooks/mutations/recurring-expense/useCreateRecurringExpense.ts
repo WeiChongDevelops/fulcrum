@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
-import { DEFAULT_CATEGORY_ICON, DEFAULT_GROUP_COLOUR, EmailContext } from "../../../utility/util.ts";
+import { DEFAULT_CATEGORY_ICON, DEFAULT_GROUP_COLOUR, EmailContext, useEmail } from "../../../utility/util.ts";
 import { toast } from "sonner";
 import { BudgetItemEntity, CategoryToIconGroupAndColourMap, RecurringExpenseItemEntity } from "../../../utility/types.ts";
 import { handleRecurringExpenseCreation } from "../../../utility/api.ts";
@@ -11,7 +11,7 @@ interface RecurringExpenseCreationMutationProps {
 }
 
 export default function useCreateRecurringExpense() {
-  const email = useContext(EmailContext);
+  const email = useEmail();
   const queryClient = useQueryClient();
 
   return useMutation({

@@ -2,11 +2,11 @@ import { handleUserOAuthLoginAttempt } from "../../../utility/api.ts";
 import { toast } from "sonner";
 import { useContext, useEffect } from "react";
 import useInitOAuthAccount from "../../../hooks/mutations/auth/useInitOAuthAccount.ts";
-import { getParamFromFragmentURL, LocationContext } from "../../../utility/util.ts";
+import { getParamFromFragmentURL, LocationContext, useLocation } from "../../../utility/util.ts";
 
 export default function OAuthRedirect() {
   const { mutate: initOAuthAccount } = useInitOAuthAccount();
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   useEffect(() => {
     toast.loading("Please wait to be redirected.");

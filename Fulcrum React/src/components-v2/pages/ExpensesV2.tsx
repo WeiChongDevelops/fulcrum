@@ -154,6 +154,7 @@ export default function ExpensesV2({
         setDefaultCalendarDate={setDefaultCalendarDate}
         setApi={setApi}
         startingIndex={startingIndex}
+        oldExpenseBeingEdited={oldExpenseBeingEdited}
       />
       <ExpenseModalsAndForms
         expenseFormVisibility={expenseFormVisibility}

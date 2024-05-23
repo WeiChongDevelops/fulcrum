@@ -5,6 +5,7 @@ import {
   addFormExitListeners,
   handleInputChangeOnFormWithAmount,
   LocationContext,
+  useLocation,
 } from "../../../../../utility/util.ts";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
@@ -41,7 +42,7 @@ export default function RecurringExpenseInstanceUpdatingForm({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateExpense } = useUpdateExpense();
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   function hideForm() {
     changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateRecurringExpenseInstanceVisible", false);

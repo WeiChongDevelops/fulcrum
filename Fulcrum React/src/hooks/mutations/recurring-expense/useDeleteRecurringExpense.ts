@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { EmailContext, getRecurringExpenseInstancesAfterDate, expenseStartDate } from "../../../utility/util.ts";
+import { EmailContext, getRecurringExpenseInstancesAfterDate, expenseStartDate, useEmail } from "../../../utility/util.ts";
 import { useContext } from "react";
 import { toast } from "sonner";
 import { ExpenseItemEntity, RecurringExpenseItemEntity } from "../../../utility/types.ts";
@@ -12,7 +12,7 @@ interface RecurringExpenseDeletionMutationProps {
 }
 
 export default function useDeleteRecurringExpense() {
-  const email = useContext(EmailContext);
+  const email = useEmail();
   const queryClient = useQueryClient();
 
   return useMutation({

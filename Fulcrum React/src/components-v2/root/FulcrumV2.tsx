@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction, useContext, useEffect } from "react";
 import { PublicUserData } from "@/utility/types.ts";
 import Loader from "@/components/child/other/Loader.tsx";
 import { getSessionEmailOrNull } from "@/utility/api.ts";
-import { LocationContext } from "@/utility/util.ts";
+import { LocationContext, NavMenuIsOpenContext } from "@/utility/util.ts";
 import { Toaster } from "sonner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
@@ -34,7 +34,7 @@ export default function FulcrumV2({ publicUserData, navMenuOpen, setNavMenuOpen,
 
   return (
     <ErrorBoundary>
-      <>
+      <NavMenuIsOpenContext.Provider value={navMenuOpen}>
         <div className={"flex flex-row relative transition-all"}>
           <div className={"fixed top-0 w-screen bg-gray-400 h-[6vh]"}></div>
           <NavigationMenuV2 publicUserData={publicUserData} navMenuOpen={navMenuOpen} setNavMenuOpen={setNavMenuOpen} />
@@ -44,7 +44,7 @@ export default function FulcrumV2({ publicUserData, navMenuOpen, setNavMenuOpen,
             <Outlet />
           </div>
         </div>
-      </>
+      </NavMenuIsOpenContext.Provider>
     </ErrorBoundary>
   );
 }

@@ -1,4 +1,4 @@
-import { ChangeEvent, createContext, Dispatch, RefObject, SetStateAction } from "react";
+import { ChangeEvent, createContext, Dispatch, RefObject, SetStateAction, useContext } from "react";
 import { v4 as uuid } from "uuid";
 import { UseMutateFunction } from "@tanstack/react-query";
 import {
@@ -68,7 +68,12 @@ export const DEFAULT_CATEGORY_GROUP = "Miscellaneous";
 // CONTEXT //
 
 export const EmailContext = createContext<string>("");
+export const useEmail = () => useContext(EmailContext);
 export const LocationContext = createContext<Location | null>(null);
+export const useLocation = () => useContext(LocationContext);
+
+export const NavMenuIsOpenContext = createContext<boolean>(true);
+export const useNavMenuIsOpen = () => useContext(NavMenuIsOpenContext);
 
 // SELECTOR CONTENT ARRAYS //
 

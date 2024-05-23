@@ -1,4 +1,4 @@
-import { checkForOpenModalOrForm, LocationContext } from "../../../../utility/util.ts";
+import { checkForOpenModalOrForm, LocationContext, useLocation } from "../../../../utility/util.ts";
 import { Dispatch, SetStateAction, useContext, useEffect } from "react";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import AddNewRecurringExpenseButton from "./buttons/AddNewRecurringExpenseButton.tsx";
@@ -39,7 +39,7 @@ export default function RecurringExpenses({
   categoryDataMap,
   recurringExpenseArray,
 }: RecurringExpensesProps) {
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
   const {
     recurringExpenseModalVisibility,
     setRecurringExpenseModalVisibility,

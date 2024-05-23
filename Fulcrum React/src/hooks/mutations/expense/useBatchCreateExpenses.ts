@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
-import { EmailContext, expenseSort } from "../../../utility/util.ts";
+import { EmailContext, expenseSort, useEmail } from "../../../utility/util.ts";
 import { ExpenseItemEntity } from "../../../utility/types.ts";
 import { handleBatchExpenseCreation } from "../../../utility/api.ts";
 
 export default function useBatchCreateExpenses() {
-  const email = useContext(EmailContext);
+  const email = useEmail();
   const queryClient = useQueryClient();
 
   return useMutation({

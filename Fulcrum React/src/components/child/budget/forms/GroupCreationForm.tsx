@@ -7,6 +7,7 @@ import {
   getRandomGroupColour,
   capitaliseFirstLetter,
   LocationContext,
+  useLocation,
 } from "../../../../utility/util.ts";
 import "../../../../css/Budget.css";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
@@ -28,7 +29,7 @@ export default function GroupCreationForm({ setBudgetFormVisibility, highestSort
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: createGroup } = useCreateGroup();
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateGroupVisible", false);

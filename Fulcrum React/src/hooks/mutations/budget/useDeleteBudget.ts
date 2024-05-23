@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
-import { EmailContext } from "../../../utility/util.ts";
+import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleBudgetDeletion } from "../../../utility/api.ts";
 import { BudgetItemEntity } from "../../../utility/types.ts";
 
 export default function useDeleteBudget() {
   const queryClient = useQueryClient();
-  const email = useContext(EmailContext);
+  const email = useEmail();
 
   return useMutation({
     mutationFn: (categoryToDelete: string) => {

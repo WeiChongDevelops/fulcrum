@@ -84,8 +84,6 @@ export default function UpdateGroupFormV2({
       id: oldGroupBeingEdited.oldId,
     };
 
-    console.log(`Sending update with colour: ${formData.colour}`);
-
     updateGroup({
       originalGroupName: oldGroupBeingEdited.oldGroupName,
       updatedGroupItem: updatedGroupItem,

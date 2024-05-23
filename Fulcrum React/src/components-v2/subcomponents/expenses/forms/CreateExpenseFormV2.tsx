@@ -188,10 +188,10 @@ export default function CreateExpenseFormV2({
 
             <div className={"grid grid-cols-4 items-center gap-5"}>
               <Label className={"text-right"}>Repeat</Label>
-              <FrequencySelector setFormData={setFormData} className={"col-span-3"} />
+              <FrequencySelector setFormData={setFormData} className={"col-span-3"} mustBeRecurring={mustBeRecurring} />
             </div>
 
-            <Button className={"mt-2 self-end"}>Create Group</Button>
+            <Button className={"mt-2 self-end"}>Add Expense</Button>
           </form>
         </SheetContent>
       </SheetOverlay>

@@ -36,6 +36,12 @@
   cursor: pointer;
 }
 
+.update-expense-trigger:hover + * {
+  transform: translate(-0.3rem, -0.3rem);
+  box-shadow: 0.7rem 0.7rem 0 0 black;
+  cursor: pointer;
+}
+
 .create-expense-button {
   background: transparent;
   border: black 2px dashed;
@@ -47,7 +53,7 @@
 }
 
 .create-recurring-expense-button {
-  width: 100%;
+  width: 95%;
 }
 
 .create-expense-button:hover {

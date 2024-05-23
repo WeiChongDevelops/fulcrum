@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
-import { EmailContext } from "../../../utility/util.ts";
+import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleTotalIncomeUpdating } from "../../../utility/api.ts";
 
 export default function useUpdateTotalIncome() {
   const queryClient = useQueryClient();
-  const email = useContext(EmailContext);
+  const email = useEmail();
 
   return useMutation({
     mutationFn: (newTotalIncomeData: number) => handleTotalIncomeUpdating(newTotalIncomeData),

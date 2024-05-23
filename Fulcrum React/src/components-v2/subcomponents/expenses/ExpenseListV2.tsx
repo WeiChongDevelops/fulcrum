@@ -1,10 +1,12 @@
 import {
   CategoryToIconGroupAndColourMap,
+  DropdownSelectorOption,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
   PublicUserData,
+  SelectorOptionsFormattedData,
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types";
@@ -14,6 +16,7 @@ import ExpenseItemV2 from "@/components-v2/subcomponents/expenses/ExpenseItemV2.
 
 interface ExpenseListV2Props {
   dayExpenseArray: ExpenseItemEntity[];
+  oldExpenseBeingEdited: PreviousExpenseBeingEdited;
 
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
@@ -23,6 +26,8 @@ interface ExpenseListV2Props {
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
   publicUserData: PublicUserData;
+
+  categoryOptions: DropdownSelectorOption[];
 }
 
 /**
@@ -36,6 +41,8 @@ export default function ExpenseListV2({
   setExpenseItemToDelete,
   categoryDataMap,
   publicUserData,
+  categoryOptions,
+  oldExpenseBeingEdited,
 }: ExpenseListV2Props) {
   return (
     <>
@@ -43,6 +50,7 @@ export default function ExpenseListV2({
         return (
           expenseElement && (
             <ExpenseItemV2
+              oldExpenseBeingEdited={oldExpenseBeingEdited}
               expenseId={expenseElement.expenseId}
               category={expenseElement.category}
               amount={expenseElement.amount}
@@ -56,6 +64,7 @@ export default function ExpenseListV2({
               setOldExpenseBeingEdited={setOldExpenseBeingEdited}
               setExpenseItemToDelete={setExpenseItemToDelete}
               publicUserData={publicUserData}
+              categoryOptions={categoryOptions}
               key={key}
             />
           )

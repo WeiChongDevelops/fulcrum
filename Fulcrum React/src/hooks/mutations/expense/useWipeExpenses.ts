@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { EmailContext } from "../../../utility/util.ts";
+import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleWipeExpenses } from "../../../utility/api.ts";
 
 export default function useWipeExpenses() {
-  const email = useContext(EmailContext);
+  const email = useEmail();
   const queryClient = useQueryClient();
 
   return useMutation({

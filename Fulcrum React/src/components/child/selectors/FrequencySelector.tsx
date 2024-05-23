@@ -28,15 +28,16 @@ interface FrequencySelectorProps {
     | Dispatch<SetStateAction<RecurringExpenseUpdatingFormData>>
     | Dispatch<SetStateAction<ExpenseUpdatingFormData>>
     | Dispatch<SetStateAction<ExpenseCreationFormData>>;
+  mustBeRecurring: boolean;
   className?: string;
 }
 
 /**
  * A creatable selector for the user to select a category for an expense.
  */
-export default function FrequencySelector({ setFormData, className }: FrequencySelectorProps) {
+export default function FrequencySelector({ setFormData, className, mustBeRecurring }: FrequencySelectorProps) {
   const [open, setOpen] = useState(false);
-  const [selectedFrequency, setSelectedFrequency] = useState("never");
+  const [selectedFrequency, setSelectedFrequency] = useState(mustBeRecurring ? "monthly" : "never");
 
   useEffect(() => {
     setFormData((currentFormData: any) => ({
@@ -121,7 +122,7 @@ export default function FrequencySelector({ setFormData, className }: FrequencyS
           <CommandEmpty>No framework found.</CommandEmpty>
           <CommandGroup>
             <CommandList>
-              {recurringFrequencyOptions.map((frequencyOption) => (
+              {(mustBeRecurring ? recurringFrequencyOptions.slice(1) : recurringFrequencyOptions).map((frequencyOption) => (
                 <CommandItem
                   key={frequencyOption.value}
                   value={frequencyOption.value}

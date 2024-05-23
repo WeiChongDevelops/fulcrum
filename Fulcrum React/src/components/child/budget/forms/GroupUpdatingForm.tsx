@@ -4,6 +4,7 @@ import {
   addFormExitListeners,
   changeFormOrModalVisibility,
   LocationContext,
+  useLocation,
 } from "../../../../utility/util.ts";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import GroupColourSelector from "../../selectors/GroupColourSelector.tsx";
@@ -40,7 +41,7 @@ export default function GroupUpdatingForm({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateGroup } = useUpdateGroup();
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", false);

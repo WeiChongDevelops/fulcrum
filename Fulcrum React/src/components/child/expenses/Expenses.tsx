@@ -1,4 +1,9 @@
-import { getStructuredExpenseData, LocationContext, updateRecurringExpenseInstances } from "../../../utility/util.ts";
+import {
+  getStructuredExpenseData,
+  LocationContext,
+  updateRecurringExpenseInstances,
+  useLocation,
+} from "../../../utility/util.ts";
 import "../../../css/Expense.css";
 import ExpenseMonthCarousel from "./main-data-hierarchy/ExpenseMonthCarousel.tsx";
 import ExpenseModalsAndForms from "./ExpenseModalsAndForms.tsx";
@@ -59,7 +64,8 @@ export default function Expenses({
 
   const [isLoading, setIsLoading] = useState(true);
   const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>();
-  const routerLocation = useContext(LocationContext);
+
+  const routerLocation = useLocation();
 
   const { mutate: batchDeleteExpenses } = useBatchDeleteExpenses();
   const { mutate: batchCreateExpenses, isSuccess: expenseCreationIsSuccess } = useBatchCreateExpenses();

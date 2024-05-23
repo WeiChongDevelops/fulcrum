@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
 import { BudgetItemEntity, GroupItemEntity } from "../../../utility/types.ts";
-import { EmailContext } from "../../../utility/util.ts";
+import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleGroupUpdating } from "../../../utility/api.ts";
 
 interface GroupUpdatingMutationProps {
@@ -12,7 +12,7 @@ interface GroupUpdatingMutationProps {
 
 export default function useUpdateGroup() {
   const queryClient = useQueryClient();
-  const email = useContext(EmailContext);
+  const email = useEmail();
 
   return useMutation({
     mutationFn: (groupUpdatingMutationProps: GroupUpdatingMutationProps) =>

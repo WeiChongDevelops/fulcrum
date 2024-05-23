@@ -11,6 +11,7 @@ import {
   groupListAsOptions,
   handleInputChangeOnFormWithAmount,
   LocationContext,
+  useLocation,
 } from "../../../../utility/util.ts";
 import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "../../selectors/CategoryIconSelector.tsx";
@@ -51,7 +52,7 @@ export default function BudgetUpdatingForm({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateBudget } = useUpdateBudget();
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateBudgetVisible", false);

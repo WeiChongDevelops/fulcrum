@@ -13,6 +13,7 @@ import {
   groupListAsOptions,
   colourStyles,
   LocationContext,
+  useLocation,
 } from "../../../../utility/util.ts";
 import CreatableSelect from "react-select/creatable";
 import "../../../../css/Budget.css";
@@ -50,7 +51,7 @@ export default function BudgetCreationForm({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: createBudget } = useCreateBudget();
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   function hideForm() {
     changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateBudgetVisible", false);

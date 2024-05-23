@@ -1,4 +1,4 @@
-import { changeFormOrModalVisibility, EmailContext } from "../../../../utility/util.ts";
+import { changeFormOrModalVisibility, EmailContext, useEmail } from "../../../../utility/util.ts";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import ProfileIconUpdatingForm from "./ProfileIconUpdatingForm.tsx";
@@ -42,7 +42,7 @@ export default function ToolsHome({ publicUserData, setOpenToolsSection }: Tools
     setOpenToolsSection("recurring");
   }
 
-  const email = useContext(EmailContext);
+  const email = useEmail();
 
   return (
     <div

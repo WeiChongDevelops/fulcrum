@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
-import { EmailContext, groupSort } from "../../../utility/util.ts";
+import { EmailContext, groupSort, useEmail } from "../../../utility/util.ts";
 import { BudgetItemEntity, GroupItemEntity } from "../../../utility/types.ts";
 import { handleBudgetCreation } from "../../../utility/api.ts";
 
 export default function useCreateBudget() {
   const queryClient = useQueryClient();
-  const email = useContext(EmailContext);
+  const email = useEmail();
 
   interface BudgetCreationMutationProps {
     newBudgetItem: BudgetItemEntity;

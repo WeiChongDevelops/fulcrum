@@ -8,6 +8,7 @@ import {
   recurringFrequencyOptions,
   colourStyles,
   LocationContext,
+  useLocation,
 } from "../../../../../utility/util.ts";
 import Select from "react-select";
 import DatePicker from "react-date-picker";
@@ -49,7 +50,7 @@ export default function RecurringExpenseUpdatingForm({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateRecurringExpense } = useUpdateRecurringExpense();
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   function hideForm() {
     changeFormOrModalVisibility(setRecurringExpenseFormVisibility, "isUpdateRecurringExpenseVisible", false);

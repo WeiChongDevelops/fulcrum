@@ -1,5 +1,10 @@
 import { FormEvent, useContext, useEffect, useRef, useState } from "react";
-import { addIconSelectionFunctionality, changeFormOrModalVisibility, LocationContext } from "../../../../utility/util.ts";
+import {
+  addIconSelectionFunctionality,
+  changeFormOrModalVisibility,
+  LocationContext,
+  useLocation,
+} from "../../../../utility/util.ts";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import ProfileIconSelector from "../../selectors/ProfileIconSelector.tsx";
 import useUpdatePublicUserData from "../../../../hooks/mutations/other/useUpdatePublicUserData.ts";
@@ -28,7 +33,7 @@ export default function ProfileIconUpdatingForm({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updatePublicUserData } = useUpdatePublicUserData();
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);

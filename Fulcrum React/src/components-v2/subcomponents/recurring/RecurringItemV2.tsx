@@ -4,106 +4,92 @@ import {
   ExpenseItemEntity,
   ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
+  PreviousRecurringExpenseBeingEdited,
   PublicUserData,
+  RecurringExpenseFormVisibility,
+  RecurringExpenseFrequency,
+  RecurringExpenseModalVisibility,
   SelectorOptionsFormattedData,
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types.ts";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 import {
+  capitaliseFirstLetter,
   changeFormOrModalVisibility,
   DEFAULT_CATEGORY_GROUP,
+  formatDate,
   formatDollarAmountStatic,
   getCurrencySymbol,
+  getNextRecurringInstance,
 } from "@/utility/util.ts";
 import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
 import UpdateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/UpdateExpenseFormV2.tsx";
 
-interface ExpenseItemV2Props {
-  expenseId: string;
+interface RecurringItemV2Props {
+  recurringExpenseId: string;
   category: string;
   amount: number;
-  recurringExpenseId: string | null;
-  timestamp: Date;
   iconPath: string;
+  timestamp: Date;
+  frequency: RecurringExpenseFrequency;
 
   groupName: string;
   groupColour: string;
 
-  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
+  setRecurringExpenseFormVisibility: Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
+  setRecurringExpenseModalVisibility: Dispatch<SetStateAction<RecurringExpenseModalVisibility>>;
 
-  setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-  setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
-  oldExpenseBeingEdited: PreviousExpenseBeingEdited;
+  setOldRecurringExpenseBeingEdited: Dispatch<SetStateAction<PreviousRecurringExpenseBeingEdited>>;
+  setRecurringExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 
   publicUserData: PublicUserData;
-  categoryOptions: DropdownSelectorOption[];
 }
 
 /**
  * A single interactive expense log.
  */
-export default function ExpenseItemV2({
-  expenseId,
+export default function RecurringItemV2({
   recurringExpenseId,
   category,
   amount,
-  timestamp,
   iconPath,
+  timestamp,
+  frequency,
   groupName,
   groupColour,
-  setExpenseFormVisibility,
-  setExpenseModalVisibility,
-  setOldExpenseBeingEdited,
-  setExpenseItemToDelete,
-  oldExpenseBeingEdited,
+  setRecurringExpenseFormVisibility,
+  setRecurringExpenseModalVisibility,
+  setOldRecurringExpenseBeingEdited,
+  setRecurringExpenseIdToDelete,
   publicUserData,
-  categoryOptions,
-}: ExpenseItemV2Props) {
+}: RecurringItemV2Props) {
   function handleEditClick() {
-    setOldExpenseBeingEdited({
-      expenseId: expenseId,
+    setOldRecurringExpenseBeingEdited({
       recurringExpenseId: recurringExpenseId,
       oldCategory: category,
       oldAmount: amount,
       oldTimestamp: timestamp,
+      oldFrequency: frequency,
     });
-    if (recurringExpenseId === null) {
-      changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateExpenseVisible", true);
-    } else {
-      changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateRecurringExpenseInstanceVisible", true);
-    }
+    // changeFormOrModalVisibility(setRecurringExpenseFormVisibility, "isUpdateRecurringExpenseVisible", true);
   }
 
   function handleDeleteClick(e: React.MouseEvent) {
     e.stopPropagation();
-    setExpenseItemToDelete({
-      expenseId: expenseId,
-      category: category,
-      amount: amount,
-      timestamp: timestamp,
-      recurringExpenseId: recurringExpenseId,
-    });
-    changeFormOrModalVisibility(setExpenseModalVisibility, "isConfirmExpenseDeletionModalVisible", true);
+    setRecurringExpenseIdToDelete(recurringExpenseId);
+    // changeFormOrModalVisibility(setRecurringExpenseModalVisibility, "isConfirmRecurringExpenseDeletionModalVisible", true);
   }
+
+  const nextRecurringInstance = useMemo(() => {
+    return getNextRecurringInstance(timestamp, frequency);
+  }, [timestamp, frequency]);
 
   const isMiscellaneous = groupName === DEFAULT_CATEGORY_GROUP;
 
   return (
-    <div className={"relative"}>
-      <UpdateExpenseFormV2
-        oldExpenseBeingEdited={oldExpenseBeingEdited}
-        setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-        categoryOptions={categoryOptions}
-        expenseId={expenseId}
-        recurringExpenseId={recurringExpenseId}
-        category={category}
-        amount={amount}
-        timestamp={timestamp}
-        currencySymbol={getCurrencySymbol(publicUserData.currency)}
-      />
-      <div className="expense-item relative" style={{ backgroundColor: groupColour }} data-value={expenseId}>
+    <div className={"w-[95%] relative mx-auto"}>
+      <div className="expense-item relative" style={{ backgroundColor: groupColour }} data-value={recurringExpenseId}>
         <div className="flex flex-row items-center">
           <div className="rounded-full bg-primary text-primary-foreground p-3">
             <DynamicIconComponent componentName={iconPath} props={{ size: 26 }} className={""} />
@@ -124,13 +110,19 @@ export default function ExpenseItemV2({
             color: isMiscellaneous ? "white" : "black",
           }}
         >
-          {recurringExpenseId && (
+          <div className="flex flex-row w-44 items-center">
             <img
               src={`/static/assets-v2/UI-icons/tools-recurring-icon-${isMiscellaneous ? "white" : "black"}.svg`}
               alt="Cycle icon"
-              className={"w-8 h-8 mr-6"}
+              className={"w-8 h-8"}
             />
-          )}
+            <p className={"text-xl ml-3 mr-4 font-bold"}>{capitaliseFirstLetter(frequency)}</p>
+          </div>
+
+          <div className="font-extrabold mr-12">
+            <p>Next:</p>
+            <p>{nextRecurringInstance && formatDate(nextRecurringInstance)}</p>
+          </div>
           <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
           <div className="flex flex-row items-center ml-2">
             <button className="circle-button" onClick={handleEditClick}>

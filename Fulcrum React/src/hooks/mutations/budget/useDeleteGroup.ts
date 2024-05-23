@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
-import { EmailContext } from "../../../utility/util.ts";
+import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleGroupDeletion } from "../../../utility/api.ts";
 import { GroupItemEntity } from "../../../utility/types.ts";
 
@@ -12,7 +12,7 @@ interface GroupDeletionProps {
 
 export default function useDeleteGroup() {
   const queryClient = useQueryClient();
-  const email = useContext(EmailContext);
+  const email = useEmail();
 
   return useMutation({
     mutationFn: (groupDeletionProps: GroupDeletionProps) => {

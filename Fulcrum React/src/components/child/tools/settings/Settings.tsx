@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { checkForOpenModalOrForm, LocationContext } from "@/utility/util.ts";
+import { checkForOpenModalOrForm, LocationContext, useLocation } from "@/utility/util.ts";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import DarkModeToggle from "../../toggles/DarkModeToggle.tsx";
 import AccessibilityToggle from "../../toggles/AccessibilityToggle.tsx";
@@ -31,7 +31,7 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
   });
   const [isSettingsFormOrModalOpen, setIsSettingsFormOrModalOpen] = useState<boolean>(false);
   const elementsBelowPopUpForm = useRef<HTMLDivElement>(null);
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   useEffect(() => {
     setIsSettingsFormOrModalOpen(checkForOpenModalOrForm(settingsFormVisibility, settingsModalVisibility));

@@ -6,7 +6,7 @@ import { ErrorBoundary } from "../child/other/ErrorBoundary.tsx";
 import { PublicUserData } from "@/utility/types.ts";
 import { useContext, useEffect } from "react";
 import { getSessionEmailOrNull } from "@/utility/api.ts";
-import { LocationContext } from "@/utility/util.ts";
+import { LocationContext, useLocation } from "@/utility/util.ts";
 
 interface FulcrumProps {
   publicUserData: PublicUserData;
@@ -17,7 +17,7 @@ interface FulcrumProps {
  * The Fulcrum component which renders the navigation bars and the active application section.
  */
 export default function Fulcrum({ publicUserData, isAnyLoading }: FulcrumProps) {
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
   if (isAnyLoading) {
     return <Loader isLoading={isAnyLoading} isDarkMode={publicUserData.darkModeEnabled} />;
   }

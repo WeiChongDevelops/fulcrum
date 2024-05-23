@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { LocationContext } from "../../utility/util.ts";
+import { LocationContext, useLocation } from "../../utility/util.ts";
 
 export default function useAnimationData(lineAngle: number) {
   const [animationDataIsLoading, setAnimationDataIsLoading] = useState(true);
@@ -52,7 +52,7 @@ export default function useAnimationData(lineAngle: number) {
     });
   }
 
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   useEffect(() => {
     setShadowDimensions().then(() => setAnimationDataIsLoading(false));

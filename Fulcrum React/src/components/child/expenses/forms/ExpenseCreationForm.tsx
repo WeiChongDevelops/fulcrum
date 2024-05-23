@@ -8,6 +8,7 @@ import {
   handleInputChangeOnFormWithAmount,
   colourStyles,
   LocationContext,
+  useLocation,
 } from "../../../../utility/util.ts";
 import { v4 as uuid } from "uuid";
 import Select from "react-select/creatable";
@@ -51,7 +52,7 @@ export default function ExpenseCreationForm({
 }: ExpenseCreationFormProps) {
   const { mutate: createExpense } = useCreateExpense();
   const { mutate: createRecurringExpense } = useCreateRecurringExpense();
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   const [formData, setFormData] = useState<ExpenseCreationFormData>({
     category: "",

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { checkForOpenModalOrForm, EmailContext, LocationContext } from "../../utility/util.ts";
+import { checkForOpenModalOrForm, EmailContext, LocationContext, useLocation } from "../../utility/util.ts";
 import { useQuery } from "@tanstack/react-query";
 import {
   BudgetFormVisibility,
@@ -40,7 +40,7 @@ export default function useInitialBudgetData() {
   const [groupNameOfNewItem, setGroupNameOfNewItem] = useState<string>("Miscellaneous");
   const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
 
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
   const [perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {

@@ -7,6 +7,7 @@ import {
   getGroupExpenditureTotal,
   LocationContext,
   monthStringArray,
+  useLocation,
 } from "../../../../utility/util.ts";
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import BudgetTile from "./BudgetTile.tsx";
@@ -62,7 +63,7 @@ export default function Group({
   perCategoryExpenseTotalThisMonth,
   publicUserData,
 }: GroupProps) {
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   const { mutate: deleteGroup } = useDeleteGroup();
 

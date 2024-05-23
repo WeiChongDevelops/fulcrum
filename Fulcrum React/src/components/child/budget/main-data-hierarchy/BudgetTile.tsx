@@ -4,6 +4,7 @@ import {
   dynamicallySizeBudgetNumberDisplays,
   formatDollarAmountStatic,
   LocationContext,
+  useLocation,
 } from "../../../../utility/util.ts";
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import {
@@ -46,7 +47,7 @@ export default function BudgetTile({
 }: BudgetTileProps) {
   const spent = perCategoryExpenseTotalThisMonth.get(category)!;
   const [budgetExceeded, setBudgetExceeded] = useState(spent > amount);
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   function handleEditClick() {
     setOldBudgetBeingEdited({

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { addDays, format } from "date-fns";
 
@@ -7,7 +6,7 @@ import { Button } from "@/components-v2/ui/button";
 import { Calendar } from "@/components-v2/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components-v2/ui/select";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   ExpenseCreationFormData,
   ExpenseUpdatingFormData,
@@ -22,10 +21,11 @@ interface ExpenseDatePickerProps {
     | Dispatch<SetStateAction<ExpenseUpdatingFormData>>
     | Dispatch<SetStateAction<ExpenseCreationFormData>>;
   className?: string;
+  defaultDate?: Date;
 }
 
-export default function ExpenseDatePicker({ setFormData, className }: ExpenseDatePickerProps) {
-  const [date, setDate] = React.useState<Date>();
+export default function ExpenseDatePicker({ setFormData, className, defaultDate = new Date() }: ExpenseDatePickerProps) {
+  const [date, setDate] = useState<Date>(defaultDate);
 
   useEffect(() => {
     setFormData((currentFormData: any) => ({

@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import useUpdatePublicUserData from "../../../hooks/mutations/other/useUpdatePublicUserData.ts";
 import { PublicUserData } from "../../../utility/types.ts";
-import { LocationContext } from "../../../utility/util.ts";
+import { LocationContext, useLocation } from "../../../utility/util.ts";
 
 interface DarkModeToggleProps {
   publicUserData: PublicUserData;
@@ -13,7 +13,7 @@ interface DarkModeToggleProps {
 export default function DarkModeToggle({ publicUserData }: DarkModeToggleProps) {
   const [isDarkMode, setIsDarkMode] = useState(publicUserData.darkModeEnabled);
   const { mutate: updatePublicUserData } = useUpdatePublicUserData();
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   useEffect(() => {
     setIsDarkMode(publicUserData.darkModeEnabled);

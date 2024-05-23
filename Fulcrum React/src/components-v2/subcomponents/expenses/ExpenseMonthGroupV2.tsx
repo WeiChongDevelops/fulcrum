@@ -1,12 +1,14 @@
 import {
   BudgetItemEntity,
   CategoryToIconGroupAndColourMap,
+  DropdownSelectorOption,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseModalVisibility,
   MonthExpenseGroupEntity,
   PreviousExpenseBeingEdited,
   PublicUserData,
+  SelectorOptionsFormattedData,
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../utility/types.ts";
@@ -14,6 +16,7 @@ import { Dispatch, memo, SetStateAction } from "react";
 import AddNewExpenseButton from "../../../components/child/expenses/buttons/AddNewExpenseButton.tsx";
 import ExpenseDayGroupV2 from "@/components-v2/subcomponents/expenses/ExpenseDayGroupV2.tsx";
 import CreateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/CreateExpenseFormV2.tsx";
+import { capitaliseFirstLetter } from "@/utility/util.ts";
 
 interface ExpenseMonthGroupV2Props {
   budgetArray: BudgetItemEntity[];
@@ -25,6 +28,7 @@ interface ExpenseMonthGroupV2Props {
   categoryDataMap: CategoryToIconGroupAndColourMap;
   publicUserData: PublicUserData;
   setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
+  oldExpenseBeingEdited: PreviousExpenseBeingEdited;
 }
 
 /**
@@ -40,8 +44,17 @@ export const ExpenseMonthGroupV2 = memo(
     setExpenseItemToDelete,
     categoryDataMap,
     publicUserData,
+    oldExpenseBeingEdited,
     setDefaultCalendarDate,
   }: ExpenseMonthGroupV2Props) => {
+    const categoryOptions = budgetArray.map((budgetItem) => {
+      const dataMapEntry = categoryDataMap.get(budgetItem.category);
+      return {
+        value: budgetItem.category,
+        label: capitaliseFirstLetter(budgetItem.category),
+        colour: !!dataMapEntry && !!dataMapEntry.colour ? dataMapEntry.colour : "black",
+      };
+    });
     return (
       <div className={"flex flex-col items-center w-full pt-8"}>
         <CreateExpenseFormV2
@@ -56,6 +69,7 @@ export const ExpenseMonthGroupV2 = memo(
           monthExpenseGroupItem.monthExpenseArray.map((dayExpenseGroup, key) => {
             return (
               <ExpenseDayGroupV2
+                categoryOptions={categoryOptions}
                 dayExpenseGroup={dayExpenseGroup}
                 setExpenseFormVisibility={setExpenseFormVisibility}
                 setExpenseModalVisibility={setExpenseModalVisibility}
@@ -63,6 +77,7 @@ export const ExpenseMonthGroupV2 = memo(
                 setExpenseItemToDelete={setExpenseItemToDelete}
                 categoryDataMap={categoryDataMap}
                 publicUserData={publicUserData}
+                oldExpenseBeingEdited={oldExpenseBeingEdited}
                 key={key}
               />
             );

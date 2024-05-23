@@ -16,6 +16,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components-v2/ui/caro
 import { EmblaCarouselType } from "embla-carousel";
 import { ScrollArea } from "@/components-v2/ui/scroll-area";
 import { ScrollAreaDemo } from "@/components-v2/subcomponents/budget/Playground.tsx";
+import { capitaliseFirstLetter } from "@/utility/util.ts";
 
 interface ExpenseMonthCarouselV2Props {
   budgetArray: BudgetItemEntity[];
@@ -29,6 +30,7 @@ interface ExpenseMonthCarouselV2Props {
   setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
   setApi: (api: EmblaCarouselType | undefined) => void;
   startingIndex: number;
+  oldExpenseBeingEdited: PreviousExpenseBeingEdited;
 }
 
 /**
@@ -46,6 +48,7 @@ export default function ExpenseMonthCarouselV2({
   setDefaultCalendarDate,
   setApi,
   startingIndex,
+  oldExpenseBeingEdited,
 }: ExpenseMonthCarouselV2Props) {
   return (
     <Carousel
@@ -71,6 +74,7 @@ export default function ExpenseMonthCarouselV2({
                     categoryDataMap={categoryDataMap}
                     publicUserData={publicUserData}
                     setDefaultCalendarDate={setDefaultCalendarDate}
+                    oldExpenseBeingEdited={oldExpenseBeingEdited}
                   />
                 </ScrollArea>
               </CarouselItem>
