@@ -98,7 +98,7 @@ export default function ExpensesV2({
       batchCreateExpenses,
       expenseCreationIsSuccess,
     );
-  }, [recurringExpenseArray]);
+  }, [recurringExpenseArray, budgetArray]);
 
   const rerenderCarousel = () => {
     const carousel = document.querySelector("#expense-carousel");

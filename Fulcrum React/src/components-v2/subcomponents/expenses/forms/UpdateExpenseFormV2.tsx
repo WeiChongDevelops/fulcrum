@@ -8,6 +8,7 @@ import {
   capitaliseFirstLetter,
   getCurrencySymbol,
   handleInputChangeOnFormWithAmount,
+  useEmail,
   useNavMenuIsOpen,
 } from "@/utility/util.ts";
 import ExpenseDatePicker from "@/components/child/selectors/ExpenseDatePicker.tsx";
@@ -25,7 +26,9 @@ import {
 } from "@/utility/types.ts";
 import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
 import { toast } from "sonner";
-import * as React from "react";
+import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
+import useDeleteExpense from "@/hooks/mutations/expense/useDeleteExpense.ts";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface UpdateExpenseFormV2Props {
   categoryOptions: DropdownSelectorOption[];
@@ -59,6 +62,11 @@ export default function UpdateExpenseFormV2({
     timestamp: oldExpenseBeingEdited.oldTimestamp,
   });
   const { mutate: updateExpense } = useUpdateExpense();
+  const { mutate: deleteExpense, isPending } = useDeleteExpense();
+  const [showConfirmDeleteExpenseDialog, setShowConfirmDeleteExpenseDialog] = useState(false);
+
+  const queryClient = useQueryClient();
+  const expenseArray: ExpenseItemEntity[] = queryClient.getQueryData(["expenseArray", useEmail()])!;
 
   const hideForm = () => {
     setFormIsOpen(false);
@@ -105,6 +113,23 @@ export default function UpdateExpenseFormV2({
   }, [setOldExpenseBeingEdited, formIsOpen]);
 
   const navMenuIsOpen = useNavMenuIsOpen();
+
+  const [toastId, setToastId] = useState<string | number>();
+
+  useEffect(() => {
+    if (isPending) {
+      setToastId(
+        toast.loading("Syncing changes, please wait.", {
+          description: "Large deletions may take a bit longer.",
+          style: {
+            textAlign: "left",
+          },
+        }),
+      );
+    } else {
+      !!toastId && toast.dismiss(toastId);
+    }
+  }, [isPending]);
 
   return (
     <div
@@ -158,14 +183,35 @@ export default function UpdateExpenseFormV2({
             </div>
 
             <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>
-              <Button
-                className={"col-start-3 col-span-3"}
-                variant={"destructive"}
-                onClick={() => toast.warning("Uh oh.")}
-                type={"button"}
-              >
-                Delete
-              </Button>
+              <FulcrumDialogTwoOptions
+                dialogOpen={showConfirmDeleteExpenseDialog}
+                setDialogOpen={setShowConfirmDeleteExpenseDialog}
+                dialogTitle={"Delete this expense?"}
+                dialogDescription={"This cannot be reversed."}
+                leftButtonText={"Cancel"}
+                leftButtonFunction={() => setShowConfirmDeleteExpenseDialog(false)}
+                rightButtonText={"Delete"}
+                rightButtonFunction={() => {
+                  setShowConfirmDeleteExpenseDialog(false);
+                  deleteExpense({
+                    expenseItemToDelete: {
+                      expenseId: expenseId,
+                      category: category,
+                      amount: amount,
+                      timestamp: timestamp,
+                      recurringExpenseId: recurringExpenseId,
+                    },
+                    deletionScale: "THIS",
+                    expenseArray: expenseArray,
+                  });
+                }}
+                buttonTriggerComponent={
+                  <Button className={"flex-grow"} variant={"destructive"} type={"button"}>
+                    Delete
+                  </Button>
+                }
+              />
+
               <Button className={"col-start-6 col-span-3"}>Save Changes</Button>
             </div>
           </form>
