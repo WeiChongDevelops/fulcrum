@@ -45,7 +45,7 @@ export default function UpdateBudgetFormV2({
 }: UpdateBudgetFormV2Props) {
   const [formData, setFormData] = useState<BudgetUpdatingFormData>({
     category: oldBudgetBeingEdited.oldCategory,
-    amount: oldBudgetBeingEdited.oldAmount.toString(),
+    amount: oldBudgetBeingEdited.oldAmount,
     iconPath: oldBudgetBeingEdited.oldIconPath,
     group: oldBudgetBeingEdited.oldGroup,
   });
@@ -58,11 +58,11 @@ export default function UpdateBudgetFormV2({
   useEffect(() => {
     setFormData({
       category: oldBudgetBeingEdited.oldCategory,
-      amount: oldBudgetBeingEdited.oldAmount.toString(),
+      amount: oldBudgetBeingEdited.oldAmount,
       iconPath: oldBudgetBeingEdited.oldIconPath,
       group: oldBudgetBeingEdited.oldGroup,
     });
-  }, [oldBudgetBeingEdited]);
+  }, [oldBudgetBeingEdited, formIsOpen]);
 
   function hideForm() {
     // changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", false);
@@ -89,7 +89,7 @@ export default function UpdateBudgetFormV2({
     hideForm();
     let defaultGroupItem: GroupItemEntity | undefined = undefined;
 
-    const updatedBudgetItem: BudgetItemEntity = { ...formData, amount: parseFloat(formData.amount), timestamp: new Date() };
+    const updatedBudgetItem: BudgetItemEntity = { ...formData, timestamp: new Date() };
 
     if (!groupArray.map((groupItem) => groupItem.group).includes(updatedBudgetItem.group)) {
       defaultGroupItem = {
@@ -108,7 +108,7 @@ export default function UpdateBudgetFormV2({
 
     setFormData({
       category: oldBudgetBeingEdited.oldCategory,
-      amount: oldBudgetBeingEdited.oldAmount.toString(),
+      amount: oldBudgetBeingEdited.oldAmount,
       iconPath: "",
       group: oldBudgetBeingEdited.oldGroup,
     });
@@ -173,7 +173,7 @@ export default function UpdateBudgetFormV2({
                 type="text"
                 className={"col-span-3 pl-8"}
                 onChange={handleInputChange}
-                value={formData.amount === "0" ? "" : formData.amount}
+                value={formData.amount === 0 ? "" : formData.amount.toFixed(2)}
                 name="amount"
                 id="amount"
                 autoComplete={"off"}

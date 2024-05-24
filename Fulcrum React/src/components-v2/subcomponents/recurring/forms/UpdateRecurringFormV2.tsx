@@ -64,7 +64,7 @@ export default function UpdateRecurringFormV2({
       timestamp: oldRecurringExpenseBeingEdited.oldTimestamp,
       frequency: oldRecurringExpenseBeingEdited.oldFrequency,
     });
-  }, [oldRecurringExpenseBeingEdited]);
+  }, [oldRecurringExpenseBeingEdited, formIsOpen]);
 
   const hideForm = () => {
     setFormIsOpen(false);

@@ -1,25 +1,18 @@
+import { handleInputChangeOnFormWithAmount, useNavMenuIsOpen } from "@/utility/util.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
-import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
-import { Input } from "@/components-v2/ui/input.tsx";
-import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
 import CategorySelector from "@/components/child/selectors/CategorySelector.tsx";
-import {
-  capitaliseFirstLetter,
-  getCurrencySymbol,
-  handleInputChangeOnFormWithAmount,
-  useNavMenuIsOpen,
-} from "@/utility/util.ts";
+import { Input } from "@/components-v2/ui/input.tsx";
 import ExpenseDatePicker from "@/components/child/selectors/ExpenseDatePicker.tsx";
-import FrequencySelector from "@/components/child/selectors/FrequencySelector.tsx";
+import { Button } from "@/components-v2/ui/button.tsx";
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
 import {
-  BudgetItemEntity,
   DropdownSelectorOption,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseUpdatingFormData,
   PreviousExpenseBeingEdited,
+  RecurringExpenseInstanceUpdatingFormData,
   SelectorOptionsFormattedData,
   SetFormVisibility,
 } from "@/utility/types.ts";
@@ -27,12 +20,11 @@ import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
 import { toast } from "sonner";
 import * as React from "react";
 
-interface UpdateExpenseFormV2Props {
+interface UpdateRecurringInstanceFormV2Props {
   categoryOptions: DropdownSelectorOption[];
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
-  setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   currencySymbol: string;
-
+  setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   expenseId: string;
   category: string;
   amount: number;
@@ -40,23 +32,21 @@ interface UpdateExpenseFormV2Props {
   timestamp: Date;
 }
 
-export default function UpdateExpenseFormV2({
+export default function UpdateRecurringInstanceFormV2({
   categoryOptions,
   oldExpenseBeingEdited,
-  setOldExpenseBeingEdited,
   currencySymbol,
+  setOldExpenseBeingEdited,
   expenseId,
   recurringExpenseId,
   category,
   amount,
   timestamp,
-}: UpdateExpenseFormV2Props) {
+}: UpdateRecurringInstanceFormV2Props) {
   const [formIsOpen, setFormIsOpen] = useState(false);
-
-  const [formData, setFormData] = useState<ExpenseUpdatingFormData>({
+  const [formData, setFormData] = useState<RecurringExpenseInstanceUpdatingFormData>({
     category: oldExpenseBeingEdited.oldCategory,
     amount: oldExpenseBeingEdited.oldAmount,
-    timestamp: oldExpenseBeingEdited.oldTimestamp,
   });
   const { mutate: updateExpense } = useUpdateExpense();
 
@@ -74,18 +64,22 @@ export default function UpdateExpenseFormV2({
     setFormData({
       category: oldExpenseBeingEdited.oldCategory,
       amount: oldExpenseBeingEdited.oldAmount,
-      timestamp: oldExpenseBeingEdited.oldTimestamp,
     });
 
+    const noChangesMade =
+      formData.category === oldExpenseBeingEdited.oldCategory && formData.amount === oldExpenseBeingEdited.oldAmount;
+
     const updatedExpenseItem: ExpenseItemEntity = {
-      ...formData,
-      amount: formData.amount,
       expenseId: oldExpenseBeingEdited.expenseId,
-      timestamp: formData.timestamp as Date,
-      recurringExpenseId: null,
+      category: formData.category,
+      amount: formData.amount,
+      timestamp: oldExpenseBeingEdited.oldTimestamp,
+      recurringExpenseId: noChangesMade ? oldExpenseBeingEdited.recurringExpenseId : null,
     };
+
     updateExpense(updatedExpenseItem);
   }
+
   const updateOldExpenseBeingEdited = () => {
     setOldExpenseBeingEdited({
       expenseId: expenseId,
@@ -100,9 +94,9 @@ export default function UpdateExpenseFormV2({
     setFormData({
       category: oldExpenseBeingEdited.oldCategory,
       amount: oldExpenseBeingEdited.oldAmount,
-      timestamp: oldExpenseBeingEdited.oldTimestamp,
     });
-  }, [setOldExpenseBeingEdited, formIsOpen]);
+    console.log(oldExpenseBeingEdited);
+  }, [oldExpenseBeingEdited]);
 
   const navMenuIsOpen = useNavMenuIsOpen();
 
@@ -115,8 +109,11 @@ export default function UpdateExpenseFormV2({
         <SheetTrigger onClick={updateOldExpenseBeingEdited} className={"w-full h-full"}></SheetTrigger>
         <SheetContent>
           <SheetHeader>
-            <SheetTitle>Updating Expense</SheetTitle>
-            <SheetDescription>{`Making changes to an existing expense entry.`}</SheetDescription>
+            <SheetTitle>Updating Expense Repeat</SheetTitle>
+            <SheetDescription>
+              <p>Editing this particular repeat of your recurring expense.</p>
+              <p className={"mt-3"}>To manage your recurring expenses, please see the 'Recurring' section.</p>
+            </SheetDescription>
           </SheetHeader>
           <form onSubmit={handleSubmit} className="flex flex-col gap-6 mt-8">
             <div className={"grid grid-cols-4 items-center gap-5"}>

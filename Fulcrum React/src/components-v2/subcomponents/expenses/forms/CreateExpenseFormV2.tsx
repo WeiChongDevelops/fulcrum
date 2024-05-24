@@ -18,7 +18,7 @@ import {
   handleInputChangeOnFormWithAmount,
 } from "@/utility/util.ts";
 import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
   BudgetItemEntity,
   CategoryToIconGroupAndColourMap,
@@ -68,6 +68,15 @@ export default function CreateExpenseFormV2({
   const hideForm = () => {
     setFormIsOpen(false);
   };
+
+  useEffect(() => {
+    setFormData({
+      category: "Other",
+      amount: 0,
+      timestamp: defaultCalendarDate,
+      frequency: mustBeRecurring ? "monthly" : "never",
+    });
+  }, [formIsOpen]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

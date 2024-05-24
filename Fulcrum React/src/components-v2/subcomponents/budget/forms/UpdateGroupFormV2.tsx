@@ -16,6 +16,8 @@ import { addColourSelectionFunctionality, addFormExitListeners, LocationContext 
 import { Input } from "@/components-v2/ui/input.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
+import { toast } from "sonner";
+import * as React from "react";
 
 interface UpdateGroupFormV2Props {
   oldGroupBeingEdited: PreviousGroupBeingEdited;
@@ -43,7 +45,7 @@ export default function UpdateGroupFormV2({
       colour: oldGroupBeingEdited.oldColour,
       group: oldGroupBeingEdited.oldGroupName,
     });
-  }, [oldGroupBeingEdited]);
+  }, [oldGroupBeingEdited, formIsOpen]);
 
   function hideForm() {
     // changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", false);
@@ -146,7 +148,18 @@ export default function UpdateGroupFormV2({
               className={"col-span-3"}
             />
           </div>
-          <Button className={"mt-1 self-end"}>Save Changes</Button>
+
+          <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>
+            <Button
+              className={"col-start-3 col-span-3"}
+              variant={"destructive"}
+              onClick={() => toast.warning("Uh oh.")}
+              type={"button"}
+            >
+              Delete
+            </Button>
+            <Button className={"col-start-6 col-span-3"}>Save Changes</Button>
+          </div>
         </form>
       </SheetContent>
     </Sheet>

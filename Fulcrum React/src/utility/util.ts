@@ -204,7 +204,9 @@ export function formatDollarAmountStatic(amount: number, currency: string): stri
  * @returns A formatted string representing the amount without a currency symbol
  */
 export function formatDollarAmountDynamic(amount: string): string {
+  // Remove anything not a number or '.'
   const cleanedValue = amount.replace(/[^\d.]/g, "");
+
   const splitValue = cleanedValue.split(".");
   if (splitValue.length >= 2 && splitValue[1].length > 2) {
     splitValue[1] = splitValue[1].substring(0, 2);

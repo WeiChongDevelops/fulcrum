@@ -74,7 +74,7 @@ export interface BudgetCreationFormData {
 
 export interface BudgetUpdatingFormData {
   category: string;
-  amount: string;
+  amount: number;
   group: string;
   iconPath: string;
 }

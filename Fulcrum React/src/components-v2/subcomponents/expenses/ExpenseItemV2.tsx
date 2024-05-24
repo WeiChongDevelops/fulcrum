@@ -18,6 +18,7 @@ import {
 } from "@/utility/util.ts";
 import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
 import UpdateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/UpdateExpenseFormV2.tsx";
+import UpdateRecurringInstanceFormV2 from "@/components-v2/subcomponents/expenses/forms/UpdateRecurringInstanceFormV2.tsx";
 
 interface ExpenseItemV2Props {
   expenseId: string;
@@ -89,20 +90,35 @@ export default function ExpenseItemV2({
   }
 
   const isMiscellaneous = groupName === DEFAULT_CATEGORY_GROUP;
+  const currencySymbol = getCurrencySymbol(publicUserData.currency);
 
   return (
     <div className={"relative"}>
-      <UpdateExpenseFormV2
-        oldExpenseBeingEdited={oldExpenseBeingEdited}
-        setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-        categoryOptions={categoryOptions}
-        expenseId={expenseId}
-        recurringExpenseId={recurringExpenseId}
-        category={category}
-        amount={amount}
-        timestamp={timestamp}
-        currencySymbol={getCurrencySymbol(publicUserData.currency)}
-      />
+      {!!recurringExpenseId ? (
+        <UpdateRecurringInstanceFormV2
+          categoryOptions={categoryOptions}
+          oldExpenseBeingEdited={oldExpenseBeingEdited}
+          currencySymbol={currencySymbol}
+          setOldExpenseBeingEdited={setOldExpenseBeingEdited}
+          expenseId={expenseId}
+          recurringExpenseId={recurringExpenseId}
+          category={category}
+          amount={amount}
+          timestamp={timestamp}
+        />
+      ) : (
+        <UpdateExpenseFormV2
+          oldExpenseBeingEdited={oldExpenseBeingEdited}
+          setOldExpenseBeingEdited={setOldExpenseBeingEdited}
+          categoryOptions={categoryOptions}
+          expenseId={expenseId}
+          recurringExpenseId={recurringExpenseId}
+          category={category}
+          amount={amount}
+          timestamp={timestamp}
+          currencySymbol={currencySymbol}
+        />
+      )}
       <div className="expense-item relative" style={{ backgroundColor: groupColour }} data-value={expenseId}>
         <div className="flex flex-row items-center">
           <div className="rounded-full bg-primary text-primary-foreground p-3">
