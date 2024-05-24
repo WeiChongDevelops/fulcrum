@@ -10,6 +10,11 @@ import ActiveFormClickShield from "@/components/child/other/ActiveFormClickShiel
 import SettingsModalsAndForms from "@/components/child/tools/settings/SettingsModalsAndForms.tsx";
 import "@/css/Tools.css";
 import { Button } from "@/components-v2/ui/button.tsx";
+import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
+import useWipeExpenses from "@/hooks/mutations/expense/useWipeExpenses.ts";
+import useWipeBudget from "@/hooks/mutations/budget/useWipeBudget.ts";
+import useResetAccountData from "@/hooks/mutations/other/useResetAccountData.ts";
+import FulcrumTypematchModal from "@/components-v2/subcomponents/other/FulcrumTypematchModal.tsx";
 
 interface SettingsV2Props {
   publicUserData: PublicUserData;
@@ -19,218 +24,121 @@ interface SettingsV2Props {
  * The root component for the settings page.
  */
 export default function SettingsV2({ publicUserData }: SettingsV2Props) {
-  const [settingsFormVisibility, setSettingsFormVisibility] = useState<SettingsFormVisibility>({
-    typeDeleteMyExpensesForm: false,
-    typeDeleteMyBudgetForm: false,
-    typeDeleteMyDataForm: false,
-    typeResetMyAccountForm: false,
-  });
-  const [settingsModalVisibility, setSettingsModalVisibility] = useState<SettingsModalVisibility>({
-    isConfirmExpenseWipeModalVisible: false,
-    isConfirmBudgetWipeModalVisible: false,
-    isConfirmAllDataWipeModalVisible: false,
-    isConfirmBudgetResetModalVisible: false,
-  });
-  const [isSettingsFormOrModalOpen, setIsSettingsFormOrModalOpen] = useState<boolean>(false);
+  // const [settingsFormVisibility, setSettingsFormVisibility] = useState<SettingsFormVisibility>({
+  //   typeDeleteMyExpensesForm: false,
+  //   typeDeleteMyBudgetForm: false,
+  //   typeDeleteMyDataForm: false,
+  //   typeResetMyAccountForm: false,
+  // });
+  // const [settingsModalVisibility, setSettingsModalVisibility] = useState<SettingsModalVisibility>({
+  //   isConfirmExpenseWipeModalVisible: false,
+  //   isConfirmBudgetWipeModalVisible: false,
+  //   isConfirmAllDataWipeModalVisible: false,
+  //   isConfirmBudgetResetModalVisible: false,
+  // });
+  // const [isSettingsFormOrModalOpen, setIsSettingsFormOrModalOpen] = useState<boolean>(false);
   const elementsBelowPopUpForm = useRef<HTMLDivElement>(null);
   const routerLocation = useContext(LocationContext);
 
-  useEffect(() => {
-    setIsSettingsFormOrModalOpen(checkForOpenModalOrForm(settingsFormVisibility, settingsModalVisibility));
-  }, [settingsFormVisibility, settingsModalVisibility, routerLocation]);
+  // useEffect(() => {
+  //   setIsSettingsFormOrModalOpen(checkForOpenModalOrForm(settingsFormVisibility, settingsModalVisibility));
+  // }, [settingsFormVisibility, settingsModalVisibility, routerLocation]);
+
+  const { mutate: wipeExpenses } = useWipeExpenses();
+  const { mutate: wipeData } = useWipeBudget();
+  const { mutate: resetData } = useResetAccountData();
+
+  const [showWipeExpenseTypematchModal, setShowWipeExpenseTypematchModal] = useState(false);
+  const [showWipeDataTypematchModal, setShowWipeDataTypematchModal] = useState(false);
+  const [showResetAccountTypematchModal, setShowResetAccountTypematchModal] = useState(false);
 
   return (
-    <div className={"flex flex-col h-screen"}>
+    <div className={"flex flex-col justify-start items-center relative"}>
       <SettingsHeaderV2 publicUserData={publicUserData} />
-      <div className={"flex flex-col justify-start items-center w-full h-[94%] relative pt-8"}>
-        <div
-          className={`px-8 elementsBelowPopUpForm
-                ${isSettingsFormOrModalOpen && "blur"}`}
-          ref={elementsBelowPopUpForm}
-        >
-          <div className={"settings-row bg-[#17423f] settings-box-shadow currency-selector-row"}>
-            <b>Currency</b>
-            {/*<CurrencySelector publicUserData={publicUserData} />*/}
-            <CurrencySelectorV2 publicUserData={publicUserData} />
-          </div>
-
-          <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
-            <b>Appearance</b>
-            <DarkModeToggleV2 publicUserData={publicUserData} />
-          </div>
-
-          <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
-            <b>Accessibility</b>
-            <AccessibilityToggleV2 publicUserData={publicUserData} />
-          </div>
-
-          <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
-            <b>Public License</b>
-            {/*<FulcrumButton*/}
-            {/*  displayText={"See Public License"}*/}
-            {/*  backgroundColour={"white"}*/}
-            {/*  optionalTailwind={"m-0"}*/}
-            {/*  onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}*/}
-            {/*/>*/}
-            <Button onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}>
-              See Public License
-            </Button>
-          </div>
-
-          <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
-            <b>Privacy Policy</b>
-            {/*<FulcrumButton*/}
-            {/*  displayText={"See Privacy Policy"}*/}
-            {/*  backgroundColour={"white"}*/}
-            {/*  optionalTailwind={"m-0"}*/}
-            {/*  onClick={() => window.open(window.location.origin + "/privacy", "_blank")}*/}
-            {/*/>*/}
-            <Button onClick={() => window.open(window.location.origin + "/privacy", "_blank")}>See Privacy Policy</Button>
-          </div>
-
-          <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
-            <b>Account Created:</b>
-            <p>{new Date(publicUserData.createdAt).toLocaleDateString()}</p>
-          </div>
-
-          <div className={"settings-row wipe-options"}>
-            <Button
-              onClick={() =>
-                setSettingsFormVisibility((prevVisibility) => ({
-                  ...prevVisibility,
-                  typeDeleteMyExpensesForm: true,
-                }))
-              }
-            >
-              Wipe Expenses
-            </Button>
-            <Button
-              onClick={() =>
-                setSettingsFormVisibility((prevVisibility) => ({
-                  ...prevVisibility,
-                  typeDeleteMyDataForm: true,
-                }))
-              }
-            >
-              Wipe All Account Data
-            </Button>
-            <Button
-              onClick={() =>
-                setSettingsFormVisibility((prevVisibility) => ({
-                  ...prevVisibility,
-                  typeResetMyAccountForm: true,
-                }))
-              }
-            >
-              Reset Account Data to Defaults
-            </Button>
-          </div>
-
-          {isSettingsFormOrModalOpen && <ActiveFormClickShield />}
+      <div className={"flex flex-col justify-start items-center w-[95%] h-[94%] mt-[6vh] pt-8"}>
+        <div className={"settings-row bg-[#17423f] settings-box-shadow currency-selector-row"}>
+          <b>Currency</b>
+          {/*<CurrencySelector publicUserData={publicUserData} />*/}
+          <CurrencySelectorV2 publicUserData={publicUserData} />
         </div>
 
-        <SettingsModalsAndForms
-          settingsModalVisibility={settingsModalVisibility}
-          setSettingsModalVisibility={setSettingsModalVisibility}
-          settingsFormVisibility={settingsFormVisibility}
-          setSettingsFormVisibility={setSettingsFormVisibility}
-        />
+        <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
+          <b>Appearance</b>
+          <DarkModeToggleV2 publicUserData={publicUserData} />
+        </div>
+
+        <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
+          <b>Accessibility</b>
+          <AccessibilityToggleV2 publicUserData={publicUserData} />
+        </div>
+
+        <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
+          <b>Public License</b>
+          <Button onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}>
+            See Public License
+          </Button>
+        </div>
+
+        <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
+          <b>Privacy Policy</b>
+          <Button onClick={() => window.open(window.location.origin + "/privacy", "_blank")}>See Privacy Policy</Button>
+        </div>
+
+        <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
+          <b>Account Created:</b>
+          <p>{new Date(publicUserData.createdAt).toLocaleDateString()}</p>
+        </div>
+
+        <div className={"settings-row wipe-options"}>
+          <FulcrumTypematchModal
+            typeMatchString={"Wipe My Expenses"}
+            dialogOpen={showWipeExpenseTypematchModal}
+            setDialogOpen={setShowWipeExpenseTypematchModal}
+            dialogTitle={"Wipe all expenses?"}
+            dialogDescription={"This decision is irreversible."}
+            leftButtonText={"Cancel"}
+            leftButtonFunction={() => setShowWipeExpenseTypematchModal(false)}
+            rightButtonText={"Confirm"}
+            rightButtonFunction={() => {
+              setShowWipeExpenseTypematchModal(false);
+              wipeExpenses();
+            }}
+            buttonTriggerComponent={<Button variant={"destructive"}>Wipe Expenses</Button>}
+          />
+
+          <FulcrumTypematchModal
+            typeMatchString={"Wipe My Data"}
+            dialogOpen={showWipeDataTypematchModal}
+            setDialogOpen={setShowWipeDataTypematchModal}
+            dialogTitle={"Wipe all data?"}
+            dialogDescription={"This decision is irreversible."}
+            leftButtonText={"Cancel"}
+            leftButtonFunction={() => setShowWipeDataTypematchModal(false)}
+            rightButtonText={"Confirm"}
+            rightButtonFunction={() => {
+              setShowWipeDataTypematchModal(false);
+              wipeData();
+            }}
+            buttonTriggerComponent={<Button variant={"destructive"}>Wipe Data</Button>}
+          />
+
+          <FulcrumTypematchModal
+            typeMatchString={"Reset to Defaults"}
+            dialogOpen={showResetAccountTypematchModal}
+            setDialogOpen={setShowResetAccountTypematchModal}
+            dialogTitle={"Reset account to default data?"}
+            dialogDescription={"This decision is irreversible."}
+            leftButtonText={"Cancel"}
+            leftButtonFunction={() => setShowResetAccountTypematchModal(false)}
+            rightButtonText={"Confirm"}
+            rightButtonFunction={() => {
+              setShowResetAccountTypematchModal(false);
+              resetData();
+            }}
+            buttonTriggerComponent={<Button variant={"destructive"}>Reset Defaults</Button>}
+          />
+        </div>
       </div>
     </div>
-    // <div
-    //   className={`flex flex-col justify-start items-center min-h-screen relative ${publicUserData.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
-    // >
-    //   <div
-    //     className={`w-[100vw] px-8 elementsBelowPopUpForm
-    //             ${isSettingsFormOrModalOpen && "blur"}`}
-    //     ref={elementsBelowPopUpForm}
-    //   >
-    //
-    //     <div className={"settings-row bg-[#17423f] settings-box-shadow currency-selector-row"}>
-    //       <b>Currency</b>
-    //       <CurrencySelector publicUserData={publicUserData} />
-    //     </div>
-    //
-    //     <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
-    //       <b>Appearance</b>
-    //       <DarkModeToggle publicUserData={publicUserData} />
-    //     </div>
-    //
-    //     <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
-    //       <b>Accessibility</b>
-    //       <AccessibilityToggle publicUserData={publicUserData} />
-    //     </div>
-    //
-    //     <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
-    //       <b>Public License</b>
-    //       <FulcrumButton
-    //         displayText={"See Public License"}
-    //         backgroundColour={"white"}
-    //         optionalTailwind={"m-0"}
-    //         onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}
-    //       />
-    //     </div>
-    //
-    //     <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
-    //       <b>Privacy Policy</b>
-    //       <FulcrumButton
-    //         displayText={"See Privacy Policy"}
-    //         backgroundColour={"white"}
-    //         optionalTailwind={"m-0"}
-    //         onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
-    //       />
-    //     </div>
-    //
-    //     <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
-    //       <b>Account Created:</b>
-    //       <p>{new Date(publicUserData.createdAt).toLocaleDateString()}</p>
-    //     </div>
-    //
-    //     <div className={"settings-row wipe-options"}>
-    //       <FulcrumButton
-    //         displayText={"Wipe Expenses"}
-    //         backgroundColour={"red"}
-    //         onClick={() =>
-    //           setSettingsFormVisibility((prevVisibility) => ({
-    //             ...prevVisibility,
-    //             typeDeleteMyExpensesForm: true,
-    //           }))
-    //         }
-    //         hoverShadow={true}
-    //       />
-    //       <FulcrumButton
-    //         displayText={"Wipe All Account Data"}
-    //         backgroundColour={"red"}
-    //         onClick={() =>
-    //           setSettingsFormVisibility((prevVisibility) => ({
-    //             ...prevVisibility,
-    //             typeDeleteMyDataForm: true,
-    //           }))
-    //         }
-    //         hoverShadow={true}
-    //       />
-    //       <FulcrumButton
-    //         displayText={"Reset Account Data to Defaults"}
-    //         backgroundColour={"red"}
-    //         onClick={() =>
-    //           setSettingsFormVisibility((prevVisibility) => ({
-    //             ...prevVisibility,
-    //             typeResetMyAccountForm: true,
-    //           }))
-    //         }
-    //         hoverShadow={true}
-    //       />
-    //     </div>
-    //
-    //     {isSettingsFormOrModalOpen && <ActiveFormClickShield />}
-    //   </div>
-    //
-    //   <SettingsModalsAndForms
-    //     settingsModalVisibility={settingsModalVisibility}
-    //     setSettingsModalVisibility={setSettingsModalVisibility}
-    //     settingsFormVisibility={settingsFormVisibility}
-    //     setSettingsFormVisibility={setSettingsFormVisibility}
-    //   />
-    // </div>
   );
 }

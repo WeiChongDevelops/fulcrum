@@ -94,6 +94,7 @@
 
 .settings-row {
   color: white;
+  width: 100%;
   display: flex;
   padding: 1rem 2rem;
   margin-bottom: 1.5rem;

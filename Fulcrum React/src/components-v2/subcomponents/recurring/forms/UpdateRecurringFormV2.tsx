@@ -213,7 +213,7 @@ export default function UpdateRecurringFormV2({
               dialogOpen={showConfirmDeleteRecurringDialog}
               setDialogOpen={setShowConfirmDeleteRecurringDialog}
               dialogTitle={"Delete this recurring expense and past repeats?"}
-              dialogDescription={"This cannot be reversed."}
+              dialogDescription={"This decision is irreversible."}
               leftButtonText={"Cancel"}
               leftButtonFunction={() => setShowConfirmDeleteRecurringDialog(false)}
               rightButtonText={"Confirm"}

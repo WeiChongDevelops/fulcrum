@@ -54,7 +54,7 @@ export default function ExpenseMonthCarouselV2({
     <Carousel
       id={"expense-carousel"}
       setApi={setApi}
-      className={"flex flex-row justify-center w-full z-10 mt-[calc(6vh)] transition-all duration-100 ease-out"}
+      className={"flex flex-row justify-center w-full z-10 mt-[6vh] transition-all duration-100 ease-out"}
       opts={{ startIndex: startingIndex }}
     >
       <CarouselContent>

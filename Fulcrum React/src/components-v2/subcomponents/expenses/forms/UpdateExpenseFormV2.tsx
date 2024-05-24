@@ -187,7 +187,7 @@ export default function UpdateExpenseFormV2({
                 dialogOpen={showConfirmDeleteExpenseDialog}
                 setDialogOpen={setShowConfirmDeleteExpenseDialog}
                 dialogTitle={"Delete this expense?"}
-                dialogDescription={"This cannot be reversed."}
+                dialogDescription={"This decision is irreversible."}
                 leftButtonText={"Cancel"}
                 leftButtonFunction={() => setShowConfirmDeleteExpenseDialog(false)}
                 rightButtonText={"Delete"}
