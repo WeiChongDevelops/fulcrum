@@ -16,6 +16,7 @@ import {
   LocationContext,
   updateRecurringExpenseInstances,
   expenseStartDate,
+  useLocation,
 } from "@/utility/util.ts";
 import useBatchDeleteExpenses from "../../hooks/mutations/expense/useBatchDeleteExpenses.ts";
 import useBatchCreateExpenses from "../../hooks/mutations/expense/useBatchCreateExpenses.ts";
@@ -75,7 +76,7 @@ export default function ExpensesV2({
   const [api, setApi] = useState<CarouselApi>();
   const [carouselWidth, setCarouselWidth] = useState(0);
 
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   const { mutate: batchDeleteExpenses } = useBatchDeleteExpenses();
   const { mutate: batchCreateExpenses, isSuccess: expenseCreationIsSuccess } = useBatchCreateExpenses();
@@ -89,7 +90,13 @@ export default function ExpensesV2({
     updateStructuredExpenseData().then(() => setIsLoading(false));
   }, [expenseArray, routerLocation]);
 
-  useMemo(() => {
+  useEffect(() => {
+    console.log("!!!!!!!!");
+    console.log(routerLocation);
+    console.log("!!!!!!!!");
+  }, [routerLocation]);
+
+  useEffect(() => {
     updateRecurringExpenseInstances(
       recurringExpenseArray,
       expenseArray,
@@ -98,7 +105,7 @@ export default function ExpensesV2({
       batchCreateExpenses,
       expenseCreationIsSuccess,
     );
-  }, [recurringExpenseArray, budgetArray]);
+  }, [expenseArray, recurringExpenseArray, blacklistedExpenseArray, budgetArray, routerLocation]);
 
   const rerenderCarousel = () => {
     const carousel = document.querySelector("#expense-carousel");

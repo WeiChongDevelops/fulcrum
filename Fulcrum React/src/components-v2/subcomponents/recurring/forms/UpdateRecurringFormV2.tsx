@@ -12,7 +12,7 @@ import {
   SetFormVisibility,
 } from "@/utility/types.ts";
 import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
-import { handleInputChangeOnFormWithAmount, useNavMenuIsOpen } from "@/utility/util.ts";
+import { handleInputChangeOnFormWithAmount, useEmail, useNavMenuIsOpen } from "@/utility/util.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import CategorySelector from "@/components/child/selectors/CategorySelector.tsx";
@@ -23,6 +23,10 @@ import useUpdateRecurringExpense from "@/hooks/mutations/recurring-expense/useUp
 import FrequencySelector from "@/components/child/selectors/FrequencySelector.tsx";
 import { toast } from "sonner";
 import * as React from "react";
+import useDeleteRecurringExpense from "@/hooks/mutations/recurring-expense/useDeleteRecurringExpense.ts";
+import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
+import FulcrumDialogThreeOptions from "@/components-v2/subcomponents/other/FulcrumDialogThreeOptions.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface UpdateRecurringFormV2Props {
   categoryOptions: DropdownSelectorOption[];
@@ -47,6 +51,7 @@ export default function UpdateRecurringFormV2({
   timestamp,
   frequency,
 }: UpdateRecurringFormV2Props) {
+  const { mutate: deleteRecurringExpense } = useDeleteRecurringExpense();
   const [formIsOpen, setFormIsOpen] = useState(false);
 
   const [formData, setFormData] = useState<RecurringExpenseUpdatingFormData>({
@@ -105,7 +110,12 @@ export default function UpdateRecurringFormV2({
 
   const navMenuIsOpen = useNavMenuIsOpen();
 
-  console.log(oldRecurringExpenseBeingEdited);
+  const queryClient = useQueryClient();
+  const expenseArray: ExpenseItemEntity[] = queryClient.getQueryData(["expenseArray", useEmail()])!;
+
+  const [showDeleteRecurringOptionsDialog, setShowDeleteRecurringOptionsDialog] = useState(false);
+  const [showConfirmDeleteRecurringDialog, setShowConfirmDeleteRecurringDialog] = useState(false);
+
   return (
     <div
       className={"h-20 inset-0 absolute update-expense-trigger z-10"}
@@ -168,16 +178,54 @@ export default function UpdateRecurringFormV2({
             </div>
 
             <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>
-              <Button
-                className={"col-start-3 col-span-3"}
-                variant={"destructive"}
-                onClick={() => toast.warning("Uh oh.")}
-                type={"button"}
-              >
-                Delete
-              </Button>
+              <FulcrumDialogThreeOptions
+                dialogOpen={showDeleteRecurringOptionsDialog}
+                setDialogOpen={setShowDeleteRecurringOptionsDialog}
+                dialogTitle={"Keep past repeats of this recurring expense?"}
+                dialogDescription={"You can delete specific repeats in the 'Expenses' page."}
+                leftButtonText={"Cancel"}
+                leftButtonFunction={() => setShowDeleteRecurringOptionsDialog(false)}
+                midButtonText={"Keep Repeats"}
+                midButtonFunction={() => {
+                  setShowDeleteRecurringOptionsDialog(false);
+                  deleteRecurringExpense({
+                    recurringExpenseId: recurringExpenseId,
+                    alsoDeleteAllInstances: false,
+                    expenseArray: expenseArray,
+                  });
+                }}
+                rightButtonText={"Delete Repeats"}
+                rightButtonFunction={() => {
+                  setShowDeleteRecurringOptionsDialog(false);
+                  setShowConfirmDeleteRecurringDialog(true);
+                }}
+                buttonTriggerComponent={
+                  <Button className={"flex-grow"} variant={"destructive"} type={"button"}>
+                    Delete
+                  </Button>
+                }
+              />
+
               <Button className={"col-start-6 col-span-3"}>Save Changes</Button>
             </div>
+
+            <FulcrumDialogTwoOptions
+              dialogOpen={showConfirmDeleteRecurringDialog}
+              setDialogOpen={setShowConfirmDeleteRecurringDialog}
+              dialogTitle={"Delete this recurring expense and past repeats?"}
+              dialogDescription={"This cannot be reversed."}
+              leftButtonText={"Cancel"}
+              leftButtonFunction={() => setShowConfirmDeleteRecurringDialog(false)}
+              rightButtonText={"Confirm"}
+              rightButtonFunction={() => {
+                setShowConfirmDeleteRecurringDialog(false);
+                deleteRecurringExpense({
+                  recurringExpenseId: recurringExpenseId,
+                  alsoDeleteAllInstances: true,
+                  expenseArray: expenseArray,
+                });
+              }}
+            />
           </form>
         </SheetContent>
       </Sheet>

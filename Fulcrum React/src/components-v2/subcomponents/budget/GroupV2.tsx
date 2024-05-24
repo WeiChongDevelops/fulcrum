@@ -206,6 +206,7 @@ export default function GroupV2({
                 }}
                 buttonTriggerComponent={
                   <Button
+                    asChild
                     variant={"ghost"}
                     className={"standard-edit-delete-button flex-justify-center px-2.5 py-0 rounded-[50%]"}
                   >

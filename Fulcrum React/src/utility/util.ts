@@ -395,8 +395,8 @@ export function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetIte
  * Groups category options in the selector, by group.
  */
 export function categoryOptionSort(
-  optionA: { value: string; label: string; colour: string | null },
-  optionB: { value: string; label: string; colour: string | null },
+  optionA: { value: string; label: string; colour: string },
+  optionB: { value: string; label: string; colour: string },
 ) {
   if (!!optionA.colour && !!optionB.colour) {
     if (optionA.colour > optionB.colour) {

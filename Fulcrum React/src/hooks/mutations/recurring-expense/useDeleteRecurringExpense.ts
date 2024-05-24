@@ -23,6 +23,7 @@ export default function useDeleteRecurringExpense() {
           recurringExpenseDeletionMutationProps.expenseArray,
           expenseStartDate,
         );
+        console.log({ instancesFoundToDelete: recurringInstancesToDelete });
         await handleBatchExpenseDeletion(recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId));
       }
       return handleRecurringExpenseDeletion(recurringExpenseDeletionMutationProps.recurringExpenseId);
@@ -53,6 +54,7 @@ export default function useDeleteRecurringExpense() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["recurringExpenseArray", email] });
+      queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
     },
   });
 }

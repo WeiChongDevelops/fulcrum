@@ -1,4 +1,4 @@
-import { colourStyles } from "../../../utility/util.ts";
+import { categoryOptionSort, colourStyles, groupSort } from "../../../utility/util.ts";
 import CreatableSelect from "react-select/creatable";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { components } from "react-select";
@@ -65,11 +65,11 @@ export default function CategorySelector({
       </PopoverTrigger>
       <PopoverContent className="p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." className="h-9" />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandInput placeholder="Search category..." className="h-9" />
+          <CommandEmpty>No category found.</CommandEmpty>
           <CommandGroup>
             <CommandList>
-              {categoryOptions.map((categoryOption) => (
+              {categoryOptions.sort(categoryOptionSort).map((categoryOption) => (
                 <CommandItem
                   key={categoryOption.value}
                   value={categoryOption.value}

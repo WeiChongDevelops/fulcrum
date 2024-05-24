@@ -95,7 +95,6 @@ export default function UpdateRecurringInstanceFormV2({
       category: oldExpenseBeingEdited.oldCategory,
       amount: oldExpenseBeingEdited.oldAmount,
     });
-    console.log(oldExpenseBeingEdited);
   }, [oldExpenseBeingEdited]);
 
   const navMenuIsOpen = useNavMenuIsOpen();
@@ -111,8 +110,10 @@ export default function UpdateRecurringInstanceFormV2({
           <SheetHeader>
             <SheetTitle>Updating Expense Repeat</SheetTitle>
             <SheetDescription>
-              <p>Editing this particular repeat of your recurring expense.</p>
-              <p className={"mt-3"}>To manage your recurring expenses, please see the 'Recurring' section.</p>
+              <span>Editing this particular repeat of your recurring expense.</span>
+              <span className={"mt-3 block"}>
+                To manage your recurring expenses, please see the <b>'Recurring'</b> section.
+              </span>
             </SheetDescription>
           </SheetHeader>
           <form onSubmit={handleSubmit} className="flex flex-col gap-6 mt-8">

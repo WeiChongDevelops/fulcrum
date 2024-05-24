@@ -158,9 +158,11 @@ export default function CreateExpenseFormV2({
       <SheetOverlay>
         <SheetContent>
           <SheetHeader>
-            <SheetTitle>New Expense Entry</SheetTitle>
+            <SheetTitle>{mustBeRecurring ? "New Recurring Expense" : "New Expense Entry"}</SheetTitle>
             <SheetDescription>
-              Log your latest expense and get notified if you create an expense that exceeds your budget.
+              {mustBeRecurring
+                ? "Add recurring expenses for regular transactions."
+                : "Log your latest expense and get notified if you create an expense that exceeds your budget."}
             </SheetDescription>
           </SheetHeader>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4">

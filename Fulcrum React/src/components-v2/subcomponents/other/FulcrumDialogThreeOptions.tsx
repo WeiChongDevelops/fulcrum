@@ -50,12 +50,16 @@ export default function FulcrumDialogThreeOptions({
   return (
     <div className={"col-start-3 col-span-3"}>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        {!!buttonTriggerComponent && <DialogTrigger className={"flex w-full"}>{buttonTriggerComponent}</DialogTrigger>}
+        {!!buttonTriggerComponent && (
+          <DialogTrigger asChild className={"flex w-full"}>
+            {buttonTriggerComponent}
+          </DialogTrigger>
+        )}
         <DialogContent className={"w-[80vw] flex flex-col gap-8"}>
           <DialogHeader>
             <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription className={"pt-3"}>
-              <p>{dialogDescription}</p>
+              <span>{dialogDescription}</span>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className={"flex flex-row justify-end items-center"}>
