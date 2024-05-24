@@ -308,7 +308,10 @@ export async function handleGroupUpdating(originalGroupName: string, updatedGrou
 export async function handleGroupReorder(reorderedGroupArray: GroupItemEntity[]) {
   try {
     await apiClient.put("/reorderGroups", {
-      reorderedGroupArray: reorderedGroupArray,
+      reorderedGroupArray: reorderedGroupArray.map((groupItem) => ({
+        group: groupItem.group,
+        id: groupItem.id,
+      })),
     });
     console.log("Groups successfully reordered.");
   } catch (error: unknown) {

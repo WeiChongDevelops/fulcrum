@@ -15,6 +15,7 @@ import { Dispatch, SetStateAction } from "react";
 import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
 import UpdateBudgetFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateBudgetFormV2.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { cn } from "@/lib/utils.ts";
 
 interface BudgetTileV2Props {
   filteredBudgetItem: BudgetItemEntity;
@@ -56,6 +57,8 @@ export default function BudgetTileV2({
 
   const [autoAnimateRef] = useAutoAnimate();
 
+  const spent = perCategoryExpenseTotalThisMonth.get(filteredBudgetItem.category) ?? 0;
+
   return (
     <div className={"size-44 relative"}>
       <UpdateBudgetFormV2
@@ -63,6 +66,7 @@ export default function BudgetTileV2({
         groupArray={groupArray}
         currencySymbol={getCurrencySymbol(publicUserData.currency)}
         updateOldBudgetBeingEdited={updateOldBudgetBeingEdited}
+        categoryToDelete={filteredBudgetItem.category}
       />
       <Card className="size-44 outline relative transition-all duration-150 ease -z-10">
         <CardHeader className={"py-3"}>
@@ -76,9 +80,9 @@ export default function BudgetTileV2({
             <p className={"truncate"}>
               Budget: <b>{formatDollarAmountStatic(filteredBudgetItem.amount, publicUserData.currency)}</b>
             </p>
-            <p className={"truncate"}>
-              Left:{" "}
-              <b>
+            <p className={`truncate`}>
+              <span>{"Left: "}</span>
+              <b className={cn(spent > filteredBudgetItem.amount ? "text-red-500" : "text-black")}>
                 {formatDollarAmountStatic(
                   filteredBudgetItem.amount - perCategoryExpenseTotalThisMonth.get(filteredBudgetItem.category)!,
                   publicUserData.currency,

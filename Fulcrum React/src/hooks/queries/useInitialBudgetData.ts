@@ -18,10 +18,10 @@ export default function useInitialBudgetData() {
     isUpdateGroupVisible: false,
   });
   const [budgetModalVisibility, setBudgetModalVisibility] = useState<BudgetModalVisibility>({
-    isDeleteOptionsModalVisible: false,
-    isConfirmGroupDeletionModalVisible: false,
-    isConfirmCategoryDeletionModalVisible: false,
-    isDataVisVisible: false,
+    showChooseDeleteGroupOptionModal: false,
+    showConfirmDeleteGroupModal: false,
+    showConfirmDeleteCategoryModal: false,
+    showDataVisModal: false,
   });
   const [groupToDelete, setGroupToDelete] = useState<string>("");
   const [categoryToDelete, setCategoryToDelete] = useState<string>("");

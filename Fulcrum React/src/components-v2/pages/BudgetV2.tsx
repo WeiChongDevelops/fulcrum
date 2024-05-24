@@ -1,5 +1,6 @@
 import {
   BudgetItemEntity,
+  BudgetModalVisibility,
   CategoryToIconGroupAndColourMap,
   ExpenseItemEntity,
   GroupItemEntity,
@@ -17,6 +18,8 @@ import {
   getTotalAmountBudgeted,
   isCurrentMonth,
   LocationContext,
+  SetBudgetModalVisibilityContext,
+  useLocation,
 } from "@/utility/util.ts";
 import { useContext, useEffect, useRef, useState } from "react";
 import BudgetModalsAndForms from "@/components/child/budget/BudgetModalsAndForms.tsx";
@@ -72,7 +75,7 @@ export default function BudgetV2({
   navMenuOpen,
   categoryDataMap,
 }: BudgetV2Props) {
-  const routerLocation = useContext(LocationContext);
+  const routerLocation = useLocation();
 
   const {
     totalIncome,
@@ -197,82 +200,83 @@ export default function BudgetV2({
   }
 
   return (
-    <div className="flex flex-col justify-start">
-      <BudgetHeaderV2 publicUserData={publicUserData} totalIncome={totalIncome!} navMenuOpen={navMenuOpen} />
-      <BudgetModalsAndForms
-        budgetFormVisibility={budgetFormVisibility}
-        // budgetArray={budgetArray}
-        groupArray={groupArray}
-        groupNameOfNewItem={groupNameOfNewItem}
-        setBudgetFormVisibility={setBudgetFormVisibility}
-        oldBudgetBeingEdited={oldBudgetBeingEdited}
-        oldGroupBeingEdited={oldGroupBeingEdited}
-        groupToDelete={groupToDelete}
-        categoryToDelete={categoryToDelete}
-        budgetModalVisibility={budgetModalVisibility}
-        setBudgetModalVisibility={setBudgetModalVisibility}
-        setLocalisedGroupArray={setLocalisedGroupArray}
-        currencySymbol={getCurrencySymbol(publicUserData.currency)}
-      />
-      <ScrollArea className={"transition-all ease-[cubic-bezier(0.9, 0, 0.4, 1)] mt-[6vh] h-[94vh]"} ref={budgetContainer}>
-        <div className={"grid gap-4 px-6 pt-6 pb-8"}>
-          <div className="grid w-full gap-6" style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}>
-            <div className={"relative z-10 bg-slate-200 rounded-xl"}>
-              <FulcrumAnimationV2
-                navMenuOpen={navMenuOpen}
-                totalIncome={totalIncome!}
-                totalBudget={getTotalAmountBudgeted(budgetArray)}
+    <SetBudgetModalVisibilityContext.Provider value={setBudgetModalVisibility}>
+      <div className="flex flex-col justify-start">
+        <BudgetHeaderV2 publicUserData={publicUserData} totalIncome={totalIncome!} navMenuOpen={navMenuOpen} />
+        {/*<BudgetModalsAndForms*/}
+        {/*  budgetFormVisibility={budgetFormVisibility}*/}
+        {/*  // budgetArray={budgetArray}*/}
+        {/*  groupArray={groupArray}*/}
+        {/*  groupNameOfNewItem={groupNameOfNewItem}*/}
+        {/*  setBudgetFormVisibility={setBudgetFormVisibility}*/}
+        {/*  oldBudgetBeingEdited={oldBudgetBeingEdited}*/}
+        {/*  oldGroupBeingEdited={oldGroupBeingEdited}*/}
+        {/*  groupToDelete={groupToDelete}*/}
+        {/*  categoryToDelete={categoryToDelete}*/}
+        {/*  budgetModalVisibility={budgetModalVisibility}*/}
+        {/*  setLocalisedGroupArray={setLocalisedGroupArray}*/}
+        {/*  currencySymbol={getCurrencySymbol(publicUserData.currency)}*/}
+        {/*/>*/}
+        <ScrollArea className={"transition-all ease-[cubic-bezier(0.9, 0, 0.4, 1)] mt-[6vh] h-[94vh]"} ref={budgetContainer}>
+          <div className={"grid gap-4 px-6 pt-6 pb-8"}>
+            <div className="grid w-full gap-6" style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}>
+              <div className={"relative z-10 bg-slate-200 rounded-xl"}>
+                <FulcrumAnimationV2
+                  navMenuOpen={navMenuOpen}
+                  totalIncome={totalIncome!}
+                  totalBudget={getTotalAmountBudgeted(budgetArray)}
+                />
+              </div>
+              <BudgetDataBento
+                budgetArray={budgetArray}
+                groupArray={groupArray}
+                budgetTotal={budgetTotal}
+                categoryDataMap={categoryDataMap}
               />
             </div>
-            <BudgetDataBento
-              budgetArray={budgetArray}
-              groupArray={groupArray}
-              budgetTotal={budgetTotal}
-              categoryDataMap={categoryDataMap}
-            />
-          </div>
-          <Separator />
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-            modifiers={[restrictToVerticalAxis]}
-          >
-            <div className="flex flex-col w-full gap-3">
-              <CreateGroupFormV2
-                publicUserData={publicUserData}
-                highestSortIndex={getHighestGroupSortIndex(groupArray)}
-                setLocalisedGroupArray={setLocalisedGroupArray}
-              />
+            <Separator />
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+              modifiers={[restrictToVerticalAxis]}
+            >
+              <div className="flex flex-col w-full gap-3">
+                <CreateGroupFormV2
+                  publicUserData={publicUserData}
+                  highestSortIndex={getHighestGroupSortIndex(groupArray)}
+                  setLocalisedGroupArray={setLocalisedGroupArray}
+                />
 
-              <SortableContext items={localisedGroupArray} strategy={verticalListSortingStrategy}>
-                {!!localisedGroupArray &&
-                  localisedGroupArray.map((group) => (
-                    <GroupV2
-                      group={group}
-                      groupArray={groupArray}
-                      setOldBudgetBeingEdited={setOldBudgetBeingEdited}
-                      budgetArray={budgetArray}
-                      setBudgetFormVisibility={setBudgetFormVisibility}
-                      setBudgetModalVisibility={setBudgetModalVisibility}
-                      perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-                      groupNameOfNewItem={groupNameOfNewItem}
-                      setGroupNameOfNewItem={setGroupNameOfNewItem}
-                      publicUserData={publicUserData}
-                      setCategoryToDelete={setCategoryToDelete}
-                      setGroupToDelete={setGroupToDelete}
-                      setOldGroupBeingEdited={setOldGroupBeingEdited}
-                      oldBudgetBeingEdited={oldBudgetBeingEdited}
-                      setLocalisedGroupArray={setLocalisedGroupArray}
-                      oldGroupBeingEdited={oldGroupBeingEdited}
-                      key={group.id}
-                    />
-                  ))}
-              </SortableContext>
-            </div>
-          </DndContext>
-        </div>
-      </ScrollArea>
-    </div>
+                <SortableContext items={localisedGroupArray} strategy={verticalListSortingStrategy}>
+                  {!!localisedGroupArray &&
+                    localisedGroupArray.map((group) => (
+                      <GroupV2
+                        group={group}
+                        groupArray={groupArray}
+                        setOldBudgetBeingEdited={setOldBudgetBeingEdited}
+                        budgetArray={budgetArray}
+                        setBudgetFormVisibility={setBudgetFormVisibility}
+                        setBudgetModalVisibility={setBudgetModalVisibility}
+                        perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
+                        groupNameOfNewItem={groupNameOfNewItem}
+                        setGroupNameOfNewItem={setGroupNameOfNewItem}
+                        publicUserData={publicUserData}
+                        setCategoryToDelete={setCategoryToDelete}
+                        setGroupToDelete={setGroupToDelete}
+                        setOldGroupBeingEdited={setOldGroupBeingEdited}
+                        oldBudgetBeingEdited={oldBudgetBeingEdited}
+                        setLocalisedGroupArray={setLocalisedGroupArray}
+                        oldGroupBeingEdited={oldGroupBeingEdited}
+                        key={group.id}
+                      />
+                    ))}
+                </SortableContext>
+              </div>
+            </DndContext>
+          </div>
+        </ScrollArea>
+      </div>
+    </SetBudgetModalVisibilityContext.Provider>
   );
 }

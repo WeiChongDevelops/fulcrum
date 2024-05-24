@@ -6,6 +6,7 @@ import {
   BlacklistedExpenseItemEntity,
   BudgetCreationFormData,
   BudgetItemEntity,
+  BudgetModalVisibility,
   BudgetUpdatingFormData,
   CategoryToIconGroupAndColourMap,
   DayExpenseGroupEntity,
@@ -74,6 +75,18 @@ export const useLocation = () => useContext(LocationContext);
 
 export const NavMenuIsOpenContext = createContext<boolean>(true);
 export const useNavMenuIsOpen = () => useContext(NavMenuIsOpenContext);
+
+// export const SetBudgetModalStateContext = createContext<BudgetModalVisibility>({
+//   showChooseDeleteGroupOptionModal: false,
+//   showConfirmDeleteGroupModal: false,
+//   showConfirmDeleteCategoryModal: false,
+//   showDataVisModal: false,
+// });
+export const SetBudgetModalVisibilityContext = createContext<Dispatch<SetStateAction<BudgetModalVisibility>> | undefined>(
+  undefined,
+);
+
+export const useSetBudgetModalVisibility = () => useContext(SetBudgetModalVisibilityContext);
 
 // SELECTOR CONTENT ARRAYS //
 

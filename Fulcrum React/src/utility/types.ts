@@ -109,10 +109,10 @@ export interface BudgetFormVisibility {
 }
 
 export interface BudgetModalVisibility {
-  isDeleteOptionsModalVisible: boolean;
-  isConfirmGroupDeletionModalVisible: boolean;
-  isConfirmCategoryDeletionModalVisible: boolean;
-  isDataVisVisible: boolean;
+  showChooseDeleteGroupOptionModal: boolean;
+  showConfirmDeleteGroupModal: boolean;
+  showConfirmDeleteCategoryModal: boolean;
+  showDataVisModal: boolean;
 }
 
 export interface ExpenseFormVisibility {

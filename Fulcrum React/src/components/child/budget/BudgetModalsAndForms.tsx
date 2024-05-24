@@ -3,7 +3,7 @@ import BudgetUpdatingForm from "./forms/BudgetUpdatingForm.tsx";
 import GroupCreationForm from "./forms/GroupCreationForm.tsx";
 import GroupUpdatingForm from "./forms/GroupUpdatingForm.tsx";
 import TwoOptionModal from "../modals/TwoOptionModal.tsx";
-import { changeFormOrModalVisibility, getHighestGroupSortIndex } from "@/utility/util.ts";
+import { changeFormOrModalVisibility, getHighestGroupSortIndex, useSetBudgetModalVisibility } from "@/utility/util.ts";
 import useDeleteGroup from "../../../hooks/mutations/budget/useDeleteGroup.ts";
 import useDeleteBudget from "../../../hooks/mutations/budget/useDeleteBudget.ts";
 import Loader from "../other/Loader.tsx";
@@ -23,7 +23,6 @@ interface ModalsAndFormsProps {
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
 
   budgetModalVisibility: BudgetModalVisibility;
-  setBudgetModalVisibility: SetModalVisibility<BudgetModalVisibility>;
 
   // budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
@@ -41,12 +40,11 @@ interface ModalsAndFormsProps {
  */
 export default function BudgetModalsAndForms({
   budgetFormVisibility,
+  setBudgetFormVisibility,
   // budgetArray,
   groupArray,
   groupNameOfNewItem,
-  setBudgetFormVisibility,
   budgetModalVisibility,
-  setBudgetModalVisibility,
   oldBudgetBeingEdited,
   oldGroupBeingEdited,
   groupToDelete,
@@ -57,8 +55,10 @@ export default function BudgetModalsAndForms({
   const { isPending, mutate: deleteGroup } = useDeleteGroup();
   const { mutate: deleteBudget } = useDeleteBudget();
 
+  const setBudgetModalVisibility = useSetBudgetModalVisibility()!;
+
   return (
-    <div className={"z-40"}>
+    <div className={"z-[1000]"}>
       <Loader isLoading={isPending} isDarkMode={true} positioning={"fixed bottom-[50vh] left-[50vw] z-[100]"} />
       {budgetFormVisibility.isCreateBudgetVisible && (
         <BudgetCreationForm
@@ -90,7 +90,7 @@ export default function BudgetModalsAndForms({
           setLocalisedGroupArray={setLocalisedGroupArray}
         />
       )}
-      {budgetModalVisibility.isDeleteOptionsModalVisible && (
+      {budgetModalVisibility.showChooseDeleteGroupOptionModal && (
         <TwoOptionModal
           title={`Would you like to keep the categories inside the group '${groupToDelete}'?`}
           setModalVisibility={setBudgetModalVisibility}
@@ -110,10 +110,10 @@ export default function BudgetModalsAndForms({
             changeFormOrModalVisibility(setBudgetModalVisibility, "isDeleteOptionsModalVisible", false);
             changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmGroupDeletionModalVisible", true);
           }}
-          isVisible="isDeleteOptionsModalVisible"
+          isVisible="showChooseDeleteGroupOptionModal"
         />
       )}
-      {budgetModalVisibility.isConfirmGroupDeletionModalVisible && (
+      {budgetModalVisibility.showConfirmDeleteGroupModal && (
         <TwoOptionModal
           title={`Are you sure? This will delete all categories in '${groupToDelete}', as well as their expense records.`}
           setModalVisibility={setBudgetModalVisibility}
@@ -139,10 +139,10 @@ export default function BudgetModalsAndForms({
             });
             changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmGroupDeletionModalVisible", false);
           }}
-          isVisible="isConfirmGroupDeletionModalVisible"
+          isVisible="showConfirmDeleteGroupModal"
         />
       )}
-      {budgetModalVisibility.isConfirmCategoryDeletionModalVisible && (
+      {budgetModalVisibility.showConfirmDeleteCategoryModal && (
         <TwoOptionModal
           title="Are you sure? This will delete all expense entries for this budget category."
           setModalVisibility={setBudgetModalVisibility}
@@ -155,10 +155,10 @@ export default function BudgetModalsAndForms({
             changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmCategoryDeletionModalVisible", false);
             deleteBudget(categoryToDelete);
           }}
-          isVisible="isConfirmCategoryDeletionModalVisible"
+          isVisible="showConfirmDeleteCategoryModal"
         />
       )}
-      {/*{budgetModalVisibility.isDataVisVisible && (*/}
+      {/*{budgetModalVisibility.showDataVisModal && (*/}
       {/*  <BudgetVis budgetArray={budgetArray} setBudgetModalVisibility={setBudgetModalVisibility} />*/}
       {/*)}*/}
     </div>

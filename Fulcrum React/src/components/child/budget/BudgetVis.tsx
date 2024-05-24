@@ -33,7 +33,7 @@
 //   }, [routerLocation]);
 //
 //   const hideForm = () => {
-//     changeFormOrModalVisibility(setBudgetModalVisibility, "isDataVisVisible", false);
+//     changeFormOrModalVisibility(setBudgetModalVisibility, "showDataVisModal", false);
 //   };
 //
 //   useEffect(() => {

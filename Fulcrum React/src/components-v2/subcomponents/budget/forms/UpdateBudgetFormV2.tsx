@@ -8,7 +8,13 @@ import {
   GroupItemEntity,
   PreviousBudgetBeingEdited,
 } from "@/utility/types.ts";
-import { capitaliseFirstLetter, getHighestGroupSortIndex, getRandomGroupColour, groupSort } from "@/utility/util.ts";
+import {
+  capitaliseFirstLetter,
+  getHighestGroupSortIndex,
+  getRandomGroupColour,
+  groupSort,
+  useSetBudgetModalVisibility,
+} from "@/utility/util.ts";
 import {
   Sheet,
   SheetContent,
@@ -29,12 +35,24 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { cn } from "@/lib/utils.ts";
 import * as React from "react";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components-v2/ui/dialog";
+import useDeleteBudget from "@/hooks/mutations/budget/useDeleteBudget.ts";
+import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
 
 interface UpdateBudgetFormV2Props {
   oldBudgetBeingEdited: PreviousBudgetBeingEdited;
   groupArray: GroupItemEntity[];
   currencySymbol: string;
   updateOldBudgetBeingEdited: (e: React.MouseEvent) => void;
+  categoryToDelete: string;
 }
 
 export default function UpdateBudgetFormV2({
@@ -42,6 +60,7 @@ export default function UpdateBudgetFormV2({
   oldBudgetBeingEdited,
   currencySymbol,
   updateOldBudgetBeingEdited,
+  categoryToDelete,
 }: UpdateBudgetFormV2Props) {
   const [formData, setFormData] = useState<BudgetUpdatingFormData>({
     category: oldBudgetBeingEdited.oldCategory,
@@ -52,6 +71,9 @@ export default function UpdateBudgetFormV2({
   // const formRef = useRef<HTMLDivElement>(null);
   // const routerLocation = useContext(LocationContext);
   const { mutate: updateBudget } = useUpdateBudget();
+  const { mutate: deleteBudget } = useDeleteBudget();
+
+  const setBudgetModalVisibility = useSetBudgetModalVisibility()!;
 
   const [formIsOpen, setFormIsOpen] = useState(false);
 
@@ -119,6 +141,7 @@ export default function UpdateBudgetFormV2({
   };
 
   const [autoAnimateRef] = useAutoAnimate();
+  const [showConfirmDeleteBudgetDialog, setShowConfirmDeleteBudgetDialog] = useState(false);
 
   return (
     <div className={"update-budget-trigger size-44 absolute"} ref={autoAnimateRef}>
@@ -207,14 +230,34 @@ export default function UpdateBudgetFormV2({
             </div>
 
             <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>
-              <Button
-                className={"col-start-3 col-span-3"}
-                variant={"destructive"}
-                onClick={() => toast.warning("Uh oh.")}
-                type={"button"}
-              >
-                Delete
-              </Button>
+              {/*<Button*/}
+              {/*  className={"col-start-3 col-span-3"}*/}
+              {/*  variant={"destructive"}*/}
+              {/*  onClick={() =>*/}
+              {/*    setBudgetModalVisibility((previousVisibility) => ({*/}
+              {/*      ...previousVisibility,*/}
+              {/*      showConfirmDeleteCategoryModal: true,*/}
+              {/*    }))*/}
+              {/*  }*/}
+              {/*  type={"button"}*/}
+              {/*>*/}
+              {/*  Delete*/}
+              {/*</Button>*/}
+              <FulcrumDialogTwoOptions
+                dialogOpen={showConfirmDeleteBudgetDialog}
+                setDialogOpen={setShowConfirmDeleteBudgetDialog}
+                dialogTitle={`Delete the budget category '${categoryToDelete}'?`}
+                dialogDescription={"Any expenses under this category will also be permanently deleted."}
+                leftButtonFunction={() => setShowConfirmDeleteBudgetDialog(false)}
+                rightButtonFunction={() => deleteBudget(categoryToDelete)}
+                leftButtonText={"Cancel"}
+                rightButtonText={"Delete"}
+                buttonTriggerComponent={
+                  <Button className={"flex-grow"} variant={"destructive"} type={"button"}>
+                    Delete
+                  </Button>
+                }
+              />
               <Button className={"col-start-6 col-span-3"}>Save Changes</Button>
             </div>
           </form>
