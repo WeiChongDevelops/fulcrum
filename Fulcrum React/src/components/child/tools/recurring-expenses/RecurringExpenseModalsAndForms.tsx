@@ -129,7 +129,7 @@ export default function RecurringExpenseModalsAndForms({
           }}
           setModalVisibility={setRecurringExpenseModalVisibility}
           isVisible={"isSelectRecurringExpenseDeletionTypeModalVisible"}
-          title={"Would you like to keep previous repeats? You can delete specific instances from the 'Expenses' page"}
+          title={"Would you like to keep previous repeats? You can delete specific instances from the 'Expenses' section"}
         />
       )}
     </div>

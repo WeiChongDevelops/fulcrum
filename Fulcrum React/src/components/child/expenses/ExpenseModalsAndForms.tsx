@@ -126,8 +126,6 @@ export default function ExpenseModalsAndForms({
             }}
             optionThreeText={"Delete All Repeats"}
             optionThreeFunction={() => {
-              console.log("expenseItemToDelete");
-              console.log(expenseItemToDelete);
               deleteExpense({ expenseItemToDelete: expenseItemToDelete!, deletionScale: "ALL", expenseArray: expenseArray });
               changeFormOrModalVisibility(setExpenseModalVisibility, "isConfirmExpenseDeletionModalVisible", false);
             }}

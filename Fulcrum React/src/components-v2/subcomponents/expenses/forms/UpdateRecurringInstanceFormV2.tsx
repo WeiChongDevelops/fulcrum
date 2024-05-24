@@ -1,4 +1,4 @@
-import { handleInputChangeOnFormWithAmount, useNavMenuIsOpen } from "@/utility/util.ts";
+import { handleInputChangeOnFormWithAmount, useEmail, useNavMenuIsOpen } from "@/utility/util.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import CategorySelector from "@/components/child/selectors/CategorySelector.tsx";
@@ -19,6 +19,10 @@ import {
 import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
 import { toast } from "sonner";
 import * as React from "react";
+import useDeleteExpense from "@/hooks/mutations/expense/useDeleteExpense.ts";
+import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
+import FulcrumDialogThreeOptions from "@/components-v2/subcomponents/other/FulcrumDialogThreeOptions.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface UpdateRecurringInstanceFormV2Props {
   categoryOptions: DropdownSelectorOption[];
@@ -49,6 +53,10 @@ export default function UpdateRecurringInstanceFormV2({
     amount: oldExpenseBeingEdited.oldAmount,
   });
   const { mutate: updateExpense } = useUpdateExpense();
+  const { mutate: deleteExpense, isPending } = useDeleteExpense();
+
+  const queryClient = useQueryClient();
+  const expenseArray: ExpenseItemEntity[] = queryClient.getQueryData(["expenseArray", useEmail()])!;
 
   const hideForm = () => {
     setFormIsOpen(false);
@@ -98,6 +106,33 @@ export default function UpdateRecurringInstanceFormV2({
   }, [oldExpenseBeingEdited]);
 
   const navMenuIsOpen = useNavMenuIsOpen();
+
+  const [toastId, setToastId] = useState<string | number>();
+
+  useEffect(() => {
+    if (isPending) {
+      setToastId(
+        toast.loading("Syncing changes, please wait.", {
+          description: "Large deletions may take a bit longer.",
+          style: {
+            textAlign: "left",
+          },
+        }),
+      );
+    } else {
+      !!toastId && toast.dismiss(toastId);
+    }
+  }, [isPending]);
+
+  const [showDeleteInstanceOptionsModal, setShowDeleteInstanceOptionsModal] = useState(false);
+
+  const expenseItemToDelete: ExpenseItemEntity = {
+    expenseId: expenseId,
+    category: category,
+    amount: amount,
+    timestamp: timestamp,
+    recurringExpenseId: recurringExpenseId,
+  };
 
   return (
     <div
@@ -156,14 +191,48 @@ export default function UpdateRecurringInstanceFormV2({
             </div>
 
             <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>
-              <Button
-                className={"col-start-3 col-span-3"}
-                variant={"destructive"}
-                onClick={() => toast.warning("Uh oh.")}
-                type={"button"}
-              >
-                Delete
-              </Button>
+              <FulcrumDialogThreeOptions
+                dialogOpen={showDeleteInstanceOptionsModal}
+                setDialogOpen={setShowDeleteInstanceOptionsModal}
+                dialogTitle={"Delete which expense repeats?"}
+                dialogDescription={
+                  "To stop future repeats or otherwise manage your recurring expenses, see the 'Recurring' section."
+                }
+                leftButtonVariant={"default"}
+                leftButtonText={"This Repeat Only"}
+                leftButtonFunction={() => {
+                  setShowDeleteInstanceOptionsModal(false);
+                  deleteExpense({
+                    expenseItemToDelete: expenseItemToDelete,
+                    deletionScale: "THIS",
+                    expenseArray: expenseArray,
+                  });
+                }}
+                midButtonText={"This and Future Repeats"}
+                midButtonFunction={() => {
+                  setShowDeleteInstanceOptionsModal(false);
+                  deleteExpense({
+                    expenseItemToDelete: expenseItemToDelete,
+                    deletionScale: "FUTURE",
+                    expenseArray: expenseArray,
+                  });
+                }}
+                rightButtonText={"All Repeats"}
+                rightButtonFunction={() => {
+                  setShowDeleteInstanceOptionsModal(false);
+                  deleteExpense({
+                    expenseItemToDelete: expenseItemToDelete,
+                    deletionScale: "ALL",
+                    expenseArray: expenseArray,
+                  });
+                }}
+                buttonTriggerComponent={
+                  <Button className={"flex-grow"} variant={"destructive"} type={"button"}>
+                    Delete
+                  </Button>
+                }
+              />
+
               <Button className={"col-start-6 col-span-3"}>Save Changes</Button>
             </div>
           </form>

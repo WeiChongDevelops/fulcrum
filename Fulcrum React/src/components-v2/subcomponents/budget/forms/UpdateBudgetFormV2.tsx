@@ -253,7 +253,7 @@ export default function UpdateBudgetFormV2({
                 leftButtonText={"Cancel"}
                 rightButtonText={"Delete"}
                 buttonTriggerComponent={
-                  <Button asChild className={"flex-grow"} variant={"destructive"} type={"button"}>
+                  <Button className={"flex-grow"} variant={"destructive"} type={"button"}>
                     Delete
                   </Button>
                 }

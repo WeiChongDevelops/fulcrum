@@ -182,7 +182,7 @@ export default function UpdateRecurringFormV2({
                 dialogOpen={showDeleteRecurringOptionsDialog}
                 setDialogOpen={setShowDeleteRecurringOptionsDialog}
                 dialogTitle={"Keep past repeats of this recurring expense?"}
-                dialogDescription={"You can delete specific repeats in the 'Expenses' page."}
+                dialogDescription={"You can delete specific repeats in the 'Expenses' section."}
                 leftButtonText={"Cancel"}
                 leftButtonFunction={() => setShowDeleteRecurringOptionsDialog(false)}
                 midButtonText={"Keep Repeats"}

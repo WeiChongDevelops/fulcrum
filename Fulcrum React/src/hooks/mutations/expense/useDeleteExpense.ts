@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useContext } from "react";
-import { EmailContext, getRecurringExpenseInstancesAfterDate, expenseStartDate, useEmail } from "../../../utility/util.ts";
+import { getRecurringExpenseInstancesAfterDate, expenseStartDate, useEmail } from "../../../utility/util.ts";
 import { toast } from "sonner";
 import {
   handleBatchBlacklistedExpenseCreation,
@@ -117,6 +116,7 @@ export default function useDeleteExpense() {
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["blacklistedExpenseArray", email] });
       await queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
+      toast.dismiss();
       toast.success("Expense(s) removed.");
     },
   });

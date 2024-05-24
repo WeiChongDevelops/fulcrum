@@ -206,7 +206,7 @@ export default function UpdateExpenseFormV2({
                   });
                 }}
                 buttonTriggerComponent={
-                  <Button asChild className={"flex-grow"} variant={"destructive"} type={"button"}>
+                  <Button className={"flex-grow"} variant={"destructive"} type={"button"}>
                     Delete
                   </Button>
                 }

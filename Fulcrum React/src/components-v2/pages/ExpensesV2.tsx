@@ -105,7 +105,7 @@ export default function ExpensesV2({
       batchCreateExpenses,
       expenseCreationIsSuccess,
     );
-  }, [expenseArray, recurringExpenseArray, blacklistedExpenseArray, budgetArray, routerLocation]);
+  }, [recurringExpenseArray, routerLocation]);
 
   const rerenderCarousel = () => {
     const carousel = document.querySelector("#expense-carousel");
@@ -163,19 +163,19 @@ export default function ExpensesV2({
         startingIndex={startingIndex}
         oldExpenseBeingEdited={oldExpenseBeingEdited}
       />
-      <ExpenseModalsAndForms
-        expenseFormVisibility={expenseFormVisibility}
-        setExpenseFormVisibility={setExpenseFormVisibility}
-        expenseModalVisibility={expenseModalVisibility}
-        setExpenseModalVisibility={setExpenseModalVisibility}
-        expenseArray={expenseArray}
-        budgetArray={budgetArray}
-        groupArray={groupArray}
-        publicUserData={publicUserData}
-        defaultCalendarDate={defaultCalendarDate}
-        oldExpenseBeingEdited={oldExpenseBeingEdited}
-        expenseItemToDelete={expenseItemToDelete}
-      />
+      {/*<ExpenseModalsAndForms*/}
+      {/*  expenseFormVisibility={expenseFormVisibility}*/}
+      {/*  setExpenseFormVisibility={setExpenseFormVisibility}*/}
+      {/*  expenseModalVisibility={expenseModalVisibility}*/}
+      {/*  setExpenseModalVisibility={setExpenseModalVisibility}*/}
+      {/*  expenseArray={expenseArray}*/}
+      {/*  budgetArray={budgetArray}*/}
+      {/*  groupArray={groupArray}*/}
+      {/*  publicUserData={publicUserData}*/}
+      {/*  defaultCalendarDate={defaultCalendarDate}*/}
+      {/*  oldExpenseBeingEdited={oldExpenseBeingEdited}*/}
+      {/*  expenseItemToDelete={expenseItemToDelete}*/}
+      {/*/>*/}
     </div>
   );
 }

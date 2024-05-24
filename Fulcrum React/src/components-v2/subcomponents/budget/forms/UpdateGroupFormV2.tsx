@@ -149,17 +149,7 @@ export default function UpdateGroupFormV2({
             />
           </div>
 
-          <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>
-            <Button
-              className={"col-start-3 col-span-3"}
-              variant={"destructive"}
-              onClick={() => toast.warning("Uh oh.")}
-              type={"button"}
-            >
-              Delete
-            </Button>
-            <Button className={"col-start-6 col-span-3"}>Save Changes</Button>
-          </div>
+          <Button className={"mt-2 self-end"}>Add Expense</Button>
         </form>
       </SheetContent>
     </Sheet>
