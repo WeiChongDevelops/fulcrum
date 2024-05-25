@@ -200,6 +200,8 @@ export default function App() {
             <Route path="/11e2e386" element={<Wall user={"Saaiq"} />} />
             <Route path="/86419f8c" element={<Wall user={"Colin"} />} />
             <Route path="/7763fcm3" element={<Wall user={"Matthew"} />} />
+
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </LocationContext.Provider>
       </EmailContext.Provider>
