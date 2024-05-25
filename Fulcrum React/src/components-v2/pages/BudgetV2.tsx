@@ -229,6 +229,7 @@ export default function BudgetV2({
             <div className="grid w-full gap-6" style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}>
               <div className={"relative z-10 bg-slate-200 rounded-xl"}>
                 <FulcrumAnimationV2
+                  currency={publicUserData.currency}
                   sideBarOpen={sideBarOpen}
                   totalIncome={totalIncome!}
                   totalBudget={getTotalAmountBudgeted(budgetArray)}

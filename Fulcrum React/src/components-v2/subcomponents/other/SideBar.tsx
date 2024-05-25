@@ -67,10 +67,10 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
      transition-all duration-400 ease-out "}`}
       >
         {sideBarOpen ? (
-          <div className={"flex flex-row w-full justify-between items-center ml-1.5 mt-2.5"}>
+          <div className={"flex flex-row w-full justify-between items-center ml-4 mt-2.5"}>
             <img
-              src={`/static/assets-v2/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`}
-              className={`transition-all ease-out ${sideBarOpen ? "w-32" : "w-0"}`}
+              src={`/static/assets-v2/fulcrum-logos/fulcrum-logo-white-v2.webp`}
+              className={`transition-all ease-out ${sideBarOpen ? "w-[8.25rem]" : "w-0"}`}
               onClick={() => (window.location.href = "/home/about")}
               alt="Fulcrum logo"
             />
