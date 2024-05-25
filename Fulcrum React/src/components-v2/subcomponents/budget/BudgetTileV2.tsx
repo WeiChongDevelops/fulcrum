@@ -11,7 +11,7 @@ import {
 import { changeFormOrModalVisibility, formatDollarAmountStatic, getCurrencySymbol } from "@/utility/util.ts";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components-v2/ui/card.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
 import UpdateBudgetFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateBudgetFormV2.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -66,15 +66,14 @@ export default function BudgetTileV2({
         groupArray={groupArray}
         currencySymbol={getCurrencySymbol(publicUserData.currency)}
         updateOldBudgetBeingEdited={updateOldBudgetBeingEdited}
-        categoryToDelete={filteredBudgetItem.category}
       />
       <Card className="size-44 outline relative transition-all duration-150 ease -z-10">
         <CardHeader className={"py-4"}>
-          <CardTitle className={"text-sm font-bold"}>{filteredBudgetItem.category}</CardTitle>
+          <CardTitle className={"text-xs lg:text-sm font-bold"}>{filteredBudgetItem.category}</CardTitle>
         </CardHeader>
         <CardContent className={"flex flex-col gap-3 pb-2 justify-center items-center"}>
           <div ref={autoAnimateRef}>
-            <DynamicIconComponent componentName={filteredBudgetItem.iconPath} props={{ size: 44 }} className={"mt-1"} />
+            <DynamicIconComponent componentName={filteredBudgetItem.iconPath} props={{ size: "3rem" }} className={"mt-1"} />
           </div>
           <div>
             <p className={"truncate"}>

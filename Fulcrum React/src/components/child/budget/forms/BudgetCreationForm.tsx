@@ -138,7 +138,7 @@ export default function BudgetCreationForm({
         <div>
           <b className="relative left-6 text-black">{currencySymbol}</b>
           <input
-            type="text"
+            type="number"
             onChange={handleInputChange}
             value={formData.amount === 0 ? "" : formData.amount}
             name="amount"

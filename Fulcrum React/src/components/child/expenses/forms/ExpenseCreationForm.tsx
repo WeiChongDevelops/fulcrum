@@ -20,12 +20,12 @@ import useCreateExpense from "../../../../hooks/mutations/expense/useCreateExpen
 import useCreateRecurringExpense from "../../../../hooks/mutations/recurring-expense/useCreateRecurringExpense.ts";
 import {
   BudgetItemEntity,
+  DropdownSelectorOption,
   ExpenseCreationFormData,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   RecurringExpenseFormVisibility,
   RecurringExpenseItemEntity,
-  SelectorOptionsFormattedData,
   SetFormVisibility,
   Value,
 } from "../../../../utility/types.ts";
@@ -33,7 +33,7 @@ import {
 interface ExpenseCreationFormProps {
   setExpenseFormVisibility: SetFormVisibility<RecurringExpenseFormVisibility> | SetFormVisibility<ExpenseFormVisibility>;
   budgetArray: BudgetItemEntity[];
-  categoryOptions: SelectorOptionsFormattedData[];
+  categoryOptions: DropdownSelectorOption[];
   currencySymbol: string;
   defaultCalendarDate: Date;
   mustBeRecurring: boolean;
@@ -157,7 +157,7 @@ export default function ExpenseCreationForm({
         <div>
           <b className="relative left-6 text-black">{currencySymbol}</b>
           <input
-            type="text"
+            type="number"
             onChange={handleInputChange}
             value={formData.amount === 0 ? "" : formData.amount}
             name="amount"

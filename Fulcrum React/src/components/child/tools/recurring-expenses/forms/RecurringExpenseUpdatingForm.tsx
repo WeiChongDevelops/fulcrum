@@ -150,7 +150,7 @@ export default function RecurringExpenseUpdatingForm({
         <div>
           <b className="relative left-6 text-black">{currencySymbol}</b>
           <input
-            type="text"
+            type="number"
             onChange={handleInputChange}
             value={formData.amount ?? ""}
             name="amount"

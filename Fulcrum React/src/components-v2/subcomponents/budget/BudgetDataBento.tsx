@@ -29,9 +29,16 @@ interface BudgetDataBentoProps {
   groupArray: GroupItemEntity[];
   budgetTotal: number;
   categoryDataMap: CategoryToIconGroupAndColourMap;
+  currency: string;
 }
 
-export default function BudgetDataBento({ budgetArray, groupArray, budgetTotal, categoryDataMap }: BudgetDataBentoProps) {
+export default function BudgetDataBento({
+  budgetArray,
+  groupArray,
+  budgetTotal,
+  categoryDataMap,
+  currency,
+}: BudgetDataBentoProps) {
   const budgetSizeSort = (budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) => {
     return budgetItemA.amount > budgetItemB.amount ? -1 : 1;
   };
@@ -61,7 +68,7 @@ export default function BudgetDataBento({ budgetArray, groupArray, budgetTotal, 
   };
 
   return (
-    <div className="flex flex-row justify-center items-center relative gap-2 bg-violet-100 rounded-xl font-bold h-96 w-full pt-2">
+    <div className="flex flex-row justify-center items-center relative gap-2 bg-zinc-100 rounded-xl font-bold w-full h-[26rem] pt-2">
       {/*<p className={"absolute top-5 left-7"}>{`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`}</p>*/}
       <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-[32ch] absolute top-3 left-4 z-30 bg-primary-foreground text-xs font-medium">
@@ -85,10 +92,11 @@ export default function BudgetDataBento({ budgetArray, groupArray, budgetTotal, 
               group: groupItem.group,
               amount: getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group == groupItem.group)),
             }))}
+            currency={currency}
             key={rerenderKey}
           />
         ) : (
-          <CategoryPieChart sortedBudgetArray={budgetArraySortedByAmount} key={rerenderKey} />
+          <CategoryPieChart sortedBudgetArray={budgetArraySortedByAmount} currency={currency} key={rerenderKey} />
         )}
       </div>
       <div className={"absolute top-3 right-3"}>

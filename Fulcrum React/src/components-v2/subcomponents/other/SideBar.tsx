@@ -7,6 +7,16 @@ import { PublicUserData } from "@/utility/types.ts";
 import { handleUserLogout } from "@/utility/api.ts";
 import PageNavigationButton from "@/components-v2/subcomponents/other/PageNavigationButton.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { SignOut } from "@phosphor-icons/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components-v2/ui/dropdown-menu";
+import { cn } from "@/lib/utils.ts";
 
 interface SideBarProps {
   publicUserData: PublicUserData;
@@ -38,6 +48,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
   };
 
   const [autoAnimateRef] = useAutoAnimate();
+  const [signOutMenuOpen, setSignOutMenuOpen] = useState(false);
 
   return (
     <div
@@ -112,8 +123,22 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
           </Avatar>
           {sideBarOpen && (
             <div className={"flex flex-col justify-start flex-grow w-1/2 -mt-1"}>
-              <div className={"flex flex-row justify-between"}>
+              <div className={"flex flex-row items-center justify-between"}>
                 <p className={"text-base font-semibold"}>Personal</p>
+
+                <DropdownMenu open={signOutMenuOpen} onOpenChange={setSignOutMenuOpen}>
+                  <DropdownMenuTrigger>
+                    <SignOut
+                      weight={"bold"}
+                      className={cn("-scale-100 hover:text-red-500", signOutMenuOpen && "text-red-500")}
+                    />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className={"flex flex-col items-start"} side={"right"} sideOffset={20}>
+                    <DropdownMenuItem className={"w-full hover:cursor-pointer here"} onSelect={handleUserLogout}>
+                      <span className={"text-red-500 text-xs font-semibold"}>Sign Out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
               <p className={"text-xs font-medium truncate w-full"}>{activeEmail}</p>
             </div>

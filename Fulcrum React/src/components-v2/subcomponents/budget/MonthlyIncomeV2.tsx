@@ -1,11 +1,11 @@
-import { formatDollarAmountStatic, handleInputChangeOnFormWithAmount } from "@/utility/util.ts";
+import { formatDollarAmountStatic, getCurrencySymbol, handleInputChangeOnFormWithAmount } from "@/utility/util.ts";
 import { PublicUserData } from "@/utility/types.ts";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { cn } from "@/lib/utils.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import useUpdateTotalIncome from "@/hooks/mutations/budget/useUpdateTotalIncome.ts";
 
 interface MonthlyIncomeV2Props {
@@ -30,6 +30,10 @@ export default function MonthlyIncomeV2({ publicUserData, className, totalIncome
     handleInputChangeOnFormWithAmount(e, setFormData);
   };
 
+  useEffect(() => {
+    setFormData({ amount: totalIncome });
+  }, [incomeFormIsVisible]);
+
   return (
     <div
       className={cn(
@@ -44,12 +48,27 @@ export default function MonthlyIncomeV2({ publicUserData, className, totalIncome
             <SheetTitle>Edit Total Income</SheetTitle>
             <SheetDescription>Estimate your total monthly income.</SheetDescription>
           </SheetHeader>
-          <form onSubmit={handleSubmit}>
-            <div className={"flex flex-row justify-center items-center gap-2 my-4"}>
-              <Label htmlFor="amount">Income</Label>
-              <Input onChange={handleChange} type={"number"} name={"amount"} value={formData.amount} id="amount" />
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4">
+            <div className={"grid grid-cols-4 items-center gap-5 relative"}>
+              <Label htmlFor="amount" className={"text-right"}>
+                Amount
+              </Label>
+              <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-black text-sm">
+                {getCurrencySymbol(publicUserData.currency)}
+              </b>
+              <Input
+                type="text"
+                className={"col-span-3 pl-8"}
+                onChange={handleChange}
+                value={formData.amount === 0 ? "" : formData.amount}
+                name="amount"
+                id="amount"
+                autoComplete={"off"}
+                required
+              />
             </div>
-            <Button>Save</Button>
+
+            <Button className={"mt-2 self-end"}>Save Changes</Button>
           </form>
         </SheetContent>
       </Sheet>

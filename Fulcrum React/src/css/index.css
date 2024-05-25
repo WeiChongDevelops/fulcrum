@@ -82,7 +82,7 @@ input:focus {
   }
 }
 
-@media (max-width: 1130px) {
+@media (max-width: 1180px) {
   :root {
     font-size: 12px;
   }

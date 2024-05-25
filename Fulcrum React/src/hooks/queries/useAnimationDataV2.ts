@@ -6,9 +6,15 @@ interface useAnimationDataV2Props {
   sideBarOpen: boolean;
   totalIncome: number;
   totalBudget: number;
+  budgetLayoutIsSideBySide: boolean;
 }
 
-export default function useAnimationDataV2({ sideBarOpen, totalIncome, totalBudget }: useAnimationDataV2Props) {
+export default function useAnimationDataV2({
+  sideBarOpen,
+  totalIncome,
+  totalBudget,
+  budgetLayoutIsSideBySide,
+}: useAnimationDataV2Props) {
   const [lineAngle, setLineAngle] = useState(0);
   const leverRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -37,15 +43,15 @@ export default function useAnimationDataV2({ sideBarOpen, totalIncome, totalBudg
   };
 
   const shadowMoveStart = async () => {
-    await updateRect();
     setShadowOpacity(0);
   };
 
   const shadowMoveEnd = async () => {
+    await updateRect();
     setShadowOpacity(1);
   };
 
-  const debouncedShadowMoveEnd = debounce(shadowMoveEnd, 200);
+  const debouncedShadowMoveEnd = debounce(shadowMoveEnd, 350);
 
   useEffect(() => {
     window.addEventListener("resize", shadowMoveStart);
@@ -60,17 +66,13 @@ export default function useAnimationDataV2({ sideBarOpen, totalIncome, totalBudg
   useEffect(() => {
     shadowMoveStart();
     debouncedShadowMoveEnd();
+    !!bowlRef.current && setBowlWidth(bowlRef.current.getBoundingClientRect().width);
     return () => debouncedShadowMoveEnd.cancel();
-  }, [sideBarOpen, containerRef.current?.getBoundingClientRect().left]);
+  }, [lineAngle, sideBarOpen, containerRef.current?.getBoundingClientRect().left, budgetLayoutIsSideBySide]);
 
   useEffect(() => {
     setLineAngle(getLineAngle(totalBudget - totalIncome, totalIncome));
   }, [totalIncome, totalBudget]);
-
-  useEffect(() => {
-    updateRect();
-    !!bowlRef.current && setBowlWidth(bowlRef.current.getBoundingClientRect().width);
-  }, [lineAngle]);
 
   useEffect(() => {
     setLeftOffset(leverLeft - containerLeft);

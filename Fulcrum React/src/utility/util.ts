@@ -55,6 +55,12 @@ import {
   ForkKnife,
   WifiHigh,
   Coin,
+  ChartLine,
+  GraduationCap,
+  HandSoap,
+  Shovel,
+  Broom,
+  Couch,
 } from "@phosphor-icons/react";
 import { Location } from "react-router-dom";
 
@@ -199,14 +205,24 @@ export function getCurrencySymbol(currency: string): string {
  * Formats a numeric amount into a currency string in manner friendly to static displays & unfriendly to dynamic inputs
  * @param amount - The numeric amount to format.
  * @param currency - The currency code to use for determining the currency symbol.
+ * @param abbreviate - Whether to abbreviate large numbers.
  * @returns A formatted string representing the amount in the specified currency.
  */
-export function formatDollarAmountStatic(amount: number, currency: string): string {
-  const formattedNumber = new Intl.NumberFormat("en-US", {
-    style: "decimal",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(amount);
+export function formatDollarAmountStatic(amount: number, currency: string, abbreviate: boolean = false): string {
+  let formattedNumber: string;
+  if (!abbreviate || amount <= 999) {
+    formattedNumber = new Intl.NumberFormat("en-US", {
+      style: "decimal",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  } else {
+    if (amount > 999_999) {
+      formattedNumber = (amount / 1_000_000).toFixed(1).toString() + "M";
+    } else {
+      formattedNumber = (amount / 1_000).toFixed(1).toString() + "K";
+    }
+  }
   let currencySymbol = getCurrencySymbol(currency);
   return currencySymbol + formattedNumber;
 }
@@ -608,6 +624,12 @@ export const categoryIconComponentMap: { [key: string]: React.FC } = {
   ForkKnife,
   WifiHigh,
   Coin,
+  ChartLine,
+  GraduationCap,
+  HandSoap,
+  Shovel,
+  Broom,
+  Couch,
 };
 
 // DYNAMIC SIZING FUNCTIONS //
@@ -865,9 +887,9 @@ export function getLineAngle(amountLeftToBudget: number, totalIncome: number): n
   const functionalPercentageIncomeRemaining =
     percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining;
   return functionalPercentageIncomeRemaining === -100
-    ? 14.5
+    ? 12.5
     : functionalPercentageIncomeRemaining === 100
-      ? -14.5
+      ? -12.5
       : functionalPercentageIncomeRemaining / (-100 / 14.5);
 }
 

@@ -117,7 +117,7 @@ export default function GroupV2({
     <div
       ref={setNodeRef}
       {...attributes}
-      className={"flex flex-row items-start gap-1 select-none rounded-xl relative"}
+      className={"flex flex-row items-start gap-1 select-none rounded-xl relative overflow-hidden"}
       style={{
         ...style,
         backgroundColor: group.colour,
@@ -143,7 +143,7 @@ export default function GroupV2({
             <p className={"font-bold text-base"}>{group.group}</p>
           </AccordionTrigger>
           <AccordionContent className={"pt-3 pb-6 pl-6"}>
-            <div className={"flex flex-row gap-5 justify-start items-center flex-wrap"}>
+            <div className={"flex flex-row gap-5 justify-start items-center w-[109%] flex-wrap "}>
               {budgetArray.length > 0 &&
                 budgetArray
                   .filter((budgetItem) => budgetItem.group === group.group)

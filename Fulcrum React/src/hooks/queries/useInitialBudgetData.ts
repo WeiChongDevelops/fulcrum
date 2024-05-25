@@ -71,6 +71,7 @@ export default function useInitialBudgetData() {
     isError,
     isSuccess,
     error,
+    status,
   } = useQuery({
     queryKey: ["totalIncome", email],
     queryFn: retrieveInitialData,

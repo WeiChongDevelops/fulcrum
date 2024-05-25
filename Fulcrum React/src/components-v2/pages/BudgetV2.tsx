@@ -101,7 +101,7 @@ export default function BudgetV2({
     setPerCategoryExpenseTotalThisMonth,
     isLoading,
     isError,
-    // isSuccess,
+    isSuccess,
     error,
   } = useInitialBudgetData();
 
@@ -173,7 +173,6 @@ export default function BudgetV2({
     } else {
       reorderGroups(localisedGroupArray);
     }
-    console.log(localisedGroupArray);
   }, [localisedGroupArray]);
 
   const [budgetLayoutIsSideBySide, setBudgetLayoutIsSideBySide] = useState(false);
@@ -181,7 +180,7 @@ export default function BudgetV2({
   const updateBentoLayout = () => {
     if (!!budgetContainer.current) {
       const containerWidth = budgetContainer.current.getBoundingClientRect().width;
-      setBudgetLayoutIsSideBySide(containerWidth > 700);
+      setBudgetLayoutIsSideBySide(containerWidth > 850);
     }
   };
 
@@ -195,8 +194,12 @@ export default function BudgetV2({
   }, []);
 
   useEffect(() => {
-    updateBentoLayout();
+    debounce(updateBentoLayout, 1500);
   }, [sideBarOpen]);
+
+  useEffect(() => {
+    setTimeout(updateBentoLayout, 300);
+  }, []);
 
   if (isError) {
     return <FulcrumErrorPage errors={[error!]} />;
@@ -227,8 +230,9 @@ export default function BudgetV2({
         <ScrollArea className={"transition-all ease-[cubic-bezier(0.9, 0, 0.4, 1)] mt-[6vh] h-[94vh]"} ref={budgetContainer}>
           <div className={"grid gap-4 px-6 pt-6 pb-8"}>
             <div className="grid w-full gap-6" style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}>
-              <div className={"relative z-10 bg-slate-200 rounded-xl"}>
+              <div className={"relative z-10 bg-slate-100 rounded-xl"}>
                 <FulcrumAnimationV2
+                  budgetLayoutIsSideBySide={budgetLayoutIsSideBySide}
                   currency={publicUserData.currency}
                   sideBarOpen={sideBarOpen}
                   totalIncome={totalIncome!}
@@ -240,6 +244,7 @@ export default function BudgetV2({
                 groupArray={groupArray}
                 budgetTotal={budgetTotal}
                 categoryDataMap={categoryDataMap}
+                currency={publicUserData.currency}
               />
             </div>
             <Separator />

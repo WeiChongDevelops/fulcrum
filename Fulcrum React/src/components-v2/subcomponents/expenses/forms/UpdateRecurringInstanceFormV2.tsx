@@ -173,7 +173,7 @@ export default function UpdateRecurringInstanceFormV2({
                 type="text"
                 className={"col-span-3 pl-8"}
                 onChange={handleInputChange}
-                value={formData.amount === 0 ? "" : formData.amount.toFixed(2)}
+                value={formData.amount === 0 ? "" : formData.amount}
                 name="amount"
                 id="amount"
                 autoComplete={"off"}

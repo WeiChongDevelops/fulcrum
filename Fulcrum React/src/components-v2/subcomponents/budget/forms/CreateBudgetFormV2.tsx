@@ -122,10 +122,11 @@ export default function CreateBudgetFormV2({ groupArray, groupNameOfNewItem, cur
   }, [formIsOpen]);
 
   function handleGroupInputChange(e: any) {
-    setFormData((currentFormData: BudgetCreationFormData) => ({
-      ...currentFormData,
-      group: e.value,
-    }));
+    // setFormData((currentFormData: BudgetCreationFormData) => ({
+    //   ...currentFormData,
+    //   group: e.value,
+    // }));
+    handleInputChangeOnFormWithAmount(e, setFormData);
   }
 
   const handleGroupSelectChange = (group: string) => {

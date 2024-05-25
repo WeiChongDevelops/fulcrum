@@ -1,4 +1,3 @@
-import { categoryIconArray } from "../../../utility/util.ts";
 import "../../../css/Budget.css";
 import {
   HandHeart,
@@ -31,7 +30,13 @@ import {
   Television,
   ForkKnife,
   WifiHigh,
-  CoinVertical,
+  Coin,
+  ChartLine,
+  GraduationCap,
+  HandSoap,
+  Shovel,
+  Broom,
+  Couch,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils.ts";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
@@ -77,9 +82,15 @@ export default function CategoryIconSelector({ setFormData, className }: Categor
     Television,
     ForkKnife,
     WifiHigh,
+    ChartLine,
+    GraduationCap,
+    HandSoap,
+    Shovel,
+    Broom,
+    Couch,
   ];
 
-  const DEFAULT_CATEGORY_ICON = CoinVertical;
+  const DEFAULT_CATEGORY_ICON = Coin;
 
   const [isActive, setIsActive] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(DEFAULT_CATEGORY_ICON.displayName);
@@ -106,7 +117,7 @@ export default function CategoryIconSelector({ setFormData, className }: Categor
     <div
       ref={selectorRef}
       className={cn(
-        `grid grid-cols-6 max-[1130px]:grid-cols-5 place-items-center gap-5 outline outline-1 shadow outline-gray-200 p-4 rounded-lg ${isActive ? "outline-black" : "outline-gray-200"}`,
+        `grid grid-cols-6 place-items-center gap-2 outline outline-1 shadow outline-gray-200 p-2 rounded-lg ${isActive ? "outline-black" : "outline-gray-200"}`,
         className,
       )}
     >
@@ -123,7 +134,7 @@ export default function CategoryIconSelector({ setFormData, className }: Categor
           data-value={IconComponent.displayName}
           key={index}
           onClick={handleIconSelection}
-          className={`flex justify-center items-center size-12 p-1.5 transition-all duration-100 ease-out rounded-full outline-primary outline-2 ${selectedIcon === IconComponent.displayName && "outline"}`}
+          className={`flex justify-center items-center size-10 p-1 transition-all duration-100 ease-out rounded-full outline-primary outline-2 ${selectedIcon === IconComponent.displayName && "outline"}`}
         >
           <IconComponent size={28} weight={"regular"} />
         </button>

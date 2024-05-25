@@ -104,11 +104,12 @@ suspend fun executeExpenseDeletion(expenseId: String, call: ApplicationCall): Bo
 
 fun getDefaultGroups(uid: String, miscellaneousExists: Boolean): List<GroupCreateRequestSent> {
     val groups = mutableListOf(
-        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#d1fae5", id = 1),
+        GroupCreateRequestSent(userId = uid, group = "Savings & Investment", colour = "#d1fae5", id = 1),
         GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#dbeafe", id = 2),
         GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#fee2e2", id = 3),
         GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#cffafe", id = 4),
         GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#fef3c7", id = 5),
+        GroupCreateRequestSent(userId = uid, group = "Leisure", colour = "#fef3c7", id = 5),
 //        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#9fd5be"),
 //        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#f1afa1"),
 //        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#7c86bf"),
@@ -125,29 +126,43 @@ fun getDefaultCategories(uid: String): List<BudgetCreateRequestSent> {
     return listOf(
         BudgetCreateRequestSent(
             userId = uid,
-            category = "Other",
-            amount = 100.00,
-            iconPath = "Coin",
-            group = "Miscellaneous"
+            category = "Emergency Funds",
+            amount = 1000.00,
+            iconPath = "FireExtinguisher",
+            group = "Savings & Investment"
         ),
         BudgetCreateRequestSent(
             userId = uid,
-            category = "Emergency Funds",
+            category = "Vacation Savings",
             amount = 500.00,
+            iconPath = "AirplaneTilt",
+            group = "Savings & Investment"
+        ),
+        BudgetCreateRequestSent(
+            userId = uid,
+            category = "Stocks",
+            amount = 500.00,
+            iconPath = "ChartLine",
+            group = "Savings & Investment"
+        ),
+        BudgetCreateRequestSent(
+            userId = uid,
+            category = "General Savings",
+            amount = 3000.00,
             iconPath = "FireExtinguisher",
-            group = "Savings"
+            group = "Savings & Investment"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Drinks",
-            amount = 150.00,
+            amount = 200.00,
             iconPath = "Martini",
             group = "Food & Drink"
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Groceries",
-            amount = 400.00,
+            amount = 450.00,
             iconPath = "ShoppingCart",
             group = "Food & Drink"
         ),
@@ -160,15 +175,29 @@ fun getDefaultCategories(uid: String): List<BudgetCreateRequestSent> {
         ),
         BudgetCreateRequestSent(
             userId = uid,
+            category = "Pet Food",
+            amount = 60.00,
+            iconPath = "PawPrint",
+            group = "Food & Drink"
+        ),
+        BudgetCreateRequestSent(
+            userId = uid,
             category = "Rent",
-            amount = 1500.00,
+            amount = 1600.00,
             iconPath = "HouseLine",
             group = "Housing"
         ),
         BudgetCreateRequestSent(
             userId = uid,
+            category = "Maintenance",
+            amount = 250.00,
+            iconPath = "Wrench",
+            group = "Housing"
+        ),
+        BudgetCreateRequestSent(
+            userId = uid,
             category = "Water",
-            amount = 30.00,
+            amount = 50.00,
             iconPath = "Drop",
             group = "Utilities"
         ),
@@ -196,7 +225,7 @@ fun getDefaultCategories(uid: String): List<BudgetCreateRequestSent> {
         BudgetCreateRequestSent(
             userId = uid,
             category = "Parking",
-            amount = 50.00,
+            amount = 60.00,
             iconPath = "CarProfile",
             group = "Transport"
         ),
@@ -206,6 +235,55 @@ fun getDefaultCategories(uid: String): List<BudgetCreateRequestSent> {
             amount = 120.00,
             iconPath = "Train",
             group = "Transport"
-        )
+        ),
+        BudgetCreateRequestSent(
+            userId = uid,
+            category = "Sports",
+            amount = 100.00,
+            iconPath = "Volleyball",
+            group = "Leisure"
+        ),
+        BudgetCreateRequestSent(
+            userId = uid,
+            category = "Entertainment",
+            amount = 100.00,
+            iconPath = "FilmStrip",
+            group = "Leisure"
+        ),
+        BudgetCreateRequestSent(
+            userId = uid,
+            category = "Gym",
+            amount = 30.00,
+            iconPath = "Barbell",
+            group = "Leisure"
+        ),
+        BudgetCreateRequestSent(
+            userId = uid,
+            category = "Education",
+            amount = 300.00,
+            iconPath = "GraduationCap",
+            group = "Miscellaneous"
+        ),
+        BudgetCreateRequestSent(
+            userId = uid,
+            category = "Personal Care",
+            amount = 100.00,
+            iconPath = "HandSoap",
+            group = "Miscellaneous"
+        ),
+        BudgetCreateRequestSent(
+            userId = uid,
+            category = "Charity",
+            amount = 50.00,
+            iconPath = "HandHeart",
+            group = "Miscellaneous"
+        ),
+        BudgetCreateRequestSent(
+            userId = uid,
+            category = "Other",
+            amount = 850.00,
+            iconPath = "Coin",
+            group = "Miscellaneous"
+        ),
     )
 }

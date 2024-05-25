@@ -13,6 +13,7 @@ import {
   getHighestGroupSortIndex,
   getRandomGroupColour,
   groupSort,
+  handleInputChangeOnFormWithAmount,
   useSetBudgetModalVisibility,
 } from "@/utility/util.ts";
 import {
@@ -52,7 +53,6 @@ interface UpdateBudgetFormV2Props {
   groupArray: GroupItemEntity[];
   currencySymbol: string;
   updateOldBudgetBeingEdited: (e: React.MouseEvent) => void;
-  categoryToDelete: string;
 }
 
 export default function UpdateBudgetFormV2({
@@ -60,7 +60,6 @@ export default function UpdateBudgetFormV2({
   oldBudgetBeingEdited,
   currencySymbol,
   updateOldBudgetBeingEdited,
-  categoryToDelete,
 }: UpdateBudgetFormV2Props) {
   const [formData, setFormData] = useState<BudgetUpdatingFormData>({
     category: oldBudgetBeingEdited.oldCategory,
@@ -101,9 +100,10 @@ export default function UpdateBudgetFormV2({
   // }, [routerLocation]);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-    setFormData((currentFormData) => {
-      return { ...currentFormData, [e.target.name]: e.target.value };
-    });
+    // setFormData((currentFormData) => {
+    //   return { ...currentFormData, [e.target.name]: e.target.value };
+    // });
+    handleInputChangeOnFormWithAmount(e, setFormData);
   }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -196,7 +196,7 @@ export default function UpdateBudgetFormV2({
                 type="text"
                 className={"col-span-3 pl-8"}
                 onChange={handleInputChange}
-                value={formData.amount === 0 ? "" : formData.amount.toFixed(2)}
+                value={formData.amount === 0 ? "" : formData.amount}
                 name="amount"
                 id="amount"
                 autoComplete={"off"}
@@ -246,10 +246,14 @@ export default function UpdateBudgetFormV2({
               <FulcrumDialogTwoOptions
                 dialogOpen={showConfirmDeleteBudgetDialog}
                 setDialogOpen={setShowConfirmDeleteBudgetDialog}
-                dialogTitle={`Delete the budget category '${categoryToDelete}'?`}
+                dialogTitle={`Delete the budget category '${oldBudgetBeingEdited.oldCategory}'?`}
                 dialogDescription={"Any expenses under this category will also be permanently deleted."}
                 leftButtonFunction={() => setShowConfirmDeleteBudgetDialog(false)}
-                rightButtonFunction={() => deleteBudget(categoryToDelete)}
+                rightButtonFunction={() => {
+                  setShowConfirmDeleteBudgetDialog(false);
+                  hideForm();
+                  deleteBudget(oldBudgetBeingEdited.oldCategory);
+                }}
                 leftButtonText={"Cancel"}
                 rightButtonText={"Delete"}
                 buttonTriggerComponent={
