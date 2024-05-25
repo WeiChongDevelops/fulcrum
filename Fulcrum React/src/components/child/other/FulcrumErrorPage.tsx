@@ -11,7 +11,7 @@ export default function FulcrumErrorPage({ errors }: FulcrumErrorPage) {
     setTimeout(() => {
       toast.dismiss();
       window.location.href = "/login";
-    }, 500);
+    }, 5000);
   }, []);
   return (
     <div className={"flex flex-col justify-center items-center h-screen gap-14 text-black font-bold"}>

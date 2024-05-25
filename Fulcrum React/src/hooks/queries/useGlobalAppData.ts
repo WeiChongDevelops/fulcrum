@@ -86,6 +86,9 @@ export function useGlobalAppData() {
   const isAnyLoading =
     globalAppDataQueries.some((query: UseQueryResult) => query.isLoading) || categoryDataMapQuery.isLoading;
   const isAnyError = globalAppDataQueries.some((query: UseQueryResult) => query.isError) || categoryDataMapQuery.isError;
+  const isAllSuccess = globalAppDataQueries.some(
+    (query: UseQueryResult) => query.isSuccess && categoryDataMapQuery.isSuccess,
+  );
   const errors = globalAppDataQueries
     .map((query: UseQueryResult) => query.error)
     .filter((error) => error !== null) as Error[];
@@ -101,6 +104,7 @@ export function useGlobalAppData() {
     categoryDataMap: categoryDataMapQuery.data as CategoryToIconGroupAndColourMap,
     isAnyLoading,
     isAnyError,
+    isAllSuccess,
     errors,
   };
 }

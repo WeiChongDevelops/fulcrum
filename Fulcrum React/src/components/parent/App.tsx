@@ -51,6 +51,7 @@ export default function App() {
     categoryDataMap,
     isAnyLoading,
     isAnyError,
+    isAllSuccess,
     errors,
   } = useGlobalAppData();
 
