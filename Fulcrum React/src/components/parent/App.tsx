@@ -30,6 +30,7 @@ import SettingsV2 from "@/components-v2/pages/SettingsV2.tsx";
 import BudgetV2 from "@/components-v2/pages/BudgetV2.tsx";
 import "@/css/global.css";
 import Playground from "@/components-v2/subcomponents/budget/Playground.tsx";
+import { Button } from "@/components-v2/ui/button.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -61,7 +62,7 @@ export default function App() {
     return <FulcrumErrorPage errors={errors} />;
   }
 
-  if (isAnyLoading || !budgetArray) {
+  if (isAnyLoading) {
     return <Loader isLoading={isAnyLoading} isDarkMode={false} />;
   }
 

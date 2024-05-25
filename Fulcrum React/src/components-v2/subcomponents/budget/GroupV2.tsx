@@ -139,7 +139,7 @@ export default function GroupV2({
         onValueChange={handleValueChange}
       >
         <AccordionItem value={`item-${group.id}`}>
-          <AccordionTrigger className={"px-8 select-none"}>
+          <AccordionTrigger className={"px-7 select-none"}>
             <p className={"font-bold text-base"}>{group.group}</p>
           </AccordionTrigger>
           <AccordionContent className={"pt-3 pb-6 pl-6"}>
@@ -290,7 +290,7 @@ export default function GroupV2({
         )}
         <div
           // className={"grid font-bold text-2xl place-items-baseline size-6 hover:scale-110 origin-center transition-all"}
-          className={"z-10 font-bold size-6 mb-3 mr-4 hover:scale-110 hover:-translate-y-[1px] origin-center transition-all"}
+          className={"z-10 font-bold size-6 mb-3 mr-5 hover:scale-110 hover:-translate-y-[1px] origin-center transition-all"}
           onMouseDown={() => setAccordionIsOpen("")}
           {...listeners}
         >

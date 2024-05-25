@@ -109,7 +109,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
           </div>
         )}
         <div className={"flex flex-row justify-start items-start w-full px-1.5 gap-3 text-left mt-6"}>
-          <Avatar className={"size-10"}>
+          <Avatar className={"size-9"}>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>
               <img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" className={"w-[65%]"} />
@@ -118,7 +118,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
           {navMenuOpen && (
             <div className={"flex flex-col justify-start flex-grow w-1/2 -mt-1"}>
               <div className={"flex flex-row justify-between"}>
-                <p className={"text-lg font-bold"}>Personal</p>
+                <p className={"text-base font-semibold"}>Personal</p>
               </div>
               <p className={"text-xs font-medium truncate w-full"}>{activeEmail}</p>
             </div>

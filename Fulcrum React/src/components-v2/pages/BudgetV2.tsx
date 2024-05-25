@@ -125,8 +125,14 @@ export default function BudgetV2({
     budgetContainer.current?.classList.add("fadeOut");
     setTimeout(() => {
       budgetContainer.current?.classList.remove("fadeOut");
-    }, 400);
+    }, 350);
   };
+  // const fadeBudget = () => {
+  //   budgetContainer.current?.classList.add("fadeOut");
+  //   setTimeout(() => {
+  //     budgetContainer.current?.classList.remove("fadeOut");
+  //   }, 350);
+  // };
 
   useEffect(fadeBudget, [navMenuOpen]);
 
@@ -182,7 +188,7 @@ export default function BudgetV2({
       setTimeout(() => {
         if (!!budgetContainer.current) {
           const containerWidth = budgetContainer.current.getBoundingClientRect().width;
-          setBudgetLayoutIsSideBySide(containerWidth > 820);
+          setBudgetLayoutIsSideBySide(containerWidth > 940);
         }
       }, 500);
     };

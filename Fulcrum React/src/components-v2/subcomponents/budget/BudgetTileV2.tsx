@@ -69,7 +69,7 @@ export default function BudgetTileV2({
         categoryToDelete={filteredBudgetItem.category}
       />
       <Card className="size-44 outline relative transition-all duration-150 ease -z-10">
-        <CardHeader className={"py-3"}>
+        <CardHeader className={"py-4"}>
           <CardTitle className={"text-sm font-bold"}>{filteredBudgetItem.category}</CardTitle>
         </CardHeader>
         <CardContent className={"flex flex-col gap-3 pb-2 justify-center items-center"}>

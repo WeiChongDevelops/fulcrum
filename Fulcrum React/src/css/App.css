@@ -209,9 +209,24 @@
   transition: all 300ms ease-out;
 }
 
+/*.fadeOut {*/
+/*  opacity: 0;*/
+/*  filter: blur(10px);*/
+/*}*/
+
+@keyframes budgetFade {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50%,
+  75% {
+    opacity: 0;
+  }
+}
+
 .fadeOut {
-  opacity: 0;
-  filter: blur(10px);
+  animation: budgetFade 600ms ease-out;
 }
 
 .standard-edit-delete-button:hover svg {

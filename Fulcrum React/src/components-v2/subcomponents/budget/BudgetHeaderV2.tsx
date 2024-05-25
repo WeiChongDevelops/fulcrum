@@ -16,7 +16,7 @@ export default function BudgetHeaderV2({ publicUserData, totalIncome, navMenuOpe
     >
       <MonthlyIncomeV2 publicUserData={publicUserData} className={"ml-10"} totalIncome={totalIncome} />
       <div className={"flex flex-row justify-center items-center gap-4 ml-auto mr-2"}>
-        <p className={"mx-8 font-bold text-xl"}>Budget</p>
+        <p className={"mx-8 font-medium text-lg"}>Budget</p>
         <DarkModeToggleV2 publicUserData={publicUserData} />
         <Button>Help</Button>
       </div>
