@@ -35,7 +35,7 @@ export default function FulcrumV2({ publicUserData, navMenuOpen, setNavMenuOpen,
   return (
     <ErrorBoundary>
       <NavMenuIsOpenContext.Provider value={navMenuOpen}>
-        <div className={"flex flex-row relative transition-all"}>
+        <div className={"flex flex-row relative transition-all font-source"}>
           <div className={"fixed top-0 w-screen bg-gray-400 h-[6vh]"}></div>
           <NavigationMenuV2 publicUserData={publicUserData} navMenuOpen={navMenuOpen} setNavMenuOpen={setNavMenuOpen} />
           <div

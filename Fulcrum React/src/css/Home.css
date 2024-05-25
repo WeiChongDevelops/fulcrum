@@ -1,10 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+/* HOMEPAGE NAVBAR */
 
-:root {
+#homepage {
   font-family: "Quicksand", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
-
-/* HOMEPAGE NAVBAR */
 
 .homepage-navbar-link {
   position: relative;

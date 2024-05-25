@@ -150,9 +150,9 @@ export default function CreateExpenseFormV2({
         <Button
           asChild
           variant={"empty"}
-          className={`w-[95%] h-16 mb-2 border-2 border-dashed border-black rounded-2xl hover:rounded-md hover:bg-[#DEDEDE33] transition-all duration-300 ease-out text-2xl font-bold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`}
+          className={`w-[95%] h-14 mb-2 border-2 border-dashed border-black rounded-2xl hover:rounded-md hover:bg-[#DEDEDE33] transition-all duration-300 ease-out font-bold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`}
         >
-          <p>+</p>
+          <p>{`+ Add ${mustBeRecurring ? "Recurring " : ""}Expense`}</p>
         </Button>
       </SheetTrigger>
       <SheetOverlay>

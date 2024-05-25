@@ -249,12 +249,6 @@ export default function BudgetV2({
               modifiers={[restrictToVerticalAxis]}
             >
               <div className="flex flex-col w-full gap-3">
-                <CreateGroupFormV2
-                  publicUserData={publicUserData}
-                  highestSortIndex={getHighestGroupSortIndex(groupArray)}
-                  setLocalisedGroupArray={setLocalisedGroupArray}
-                />
-
                 <SortableContext items={localisedGroupArray} strategy={verticalListSortingStrategy}>
                   {!!localisedGroupArray &&
                     localisedGroupArray.map((group) => (
@@ -279,6 +273,11 @@ export default function BudgetV2({
                       />
                     ))}
                 </SortableContext>
+                <CreateGroupFormV2
+                  publicUserData={publicUserData}
+                  highestSortIndex={getHighestGroupSortIndex(groupArray)}
+                  setLocalisedGroupArray={setLocalisedGroupArray}
+                />
               </div>
             </DndContext>
           </div>

@@ -8,7 +8,7 @@ import { getWindowLocation } from "../../../utility/util.ts";
  */
 export default function Home() {
   return (
-    <div className={"relative"}>
+    <div className={"relative"} id={"homepage"}>
       <HomeNavbar />
       <Outlet />
       <HomeFooter
