@@ -13,6 +13,7 @@ import {
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
 } from "@/utility/types.ts";
+import { expenseStartDate } from "@/utility/util.ts";
 
 interface ExpenseDatePickerProps {
   setFormData:
@@ -58,7 +59,13 @@ export default function ExpenseDatePicker({ setFormData, className, defaultDate 
           </SelectContent>
         </Select>
         <div className="rounded-md border">
-          <Calendar mode="single" selected={date} onSelect={setDate} />
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate as Dispatch<SetStateAction<Date | undefined>>}
+            fromDate={expenseStartDate}
+            toDate={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
+          />
         </div>
       </PopoverContent>
     </Popover>

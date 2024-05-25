@@ -57,6 +57,7 @@ import CreateGroupFormV2 from "@/components-v2/subcomponents/budget/forms/Create
 import Playground from "@/components-v2/subcomponents/budget/Playground.tsx";
 import { ScrollArea, ScrollBar } from "@/components-v2/ui/scroll-area.tsx";
 import BudgetDataBento from "@/components-v2/subcomponents/budget/BudgetDataBento.tsx";
+import { debounce } from "lodash";
 
 interface BudgetV2Props {
   publicUserData: PublicUserData;
@@ -121,20 +122,14 @@ export default function BudgetV2({
   const budgetContainer = useRef<HTMLDivElement>(null);
   const budgetTotal = budgetArray.reduce((acc, budgetItem) => acc + budgetItem.amount, 0);
 
-  const fadeBudget = () => {
-    budgetContainer.current?.classList.add("fadeOut");
-    setTimeout(() => {
-      budgetContainer.current?.classList.remove("fadeOut");
-    }, 350);
-  };
   // const fadeBudget = () => {
   //   budgetContainer.current?.classList.add("fadeOut");
   //   setTimeout(() => {
   //     budgetContainer.current?.classList.remove("fadeOut");
   //   }, 350);
   // };
-
-  useEffect(fadeBudget, [navMenuOpen]);
+  //
+  // useEffect(fadeBudget, [navMenuOpen]);
 
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
   const [localisedGroupArray, setLocalisedGroupArray] = useState([...groupArray]);
@@ -183,18 +178,24 @@ export default function BudgetV2({
 
   const [budgetLayoutIsSideBySide, setBudgetLayoutIsSideBySide] = useState(false);
 
+  const updateBentoLayout = () => {
+    if (!!budgetContainer.current) {
+      const containerWidth = budgetContainer.current.getBoundingClientRect().width;
+      setBudgetLayoutIsSideBySide(containerWidth > 700);
+    }
+  };
+
   useEffect(() => {
-    const updateBudgetLayout = () => {
-      setTimeout(() => {
-        if (!!budgetContainer.current) {
-          const containerWidth = budgetContainer.current.getBoundingClientRect().width;
-          setBudgetLayoutIsSideBySide(containerWidth > 940);
-        }
-      }, 500);
+    window.addEventListener("resize", updateBentoLayout);
+    window.addEventListener("resize", () => debounce(updateBentoLayout, 150));
+    return () => {
+      window.removeEventListener("resize", updateBentoLayout);
+      window.removeEventListener("resize", () => debounce(updateBentoLayout, 150));
     };
-    updateBudgetLayout();
-    window.addEventListener("resize", updateBudgetLayout);
-    return () => window.removeEventListener("resize", updateBudgetLayout);
+  }, []);
+
+  useEffect(() => {
+    updateBentoLayout();
   }, [navMenuOpen]);
 
   if (isError) {

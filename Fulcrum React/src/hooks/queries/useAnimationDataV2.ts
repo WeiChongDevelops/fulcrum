@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getLineAngle } from "@/utility/util.ts";
+import { debounce } from "lodash";
 
 interface useAnimationDataV2Props {
   navMenuOpen: boolean;
@@ -22,26 +23,44 @@ export default function useAnimationDataV2({ navMenuOpen, totalIncome, totalBudg
 
   const [bowlWidth, setBowlWidth] = useState(0);
 
-  const updateRect = () => {
-    setTimeout(() => {
-      const leverRect = leverRef.current?.getBoundingClientRect();
-      if (!!leverRect) {
-        setLeverLeft(leverRect.left);
-      }
-      const containerRect = containerRef.current?.getBoundingClientRect();
-      if (!!containerRect) {
-        setContainerLeft(containerRect.left);
-      }
-    }, 350);
+  const [shadowOpacity, setShadowOpacity] = useState(1);
+
+  const updateRect = async () => {
+    const leverRect = leverRef.current?.getBoundingClientRect();
+    if (!!leverRect) {
+      setLeverLeft(leverRect.left);
+    }
+    const containerRect = containerRef.current?.getBoundingClientRect();
+    if (!!containerRect) {
+      setContainerLeft(containerRect.left);
+    }
   };
 
+  const shadowMoveStart = async () => {
+    await updateRect();
+    setShadowOpacity(0);
+  };
+
+  const shadowMoveEnd = async () => {
+    setShadowOpacity(1);
+  };
+
+  const debouncedShadowMoveEnd = debounce(shadowMoveEnd, 200);
+
   useEffect(() => {
-    window.addEventListener("resize", updateRect);
-    return () => window.removeEventListener("resize", updateRect);
+    window.addEventListener("resize", shadowMoveStart);
+    window.addEventListener("resize", debouncedShadowMoveEnd);
+    return () => {
+      window.removeEventListener("resize", shadowMoveStart);
+      window.removeEventListener("resize", debouncedShadowMoveEnd);
+      debouncedShadowMoveEnd.cancel();
+    };
   }, []);
 
   useEffect(() => {
-    updateRect();
+    shadowMoveStart();
+    debouncedShadowMoveEnd();
+    return () => debouncedShadowMoveEnd.cancel();
   }, [navMenuOpen, containerRef.current?.getBoundingClientRect().left]);
 
   useEffect(() => {
@@ -62,5 +81,5 @@ export default function useAnimationDataV2({ navMenuOpen, totalIncome, totalBudg
     }
   }, [leverLeft, containerLeft]);
 
-  return { bowlWidth, containerRef, lineAngle, leverRef, bowlRef, leftOffset, rightOffset };
+  return { bowlWidth, containerRef, lineAngle, leverRef, bowlRef, leftOffset, rightOffset, shadowOpacity };
 }

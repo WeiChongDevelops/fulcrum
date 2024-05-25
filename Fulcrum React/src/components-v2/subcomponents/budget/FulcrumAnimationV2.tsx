@@ -7,11 +7,12 @@ interface FulcrumAnimationV2Props {
 }
 
 export default function FulcrumAnimationV2({ navMenuOpen, totalIncome, totalBudget }: FulcrumAnimationV2Props) {
-  const { bowlWidth, containerRef, lineAngle, leverRef, bowlRef, leftOffset, rightOffset } = useAnimationDataV2({
-    navMenuOpen,
-    totalIncome,
-    totalBudget,
-  });
+  const { bowlWidth, containerRef, lineAngle, leverRef, bowlRef, leftOffset, rightOffset, shadowOpacity } =
+    useAnimationDataV2({
+      navMenuOpen,
+      totalIncome,
+      totalBudget,
+    });
 
   const activeTriangleFulcrum = `/static/assets-v2/fulcrum-animation/fulcrum-tri-${lineAngle === 0 ? "green" : "red"}.webp`;
   const baseShadowWidth = bowlWidth * 0.85;
@@ -47,12 +48,15 @@ export default function FulcrumAnimationV2({ navMenuOpen, totalIncome, totalBudg
       {/*  style={{ left: leftOffset }}*/}
       {/*></div>*/}
       <div
-        className={"absolute bottom-[12%] bg-black rounded-[50%] transition-all ease-out "}
+        className={
+          "absolute bottom-[12%] bg-black rounded-[50%] transition-all ease-[cubic-bezier(0.0, 0.85, 0.95, 1.0)] duration-200"
+        }
         style={{
           left: leftOffset,
           width: baseShadowWidth + lineAngle * 1.5,
           height: (baseShadowWidth + lineAngle * 1.5) / 10,
           transform: `translate(-50%, 50%) scale(${100 + lineAngle}%)`,
+          opacity: shadowOpacity,
         }}
       ></div>
       {/*<div*/}
@@ -60,15 +64,18 @@ export default function FulcrumAnimationV2({ navMenuOpen, totalIncome, totalBudg
       {/*  style={{ left: rightOffset }}*/}
       {/*></div>*/}
       <div
-        className={"absolute bottom-[12%] bg-black rounded-[50%] transition-all ease-out -translate-x-1/2 "}
+        className={
+          "absolute bottom-[12%] bg-black rounded-[50%] transition-all ease-[cubic-bezier(0.0, 0.85, 0.95, 1.0)] duration-200 -translate-x-1/2"
+        }
         style={{
           left: rightOffset,
           width: baseShadowWidth - lineAngle * 1.5,
           height: (baseShadowWidth + lineAngle * 1.5) / 10,
           transform: `translate(-50%, 50%) scale(${100 - lineAngle}%)`,
+          opacity: shadowOpacity,
         }}
       ></div>
-      <div className={"absolute bottom-[10.8%] bg-black rounded-[50%] left-1/2 w-6 h-2 -translate-x-1/2 "}></div>
+      <div className={"absolute bottom-[10.8%] bg-black rounded-[50%] left-1/2 w-6 h-2 -translate-x-1/2"}></div>
     </div>
   );
 }
