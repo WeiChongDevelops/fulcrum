@@ -10,7 +10,7 @@ interface ExpenseHeaderV2Props {
   structuredExpenseData: MonthExpenseGroupEntity[] | undefined;
   startingIndex: number;
   publicUserData: PublicUserData;
-  navMenuOpen: boolean;
+  sideBarOpen: boolean;
 }
 
 export default function ExpenseHeaderV2({
@@ -18,7 +18,7 @@ export default function ExpenseHeaderV2({
   structuredExpenseData,
   startingIndex,
   publicUserData,
-  navMenuOpen,
+  sideBarOpen,
 }: ExpenseHeaderV2Props) {
   const [activeCarouselIndex, setActiveCarouselIndex] = useState(startingIndex);
   const [activeMonthAndYear, setActiveMonthAndYear] = useState<{
@@ -47,7 +47,7 @@ export default function ExpenseHeaderV2({
 
   return (
     <div
-      className={`fixed flex flex-row z-20 gap-4 justify-start items-center bg-gray-400 transition-all duration-600 ease-out ${navMenuOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
+      className={`fixed flex flex-row z-20 gap-4 justify-start items-center bg-gray-400 transition-all duration-600 ease-out ${sideBarOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
     >
       <div
         className={

@@ -64,7 +64,7 @@ interface BudgetV2Props {
   budgetArray: BudgetItemEntity[];
   expenseArray: ExpenseItemEntity[];
   groupArray: GroupItemEntity[];
-  navMenuOpen: boolean;
+  sideBarOpen: boolean;
   categoryDataMap: CategoryToIconGroupAndColourMap;
 }
 
@@ -73,7 +73,7 @@ export default function BudgetV2({
   budgetArray,
   expenseArray,
   groupArray,
-  navMenuOpen,
+  sideBarOpen,
   categoryDataMap,
 }: BudgetV2Props) {
   const routerLocation = useLocation();
@@ -129,7 +129,7 @@ export default function BudgetV2({
   //   }, 350);
   // };
   //
-  // useEffect(fadeBudget, [navMenuOpen]);
+  // useEffect(fadeBudget, [sideBarOpen]);
 
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
   const [localisedGroupArray, setLocalisedGroupArray] = useState([...groupArray]);
@@ -196,7 +196,7 @@ export default function BudgetV2({
 
   useEffect(() => {
     updateBentoLayout();
-  }, [navMenuOpen]);
+  }, [sideBarOpen]);
 
   if (isError) {
     return <FulcrumErrorPage errors={[error!]} />;
@@ -209,7 +209,7 @@ export default function BudgetV2({
   return (
     <SetBudgetModalVisibilityContext.Provider value={setBudgetModalVisibility}>
       <div className="flex flex-col justify-start">
-        <BudgetHeaderV2 publicUserData={publicUserData} totalIncome={totalIncome!} navMenuOpen={navMenuOpen} />
+        <BudgetHeaderV2 publicUserData={publicUserData} totalIncome={totalIncome!} sideBarOpen={sideBarOpen} />
         {/*<BudgetModalsAndForms*/}
         {/*  budgetFormVisibility={budgetFormVisibility}*/}
         {/*  // budgetArray={budgetArray}*/}
@@ -229,7 +229,7 @@ export default function BudgetV2({
             <div className="grid w-full gap-6" style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}>
               <div className={"relative z-10 bg-slate-200 rounded-xl"}>
                 <FulcrumAnimationV2
-                  navMenuOpen={navMenuOpen}
+                  sideBarOpen={sideBarOpen}
                   totalIncome={totalIncome!}
                   totalBudget={getTotalAmountBudgeted(budgetArray)}
                 />

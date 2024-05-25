@@ -25,7 +25,7 @@ interface RecurringExpensesV2Props {
   groupArray: GroupItemEntity[];
   recurringExpenseArray: RecurringExpenseItemEntity[];
   categoryDataMap: CategoryToIconGroupAndColourMap;
-  navMenuOpen: boolean;
+  sideBarOpen: boolean;
 }
 
 /**
@@ -38,7 +38,7 @@ export default function RecurringExpensesV2({
   groupArray,
   categoryDataMap,
   recurringExpenseArray,
-  navMenuOpen,
+  sideBarOpen,
 }: RecurringExpensesV2Props) {
   const routerLocation = useContext(LocationContext);
   const {
@@ -71,7 +71,7 @@ export default function RecurringExpensesV2({
 
   return (
     <div className={"flex flex-col justify-start items-center h-screen"}>
-      <RecurringExpensesHeaderV2 navMenuOpen={navMenuOpen} publicUserData={publicUserData} />
+      <RecurringExpensesHeaderV2 sideBarOpen={sideBarOpen} publicUserData={publicUserData} />
       <ScrollArea className={"w-full h-[94vh] pt-8"}>
         <CreateExpenseFormV2
           categoryDataMap={categoryDataMap}

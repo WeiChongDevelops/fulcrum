@@ -3,12 +3,12 @@ import { getLineAngle } from "@/utility/util.ts";
 import { debounce } from "lodash";
 
 interface useAnimationDataV2Props {
-  navMenuOpen: boolean;
+  sideBarOpen: boolean;
   totalIncome: number;
   totalBudget: number;
 }
 
-export default function useAnimationDataV2({ navMenuOpen, totalIncome, totalBudget }: useAnimationDataV2Props) {
+export default function useAnimationDataV2({ sideBarOpen, totalIncome, totalBudget }: useAnimationDataV2Props) {
   const [lineAngle, setLineAngle] = useState(0);
   const leverRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -61,7 +61,7 @@ export default function useAnimationDataV2({ navMenuOpen, totalIncome, totalBudg
     shadowMoveStart();
     debouncedShadowMoveEnd();
     return () => debouncedShadowMoveEnd.cancel();
-  }, [navMenuOpen, containerRef.current?.getBoundingClientRect().left]);
+  }, [sideBarOpen, containerRef.current?.getBoundingClientRect().left]);
 
   useEffect(() => {
     setLineAngle(getLineAngle(totalBudget - totalIncome, totalIncome));

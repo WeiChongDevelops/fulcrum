@@ -9,7 +9,7 @@ interface PageNavigationButtonProps {
   page: string;
   svgIcon: ReactNode;
   nonAppRedirectUrl?: string;
-  navMenuOpen: boolean;
+  sideBarOpen: boolean;
   className?: string;
 }
 
@@ -18,7 +18,7 @@ export default function PageNavigationButton({
   page,
   svgIcon,
   nonAppRedirectUrl = "/app/register",
-  navMenuOpen,
+  sideBarOpen,
   className,
 }: PageNavigationButtonProps) {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function PageNavigationButton({
     >
       {svgIcon}
 
-      {navMenuOpen && <p className={"text-[0.8rem]"}>{capitaliseFirstLetter(page)}</p>}
+      {sideBarOpen && <p className={"text-[0.8rem]"}>{capitaliseFirstLetter(page)}</p>}
     </Button>
   );
 }

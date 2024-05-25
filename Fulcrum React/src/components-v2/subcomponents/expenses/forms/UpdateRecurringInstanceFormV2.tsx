@@ -1,4 +1,4 @@
-import { handleInputChangeOnFormWithAmount, useEmail, useNavMenuIsOpen } from "@/utility/util.ts";
+import { handleInputChangeOnFormWithAmount, useEmail, useSideBarIsOpen } from "@/utility/util.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import CategorySelector from "@/components/child/selectors/CategorySelector.tsx";
@@ -105,7 +105,7 @@ export default function UpdateRecurringInstanceFormV2({
     });
   }, [oldExpenseBeingEdited]);
 
-  const navMenuIsOpen = useNavMenuIsOpen();
+  const navMenuIsOpen = useSideBarIsOpen();
 
   const [toastId, setToastId] = useState<string | number>();
 

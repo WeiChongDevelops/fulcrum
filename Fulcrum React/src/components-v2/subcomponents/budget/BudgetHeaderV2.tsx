@@ -6,13 +6,13 @@ import MonthlyIncomeV2 from "@/components-v2/subcomponents/budget/MonthlyIncomeV
 interface BudgetHeaderV2Props {
   publicUserData: PublicUserData;
   totalIncome: number;
-  navMenuOpen: boolean;
+  sideBarOpen: boolean;
 }
 
-export default function BudgetHeaderV2({ publicUserData, totalIncome, navMenuOpen }: BudgetHeaderV2Props) {
+export default function BudgetHeaderV2({ publicUserData, totalIncome, sideBarOpen }: BudgetHeaderV2Props) {
   return (
     <div
-      className={`fixed flex flex-row z-40 gap-4 justify-start items-center self-end bg-gray-400 ${navMenuOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
+      className={`fixed flex flex-row z-40 gap-4 justify-start items-center self-end bg-gray-400 ${sideBarOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
     >
       <MonthlyIncomeV2 publicUserData={publicUserData} className={"ml-10"} totalIncome={totalIncome} />
       <div className={"flex flex-row justify-center items-center gap-3 ml-auto mr-2"}>

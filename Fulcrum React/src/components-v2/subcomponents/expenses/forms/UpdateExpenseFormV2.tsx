@@ -9,7 +9,7 @@ import {
   getCurrencySymbol,
   handleInputChangeOnFormWithAmount,
   useEmail,
-  useNavMenuIsOpen,
+  useSideBarIsOpen,
 } from "@/utility/util.ts";
 import ExpenseDatePicker from "@/components/child/selectors/ExpenseDatePicker.tsx";
 import FrequencySelector from "@/components/child/selectors/FrequencySelector.tsx";
@@ -112,7 +112,7 @@ export default function UpdateExpenseFormV2({
     });
   }, [setOldExpenseBeingEdited, formIsOpen]);
 
-  const navMenuIsOpen = useNavMenuIsOpen();
+  const navMenuIsOpen = useSideBarIsOpen();
 
   const [toastId, setToastId] = useState<string | number>();
 

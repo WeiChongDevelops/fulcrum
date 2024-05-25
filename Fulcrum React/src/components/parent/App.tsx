@@ -57,7 +57,7 @@ export default function App() {
 
   const location = useLocation();
 
-  const [navMenuOpen, setNavMenuOpen] = useState(true);
+  const [sideBarOpen, setSideBarOpen] = useState(true);
 
   if (isAnyError) {
     return <FulcrumErrorPage errors={errors} />;
@@ -93,9 +93,9 @@ export default function App() {
               element={
                 <FulcrumV2
                   publicUserData={publicUserData}
-                  navMenuOpen={navMenuOpen}
+                  sideBarOpen={sideBarOpen}
                   isAnyLoading={isAnyLoading}
-                  setNavMenuOpen={setNavMenuOpen}
+                  setSideBarOpen={setSideBarOpen}
                 />
               }
             >
@@ -151,7 +151,7 @@ export default function App() {
                     categoryDataMap={categoryDataMap}
                     recurringExpenseArray={recurringExpenseArray}
                     blacklistedExpenseArray={blacklistedExpenseArray}
-                    navMenuOpen={navMenuOpen}
+                    sideBarOpen={sideBarOpen}
                   />
                 }
               />
@@ -165,7 +165,7 @@ export default function App() {
                     groupArray={groupArray}
                     categoryDataMap={categoryDataMap}
                     recurringExpenseArray={recurringExpenseArray}
-                    navMenuOpen={navMenuOpen}
+                    sideBarOpen={sideBarOpen}
                   />
                 }
               />
@@ -178,7 +178,7 @@ export default function App() {
                     expenseArray={expenseArray}
                     budgetArray={budgetArray}
                     groupArray={groupArray}
-                    navMenuOpen={navMenuOpen}
+                    sideBarOpen={sideBarOpen}
                     categoryDataMap={categoryDataMap}
                   />
                 }

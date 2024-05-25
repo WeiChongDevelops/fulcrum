@@ -73,8 +73,8 @@ export const useEmail = () => useContext(EmailContext);
 export const LocationContext = createContext<Location | null>(null);
 export const useLocation = () => useContext(LocationContext);
 
-export const NavMenuIsOpenContext = createContext<boolean>(true);
-export const useNavMenuIsOpen = () => useContext(NavMenuIsOpenContext);
+export const SideBarIsOpenContext = createContext<boolean>(true);
+export const useSideBarIsOpen = () => useContext(SideBarIsOpenContext);
 
 // export const SetBudgetModalStateContext = createContext<BudgetModalVisibility>({
 //   showChooseDeleteGroupOptionModal: false,

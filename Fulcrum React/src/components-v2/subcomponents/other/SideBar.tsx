@@ -8,20 +8,15 @@ import { handleUserLogout } from "@/utility/api.ts";
 import PageNavigationButton from "@/components-v2/subcomponents/other/PageNavigationButton.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
-interface NavigationMenuV2Props {
+interface SideBarProps {
   publicUserData: PublicUserData;
-  navMenuOpen: boolean;
-  setNavMenuOpen: Dispatch<SetStateAction<boolean>>;
+  sideBarOpen: boolean;
+  setSideBarOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMenuOpen }: NavigationMenuV2Props) {
+export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }: SideBarProps) {
   const routerLocation = useContext(LocationContext);
   const activeEmail = useContext(EmailContext);
-
-  // const budgetLinkRef = useRef<HTMLDivElement>(null);
-  // const expensesLinkRef = useRef<HTMLDivElement>(null);
-  // const recurringLinkRef = useRef<HTMLDivElement>(null);
-  // const settingsLinkRef = useRef<HTMLDivElement>(null);
 
   const [currentPage, setCurrentPage] = useState(window.location.pathname.split("/")[2]);
 
@@ -33,20 +28,20 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
 
   const toggleNavMenu = () => {
     if (!!animatedMenuContainerRef.current) {
-      if (navMenuOpen) {
+      if (sideBarOpen) {
         animatedMenuContainerRef.current.style.width = "5rem";
       } else {
         animatedMenuContainerRef.current.style.width = "100%";
       }
     }
-    setNavMenuOpen(!navMenuOpen);
+    setSideBarOpen(!sideBarOpen);
   };
 
   const [autoAnimateRef] = useAutoAnimate();
 
   return (
     <div
-      className={`fixed flex flex-col ${navMenuOpen ? "w-[14rem]" : "w-[5rem]"} h-screen z-50 transition-all duration-400 ease-out`}
+      className={`fixed flex flex-col ${sideBarOpen ? "w-[14rem]" : "w-[5rem]"} h-screen z-50 transition-all duration-400 ease-out`}
       ref={autoAnimateRef}
     >
       {/*<div className={"flex justify-start items-center h-[6vh] w-full bg-gray-700"}>*/}
@@ -71,11 +66,11 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
     bg-gray-700 text-gray-300 overflow-hidden pl-3 pr-4
      transition-all duration-400 ease-out "}`}
       >
-        {navMenuOpen ? (
+        {sideBarOpen ? (
           <div className={"flex flex-row w-full justify-between items-center ml-1.5 mt-2.5"}>
             <img
               src={`/static/assets-v2/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`}
-              className={`transition-all ease-out ${navMenuOpen ? "w-32" : "w-0"}`}
+              className={`transition-all ease-out ${sideBarOpen ? "w-32" : "w-0"}`}
               onClick={() => (window.location.href = "/home/about")}
               alt="Fulcrum logo"
             />
@@ -115,7 +110,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
               <img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" className={"w-[65%]"} />
             </AvatarFallback>
           </Avatar>
-          {navMenuOpen && (
+          {sideBarOpen && (
             <div className={"flex flex-col justify-start flex-grow w-1/2 -mt-1"}>
               <div className={"flex flex-row justify-between"}>
                 <p className={"text-base font-semibold"}>Personal</p>
@@ -128,7 +123,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
           <PageNavigationButton
             page={"budget"}
             currentPage={currentPage}
-            navMenuOpen={navMenuOpen}
+            sideBarOpen={sideBarOpen}
             svgIcon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +141,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
           <PageNavigationButton
             page={"expenses"}
             currentPage={currentPage}
-            navMenuOpen={navMenuOpen}
+            sideBarOpen={sideBarOpen}
             svgIcon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +162,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
           <PageNavigationButton
             page={"recurring"}
             currentPage={currentPage}
-            navMenuOpen={navMenuOpen}
+            sideBarOpen={sideBarOpen}
             svgIcon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -188,7 +183,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
           <PageNavigationButton
             page={"settings"}
             currentPage={currentPage}
-            navMenuOpen={navMenuOpen}
+            sideBarOpen={sideBarOpen}
             svgIcon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -212,7 +207,7 @@ export default function NavigationMenuV2({ publicUserData, navMenuOpen, setNavMe
             page={"help"}
             nonAppRedirectUrl={"/home/faq"}
             className={"mt-auto"}
-            navMenuOpen={navMenuOpen}
+            sideBarOpen={sideBarOpen}
             svgIcon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"

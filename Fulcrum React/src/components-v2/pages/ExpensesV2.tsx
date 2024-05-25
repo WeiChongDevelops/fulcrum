@@ -41,7 +41,7 @@ interface ExpensesV2Props {
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[];
-  navMenuOpen: boolean;
+  sideBarOpen: boolean;
 }
 
 /**
@@ -55,7 +55,7 @@ export default function ExpensesV2({
   categoryDataMap,
   blacklistedExpenseArray,
   recurringExpenseArray,
-  navMenuOpen,
+  sideBarOpen,
 }: ExpensesV2Props) {
   const {
     expenseFormVisibility,
@@ -125,7 +125,7 @@ export default function ExpensesV2({
 
   useEffect(() => {
     rerenderCarousel();
-  }, [navMenuOpen]);
+  }, [sideBarOpen]);
 
   useEffect(() => {
     window.addEventListener("resize", getUpdatedCarouselWidth);
@@ -147,7 +147,7 @@ export default function ExpensesV2({
         structuredExpenseData={structuredExpenseData}
         startingIndex={startingIndex}
         publicUserData={publicUserData}
-        navMenuOpen={navMenuOpen}
+        sideBarOpen={sideBarOpen}
       />
       <ExpenseMonthCarouselV2
         budgetArray={budgetArray}
