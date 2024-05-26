@@ -15,6 +15,7 @@ import useWipeExpenses from "@/hooks/mutations/expense/useWipeExpenses.ts";
 import useWipeBudget from "@/hooks/mutations/budget/useWipeBudget.ts";
 import useResetAccountData from "@/hooks/mutations/other/useResetAccountData.ts";
 import FulcrumTypematchModal from "@/components-v2/subcomponents/other/FulcrumTypematchModal.tsx";
+import ReactCountryFlag from "react-country-flag";
 
 interface SettingsV2Props {
   publicUserData: PublicUserData;
@@ -59,7 +60,7 @@ export default function SettingsV2({ publicUserData }: SettingsV2Props) {
         <div className={"settings-row bg-[#17423f] h-16"}>
           <b>Currency</b>
           {/*<CurrencySelector publicUserData={publicUserData} />*/}
-          <CurrencySelectorV2 publicUserData={publicUserData} className={"w-[20ch] mx-0"} />
+          <CurrencySelectorV2 publicUserData={publicUserData} className={"w-28 mx-0 bg-primary"} />
         </div>
 
         <div className={"settings-row bg-[#17423f] h-16"}>

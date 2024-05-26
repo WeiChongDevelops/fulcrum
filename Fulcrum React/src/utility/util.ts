@@ -202,6 +202,42 @@ export function getCurrencySymbol(currency: string): string {
 }
 
 /**
+ * Retrieves the country code for a given currency.
+ * @param currency - The currency code (e.g., "USD", "AUD", "GBP").
+ * @returns The country code associated with the given currency code.
+ */
+export function getCurrencyCountryCode(currency: string): string {
+  let currencySymbol;
+  switch (currency) {
+    case "USD":
+      currencySymbol = "US";
+      break;
+    case "AUD":
+      currencySymbol = "AU";
+      break;
+    case "GBP":
+      currencySymbol = "GB";
+      break;
+    case "KRW":
+      currencySymbol = "KR";
+      break;
+    case "JPY":
+      currencySymbol = "JP";
+      break;
+    case "CNY":
+      currencySymbol = "CN";
+      break;
+    case "ZAR":
+      currencySymbol = "ZA";
+      break;
+    default:
+      currencySymbol = "AU";
+      break;
+  }
+  return currencySymbol;
+}
+
+/**
  * Formats a numeric amount into a currency string in manner friendly to static displays & unfriendly to dynamic inputs
  * @param amount - The numeric amount to format.
  * @param currency - The currency code to use for determining the currency symbol.
@@ -564,9 +600,10 @@ export const currencyOptions = [
   { label: "$AUD", value: "AUD" },
   { label: "$USD", value: "USD" },
   { label: "£GBP", value: "GBP" },
-  { label: "₩KRW", value: "KRW" },
-  { label: "¥JPY", value: "JPY" },
   { label: "¥CNY", value: "CNY" },
+  { label: "¥JPY", value: "JPY" },
+  { label: "₩KRW", value: "KRW" },
+  { label: "RZAR", value: "ZAR" },
 ];
 
 export const queryTypeOptions = [

@@ -2,6 +2,9 @@ import { Button } from "@/components-v2/ui/button.tsx";
 import { PublicUserData } from "@/utility/types.ts";
 import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
 import { useSideBarIsOpen } from "@/utility/util.ts";
+import ReactCountryFlag from "react-country-flag";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popover.tsx";
+import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
 
 interface SettingsHeaderV2 {
   publicUserData: PublicUserData;
@@ -13,9 +16,28 @@ export default function SettingsHeaderV2({ publicUserData }: SettingsHeaderV2) {
     <div
       className={`fixed flex flex-row z-40 gap-4 justify-start items-center self-end bg-gray-400 ${sideBarOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
     >
-      <div className={"flex flex-row justify-center items-center gap-3 ml-auto mr-2"}>
-        <p className={"mr-3 font-medium text-base"}>Settings</p>
-        <DarkModeToggleV2 publicUserData={publicUserData} />
+      <div className={"flex flex-row justify-center items-center gap-2 ml-auto mr-2"}>
+        <p className={"mr-6 mb-1 font-medium text-base"}>Settings</p>
+        {/*<DarkModeToggleV2 publicUserData={publicUserData} />*/}
+        {/*<Popover>*/}
+        {/*  <PopoverTrigger>*/}
+        {/*    <ReactCountryFlag*/}
+        {/*      countryCode="US"*/}
+        {/*      svg*/}
+        {/*      style={{*/}
+        {/*        width: "1em",*/}
+        {/*        height: "1em",*/}
+        {/*      }}*/}
+        {/*      title="US"*/}
+        {/*    />*/}
+        {/*    <span className={"font-medium text-xs"}>$USD</span>*/}
+        {/*  </PopoverTrigger>*/}
+        {/*  <PopoverContent>*/}
+        {/*    <CurrencySelectorV2 publicUserData={publicUserData} />*/}
+        {/*  </PopoverContent>*/}
+        {/*</Popover>*/}
+        <CurrencySelectorV2 publicUserData={publicUserData} className={"w-28 mx-0 outline-none border-none shadow-none"} />
+
         <Button variant={"ghost"} className={"p-2 mr-2"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
