@@ -33,7 +33,7 @@ export default function FulcrumAnimationV2({
     <div className={"z-10 px-32 py-40 rounded-xl transition-opacity enableFadeIn h-96"} ref={containerRef}>
       <div
         className={
-          "absolute flex flex-row justify-center z-20 bottom-[8.3rem] left-1/2 w-[90%] origin-top transition-transform duration-600 ease-out "
+          "absolute flex flex-row justify-center z-20 bottom-[8.3rem] left-1/2 w-[90%] origin-top transition-transform duration-600 ease-out animateLeverFall"
         }
         style={{ transform: `translateX(-50%) rotate(${lineAngle}deg)` }}
       >
@@ -50,16 +50,16 @@ export default function FulcrumAnimationV2({
             src={`/static/assets-v2/fulcrum-animation/fulcrum-basket-black.webp`}
             ref={bowlRef}
             alt="Fulcrum bowl"
-            className="w-20 z-20 transition-transform duration-1000 origin-top"
+            className="w-20 z-20 transition-transform duration-1000 origin-top animateSettleSwingLeft"
             style={{ transform: `rotate(${-lineAngle}deg` }}
           />
         </div>
 
-        <div ref={leverRef} className={"w-[75%] max-w-3xl z-10 h-3 bg-black"}></div>
+        <div ref={leverRef} className={"w-[75%] max-w-3xl z-10 h-3 bg-black "}></div>
 
         <div className={"flex flex-col items-center relative -ml-10"}>
           <div
-            className={"absolute -top-full origin-bottom-left  -right-0.5"}
+            className={"absolute -top-full origin-bottom-left -right-0.5"}
             style={{ transform: `rotate(${-lineAngle}deg` }}
           >
             <p className={"font-bold text-xs"}>Income</p>
@@ -68,7 +68,7 @@ export default function FulcrumAnimationV2({
           <img
             src={`/static/assets-v2/fulcrum-animation/fulcrum-basket-black.webp`}
             alt="Fulcrum bowl"
-            className="w-20 z-20 transition-transform duration-1000 origin-top"
+            className="w-20 z-20 transition-transform duration-1000 origin-top animateSettleSwingRight"
             style={{ transform: `rotate(${-lineAngle}deg` }}
           />
         </div>

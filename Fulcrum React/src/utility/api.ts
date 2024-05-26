@@ -10,6 +10,7 @@ import {
 } from "./types.ts";
 import { budgetSort, DEFAULT_CATEGORY_GROUP, DEFAULT_CATEGORY_ICON, expenseSort, groupSort } from "./util.ts";
 import axios from "axios";
+import { toast } from "sonner";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:3001/api",
@@ -23,8 +24,9 @@ apiClient.interceptors.response.use(
   },
   async (error) => {
     if (error.response && error.response.status === 401) {
-      console.log("Session expired or not valid, redirecting to login...");
       await handleUserLogout();
+      console.log("Session expired or invalid, redirected to login.");
+      toast.info("Your session has expired. Please log in again.");
     }
     return Promise.reject(error);
   },

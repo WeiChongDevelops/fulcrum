@@ -106,10 +106,10 @@ fun getDefaultGroups(uid: String, miscellaneousExists: Boolean): List<GroupCreat
     val groups = mutableListOf(
         GroupCreateRequestSent(userId = uid, group = "Savings & Investment", colour = "#d1fae5", id = 1),
         GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#dbeafe", id = 2),
-        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#fee2e2", id = 3),
+        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#fbcfe8", id = 3),
         GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#cffafe", id = 4),
-        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#fef3c7", id = 5),
-        GroupCreateRequestSent(userId = uid, group = "Leisure", colour = "#fef3c7", id = 5),
+        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#e9d5ff", id = 5),
+        GroupCreateRequestSent(userId = uid, group = "Leisure", colour = "#fef3c7", id = 6),
     )
     if (!miscellaneousExists) {
         groups.add(GroupCreateRequestSent(userId = uid, group = "Miscellaneous", colour = "#313435", id = 999))

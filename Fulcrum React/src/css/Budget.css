@@ -128,7 +128,49 @@
 }
 
 .enableFadeIn {
-  animation: downRampFade 615ms ease-out;
+  animation: downRampFade 700ms ease-out;
+}
+
+@keyframes settleSwing {
+  0% {
+    rotate: 33deg;
+  }
+  15% {
+    rotate: -25deg;
+  }
+  35% {
+    rotate: 15deg;
+  }
+  60% {
+    rotate: -7deg;
+  }
+  90% {
+    rotate: 3deg;
+  }
+  100% {
+    rotate: 0;
+  }
+}
+
+.animateSettleSwingRight {
+  animation: 400ms ease-out 75ms settleSwing;
+}
+
+.animateSettleSwingLeft {
+  animation: 150ms ease-out 50ms settleSwing;
+}
+
+@keyframes leverFall {
+  0% {
+    rotate: 45deg;
+  }
+  100% {
+    rotate: 0;
+  }
+}
+
+.animateLeverFall {
+  animation: 475ms linear 50ms leverFall;
 }
 
 /* ADD NEW GROUP BUTTON */
