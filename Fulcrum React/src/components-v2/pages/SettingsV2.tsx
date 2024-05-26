@@ -55,37 +55,37 @@ export default function SettingsV2({ publicUserData }: SettingsV2Props) {
   return (
     <div className={"flex flex-col justify-start items-center relative"}>
       <SettingsHeaderV2 publicUserData={publicUserData} />
-      <div className={"flex flex-col justify-start items-center w-[95%] h-[94%] mt-[6vh] pt-8"}>
-        <div className={"settings-row bg-[#17423f] settings-box-shadow currency-selector-row"}>
+      <div className={"flex flex-col justify-start items-center gap-2 w-[95%] h-[94%] mt-[6vh] pt-8 font-extralight"}>
+        <div className={"settings-row bg-[#17423f] h-16"}>
           <b>Currency</b>
           {/*<CurrencySelector publicUserData={publicUserData} />*/}
-          <CurrencySelectorV2 publicUserData={publicUserData} />
+          <CurrencySelectorV2 publicUserData={publicUserData} className={"w-[20ch] mx-0"} />
         </div>
 
-        <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
+        <div className={"settings-row bg-[#17423f] h-16"}>
           <b>Appearance</b>
           <DarkModeToggleV2 publicUserData={publicUserData} />
         </div>
 
-        <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
+        <div className={"settings-row bg-[#17423f] h-16"}>
           <b>Accessibility</b>
           <AccessibilityToggleV2 publicUserData={publicUserData} />
         </div>
 
-        <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
+        <div className={"settings-row bg-[#17423f] h-16"}>
           <b>Public License</b>
           <Button onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}>
             See Public License
           </Button>
         </div>
 
-        <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
+        <div className={"settings-row bg-[#17423f] h-16"}>
           <b>Privacy Policy</b>
           <Button onClick={() => window.open(window.location.origin + "/privacy", "_blank")}>See Privacy Policy</Button>
         </div>
 
-        <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
-          <b>Account Created:</b>
+        <div className={"settings-row bg-[#17423f] h-16"}>
+          <b>Joined On</b>
           <p>{new Date(publicUserData.createdAt).toLocaleDateString()}</p>
         </div>
 

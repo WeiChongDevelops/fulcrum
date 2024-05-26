@@ -228,8 +228,8 @@ export default function BudgetV2({
         {/*  currencySymbol={getCurrencySymbol(publicUserData.currency)}*/}
         {/*/>*/}
         <ScrollArea className={"transition-all ease-[cubic-bezier(0.9, 0, 0.4, 1)] mt-[6vh] h-[94vh]"} ref={budgetContainer}>
-          <div className={"grid gap-4 px-6 pt-6 pb-8"}>
-            <div className="grid w-full gap-6" style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}>
+          <div className={"grid gap-3 px-4 pt-4 pb-6"}>
+            <div className="grid w-full gap-4" style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}>
               <div className={"relative z-10 bg-slate-100 rounded-xl"}>
                 <FulcrumAnimationV2
                   budgetLayoutIsSideBySide={budgetLayoutIsSideBySide}

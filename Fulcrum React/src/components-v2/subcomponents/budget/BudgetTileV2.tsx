@@ -67,26 +67,29 @@ export default function BudgetTileV2({
         currencySymbol={getCurrencySymbol(publicUserData.currency)}
         updateOldBudgetBeingEdited={updateOldBudgetBeingEdited}
       />
-      <Card className="size-44 outline relative transition-all duration-150 ease -z-10">
-        <CardHeader className={"py-4"}>
+      <Card className="size-44 outline outline-3 outline-zinc-800 relative transition-all duration-150 ease -z-10 flex flex-col justify-center">
+        <CardHeader className={"py-2"}>
           <CardTitle className={"text-xs lg:text-sm font-bold"}>{filteredBudgetItem.category}</CardTitle>
         </CardHeader>
-        <CardContent className={"flex flex-col gap-3 pb-2 justify-center items-center"}>
+        <CardContent className={"flex flex-col gap-4 pb-2 justify-center items-center"}>
           <div ref={autoAnimateRef}>
             <DynamicIconComponent componentName={filteredBudgetItem.iconPath} props={{ size: "3rem" }} className={"mt-1"} />
           </div>
           <div>
-            <p className={"truncate"}>
-              Budget: <b>{formatDollarAmountStatic(filteredBudgetItem.amount, publicUserData.currency)}</b>
+            <p className={"truncate font-light"}>
+              <span>{"Budget: "}</span>
+              <span className={"font-bold"}>
+                {formatDollarAmountStatic(filteredBudgetItem.amount, publicUserData.currency)}
+              </span>
             </p>
-            <p className={`truncate`}>
+            <p className={`truncate font-light`}>
               <span>{"Left: "}</span>
-              <b className={cn(spent > filteredBudgetItem.amount ? "text-red-500" : "text-black")}>
+              <span className={cn("font-bold", spent > filteredBudgetItem.amount ? "text-red-500" : "text-black")}>
                 {formatDollarAmountStatic(
                   filteredBudgetItem.amount - perCategoryExpenseTotalThisMonth.get(filteredBudgetItem.category)!,
                   publicUserData.currency,
                 )}
-              </b>
+              </span>
             </p>
           </div>
         </CardContent>

@@ -4,7 +4,7 @@ import { BudgetItemEntity, GroupItemEntity } from "@/utility/types.ts";
 import { formatDollarAmountStatic, getCurrencySymbol } from "@/utility/util.ts";
 
 interface GroupPieChartProps {
-  sortedGroupDataArray: { group: string; amount: number }[];
+  sortedGroupDataArray: { group: string; amount: number; colour: string }[];
   currency: string;
 }
 
@@ -26,10 +26,18 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
 
     return (
       <g>
-        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill} className={"brightness-50"}>
+        <text
+          x={cx}
+          y={cy}
+          dy={8}
+          textAnchor="middle"
+          fill={fill}
+          className={"brightness-[50%] saturate-[1000%] font-medium"}
+        >
           {payload.group.length < 12 ? payload.group : payload.group.substring(0, 9) + "..."}
         </text>
         <Sector
+          className={"brightness-[83%] saturate-[600%]"}
           cx={cx}
           cy={cy}
           innerRadius={innerRadius}
@@ -39,6 +47,7 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
           fill={fill}
         />
         <Sector
+          className={"brightness-[90%] saturate-[300%]"}
           cx={cx}
           cy={cy}
           startAngle={startAngle}
@@ -47,12 +56,30 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
           outerRadius={outerRadius + 10}
           fill={fill}
         />
-        <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
-        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-        <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">
+        <path
+          d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
+          stroke={fill}
+          className={"brightness-[90%] saturate-[300%]"}
+          fill="none"
+        />
+        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" className={"brightness-[90%] saturate-[300%]"} />
+        <text
+          className={"font-bold text-[1rem]"}
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          textAnchor={textAnchor}
+          fill="#333"
+        >
           {displayValue}
         </text>
-        <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
+        <text
+          className={"text-[0.8rem] font-extralight"}
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          dy={18}
+          textAnchor={textAnchor}
+          fill="#787777"
+        >
           {`(${(percent * 100).toFixed(2)}%)`}
         </text>
       </g>
@@ -63,32 +90,11 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
   };
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const COLOURS = [
-    "#022c22",
-    "#064e3b",
-    "#065f46",
-    "#047857",
-    "#059669",
-    "#10b981",
-    "#34d399",
-    "#6ee7b7",
-    "#a7f3d0",
-    "#a7f3d0",
-    "#6ee7b7",
-    "#34d399",
-    "#10b981",
-    "#059669",
-    "#047857",
-    "#065f46",
-    "#064e3b",
-    "#022c22",
-  ];
-
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart width={730} height={250}>
         <Pie
-          animationBegin={100}
+          animationBegin={200}
           animationDuration={1000}
           animationEasing={"ease-out"}
           onMouseEnter={handlePieEnter}
@@ -101,8 +107,8 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
           activeShape={renderActiveBudgetShape}
           activeIndex={activeIndex}
         >
-          {sortedGroupDataArray.map((_, index) => (
-            <Cell key={index} fill={COLOURS[index % COLOURS.length]} />
+          {sortedGroupDataArray.map((groupItem, index) => (
+            <Cell key={index} fill={groupItem.colour} className={"brightness-[85%] saturate-[550%]"} />
           ))}
         </Pie>
       </PieChart>

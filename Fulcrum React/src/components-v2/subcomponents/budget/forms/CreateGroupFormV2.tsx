@@ -95,7 +95,7 @@ export default function CreateGroupFormV2({
         <Button
           asChild
           variant={"empty"}
-          className={`w-full h-12 mb-2 border-2 border-dashed border-black rounded-2xl hover:rounded-md hover:bg-[#DEDEDE33] transition-all duration-300 ease-out font-bold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`}
+          className={`w-full h-12 mb-2 border-2 border-dashed border-black rounded-xl hover:rounded-3xl hover:bg-zinc-100 transition-all duration-300 ease-out font-bold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`}
         >
           <p>+ Add Group</p>
         </Button>

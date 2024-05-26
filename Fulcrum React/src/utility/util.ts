@@ -887,9 +887,9 @@ export function getLineAngle(amountLeftToBudget: number, totalIncome: number): n
   const functionalPercentageIncomeRemaining =
     percentageIncomeRemaining <= -100 ? -100 : percentageIncomeRemaining >= 100 ? 100 : percentageIncomeRemaining;
   return functionalPercentageIncomeRemaining === -100
-    ? 12.5
+    ? 10
     : functionalPercentageIncomeRemaining === 100
-      ? -12.5
+      ? -10
       : functionalPercentageIncomeRemaining / (-100 / 14.5);
 }
 

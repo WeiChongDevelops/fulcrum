@@ -104,15 +104,21 @@ suspend fun executeExpenseDeletion(expenseId: String, call: ApplicationCall): Bo
 
 fun getDefaultGroups(uid: String, miscellaneousExists: Boolean): List<GroupCreateRequestSent> {
     val groups = mutableListOf(
-        GroupCreateRequestSent(userId = uid, group = "Savings & Investment", colour = "#d1fae5", id = 1),
-        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#dbeafe", id = 2),
-        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#fbcfe8", id = 3),
-        GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#cffafe", id = 4),
-        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#e9d5ff", id = 5),
-        GroupCreateRequestSent(userId = uid, group = "Leisure", colour = "#fef3c7", id = 6),
+//        GroupCreateRequestSent(userId = uid, group = "Savings & Investment", colour = "#d1fae5", id = 1),
+//        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#dbeafe", id = 2),
+//        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#fbcfe8", id = 3),
+//        GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#cffafe", id = 4),
+//        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#e9d5ff", id = 5),
+//        GroupCreateRequestSent(userId = uid, group = "Leisure", colour = "#fef3c7", id = 6),
+        GroupCreateRequestSent(userId = uid, group = "Savings & Investment", colour = "#ecfdf5", id = 1),
+        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#f0f9ff", id = 2),
+        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#fef2f2", id = 3),
+        GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#f7fee7", id = 4),
+        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#f5f3ff", id = 5),
+        GroupCreateRequestSent(userId = uid, group = "Leisure", colour = "#fefce8", id = 6),
     )
     if (!miscellaneousExists) {
-        groups.add(GroupCreateRequestSent(userId = uid, group = "Miscellaneous", colour = "#313435", id = 999))
+        groups.add(GroupCreateRequestSent(userId = uid, group = "Miscellaneous", colour = "#e3e3e3", id = 999))
     }
     return groups
 }

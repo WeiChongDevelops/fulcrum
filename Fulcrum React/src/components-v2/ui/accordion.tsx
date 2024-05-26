@@ -26,7 +26,7 @@ const AccordionTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      <ChevronDownIcon className="size-5 ml-3 mr-auto shrink-0 transition-transform duration-200" />
+      <ChevronDownIcon className="size-5 ml-3 mr-auto shrink-0 transition-all duratiom-300 chevron-icon" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));

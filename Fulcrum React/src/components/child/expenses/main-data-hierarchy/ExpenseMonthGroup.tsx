@@ -120,7 +120,7 @@ export const ExpenseMonthGroup = memo(
             );
           })
         ) : (
-          <p className={`text-2xl mt-48 select-none ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
+          <p className={`text-xl mt-48 select-none ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
             No expenses added this month.
           </p>
         )}

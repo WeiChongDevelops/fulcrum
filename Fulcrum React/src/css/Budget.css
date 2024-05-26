@@ -117,60 +117,8 @@
   transition: all 400ms ease-out;
 }
 
-@keyframes downRampFade {
-  0%,
-  60% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.enableFadeIn {
-  animation: downRampFade 700ms ease-out;
-}
-
-@keyframes settleSwing {
-  0% {
-    rotate: 33deg;
-  }
-  15% {
-    rotate: -25deg;
-  }
-  35% {
-    rotate: 15deg;
-  }
-  60% {
-    rotate: -7deg;
-  }
-  90% {
-    rotate: 3deg;
-  }
-  100% {
-    rotate: 0;
-  }
-}
-
-.animateSettleSwingRight {
-  animation: 400ms ease-out 75ms settleSwing;
-}
-
-.animateSettleSwingLeft {
-  animation: 150ms ease-out 50ms settleSwing;
-}
-
-@keyframes leverFall {
-  0% {
-    rotate: 45deg;
-  }
-  100% {
-    rotate: 0;
-  }
-}
-
-.animateLeverFall {
-  animation: 475ms linear 50ms leverFall;
+.group-accordion-trigger:hover .chevron-icon {
+  scale: 110%;
 }
 
 /* ADD NEW GROUP BUTTON */
@@ -359,6 +307,138 @@
 
 .fulcrum-bowl-right {
   left: 99.5%;
+}
+
+@keyframes downRampFade {
+  0%,
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.enableFadeIn {
+  animation: downRampFade 700ms ease-out;
+}
+
+@keyframes settleSwing {
+  0% {
+    rotate: 33deg;
+  }
+  15% {
+    rotate: -25deg;
+  }
+  35% {
+    rotate: 15deg;
+  }
+  60% {
+    rotate: -7deg;
+  }
+  90% {
+    rotate: 3deg;
+  }
+  100% {
+    rotate: 0;
+  }
+}
+
+.animateSettleSwingRight {
+  animation: 1400ms ease-out 75ms settleSwing;
+}
+
+.animateSettleSwingLeft {
+  animation: 1150ms ease-out 50ms settleSwing;
+}
+
+@keyframes wobble {
+  0% {
+    transform-origin: left;
+    rotate: 0deg;
+  }
+  7% {
+    rotate: -1deg;
+  }
+  30% {
+    rotate: 1deg;
+  }
+  63% {
+    rotate: 0deg;
+  }
+  90% {
+    rotate: -1deg;
+  }
+  100% {
+    transform-origin: left;
+    rotate: 0deg;
+  }
+}
+
+.animateInfiniteWobble {
+  animation: 10s ease-in-out 0ms wobble infinite;
+}
+
+@keyframes rightShadowSway {
+  0% {
+    translate: 0;
+    scale: 100%;
+  }
+  7% {
+    translate: 2px;
+    scale: 108%;
+  }
+  30% {
+    translate: -2px;
+    scale: 92%;
+  }
+  63% {
+    translate: 0;
+    scale: 100%;
+  }
+  90% {
+    translate: 2px;
+    scale: 108%;
+  }
+  100% {
+    translate: 0;
+    scale: 100%;
+  }
+}
+
+.animateRightShadowSway {
+  animation: 10s ease-in-out 0ms rightShadowSway infinite;
+}
+
+@keyframes leftShadowSway {
+  0% {
+    translate: 0;
+    scale: 100%;
+  }
+  7% {
+    translate: -2px;
+    scale: 92%;
+  }
+  30% {
+    translate: 2px;
+    scale: 108%;
+  }
+  63% {
+    translate: 0;
+    scale: 100%;
+  }
+  90% {
+    translate: -2px;
+    scale: 92%;
+  }
+  100% {
+    translate: 0;
+    scale: 100%;
+  }
+}
+
+.animateLeftShadowSway {
+  animation: 10s ease-in-out 0ms leftShadowSway infinite;
 }
 
 /* INCOME DISPLAY */

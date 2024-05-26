@@ -117,11 +117,12 @@ export default function GroupV2({
     <div
       ref={setNodeRef}
       {...attributes}
-      className={"flex flex-row items-start gap-1 select-none rounded-xl relative overflow-hidden"}
+      className={
+        "flex flex-row items-start gap-1 select-none rounded-xl relative overflow-hidden brightness-[95%] saturate-[250%]"
+      }
       style={{
         ...style,
         backgroundColor: group.colour,
-        color: group.group === "Miscellaneous" ? "white" : "black",
         display: "flex",
         userSelect: "none",
       }}
@@ -139,8 +140,8 @@ export default function GroupV2({
         onValueChange={handleValueChange}
       >
         <AccordionItem value={`item-${group.id}`}>
-          <AccordionTrigger className={"px-7 select-none"}>
-            <p className={"font-bold text-base"}>{group.group}</p>
+          <AccordionTrigger className={"px-7 select-none group-accordion-trigger"}>
+            <p className={"font-medium text-base"}>{group.group}</p>
           </AccordionTrigger>
           <AccordionContent className={"pt-3 pb-6 pl-6"}>
             <div className={"flex flex-row gap-5 justify-start items-center w-[109%] flex-wrap "}>

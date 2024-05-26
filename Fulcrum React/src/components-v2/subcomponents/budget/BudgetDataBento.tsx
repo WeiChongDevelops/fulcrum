@@ -49,7 +49,7 @@ export default function BudgetDataBento({
       ? 1
       : -1;
 
-  const [sortByGroup, setSortByGroup] = useState(true);
+  const [sortByGroup, setSortByGroup] = useState(false);
   const [groupArraySortedByAmount, setGroupArraySortedByAmount] = useState(groupArray.sort(groupSizeSort));
   const [budgetArraySortedByAmount, setBudgetArraySortedByAmount] = useState(budgetArray.sort(budgetSizeSort));
   const [rerenderKey, setRerenderKey] = useState(0);
@@ -68,19 +68,19 @@ export default function BudgetDataBento({
   };
 
   return (
-    <div className="flex flex-row justify-center items-center relative gap-2 bg-zinc-100 rounded-xl font-bold w-full h-[26rem] pt-2">
+    <div className="flex flex-row justify-center items-center relative gap-2 bg-slate-100 rounded-xl font-bold w-full h-[26rem] pt-2">
       {/*<p className={"absolute top-5 left-7"}>{`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`}</p>*/}
-      <Select onValueChange={handleValueChange}>
+      <Select onValueChange={handleValueChange} defaultValue={"category"}>
         <SelectTrigger className="w-[32ch] absolute top-3 left-4 z-30 bg-primary-foreground text-xs font-medium">
           <SelectValue placeholder={`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="group" className={"text-xs font-medium"}>
-              Budget Distribution by Group
-            </SelectItem>
             <SelectItem value="category" className={"text-xs font-medium"}>
               Budget Distribution by Category
+            </SelectItem>
+            <SelectItem value="group" className={"text-xs font-medium"}>
+              Budget Distribution by Group
             </SelectItem>
           </SelectGroup>
         </SelectContent>
@@ -91,6 +91,7 @@ export default function BudgetDataBento({
             sortedGroupDataArray={groupArraySortedByAmount.map((groupItem) => ({
               group: groupItem.group,
               amount: getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group == groupItem.group)),
+              colour: groupItem.colour,
             }))}
             currency={currency}
             key={rerenderKey}

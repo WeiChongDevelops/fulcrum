@@ -51,7 +51,7 @@ export default function useAnimationDataV2({
     setShadowOpacity(1);
   };
 
-  const debouncedShadowMoveEnd = debounce(shadowMoveEnd, 350);
+  const debouncedShadowMoveEnd = debounce(shadowMoveEnd, 400);
 
   useEffect(() => {
     window.addEventListener("resize", shadowMoveStart);
@@ -68,7 +68,7 @@ export default function useAnimationDataV2({
     debouncedShadowMoveEnd();
     !!bowlRef.current && setBowlWidth(bowlRef.current.getBoundingClientRect().width);
     return () => debouncedShadowMoveEnd.cancel();
-  }, [lineAngle, sideBarOpen, containerRef.current?.getBoundingClientRect().left, budgetLayoutIsSideBySide]);
+  }, [lineAngle, sideBarOpen, budgetLayoutIsSideBySide, containerRef.current?.style.rotate]);
 
   useEffect(() => {
     setLineAngle(getLineAngle(totalBudget - totalIncome, totalIncome));

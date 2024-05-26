@@ -132,12 +132,12 @@ export default function RecurringItemV2({
               alt="Cycle icon"
               className={"w-8 h-8"}
             />
-            <p className={"text-xl ml-3 mr-4 font-bold"}>{capitaliseFirstLetter(frequency)}</p>
+            <p className={"text-xl ml-3 mr-4 font-medium"}>{capitaliseFirstLetter(frequency)}</p>
           </div>
 
-          <div className="font-extrabold mr-12">
-            <p>Next:</p>
-            <p>{nextRecurringInstance && formatDate(nextRecurringInstance)}</p>
+          <div className="mr-12">
+            <p className={"font-light"}>Next:</p>
+            <p className={"font-bold"}>{nextRecurringInstance && formatDate(nextRecurringInstance)}</p>
           </div>
           <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
           <div className="flex flex-row items-center ml-2">

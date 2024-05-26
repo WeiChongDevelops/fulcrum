@@ -32,26 +32,27 @@ export default function FulcrumAnimationV2({
   return (
     <div className={"z-10 px-32 py-40 rounded-xl transition-opacity enableFadeIn h-96"} ref={containerRef}>
       <div
-        className={
-          "absolute flex flex-row justify-center z-20 bottom-[8.3rem] left-1/2 w-[90%] origin-top transition-transform duration-600 ease-out animateLeverFall"
-        }
-        style={{ transform: `translateX(-50%) rotate(${lineAngle}deg)` }}
+        className={cn(
+          "absolute flex flex-row justify-center bottom-[8.3rem] z-20 left-1/2 w-[90%] origin-top",
+          lineAngle === 0 && "animateInfiniteWobble",
+        )}
+        style={{ transform: `translateX(-50%) rotate(${lineAngle}deg)`, transition: "transform ease-out 400ms" }}
       >
         <div className={"flex flex-col items-center relative -mr-10"}>
           {/*<div className={"absolute -top-full "} style={{ transform: `rotate(${-lineAngle}deg` }}>*/}
           <div
-            className={"absolute -top-full origin-bottom-right -left-0.5"}
+            className={"absolute -top-full origin-bottom-right -left-3.5"}
             style={{ transform: `rotate(${-lineAngle}deg` }}
           >
             <p className={"font-bold text-xs"}>Budget</p>
-            <p className={"font-light text-lg"}>{formatDollarAmountStatic(totalBudget, currency)}</p>
+            <p className={"font-light text-[1.25rem]"}>{formatDollarAmountStatic(totalBudget, currency)}</p>
           </div>
           <img
             src={`/static/assets-v2/fulcrum-animation/fulcrum-basket-black.webp`}
             ref={bowlRef}
             alt="Fulcrum bowl"
-            className="w-20 z-20 transition-transform duration-1000 origin-top animateSettleSwingLeft"
-            style={{ transform: `rotate(${-lineAngle}deg` }}
+            className="w-20 z-20 origin-top animateSettleSwingLeft"
+            style={{ transform: `rotate(${-lineAngle}deg`, transition: "transform ease-out 650ms" }}
           />
         </div>
 
@@ -59,17 +60,17 @@ export default function FulcrumAnimationV2({
 
         <div className={"flex flex-col items-center relative -ml-10"}>
           <div
-            className={"absolute -top-full origin-bottom-left -right-0.5"}
+            className={"absolute -top-full origin-bottom-left -right-3.5"}
             style={{ transform: `rotate(${-lineAngle}deg` }}
           >
             <p className={"font-bold text-xs"}>Income</p>
-            <p className={"font-light text-lg"}>{formatDollarAmountStatic(totalIncome, currency)}</p>
+            <p className={"font-light text-[1.25rem]"}>{formatDollarAmountStatic(totalIncome, currency)}</p>
           </div>
           <img
             src={`/static/assets-v2/fulcrum-animation/fulcrum-basket-black.webp`}
             alt="Fulcrum bowl"
-            className="w-20 z-20 transition-transform duration-1000 origin-top animateSettleSwingRight"
-            style={{ transform: `rotate(${-lineAngle}deg` }}
+            className="w-20 z-20 origin-top animateSettleSwingRight"
+            style={{ transform: `rotate(${-lineAngle}deg`, transition: "transform ease-out 550ms" }}
           />
         </div>
       </div>
@@ -80,7 +81,7 @@ export default function FulcrumAnimationV2({
         <div className={cn("absolute w-60", budgetLayoutIsSideBySide ? "-top-[115%]" : "-top-full")}>
           {leftToBudget !== 0 ? (
             <>
-              <p className={"font-extrabold text-red-600"}>Give every dollar a job!</p>
+              <p className={"font-extrabold text-red-6000 mb-1"}>Give every dollar a job!</p>
               {leftToBudget < 0 ? (
                 <span className={"font-medium text-sm"}>
                   You have over-budgeted by <b>{formatDollarAmountStatic(leftToBudget * -1, currency)}</b>.
@@ -93,7 +94,7 @@ export default function FulcrumAnimationV2({
             </>
           ) : (
             <>
-              <p className={"font-extrabold text-emerald-600"}>Every dollar has a job!</p>
+              <p className={"font-extrabold text-emerald-600 mb-1"}>Every dollar has a job!</p>
               <p className={"font-light text-xs"}>Make sure your budget reflects your monthly expenditure.</p>
             </>
           )}
@@ -116,15 +117,14 @@ export default function FulcrumAnimationV2({
       {/*  style={{ left: leftOffset }}*/}
       {/*></div>*/}
       <div
-        className={
-          "absolute bottom-[11%] bg-black rounded-[50%] transition-all ease-[cubic-bezier(0.0, 0.85, 0.95, 1.0)] duration-200"
-        }
+        className={cn("absolute bottom-[11%] bg-black rounded-[50%]", lineAngle === 0 && "animateLeftShadowSway")}
         style={{
           left: leftOffset,
           width: baseShadowWidth + lineAngle * 1.3,
           height: (baseShadowWidth + lineAngle * 1.3) / 9,
           transform: `translate(-50%, 50%) scale(${100 + lineAngle}%)`,
           opacity: shadowOpacity,
+          transition: "transform 200ms cubic-bezier(0.0, 0.85, 0.95, 1.0)",
         }}
       ></div>
       {/*<div*/}
@@ -132,15 +132,17 @@ export default function FulcrumAnimationV2({
       {/*  style={{ left: rightOffset }}*/}
       {/*></div>*/}
       <div
-        className={
-          "absolute bottom-[11%] bg-black rounded-[50%] transition-all ease-[cubic-bezier(0.0, 0.85, 0.95, 1.0)] duration-200 -translate-x-full"
-        }
+        className={cn(
+          "absolute bottom-[11%] bg-black rounded-[50%] -translate-x-full",
+          lineAngle === 0 && "animateRightShadowSway",
+        )}
         style={{
           left: rightOffset,
           width: baseShadowWidth - lineAngle * 1.3,
           height: (baseShadowWidth + lineAngle * 1.3) / 9,
           transform: `translate(-50%, 50%) scale(${100 - lineAngle}%)`,
           opacity: shadowOpacity,
+          transition: "transform 200ms cubic-bezier(0.0, 0.85, 0.95, 1.0)",
         }}
       ></div>
       <div className={"absolute bottom-[10.4%] bg-black rounded-[50%] left-1/2 w-6 h-2 -translate-x-1/2"}></div>

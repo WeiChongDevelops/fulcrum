@@ -114,7 +114,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
             </Button>
           </div>
         )}
-        <div className={"flex flex-row justify-start items-start w-full px-1.5 gap-3 text-left mt-6"}>
+        <div className={"flex flex-row justify-start items-start w-full px-1 gap-3 text-left mt-6"}>
           <Avatar className={"size-9"}>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>
@@ -140,7 +140,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <p className={"text-xs font-medium truncate w-full"}>{activeEmail}</p>
+              <p className={"text-[0.65rem] mt-1 truncate w-full"}>{activeEmail}</p>
             </div>
           )}
         </div>

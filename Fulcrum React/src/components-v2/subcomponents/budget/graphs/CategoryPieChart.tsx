@@ -88,7 +88,7 @@ export default function CategoryPieChart({ sortedBudgetArray, currency }: Catego
     <ResponsiveContainer width="100%" height="100%">
       <PieChart width={730} height={250}>
         <Pie
-          animationBegin={100}
+          animationBegin={200}
           animationDuration={1000}
           animationEasing={"ease-out"}
           onMouseEnter={handlePieEnter}

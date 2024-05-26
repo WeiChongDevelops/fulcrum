@@ -28,7 +28,7 @@ export default function PageNavigationButton({
     <Button
       variant={isActive ? "default" : "ghost"}
       className={cn(
-        `flex flex-row justify-start items-center gap-3 hover:cursor-pointer py-6 font-bold transition-all duration-200 ease-out text-white ${!isActive && "hover:bg-white hover:text-black"} ${className}`,
+        `flex flex-row justify-start items-center gap-3.5 hover:cursor-pointer py-6 font-semibold transition-all duration-200 ease-out text-white ${!isActive && "hover:bg-white hover:text-black"} ${className}`,
       )}
       onClick={() => (isAppPage ? navigate(`/app/${page}`) : (window.location.href = nonAppRedirectUrl))}
     >
