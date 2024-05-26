@@ -95,7 +95,7 @@ export default function FulcrumAnimationV2({
           ) : (
             <>
               <p className={"font-extrabold text-emerald-600 mb-1"}>Every dollar has a job!</p>
-              <p className={"font-light text-xs"}>Make sure your budget reflects your monthly expenditure.</p>
+              <p className={"font-light text-xs"}>Make sure your budget below reflects your monthly expenditure.</p>
             </>
           )}
         </div>

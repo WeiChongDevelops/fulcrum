@@ -111,7 +111,7 @@ export default function BudgetDataBento({
             <div className="mx-auto w-full max-w-sm">
               <DrawerHeader>
                 <DrawerTitle>{`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`}</DrawerTitle>
-                <DrawerDescription>{`See your budget distribution by category${sortByGroup ? " group" : ""}.`}</DrawerDescription>
+                <DrawerDescription>{`View the breakdown of your budget by ${sortByGroup ? "group" : "category"}.`}</DrawerDescription>
               </DrawerHeader>
               <div className="p-4 pb-0">
                 <div className="flex items-center justify-center space-x-2">
@@ -123,13 +123,13 @@ export default function BudgetDataBento({
                         <div className={"flex flex-col items-center mb-4"}>
                           {groupArraySortedByAmount.map((groupItem, index) => (
                             <div
-                              className={"grid text-sm font-bold w-2/3"}
-                              style={{ gridTemplateColumns: "1fr 1fr" }}
+                              className={"grid text-sm font-medium w-3/4"}
+                              style={{ gridTemplateColumns: "2fr 1fr" }}
                               key={index}
                             >
                               <div className={"flex flex-row justify-start items-center gap-2 text-left"}>
                                 <div
-                                  className={"rounded-[50%] size-2 brightness-90"}
+                                  className={"rounded-[50%] size-2 saturate-[650%] brightness-[90%]"}
                                   style={{ backgroundColor: groupItem.colour }}
                                 ></div>
                                 <p>{groupItem.group}</p>
@@ -145,13 +145,13 @@ export default function BudgetDataBento({
                           <div>
                             {budgetArraySortedByAmount.map((budgetItem, index) => (
                               <div
-                                className={"grid text-sm font-bold w-full"}
+                                className={"grid text-sm font-medium w-full"}
                                 style={{ gridTemplateColumns: "1fr 1fr" }}
                                 key={index}
                               >
                                 <div className={"flex flex-row justify-start items-center gap-2 text-left"}>
                                   <div
-                                    className={"rounded-[50%] size-1.5 brightness-90 saturate-200"}
+                                    className={"rounded-[50%] size-1.5 saturate-[600%] brightness-[90%]"}
                                     style={{
                                       backgroundColor: categoryDataMap.get(budgetItem.category)?.colour ?? "black",
                                     }}

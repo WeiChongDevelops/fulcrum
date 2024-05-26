@@ -5,7 +5,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popover.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { currencyOptions, getCurrencyCountryCode, recurringFrequencyOptions } from "@/utility/util.ts";
 import {
   Select,
@@ -39,7 +39,6 @@ export default function CurrencySelectorV2({ publicUserData, className }: Curren
   const handleSelect = (currentValue: string) => {
     setCurrencyValue(currentValue === currencyValue ? "" : currentValue);
     // setOpen(false);
-
     const updatedPublicUserData: PublicUserData = { ...publicUserData, currency: currentValue };
     updatePublicUserData(updatedPublicUserData);
   };
