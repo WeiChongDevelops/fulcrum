@@ -110,14 +110,9 @@ fun getDefaultGroups(uid: String, miscellaneousExists: Boolean): List<GroupCreat
         GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#cffafe", id = 4),
         GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#fef3c7", id = 5),
         GroupCreateRequestSent(userId = uid, group = "Leisure", colour = "#fef3c7", id = 5),
-//        GroupCreateRequestSent(userId = uid, group = "Savings", colour = "#9fd5be"),
-//        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#f1afa1"),
-//        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#7c86bf"),
-//        GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#fbf5ab"),
-//        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#dfcde3")
     )
     if (!miscellaneousExists) {
-        groups.add(GroupCreateRequestSent(userId = uid, group = "Miscellaneous", colour = "#292524", id = 999))
+        groups.add(GroupCreateRequestSent(userId = uid, group = "Miscellaneous", colour = "#313435", id = 999))
     }
     return groups
 }

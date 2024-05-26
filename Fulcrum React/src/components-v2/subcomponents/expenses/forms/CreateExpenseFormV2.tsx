@@ -38,6 +38,7 @@ import useCreateRecurringExpense from "@/hooks/mutations/recurring-expense/useCr
 import CategorySelector from "@/components/child/selectors/CategorySelector.tsx";
 import FrequencySelector from "@/components/child/selectors/FrequencySelector.tsx";
 import ExpenseDatePicker from "@/components/child/selectors/ExpenseDatePicker.tsx";
+import { toast } from "sonner";
 
 interface CreateExpenseFormV2Props {
   categoryDataMap: CategoryToIconGroupAndColourMap;
@@ -80,6 +81,10 @@ export default function CreateExpenseFormV2({
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (formData.category === "") {
+      toast.warning("Please select a budget category.");
+      return;
+    }
     hideForm();
     setFormData({
       category: "Other",

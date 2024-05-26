@@ -131,7 +131,7 @@ export default function ExpenseItemV2({
             }}
           >
             <p className="font-bold text-xl mb-[-2px]">{category}</p>
-            <p className="text-sm font-medium">{groupName}</p>
+            <p className="text-xs font-medium">{groupName}</p>
           </div>
         </div>
         <div
@@ -147,23 +147,7 @@ export default function ExpenseItemV2({
               className={"w-8 h-8 mr-6"}
             />
           )}
-          <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
-          <div className="flex flex-row items-center ml-2">
-            <button className="circle-button" onClick={handleEditClick}>
-              <img
-                src={`/static/assets-v2/UI-icons/edit-pencil-${isMiscellaneous ? "white" : "black"}-icon.svg`}
-                alt="Expense edit icon"
-                className="mx-1 w-6 h-6"
-              />
-            </button>
-            <button className="circle-button" onClick={handleDeleteClick}>
-              <img
-                src={`/static/assets-v2/UI-icons/delete-trash-${isMiscellaneous ? "white" : "black"}-icon.svg`}
-                alt="Expense delete icon"
-                className="mx-1 w-6 h-6"
-              />
-            </button>
-          </div>
+          <b className="text-xl mr-2">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
         </div>
       </div>
     </div>

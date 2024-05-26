@@ -41,10 +41,10 @@ export default function CategorySelector({
   oldExpenseBeingEdited,
   setFormData,
   className,
-  defaultCategory = "Other",
+  defaultCategory,
 }: CategorySelectorProps) {
   const [open, setOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(defaultCategory);
+  const [selectedCategory, setSelectedCategory] = useState(defaultCategory ?? "");
 
   useEffect(() => {
     setFormData((currentFormData: any) => ({
@@ -56,16 +56,21 @@ export default function CategorySelector({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" role="combobox" aria-expanded={open} className={cn("justify-between", className)}>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className={cn("justify-between font-normal", className)}
+        >
           {selectedCategory
             ? categoryOptions.find((categoryOption) => categoryOption.value === selectedCategory)?.label
             : "Select category..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
+      <PopoverContent className="p-0 ">
         <Command>
-          <CommandInput placeholder="Search category..." className="h-9" />
+          <CommandInput placeholder="Search category..." className="h-9 font-normal" required />
           <CommandEmpty>No category found.</CommandEmpty>
           <CommandGroup>
             <CommandList>
@@ -79,7 +84,7 @@ export default function CategorySelector({
                   }}
                 >
                   <div
-                    className={"mx-3 size-1.5 rounded-[50%] brightness-90 saturate-200"}
+                    className={"mx-3 size-1.5 rounded-[50%] brightness-95 saturate-[250%]"}
                     style={{ backgroundColor: categoryOption.colour }}
                   ></div>
                   <span className={"mr-auto text-left"}>{categoryOption.label}</span>
