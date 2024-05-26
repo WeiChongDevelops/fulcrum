@@ -119,10 +119,14 @@ export default function ExpenseItemV2({
           currencySymbol={currencySymbol}
         />
       )}
-      <div className="expense-item relative" style={{ backgroundColor: groupColour }} data-value={expenseId}>
+      <div
+        className="expense-item relative saturate-[275%] brightness-[98%]"
+        style={{ backgroundColor: groupColour }}
+        data-value={expenseId}
+      >
         <div className="flex flex-row items-center">
-          <div className="rounded-full bg-primary text-primary-foreground p-3">
-            <DynamicIconComponent componentName={iconPath} props={{ size: 26 }} className={""} />
+          <div className="rounded-full bg-primary text-primary-foreground p-2">
+            <DynamicIconComponent componentName={iconPath} props={{ size: 32 }} className={""} />
           </div>
           <div
             className="flex flex-col items-start ml-2"
@@ -130,8 +134,8 @@ export default function ExpenseItemV2({
               color: isMiscellaneous ? "white" : "black",
             }}
           >
-            <p className="font-bold text-xl mb-[-2px]">{category}</p>
-            <p className="text-xs font-medium">{groupName}</p>
+            <p className="font-bold text-[1.2rem] mb-[-2px]">{category}</p>
+            <p className="text-sm font-medium">{groupName}</p>
           </div>
         </div>
         <div
@@ -141,11 +145,20 @@ export default function ExpenseItemV2({
           }}
         >
           {recurringExpenseId && (
-            <img
-              src={`/static/assets-v2/UI-icons/tools-recurring-icon-${isMiscellaneous ? "white" : "black"}.svg`}
-              alt="Cycle icon"
-              className={"w-8 h-8 mr-6"}
-            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6 mx-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+              />
+            </svg>
           )}
           <b className="text-xl mr-2">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
         </div>

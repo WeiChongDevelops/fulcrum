@@ -14,6 +14,7 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import { formatDate, formatDollarAmountStatic } from "@/utility/util.ts";
 import ExpenseListV2 from "@/components-v2/subcomponents/expenses/ExpenseListV2.tsx";
+import { Separator } from "@/components-v2/ui/separator.tsx";
 
 interface ExpenseDayGroupV2Props {
   dayExpenseGroup: DayExpenseGroupEntity;
@@ -59,15 +60,22 @@ export default function ExpenseDayGroupV2({
       <div
         className={`flex flex-row justify-between items-center relative ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}
       >
-        <p className="text-3xl font-bold">
+        {/*<div*/}
+        {/*  className={`grid grid-cols-3 outline`}*/}
+        {/*  style={{*/}
+        {/*    gridTemplateColumns: "1fr 1fr 1fr",*/}
+        {/*  }}*/}
+        {/*>*/}
+        <p className="text-2xl text-left">
           {expenseDayGroupCalendarDate === dateStringToday
             ? "Today"
             : expenseDayGroupCalendarDate === dateString
               ? "Yesterday"
               : formatDate(dayExpenseGroup.calendarDate)}
         </p>
-        <div className={`dotted-line ${publicUserData.darkModeEnabled && "dotted-line-dark"}`}></div>
-        <p className="text-3xl font-bold">{formatDollarAmountStatic(dayTotal, publicUserData.currency)}</p>
+        {/*<div className={`dotted-line ${publicUserData.darkModeEnabled && "dotted-line-dark"}`}></div>*/}
+        <div className={"flex-grow h-[1px] bg-[#17423f] bg-opacity-20 mx-4"}></div>
+        <p className="text-2xl text-right">{formatDollarAmountStatic(dayTotal, publicUserData.currency)}</p>
       </div>
       {dayExpenseGroup.dayExpenseArray.length > 0 && (
         <ExpenseListV2

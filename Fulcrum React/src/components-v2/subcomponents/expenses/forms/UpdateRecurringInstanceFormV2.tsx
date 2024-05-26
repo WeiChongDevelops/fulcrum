@@ -145,9 +145,9 @@ export default function UpdateRecurringInstanceFormV2({
           <SheetHeader>
             <SheetTitle>Updating Expense Repeat</SheetTitle>
             <SheetDescription>
-              <span>Editing this particular repeat of your recurring expense.</span>
+              <span>You're currently editing this instance of your recurring expense.</span>
               <span className={"mt-3 block"}>
-                To manage your recurring expenses, please see the <b>'Recurring'</b> section.
+                For full control over your recurring expenses, check the <b>'Recurring'</b> section.
               </span>
             </SheetDescription>
           </SheetHeader>
