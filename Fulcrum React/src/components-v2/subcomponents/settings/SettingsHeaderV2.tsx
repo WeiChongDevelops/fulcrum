@@ -36,7 +36,7 @@ export default function SettingsHeaderV2({ publicUserData }: SettingsHeaderV2) {
         {/*    <CurrencySelectorV2 publicUserData={publicUserData} />*/}
         {/*  </PopoverContent>*/}
         {/*</Popover>*/}
-        <CurrencySelectorV2 publicUserData={publicUserData} className={"w-28 mx-0 outline-none border-none shadow-none"} />
+        <CurrencySelectorV2 publicUserData={publicUserData} className={"w-26 mx-0 outline-none border-none shadow-none"} />
 
         <Button variant={"ghost"} className={"p-2 mr-2"}>
           <svg

@@ -23,17 +23,20 @@ import { Input } from "@/components-v2/ui/input.tsx";
 import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
 import FulcrumButton from "@/components/child/buttons/FulcrumButton.tsx";
 import AddNewGroupButton from "@/components/child/budget/buttons/AddNewGroupButton.tsx";
+import { cn } from "@/lib/utils.ts";
 
 interface CreateGroupFormV2Props {
   highestSortIndex: number;
   setLocalisedGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
   publicUserData: PublicUserData;
+  className?: string;
 }
 
 export default function CreateGroupFormV2({
   highestSortIndex,
   setLocalisedGroupArray,
   publicUserData,
+  className,
 }: CreateGroupFormV2Props) {
   const [formData, setFormData] = useState<BasicGroupData>({
     group: "",
@@ -95,7 +98,10 @@ export default function CreateGroupFormV2({
         <Button
           asChild
           variant={"empty"}
-          className={`w-full h-12 mb-2 border-2 border-dashed border-black rounded-xl hover:rounded-3xl hover:bg-zinc-100 transition-all duration-300 ease-out font-bold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`}
+          className={cn(
+            `w-full h-12 mb-2 border-2 border-dashed border-black rounded-xl hover:rounded-3xl hover:bg-zinc-100 transition-all duration-300 ease-out font-semibold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`,
+            className,
+          )}
         >
           <p>+ Add Group</p>
         </Button>

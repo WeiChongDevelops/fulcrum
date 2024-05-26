@@ -283,6 +283,7 @@ export default function BudgetV2({
                   publicUserData={publicUserData}
                   highestSortIndex={getHighestGroupSortIndex(groupArray)}
                   setLocalisedGroupArray={setLocalisedGroupArray}
+                  className={"mt-1"}
                 />
               </div>
             </DndContext>

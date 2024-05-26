@@ -16,6 +16,8 @@ import useWipeBudget from "@/hooks/mutations/budget/useWipeBudget.ts";
 import useResetAccountData from "@/hooks/mutations/other/useResetAccountData.ts";
 import FulcrumTypematchModal from "@/components-v2/subcomponents/other/FulcrumTypematchModal.tsx";
 import ReactCountryFlag from "react-country-flag";
+import ThemeToggle from "@/components-v2/subcomponents/other/ThemeToggle.tsx";
+import AccessibilityToggle from "@/components-v2/subcomponents/other/AccessibilityToggle.tsx";
 
 interface SettingsV2Props {
   publicUserData: PublicUserData;
@@ -64,13 +66,16 @@ export default function SettingsV2({ publicUserData }: SettingsV2Props) {
         </div>
 
         <div className={"settings-row bg-[#17423f] h-16"}>
-          <b>Appearance</b>
-          <DarkModeToggleV2 publicUserData={publicUserData} />
+          <b>Theme</b>
+          {/*<DarkModeToggleV2 publicUserData={publicUserData} />*/}
+
+          <ThemeToggle publicUserData={publicUserData} hideDescriptor />
         </div>
 
         <div className={"settings-row bg-[#17423f] h-16"}>
           <b>Accessibility</b>
-          <AccessibilityToggleV2 publicUserData={publicUserData} />
+          {/*<AccessibilityToggleV2 publicUserData={publicUserData} />*/}
+          <AccessibilityToggle publicUserData={publicUserData} hideDescriptor />
         </div>
 
         <div className={"settings-row bg-[#17423f] h-16"}>
