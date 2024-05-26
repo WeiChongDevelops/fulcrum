@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { EmblaCarouselType } from "embla-carousel";
 import { MonthExpenseGroupEntity, PublicUserData } from "@/utility/types.ts";
 import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
+import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
 
 interface ExpenseHeaderV2Props {
   carouselAPI: EmblaCarouselType;
@@ -77,9 +78,9 @@ export default function ExpenseHeaderV2({
           <span>Back to {monthStringArray[new Date().getMonth()]}</span>
         </Button>
       )}
-      <div className={"flex flex-row justify-center items-center gap-3 ml-auto mr-2"}>
-        <p className={"mr-3 font-medium text-base"}>Expenses</p>
-        <DarkModeToggleV2 publicUserData={publicUserData} />
+      <div className={"flex flex-row justify-center items-center gap-2 ml-auto mr-2"}>
+        <p className={"mr-4 mb-1 font-medium text-base"}>Expenses</p>
+        <CurrencySelectorV2 publicUserData={publicUserData} className={"w-26 mx-0 outline-none border-none shadow-none"} />
         <Button variant={"ghost"} className={"p-2 mr-2"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
