@@ -63,10 +63,10 @@ export default function ThemeToggle({
         )}
       </svg>
       {sideBarOpen && (
-        <>
-          {!hideDescriptor && <p>Theme</p>}
+        <div className={"flex flex-row items-center"}>
+          {!hideDescriptor && <p className={"mr-4 text-[0.8rem]"}>Theme</p>}
           <Switch checked={darkModeOn} onCheckedChange={handleToggleChange} className={"shadow"} key={rerenderKey} />
-        </>
+        </div>
       )}
     </div>
   );

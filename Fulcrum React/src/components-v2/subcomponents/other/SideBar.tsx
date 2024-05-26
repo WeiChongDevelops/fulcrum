@@ -67,15 +67,13 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
       {/*</div>*/}
       <div
         ref={animatedMenuContainerRef}
-        className={`flex flex-col justify-start items-center relative h-screen
-    bg-gray-700 text-gray-300 overflow-hidden pl-3 pr-4
-     transition-all duration-400 ease-out "}`}
+        className={`flex flex-col justify-start items-center relative h-screen bg-gray-700 text-gray-300 overflow-hidden pl-3 pr-4 transition-all duration-600 ease-out"}`}
       >
         {sideBarOpen ? (
           <div className={"flex flex-row w-full justify-between items-center ml-4 mt-2.5"}>
             <img
               src={`/static/assets-v2/fulcrum-logos/fulcrum-logo-white-v2.webp`}
-              className={`transition-all ease-out ${sideBarOpen ? "w-[8.25rem]" : "w-0"}`}
+              className={cn(sideBarOpen ? "w-[8.25rem]" : "w-0")}
               onClick={() => (window.location.href = "/home/about")}
               alt="Fulcrum logo"
             />
@@ -108,7 +106,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
             </Button>
           </div>
         )}
-        <div className={"flex flex-row justify-start items-start w-full px-1 gap-3 text-left mt-6"}>
+        <div className={"flex flex-row justify-start items-start w-full px-1 gap-3 text-left mt-6 min-h-12"}>
           <Avatar className={"size-9"}>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>
@@ -116,7 +114,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
             </AvatarFallback>
           </Avatar>
           {sideBarOpen && (
-            <div className={"flex flex-col justify-start flex-grow w-1/2 -mt-1"}>
+            <div className={"flex flex-col justify-start flex-grow w-1/2 -mt-0.5"}>
               <div className={"flex flex-row items-center justify-between"}>
                 <p className={"text-base font-semibold"}>Personal</p>
 
@@ -134,7 +132,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <p className={"text-[0.65rem] mt-1 truncate w-full"}>{activeEmail}</p>
+              <p className={"text-[0.65rem] truncate w-full mt-0.5"}>{activeEmail}</p>
             </div>
           )}
         </div>
@@ -221,7 +219,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
               </svg>
             }
           />
-          <ThemeToggle publicUserData={publicUserData} sideBarOpen={sideBarOpen} className={"pl-3.5 h-16"} />
+          <ThemeToggle publicUserData={publicUserData} sideBarOpen={sideBarOpen} className={"pl-4 h-16"} />
           <PageNavigationButton
             currentPage={currentPage}
             page={"help"}

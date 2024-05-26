@@ -32,12 +32,12 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
           dy={8}
           textAnchor="middle"
           fill={fill}
-          className={"brightness-[50%] saturate-[1000%] font-medium"}
+          className={"brightness-[30%] saturate-[1000%] font-medium"}
         >
           {payload.group.length < 12 ? payload.group : payload.group.substring(0, 9) + "..."}
         </text>
         <Sector
-          className={"brightness-[83%] saturate-[600%]"}
+          className={"brightness-[82%] saturate-[600%]"}
           cx={cx}
           cy={cy}
           innerRadius={innerRadius}
@@ -47,7 +47,7 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
           fill={fill}
         />
         <Sector
-          className={"brightness-[90%] saturate-[300%]"}
+          className={"brightness-[85%] saturate-[300%]"}
           cx={cx}
           cy={cy}
           startAngle={startAngle}
@@ -59,10 +59,10 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
         <path
           d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
           stroke={fill}
-          className={"brightness-[90%] saturate-[300%]"}
+          className={"brightness-[85%] saturate-[300%]"}
           fill="none"
         />
-        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" className={"brightness-[90%] saturate-[300%]"} />
+        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" className={"brightness-[85%] saturate-[300%]"} />
         <text
           className={"font-bold text-[1rem]"}
           x={ex + (cos >= 0 ? 1 : -1) * 12}
