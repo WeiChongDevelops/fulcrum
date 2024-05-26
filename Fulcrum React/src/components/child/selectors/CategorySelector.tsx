@@ -84,7 +84,7 @@ export default function CategorySelector({
                   }}
                 >
                   <div
-                    className={"mx-3 size-1.5 rounded-[50%] brightness-95 saturate-[250%]"}
+                    className={"mx-3 size-1.5 rounded-[50%] saturate-[650%] brightness-[90%]"}
                     style={{ backgroundColor: categoryOption.colour }}
                   ></div>
                   <span className={"mr-auto text-left"}>{categoryOption.label}</span>

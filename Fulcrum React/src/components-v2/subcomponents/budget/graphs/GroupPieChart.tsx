@@ -103,12 +103,12 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
           nameKey="group"
           innerRadius={"35%"}
           outerRadius={"55%"}
-          paddingAngle={0}
+          paddingAngle={2}
           activeShape={renderActiveBudgetShape}
           activeIndex={activeIndex}
         >
           {sortedGroupDataArray.map((groupItem, index) => (
-            <Cell key={index} fill={groupItem.colour} className={"brightness-[85%] saturate-[550%]"} />
+            <Cell key={index} fill={groupItem.colour} stroke={"none"} className={"brightness-[85%] saturate-[475%]"} />
           ))}
         </Pie>
       </PieChart>

@@ -50,8 +50,8 @@ export default function GroupColourSelector({ oldColour = "#fff", setFormData, c
         return (
           <div
             data-value={colour}
-            className={`transition-all duration-250 ease-out size-10 rounded-full origin-center hover:cursor-pointer ${selectedColour === colour && "outline outline-2 outline-offset-4"}`}
-            style={{ backgroundColor: colour, outlineColor: colour, filter: "brightness(98%) saturate(150%)" }}
+            className={`transition-all duration-250 ease-out size-10 rounded-full origin-center hover:cursor-pointer saturate-[400%] brightness-[98%] ${selectedColour === colour && "outline outline-2 outline-offset-4"}`}
+            style={{ backgroundColor: colour, outlineColor: colour }}
             key={key}
             onClick={handleColourSelection}
           ></div>

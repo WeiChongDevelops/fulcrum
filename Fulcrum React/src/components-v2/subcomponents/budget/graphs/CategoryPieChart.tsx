@@ -97,12 +97,12 @@ export default function CategoryPieChart({ sortedBudgetArray, currency }: Catego
           nameKey="category"
           innerRadius={"35%"}
           outerRadius={"55%"}
-          paddingAngle={0}
+          paddingAngle={1}
           activeShape={renderActiveBudgetShape}
           activeIndex={activeIndex}
         >
           {sortedBudgetArray.map((_, index) => (
-            <Cell key={index} fill={COLOURS[index % COLOURS.length]} />
+            <Cell key={index} stroke={"none"} fill={COLOURS[index % COLOURS.length]} />
           ))}
         </Pie>
       </PieChart>
