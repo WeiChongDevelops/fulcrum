@@ -188,6 +188,7 @@ class ApplicationTest {
         val testBudgetAmount = 200.0
         val testBudgetIconPath = "/icons/leisure.svg"
         val testBudgetGroup = "Monthly"
+        val testBudgetId = 1
 
         // Register user
         client.post("/api/register") {
@@ -216,7 +217,8 @@ class ApplicationTest {
                         testBudgetCategory,
                         testBudgetAmount,
                         testBudgetIconPath,
-                        testBudgetGroup
+                        testBudgetGroup,
+                        testBudgetId
                     )
                 )
             )

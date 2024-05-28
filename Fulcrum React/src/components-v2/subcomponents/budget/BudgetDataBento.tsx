@@ -10,7 +10,7 @@ import {
 } from "@/components-v2/ui/drawer.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { getGroupBudgetTotal, useEmail } from "@/utility/util.ts";
-import { BudgetItemEntity, CategoryToIconGroupAndColourMap, GroupItemEntity } from "@/utility/types.ts";
+import { BudgetItemEntity, CategoryToIconGroupAndColourMap, GroupItemEntity, PublicUserData } from "@/utility/types.ts";
 import { useEffect, useState } from "react";
 import {
   Select,
@@ -24,13 +24,15 @@ import {
 import GroupPieChart from "@/components-v2/subcomponents/budget/graphs/GroupPieChart.tsx";
 import CategoryPieChart from "@/components-v2/subcomponents/budget/graphs/CategoryPieChart.tsx";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils.ts";
+import { ScrollArea } from "@/components-v2/ui/scroll-area.tsx";
 
 interface BudgetDataBentoProps {
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
   budgetTotal: number;
   categoryDataMap: CategoryToIconGroupAndColourMap;
-  currency: string;
+  publicUserData: PublicUserData;
 }
 
 export default function BudgetDataBento({
@@ -38,7 +40,7 @@ export default function BudgetDataBento({
   groupArray,
   budgetTotal,
   categoryDataMap,
-  currency,
+  publicUserData,
 }: BudgetDataBentoProps) {
   const budgetSizeSort = (budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) => {
     return budgetItemA.amount > budgetItemB.amount ? -1 : 1;
@@ -69,13 +71,17 @@ export default function BudgetDataBento({
   };
 
   return (
-    <div className="flex flex-row justify-center items-center relative gap-2 border-[3px] bg-primary-foreground border-border rounded-xl font-bold w-full h-[26rem] pt-2">
+    <div
+      className={cn(
+        "flex flex-row justify-center items-center relative gap-2 border-[3px] bg-primary-foreground border-border rounded-xl font-bold w-full h-[26rem] pt-2",
+      )}
+    >
       {/*<p className={"absolute top-5 left-7"}>{`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`}</p>*/}
       <Select onValueChange={handleValueChange} defaultValue={"category"}>
         <SelectTrigger className="w-[32ch] absolute top-3 left-4 z-30 bg-background text-xs font-medium">
           <SelectValue placeholder={`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className={cn("bg-background", publicUserData.darkModeEnabled && "dark")}>
           <SelectGroup>
             <SelectItem value="category" className={"text-xs font-medium"}>
               Budget Distribution by Category
@@ -94,11 +100,15 @@ export default function BudgetDataBento({
               amount: getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group == groupItem.group)),
               colour: groupItem.colour,
             }))}
-            currency={currency}
+            currency={publicUserData.currency}
             key={rerenderKey}
           />
         ) : (
-          <CategoryPieChart sortedBudgetArray={budgetArraySortedByAmount} currency={currency} key={rerenderKey} />
+          <CategoryPieChart
+            sortedBudgetArray={budgetArraySortedByAmount}
+            currency={publicUserData.currency}
+            key={rerenderKey}
+          />
         )}
       </div>
       <div className={"absolute top-3 right-3"}>
@@ -108,7 +118,7 @@ export default function BudgetDataBento({
               {`${sortByGroup ? "Group" : "Category"} Details`}
             </Button>
           </DrawerTrigger>
-          <DrawerContent>
+          <DrawerContent className={cn("bg-background text-primary", publicUserData.darkModeEnabled && "dark")}>
             <div className="mx-auto w-full max-w-sm">
               <DrawerHeader>
                 <DrawerTitle>{`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`}</DrawerTitle>
@@ -142,7 +152,7 @@ export default function BudgetDataBento({
                           ))}
                         </div>
                       ) : (
-                        <div className={"flex flex-col items-center mb-4 max-h-48 overflow-y-scroll"}>
+                        <ScrollArea className={"flex flex-col items-center mb-4 h-48"}>
                           <div>
                             {budgetArraySortedByAmount.map((budgetItem, index) => (
                               <div
@@ -152,7 +162,7 @@ export default function BudgetDataBento({
                               >
                                 <div className={"flex flex-row justify-start items-center gap-2 text-left"}>
                                   <div
-                                    className={"rounded-[50%] size-1.5 saturate-[600%] brightness-[90%]"}
+                                    className={"rounded-[50%] size-1.5 saturate-[600%] brightness-[90%] ml-4"}
                                     style={{
                                       backgroundColor: categoryDataMap.get(budgetItem.category)?.colour ?? "black",
                                     }}
@@ -160,12 +170,12 @@ export default function BudgetDataBento({
                                   <p>{budgetItem.category}</p>
                                 </div>
                                 <div
-                                  className={"text-right"}
+                                  className={"ml-auto mr-4"}
                                 >{`${((budgetItem.amount / budgetTotal) * 100).toFixed(0)}%`}</div>
                               </div>
                             ))}
                           </div>
-                        </div>
+                        </ScrollArea>
                       )}
                     </div>
                   </div>

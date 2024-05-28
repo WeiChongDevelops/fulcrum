@@ -36,7 +36,7 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
           dy={8}
           textAnchor="middle"
           fill={fill}
-          className={"brightness-[30%] saturate-[1000%] font-medium"}
+          className={"brightness-[30%] dark:brightness-100 saturate-[1000%] dark:saturate-[600%] font-medium"}
         >
           {payload.group.length < 12 ? payload.group : payload.group.substring(0, 9) + "..."}
         </text>

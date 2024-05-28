@@ -30,7 +30,14 @@ export default function CategoryPieChart({ sortedBudgetArray, currency }: Catego
 
     return (
       <g>
-        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill} className={"brightness-50"}>
+        <text
+          x={cx}
+          y={cy}
+          dy={8}
+          textAnchor="middle"
+          fill={fill}
+          className={"brightness-50 dark:brightness-[500%] dark:saturate-[50%]"}
+        >
           {payload.category.length < 12 ? payload.category : payload.category.substring(0, 9) + "..."}
         </text>
         <Sector

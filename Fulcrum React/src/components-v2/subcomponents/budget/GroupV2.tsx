@@ -141,11 +141,11 @@ export default function GroupV2({
       ref={setNodeRef}
       {...attributes}
       className={
-        "flex flex-row items-start gap-1 select-none rounded-xl relative overflow-hidden saturate-[250%] dark:saturate-[80%] brightness-[95%]"
+        "flex flex-row items-start gap-1 select-none rounded-xl relative overflow-hidden saturate-[250%] dark:saturate-[120%] brightness-[95%]"
       }
       style={{
         ...style,
-        backgroundColor: publicUserData.darkModeEnabled ? darkenColor(group.colour, 80) : group.colour,
+        backgroundColor: publicUserData.darkModeEnabled ? darkenColor(group.colour, 70) : group.colour,
         display: "flex",
         userSelect: "none",
       }}

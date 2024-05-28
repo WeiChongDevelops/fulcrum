@@ -99,7 +99,7 @@ export default function CreateGroupFormV2({
           asChild
           variant={"empty"}
           className={cn(
-            `w-full h-12 mb-2 border-2 border-dashed border-black rounded-xl hover:rounded-3xl hover:bg-zinc-100 transition-all duration-300 ease-out font-semibold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`,
+            `w-full h-12 mb-2 border-2 border-dashed border-primary rounded-xl hover:rounded-3xl hover:bg-zinc-100 transition-all duration-300 ease-out font-semibold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`,
             className,
           )}
         >

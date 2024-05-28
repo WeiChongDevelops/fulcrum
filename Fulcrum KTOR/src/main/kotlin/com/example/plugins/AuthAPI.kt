@@ -6,11 +6,9 @@ import com.example.entities.budget.*
 import com.example.entities.user.*
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
 import io.github.jan.supabase.gotrue.gotrue
-import io.github.jan.supabase.gotrue.parseSessionFromUrl
 import io.github.jan.supabase.gotrue.providers.Facebook
 import io.github.jan.supabase.gotrue.providers.Google
 import io.github.jan.supabase.gotrue.providers.builtin.Email
-import io.github.jan.supabase.gotrue.providers.builtin.IDToken
 import io.github.jan.supabase.gotrue.user.UserSession
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
@@ -19,7 +17,6 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.Serializable
 
 
 fun Application.configureAuthRouting() {
@@ -88,7 +85,7 @@ fun Application.configureAuthRouting() {
                     password = userCreds.password
                 }
                 val miscGroup =
-                    supabase.postgrest["groups"].select(columns = Columns.list("group, colour, timestamp")) {
+                    supabase.postgrest["groups"].select(columns = Columns.list("group, colour, timestamp, id")) {
                         eq("group", "Miscellaneous")
                     }.decodeSingleOrNull<GroupItemResponse>()
                 initialiseDefaultPublicUserData(call)

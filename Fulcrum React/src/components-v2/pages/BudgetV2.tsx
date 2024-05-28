@@ -239,7 +239,7 @@ export default function BudgetV2({
                 groupArray={groupArray}
                 budgetTotal={totalBudget}
                 categoryDataMap={categoryDataMap}
-                currency={publicUserData.currency}
+                publicUserData={publicUserData}
               />
             </div>
             <DndContext
