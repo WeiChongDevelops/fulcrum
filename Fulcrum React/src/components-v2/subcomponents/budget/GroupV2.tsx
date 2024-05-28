@@ -117,16 +117,35 @@ export default function GroupV2({
     );
   };
 
+  function darkenColor(color: string, percent: number): string {
+    const num = parseInt(color.slice(1), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = (num >> 16) - amt;
+    const G = ((num >> 8) & 0x00ff) - amt;
+    const B = (num & 0x0000ff) - amt;
+    return (
+      "#" +
+      (
+        0x1000000 +
+        (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+        (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+        (B < 255 ? (B < 1 ? 0 : B) : 255)
+      )
+        .toString(16)
+        .slice(1)
+    );
+  }
+
   return (
     <div
       ref={setNodeRef}
       {...attributes}
       className={
-        "flex flex-row items-start gap-1 select-none rounded-xl relative overflow-hidden brightness-[95%] saturate-[250%]"
+        "flex flex-row items-start gap-1 select-none rounded-xl relative overflow-hidden saturate-[250%] dark:saturate-[80%] brightness-[95%]"
       }
       style={{
         ...style,
-        backgroundColor: group.colour,
+        backgroundColor: publicUserData.darkModeEnabled ? darkenColor(group.colour, 80) : group.colour,
         display: "flex",
         userSelect: "none",
       }}
@@ -145,7 +164,7 @@ export default function GroupV2({
       >
         <AccordionItem value={`item-${group.id}`}>
           <AccordionTrigger className={"px-7 select-none group-accordion-trigger"}>
-            <p className={"font-medium text-base"}>{group.group}</p>
+            <p className={"font-medium text-base text-primary"}>{group.group}</p>
           </AccordionTrigger>
           <AccordionContent className={"pt-3 pb-6 pl-6"}>
             <div className={"flex flex-row gap-5 justify-start items-center w-[109%] flex-wrap "}>

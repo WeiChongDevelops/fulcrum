@@ -1,7 +1,8 @@
 import { PieChart, Pie, ResponsiveContainer, Sector, Cell } from "recharts";
 import { useState } from "react";
-import { BudgetItemEntity, GroupItemEntity } from "@/utility/types.ts";
-import { formatDollarAmountStatic, getCurrencySymbol } from "@/utility/util.ts";
+import { BudgetItemEntity, GroupItemEntity, PublicUserData } from "@/utility/types.ts";
+import { formatDollarAmountStatic, getCurrencySymbol, useEmail } from "@/utility/util.ts";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface GroupPieChartProps {
   sortedGroupDataArray: { group: string; amount: number; colour: string }[];
@@ -23,6 +24,9 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
     const textAnchor = cos >= 0 ? "start" : "end";
 
     const displayValue = formatDollarAmountStatic(value, currency, true);
+
+    const queryClient = useQueryClient();
+    const publicUserData: PublicUserData = queryClient.getQueryData(["publicUserData", useEmail()])!;
 
     return (
       <g>
@@ -64,21 +68,20 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
         />
         <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" className={"brightness-[85%] saturate-[300%]"} />
         <text
-          className={"font-bold text-[1rem]"}
           x={ex + (cos >= 0 ? 1 : -1) * 12}
           y={ey}
           textAnchor={textAnchor}
-          fill="#333"
+          fill={publicUserData.darkModeEnabled ? "white" : "#333"}
         >
           {displayValue}
         </text>
         <text
-          className={"text-[0.8rem] font-extralight"}
+          className={"text-[0.8rem]"}
           x={ex + (cos >= 0 ? 1 : -1) * 12}
           y={ey}
           dy={18}
           textAnchor={textAnchor}
-          fill="#787777"
+          fill={publicUserData.darkModeEnabled ? "white" : "#545353"}
         >
           {`(${(percent * 100).toFixed(2)}%)`}
         </text>

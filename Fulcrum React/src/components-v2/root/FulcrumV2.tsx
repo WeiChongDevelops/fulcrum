@@ -8,6 +8,7 @@ import { getSessionEmailOrNull } from "@/utility/api.ts";
 import { LocationContext, SideBarIsOpenContext } from "@/utility/util.ts";
 import { Toaster } from "sonner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { cn } from "@/lib/utils.ts";
 
 interface FulcrumV2Props {
   publicUserData: PublicUserData;
@@ -39,7 +40,10 @@ export default function FulcrumV2({ publicUserData, sideBarOpen, setSideBarOpen,
           <div className={"fixed top-0 w-screen bg-gray-400 h-[6vh]"}></div>
           <SideBar publicUserData={publicUserData} sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} />
           <div
-            className={`absolute top-0 right-0 min-h-screen z-40 ${sideBarOpen ? "w-[calc(100vw-13rem)]" : "w-[calc(100vw-5rem)]"}`}
+            className={cn(
+              `absolute top-0 right-0 min-h-screen text-foreground bg-background z-40 ${sideBarOpen ? "w-[calc(100vw-13rem)]" : "w-[calc(100vw-5rem)]"}`,
+              publicUserData.darkModeEnabled && "dark",
+            )}
           >
             <Outlet />
           </div>

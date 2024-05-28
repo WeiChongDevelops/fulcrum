@@ -9,7 +9,7 @@ import {
   DrawerTrigger,
 } from "@/components-v2/ui/drawer.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
-import { getGroupBudgetTotal } from "@/utility/util.ts";
+import { getGroupBudgetTotal, useEmail } from "@/utility/util.ts";
 import { BudgetItemEntity, CategoryToIconGroupAndColourMap, GroupItemEntity } from "@/utility/types.ts";
 import { useEffect, useState } from "react";
 import {
@@ -23,6 +23,7 @@ import {
 } from "@/components-v2/ui/select";
 import GroupPieChart from "@/components-v2/subcomponents/budget/graphs/GroupPieChart.tsx";
 import CategoryPieChart from "@/components-v2/subcomponents/budget/graphs/CategoryPieChart.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface BudgetDataBentoProps {
   budgetArray: BudgetItemEntity[];
@@ -68,10 +69,10 @@ export default function BudgetDataBento({
   };
 
   return (
-    <div className="flex flex-row justify-center items-center relative gap-2 border-[3px] border-gray-300 rounded-xl font-bold w-full h-[26rem] pt-2">
+    <div className="flex flex-row justify-center items-center relative gap-2 border-[3px] bg-primary-foreground border-border rounded-xl font-bold w-full h-[26rem] pt-2">
       {/*<p className={"absolute top-5 left-7"}>{`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`}</p>*/}
       <Select onValueChange={handleValueChange} defaultValue={"category"}>
-        <SelectTrigger className="w-[32ch] absolute top-3 left-4 z-30 bg-primary-foreground text-xs font-medium">
+        <SelectTrigger className="w-[32ch] absolute top-3 left-4 z-30 bg-background text-xs font-medium">
           <SelectValue placeholder={`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`} />
         </SelectTrigger>
         <SelectContent>

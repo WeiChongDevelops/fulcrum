@@ -208,7 +208,7 @@ export default function BudgetV2({
 
   return (
     <SetBudgetModalVisibilityContext.Provider value={setBudgetModalVisibility}>
-      <div className="flex flex-col justify-start">
+      <div className="flex flex-col justify-start bg-transparent">
         <BudgetHeaderV2 publicUserData={publicUserData} totalIncome={totalIncome!} sideBarOpen={sideBarOpen} />
         {/*<BudgetModalsAndForms*/}
         {/*  budgetFormVisibility={budgetFormVisibility}*/}

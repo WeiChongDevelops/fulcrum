@@ -1,7 +1,8 @@
 import { PieChart, Pie, ResponsiveContainer, Sector, Cell } from "recharts";
 import { useState } from "react";
-import { BudgetItemEntity, GroupItemEntity } from "@/utility/types.ts";
-import { formatDollarAmountStatic } from "@/utility/util.ts";
+import { BudgetItemEntity, GroupItemEntity, PublicUserData } from "@/utility/types.ts";
+import { formatDollarAmountStatic, useEmail } from "@/utility/util.ts";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CategoryPieChartProps {
   sortedBudgetArray: BudgetItemEntity[];
@@ -23,6 +24,9 @@ export default function CategoryPieChart({ sortedBudgetArray, currency }: Catego
     const textAnchor = cos >= 0 ? "start" : "end";
 
     const displayValue = formatDollarAmountStatic(value, currency, true);
+
+    const queryClient = useQueryClient();
+    const publicUserData: PublicUserData = queryClient.getQueryData(["publicUserData", useEmail()])!;
 
     return (
       <g>
@@ -49,10 +53,22 @@ export default function CategoryPieChart({ sortedBudgetArray, currency }: Catego
         />
         <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
         <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-        <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">
+        <text
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          textAnchor={textAnchor}
+          fill={publicUserData.darkModeEnabled ? "white" : "#545353"}
+        >
           {displayValue}
         </text>
-        <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
+        <text
+          className={"text-[0.8rem]"}
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          dy={18}
+          textAnchor={textAnchor}
+          fill="#999"
+        >
           {`(${(percent * 100).toFixed(2)}%)`}
         </text>
       </g>

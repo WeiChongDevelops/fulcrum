@@ -88,7 +88,7 @@ export default function BudgetTileV2({
             updateOldBudgetBeingEdited={updateOldBudgetBeingEdited}
           />
         )}
-        <Card className="size-44 outline outline-3 outline-zinc-800 relative transition-all duration-150 ease -z-10 flex flex-col justify-center">
+        <Card className="size-44 outline outline-3 outline-zinc-800 dark:outline-zinc-400 relative transition-all duration-150 ease -z-10 flex flex-col justify-center">
           <CardHeader className={"py-2"}>
             <CardTitle className={"text-xs lg:text-sm font-bold"}>{filteredBudgetItem.category}</CardTitle>
           </CardHeader>
@@ -109,7 +109,7 @@ export default function BudgetTileV2({
               </p>
               <p className={`truncate font-light`}>
                 <span>{"Left: "}</span>
-                <span className={cn("font-bold", spent > filteredBudgetItem.amount ? "text-red-500" : "text-black")}>
+                <span className={cn("font-bold", spent > filteredBudgetItem.amount ? "text-[#FF3F3F]" : "text-primary")}>
                   {formatDollarAmountStatic(
                     filteredBudgetItem.amount - perCategoryExpenseTotalThisMonth.get(filteredBudgetItem.category)!,
                     publicUserData.currency,
