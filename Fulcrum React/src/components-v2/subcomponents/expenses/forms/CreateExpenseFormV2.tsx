@@ -15,6 +15,7 @@ import {
   DEFAULT_CATEGORY_GROUP,
   DEFAULT_CATEGORY_ICON,
   getCurrencySymbol,
+  getHighestBudgetSortIndex,
   handleInputChangeOnFormWithAmount,
 } from "@/utility/util.ts";
 import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
@@ -121,6 +122,7 @@ export default function CreateExpenseFormV2({
         iconPath: DEFAULT_CATEGORY_ICON,
         group: DEFAULT_CATEGORY_GROUP,
         timestamp: formData.timestamp as Date,
+        id: getHighestBudgetSortIndex(budgetArray) + 1,
       };
     }
 

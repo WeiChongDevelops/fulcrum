@@ -440,10 +440,11 @@ export function expenseSort(expenseItemA: ExpenseItemEntity, expenseItemB: Expen
  * @returns Sorting order value, or logs error if timestamp conversion fails.
  */
 export function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity): number {
-  const dateA = new Date(budgetItemA.timestamp!).getTime();
-  const dateB = new Date(budgetItemB.timestamp!).getTime();
-  if (dateA === dateB) return -1;
-  return dateA - dateB;
+  // const dateA = new Date(budgetItemA.timestamp!).getTime();
+  // const dateB = new Date(budgetItemB.timestamp!).getTime();
+  // if (dateA === dateB) return -1;
+  // return dateA - dateB;
+  return budgetItemA.id - budgetItemB.id;
 }
 
 /**
@@ -834,6 +835,15 @@ export function isCurrentMonth(timestamp: Date): boolean {
  */
 export function getHighestGroupSortIndex(groupArray: GroupItemEntity[]) {
   return maxNumber(groupArray.map((groupItem) => groupItem.id));
+}
+
+/**
+ * Identifies the highest group sorting index excluding Miscellaneous.
+ * @param budgetArray - The budget array.
+ * @returns The largest sort index.
+ */
+export function getHighestBudgetSortIndex(budgetArray: BudgetItemEntity[]) {
+  return maxNumber(budgetArray.map((budgetItem) => budgetItem.id));
 }
 
 /**

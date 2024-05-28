@@ -39,7 +39,7 @@ export default function FulcrumV2({ publicUserData, sideBarOpen, setSideBarOpen,
           <div className={"fixed top-0 w-screen bg-gray-400 h-[6vh]"}></div>
           <SideBar publicUserData={publicUserData} sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} />
           <div
-            className={`absolute top-0 right-0 min-h-screen z-40 ${sideBarOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"}`}
+            className={`absolute top-0 right-0 min-h-screen z-40 ${sideBarOpen ? "w-[calc(100vw-13rem)]" : "w-[calc(100vw-5rem)]"}`}
           >
             <Outlet />
           </div>

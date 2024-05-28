@@ -46,7 +46,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
 
   return (
     <div
-      className={`fixed flex flex-col ${sideBarOpen ? "w-[14rem]" : "w-[5rem]"} h-screen z-50 transition-all duration-400 ease-out`}
+      className={`fixed flex flex-col ${sideBarOpen ? "w-[13rem]" : "w-[5rem]"} h-screen z-50 transition-all duration-400 ease-out`}
       ref={autoAnimateRef}
     >
       {/*<div className={"flex justify-start items-center h-[6vh] w-full bg-gray-700"}>*/}
@@ -73,7 +73,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
           <div className={"flex flex-row w-full justify-between items-center ml-4 mt-2.5"}>
             <img
               src={`/static/assets-v2/fulcrum-logos/fulcrum-logo-white-v2.webp`}
-              className={cn(sideBarOpen ? "w-[8.25rem]" : "w-0")}
+              className={cn(sideBarOpen ? "w-28" : "w-0")}
               onClick={() => (window.location.href = "/home/about")}
               alt="Fulcrum logo"
             />

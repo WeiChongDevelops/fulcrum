@@ -57,14 +57,14 @@ export default function ExpenseMonthCarouselV2({
       id={"expense-carousel"}
       setApi={setApi}
       className={"flex flex-row justify-center w-full z-10 mt-[6vh] transition-all duration-100 ease-out"}
-      opts={{ startIndex: startingIndex }}
+      opts={{ startIndex: startingIndex, watchDrag: false }}
     >
-      <CarouselContent>
+      <CarouselContent className={"-ml-24"}>
         {budgetArray.length > 0 &&
           structuredExpenseData.length > 0 &&
           structuredExpenseData.map((monthExpenseGroupItem, key) => {
             return (
-              <CarouselItem key={key}>
+              <CarouselItem key={key} className={"pl-24"}>
                 <ScrollArea className={"flex flex-row justify-center h-[94vh]"}>
                   <ExpenseMonthGroupV2
                     budgetArray={budgetArray}

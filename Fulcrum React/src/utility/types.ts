@@ -57,6 +57,7 @@ export interface BudgetItemEntity {
   iconPath: string;
   group: string;
   timestamp: Date | null;
+  id: number;
 }
 
 export interface PreviousBudgetBeingEdited {
@@ -64,6 +65,7 @@ export interface PreviousBudgetBeingEdited {
   oldCategory: string;
   oldGroup: string;
   oldIconPath: string;
+  id: number;
 }
 export interface BudgetCreationFormData {
   category: string;

@@ -23,13 +23,14 @@ describe("Group", () => {
     groupName: "Utilities",
     groupColour: "#ffcc00",
     filteredBudgetArray: [
-      { category: "Water", amount: 30, iconPath: "water-icon.svg", group: "Miscellaneous", timestamp: new Date() },
+      { category: "Water", amount: 30, iconPath: "water-icon.svg", group: "Miscellaneous", timestamp: new Date(), id: 0 },
       {
         category: "Electricity",
         amount: 70,
         iconPath: "electricity-icon.svg",
         group: "Miscellaneous",
         timestamp: new Date(),
+        id: 1,
       },
     ],
     expenseArray: [

@@ -130,161 +130,184 @@ fun getDefaultCategories(uid: String): List<BudgetCreateRequestSent> {
             category = "Emergency Funds",
             amount = 1000.00,
             iconPath = "FireExtinguisher",
-            group = "Savings & Investment"
+            group = "Savings & Investment",
+            id = 0
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Vacation Savings",
-            amount = 500.00,
+            amount = 400.00,
             iconPath = "AirplaneTilt",
-            group = "Savings & Investment"
+            group = "Savings & Investment",
+            id = 1
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Stocks",
-            amount = 500.00,
+            amount = 600.00,
             iconPath = "ChartLine",
-            group = "Savings & Investment"
+            group = "Savings & Investment",
+            id = 2
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "General Savings",
             amount = 3000.00,
             iconPath = "FireExtinguisher",
-            group = "Savings & Investment"
+            group = "Savings & Investment",
+            id = 3
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Drinks",
             amount = 200.00,
             iconPath = "Martini",
-            group = "Food & Drink"
+            group = "Food & Drink",
+            id = 4
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Groceries",
             amount = 450.00,
             iconPath = "ShoppingCart",
-            group = "Food & Drink"
+            group = "Food & Drink",
+            id = 5
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Restaurant",
             amount = 300.00,
             iconPath = "ForkKnife",
-            group = "Food & Drink"
+            group = "Food & Drink",
+            id = 6
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Pet Food",
             amount = 60.00,
             iconPath = "PawPrint",
-            group = "Food & Drink"
+            group = "Food & Drink",
+            id = 7
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Rent",
             amount = 1600.00,
             iconPath = "HouseLine",
-            group = "Housing"
+            group = "Housing",
+            id = 8
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Maintenance",
             amount = 250.00,
             iconPath = "Wrench",
-            group = "Housing"
+            group = "Housing",
+            id = 9
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Water",
             amount = 50.00,
             iconPath = "Drop",
-            group = "Utilities"
+            group = "Utilities",
+            id = 10
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Electricity",
             amount = 100.00,
             iconPath = "Lightning",
-            group = "Utilities"
+            group = "Utilities",
+            id = 11
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Internet",
             amount = 80.00,
             iconPath = "WifiHigh",
-            group = "Utilities"
+            group = "Utilities",
+            id = 12
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Petrol",
             amount = 200.00,
             iconPath = "GasPump",
-            group = "Transport"
+            group = "Transport",
+            id = 13
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Parking",
             amount = 60.00,
             iconPath = "CarProfile",
-            group = "Transport"
+            group = "Transport",
+            id = 14
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Public Transport",
             amount = 120.00,
             iconPath = "Train",
-            group = "Transport"
+            group = "Transport",
+            id = 15
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Sports",
-            amount = 100.00,
+            amount = 80.00,
             iconPath = "Volleyball",
-            group = "Leisure"
+            group = "Leisure",
+            id = 16
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Entertainment",
-            amount = 100.00,
+            amount = 120.00,
             iconPath = "FilmStrip",
-            group = "Leisure"
+            group = "Leisure",
+            id = 17
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Gym",
             amount = 30.00,
             iconPath = "Barbell",
-            group = "Leisure"
+            group = "Leisure",
+            id = 18
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Education",
             amount = 300.00,
             iconPath = "GraduationCap",
-            group = "Miscellaneous"
+            group = "Miscellaneous",
+            id = 19
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Personal Care",
             amount = 100.00,
             iconPath = "HandSoap",
-            group = "Miscellaneous"
+            group = "Miscellaneous",
+            id = 20
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Charity",
             amount = 50.00,
             iconPath = "HandHeart",
-            group = "Miscellaneous"
+            group = "Miscellaneous",
+            id = 21
         ),
         BudgetCreateRequestSent(
             userId = uid,
             category = "Other (Default)",
             amount = 850.00,
             iconPath = "Coin",
-            group = "Miscellaneous"
+            group = "Miscellaneous",
+            id = 22
         ),
     )
 }

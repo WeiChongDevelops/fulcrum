@@ -133,7 +133,7 @@ export default function UpdateExpenseFormV2({
   return (
     <div
       className={"h-20 inset-0 absolute update-expense-trigger z-10"}
-      style={{ width: `calc(100vw - ${navMenuIsOpen ? "14rem" : "5rem"} - 4rem)` }}
+      style={{ width: `calc(100vw - ${navMenuIsOpen ? "13rem" : "5rem"} - 4rem)` }}
     >
       <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>
         <SheetTrigger onClick={updateOldExpenseBeingEdited} className={"w-full h-full"}></SheetTrigger>

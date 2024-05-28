@@ -19,6 +19,7 @@ import {
   DEFAULT_CATEGORY_GROUP,
   DEFAULT_CATEGORY_ICON,
   getColourOfGroup,
+  getHighestBudgetSortIndex,
   getHighestGroupSortIndex,
   getRandomGroupColour,
   groupListAsOptions,
@@ -44,12 +45,18 @@ import {
 } from "@/components-v2/ui/select.tsx";
 
 interface CreateBudgetFormV2Props {
+  budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
   groupNameOfNewItem: string;
   currencySymbol: string;
 }
 
-export default function CreateBudgetFormV2({ groupArray, groupNameOfNewItem, currencySymbol }: CreateBudgetFormV2Props) {
+export default function CreateBudgetFormV2({
+  budgetArray,
+  groupArray,
+  groupNameOfNewItem,
+  currencySymbol,
+}: CreateBudgetFormV2Props) {
   const [formData, setFormData] = useState<BudgetCreationFormData>({
     category: "",
     amount: 0,
@@ -95,6 +102,7 @@ export default function CreateBudgetFormV2({ groupArray, groupNameOfNewItem, cur
       iconPath: formData.iconPath === "" ? DEFAULT_CATEGORY_ICON : formData.iconPath,
       group: formData.group ? formData.group : DEFAULT_CATEGORY_GROUP,
       timestamp: new Date(),
+      id: getHighestBudgetSortIndex(budgetArray) + 1,
     };
 
     if (!groupArray.map((groupItem) => groupItem.group).includes(newBudgetItem.group)) {

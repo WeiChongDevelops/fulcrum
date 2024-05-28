@@ -25,7 +25,7 @@ fun Application.configureBudgetRouting() {
         post("/api/createBudget") {
             try {
                 val budgetCreateRequest = call.receive<BudgetCreateRequestReceived>()
-                supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp")) {
+                supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp, id")) {
                     eq("userId", getActiveUserId())
                 }.decodeList<BudgetItemResponse>()
 
@@ -34,7 +34,8 @@ fun Application.configureBudgetRouting() {
                     category = budgetCreateRequest.category,
                     amount = budgetCreateRequest.amount,
                     iconPath = budgetCreateRequest.iconPath,
-                    group = budgetCreateRequest.group
+                    group = budgetCreateRequest.group,
+                    id = budgetCreateRequest.id
                 )
                 val insertedItem = supabase.postgrest["budgets"].insert(
                     itemToInsert,
@@ -56,7 +57,7 @@ fun Application.configureBudgetRouting() {
             try {
                 supabase.gotrue.refreshCurrentSession()
                 val budgetList =
-                    supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp")) {
+                    supabase.postgrest["budgets"].select(columns = Columns.list("category, amount, iconPath, group, timestamp, id")) {
                         eq("userId", getActiveUserId())
                     }.decodeList<BudgetItemResponse>()
                 call.respond(HttpStatusCode.OK, budgetList)

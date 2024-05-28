@@ -168,6 +168,7 @@ export async function handleBudgetCreation(newBudgetItem: BudgetItemEntity): Pro
       amount: newBudgetItem.amount ? newBudgetItem.amount : 0,
       iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : DEFAULT_CATEGORY_ICON,
       group: newBudgetItem.group ? newBudgetItem.group.trim() : DEFAULT_CATEGORY_GROUP,
+      id: newBudgetItem.id,
     });
     console.log(response.data);
   } catch (error: unknown) {

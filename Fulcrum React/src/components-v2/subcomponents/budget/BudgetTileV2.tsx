@@ -62,6 +62,7 @@ export default function BudgetTileV2({
       oldCategory: filteredBudgetItem.category,
       oldGroup: filteredBudgetItem.group,
       oldIconPath: filteredBudgetItem.iconPath,
+      id: filteredBudgetItem.id,
     });
   };
 

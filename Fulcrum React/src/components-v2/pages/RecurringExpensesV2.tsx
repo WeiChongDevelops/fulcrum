@@ -108,7 +108,7 @@ export default function RecurringExpensesV2({
               );
             })
           ) : (
-            <p className={"text-2xl mt-48"}>Add recurring expenses for transactions you expect to arise regularly.</p>
+            <p className={"text-lg mt-48"}>Add recurring expenses for transactions you expect to arise regularly.</p>
           )}
         </div>
       </ScrollArea>

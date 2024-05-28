@@ -93,12 +93,6 @@ export default function ExpensesV2({
   }, [expenseArray, routerLocation]);
 
   useEffect(() => {
-    console.log("!!!!!!!!");
-    console.log(routerLocation);
-    console.log("!!!!!!!!");
-  }, [routerLocation]);
-
-  useEffect(() => {
     updateRecurringExpenseInstances(
       recurringExpenseArray,
       expenseArray,
@@ -127,16 +121,12 @@ export default function ExpensesV2({
 
   useEffect(() => {
     rerenderCarousel();
-  }, [sideBarOpen]);
+  }, [sideBarOpen, carouselWidth]);
 
   useEffect(() => {
     window.addEventListener("resize", getUpdatedCarouselWidth);
     return () => window.removeEventListener("resize", getUpdatedCarouselWidth);
   }, []);
-
-  useEffect(() => {
-    rerenderCarousel();
-  }, [carouselWidth]);
 
   if (isLoading) {
     return <Loader isLoading={isLoading} isDarkMode={false} />;

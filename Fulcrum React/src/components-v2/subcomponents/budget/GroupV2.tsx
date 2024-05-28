@@ -12,7 +12,7 @@ import {
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types.ts";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components-v2/ui/button.tsx";
@@ -63,8 +63,12 @@ export default function GroupV2({
   setLocalisedGroupArray,
   groupArray,
 }: GroupV2Props) {
-  const [accordionIsOpen, setAccordionIsOpen] = useState<string>();
+  const [accordionIsOpen, setAccordionIsOpen] = useState<string>("item-1");
   const { isPending, mutate: deleteGroup } = useDeleteGroup();
+
+  // useEffect(() => {
+  //   window.alert(accordionIsOpen);
+  // }, [accordionIsOpen]);
 
   // const handleEditClick = (e: React.MouseEvent) => {
   //   e.stopPropagation();
@@ -165,6 +169,7 @@ export default function GroupV2({
                     </div>
                   ))}
               <CreateBudgetFormV2
+                budgetArray={budgetArray}
                 groupArray={groupArray}
                 groupNameOfNewItem={group.group}
                 currencySymbol={getCurrencySymbol(publicUserData.currency)}

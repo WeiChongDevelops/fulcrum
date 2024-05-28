@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
 import { BudgetItemEntity, GroupItemEntity } from "../../../utility/types.ts";
-import { EmailContext, groupSort, useEmail } from "../../../utility/util.ts";
+import { budgetSort, EmailContext, groupSort, useEmail } from "../../../utility/util.ts";
 import { handleBudgetUpdating } from "../../../utility/api.ts";
 
 interface BudgetUpdatingMutationProps {
@@ -39,11 +39,13 @@ export default function useUpdateBudget() {
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
       const budgetArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["budgetArray", email]);
       await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
-        return prevBudgetCache.map((budgetItem) =>
-          budgetItem.category === budgetUpdatingMutationProps.originalCategory
-            ? { ...budgetUpdatingMutationProps.updatedBudgetItem }
-            : budgetItem,
-        );
+        return prevBudgetCache
+          .map((budgetItem) =>
+            budgetItem.category === budgetUpdatingMutationProps.originalCategory
+              ? budgetUpdatingMutationProps.updatedBudgetItem
+              : budgetItem,
+          )
+          .sort(budgetSort);
       });
       toast.success("Budget updated!");
       return { budgetArrayBeforeOptimisticUpdate, groupArrayBeforeOptimisticUpdate };

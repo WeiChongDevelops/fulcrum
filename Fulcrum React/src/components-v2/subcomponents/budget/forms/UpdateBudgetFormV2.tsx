@@ -85,10 +85,6 @@ export default function UpdateBudgetFormV2({
     });
   }, [oldBudgetBeingEdited, formIsOpen]);
 
-  useEffect(() => {
-    console.log({ formDataHere: formData });
-  }, [formData]);
-
   function hideForm() {
     // changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", false);
     setFormIsOpen(false);
@@ -119,6 +115,7 @@ export default function UpdateBudgetFormV2({
       ...formData,
       amount: typeof formData.amount === "string" ? parseFloat(formData.amount) : formData.amount,
       timestamp: new Date(),
+      id: oldBudgetBeingEdited.id, // Used only for optimistic update
     };
 
     if (!groupArray.map((groupItem) => groupItem.group).includes(updatedBudgetItem.group)) {
@@ -234,7 +231,7 @@ export default function UpdateBudgetFormV2({
               <Label htmlFor="iconPath" className={"text-right"}>
                 Icon
               </Label>
-              <CategoryIconSelector setFormData={setFormData} className={"col-span-3"} />
+              <CategoryIconSelector formData={formData} setFormData={setFormData} className={"col-span-3"} />
             </div>
 
             <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>

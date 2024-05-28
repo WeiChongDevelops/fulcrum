@@ -26,6 +26,7 @@ export default function ExpenseHeaderV2({
     month: string;
     year: number;
   }>();
+
   const prevSlide = () => {
     carouselAPI?.scrollPrev();
     setActiveCarouselIndex(activeCarouselIndex - 1);
@@ -48,11 +49,11 @@ export default function ExpenseHeaderV2({
 
   return (
     <div
-      className={`fixed flex flex-row z-20 gap-4 justify-start items-center bg-gray-400 transition-all duration-600 ease-out ${sideBarOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
+      className={`fixed flex flex-row z-20 gap-4 justify-start items-center bg-gray-100 border-b-2 transition-all duration-600 ease-out ${sideBarOpen ? "w-[calc(100vw-13rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
     >
       <div
         className={
-          "flex flex-row justify-between items-center ml-6 w-[40vw] sm:w-[35vw] md:w-[32vw] lg:w-[30vw] py-1 my-4 bg-[#17423f] rounded-3xl text-white select-none"
+          "flex flex-row justify-between items-center ml-6 w-[40vw] sm:w-[35vw] md:w-[32vw] lg:w-[30vw] py-0.5 my-4 bg-[#1e3836] rounded-3xl text-white select-none"
         }
       >
         <button
@@ -62,7 +63,7 @@ export default function ExpenseHeaderV2({
         >
           <img src="/static/assets-v2/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
         </button>
-        <p className={"text-xl font-medium"}>
+        <p className={"text-lg font-medium"}>
           {!!activeMonthAndYear ? activeMonthAndYear.month + " " + activeMonthAndYear.year.toString() : "Loading..."}
         </p>
         <button
@@ -79,7 +80,7 @@ export default function ExpenseHeaderV2({
         </Button>
       )}
       <div className={"flex flex-row justify-center items-center gap-2 ml-auto mr-2"}>
-        <p className={"mr-4 mb-1 font-medium text-base"}>Expenses</p>
+        <p className={"mr-4 font-medium text-base"}>Expenses</p>
         <CurrencySelectorV2 publicUserData={publicUserData} className={"w-26 mx-0 outline-none border-none shadow-none"} />
         <Button variant={"ghost"} className={"p-2 mr-2"}>
           <svg

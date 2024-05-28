@@ -43,6 +43,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { BudgetCreationFormData, BudgetUpdatingFormData } from "@/utility/types.ts";
 
 interface CategoryIconSelectorProps {
+  formData?: BudgetCreationFormData | BudgetUpdatingFormData;
   setFormData: Dispatch<SetStateAction<BudgetCreationFormData>> | Dispatch<SetStateAction<BudgetUpdatingFormData>>;
   className: string;
 }
@@ -50,7 +51,7 @@ interface CategoryIconSelectorProps {
 /**
  * A visual selector for the user to choose an icon for a budget category.
  */
-export default function CategoryIconSelector({ setFormData, className }: CategoryIconSelectorProps) {
+export default function CategoryIconSelector({ formData, setFormData, className }: CategoryIconSelectorProps) {
   const iconComponents = [
     HandHeart,
     Drop,
@@ -93,7 +94,7 @@ export default function CategoryIconSelector({ setFormData, className }: Categor
   const DEFAULT_CATEGORY_ICON = Coin;
 
   const [isActive, setIsActive] = useState(false);
-  const [selectedIcon, setSelectedIcon] = useState(DEFAULT_CATEGORY_ICON.displayName);
+  const [selectedIcon, setSelectedIcon] = useState(formData ? formData.iconPath : DEFAULT_CATEGORY_ICON.displayName);
   const selectorRef = useRef<HTMLDivElement>(null);
 
   const handleIconSelection = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -134,7 +135,7 @@ export default function CategoryIconSelector({ setFormData, className }: Categor
           data-value={IconComponent.displayName}
           key={index}
           onClick={handleIconSelection}
-          className={`flex justify-center items-center size-10 p-1 transition-all duration-100 ease-out rounded-full outline-primary outline-2 ${selectedIcon === IconComponent.displayName && "outline"}`}
+          className={`flex justify-center items-center size-10 p-1.5 transition-all duration-100 ease-out rounded-full outline-primary outline-2 ${selectedIcon === IconComponent.displayName && "outline"}`}
         >
           <IconComponent size={28} weight={"regular"} />
         </button>
