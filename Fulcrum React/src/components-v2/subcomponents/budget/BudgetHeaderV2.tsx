@@ -14,7 +14,7 @@ interface BudgetHeaderV2Props {
 export default function BudgetHeaderV2({ publicUserData, totalIncome, sideBarOpen }: BudgetHeaderV2Props) {
   return (
     <div
-      className={`fixed flex flex-row z-40 gap-4 justify-start items-center self-end bg-gray-400 ${sideBarOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
+      className={`fixed flex flex-row z-40 gap-4 justify-start items-center self-end bg-white border-b-2 ${sideBarOpen ? "w-[calc(100vw-14rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
     >
       <MonthlyIncomeV2 publicUserData={publicUserData} className={"ml-10"} totalIncome={totalIncome} />
       <div className={"flex flex-row justify-center items-center gap-2 ml-auto mr-2"}>

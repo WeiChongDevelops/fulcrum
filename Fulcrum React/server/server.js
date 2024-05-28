@@ -32,6 +32,7 @@ app.use("/api", async (req, res) => {
   try {
     const response = await axios({
       method: req.method,
+      // url: `http://backend:8080/api${req.url}`,
       url: `http://localhost:8080/api${req.url}`,
       data: req.body,
     });

@@ -8,7 +8,6 @@ import {
   RecurringExpenseFrequency,
   RecurringExpenseItemEntity,
   RecurringExpenseUpdatingFormData,
-  SelectorOptionsFormattedData,
   SetFormVisibility,
 } from "@/utility/types.ts";
 import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";

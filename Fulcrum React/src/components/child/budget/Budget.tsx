@@ -32,137 +32,138 @@ interface BudgetProps {
  * The root component for the budget page. It contains the income display, the Fulcrum animation and the user's budget.
  */
 export default function Budget({ publicUserData, expenseArray, budgetArray, groupArray }: BudgetProps) {
-  const {
-    totalIncome,
-    budgetFormVisibility,
-    setBudgetFormVisibility,
-    budgetModalVisibility,
-    setBudgetModalVisibility,
-    groupToDelete,
-    setGroupToDelete,
-    categoryToDelete,
-    setCategoryToDelete,
-    oldBudgetBeingEdited,
-    setOldBudgetBeingEdited,
-    oldGroupBeingEdited,
-    setOldGroupBeingEdited,
-    amountLeftToBudget,
-    setAmountLeftToBudget,
-    groupNameOfNewItem,
-    setGroupNameOfNewItem,
-    isBudgetFormOrModalOpen,
-    lineAngle,
-    perCategoryExpenseTotalThisMonth,
-    setPerCategoryExpenseTotalThisMonth,
-    isLoading,
-    isError,
-    isSuccess,
-    error,
-  } = useInitialBudgetData();
-  const routerLocation = useContext(LocationContext);
+  // const {
+  //   totalIncome,
+  //   budgetFormVisibility,
+  //   setBudgetFormVisibility,
+  //   budgetModalVisibility,
+  //   setBudgetModalVisibility,
+  //   groupToDelete,
+  //   setGroupToDelete,
+  //   categoryToDelete,
+  //   setCategoryToDelete,
+  //   oldBudgetBeingEdited,
+  //   setOldBudgetBeingEdited,
+  //   oldGroupBeingEdited,
+  //   setOldGroupBeingEdited,
+  //   amountLeftToBudget,
+  //   setAmountLeftToBudget,
+  //   groupNameOfNewItem,
+  //   setGroupNameOfNewItem,
+  //   isBudgetFormOrModalOpen,
+  //   lineAngle,
+  //   perCategoryExpenseTotalThisMonth,
+  //   setPerCategoryExpenseTotalThisMonth,
+  //   isLoading,
+  //   isError,
+  //   isSuccess,
+  //   error,
+  // } = useInitialBudgetData();
+  // const routerLocation = useContext(LocationContext);
+  //
+  // const { animationDataIsLoading, activeTriangleFulcrum, bowlShadowDimensions } = useAnimationData(lineAngle);
+  //
+  // const totalBudget = useMemo(() => {
+  //   return !!budgetArray ? getTotalAmountBudgeted(budgetArray) : 0;
+  // }, [budgetArray]);
+  //
+  // useEffect(() => {
+  //   !!totalIncome && setAmountLeftToBudget(totalIncome - totalBudget);
+  // }, [budgetArray, totalIncome, routerLocation]);
+  //
+  // useEffect(() => {
+  //   if (!!budgetArray) {
+  //     const categoryArray = budgetArray.map((budgetItem) => budgetItem.category);
+  //     categoryArray.forEach((category) => {
+  //       const thisCategoryExpenseArray = expenseArray.filter((expenseItem) => expenseItem.category === category);
+  //       const categoryExpenditure = thisCategoryExpenseArray.reduce(
+  //         (acc, expenseItem) => acc + (isCurrentMonth(expenseItem.timestamp) ? expenseItem.amount : 0),
+  //         0,
+  //       );
+  //       setPerCategoryExpenseTotalThisMonth((previousMap) => new Map([...previousMap, [category, categoryExpenditure]]));
+  //     });
+  //   }
+  // }, [budgetArray, expenseArray, routerLocation]);
 
-  const { animationDataIsLoading, activeTriangleFulcrum, bowlShadowDimensions } = useAnimationData(lineAngle);
-
-  const totalBudget = useMemo(() => {
-    return !!budgetArray ? getTotalAmountBudgeted(budgetArray) : 0;
-  }, [budgetArray]);
-
-  useEffect(() => {
-    !!totalIncome && setAmountLeftToBudget(totalIncome - totalBudget);
-  }, [budgetArray, totalIncome, routerLocation]);
-
-  useEffect(() => {
-    if (!!budgetArray) {
-      const categoryArray = budgetArray.map((budgetItem) => budgetItem.category);
-      categoryArray.forEach((category) => {
-        const thisCategoryExpenseArray = expenseArray.filter((expenseItem) => expenseItem.category === category);
-        const categoryExpenditure = thisCategoryExpenseArray.reduce(
-          (acc, expenseItem) => acc + (isCurrentMonth(expenseItem.timestamp) ? expenseItem.amount : 0),
-          0,
-        );
-        setPerCategoryExpenseTotalThisMonth((previousMap) => new Map([...previousMap, [category, categoryExpenditure]]));
-      });
-    }
-  }, [budgetArray, expenseArray, routerLocation]);
-
-  if (isError) {
-    return <FulcrumErrorPage errors={[error!]} />;
-  }
-
-  if (isLoading || animationDataIsLoading) {
-    return <Loader isLoading={isLoading || animationDataIsLoading} isDarkMode={publicUserData.darkModeEnabled ?? false} />;
-  }
-
-  if (isSuccess)
-    return (
-      <div className="flex flex-row justify-center items-center relative">
-        <div>
-          <div
-            className={`justify-center items-center elementsBelowPopUpForm
-                        ${isBudgetFormOrModalOpen && "blur"}`}
-          >
-            <IncomeDisplay
-              totalIncome={totalIncome!}
-              amountLeftToBudget={amountLeftToBudget}
-              publicUserData={publicUserData}
-            />
-
-            <FulcrumButton
-              displayText={"Visualise Budget"}
-              onClick={() => changeFormOrModalVisibility(setBudgetModalVisibility, "isDataVisVisible", true)}
-              hoverShadow
-              backgroundColour={"white"}
-              optionalTailwind={"mt-4 shadow-[0.3rem_0.3rem_0px_black]"}
-            />
-
-            <FulcrumAnimation
-              lineAngle={lineAngle}
-              isDarkMode={publicUserData.darkModeEnabled}
-              activeTriangleFulcrum={activeTriangleFulcrum}
-              bowlShadowDimensions={bowlShadowDimensions}
-            />
-
-            {groupArray?.length > 0 && (
-              <GroupList
-                budgetArray={budgetArray}
-                expenseArray={expenseArray}
-                setOldBudgetBeingEdited={setOldBudgetBeingEdited}
-                setOldGroupBeingEdited={setOldGroupBeingEdited}
-                groupArray={groupArray}
-                setGroupNameOfNewItem={setGroupNameOfNewItem}
-                setBudgetFormVisibility={setBudgetFormVisibility}
-                setGroupToDelete={setGroupToDelete}
-                setCategoryToDelete={setCategoryToDelete}
-                setModalFormVisibility={setBudgetModalVisibility}
-                perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-                publicUserData={publicUserData}
-              />
-            )}
-
-            <AddNewGroupButton
-              setBudgetFormVisibility={setBudgetFormVisibility}
-              isDarkMode={publicUserData.darkModeEnabled}
-            />
-          </div>
-
-          {isBudgetFormOrModalOpen && <ActiveFormClickShield />}
-
-          <BudgetModalsAndForms
-            budgetFormVisibility={budgetFormVisibility}
-            budgetArray={budgetArray}
-            groupArray={groupArray}
-            groupNameOfNewItem={groupNameOfNewItem}
-            setBudgetFormVisibility={setBudgetFormVisibility}
-            oldBudgetBeingEdited={oldBudgetBeingEdited}
-            oldGroupBeingEdited={oldGroupBeingEdited}
-            groupToDelete={groupToDelete}
-            categoryToDelete={categoryToDelete}
-            budgetModalVisibility={budgetModalVisibility}
-            setBudgetModalVisibility={setBudgetModalVisibility}
-            currencySymbol={getCurrencySymbol(publicUserData.currency)}
-          />
-        </div>
-        )
-      </div>
-    );
+  // if (isError) {
+  //   return <FulcrumErrorPage errors={[error!]} />;
+  // }
+  //
+  // if (isLoading || animationDataIsLoading) {
+  //   return <Loader isLoading={isLoading || animationDataIsLoading} isDarkMode={publicUserData.darkModeEnabled ?? false} />;
+  // }
+  //
+  // if (isSuccess)
+  return (
+    <></>
+    // <div className="flex flex-row justify-center items-center relative">
+    //   <div>
+    //     <div
+    //       className={`justify-center items-center elementsBelowPopUpForm
+    //                   ${isBudgetFormOrModalOpen && "blur"}`}
+    //     >
+    //       <IncomeDisplay
+    //         totalIncome={totalIncome!}
+    //         amountLeftToBudget={amountLeftToBudget}
+    //         publicUserData={publicUserData}
+    //       />
+    //
+    //       <FulcrumButton
+    //         displayText={"Visualise Budget"}
+    //         onClick={() => changeFormOrModalVisibility(setBudgetModalVisibility, "isDataVisVisible", true)}
+    //         hoverShadow
+    //         backgroundColour={"white"}
+    //         optionalTailwind={"mt-4 shadow-[0.3rem_0.3rem_0px_black]"}
+    //       />
+    //
+    //       <FulcrumAnimation
+    //         lineAngle={lineAngle}
+    //         isDarkMode={publicUserData.darkModeEnabled}
+    //         activeTriangleFulcrum={activeTriangleFulcrum}
+    //         bowlShadowDimensions={bowlShadowDimensions}
+    //       />
+    //
+    //       {groupArray?.length > 0 && (
+    //         <GroupList
+    //           budgetArray={budgetArray}
+    //           expenseArray={expenseArray}
+    //           setOldBudgetBeingEdited={setOldBudgetBeingEdited}
+    //           setOldGroupBeingEdited={setOldGroupBeingEdited}
+    //           groupArray={groupArray}
+    //           setGroupNameOfNewItem={setGroupNameOfNewItem}
+    //           setBudgetFormVisibility={setBudgetFormVisibility}
+    //           setGroupToDelete={setGroupToDelete}
+    //           setCategoryToDelete={setCategoryToDelete}
+    //           setModalFormVisibility={setBudgetModalVisibility}
+    //           perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
+    //           publicUserData={publicUserData}
+    //         />
+    //       )}
+    //
+    //       <AddNewGroupButton
+    //         setBudgetFormVisibility={setBudgetFormVisibility}
+    //         isDarkMode={publicUserData.darkModeEnabled}
+    //       />
+    //     </div>
+    //
+    //     {isBudgetFormOrModalOpen && <ActiveFormClickShield />}
+    //
+    //     <BudgetModalsAndForms
+    //       budgetFormVisibility={budgetFormVisibility}
+    //       budgetArray={budgetArray}
+    //       groupArray={groupArray}
+    //       groupNameOfNewItem={groupNameOfNewItem}
+    //       setBudgetFormVisibility={setBudgetFormVisibility}
+    //       oldBudgetBeingEdited={oldBudgetBeingEdited}
+    //       oldGroupBeingEdited={oldGroupBeingEdited}
+    //       groupToDelete={groupToDelete}
+    //       categoryToDelete={categoryToDelete}
+    //       budgetModalVisibility={budgetModalVisibility}
+    //       setBudgetModalVisibility={setBudgetModalVisibility}
+    //       currencySymbol={getCurrencySymbol(publicUserData.currency)}
+    //     />
+    //   </div>
+    //   )
+    // </div>
+  );
 }

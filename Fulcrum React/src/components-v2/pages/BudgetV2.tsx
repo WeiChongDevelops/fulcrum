@@ -21,12 +21,8 @@ import {
   SetBudgetModalVisibilityContext,
   useLocation,
 } from "@/utility/util.ts";
-import { useContext, useEffect, useRef, useState } from "react";
-import BudgetModalsAndForms from "@/components/child/budget/BudgetModalsAndForms.tsx";
+import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import GroupV2 from "@/components-v2/subcomponents/budget/GroupV2.tsx";
-
-import AddNewGroupButton from "@/components/child/budget/buttons/AddNewGroupButton.tsx";
-import CategoryPieChart from "@/components-v2/subcomponents/budget/PieChart.tsx";
 import {
   closestCenter,
   DndContext,
@@ -41,18 +37,6 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-ki
 import useReorderGroups from "@/hooks/mutations/budget/useReorderGroups.ts";
 import { Separator } from "@/components-v2/ui/separator.tsx";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components-v2/ui/drawer.tsx";
-import { Button } from "@/components-v2/ui/button.tsx";
-import UpdateGroupFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateGroupFormV2.tsx";
 import CreateGroupFormV2 from "@/components-v2/subcomponents/budget/forms/CreateGroupFormV2.tsx";
 import Playground from "@/components-v2/subcomponents/budget/Playground.tsx";
 import { ScrollArea, ScrollBar } from "@/components-v2/ui/scroll-area.tsx";
@@ -66,6 +50,8 @@ interface BudgetV2Props {
   groupArray: GroupItemEntity[];
   sideBarOpen: boolean;
   categoryDataMap: CategoryToIconGroupAndColourMap;
+  perCategoryExpenseTotalThisMonth: Map<string, number>;
+  setPerCategoryExpenseTotalThisMonth: Dispatch<SetStateAction<Map<string, number>>>;
 }
 
 export default function BudgetV2({
@@ -75,6 +61,8 @@ export default function BudgetV2({
   groupArray,
   sideBarOpen,
   categoryDataMap,
+  perCategoryExpenseTotalThisMonth,
+  setPerCategoryExpenseTotalThisMonth,
 }: BudgetV2Props) {
   const routerLocation = useLocation();
 
@@ -97,13 +85,23 @@ export default function BudgetV2({
     groupNameOfNewItem,
     setGroupNameOfNewItem,
     isBudgetFormOrModalOpen,
-    perCategoryExpenseTotalThisMonth,
-    setPerCategoryExpenseTotalThisMonth,
     isLoading,
     isError,
     isSuccess,
     error,
   } = useInitialBudgetData();
+
+  // const [totalBudget, setTotalBudget] = useState(() => getTotalAmountBudgeted(budgetArray));
+  //
+  // useEffect(() => {
+  //   setTotalBudget(getTotalAmountBudgeted(budgetArray));
+  // }, [budgetArray]);
+
+  const [totalBudget, setTotalBudget] = useState(() => getTotalAmountBudgeted(budgetArray));
+
+  useEffect(() => {
+    setTotalBudget(getTotalAmountBudgeted(budgetArray));
+  }, [budgetArray]);
 
   useEffect(() => {
     if (!!budgetArray) {
@@ -120,7 +118,6 @@ export default function BudgetV2({
   }, [budgetArray, expenseArray, routerLocation]);
 
   const budgetContainer = useRef<HTMLDivElement>(null);
-  const budgetTotal = budgetArray.reduce((acc, budgetItem) => acc + budgetItem.amount, 0);
 
   // const fadeBudget = () => {
   //   budgetContainer.current?.classList.add("fadeOut");
@@ -236,13 +233,13 @@ export default function BudgetV2({
                   currency={publicUserData.currency}
                   sideBarOpen={sideBarOpen}
                   totalIncome={totalIncome!}
-                  totalBudget={getTotalAmountBudgeted(budgetArray)}
+                  totalBudget={totalBudget}
                 />
               </div>
               <BudgetDataBento
                 budgetArray={budgetArray}
                 groupArray={groupArray}
-                budgetTotal={budgetTotal}
+                budgetTotal={totalBudget}
                 categoryDataMap={categoryDataMap}
                 currency={publicUserData.currency}
               />

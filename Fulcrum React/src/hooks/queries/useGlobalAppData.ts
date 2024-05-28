@@ -18,6 +18,7 @@ import {
   PublicUserData,
   RecurringExpenseItemEntity,
 } from "@/utility/types.ts";
+import { useState } from "react";
 
 export function useGlobalAppData() {
   const sessionStoredProfileIcon = sessionStorage.getItem("profileIconFileName");
@@ -83,6 +84,8 @@ export function useGlobalAppData() {
     enabled: !!email && !!budgetArrayQuery.data && !!groupArrayQuery.data,
   });
 
+  const [perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth] = useState<Map<string, number>>(new Map());
+
   const isAnyLoading =
     globalAppDataQueries.some((query: UseQueryResult) => query.isLoading) || categoryDataMapQuery.isLoading;
   const isAnyError = globalAppDataQueries.some((query: UseQueryResult) => query.isError) || categoryDataMapQuery.isError;
@@ -102,6 +105,8 @@ export function useGlobalAppData() {
     blacklistedExpenseArray: blacklistedExpenseArrayQuery.data as BlacklistedExpenseItemEntity[],
     publicUserData: publicUserDataQuery.data as PublicUserData,
     categoryDataMap: categoryDataMapQuery.data as CategoryToIconGroupAndColourMap,
+    perCategoryExpenseTotalThisMonth,
+    setPerCategoryExpenseTotalThisMonth,
     isAnyLoading,
     isAnyError,
     isAllSuccess,

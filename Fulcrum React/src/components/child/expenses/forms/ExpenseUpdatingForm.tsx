@@ -17,13 +17,13 @@ import {
   ExpenseItemEntity,
   ExpenseUpdatingFormData,
   PreviousExpenseBeingEdited,
-  SelectorOptionsFormattedData,
+  DropdownSelectorOption,
   SetFormVisibility,
   Value,
 } from "../../../../utility/types.ts";
 interface ExpenseUpdatingFormProps {
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  categoryOptions: SelectorOptionsFormattedData[];
+  categoryOptions: DropdownSelectorOption[];
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   currencySymbol: string;
 }

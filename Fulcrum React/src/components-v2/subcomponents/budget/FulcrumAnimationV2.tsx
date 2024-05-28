@@ -81,9 +81,11 @@ export default function FulcrumAnimationV2({
         <div className={cn("absolute w-60", budgetLayoutIsSideBySide ? "-top-[115%]" : "-top-full")}>
           {leftToBudget !== 0 ? (
             <>
-              <p className={"font-extrabold text-red-6000 mb-1"}>Give every dollar a job!</p>
+              <p className={"font-extrabold text-[#FF3F3F] mb-1"}>
+                {leftToBudget > 0 ? "Give every dollar a job!" : "Budget exceeds income."}
+              </p>
               {leftToBudget < 0 ? (
-                <span className={"font-medium text-sm"}>
+                <span className={"font-medium text-sm text-zinc-700"}>
                   You have over-budgeted by <b>{formatDollarAmountStatic(leftToBudget * -1, currency)}</b>.
                 </span>
               ) : (
@@ -94,7 +96,7 @@ export default function FulcrumAnimationV2({
             </>
           ) : (
             <>
-              <p className={"font-extrabold text-emerald-600 mb-1"}>Every dollar has a job!</p>
+              <p className={"font-extrabold text-[#058403] mb-1"}>Every dollar has a job!</p>
               <p className={"font-light text-xs"}>Make sure your budget below reflects your monthly expenditure.</p>
             </>
           )}

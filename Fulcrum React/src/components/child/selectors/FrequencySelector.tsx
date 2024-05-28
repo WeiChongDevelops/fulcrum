@@ -12,7 +12,6 @@ import {
   RecurringExpenseFrequency,
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
-  SelectorOptionsFormattedData,
 } from "../../../utility/types.ts";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components-v2/ui/button";

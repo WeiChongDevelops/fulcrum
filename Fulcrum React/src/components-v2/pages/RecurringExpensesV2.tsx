@@ -26,6 +26,7 @@ interface RecurringExpensesV2Props {
   recurringExpenseArray: RecurringExpenseItemEntity[];
   categoryDataMap: CategoryToIconGroupAndColourMap;
   sideBarOpen: boolean;
+  perCategoryExpenseTotalThisMonth: Map<string, number>;
 }
 
 /**
@@ -39,6 +40,7 @@ export default function RecurringExpensesV2({
   categoryDataMap,
   recurringExpenseArray,
   sideBarOpen,
+  perCategoryExpenseTotalThisMonth,
 }: RecurringExpensesV2Props) {
   const routerLocation = useContext(LocationContext);
   const {
@@ -79,6 +81,7 @@ export default function RecurringExpensesV2({
           defaultCalendarDate={new Date()}
           mustBeRecurring={true}
           publicUserData={publicUserData}
+          perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
         />
         <div className={"mt-6 w-full"}>
           {recurringExpenseArray.length > 0 ? (

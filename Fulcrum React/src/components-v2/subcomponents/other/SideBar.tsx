@@ -67,7 +67,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
       {/*</div>*/}
       <div
         ref={animatedMenuContainerRef}
-        className={`flex flex-col justify-start items-center relative h-screen bg-gray-700 text-gray-300 overflow-hidden pl-3 pr-4 transition-all duration-600 ease-out"}`}
+        className={`flex flex-col justify-start items-center relative h-screen bg-[#1e3836] text-gray-300 overflow-hidden pl-3 pr-4 transition-all duration-600 ease-out"}`}
       >
         {sideBarOpen ? (
           <div className={"flex flex-row w-full justify-between items-center ml-4 mt-2.5"}>

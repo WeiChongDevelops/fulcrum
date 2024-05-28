@@ -4,14 +4,13 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { components } from "react-select";
 import { InputProps } from "react-select";
 import {
-  DropdownSelectorOption,
   ExpenseCreationFormData,
   ExpenseUpdatingFormData,
   PreviousExpenseBeingEdited,
   PreviousRecurringExpenseBeingEdited,
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
-  SelectorOptionsFormattedData,
+  DropdownSelectorOption,
 } from "../../../utility/types.ts";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components-v2/ui/button";
@@ -85,7 +84,7 @@ export default function CategorySelector({
                 >
                   <div
                     className={"mx-3 size-1.5 rounded-[50%] saturate-[650%] brightness-[90%]"}
-                    style={{ backgroundColor: categoryOption.colour }}
+                    style={{ backgroundColor: categoryOption.colour ?? "black" }}
                   ></div>
                   <span className={"mr-auto text-left"}>{categoryOption.label}</span>
                   <CheckIcon

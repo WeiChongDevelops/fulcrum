@@ -16,6 +16,16 @@ import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIco
 import UpdateBudgetFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateBudgetFormV2.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { cn } from "@/lib/utils.ts";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components-v2/ui/dialog.tsx";
+import * as React from "react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components-v2/ui/tooltip.tsx";
 
 interface BudgetTileV2Props {
   filteredBudgetItem: BudgetItemEntity;
@@ -61,39 +71,54 @@ export default function BudgetTileV2({
 
   return (
     <div className={"size-44 relative"}>
-      <UpdateBudgetFormV2
-        oldBudgetBeingEdited={oldBudgetBeingEdited}
-        groupArray={groupArray}
-        currencySymbol={getCurrencySymbol(publicUserData.currency)}
-        updateOldBudgetBeingEdited={updateOldBudgetBeingEdited}
-      />
-      <Card className="size-44 outline outline-3 outline-zinc-800 relative transition-all duration-150 ease -z-10 flex flex-col justify-center">
-        <CardHeader className={"py-2"}>
-          <CardTitle className={"text-xs lg:text-sm font-bold"}>{filteredBudgetItem.category}</CardTitle>
-        </CardHeader>
-        <CardContent className={"flex flex-col gap-4 pb-2 justify-center items-center"}>
-          <div ref={autoAnimateRef}>
-            <DynamicIconComponent componentName={filteredBudgetItem.iconPath} props={{ size: "3rem" }} className={"mt-1"} />
-          </div>
-          <div>
-            <p className={"truncate font-light"}>
-              <span>{"Budget: "}</span>
-              <span className={"font-bold"}>
-                {formatDollarAmountStatic(filteredBudgetItem.amount, publicUserData.currency)}
-              </span>
-            </p>
-            <p className={`truncate font-light`}>
-              <span>{"Left: "}</span>
-              <span className={cn("font-bold", spent > filteredBudgetItem.amount ? "text-red-500" : "text-black")}>
-                {formatDollarAmountStatic(
-                  filteredBudgetItem.amount - perCategoryExpenseTotalThisMonth.get(filteredBudgetItem.category)!,
-                  publicUserData.currency,
-                )}
-              </span>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <TooltipProvider delayDuration={200} disableHoverableContent={false}>
+        {filteredBudgetItem.category === "Other (Default)" ? (
+          <Tooltip>
+            <TooltipTrigger className={"w-full h-full hover:cursor-not-allowed absolute left-4"}></TooltipTrigger>
+            <TooltipContent side={"top"}>
+              <span>Default category cannot be deleted.</span>
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          <UpdateBudgetFormV2
+            oldBudgetBeingEdited={oldBudgetBeingEdited}
+            groupArray={groupArray}
+            currencySymbol={getCurrencySymbol(publicUserData.currency)}
+            updateOldBudgetBeingEdited={updateOldBudgetBeingEdited}
+          />
+        )}
+        <Card className="size-44 outline outline-3 outline-zinc-800 relative transition-all duration-150 ease -z-10 flex flex-col justify-center">
+          <CardHeader className={"py-2"}>
+            <CardTitle className={"text-xs lg:text-sm font-bold"}>{filteredBudgetItem.category}</CardTitle>
+          </CardHeader>
+          <CardContent className={"flex flex-col gap-4 pb-2 justify-center items-center"}>
+            <div ref={autoAnimateRef}>
+              <DynamicIconComponent
+                componentName={filteredBudgetItem.iconPath}
+                props={{ size: "3rem" }}
+                className={"mt-1"}
+              />
+            </div>
+            <div>
+              <p className={"truncate font-light"}>
+                <span>{"Budget: "}</span>
+                <span className={"font-bold"}>
+                  {formatDollarAmountStatic(filteredBudgetItem.amount, publicUserData.currency)}
+                </span>
+              </p>
+              <p className={`truncate font-light`}>
+                <span>{"Left: "}</span>
+                <span className={cn("font-bold", spent > filteredBudgetItem.amount ? "text-red-500" : "text-black")}>
+                  {formatDollarAmountStatic(
+                    filteredBudgetItem.amount - perCategoryExpenseTotalThisMonth.get(filteredBudgetItem.category)!,
+                    publicUserData.currency,
+                  )}
+                </span>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </TooltipProvider>
     </div>
   );
 }

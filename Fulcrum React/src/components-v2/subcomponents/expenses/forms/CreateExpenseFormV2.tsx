@@ -28,7 +28,7 @@ import {
   PublicUserData,
   RecurringExpenseFormVisibility,
   RecurringExpenseItemEntity,
-  SelectorOptionsFormattedData,
+  DropdownSelectorOption,
   SetFormVisibility,
   Value,
 } from "@/utility/types.ts";
@@ -46,6 +46,7 @@ interface CreateExpenseFormV2Props {
   defaultCalendarDate: Date;
   mustBeRecurring: boolean;
   publicUserData: PublicUserData;
+  perCategoryExpenseTotalThisMonth: Map<string, number>;
 }
 
 export default function CreateExpenseFormV2({
@@ -54,6 +55,7 @@ export default function CreateExpenseFormV2({
   defaultCalendarDate,
   mustBeRecurring,
   publicUserData,
+  perCategoryExpenseTotalThisMonth,
 }: CreateExpenseFormV2Props) {
   const [formIsOpen, setFormIsOpen] = useState(false);
 
@@ -92,6 +94,16 @@ export default function CreateExpenseFormV2({
       timestamp: defaultCalendarDate,
       frequency: mustBeRecurring ? "monthly" : "never",
     });
+
+    const totalBudgetForCategory = perCategoryExpenseTotalThisMonth.get(formData.category);
+
+    if (
+      totalBudgetForCategory &&
+      totalBudgetForCategory + formData.amount >
+        budgetArray.find((budgetItem) => budgetItem.category === formData.category)!.amount
+    ) {
+      toast.warning(`You have exceeded your budget for '${formData.category}'.`);
+    }
     let newDefaultBudgetItem: BudgetItemEntity | undefined = undefined;
 
     const newExpenseItem: ExpenseItemEntity = {

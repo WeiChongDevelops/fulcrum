@@ -8,7 +8,7 @@ RUN npm ci
 
 # Copy and build project
 COPY . .
-RUN npm run build
+RUN npm run build --debug
 
 # Copy static files into build directory
 COPY public/static /app/dist/static

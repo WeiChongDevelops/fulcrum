@@ -92,32 +92,33 @@ export default function GroupUpdatingForm({
   }
 
   return (
-    <div ref={formRef} className="fulcrum-form">
-      <FulcrumButton
-        onClick={() => {
-          hideForm();
-        }}
-        displayText={"Cancel"}
-        optionalTailwind={"ml-auto mb-auto"}
-        backgroundColour="grey"
-      ></FulcrumButton>
-
-      <p className="mb-6 mt-4 font-bold text-3xl">Updating Category Group {oldGroupBeingEdited.oldGroupName}</p>
-      <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
-        <label htmlFor="groupName">Group Name</label>
-        <input
-          type="text"
-          name="group"
-          id="group"
-          value={formData.group}
-          onChange={handleInputChange}
-          autoComplete={"off"}
-        />
-
-        <GroupColourSelector oldColour={oldGroupBeingEdited.oldColour} />
-
-        <FulcrumButton displayText="Update Group" />
-      </form>
-    </div>
+    // <div ref={formRef} className="fulcrum-form">
+    //   <FulcrumButton
+    //     onClick={() => {
+    //       hideForm();
+    //     }}
+    //     displayText={"Cancel"}
+    //     optionalTailwind={"ml-auto mb-auto"}
+    //     backgroundColour="grey"
+    //   ></FulcrumButton>
+    //
+    //   <p className="mb-6 mt-4 font-bold text-3xl">Updating Category Group {oldGroupBeingEdited.oldGroupName}</p>
+    //   <form onSubmit={handleSubmit} className="flex flex-col items-center mb-auto">
+    //     <label htmlFor="groupName">Group Name</label>
+    //     <input
+    //       type="text"
+    //       name="group"
+    //       id="group"
+    //       value={formData.group}
+    //       onChange={handleInputChange}
+    //       autoComplete={"off"}
+    //     />
+    //
+    //     <GroupColourSelector oldColour={oldGroupBeingEdited.oldColour} />
+    //
+    //     <FulcrumButton displayText="Update Group" />
+    //   </form>
+    // </div>
+    <></>
   );
 }

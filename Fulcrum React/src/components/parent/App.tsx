@@ -31,6 +31,7 @@ import BudgetV2 from "@/components-v2/pages/BudgetV2.tsx";
 import "@/css/global.css";
 import Playground from "@/components-v2/subcomponents/budget/Playground.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
+import Maintenance from "@/components-v2/pages/Maintenance.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -49,6 +50,8 @@ export default function App() {
     blacklistedExpenseArray,
     publicUserData,
     categoryDataMap,
+    perCategoryExpenseTotalThisMonth,
+    setPerCategoryExpenseTotalThisMonth,
     isAnyLoading,
     isAnyError,
     isAllSuccess,
@@ -88,6 +91,7 @@ export default function App() {
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
             <Route path="/playground" element={<Playground />} />
+            <Route path="/maintenance" element={<Maintenance />} />
             <Route
               path="/app/"
               element={
@@ -99,7 +103,6 @@ export default function App() {
                 />
               }
             >
-              <Route index element={<Navigate replace to="budget" />} />
               {/*<Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>*/}
               {/*  <Route index element={<Navigate replace to="budget" />} />*/}
               {/*<Route*/}
@@ -152,6 +155,7 @@ export default function App() {
                     recurringExpenseArray={recurringExpenseArray}
                     blacklistedExpenseArray={blacklistedExpenseArray}
                     sideBarOpen={sideBarOpen}
+                    perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                   />
                 }
               />
@@ -166,6 +170,7 @@ export default function App() {
                     categoryDataMap={categoryDataMap}
                     recurringExpenseArray={recurringExpenseArray}
                     sideBarOpen={sideBarOpen}
+                    perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                   />
                 }
               />
@@ -180,6 +185,8 @@ export default function App() {
                     groupArray={groupArray}
                     sideBarOpen={sideBarOpen}
                     categoryDataMap={categoryDataMap}
+                    perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
+                    setPerCategoryExpenseTotalThisMonth={setPerCategoryExpenseTotalThisMonth}
                   />
                 }
               />

@@ -91,8 +91,8 @@ fun Application.configureOtherRouting() {
 
         delete("/api/wipeBudget") {
             try {
-                var noCategoriesFound = false;
-                var noGroupsFound = false;
+                var noCategoriesFound = false
+                var noGroupsFound = false
 
                 if (supabase.postgrest["budgets"].select(
                         columns = Columns.list("category, amount, iconPath, group, timestamp")

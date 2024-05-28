@@ -49,13 +49,13 @@ export default function InfoTile({
     setIsHovered(!isHovered);
   }
 
-  useEffect(() => {
-    if (isHovered) {
-      tileRef.current?.classList.add("budget-tile-raise-flip");
-    } else {
-      tileRef.current?.classList.remove("budget-tile-raise-flip");
-    }
-  }, [isHovered, routerLocation]);
+  // useEffect(() => {
+  //   if (isHovered) {
+  //     tileRef.current?.classList.add("budget-tile-raise-flip");
+  //   } else {
+  //     tileRef.current?.classList.remove("budget-tile-raise-flip");
+  //   }
+  // }, [isHovered, routerLocation]);
 
   return (
     <div className={"single-tile-container hide-tile select-none hover:cursor-default"} ref={tileRef}>

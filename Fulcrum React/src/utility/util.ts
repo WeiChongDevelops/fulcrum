@@ -10,6 +10,7 @@ import {
   BudgetUpdatingFormData,
   CategoryToIconGroupAndColourMap,
   DayExpenseGroupEntity,
+  DropdownSelectorOption,
   ExpenseCreationFormData,
   ExpenseItemEntity,
   ExpenseUpdatingFormData,
@@ -19,7 +20,6 @@ import {
   MonthExpenseGroupEntity,
   RecurringExpenseFrequency,
   RecurringExpenseItemEntity,
-  SelectorOptionsFormattedData,
   SetFormVisibility,
   SetModalVisibility,
 } from "./types.ts";
@@ -440,16 +440,16 @@ export function expenseSort(expenseItemA: ExpenseItemEntity, expenseItemB: Expen
  * @returns Sorting order value, or logs error if timestamp conversion fails.
  */
 export function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity): number {
-  return new Date(budgetItemA.timestamp!).getTime() - new Date(budgetItemB.timestamp!).getTime();
+  const dateA = new Date(budgetItemA.timestamp!).getTime();
+  const dateB = new Date(budgetItemB.timestamp!).getTime();
+  if (dateA === dateB) return -1;
+  return dateA - dateB;
 }
 
 /**
  * Groups category options in the selector, by group.
  */
-export function categoryOptionSort(
-  optionA: { value: string; label: string; colour: string },
-  optionB: { value: string; label: string; colour: string },
-) {
+export function categoryOptionSort(optionA: DropdownSelectorOption, optionB: DropdownSelectorOption) {
   if (!!optionA.colour && !!optionB.colour) {
     if (optionA.colour > optionB.colour) {
       return -1;
@@ -568,7 +568,7 @@ export const colourStyles = {
  * Converts an array of budget category groups into the selector options format.
  * @param groupArray - The array of budget category groups to convert.
  */
-export function groupListAsOptions(groupArray: GroupItemEntity[]): SelectorOptionsFormattedData[] {
+export function groupListAsOptions(groupArray: GroupItemEntity[]): DropdownSelectorOption[] {
   return groupArray.map((groupItemEntity) => {
     return {
       value: groupItemEntity.group,
@@ -587,10 +587,11 @@ export function categoryListAsOptions(budgetArray: BudgetItemEntity[], groupArra
   return budgetArray
     .map((budgetItemEntity) => {
       const groupOfCategory = getGroupOfCategory(budgetArray, budgetItemEntity.category);
+      const colourOfGroup = getGroupOfCategory(budgetArray, budgetItemEntity.category);
       return {
         value: budgetItemEntity.category,
         label: budgetItemEntity.category,
-        colour: groupOfCategory ? getColourOfGroup(groupOfCategory, groupArray) : "#17423f",
+        colour: groupOfCategory && colourOfGroup ? getColourOfGroup(groupOfCategory, groupArray)! : "#17423f",
       };
     })
     .sort(categoryOptionSort);
@@ -891,6 +892,7 @@ export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[
  */
 export function getTotalAmountBudgeted(budgetArray: BudgetItemEntity[]): number {
   const amountArray = budgetArray.map((budgetItem) => budgetItem.amount);
+  console.log({ amountArray: amountArray });
   return amountArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 }
 
@@ -950,8 +952,8 @@ export function handleInputChangeOnFormWithAmount(
     newFormValue = e.target.value;
   }
   if (
-    e.target.name != "amount" ||
-    e.target.value == "" ||
+    e.target.name !== "amount" ||
+    e.target.value === "" ||
     (e.target.name === "amount" && parseFloat(e.target.value) >= 0 && parseFloat(e.target.value) <= 9999999.99)
   ) {
     setFormData(

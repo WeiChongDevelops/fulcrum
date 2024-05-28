@@ -31,6 +31,7 @@ interface ExpenseMonthCarouselV2Props {
   setApi: (api: EmblaCarouselType | undefined) => void;
   startingIndex: number;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
+  perCategoryExpenseTotalThisMonth: Map<string, number>;
 }
 
 /**
@@ -49,6 +50,7 @@ export default function ExpenseMonthCarouselV2({
   setApi,
   startingIndex,
   oldExpenseBeingEdited,
+  perCategoryExpenseTotalThisMonth,
 }: ExpenseMonthCarouselV2Props) {
   return (
     <Carousel
@@ -66,6 +68,7 @@ export default function ExpenseMonthCarouselV2({
                 <ScrollArea className={"flex flex-row justify-center h-[94vh]"}>
                   <ExpenseMonthGroupV2
                     budgetArray={budgetArray}
+                    perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                     monthExpenseGroupItem={monthExpenseGroupItem}
                     setExpenseFormVisibility={setExpenseFormVisibility}
                     setExpenseModalVisibility={setExpenseModalVisibility}

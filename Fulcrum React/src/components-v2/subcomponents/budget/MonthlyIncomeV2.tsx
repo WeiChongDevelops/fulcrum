@@ -38,7 +38,7 @@ export default function MonthlyIncomeV2({ publicUserData, className, totalIncome
   return (
     <div
       className={cn(
-        `flex flex-row justify-between items-center px-4 py-1 w-[35%] bg-emerald-200 rounded-xl text-xs ${className}`,
+        `flex flex-row justify-between items-center px-4 py-1 w-[35%] bg-[#1e3836] text-white rounded-xl text-xs ${className}`,
       )}
     >
       <span className={"font-light"}>Monthly Income: </span>

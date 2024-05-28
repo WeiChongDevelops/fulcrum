@@ -42,6 +42,7 @@ interface ExpensesV2Props {
   categoryDataMap: CategoryToIconGroupAndColourMap;
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[];
   sideBarOpen: boolean;
+  perCategoryExpenseTotalThisMonth: Map<string, number>;
 }
 
 /**
@@ -56,6 +57,7 @@ export default function ExpensesV2({
   blacklistedExpenseArray,
   recurringExpenseArray,
   sideBarOpen,
+  perCategoryExpenseTotalThisMonth,
 }: ExpensesV2Props) {
   const {
     expenseFormVisibility,
@@ -162,6 +164,7 @@ export default function ExpensesV2({
         setApi={setApi}
         startingIndex={startingIndex}
         oldExpenseBeingEdited={oldExpenseBeingEdited}
+        perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
       />
       {/*<ExpenseModalsAndForms*/}
       {/*  expenseFormVisibility={expenseFormVisibility}*/}

@@ -41,10 +41,7 @@ export default function useUpdateBudget() {
       await queryClient.setQueryData(["budgetArray", email], (prevBudgetCache: BudgetItemEntity[]) => {
         return prevBudgetCache.map((budgetItem) =>
           budgetItem.category === budgetUpdatingMutationProps.originalCategory
-            ? {
-                ...budgetUpdatingMutationProps.updatedBudgetItem,
-                amount: budgetUpdatingMutationProps.updatedBudgetItem.amount,
-              }
+            ? { ...budgetUpdatingMutationProps.updatedBudgetItem }
             : budgetItem,
         );
       });

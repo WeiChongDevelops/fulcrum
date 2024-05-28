@@ -85,6 +85,10 @@ export default function UpdateBudgetFormV2({
     });
   }, [oldBudgetBeingEdited, formIsOpen]);
 
+  useEffect(() => {
+    console.log({ formDataHere: formData });
+  }, [formData]);
+
   function hideForm() {
     // changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", false);
     setFormIsOpen(false);
@@ -111,7 +115,11 @@ export default function UpdateBudgetFormV2({
     hideForm();
     let defaultGroupItem: GroupItemEntity | undefined = undefined;
 
-    const updatedBudgetItem: BudgetItemEntity = { ...formData, timestamp: new Date() };
+    const updatedBudgetItem: BudgetItemEntity = {
+      ...formData,
+      amount: typeof formData.amount === "string" ? parseFloat(formData.amount) : formData.amount,
+      timestamp: new Date(),
+    };
 
     if (!groupArray.map((groupItem) => groupItem.group).includes(updatedBudgetItem.group)) {
       defaultGroupItem = {
@@ -196,7 +204,7 @@ export default function UpdateBudgetFormV2({
                 type="text"
                 className={"col-span-3 pl-8"}
                 onChange={handleInputChange}
-                value={formData.amount === 0 ? "" : formData.amount}
+                value={formData.amount}
                 name="amount"
                 id="amount"
                 autoComplete={"off"}

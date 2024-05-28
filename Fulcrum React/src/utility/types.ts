@@ -74,7 +74,7 @@ export interface BudgetCreationFormData {
 
 export interface BudgetUpdatingFormData {
   category: string;
-  amount: number;
+  amount: number | string;
   group: string;
   iconPath: string;
 }
@@ -219,12 +219,6 @@ export interface RegisterFormData {
   email: string;
   password: string;
   confirmPassword: string;
-}
-
-export interface SelectorOptionsFormattedData {
-  value: string;
-  label: string;
-  colour: string | null;
 }
 
 export interface PublicUserData {

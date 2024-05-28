@@ -8,7 +8,6 @@ import {
   MonthExpenseGroupEntity,
   PreviousExpenseBeingEdited,
   PublicUserData,
-  SelectorOptionsFormattedData,
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../utility/types.ts";
@@ -29,6 +28,7 @@ interface ExpenseMonthGroupV2Props {
   publicUserData: PublicUserData;
   setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
+  perCategoryExpenseTotalThisMonth: Map<string, number>;
 }
 
 /**
@@ -46,6 +46,7 @@ export const ExpenseMonthGroupV2 = memo(
     publicUserData,
     oldExpenseBeingEdited,
     setDefaultCalendarDate,
+    perCategoryExpenseTotalThisMonth,
   }: ExpenseMonthGroupV2Props) => {
     const categoryOptions = budgetArray.map((budgetItem) => {
       const dataMapEntry = categoryDataMap.get(budgetItem.category);
@@ -63,6 +64,7 @@ export const ExpenseMonthGroupV2 = memo(
           defaultCalendarDate={new Date()}
           mustBeRecurring={false}
           publicUserData={publicUserData}
+          perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
         />
 
         {monthExpenseGroupItem.monthExpenseArray.length > 0 ? (

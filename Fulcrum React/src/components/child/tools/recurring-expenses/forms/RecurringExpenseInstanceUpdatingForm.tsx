@@ -16,13 +16,13 @@ import {
   ExpenseItemEntity,
   PreviousExpenseBeingEdited,
   RecurringExpenseInstanceUpdatingFormData,
-  SelectorOptionsFormattedData,
+  DropdownSelectorOption,
   SetFormVisibility,
 } from "../../../../../utility/types.ts";
 
 interface RecurringExpenseInstanceUpdatingFormProps {
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  categoryOptions: SelectorOptionsFormattedData[];
+  categoryOptions: DropdownSelectorOption[];
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   currencySymbol: string;
 }

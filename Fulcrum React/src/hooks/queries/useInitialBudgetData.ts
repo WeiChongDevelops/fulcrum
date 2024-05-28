@@ -41,7 +41,6 @@ export default function useInitialBudgetData() {
   const [isBudgetFormOrModalOpen, setIsBudgetFormOrModalOpen] = useState(false);
 
   const routerLocation = useLocation();
-  const [perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
     setIsBudgetFormOrModalOpen(checkForOpenModalOrForm(budgetFormVisibility, budgetModalVisibility));
@@ -97,8 +96,6 @@ export default function useInitialBudgetData() {
     groupNameOfNewItem,
     setGroupNameOfNewItem,
     isBudgetFormOrModalOpen,
-    perCategoryExpenseTotalThisMonth,
-    setPerCategoryExpenseTotalThisMonth,
     isLoading,
     isError,
     isSuccess,

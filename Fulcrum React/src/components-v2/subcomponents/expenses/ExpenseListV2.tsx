@@ -6,7 +6,6 @@ import {
   ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
   PublicUserData,
-  SelectorOptionsFormattedData,
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types";

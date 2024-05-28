@@ -9,7 +9,6 @@ import {
   RecurringExpenseFormVisibility,
   RecurringExpenseFrequency,
   RecurringExpenseModalVisibility,
-  SelectorOptionsFormattedData,
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types.ts";

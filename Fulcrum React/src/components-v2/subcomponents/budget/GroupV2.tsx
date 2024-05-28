@@ -19,7 +19,7 @@ import { Button } from "@/components-v2/ui/button.tsx";
 import UpdateGroupFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateGroupFormV2.tsx";
 import CreateBudgetFormV2 from "@/components-v2/subcomponents/budget/forms/CreateBudgetFormV2.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { changeFormOrModalVisibility, getCurrencySymbol } from "@/utility/util.ts";
+import { budgetSort, changeFormOrModalVisibility, getCurrencySymbol } from "@/utility/util.ts";
 import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
 import * as React from "react";
 import useDeleteGroup from "@/hooks/mutations/budget/useDeleteGroup.ts";
@@ -148,6 +148,7 @@ export default function GroupV2({
               {budgetArray.length > 0 &&
                 budgetArray
                   .filter((budgetItem) => budgetItem.group === group.group)
+                  .sort(budgetSort)
                   .map((filteredBudgetItem, index) => (
                     <div key={index}>
                       <BudgetTileV2
