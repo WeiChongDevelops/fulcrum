@@ -9,7 +9,7 @@ import {
   ExpenseModalVisibility,
   MonthExpenseGroupEntity,
   PreviousExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../../utility/types.ts";
@@ -21,7 +21,7 @@ interface ExpenseMonthGroupProps {
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
   categoryDataMap: CategoryToIconGroupAndColourMap;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   monthsFromY2KToNow: number;
   monthPanelShowingIndex: number;
   setMonthPanelShowingIndex: Dispatch<SetStateAction<number>>;
@@ -39,7 +39,7 @@ export const ExpenseMonthGroup = memo(
     setOldExpenseBeingEdited,
     setExpenseItemToDelete,
     categoryDataMap,
-    publicUserData,
+    userPreferences,
     monthsFromY2KToNow,
     monthPanelShowingIndex,
     setMonthPanelShowingIndex,
@@ -99,7 +99,7 @@ export const ExpenseMonthGroup = memo(
 
         <AddNewExpenseButton
           setExpenseFormVisibility={setExpenseFormVisibility}
-          isDarkMode={publicUserData.darkModeEnabled}
+          isDarkMode={userPreferences.darkModeEnabled}
           setDefaultCalendarDate={setDefaultCalendarDate}
           monthExpenseGroupItem={monthExpenseGroupItem}
         />
@@ -114,13 +114,13 @@ export const ExpenseMonthGroup = memo(
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                 setExpenseItemToDelete={setExpenseItemToDelete}
                 categoryDataMap={categoryDataMap}
-                publicUserData={publicUserData}
+                userPreferences={userPreferences}
                 key={key}
               />
             );
           })
         ) : (
-          <p className={`text-xs mt-48 select-none ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
+          <p className={`text-xs mt-48 select-none ${userPreferences.darkModeEnabled ? "text-white" : "text-black"}`}>
             No expenses added this month.
           </p>
         )}

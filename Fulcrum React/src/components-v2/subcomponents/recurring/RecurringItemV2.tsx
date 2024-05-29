@@ -5,7 +5,7 @@ import {
   ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
   PreviousRecurringExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseFormVisibility,
   RecurringExpenseFrequency,
   RecurringExpenseModalVisibility,
@@ -46,7 +46,7 @@ interface RecurringItemV2Props {
   oldRecurringExpenseBeingEdited: PreviousRecurringExpenseBeingEdited;
   setRecurringExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
@@ -67,7 +67,7 @@ export default function RecurringItemV2({
   setOldRecurringExpenseBeingEdited,
   oldRecurringExpenseBeingEdited,
   setRecurringExpenseIdToDelete,
-  publicUserData,
+  userPreferences,
 }: RecurringItemV2Props) {
   function handleEditClick() {
     setOldRecurringExpenseBeingEdited({
@@ -100,14 +100,14 @@ export default function RecurringItemV2({
         amount={amount}
         timestamp={timestamp}
         frequency={frequency}
-        currencySymbol={getCurrencySymbol(publicUserData.currency)}
+        currencySymbol={getCurrencySymbol(userPreferences.currency)}
         setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}
         categoryOptions={categoryOptions}
         oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
       />
       <div
         className="expense-item relative saturate-[275%] dark:saturate-[350%]"
-        style={{ backgroundColor: publicUserData.darkModeEnabled ? darkenColor(groupColour, 40) : groupColour }}
+        style={{ backgroundColor: userPreferences.darkModeEnabled ? darkenColor(groupColour, 40) : groupColour }}
         data-value={recurringExpenseId}
       >
         <div className="flex flex-row items-center">
@@ -152,7 +152,7 @@ export default function RecurringItemV2({
             <p className={"font-light"}>Next:</p>
             <p className={"font-bold"}>{nextRecurringInstance && formatDate(nextRecurringInstance)}</p>
           </div>
-          <b className="text-lg 2xl:text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
+          <b className="text-lg 2xl:text-xl">{formatDollarAmountStatic(amount, userPreferences.currency)}</b>
           {/*<div className="flex flex-row items-center ml-2">*/}
           {/*  <button className="circle-button" onClick={handleEditClick}>*/}
           {/*    <img*/}

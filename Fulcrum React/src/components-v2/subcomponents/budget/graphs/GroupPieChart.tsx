@@ -1,6 +1,6 @@
 import { PieChart, Pie, ResponsiveContainer, Sector, Cell } from "recharts";
 import { useState } from "react";
-import { BudgetItemEntity, GroupItemEntity, PublicUserData } from "@/utility/types.ts";
+import { BudgetItemEntity, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import { formatDollarAmountStatic, getCurrencySymbol, useEmail } from "@/utility/util.ts";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -26,7 +26,7 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
     const displayValue = formatDollarAmountStatic(value, currency, true);
 
     const queryClient = useQueryClient();
-    const publicUserData: PublicUserData = queryClient.getQueryData(["publicUserData", useEmail()])!;
+    const userPreferences: UserPreferences = queryClient.getQueryData(["userPreferences", useEmail()])!;
 
     return (
       <g>
@@ -71,7 +71,7 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
           x={ex + (cos >= 0 ? 1 : -1) * 12}
           y={ey}
           textAnchor={textAnchor}
-          fill={publicUserData.darkModeEnabled ? "white" : "#333"}
+          fill={userPreferences.darkModeEnabled ? "white" : "#333"}
         >
           {displayValue}
         </text>
@@ -81,7 +81,7 @@ export default function GroupPieChart({ sortedGroupDataArray, currency }: GroupP
           y={ey}
           dy={18}
           textAnchor={textAnchor}
-          fill={publicUserData.darkModeEnabled ? "white" : "#545353"}
+          fill={userPreferences.darkModeEnabled ? "white" : "#545353"}
         >
           {`(${(percent * 100).toFixed(2)}%)`}
         </text>

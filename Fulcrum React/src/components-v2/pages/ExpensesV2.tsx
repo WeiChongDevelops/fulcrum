@@ -5,7 +5,7 @@ import {
   ExpenseItemEntity,
   GroupItemEntity,
   MonthExpenseGroupEntity,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseItemEntity,
 } from "@/utility/types.ts";
 import useInitialExpenseData from "../../hooks/queries/useInitialExpenseData.ts";
@@ -32,7 +32,7 @@ import { Separator } from "@/components-v2/ui/separator.tsx";
 import { ScrollArea } from "@/components-v2/ui/scroll-area.tsx";
 
 interface ExpensesV2Props {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
@@ -49,7 +49,7 @@ interface ExpensesV2Props {
  * The root component for the expense page.
  */
 export default function ExpensesV2({
-  publicUserData,
+  userPreferences,
   expenseArray,
   budgetArray,
   groupArray,
@@ -138,7 +138,7 @@ export default function ExpensesV2({
         carouselAPI={api!}
         structuredExpenseData={structuredExpenseData}
         startingIndex={startingIndex}
-        publicUserData={publicUserData}
+        userPreferences={userPreferences}
         sideBarOpen={sideBarOpen}
       />
       <ExpenseMonthCarouselV2
@@ -149,7 +149,7 @@ export default function ExpensesV2({
         setOldExpenseBeingEdited={setOldExpenseBeingEdited}
         setExpenseItemToDelete={setExpenseItemToDelete}
         categoryDataMap={categoryDataMap}
-        publicUserData={publicUserData}
+        userPreferences={userPreferences}
         setDefaultCalendarDate={setDefaultCalendarDate}
         setApi={setApi}
         startingIndex={startingIndex}
@@ -164,7 +164,7 @@ export default function ExpensesV2({
       {/*  expenseArray={expenseArray}*/}
       {/*  budgetArray={budgetArray}*/}
       {/*  groupArray={groupArray}*/}
-      {/*  publicUserData={publicUserData}*/}
+      {/*  userPreferences={userPreferences}*/}
       {/*  defaultCalendarDate={defaultCalendarDate}*/}
       {/*  oldExpenseBeingEdited={oldExpenseBeingEdited}*/}
       {/*  expenseItemToDelete={expenseItemToDelete}*/}

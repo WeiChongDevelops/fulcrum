@@ -1,25 +1,25 @@
 import { currencyOptions } from "../../../utility/util.ts";
 import FulcrumButton from "../buttons/FulcrumButton.tsx";
-import useUpdatePublicUserData from "../../../hooks/mutations/other/useUpdatePublicUserData.ts";
-import { PublicUserData } from "../../../utility/types.ts";
+import useUpdateUserPreferences from "../../../hooks/mutations/other/useUpdateUserPreferences.ts";
+import { UserPreferences } from "../../../utility/types.ts";
 
 interface CurrencySelectorProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
  * A visual selector for the user to choose the application's currency. Does not perform conversion.
  */
-export default function CurrencySelector({ publicUserData }: CurrencySelectorProps) {
+export default function CurrencySelector({ userPreferences }: CurrencySelectorProps) {
   return <></>;
-  // const { mutate: updatePublicUserData } = useUpdatePublicUserData();
+  // const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   //
   // async function handleCurrencySelection(e: React.MouseEvent) {
   //   const target = e.target as HTMLDivElement;
   //   const newCurrencySetting = target.innerText.slice(1);
   //
-  //   const updatedPublicUserData: PublicUserData = { ...publicUserData, currency: newCurrencySetting };
-  //   updatePublicUserData(updatedPublicUserData);
+  //   const updatedUserPreferences: UserPreferences = { ...userPreferences, currency: newCurrencySetting };
+  //   updateUserPreferences(updatedUserPreferences);
   // }
   //
   // return (
@@ -28,9 +28,9 @@ export default function CurrencySelector({ publicUserData }: CurrencySelectorPro
   //       return (
   //         <FulcrumButton
   //           displayText={currencyOption.symbol}
-  //           backgroundColour={publicUserData.currency === currencyOption.code ? "grey" : "white"}
+  //           backgroundColour={userPreferences.currency === currencyOption.code ? "grey" : "white"}
   //           onClick={handleCurrencySelection}
-  //           optionalTailwind={`w-32 px-2 text-md ${publicUserData.currency === currencyOption.code && "outline"}`}
+  //           optionalTailwind={`w-32 px-2 text-md ${userPreferences.currency === currencyOption.code && "outline"}`}
   //           hoverShadow={true}
   //           key={key}
   //         />

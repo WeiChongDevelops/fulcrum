@@ -5,7 +5,7 @@ import {
   BudgetItemEntity,
   ExpenseItemEntity,
   GroupItemEntity,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseItemEntity,
 } from "./types.ts";
 import { budgetSort, DEFAULT_CATEGORY_GROUP, DEFAULT_CATEGORY_ICON, expenseSort, groupSort } from "./util.ts";
@@ -727,44 +727,43 @@ export async function getSessionEmailOrNull(): Promise<string | null> {
   }
 }
 
-// Public User Data API //
+// User Preferences API //
 
 /**
- * Retrieves public user data.
+ * Retrieves user preferences.
  */
-export async function getPublicUserData(): Promise<PublicUserData> {
+export async function getUserPreferences(): Promise<UserPreferences> {
   try {
-    const response = await apiClient.get("/getPublicUserData");
-    console.log("Public User Data:");
-    console.log(response.data);
+    const response = await apiClient.get("/getUserPreferences");
+    console.log({ userPreferences: response.data });
     return response.data;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error(`An error occurred while fetching public user data: ${error.message}`);
+      throw new Error(`An error occurred while fetching user preferences: ${error.message}`);
     } else {
-      throw new Error("Unknown error encountered while fetching public user data.");
+      throw new Error("Unknown error encountered while fetching user preferences.");
     }
   }
 }
 
 /**
- * Updates public user data with the specified settings.
- * @param updatedPublicUserData - The updated public user data.
+ * Updates user preferences with the specified settings.
+ * @param updatedUserPreferences - The updated user preferences.
  */
-export async function handlePublicUserDataUpdating(updatedPublicUserData: PublicUserData): Promise<void> {
+export async function handleUserPreferencesUpdating(updatedUserPreferences: UserPreferences): Promise<void> {
   try {
-    const response = await apiClient.put("/updatePublicUserData", {
-      currency: updatedPublicUserData.currency,
-      darkModeEnabled: updatedPublicUserData.darkModeEnabled,
-      accessibilityEnabled: updatedPublicUserData.accessibilityEnabled,
-      profileIconFileName: updatedPublicUserData.profileIconFileName,
+    const response = await apiClient.put("/updateUserPreferences", {
+      currency: updatedUserPreferences.currency,
+      darkModeEnabled: updatedUserPreferences.darkModeEnabled,
+      accessibilityEnabled: updatedUserPreferences.accessibilityEnabled,
+      profileIconFileName: updatedUserPreferences.profileIconFileName,
     });
     console.log(response.data);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error(`Error encountered when requesting public user data update: ${error.message}`);
+      throw new Error(`Error encountered when requesting user preferences update: ${error.message}`);
     } else {
-      throw new Error("Unknown error encountered when requesting public user data update.");
+      throw new Error("Unknown error encountered when requesting user preferences update.");
     }
   }
 }

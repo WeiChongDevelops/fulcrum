@@ -7,7 +7,7 @@ import {
   ExpenseModalVisibility,
   MonthExpenseGroupEntity,
   PreviousExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../utility/types.ts";
@@ -25,7 +25,7 @@ interface ExpenseMonthGroupV2Props {
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
   categoryDataMap: CategoryToIconGroupAndColourMap;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
@@ -43,7 +43,7 @@ export const ExpenseMonthGroupV2 = memo(
     setOldExpenseBeingEdited,
     setExpenseItemToDelete,
     categoryDataMap,
-    publicUserData,
+    userPreferences,
     oldExpenseBeingEdited,
     setDefaultCalendarDate,
     perCategoryExpenseTotalThisMonth,
@@ -77,14 +77,14 @@ export const ExpenseMonthGroupV2 = memo(
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                 setExpenseItemToDelete={setExpenseItemToDelete}
                 categoryDataMap={categoryDataMap}
-                publicUserData={publicUserData}
+                userPreferences={userPreferences}
                 oldExpenseBeingEdited={oldExpenseBeingEdited}
                 key={key}
               />
             );
           })
         ) : (
-          <p className={`text-lg mt-48 select-none ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}>
+          <p className={`text-lg mt-48 select-none ${userPreferences.darkModeEnabled ? "text-white" : "text-black"}`}>
             No expenses added this month.
           </p>
         )}

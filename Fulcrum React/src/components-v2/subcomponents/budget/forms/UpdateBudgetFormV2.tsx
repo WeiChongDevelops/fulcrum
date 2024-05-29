@@ -7,7 +7,7 @@ import {
   BudgetUpdatingFormData,
   GroupItemEntity,
   PreviousBudgetBeingEdited,
-  PublicUserData,
+  UserPreferences,
 } from "@/utility/types.ts";
 import {
   capitaliseFirstLetter,
@@ -75,7 +75,7 @@ export default function UpdateBudgetFormV2({
   // const routerLocation = useContext(LocationContext);
   const { mutate: updateBudget } = useUpdateBudget();
   const { mutate: deleteBudget } = useDeleteBudget();
-  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
 
   const setBudgetModalVisibility = useSetBudgetModalVisibility()!;
 
@@ -174,7 +174,7 @@ export default function UpdateBudgetFormV2({
           {/*  </div>*/}
           {/*</Button>*/}
         </SheetTrigger>
-        <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
+        <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
           <SheetHeader>
             <SheetTitle>Updating Budget Category</SheetTitle>
             <SheetDescription>{`Making changes to the budget for '${oldBudgetBeingEdited.oldCategory}'.`}</SheetDescription>

@@ -4,7 +4,7 @@ import {
   ExpenseItemEntity,
   ExpenseUpdatingFormData,
   PreviousRecurringExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseFormVisibility,
   RecurringExpenseFrequency,
   RecurringExpenseItemEntity,
@@ -62,7 +62,7 @@ export default function UpdateRecurringFormV2({
     frequency: oldRecurringExpenseBeingEdited.oldFrequency,
   });
   const { mutate: updateRecurringExpense } = useUpdateRecurringExpense();
-  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
 
   useEffect(() => {
     setFormData({
@@ -125,7 +125,7 @@ export default function UpdateRecurringFormV2({
     >
       <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>
         <SheetTrigger onClick={updateOldRecurringBeingEdited} className={"w-full h-full"}></SheetTrigger>
-        <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
+        <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
           <SheetHeader>
             <SheetTitle>Updating Recurring Expense</SheetTitle>
             <SheetDescription>{`Making changes to your existing recurring expense.`}</SheetDescription>

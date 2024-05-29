@@ -5,7 +5,7 @@ import {
   getBudgetList,
   getExpenseList,
   getGroupList,
-  getPublicUserData,
+  getUserPreferences,
   getRecurringExpenseList,
   getSessionEmailOrNull,
 } from "@/utility/api.ts";
@@ -15,7 +15,7 @@ import {
   CategoryToIconGroupAndColourMap,
   ExpenseItemEntity,
   GroupItemEntity,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseItemEntity,
 } from "@/utility/types.ts";
 import { useState } from "react";
@@ -44,8 +44,8 @@ export function useGlobalAppData() {
       { queryKey: ["recurringExpenseArray", email], queryFn: getRecurringExpenseList, enabled: retrievalConditions },
       { queryKey: ["blacklistedExpenseArray", email], queryFn: getBlacklistedExpenses, enabled: retrievalConditions },
       {
-        queryKey: ["publicUserData", email],
-        queryFn: getPublicUserData,
+        queryKey: ["userPreferences", email],
+        queryFn: getUserPreferences,
         enabled: retrievalConditions,
         initialData: {
           createdAt: new Date(),
@@ -64,14 +64,14 @@ export function useGlobalAppData() {
     expenseArrayQuery,
     recurringExpenseArrayQuery,
     blacklistedExpenseArrayQuery,
-    publicUserDataQuery,
+    userPreferencesQuery,
   ] = globalAppDataQueries;
 
-  if (!!publicUserDataQuery.data) {
-    const publicUserData = publicUserDataQuery.data as PublicUserData;
-    sessionStorage.setItem("profileIconFileName", publicUserData.profileIconFileName);
-    sessionStorage.setItem("darkModeEnabled", publicUserData.darkModeEnabled.toString());
-    sessionStorage.setItem("accessibilityEnabled", publicUserData.accessibilityEnabled.toString());
+  if (!!userPreferencesQuery.data) {
+    const userPreferences = userPreferencesQuery.data as UserPreferences;
+    sessionStorage.setItem("profileIconFileName", userPreferences.profileIconFileName);
+    sessionStorage.setItem("darkModeEnabled", userPreferences.darkModeEnabled.toString());
+    sessionStorage.setItem("accessibilityEnabled", userPreferences.accessibilityEnabled.toString());
   }
 
   const categoryDataMapQuery = useQuery({
@@ -103,7 +103,7 @@ export function useGlobalAppData() {
     expenseArray: expenseArrayQuery.data as ExpenseItemEntity[],
     recurringExpenseArray: recurringExpenseArrayQuery.data as RecurringExpenseItemEntity[],
     blacklistedExpenseArray: blacklistedExpenseArrayQuery.data as BlacklistedExpenseItemEntity[],
-    publicUserData: publicUserDataQuery.data as PublicUserData,
+    userPreferences: userPreferencesQuery.data as UserPreferences,
     categoryDataMap: categoryDataMapQuery.data as CategoryToIconGroupAndColourMap,
     perCategoryExpenseTotalThisMonth,
     setPerCategoryExpenseTotalThisMonth,

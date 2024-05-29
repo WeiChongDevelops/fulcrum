@@ -19,7 +19,7 @@ import {
   ExpenseItemEntity,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../../utility/types.ts";
@@ -42,7 +42,7 @@ interface GroupProps {
   setGroupToDelete: Dispatch<SetStateAction<string>>;
   setCategoryToDelete: Dispatch<SetStateAction<string>>;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
@@ -61,7 +61,7 @@ export default function Group({
   setCategoryToDelete,
   setModalFormVisibility,
   perCategoryExpenseTotalThisMonth,
-  publicUserData,
+  userPreferences,
 }: GroupProps) {
   // const routerLocation = useLocation();
   //
@@ -94,7 +94,7 @@ export default function Group({
   //   setGroupExpenditureTotal(getGroupExpenditureTotal(expenseArray, filteredBudgetArray));
   // }, [filteredBudgetArray, expenseArray, routerLocation]);
   //
-  // const currency = publicUserData.currency;
+  // const currency = userPreferences.currency;
   // const isMiscellaneous = groupName === DEFAULT_CATEGORY_GROUP;
   // const currentMonth = monthStringArray[new Date().getMonth()];
 
@@ -104,7 +104,7 @@ export default function Group({
     //   className="group flex flex-col w-[96vw] rounded-xl p-2 mb-5"
     //   style={{
     //     backgroundColor: groupColour,
-    //     filter: publicUserData.darkModeEnabled ? "brightness(83%) contrast(113%)" : "brightness(100%)",
+    //     filter: userPreferences.darkModeEnabled ? "brightness(83%) contrast(113%)" : "brightness(100%)",
     //   }}
     // >
     //   <div className="flex flex-row justify-between items-center mb-4">
@@ -143,7 +143,7 @@ export default function Group({
     //           setModalFormVisibility={setModalFormVisibility}
     //           setCategoryToDelete={setCategoryToDelete}
     //           perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-    //           publicUserData={publicUserData}
+    //           userPreferences={userPreferences}
     //           key={key}
     //         />
     //       ))}

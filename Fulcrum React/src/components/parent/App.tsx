@@ -48,7 +48,7 @@ export default function App() {
     expenseArray,
     recurringExpenseArray,
     blacklistedExpenseArray,
-    publicUserData,
+    userPreferences,
     categoryDataMap,
     perCategoryExpenseTotalThisMonth,
     setPerCategoryExpenseTotalThisMonth,
@@ -96,20 +96,20 @@ export default function App() {
               path="/app/"
               element={
                 <FulcrumV2
-                  publicUserData={publicUserData}
+                  userPreferences={userPreferences}
                   sideBarOpen={sideBarOpen}
                   isAnyLoading={isAnyLoading}
                   setSideBarOpen={setSideBarOpen}
                 />
               }
             >
-              {/*<Route path="/app/" element={<Fulcrum publicUserData={publicUserData} isAnyLoading={isAnyLoading} />}>*/}
+              {/*<Route path="/app/" element={<Fulcrum userPreferences={userPreferences} isAnyLoading={isAnyLoading} />}>*/}
               {/*  <Route index element={<Navigate replace to="budget" />} />*/}
               {/*<Route*/}
               {/*  path="expenses"*/}
               {/*  element={*/}
               {/*    <Expenses*/}
-              {/*      publicUserData={publicUserData}*/}
+              {/*      userPreferences={userPreferences}*/}
               {/*      expenseArray={expenseArray}*/}
               {/*      budgetArray={budgetArray}*/}
               {/*      groupArray={groupArray}*/}
@@ -123,7 +123,7 @@ export default function App() {
               {/*  path="budget"*/}
               {/*  element={*/}
               {/*    <Budget*/}
-              {/*      publicUserData={publicUserData}*/}
+              {/*      userPreferences={userPreferences}*/}
               {/*      expenseArray={expenseArray}*/}
               {/*      budgetArray={budgetArray}*/}
               {/*      groupArray={groupArray}*/}
@@ -134,7 +134,7 @@ export default function App() {
               {/*  path="tools"*/}
               {/*  element={*/}
               {/*    <Tools*/}
-              {/*      publicUserData={publicUserData}*/}
+              {/*      userPreferences={userPreferences}*/}
               {/*      expenseArray={expenseArray}*/}
               {/*      budgetArray={budgetArray}*/}
               {/*      groupArray={groupArray}*/}
@@ -147,7 +147,7 @@ export default function App() {
                 path="expenses"
                 element={
                   <ExpensesV2
-                    publicUserData={publicUserData}
+                    userPreferences={userPreferences}
                     expenseArray={expenseArray}
                     budgetArray={budgetArray}
                     groupArray={groupArray}
@@ -163,7 +163,7 @@ export default function App() {
                 path="recurring"
                 element={
                   <RecurringExpensesV2
-                    publicUserData={publicUserData}
+                    userPreferences={userPreferences}
                     expenseArray={expenseArray}
                     budgetArray={budgetArray}
                     groupArray={groupArray}
@@ -174,12 +174,12 @@ export default function App() {
                   />
                 }
               />
-              <Route path="settings" element={<SettingsV2 publicUserData={publicUserData} />} />
+              <Route path="settings" element={<SettingsV2 userPreferences={userPreferences} />} />
               <Route
                 path="budget"
                 element={
                   <BudgetV2
-                    publicUserData={publicUserData}
+                    userPreferences={userPreferences}
                     expenseArray={expenseArray}
                     budgetArray={budgetArray}
                     groupArray={groupArray}
@@ -194,7 +194,7 @@ export default function App() {
               {/*  path="tools"*/}
               {/*  element={*/}
               {/*    <ToolsV2*/}
-              {/*      publicUserData={publicUserData}*/}
+              {/*      userPreferences={userPreferences}*/}
               {/*      expenseArray={expenseArray}*/}
               {/*      budgetArray={budgetArray}*/}
               {/*      groupArray={groupArray}*/}

@@ -7,17 +7,17 @@ import {
 } from "../../../../utility/util.ts";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import ProfileIconSelector from "../../selectors/ProfileIconSelector.tsx";
-import useUpdatePublicUserData from "../../../../hooks/mutations/other/useUpdatePublicUserData.ts";
+import useUpdateUserPreferences from "../../../../hooks/mutations/other/useUpdateUserPreferences.ts";
 import {
   ProfileIconUpdatingFormData,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   ToolsFormVisibility,
 } from "../../../../utility/types.ts";
 interface ProfileIconUpdatingFormProps {
   oldIconFileName: string;
   setToolsFormVisibility: SetFormVisibility<ToolsFormVisibility>;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
@@ -26,13 +26,13 @@ interface ProfileIconUpdatingFormProps {
 export default function ProfileIconUpdatingForm({
   oldIconFileName,
   setToolsFormVisibility,
-  publicUserData,
+  userPreferences,
 }: ProfileIconUpdatingFormProps) {
   const [formData, setFormData] = useState<ProfileIconUpdatingFormData>({
     iconPath: oldIconFileName,
   });
   const formRef = useRef<HTMLDivElement>(null);
-  const { mutate: updatePublicUserData } = useUpdatePublicUserData();
+  const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const routerLocation = useLocation();
 
   useEffect(() => {
@@ -58,8 +58,8 @@ export default function ProfileIconUpdatingForm({
     e.preventDefault();
     hideForm();
 
-    const updatedPublicUserData: PublicUserData = { ...publicUserData, profileIconFileName: formData.iconPath };
-    updatePublicUserData(updatedPublicUserData);
+    const updatedUserPreferences: UserPreferences = { ...userPreferences, profileIconFileName: formData.iconPath };
+    updateUserPreferences(updatedUserPreferences);
   }
 
   return (

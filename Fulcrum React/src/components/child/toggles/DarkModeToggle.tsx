@@ -1,30 +1,30 @@
 import { useState, useEffect, useContext } from "react";
-import useUpdatePublicUserData from "../../../hooks/mutations/other/useUpdatePublicUserData.ts";
-import { PublicUserData } from "../../../utility/types.ts";
+import useUpdateUserPreferences from "../../../hooks/mutations/other/useUpdateUserPreferences.ts";
+import { UserPreferences } from "../../../utility/types.ts";
 import { LocationContext, useLocation } from "../../../utility/util.ts";
 
 interface DarkModeToggleProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
  * A toggle for the user to choose between light and dark mode.
  */
-export default function DarkModeToggle({ publicUserData }: DarkModeToggleProps) {
-  const [isDarkMode, setIsDarkMode] = useState(publicUserData.darkModeEnabled);
-  const { mutate: updatePublicUserData } = useUpdatePublicUserData();
+export default function DarkModeToggle({ userPreferences }: DarkModeToggleProps) {
+  const [isDarkMode, setIsDarkMode] = useState(userPreferences.darkModeEnabled);
+  const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const routerLocation = useLocation();
 
   useEffect(() => {
-    setIsDarkMode(publicUserData.darkModeEnabled);
-  }, [publicUserData.darkModeEnabled, routerLocation]);
+    setIsDarkMode(userPreferences.darkModeEnabled);
+  }, [userPreferences.darkModeEnabled, routerLocation]);
 
   async function handleDarkModeToggle() {
     const newIsDarkMode = !isDarkMode;
     setIsDarkMode(newIsDarkMode);
 
-    const updatedPublicUserData: PublicUserData = { ...publicUserData, darkModeEnabled: newIsDarkMode };
-    updatePublicUserData(updatedPublicUserData);
+    const updatedUserPreferences: UserPreferences = { ...userPreferences, darkModeEnabled: newIsDarkMode };
+    updateUserPreferences(updatedUserPreferences);
   }
 
   return (

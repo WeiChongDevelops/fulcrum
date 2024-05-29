@@ -31,7 +31,7 @@ describe("BudgetTile", () => {
     setModalFormVisibility: mockSetModalFormVisibility,
     setCategoryToDelete: mockSetCategoryToDelete,
     perCategoryExpenseTotalThisMonth: new Map([["Groceries", 150]]),
-    publicUserData: {
+    userPreferences: {
       createdAt: new Date(),
       currency: "AUD",
       profileIconFileName: "profile-icon-default",

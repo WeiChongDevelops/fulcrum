@@ -1,4 +1,4 @@
-import { PublicUserData, SettingsFormVisibility, SettingsModalVisibility } from "@/utility/types.ts";
+import { UserPreferences, SettingsFormVisibility, SettingsModalVisibility } from "@/utility/types.ts";
 import { useContext, useEffect, useRef, useState } from "react";
 import { checkForOpenModalOrForm, LocationContext } from "@/utility/util.ts";
 import SettingsHeaderV2 from "@/components-v2/subcomponents/settings/SettingsHeaderV2.tsx";
@@ -21,13 +21,13 @@ import AccessibilityToggle from "@/components-v2/subcomponents/other/Accessibili
 import { CalendarStar, Globe, Lock, PaintBrushBroad, PersonSimpleCircle, Scales } from "@phosphor-icons/react";
 
 interface SettingsV2Props {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
  * The root component for the settings page.
  */
-export default function SettingsV2({ publicUserData }: SettingsV2Props) {
+export default function SettingsV2({ userPreferences }: SettingsV2Props) {
   // const [settingsFormVisibility, setSettingsFormVisibility] = useState<SettingsFormVisibility>({
   //   typeDeleteMyExpensesForm: false,
   //   typeDeleteMyBudgetForm: false,
@@ -58,28 +58,28 @@ export default function SettingsV2({ publicUserData }: SettingsV2Props) {
 
   return (
     <div className={"flex flex-col justify-start items-center relative"}>
-      <SettingsHeaderV2 publicUserData={publicUserData} />
+      <SettingsHeaderV2 userPreferences={userPreferences} />
       <div className={"flex flex-col justify-start items-center gap-3.5 w-[95%] h-[94%] mt-[6vh] pt-8 font-extralight"}>
         <div className={"settings-row outline outline-[1px] outline-primary text-primary shadow h-14"}>
           <Globe size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Currency</b>
-          {/*<CurrencySelector publicUserData={publicUserData} />*/}
-          <CurrencySelectorV2 publicUserData={publicUserData} className={"w-28  text-primary font-medium bg-background"} />
+          {/*<CurrencySelector userPreferences={userPreferences} />*/}
+          <CurrencySelectorV2 userPreferences={userPreferences} className={"w-28  text-primary font-medium bg-background"} />
         </div>
 
         <div className={"settings-row outline outline-[1px] outline-primary text-primary shadow h-14"}>
           <PaintBrushBroad size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Theme</b>
-          {/*<DarkModeToggleV2 publicUserData={publicUserData} />*/}
+          {/*<DarkModeToggleV2 userPreferences={userPreferences} />*/}
 
-          <ThemeToggle publicUserData={publicUserData} className={"mr-2"} hideDescriptor />
+          <ThemeToggle userPreferences={userPreferences} className={"mr-2"} hideDescriptor />
         </div>
 
         <div className={"settings-row outline outline-[1px] outline-primary text-primary shadow h-14"}>
           <PersonSimpleCircle size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Accessibility</b>
-          {/*<AccessibilityToggleV2 publicUserData={publicUserData} />*/}
-          <AccessibilityToggle publicUserData={publicUserData} className={"mr-2"} hideDescriptor />
+          {/*<AccessibilityToggleV2 userPreferences={userPreferences} />*/}
+          <AccessibilityToggle userPreferences={userPreferences} className={"mr-2"} hideDescriptor />
         </div>
 
         <div className={"settings-row outline outline-[1px] outline-primary text-primary shadow h-14"}>
@@ -104,7 +104,7 @@ export default function SettingsV2({ publicUserData }: SettingsV2Props) {
         <div className={"settings-row outline outline-[1px] outline-primary text-primary shadow h-14"}>
           <CalendarStar size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Joined On</b>
-          <p>{new Date(publicUserData.createdAt).toLocaleDateString()}</p>
+          <p>{new Date(userPreferences.createdAt).toLocaleDateString()}</p>
         </div>
 
         <div className={"settings-row wipe-options"}>

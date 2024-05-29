@@ -1,25 +1,25 @@
 import { Button } from "@/components-v2/ui/button.tsx";
-import { PublicUserData } from "@/utility/types.ts";
+import { UserPreferences } from "@/utility/types.ts";
 import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
 import MonthlyIncomeV2 from "@/components-v2/subcomponents/budget/MonthlyIncomeV2.tsx";
 import ReactCountryFlag from "react-country-flag";
 import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
 
 interface BudgetHeaderV2Props {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   totalIncome: number;
   sideBarOpen: boolean;
 }
 
-export default function BudgetHeaderV2({ publicUserData, totalIncome, sideBarOpen }: BudgetHeaderV2Props) {
+export default function BudgetHeaderV2({ userPreferences, totalIncome, sideBarOpen }: BudgetHeaderV2Props) {
   return (
     <div
       className={`fixed flex flex-row z-40 gap-4 justify-start items-center self-end text-primary bg-primary-foreground border-b-2 ${sideBarOpen ? "w-[calc(100vw-13rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}
     >
-      <MonthlyIncomeV2 publicUserData={publicUserData} className={"ml-10"} totalIncome={totalIncome} />
+      <MonthlyIncomeV2 userPreferences={userPreferences} className={"ml-10"} totalIncome={totalIncome} />
       <div className={"flex flex-row justify-center items-center gap-2 ml-auto mr-2"}>
         <p className={"mr-4 font-medium text-base"}>Budget</p>
-        <CurrencySelectorV2 publicUserData={publicUserData} className={"w-26 mx-0 outline-none border-none shadow-none"} />
+        <CurrencySelectorV2 userPreferences={userPreferences} className={"w-26 mx-0 outline-none border-none shadow-none"} />
 
         <Button variant={"ghost"} className={"px-2.5 mr-2"}>
           <svg

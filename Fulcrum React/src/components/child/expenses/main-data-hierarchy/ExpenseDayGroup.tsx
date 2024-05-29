@@ -9,7 +9,7 @@ import {
   ExpenseItemEntity,
   ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../../utility/types.ts";
@@ -24,7 +24,7 @@ interface ExpenseDayGroupProps {
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
@@ -37,7 +37,7 @@ export default function ExpenseDayGroup({
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
   categoryDataMap,
-  publicUserData,
+  userPreferences,
 }: ExpenseDayGroupProps) {
   const expenseDayGroupCalendarDate = new Date(dayExpenseGroup.calendarDate).toLocaleDateString();
   const dateStringToday = new Date().toLocaleDateString();
@@ -52,7 +52,7 @@ export default function ExpenseDayGroup({
   return (
     <div className="my-4">
       <div
-        className={`flex flex-row justify-between items-center relative ${publicUserData.darkModeEnabled ? "text-white" : "text-black"}`}
+        className={`flex flex-row justify-between items-center relative ${userPreferences.darkModeEnabled ? "text-white" : "text-black"}`}
       >
         <p className="text-3xl font-bold">
           {expenseDayGroupCalendarDate === dateStringToday
@@ -61,8 +61,8 @@ export default function ExpenseDayGroup({
               ? "Yesterday"
               : formatDate(dayExpenseGroup.calendarDate)}
         </p>
-        <div className={`dotted-line ${publicUserData.darkModeEnabled && "dotted-line-dark"}`}></div>
-        <p className="text-3xl font-bold">{formatDollarAmountStatic(dayTotal, publicUserData.currency)}</p>
+        <div className={`dotted-line ${userPreferences.darkModeEnabled && "dotted-line-dark"}`}></div>
+        <p className="text-3xl font-bold">{formatDollarAmountStatic(dayTotal, userPreferences.currency)}</p>
       </div>
       {dayExpenseGroup.dayExpenseArray.length > 0 && (
         <ExpenseList
@@ -72,7 +72,7 @@ export default function ExpenseDayGroup({
           setOldExpenseBeingEdited={setOldExpenseBeingEdited}
           setExpenseItemToDelete={setExpenseItemToDelete}
           categoryDataMap={categoryDataMap}
-          publicUserData={publicUserData}
+          userPreferences={userPreferences}
         />
       )}
     </div>

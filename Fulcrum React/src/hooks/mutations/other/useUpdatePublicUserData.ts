@@ -2,25 +2,25 @@ import { useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
-import { PublicUserData } from "../../../utility/types.ts";
-import { handlePublicUserDataUpdating } from "../../../utility/api.ts";
+import { UserPreferences } from "../../../utility/types.ts";
+import { handleUserPreferencesUpdating } from "../../../utility/api.ts";
 
-export default function useUpdatePublicUserData() {
+export default function useUpdateUserPreferences() {
   const email = useEmail();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["publicUserData", email],
-    mutationFn: (updatedPublicUserData: PublicUserData) => handlePublicUserDataUpdating(updatedPublicUserData),
-    onMutate: async (updatedPublicUserData: PublicUserData) => {
-      await queryClient.cancelQueries({ queryKey: ["publicUserData", email] });
-      const publicUserDataBeforeOptimisticUpdate = queryClient.getQueryData(["publicUserData", email]);
-      await queryClient.setQueryData(["publicUserData", email], updatedPublicUserData);
+    mutationKey: ["userPreferences", email],
+    mutationFn: (updatedUserPreferences: UserPreferences) => handleUserPreferencesUpdating(updatedUserPreferences),
+    onMutate: async (updatedUserPreferences: UserPreferences) => {
+      await queryClient.cancelQueries({ queryKey: ["userPreferences", email] });
+      const userPreferencesBeforeOptimisticUpdate = queryClient.getQueryData(["userPreferences", email]);
+      await queryClient.setQueryData(["userPreferences", email], updatedUserPreferences);
       toast.success("Preferences updated!");
-      return { publicUserDataBeforeOptimisticUpdate };
+      return { userPreferencesBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {
-      queryClient.setQueryData(["publicUserData", email], context?.publicUserDataBeforeOptimisticUpdate);
+      queryClient.setQueryData(["userPreferences", email], context?.userPreferencesBeforeOptimisticUpdate);
       toast.error(
         "Oops! We couldn’t save your changes due to a network issue. We’ve restored your last settings. Please try again later.",
         {
@@ -29,7 +29,7 @@ export default function useUpdatePublicUserData() {
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["publicUserData", email] });
+      queryClient.invalidateQueries({ queryKey: ["userPreferences", email] });
     },
   });
 }

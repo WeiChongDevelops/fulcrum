@@ -4,7 +4,7 @@ import {
   CategoryToIconGroupAndColourMap,
   ExpenseItemEntity,
   GroupItemEntity,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseItemEntity,
 } from "@/utility/types.ts";
 import { useContext, useEffect } from "react";
@@ -19,7 +19,7 @@ import RecurringItemV2 from "@/components-v2/subcomponents/recurring/RecurringIt
 import CreateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/CreateExpenseFormV2.tsx";
 
 interface RecurringExpensesV2Props {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
@@ -33,7 +33,7 @@ interface RecurringExpensesV2Props {
  * The root component for the recurring expense page.
  */
 export default function RecurringExpensesV2({
-  publicUserData,
+  userPreferences,
   expenseArray,
   budgetArray,
   groupArray,
@@ -73,7 +73,7 @@ export default function RecurringExpensesV2({
 
   return (
     <div className={"flex flex-col justify-start items-center h-screen"}>
-      <RecurringExpensesHeaderV2 sideBarOpen={sideBarOpen} publicUserData={publicUserData} />
+      <RecurringExpensesHeaderV2 sideBarOpen={sideBarOpen} userPreferences={userPreferences} />
       <ScrollArea className={"w-full h-[94vh] pt-8"}>
         <CreateExpenseFormV2
           categoryDataMap={categoryDataMap}
@@ -101,7 +101,7 @@ export default function RecurringExpensesV2({
                   setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}
                   oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
                   setRecurringExpenseIdToDelete={setRecurringExpenseIdToDelete}
-                  publicUserData={publicUserData}
+                  userPreferences={userPreferences}
                   key={key}
                 />
               );
@@ -119,14 +119,14 @@ export default function RecurringExpensesV2({
         setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
         setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
         recurringExpenseIdToDelete={recurringExpenseIdToDelete}
-        publicUserData={publicUserData}
+        userPreferences={userPreferences}
         budgetArray={budgetArray}
         oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
       />
     </div>
     // <>
     //   <div
-    //     className={`justify-start items-center min-h-screen relative ${publicUserData.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
+    //     className={`justify-start items-center min-h-screen relative ${userPreferences.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
     //   >
     //     <div>
     //       <div
@@ -171,7 +171,7 @@ export default function RecurringExpensesV2({
     //                   setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
     //                   setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}
     //                   setRecurringExpenseIdToDelete={setRecurringExpenseIdToDelete}
-    //                   publicUserData={publicUserData}
+    //                   userPreferences={userPreferences}
     //                   key={key}
     //                 />
     //               );
@@ -192,7 +192,7 @@ export default function RecurringExpensesV2({
     //         setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
     //         setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
     //         recurringExpenseIdToDelete={recurringExpenseIdToDelete}
-    //         publicUserData={publicUserData}
+    //         userPreferences={userPreferences}
     //         budgetArray={budgetArray}
     //         oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
     //       />

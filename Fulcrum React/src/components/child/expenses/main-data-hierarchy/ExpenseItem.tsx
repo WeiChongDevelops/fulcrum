@@ -6,7 +6,7 @@ import {
   ExpenseItemEntity,
   ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../../utility/types.ts";
@@ -29,7 +29,7 @@ interface ExpenseItemProps {
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
 
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
@@ -48,7 +48,7 @@ export default function ExpenseItem({
   setExpenseModalVisibility,
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
-  publicUserData,
+  userPreferences,
 }: ExpenseItemProps) {
   function handleEditClick() {
     setOldExpenseBeingEdited({
@@ -108,7 +108,7 @@ export default function ExpenseItem({
             className={"w-8 h-8 mr-6"}
           />
         )}
-        <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
+        <b className="text-xl">{formatDollarAmountStatic(amount, userPreferences.currency)}</b>
         <div className="flex flex-row items-center ml-2">
           <button className="circle-button" onClick={handleEditClick}>
             <img

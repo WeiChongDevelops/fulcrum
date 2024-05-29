@@ -12,14 +12,14 @@ import {
   ExpenseItemEntity,
   GroupItemEntity,
   OpenToolsSection,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseItemEntity,
 } from "../../../../utility/types.ts";
 import "../../../../css/Expense.css";
 
 interface RecurringExpensesProps {
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
@@ -32,7 +32,7 @@ interface RecurringExpensesProps {
  */
 export default function RecurringExpenses({
   setOpenToolsSection,
-  publicUserData,
+  userPreferences,
   expenseArray,
   budgetArray,
   groupArray,
@@ -62,7 +62,7 @@ export default function RecurringExpenses({
   return (
     <>
       <div
-        className={`justify-start items-center min-h-screen relative ${publicUserData.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
+        className={`justify-start items-center min-h-screen relative ${userPreferences.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
       >
         <div>
           <div
@@ -124,7 +124,7 @@ export default function RecurringExpenses({
                       setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
                       setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}
                       setRecurringExpenseIdToDelete={setRecurringExpenseIdToDelete}
-                      publicUserData={publicUserData}
+                      userPreferences={userPreferences}
                       key={key}
                     />
                   );
@@ -145,7 +145,7 @@ export default function RecurringExpenses({
             setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
             setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
             recurringExpenseIdToDelete={recurringExpenseIdToDelete}
-            publicUserData={publicUserData}
+            userPreferences={userPreferences}
             budgetArray={budgetArray}
             oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
           />

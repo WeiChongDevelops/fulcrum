@@ -4,7 +4,7 @@ import {
   ExpenseItemEntity,
   ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types.ts";
@@ -38,7 +38,7 @@ interface ExpenseItemV2Props {
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
 
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   categoryOptions: DropdownSelectorOption[];
 }
 
@@ -59,7 +59,7 @@ export default function ExpenseItemV2({
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
   oldExpenseBeingEdited,
-  publicUserData,
+  userPreferences,
   categoryOptions,
 }: ExpenseItemV2Props) {
   function handleEditClick() {
@@ -90,7 +90,7 @@ export default function ExpenseItemV2({
   }
 
   const isMiscellaneous = groupName === DEFAULT_CATEGORY_GROUP;
-  const currencySymbol = getCurrencySymbol(publicUserData.currency);
+  const currencySymbol = getCurrencySymbol(userPreferences.currency);
 
   return (
     <div className={"relative"}>
@@ -122,7 +122,7 @@ export default function ExpenseItemV2({
       <div
         className="expense-item relative saturate-[275%] dark:saturate-[350%]"
         style={{
-          backgroundColor: publicUserData.darkModeEnabled ? darkenColor(groupColour, 40) : darkenColor(groupColour, 5),
+          backgroundColor: userPreferences.darkModeEnabled ? darkenColor(groupColour, 40) : darkenColor(groupColour, 5),
         }}
         data-value={expenseId}
       >
@@ -163,7 +163,7 @@ export default function ExpenseItemV2({
               />
             </svg>
           )}
-          <b className="text-lg 2xl:text-xl mr-2">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
+          <b className="text-lg 2xl:text-xl mr-2">{formatDollarAmountStatic(amount, userPreferences.currency)}</b>
         </div>
       </div>
     </div>

@@ -27,7 +27,7 @@ import {
   ExpenseCreationFormData,
   ExpenseFormVisibility,
   ExpenseItemEntity,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseFormVisibility,
   RecurringExpenseItemEntity,
   DropdownSelectorOption,
@@ -63,7 +63,7 @@ export default function CreateExpenseFormV2({
 
   const { mutate: createExpense } = useCreateExpense();
   const { mutate: createRecurringExpense } = useCreateRecurringExpense();
-  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const [formData, setFormData] = useState<ExpenseCreationFormData>({
     category: "Other",
     amount: 0,
@@ -171,13 +171,13 @@ export default function CreateExpenseFormV2({
         <Button
           asChild
           variant={"empty"}
-          className={`w-[95%] h-14 mb-2 border-2 border-dashed border-primary rounded-lg hover:rounded-3xl hover:bg-zinc-100 transition-all duration-300 ease-out font-semibold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`}
+          className={`w-[95%] h-14 mb-2 border-2 border-dashed border-primary rounded-lg hover:rounded-3xl hover:bg-zinc-100 transition-all duration-300 ease-out font-semibold ${userPreferences.darkModeEnabled && "create-expense-button-dark"}`}
         >
           <p>{`+ Add ${mustBeRecurring ? "Recurring " : ""}Expense`}</p>
         </Button>
       </SheetTrigger>
       <SheetOverlay>
-        <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
+        <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
           <SheetHeader>
             <SheetTitle>{mustBeRecurring ? "New Recurring Expense" : "New Expense Entry"}</SheetTitle>
             <SheetDescription>
@@ -199,7 +199,7 @@ export default function CreateExpenseFormV2({
                 Amount
               </Label>
               <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-primary text-sm">
-                {getCurrencySymbol(publicUserData.currency)}
+                {getCurrencySymbol(userPreferences.currency)}
               </b>
               <Input
                 type="text"

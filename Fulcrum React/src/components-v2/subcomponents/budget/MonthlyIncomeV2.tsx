@@ -1,5 +1,5 @@
 import { formatDollarAmountStatic, getCurrencySymbol, handleInputChangeOnFormWithAmount } from "@/utility/util.ts";
-import { PublicUserData } from "@/utility/types.ts";
+import { UserPreferences } from "@/utility/types.ts";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { cn } from "@/lib/utils.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
@@ -10,12 +10,12 @@ import useUpdateTotalIncome from "@/hooks/mutations/budget/useUpdateTotalIncome.
 import * as React from "react";
 
 interface MonthlyIncomeV2Props {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   className?: string;
   totalIncome: number;
 }
 
-export default function MonthlyIncomeV2({ publicUserData, className, totalIncome }: MonthlyIncomeV2Props) {
+export default function MonthlyIncomeV2({ userPreferences, className, totalIncome }: MonthlyIncomeV2Props) {
   const [formData, setFormData] = useState({ amount: totalIncome });
   const [incomeFormIsVisible, setIncomeFormIsVisible] = useState(false);
 
@@ -43,7 +43,7 @@ export default function MonthlyIncomeV2({ publicUserData, className, totalIncome
     >
       <span className={"font-light"}>Monthly Income: </span>
       <span className={"font-bold ml-1 mr-auto"}>
-        {!!totalIncome ? formatDollarAmountStatic(totalIncome, publicUserData.currency) : ""}
+        {!!totalIncome ? formatDollarAmountStatic(totalIncome, userPreferences.currency) : ""}
       </span>
       <Sheet open={incomeFormIsVisible} onOpenChange={setIncomeFormIsVisible}>
         <SheetTrigger className={"standard-edit-delete-button"}>
@@ -76,7 +76,7 @@ export default function MonthlyIncomeV2({ publicUserData, className, totalIncome
                 Amount
               </Label>
               <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-black text-sm">
-                {getCurrencySymbol(publicUserData.currency)}
+                {getCurrencySymbol(userPreferences.currency)}
               </b>
               <Input
                 type="text"

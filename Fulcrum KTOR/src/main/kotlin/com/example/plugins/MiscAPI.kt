@@ -137,16 +137,16 @@ fun Application.configureOtherRouting() {
         }
 
 
-        // PUBLIC USER DATA //
+        // USER PREFERENCES //
 
-        get("/api/getPublicUserData") {
+        get("/api/getUserPreferences") {
             try {
                 val userData =
-                    supabase.postgrest["public_user_data"].select(
+                    supabase.postgrest["user_preferences"].select(
                         columns = Columns.list("currency, createdAt, darkModeEnabled, accessibilityEnabled, profileIconFileName")
                     ) {
                         eq("userId", getActiveUserId())
-                    }.decodeSingle<PublicUserDataResponse>()
+                    }.decodeSingle<UserPreferencesResponse>()
                 call.respond(HttpStatusCode.OK, userData)
             } catch (e: UnauthorizedRestException) {
                 call.application.log.error("Not authorised - JWT token likely expired.", e)
@@ -155,34 +155,34 @@ fun Application.configureOtherRouting() {
                 call.application.log.error("Session not found.", e)
                 call.respondAuthError("Session not found: $e")
             } catch (e: Exception) {
-                call.application.log.error("Error while retrieving public user data", e)
-                call.respondError("Error while retrieving public user data: $e")
+                call.application.log.error("Error while retrieving user preferences", e)
+                call.respondError("Error while retrieving user preferences: $e")
             }
         }
 
-        put("/api/updatePublicUserData") {
+        put("/api/updateUserPreferences") {
             try {
-                val publicUserDataUpdateRequest = call.receive<PublicUserDataUpdateRequestReceived>()
+                val userPreferencesUpdateRequest = call.receive<UserPreferencesUpdateRequestReceived>()
 
-                val updatedItem = supabase.postgrest["public_user_data"].update(
+                val updatedItem = supabase.postgrest["user_preferences"].update(
                     {
-                        set("currency", publicUserDataUpdateRequest.currency)
-                        set("darkModeEnabled", publicUserDataUpdateRequest.darkModeEnabled)
-                        set("accessibilityEnabled", publicUserDataUpdateRequest.accessibilityEnabled)
-                        set("profileIconFileName", publicUserDataUpdateRequest.profileIconFileName)
+                        set("currency", userPreferencesUpdateRequest.currency)
+                        set("darkModeEnabled", userPreferencesUpdateRequest.darkModeEnabled)
+                        set("accessibilityEnabled", userPreferencesUpdateRequest.accessibilityEnabled)
+                        set("profileIconFileName", userPreferencesUpdateRequest.profileIconFileName)
                     }
                 ) {
                     eq("userId", getActiveUserId())
                 }
 
                 if (updatedItem.body == null) {
-                    call.respondError("Public user data update failed")
+                    call.respondError("User preferences update failed")
                 } else {
-                    call.respondSuccess("Public user data update successful")
+                    call.respondSuccess("User preferences update successful")
                 }
             } catch (e: Exception) {
-                call.application.log.error("Error while updating public user data", e)
-                call.respondError("Error while updating public user data: $e")
+                call.application.log.error("Error while updating user preferences", e)
+                call.respondError("Error while updating user preferences: $e")
             }
         }
 

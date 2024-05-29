@@ -10,7 +10,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   ExpenseCreationFormData,
   ExpenseUpdatingFormData,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
 } from "@/utility/types.ts";
@@ -28,7 +28,7 @@ interface ExpenseDatePickerProps {
 }
 
 export default function ExpenseDatePicker({ setFormData, className, defaultDate = new Date() }: ExpenseDatePickerProps) {
-  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const [date, setDate] = useState<Date>(defaultDate);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function ExpenseDatePicker({ setFormData, className, defaultDate 
 
   return (
     <Popover>
-      <PopoverTrigger asChild className={cn("bg-background text-primary", publicUserData.darkModeEnabled && "dark")}>
+      <PopoverTrigger asChild className={cn("bg-background text-primary", userPreferences.darkModeEnabled && "dark")}>
         <Button
           variant={"outline"}
           className={cn(" justify-start text-left font-normal", !date && "text-muted-foreground", className)}
@@ -51,13 +51,13 @@ export default function ExpenseDatePicker({ setFormData, className, defaultDate 
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className={cn("flex w-auto flex-col space-y-2 p-2 dark", publicUserData.darkModeEnabled && "dark")}
+        className={cn("flex w-auto flex-col space-y-2 p-2 dark", userPreferences.darkModeEnabled && "dark")}
       >
         <Select onValueChange={(value) => setDate(addDays(new Date(), parseInt(value)))}>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
           </SelectTrigger>
-          <SelectContent position="popper" className={cn(publicUserData.darkModeEnabled && "dark")}>
+          <SelectContent position="popper" className={cn(userPreferences.darkModeEnabled && "dark")}>
             <SelectItem value="0">Today</SelectItem>
             <SelectItem value="1">Tomorrow</SelectItem>
             <SelectItem value="3">In 3 days</SelectItem>

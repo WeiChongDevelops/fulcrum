@@ -6,17 +6,17 @@ import AccessibilityToggle from "../../toggles/AccessibilityToggle.tsx";
 import CurrencySelector from "../../selectors/CurrencySelector.tsx";
 import ActiveFormClickShield from "../../other/ActiveFormClickShield.tsx";
 import SettingsModalsAndForms from "./SettingsModalsAndForms.tsx";
-import { OpenToolsSection, PublicUserData, SettingsFormVisibility, SettingsModalVisibility } from "@/utility/types.ts";
+import { OpenToolsSection, UserPreferences, SettingsFormVisibility, SettingsModalVisibility } from "@/utility/types.ts";
 
 interface SettingsProps {
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
  * The root component for the settings page.
  */
-export default function Settings({ setOpenToolsSection, publicUserData }: SettingsProps) {
+export default function Settings({ setOpenToolsSection, userPreferences }: SettingsProps) {
   const [settingsFormVisibility, setSettingsFormVisibility] = useState<SettingsFormVisibility>({
     typeDeleteMyExpensesForm: false,
     typeDeleteMyBudgetForm: false,
@@ -39,7 +39,7 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
 
   return (
     <div
-      className={`flex flex-col justify-start items-center min-h-screen relative ${publicUserData.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
+      className={`flex flex-col justify-start items-center min-h-screen relative ${userPreferences.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
     >
       <div
         className={`w-[100vw] px-8 elementsBelowPopUpForm
@@ -80,17 +80,17 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow currency-selector-row"}>
           <b>Currency</b>
-          <CurrencySelector publicUserData={publicUserData} />
+          <CurrencySelector userPreferences={userPreferences} />
         </div>
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
           <b>Appearance</b>
-          <DarkModeToggle publicUserData={publicUserData} />
+          <DarkModeToggle userPreferences={userPreferences} />
         </div>
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
           <b>Accessibility</b>
-          <AccessibilityToggle publicUserData={publicUserData} />
+          <AccessibilityToggle userPreferences={userPreferences} />
         </div>
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow pr-4"}>
@@ -115,7 +115,7 @@ export default function Settings({ setOpenToolsSection, publicUserData }: Settin
 
         <div className={"settings-row bg-[#17423f] settings-box-shadow"}>
           <b>Account Created:</b>
-          <p>{new Date(publicUserData.createdAt).toLocaleDateString()}</p>
+          <p>{new Date(userPreferences.createdAt).toLocaleDateString()}</p>
         </div>
 
         <div className={"settings-row wipe-options"}>

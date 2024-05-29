@@ -1,33 +1,33 @@
 import { Switch } from "@/components-v2/ui/switch.tsx";
 import { useContext, useEffect, useState } from "react";
-import { PublicUserData } from "@/utility/types.ts";
+import { UserPreferences } from "@/utility/types.ts";
 import { cn } from "@/lib/utils.ts";
-import useUpdatePublicUserData from "@/hooks/mutations/other/useUpdatePublicUserData.ts";
+import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
 import { LocationContext } from "@/utility/util.ts";
 
 interface AccessibilityToggleProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   hideDescriptor?: boolean;
   className?: string;
 }
 
 export default function AccessibilityToggle({
-  publicUserData,
+  userPreferences,
   hideDescriptor = false,
   className,
 }: AccessibilityToggleProps) {
-  const [accessibilityOn, setAccessibilityOn] = useState(publicUserData.darkModeEnabled);
-  const { mutate: updatePublicUserData } = useUpdatePublicUserData();
+  const [accessibilityOn, setAccessibilityOn] = useState(userPreferences.darkModeEnabled);
+  const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const routerLocation = useContext(LocationContext);
 
   useEffect(() => {
-    setAccessibilityOn(publicUserData.accessibilityEnabled);
-  }, [publicUserData.darkModeEnabled, routerLocation]);
+    setAccessibilityOn(userPreferences.accessibilityEnabled);
+  }, [userPreferences.darkModeEnabled, routerLocation]);
 
   const handleToggleChange = () => {
     setAccessibilityOn(!accessibilityOn);
-    const updatedPublicUserData: PublicUserData = { ...publicUserData, accessibilityEnabled: !accessibilityOn };
-    updatePublicUserData(updatedPublicUserData);
+    const updatedUserPreferences: UserPreferences = { ...userPreferences, accessibilityEnabled: !accessibilityOn };
+    updateUserPreferences(updatedUserPreferences);
   };
 
   return (

@@ -18,11 +18,11 @@ import ActiveFormClickShield from "../other/ActiveFormClickShield.tsx";
 import useInitialBudgetData from "../../../hooks/queries/useInitialBudgetData.ts";
 import FulcrumErrorPage from "../other/FulcrumErrorPage.tsx";
 import useAnimationData from "../../../hooks/queries/useAnimationData.ts";
-import { BudgetItemEntity, ExpenseItemEntity, GroupItemEntity, PublicUserData } from "../../../utility/types.ts";
+import { BudgetItemEntity, ExpenseItemEntity, GroupItemEntity, UserPreferences } from "../../../utility/types.ts";
 import FulcrumButton from "../buttons/FulcrumButton.tsx";
 
 interface BudgetProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
@@ -31,7 +31,7 @@ interface BudgetProps {
 /**
  * The root component for the budget page. It contains the income display, the Fulcrum animation and the user's budget.
  */
-export default function Budget({ publicUserData, expenseArray, budgetArray, groupArray }: BudgetProps) {
+export default function Budget({ userPreferences, expenseArray, budgetArray, groupArray }: BudgetProps) {
   // const {
   //   totalIncome,
   //   budgetFormVisibility,
@@ -90,7 +90,7 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
   // }
   //
   // if (isLoading || animationDataIsLoading) {
-  //   return <Loader isLoading={isLoading || animationDataIsLoading} isDarkMode={publicUserData.darkModeEnabled ?? false} />;
+  //   return <Loader isLoading={isLoading || animationDataIsLoading} isDarkMode={userPreferences.darkModeEnabled ?? false} />;
   // }
   //
   // if (isSuccess)
@@ -105,7 +105,7 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
     //       <IncomeDisplay
     //         totalIncome={totalIncome!}
     //         amountLeftToBudget={amountLeftToBudget}
-    //         publicUserData={publicUserData}
+    //         userPreferences={userPreferences}
     //       />
     //
     //       <FulcrumButton
@@ -118,7 +118,7 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
     //
     //       <FulcrumAnimation
     //         lineAngle={lineAngle}
-    //         isDarkMode={publicUserData.darkModeEnabled}
+    //         isDarkMode={userPreferences.darkModeEnabled}
     //         activeTriangleFulcrum={activeTriangleFulcrum}
     //         bowlShadowDimensions={bowlShadowDimensions}
     //       />
@@ -136,13 +136,13 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
     //           setCategoryToDelete={setCategoryToDelete}
     //           setModalFormVisibility={setBudgetModalVisibility}
     //           perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-    //           publicUserData={publicUserData}
+    //           userPreferences={userPreferences}
     //         />
     //       )}
     //
     //       <AddNewGroupButton
     //         setBudgetFormVisibility={setBudgetFormVisibility}
-    //         isDarkMode={publicUserData.darkModeEnabled}
+    //         isDarkMode={userPreferences.darkModeEnabled}
     //       />
     //     </div>
     //
@@ -160,7 +160,7 @@ export default function Budget({ publicUserData, expenseArray, budgetArray, grou
     //       categoryToDelete={categoryToDelete}
     //       budgetModalVisibility={budgetModalVisibility}
     //       setBudgetModalVisibility={setBudgetModalVisibility}
-    //       currencySymbol={getCurrencySymbol(publicUserData.currency)}
+    //       currencySymbol={getCurrencySymbol(userPreferences.currency)}
     //     />
     //   </div>
     //   )

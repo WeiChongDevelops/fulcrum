@@ -48,7 +48,7 @@ describe("Group", () => {
       ["Water", 20],
       ["Electricity", 50],
     ]),
-    publicUserData: {
+    userPreferences: {
       createdAt: new Date(),
       currency: "AUD",
       profileIconFileName: "profile-icon-default",

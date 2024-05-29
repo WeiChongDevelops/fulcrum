@@ -1,6 +1,6 @@
 import { PieChart, Pie, ResponsiveContainer, Sector, Cell } from "recharts";
 import { useState } from "react";
-import { BudgetItemEntity, GroupItemEntity, PublicUserData } from "@/utility/types.ts";
+import { BudgetItemEntity, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import { formatDollarAmountStatic, useEmail } from "@/utility/util.ts";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -26,7 +26,7 @@ export default function CategoryPieChart({ sortedBudgetArray, currency }: Catego
     const displayValue = formatDollarAmountStatic(value, currency, true);
 
     const queryClient = useQueryClient();
-    const publicUserData: PublicUserData = queryClient.getQueryData(["publicUserData", useEmail()])!;
+    const userPreferences: UserPreferences = queryClient.getQueryData(["userPreferences", useEmail()])!;
 
     return (
       <g>
@@ -64,7 +64,7 @@ export default function CategoryPieChart({ sortedBudgetArray, currency }: Catego
           x={ex + (cos >= 0 ? 1 : -1) * 12}
           y={ey}
           textAnchor={textAnchor}
-          fill={publicUserData.darkModeEnabled ? "white" : "#545353"}
+          fill={userPreferences.darkModeEnabled ? "white" : "#545353"}
         >
           {displayValue}
         </text>

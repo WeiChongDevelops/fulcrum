@@ -17,7 +17,7 @@ import {
   ExpenseModalVisibility,
   GroupItemEntity,
   PreviousExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../utility/types.ts";
@@ -32,7 +32,7 @@ interface ExpenseModalsAndFormsProps {
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   defaultCalendarDate: Date;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   expenseItemToDelete: ExpenseItemEntity;
@@ -49,7 +49,7 @@ export default function ExpenseModalsAndForms({
   expenseArray,
   budgetArray,
   groupArray,
-  publicUserData,
+  userPreferences,
   defaultCalendarDate,
   oldExpenseBeingEdited,
   expenseItemToDelete,
@@ -80,7 +80,7 @@ export default function ExpenseModalsAndForms({
           setExpenseFormVisibility={setExpenseFormVisibility}
           budgetArray={budgetArray}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
-          currencySymbol={getCurrencySymbol(publicUserData.currency)}
+          currencySymbol={getCurrencySymbol(userPreferences.currency)}
           defaultCalendarDate={defaultCalendarDate}
           mustBeRecurring={false}
         />
@@ -90,7 +90,7 @@ export default function ExpenseModalsAndForms({
           setExpenseFormVisibility={setExpenseFormVisibility}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           oldExpenseBeingEdited={oldExpenseBeingEdited}
-          currencySymbol={getCurrencySymbol(publicUserData.currency)}
+          currencySymbol={getCurrencySymbol(userPreferences.currency)}
         />
       )}
 
@@ -99,7 +99,7 @@ export default function ExpenseModalsAndForms({
           setExpenseFormVisibility={setExpenseFormVisibility}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           oldExpenseBeingEdited={oldExpenseBeingEdited}
-          currencySymbol={getCurrencySymbol(publicUserData.currency)}
+          currencySymbol={getCurrencySymbol(userPreferences.currency)}
         />
       )}
 

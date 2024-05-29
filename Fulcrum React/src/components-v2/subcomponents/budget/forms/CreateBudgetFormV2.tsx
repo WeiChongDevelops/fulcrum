@@ -30,7 +30,7 @@ import {
 } from "@/utility/util.ts";
 import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
 import FulcrumButton from "@/components/child/buttons/FulcrumButton.tsx";
-import { BudgetCreationFormData, BudgetItemEntity, GroupItemEntity, PublicUserData } from "@/utility/types.ts";
+import { BudgetCreationFormData, BudgetItemEntity, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "@/components/child/selectors/CategoryIconSelector.tsx";
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
@@ -69,7 +69,7 @@ export default function CreateBudgetFormV2({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: createBudget } = useCreateBudget();
-  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const routerLocation = useContext(LocationContext);
   const [formIsOpen, setFormIsOpen] = useState(false);
 
@@ -153,7 +153,7 @@ export default function CreateBudgetFormV2({
           <b>+</b>
         </Button>
       </SheetTrigger>
-      <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
+      <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
         <SheetHeader>
           <SheetTitle>New Budget Item</SheetTitle>
           <SheetDescription>Create a new budgeting category.</SheetDescription>

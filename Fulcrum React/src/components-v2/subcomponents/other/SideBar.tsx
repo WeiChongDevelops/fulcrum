@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components-v2/ui/avatar.t
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import { EmailContext, LocationContext } from "@/utility/util.ts";
-import { PublicUserData } from "@/utility/types.ts";
+import { UserPreferences } from "@/utility/types.ts";
 import { handleUserLogout } from "@/utility/api.ts";
 import PageNavigationButton from "@/components-v2/subcomponents/other/PageNavigationButton.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -13,12 +13,12 @@ import { Switch } from "@/components-v2/ui/switch.tsx";
 import ThemeToggle from "@/components-v2/subcomponents/other/ThemeToggle.tsx";
 
 interface SideBarProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   sideBarOpen: boolean;
   setSideBarOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }: SideBarProps) {
+export default function SideBar({ userPreferences, sideBarOpen, setSideBarOpen }: SideBarProps) {
   const routerLocation = useContext(LocationContext);
   const activeEmail = useContext(EmailContext);
 
@@ -51,7 +51,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
     >
       {/*<div className={"flex justify-start items-center h-[6vh] w-full bg-gray-700"}>*/}
       {/*  <img*/}
-      {/*    src={`/static/assets-v2/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`}*/}
+      {/*    src={`/static/assets-v2/fulcrum-logos/fulcrum-long-${userPreferences.darkModeEnabled ? "white" : "black"}.webp`}*/}
       {/*    className="w-32 ml-4"*/}
       {/*    onClick={() => (window.location.href = "/app/budget")}*/}
       {/*    alt="Fulcrum logo"*/}
@@ -59,7 +59,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
       {/*</div>*/}
       {/*<div className={"flex justify-start items-center h-[6vh] w-full bg-gray-700"}>*/}
       {/*  <img*/}
-      {/*    src={`/static/assets-v2/fulcrum-logos/fulcrum-long-${publicUserData.darkModeEnabled ? "white" : "black"}.webp`}*/}
+      {/*    src={`/static/assets-v2/fulcrum-logos/fulcrum-long-${userPreferences.darkModeEnabled ? "white" : "black"}.webp`}*/}
       {/*    className="w-32 ml-4"*/}
       {/*    onClick={() => (window.location.href = "/app/budget")}*/}
       {/*    alt="Fulcrum logo"*/}
@@ -219,7 +219,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
               </svg>
             }
           />
-          <ThemeToggle publicUserData={publicUserData} sideBarOpen={sideBarOpen} className={"pl-4 h-12 mt-auto"} />
+          <ThemeToggle userPreferences={userPreferences} sideBarOpen={sideBarOpen} className={"pl-4 h-12 mt-auto"} />
           <PageNavigationButton
             currentPage={currentPage}
             page={"help"}

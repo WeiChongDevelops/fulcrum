@@ -23,28 +23,28 @@ fun Application.configureAuthRouting() {
 
     routing {
 
-        suspend fun initialiseDefaultPublicUserData(call: ApplicationCall) {
+        suspend fun initialiseDefaultUserPreferences(call: ApplicationCall) {
             val uid = getActiveUserId()
 
-            if (supabase.postgrest["public_user_data"].select(
+            if (supabase.postgrest["user_preferences"].select(
                     columns = Columns.list("currency, createdAt, darkModeEnabled, accessibilityEnabled, profileIconFileName")
                 ) {
                     eq("userId", uid)
-                }.decodeSingleOrNull<PublicUserDataResponse>() != null
+                }.decodeSingleOrNull<UserPreferencesResponse>() != null
             ) {
-                supabase.postgrest["public_user_data"].delete() {
+                supabase.postgrest["user_preferences"].delete() {
                     eq("userId", uid)
                 }
             }
 
-            val newUserInfo = PublicUserDataCreateRequestSent(
+            val newUserInfo = UserPreferencesCreateRequestSent(
                 userId = uid
             )
-            val userInfoInserted = supabase.postgrest["public_user_data"].insert(
+            val userInfoInserted = supabase.postgrest["user_preferences"].insert(
                 newUserInfo, upsert = true
             )
             if (userInfoInserted.body == null) {
-                call.respondError("Default public user data initialisation failed.")
+                call.respondError("Default user preferences initialisation failed.")
             }
         }
 
@@ -88,7 +88,7 @@ fun Application.configureAuthRouting() {
                     supabase.postgrest["groups"].select(columns = Columns.list("group, colour, timestamp, id")) {
                         eq("group", "Miscellaneous")
                     }.decodeSingleOrNull<GroupItemResponse>()
-                initialiseDefaultPublicUserData(call)
+                initialiseDefaultUserPreferences(call)
                 initialiseDefaultIncome(call)
                 initialiseDefaultBudgets(call, miscGroup != null)
                 supabase.gotrue.logout()
@@ -177,24 +177,24 @@ fun Application.configureAuthRouting() {
 
         post("/api/oAuthDataInitialisation") {
             try {
-                val publicUserDataNotFound = supabase.postgrest["public_user_data"].select(
+                val userPreferencesNotFound = supabase.postgrest["user_preferences"].select(
                     columns = Columns.list(
                         "createdAt, currency, darkModeEnabled, accessibilityEnabled, profileIconFileName"
                     )
-                ).decodeSingleOrNull<PublicUserDataResponse>() == null
+                ).decodeSingleOrNull<UserPreferencesResponse>() == null
                 val totalIncomeNotFound =
                     supabase.postgrest["total_income"].select(columns = Columns.list("totalIncome"))
                         .decodeSingleOrNull<TotalIncomeResponse>() == null
 
-                if (publicUserDataNotFound) {
-                    initialiseDefaultPublicUserData(call)
+                if (userPreferencesNotFound) {
+                    initialiseDefaultUserPreferences(call)
                 }
 
                 if (totalIncomeNotFound) {
                     initialiseDefaultIncome(call)
                 }
 
-                if (publicUserDataNotFound && totalIncomeNotFound) {
+                if (userPreferencesNotFound && totalIncomeNotFound) {
                     initialiseDefaultBudgets(call, false)
                 }
 
@@ -245,7 +245,7 @@ fun Application.configureAuthRouting() {
         post("/api/resetAccountData") {
             try {
                 initialiseDefaultBudgets(call, true)
-                initialiseDefaultPublicUserData(call)
+                initialiseDefaultUserPreferences(call)
                 initialiseDefaultIncome(call)
                 call.respondSuccess("Successfully reset account.")
             } catch (e: Exception) {

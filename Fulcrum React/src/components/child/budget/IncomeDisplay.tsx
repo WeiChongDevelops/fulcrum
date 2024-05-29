@@ -1,19 +1,19 @@
 import { formatDollarAmountDynamic, formatDollarAmountStatic, LocationContext } from "../../../utility/util.ts";
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import useUpdateTotalIncome from "../../../hooks/mutations/budget/useUpdateTotalIncome.ts";
-import { PublicUserData } from "../../../utility/types.ts";
+import { UserPreferences } from "../../../utility/types.ts";
 
 interface IncomeDisplayProps {
   totalIncome: number;
   amountLeftToBudget: number;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
  * Displays the user's total income and the amount left to budget, also allowing users to edit their total income.
  */
-export default function IncomeDisplay({ totalIncome, amountLeftToBudget, publicUserData }: IncomeDisplayProps) {
-  const currency = publicUserData.currency;
+export default function IncomeDisplay({ totalIncome, amountLeftToBudget, userPreferences }: IncomeDisplayProps) {
+  const currency = userPreferences.currency;
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [incomeFormData, setIncomeFormData] = useState({
     income: totalIncome ? formatDollarAmountDynamic(totalIncome.toString()) : "8000",

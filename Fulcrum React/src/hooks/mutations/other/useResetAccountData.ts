@@ -30,7 +30,7 @@ export default function useResetAccountData() {
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["budgetArray"] });
       await queryClient.invalidateQueries({ queryKey: ["groupArray"] });
-      await queryClient.invalidateQueries({ queryKey: ["publicUserData"] });
+      await queryClient.invalidateQueries({ queryKey: ["userPreferences"] });
     },
   });
 }

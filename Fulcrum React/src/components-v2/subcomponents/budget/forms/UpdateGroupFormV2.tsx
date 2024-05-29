@@ -10,7 +10,7 @@ import {
 import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
 import FulcrumButton from "@/components/child/buttons/FulcrumButton.tsx";
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { BasicGroupData, GroupItemEntity, PreviousGroupBeingEdited, PublicUserData } from "@/utility/types.ts";
+import { BasicGroupData, GroupItemEntity, PreviousGroupBeingEdited, UserPreferences } from "@/utility/types.ts";
 import useUpdateGroup from "@/hooks/mutations/budget/useUpdateGroup.ts";
 import { addColourSelectionFunctionality, addFormExitListeners, LocationContext, useEmail } from "@/utility/util.ts";
 import { Input } from "@/components-v2/ui/input.tsx";
@@ -38,7 +38,7 @@ export default function UpdateGroupFormV2({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateGroup } = useUpdateGroup();
-  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const routerLocation = useContext(LocationContext);
 
   const [formIsOpen, setFormIsOpen] = useState(false);
@@ -120,7 +120,7 @@ export default function UpdateGroupFormV2({
           </div>
         </Button>
       </SheetTrigger>
-      <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
+      <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
         <SheetHeader>
           <SheetTitle>Updating Category Group</SheetTitle>
           <SheetDescription>{`Making changes to the group '${oldGroupBeingEdited.oldGroupName}'.`}</SheetDescription>

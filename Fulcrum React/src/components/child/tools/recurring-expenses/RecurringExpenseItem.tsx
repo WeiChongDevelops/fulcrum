@@ -10,7 +10,7 @@ import {
 import { Dispatch, SetStateAction, useMemo } from "react";
 import {
   PreviousRecurringExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseFormVisibility,
   RecurringExpenseFrequency,
   RecurringExpenseModalVisibility,
@@ -33,7 +33,7 @@ interface RecurringExpenseItemProps {
   setOldRecurringExpenseBeingEdited: Dispatch<SetStateAction<PreviousRecurringExpenseBeingEdited>>;
   setRecurringExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
@@ -52,7 +52,7 @@ export default function RecurringExpenseItem({
   setRecurringExpenseModalVisibility,
   setOldRecurringExpenseBeingEdited,
   setRecurringExpenseIdToDelete,
-  publicUserData,
+  userPreferences,
 }: RecurringExpenseItemProps) {
   function handleEditClick() {
     setOldRecurringExpenseBeingEdited({
@@ -120,7 +120,7 @@ export default function RecurringExpenseItem({
           <p>{nextRecurringInstance && formatDate(nextRecurringInstance)}</p>
         </div>
 
-        <b className="text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
+        <b className="text-xl">{formatDollarAmountStatic(amount, userPreferences.currency)}</b>
         <div className="flex flex-row items-center ml-2">
           <button className="circle-button" onClick={handleEditClick}>
             <img

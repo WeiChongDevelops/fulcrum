@@ -9,7 +9,7 @@ import {
   GroupItemEntity,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../../utility/types.ts";
@@ -29,7 +29,7 @@ interface GroupListProps {
   setCategoryToDelete: Dispatch<SetStateAction<string>>;
 
   perCategoryExpenseTotalThisMonth: Map<string, number>;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
@@ -47,7 +47,7 @@ export default function GroupList({
   setModalFormVisibility,
   setCategoryToDelete,
   perCategoryExpenseTotalThisMonth,
-  publicUserData,
+  userPreferences,
 }: GroupListProps) {
   return (
     <div className="flex flex-col items-center">
@@ -69,7 +69,7 @@ export default function GroupList({
             setCategoryToDelete={setCategoryToDelete}
             setModalFormVisibility={setModalFormVisibility}
             perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-            publicUserData={publicUserData}
+            userPreferences={userPreferences}
             key={key}
           />
         );

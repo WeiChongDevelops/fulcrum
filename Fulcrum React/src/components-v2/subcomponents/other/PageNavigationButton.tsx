@@ -4,7 +4,7 @@ import { capitaliseFirstLetter, useEmail } from "@/utility/util.ts";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils.ts";
 import { useQueryClient } from "@tanstack/react-query";
-import { PublicUserData } from "@/utility/types.ts";
+import { UserPreferences } from "@/utility/types.ts";
 
 interface PageNavigationButtonProps {
   currentPage: string;
@@ -26,13 +26,13 @@ export default function PageNavigationButton({
   const navigate = useNavigate();
   const isActive = currentPage === page;
   const isAppPage = ["budget", "expenses", "recurring", "settings"].includes(page);
-  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   return (
     <Button
       variant={isActive ? "default" : "ghost"}
       className={cn(
         "flex flex-row justify-start items-center gap-3.5 py-6 font-semibold transition-all duration-200 ease-out text-background outline-none hover:cursor-pointer ",
-        !isActive && publicUserData.darkModeEnabled && "hover:bg-[#e6e6e6]",
+        !isActive && userPreferences.darkModeEnabled && "hover:bg-[#e6e6e6]",
         className,
       )}
       onClick={() => (isAppPage ? navigate(`/app/${page}`) : (window.location.href = nonAppRedirectUrl))}

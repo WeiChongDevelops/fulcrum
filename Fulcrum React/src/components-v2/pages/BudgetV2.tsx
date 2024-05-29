@@ -4,7 +4,7 @@ import {
   CategoryToIconGroupAndColourMap,
   ExpenseItemEntity,
   GroupItemEntity,
-  PublicUserData,
+  UserPreferences,
 } from "@/utility/types.ts";
 import BudgetHeaderV2 from "@/components-v2/subcomponents/budget/BudgetHeaderV2.tsx";
 import FulcrumAnimationV2 from "@/components-v2/subcomponents/budget/FulcrumAnimationV2.tsx";
@@ -44,7 +44,7 @@ import BudgetDataBento from "@/components-v2/subcomponents/budget/BudgetDataBent
 import { debounce } from "lodash";
 
 interface BudgetV2Props {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   budgetArray: BudgetItemEntity[];
   expenseArray: ExpenseItemEntity[];
   groupArray: GroupItemEntity[];
@@ -55,7 +55,7 @@ interface BudgetV2Props {
 }
 
 export default function BudgetV2({
-  publicUserData,
+  userPreferences,
   budgetArray,
   expenseArray,
   groupArray,
@@ -203,13 +203,13 @@ export default function BudgetV2({
   }
 
   if (isLoading) {
-    return <Loader isLoading={!isLoading} isDarkMode={publicUserData.darkModeEnabled ?? false} size={10} />;
+    return <Loader isLoading={!isLoading} isDarkMode={userPreferences.darkModeEnabled ?? false} size={10} />;
   }
 
   return (
     <SetBudgetModalVisibilityContext.Provider value={setBudgetModalVisibility}>
       <div className="flex flex-col justify-start bg-transparent">
-        <BudgetHeaderV2 publicUserData={publicUserData} totalIncome={totalIncome!} sideBarOpen={sideBarOpen} />
+        <BudgetHeaderV2 userPreferences={userPreferences} totalIncome={totalIncome!} sideBarOpen={sideBarOpen} />
         {/*<BudgetModalsAndForms*/}
         {/*  budgetFormVisibility={budgetFormVisibility}*/}
         {/*  // budgetArray={budgetArray}*/}
@@ -222,14 +222,14 @@ export default function BudgetV2({
         {/*  categoryToDelete={categoryToDelete}*/}
         {/*  budgetModalVisibility={budgetModalVisibility}*/}
         {/*  setLocalisedGroupArray={setLocalisedGroupArray}*/}
-        {/*  currencySymbol={getCurrencySymbol(publicUserData.currency)}*/}
+        {/*  currencySymbol={getCurrencySymbol(userPreferences.currency)}*/}
         {/*/>*/}
         <ScrollArea className={"transition-all ease-[cubic-bezier(0.9, 0, 0.4, 1)] mt-[6vh] h-[94vh]"} ref={budgetContainer}>
           <div className={"grid gap-4 px-4 pt-4 pb-6"}>
             <div className="grid w-full gap-4" style={{ gridTemplateColumns: budgetLayoutIsSideBySide ? "6fr 5fr" : "1fr" }}>
               <FulcrumAnimationV2
                 budgetLayoutIsSideBySide={budgetLayoutIsSideBySide}
-                currency={publicUserData.currency}
+                currency={userPreferences.currency}
                 sideBarOpen={sideBarOpen}
                 totalIncome={totalIncome!}
                 totalBudget={totalBudget}
@@ -239,7 +239,7 @@ export default function BudgetV2({
                 groupArray={groupArray}
                 budgetTotal={totalBudget}
                 categoryDataMap={categoryDataMap}
-                publicUserData={publicUserData}
+                userPreferences={userPreferences}
               />
             </div>
             <DndContext
@@ -262,7 +262,7 @@ export default function BudgetV2({
                         perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                         groupNameOfNewItem={groupNameOfNewItem}
                         setGroupNameOfNewItem={setGroupNameOfNewItem}
-                        publicUserData={publicUserData}
+                        userPreferences={userPreferences}
                         setCategoryToDelete={setCategoryToDelete}
                         setGroupToDelete={setGroupToDelete}
                         setOldGroupBeingEdited={setOldGroupBeingEdited}

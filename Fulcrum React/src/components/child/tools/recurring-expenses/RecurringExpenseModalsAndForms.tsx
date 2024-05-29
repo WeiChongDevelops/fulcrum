@@ -8,7 +8,7 @@ import {
   ExpenseItemEntity,
   GroupItemEntity,
   PreviousRecurringExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseFormVisibility,
   RecurringExpenseModalVisibility,
   SetFormVisibility,
@@ -25,7 +25,7 @@ interface RecurringExpenseModalsAndFormsProps {
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
 
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 
   recurringExpenseIdToDelete: string;
   oldRecurringExpenseBeingEdited: PreviousRecurringExpenseBeingEdited;
@@ -42,7 +42,7 @@ export default function RecurringExpenseModalsAndForms({
   expenseArray,
   budgetArray,
   groupArray,
-  publicUserData,
+  userPreferences,
   recurringExpenseIdToDelete,
   oldRecurringExpenseBeingEdited,
 }: RecurringExpenseModalsAndFormsProps) {
@@ -55,7 +55,7 @@ export default function RecurringExpenseModalsAndForms({
           setExpenseFormVisibility={setRecurringExpenseFormVisibility}
           budgetArray={budgetArray}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
-          currencySymbol={getCurrencySymbol(publicUserData.currency)}
+          currencySymbol={getCurrencySymbol(userPreferences.currency)}
           defaultCalendarDate={new Date()}
           mustBeRecurring={true}
         />
@@ -66,7 +66,7 @@ export default function RecurringExpenseModalsAndForms({
           setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
           categoryOptions={categoryListAsOptions(budgetArray, groupArray)}
           oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
-          currencySymbol={getCurrencySymbol(publicUserData.currency)}
+          currencySymbol={getCurrencySymbol(userPreferences.currency)}
         />
       )}
 

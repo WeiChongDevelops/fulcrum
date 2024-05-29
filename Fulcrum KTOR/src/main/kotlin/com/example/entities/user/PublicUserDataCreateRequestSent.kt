@@ -3,6 +3,6 @@ package com.example.entities.user
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PublicUserDataCreateRequestSent(
+data class UserPreferencesCreateRequestSent(
     val userId: String
 )

@@ -4,7 +4,7 @@ import {
   BudgetModalVisibility,
   GroupItemEntity,
   PreviousBudgetBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types.ts";
@@ -33,7 +33,7 @@ interface BudgetTileV2Props {
   setCategoryToDelete: Dispatch<SetStateAction<string>>;
   setBudgetModalVisibility: SetModalVisibility<BudgetModalVisibility>;
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
   oldBudgetBeingEdited: PreviousBudgetBeingEdited;
   groupArray: GroupItemEntity[];
@@ -45,7 +45,7 @@ export default function BudgetTileV2({
   setCategoryToDelete,
   setBudgetModalVisibility,
   setBudgetFormVisibility,
-  publicUserData,
+  userPreferences,
   perCategoryExpenseTotalThisMonth,
   oldBudgetBeingEdited,
   groupArray,
@@ -84,7 +84,7 @@ export default function BudgetTileV2({
           <UpdateBudgetFormV2
             oldBudgetBeingEdited={oldBudgetBeingEdited}
             groupArray={groupArray}
-            currencySymbol={getCurrencySymbol(publicUserData.currency)}
+            currencySymbol={getCurrencySymbol(userPreferences.currency)}
             updateOldBudgetBeingEdited={updateOldBudgetBeingEdited}
           />
         )}
@@ -104,7 +104,7 @@ export default function BudgetTileV2({
               <p className={"truncate font-light"}>
                 <span>{"Budget: "}</span>
                 <span className={"font-bold"}>
-                  {formatDollarAmountStatic(filteredBudgetItem.amount, publicUserData.currency)}
+                  {formatDollarAmountStatic(filteredBudgetItem.amount, userPreferences.currency)}
                 </span>
               </p>
               <p className={`truncate font-light`}>
@@ -112,7 +112,7 @@ export default function BudgetTileV2({
                 <span className={cn("font-bold", spent > filteredBudgetItem.amount ? "text-[#FF3F3F]" : "text-primary")}>
                   {formatDollarAmountStatic(
                     filteredBudgetItem.amount - perCategoryExpenseTotalThisMonth.get(filteredBudgetItem.category)!,
-                    publicUserData.currency,
+                    userPreferences.currency,
                   )}
                 </span>
               </p>

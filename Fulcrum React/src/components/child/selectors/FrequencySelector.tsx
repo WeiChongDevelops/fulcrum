@@ -9,7 +9,7 @@ import {
   ExpenseUpdatingFormData,
   PreviousExpenseBeingEdited,
   PreviousRecurringExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseFrequency,
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
@@ -52,7 +52,7 @@ export default function FrequencySelector({
   mustBeRecurring,
   initialFrequency,
 }: FrequencySelectorProps) {
-  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const [open, setOpen] = useState(false);
   const [selectedFrequency, setSelectedFrequency] = useState(
     initialFrequency ? initialFrequency : mustBeRecurring ? "monthly" : "never",
@@ -109,10 +109,10 @@ export default function FrequencySelector({
         setSelectedFrequency(currentValue as RecurringExpenseFrequency);
       }}
     >
-      <SelectTrigger className={cn("px-4 dark:text-primary", publicUserData.darkModeEnabled && "dark", className)}>
+      <SelectTrigger className={cn("px-4 dark:text-primary", userPreferences.darkModeEnabled && "dark", className)}>
         <SelectValue placeholder={"Select frequency..."} />
       </SelectTrigger>
-      <SelectContent className={cn(publicUserData.darkModeEnabled && "dark")}>
+      <SelectContent className={cn(userPreferences.darkModeEnabled && "dark")}>
         <SelectGroup>
           <SelectLabel>Repeat Frequency</SelectLabel>
           {(mustBeRecurring ? recurringFrequencyOptions.slice(1) : recurringFrequencyOptions).map((frequencyOption) => (

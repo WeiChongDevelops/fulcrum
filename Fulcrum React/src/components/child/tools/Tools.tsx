@@ -9,12 +9,12 @@ import {
   ExpenseItemEntity,
   GroupItemEntity,
   OpenToolsSection,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseItemEntity,
 } from "../../../utility/types.ts";
 
 interface ToolsProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
@@ -26,7 +26,7 @@ interface ToolsProps {
  * The root component for the tools page.
  */
 export default function Tools({
-  publicUserData,
+  userPreferences,
   expenseArray,
   budgetArray,
   groupArray,
@@ -36,14 +36,14 @@ export default function Tools({
   const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
 
   if (openToolsSection === "settings") {
-    return <Settings setOpenToolsSection={setOpenToolsSection} publicUserData={publicUserData} />;
+    return <Settings setOpenToolsSection={setOpenToolsSection} userPreferences={userPreferences} />;
   }
 
   if (openToolsSection === "recurring") {
     return (
       <RecurringExpenses
         setOpenToolsSection={setOpenToolsSection}
-        publicUserData={publicUserData}
+        userPreferences={userPreferences}
         expenseArray={expenseArray}
         budgetArray={budgetArray}
         groupArray={groupArray}
@@ -53,5 +53,5 @@ export default function Tools({
     );
   }
 
-  return <ToolsHome publicUserData={publicUserData} setOpenToolsSection={setOpenToolsSection} />;
+  return <ToolsHome userPreferences={userPreferences} setOpenToolsSection={setOpenToolsSection} />;
 }

@@ -11,7 +11,7 @@ import {
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
   DropdownSelectorOption,
-  PublicUserData,
+  UserPreferences,
 } from "../../../utility/types.ts";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components-v2/ui/button";
@@ -44,7 +44,7 @@ export default function CategorySelector({
   className,
   defaultCategory,
 }: CategorySelectorProps) {
-  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(defaultCategory ?? "");
 
@@ -57,7 +57,7 @@ export default function CategorySelector({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild className={cn("dark:text-primary", publicUserData.darkModeEnabled && "dark")}>
+      <PopoverTrigger asChild className={cn("dark:text-primary", userPreferences.darkModeEnabled && "dark")}>
         <Button
           variant="outline"
           role="combobox"
@@ -70,7 +70,7 @@ export default function CategorySelector({
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className={cn("p-0 dark:text-primary", publicUserData.darkModeEnabled && "dark")}>
+      <PopoverContent className={cn("p-0 dark:text-primary", userPreferences.darkModeEnabled && "dark")}>
         <Command>
           <CommandInput placeholder="Search category..." className="h-9 font-normal" required />
           <CommandEmpty>No category found.</CommandEmpty>

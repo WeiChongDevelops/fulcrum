@@ -10,7 +10,7 @@ import {
 } from "@/components-v2/ui/drawer.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { getGroupBudgetTotal, useEmail } from "@/utility/util.ts";
-import { BudgetItemEntity, CategoryToIconGroupAndColourMap, GroupItemEntity, PublicUserData } from "@/utility/types.ts";
+import { BudgetItemEntity, CategoryToIconGroupAndColourMap, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import { useEffect, useState } from "react";
 import {
   Select,
@@ -32,7 +32,7 @@ interface BudgetDataBentoProps {
   groupArray: GroupItemEntity[];
   budgetTotal: number;
   categoryDataMap: CategoryToIconGroupAndColourMap;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 export default function BudgetDataBento({
@@ -40,7 +40,7 @@ export default function BudgetDataBento({
   groupArray,
   budgetTotal,
   categoryDataMap,
-  publicUserData,
+  userPreferences,
 }: BudgetDataBentoProps) {
   const budgetSizeSort = (budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) => {
     return budgetItemA.amount > budgetItemB.amount ? -1 : 1;
@@ -81,7 +81,7 @@ export default function BudgetDataBento({
         <SelectTrigger className="w-[32ch] absolute top-3 left-4 z-30 bg-background text-xs font-medium">
           <SelectValue placeholder={`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`} />
         </SelectTrigger>
-        <SelectContent className={cn("bg-background", publicUserData.darkModeEnabled && "dark")}>
+        <SelectContent className={cn("bg-background", userPreferences.darkModeEnabled && "dark")}>
           <SelectGroup>
             <SelectItem value="category" className={"text-xs font-medium"}>
               Budget Distribution by Category
@@ -100,13 +100,13 @@ export default function BudgetDataBento({
               amount: getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group == groupItem.group)),
               colour: groupItem.colour,
             }))}
-            currency={publicUserData.currency}
+            currency={userPreferences.currency}
             key={rerenderKey}
           />
         ) : (
           <CategoryPieChart
             sortedBudgetArray={budgetArraySortedByAmount}
-            currency={publicUserData.currency}
+            currency={userPreferences.currency}
             key={rerenderKey}
           />
         )}
@@ -118,7 +118,7 @@ export default function BudgetDataBento({
               {`${sortByGroup ? "Group" : "Category"} Details`}
             </Button>
           </DrawerTrigger>
-          <DrawerContent className={cn("bg-background text-primary", publicUserData.darkModeEnabled && "dark")}>
+          <DrawerContent className={cn("bg-background text-primary", userPreferences.darkModeEnabled && "dark")}>
             <div className="mx-auto w-full max-w-sm">
               <DrawerHeader>
                 <DrawerTitle>{`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`}</DrawerTitle>

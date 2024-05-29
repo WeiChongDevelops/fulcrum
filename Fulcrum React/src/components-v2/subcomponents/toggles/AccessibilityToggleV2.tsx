@@ -1,31 +1,31 @@
-import { PublicUserData } from "@/utility/types.ts";
+import { UserPreferences } from "@/utility/types.ts";
 import { useContext, useEffect, useState } from "react";
-import useUpdatePublicUserData from "@/hooks/mutations/other/useUpdatePublicUserData.ts";
+import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
 import { LocationContext } from "@/utility/util.ts";
 
 interface AccessibilityV2ToggleProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
  * A toggle for the user to choose between standard mode and accessibility mode (high contrast + greyscale).
  */
-export default function AccessibilityToggleV2({ publicUserData }: AccessibilityV2ToggleProps) {
-  const [isAccessibilityMode, setIsAccessibilityMode] = useState(publicUserData.accessibilityEnabled);
-  const { mutate: updatePublicUserData } = useUpdatePublicUserData();
+export default function AccessibilityToggleV2({ userPreferences }: AccessibilityV2ToggleProps) {
+  const [isAccessibilityMode, setIsAccessibilityMode] = useState(userPreferences.accessibilityEnabled);
+  const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const routerLocation = useContext(LocationContext);
 
   async function handleAccessibilityToggle() {
     const newIsAccessibilityMode = !isAccessibilityMode;
     setIsAccessibilityMode(newIsAccessibilityMode);
 
-    const updatedPublicUserData: PublicUserData = { ...publicUserData, accessibilityEnabled: newIsAccessibilityMode };
-    updatePublicUserData(updatedPublicUserData);
+    const updatedUserPreferences: UserPreferences = { ...userPreferences, accessibilityEnabled: newIsAccessibilityMode };
+    updateUserPreferences(updatedUserPreferences);
   }
 
   useEffect(() => {
-    setIsAccessibilityMode(publicUserData.accessibilityEnabled);
-  }, [publicUserData.accessibilityEnabled, routerLocation]);
+    setIsAccessibilityMode(userPreferences.accessibilityEnabled);
+  }, [userPreferences.accessibilityEnabled, routerLocation]);
 
   return (
     <div

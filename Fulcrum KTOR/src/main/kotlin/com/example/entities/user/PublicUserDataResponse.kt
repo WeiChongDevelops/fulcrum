@@ -5,7 +5,7 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PublicUserDataResponse(
+data class UserPreferencesResponse(
     @Contextual val createdAt: Instant,
     val currency: String,
     val darkModeEnabled: Boolean,

@@ -1,30 +1,30 @@
 import { Switch } from "@/components-v2/ui/switch.tsx";
 import { useContext, useEffect, useState } from "react";
-import { PublicUserData } from "@/utility/types.ts";
+import { UserPreferences } from "@/utility/types.ts";
 import { cn } from "@/lib/utils.ts";
-import useUpdatePublicUserData from "@/hooks/mutations/other/useUpdatePublicUserData.ts";
+import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
 import { LocationContext } from "@/utility/util.ts";
 
 interface ThemeToggleProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   hideDescriptor?: boolean;
   sideBarOpen?: boolean;
   className?: string;
 }
 
 export default function ThemeToggle({
-  publicUserData,
+  userPreferences,
   sideBarOpen = true,
   hideDescriptor = false,
   className,
 }: ThemeToggleProps) {
-  const [darkModeOn, setDarkModeOn] = useState(publicUserData.darkModeEnabled);
-  const { mutate: updatePublicUserData } = useUpdatePublicUserData();
+  const [darkModeOn, setDarkModeOn] = useState(userPreferences.darkModeEnabled);
+  const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const routerLocation = useContext(LocationContext);
 
   useEffect(() => {
-    setDarkModeOn(publicUserData.darkModeEnabled);
-  }, [publicUserData, routerLocation]);
+    setDarkModeOn(userPreferences.darkModeEnabled);
+  }, [userPreferences, routerLocation]);
 
   useEffect(() => {
     setRerenderKey(rerenderKey + 1);
@@ -32,8 +32,8 @@ export default function ThemeToggle({
 
   const handleToggleChange = () => {
     setDarkModeOn(!darkModeOn);
-    const updatedPublicUserData: PublicUserData = { ...publicUserData, darkModeEnabled: !darkModeOn };
-    updatePublicUserData(updatedPublicUserData);
+    const updatedUserPreferences: UserPreferences = { ...userPreferences, darkModeEnabled: !darkModeOn };
+    updateUserPreferences(updatedUserPreferences);
   };
 
   const [rerenderKey, setRerenderKey] = useState(0);

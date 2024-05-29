@@ -6,7 +6,7 @@ import {
   ExpenseModalVisibility,
   MonthExpenseGroupEntity,
   PreviousExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types.ts";
@@ -26,7 +26,7 @@ interface ExpenseMonthCarouselV2Props {
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
   categoryDataMap: CategoryToIconGroupAndColourMap;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
   setApi: (api: EmblaCarouselType | undefined) => void;
   startingIndex: number;
@@ -45,7 +45,7 @@ export default function ExpenseMonthCarouselV2({
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
   categoryDataMap,
-  publicUserData,
+  userPreferences,
   setDefaultCalendarDate,
   setApi,
   startingIndex,
@@ -75,7 +75,7 @@ export default function ExpenseMonthCarouselV2({
                     setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                     setExpenseItemToDelete={setExpenseItemToDelete}
                     categoryDataMap={categoryDataMap}
-                    publicUserData={publicUserData}
+                    userPreferences={userPreferences}
                     setDefaultCalendarDate={setDefaultCalendarDate}
                     oldExpenseBeingEdited={oldExpenseBeingEdited}
                   />

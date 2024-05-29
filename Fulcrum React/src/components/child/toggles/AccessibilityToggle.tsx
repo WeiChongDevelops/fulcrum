@@ -1,31 +1,31 @@
 import { useState, useEffect, useContext } from "react";
-import useUpdatePublicUserData from "../../../hooks/mutations/other/useUpdatePublicUserData.ts";
-import { PublicUserData } from "../../../utility/types.ts";
+import useUpdateUserPreferences from "../../../hooks/mutations/other/useUpdateUserPreferences.ts";
+import { UserPreferences } from "../../../utility/types.ts";
 import { LocationContext, useLocation } from "../../../utility/util.ts";
 
 interface AccessibilityToggleProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
  * A toggle for the user to choose between standard mode and accessibility mode (high contrast + greyscale).
  */
-export default function AccessibilityToggle({ publicUserData }: AccessibilityToggleProps) {
-  const [isAccessibilityMode, setIsAccessibilityMode] = useState(publicUserData.accessibilityEnabled);
-  const { mutate: updatePublicUserData } = useUpdatePublicUserData();
+export default function AccessibilityToggle({ userPreferences }: AccessibilityToggleProps) {
+  const [isAccessibilityMode, setIsAccessibilityMode] = useState(userPreferences.accessibilityEnabled);
+  const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const routerLocation = useLocation();
 
   async function handleAccessibilityToggle() {
     const newIsAccessibilityMode = !isAccessibilityMode;
     setIsAccessibilityMode(newIsAccessibilityMode);
 
-    const updatedPublicUserData: PublicUserData = { ...publicUserData, accessibilityEnabled: newIsAccessibilityMode };
-    updatePublicUserData(updatedPublicUserData);
+    const updatedUserPreferences: UserPreferences = { ...userPreferences, accessibilityEnabled: newIsAccessibilityMode };
+    updateUserPreferences(updatedUserPreferences);
   }
 
   useEffect(() => {
-    setIsAccessibilityMode(publicUserData.accessibilityEnabled);
-  }, [publicUserData.accessibilityEnabled, routerLocation]);
+    setIsAccessibilityMode(userPreferences.accessibilityEnabled);
+  }, [userPreferences.accessibilityEnabled, routerLocation]);
 
   return (
     <div

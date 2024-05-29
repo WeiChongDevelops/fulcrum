@@ -20,12 +20,12 @@ import {
   ExpenseItemEntity,
   GroupItemEntity,
   MonthExpenseGroupEntity,
-  PublicUserData,
+  UserPreferences,
   RecurringExpenseItemEntity,
 } from "../../../utility/types.ts";
 
 interface ExpensesProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 
   expenseArray: ExpenseItemEntity[];
   budgetArray: BudgetItemEntity[];
@@ -40,7 +40,7 @@ interface ExpensesProps {
  * The root component for the expense page.
  */
 export default function Expenses({
-  publicUserData,
+  userPreferences,
   expenseArray,
   budgetArray,
   groupArray,
@@ -106,7 +106,7 @@ export default function Expenses({
             setOldExpenseBeingEdited={setOldExpenseBeingEdited}
             setExpenseItemToDelete={setExpenseItemToDelete}
             categoryDataMap={categoryDataMap}
-            publicUserData={publicUserData}
+            userPreferences={userPreferences}
             setDefaultCalendarDate={setDefaultCalendarDate}
           />
         </div>
@@ -121,7 +121,7 @@ export default function Expenses({
           expenseArray={expenseArray}
           budgetArray={budgetArray}
           groupArray={groupArray}
-          publicUserData={publicUserData}
+          userPreferences={userPreferences}
           defaultCalendarDate={defaultCalendarDate}
           oldExpenseBeingEdited={oldExpenseBeingEdited}
           expenseItemToDelete={expenseItemToDelete}

@@ -26,7 +26,7 @@ describe("ExpenseItem", () => {
     setExpenseModalVisibility: mockSetExpenseModalVisibility,
     setOldExpenseBeingEdited: mockSetOldExpenseBeingEdited,
     setExpenseItemToDelete: mockSetExpenseItemToDelete,
-    publicUserData: {
+    userPreferences: {
       createdAt: new Date(),
       currency: "AUD",
       profileIconFileName: "profile-icon-default",

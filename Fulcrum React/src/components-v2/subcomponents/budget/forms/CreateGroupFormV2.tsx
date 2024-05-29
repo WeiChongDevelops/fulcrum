@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { BasicGroupData, GroupItemEntity, PublicUserData } from "@/utility/types.ts";
+import { BasicGroupData, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import useCreateGroup from "@/hooks/mutations/budget/useCreateGroup.ts";
 import {
   addColourSelectionFunctionality,
@@ -40,7 +40,7 @@ export default function CreateGroupFormV2({ highestSortIndex, setLocalisedGroupA
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: createGroup } = useCreateGroup();
-  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const routerLocation = useContext(LocationContext);
 
   const [formIsOpen, setFormIsOpen] = useState(false);
@@ -96,14 +96,14 @@ export default function CreateGroupFormV2({ highestSortIndex, setLocalisedGroupA
           asChild
           variant={"empty"}
           className={cn(
-            `w-full h-12 mb-2 border-2 border-dashed border-primary rounded-xl hover:rounded-3xl hover:bg-zinc-100 transition-all duration-300 ease-out font-semibold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`,
+            `w-full h-12 mb-2 border-2 border-dashed border-primary rounded-xl hover:rounded-3xl hover:bg-zinc-100 transition-all duration-300 ease-out font-semibold ${userPreferences.darkModeEnabled && "create-expense-button-dark"}`,
             className,
           )}
         >
           <p>+ Add Group</p>
         </Button>
       </SheetTrigger>
-      <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
+      <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
         <SheetHeader>
           <SheetTitle>New Category Group</SheetTitle>
           <SheetDescription>Create a new group to organise your budget categories.</SheetDescription>

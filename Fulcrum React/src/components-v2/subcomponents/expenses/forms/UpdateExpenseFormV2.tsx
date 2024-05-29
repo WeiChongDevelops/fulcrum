@@ -21,7 +21,7 @@ import {
   ExpenseItemEntity,
   ExpenseUpdatingFormData,
   PreviousExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
 } from "@/utility/types.ts";
 import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
@@ -64,7 +64,7 @@ export default function UpdateExpenseFormV2({
   });
   const { mutate: updateExpense } = useUpdateExpense();
   const { mutate: deleteExpense, isPending } = useDeleteExpense();
-  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const [showConfirmDeleteExpenseDialog, setShowConfirmDeleteExpenseDialog] = useState(false);
 
   const queryClient = useQueryClient();
@@ -140,7 +140,7 @@ export default function UpdateExpenseFormV2({
     >
       <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>
         <SheetTrigger onClick={updateOldExpenseBeingEdited} className={"w-full h-full"}></SheetTrigger>
-        <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
+        <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
           <SheetHeader>
             <SheetTitle>Updating Expense</SheetTitle>
             <SheetDescription>{`Making changes to an existing expense entry.`}</SheetDescription>

@@ -223,7 +223,7 @@ export interface RegisterFormData {
   confirmPassword: string;
 }
 
-export interface PublicUserData {
+export interface UserPreferences {
   currency: string;
   createdAt: Date;
   darkModeEnabled: boolean;

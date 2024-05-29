@@ -3,23 +3,23 @@ import NavbarUpper from "../child/navbar/NavbarUpper.tsx";
 import NavbarLower from "../child/navbar/NavbarLower.tsx";
 import Loader from "../child/other/Loader.tsx";
 import { ErrorBoundary } from "../child/other/ErrorBoundary.tsx";
-import { PublicUserData } from "@/utility/types.ts";
+import { UserPreferences } from "@/utility/types.ts";
 import { useContext, useEffect } from "react";
 import { getSessionEmailOrNull } from "@/utility/api.ts";
 import { LocationContext, useLocation } from "@/utility/util.ts";
 
 interface FulcrumProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   isAnyLoading: boolean;
 }
 
 /**
  * The Fulcrum component which renders the navigation bars and the active application section.
  */
-export default function Fulcrum({ publicUserData, isAnyLoading }: FulcrumProps) {
+export default function Fulcrum({ userPreferences, isAnyLoading }: FulcrumProps) {
   const routerLocation = useLocation();
   if (isAnyLoading) {
-    return <Loader isLoading={isAnyLoading} isDarkMode={publicUserData.darkModeEnabled} />;
+    return <Loader isLoading={isAnyLoading} isDarkMode={userPreferences.darkModeEnabled} />;
   }
 
   useEffect(() => {
@@ -30,12 +30,12 @@ export default function Fulcrum({ publicUserData, isAnyLoading }: FulcrumProps) 
 
   return (
     <div
-      className={`transition-filter duration-500 ease-in-out min-h-screen ${publicUserData.accessibilityEnabled && "accessibility-enabled"}`}
+      className={`transition-filter duration-500 ease-in-out min-h-screen ${userPreferences.accessibilityEnabled && "accessibility-enabled"}`}
     >
-      <NavbarUpper publicUserData={publicUserData} />
-      <NavbarLower darkModeEnabled={publicUserData.darkModeEnabled} />
+      <NavbarUpper userPreferences={userPreferences} />
+      <NavbarLower darkModeEnabled={userPreferences.darkModeEnabled} />
       {!window.location.href.includes("tools") && (
-        <div id="background" className={`${publicUserData.darkModeEnabled ? "bg-dark-2" : "bg-light"}`}></div>
+        <div id="background" className={`${userPreferences.darkModeEnabled ? "bg-dark-2" : "bg-light"}`}></div>
       )}
 
       <ErrorBoundary>

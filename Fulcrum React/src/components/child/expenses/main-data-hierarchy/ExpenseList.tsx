@@ -7,7 +7,7 @@ import {
   ExpenseItemEntity,
   ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../../utility/types.ts";
@@ -22,7 +22,7 @@ interface ExpenseListProps {
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
@@ -35,7 +35,7 @@ export default function ExpenseList({
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
   categoryDataMap,
-  publicUserData,
+  userPreferences,
 }: ExpenseListProps) {
   return (
     <div>
@@ -56,7 +56,7 @@ export default function ExpenseList({
                 setExpenseModalVisibility={setExpenseModalVisibility}
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                 setExpenseItemToDelete={setExpenseItemToDelete}
-                publicUserData={publicUserData}
+                userPreferences={userPreferences}
                 key={key}
               />
             )

@@ -27,7 +27,7 @@ describe("RecurringExpenseItem", () => {
     setRecurringExpenseModalVisibility: mockSetRecurringExpenseModalVisibility,
     setOldRecurringExpenseBeingEdited: mockSetOldRecurringExpenseBeingEdited,
     setRecurringExpenseIdToDelete: mockSetRecurringExpenseIdToDelete,
-    publicUserData: {
+    userPreferences: {
       createdAt: new Date(),
       currency: "AUD",
       profileIconFileName: "profile-icon-default",

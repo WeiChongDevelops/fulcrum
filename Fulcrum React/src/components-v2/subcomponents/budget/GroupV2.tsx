@@ -8,7 +8,7 @@ import {
   GroupItemEntity,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types.ts";
@@ -29,7 +29,7 @@ import FulcrumDialogThreeOptions from "@/components-v2/subcomponents/other/Fulcr
 interface GroupV2Props {
   group: GroupItemEntity;
   budgetArray: BudgetItemEntity[];
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
   setBudgetModalVisibility: SetModalVisibility<BudgetModalVisibility>;
@@ -48,7 +48,7 @@ interface GroupV2Props {
 export default function GroupV2({
   group,
   budgetArray,
-  publicUserData,
+  userPreferences,
   perCategoryExpenseTotalThisMonth,
   setBudgetFormVisibility,
   setBudgetModalVisibility,
@@ -126,14 +126,14 @@ export default function GroupV2({
       }
       style={{
         ...style,
-        backgroundColor: publicUserData.darkModeEnabled ? darkenColor(group.colour, 70) : group.colour,
+        backgroundColor: userPreferences.darkModeEnabled ? darkenColor(group.colour, 70) : group.colour,
         display: "flex",
         userSelect: "none",
       }}
     >
       <Loader
         isLoading={isPending}
-        isDarkMode={publicUserData.darkModeEnabled}
+        isDarkMode={userPreferences.darkModeEnabled}
         positioning={"fixed bottom-[50vh] left-[50vw] z-[100]"}
       />
       <Accordion
@@ -157,7 +157,7 @@ export default function GroupV2({
                     <div key={index}>
                       <BudgetTileV2
                         filteredBudgetItem={filteredBudgetItem}
-                        publicUserData={publicUserData}
+                        userPreferences={userPreferences}
                         perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                         setBudgetFormVisibility={setBudgetFormVisibility}
                         setBudgetModalVisibility={setBudgetModalVisibility}
@@ -172,7 +172,7 @@ export default function GroupV2({
                 budgetArray={budgetArray}
                 groupArray={groupArray}
                 groupNameOfNewItem={group.group}
-                currencySymbol={getCurrencySymbol(publicUserData.currency)}
+                currencySymbol={getCurrencySymbol(userPreferences.currency)}
               />
             </div>
           </AccordionContent>

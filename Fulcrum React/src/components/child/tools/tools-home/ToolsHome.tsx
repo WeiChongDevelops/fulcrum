@@ -2,12 +2,12 @@ import { changeFormOrModalVisibility, EmailContext, useEmail } from "../../../..
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import ProfileIconUpdatingForm from "./ProfileIconUpdatingForm.tsx";
-import { OpenToolsSection, PublicUserData, ToolsFormVisibility } from "../../../../utility/types.ts";
+import { OpenToolsSection, UserPreferences, ToolsFormVisibility } from "../../../../utility/types.ts";
 import { handleUserLogout } from "../../../../utility/api.ts";
 import ActiveFormClickShield from "../../other/ActiveFormClickShield.tsx";
 
 interface ToolsHomeProps {
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
   setOpenToolsSection: Dispatch<SetStateAction<OpenToolsSection>>;
 }
 
@@ -15,7 +15,7 @@ interface ToolsHomeProps {
  * The home component for the tools page.
  */
 
-export default function ToolsHome({ publicUserData, setOpenToolsSection }: ToolsHomeProps) {
+export default function ToolsHome({ userPreferences, setOpenToolsSection }: ToolsHomeProps) {
   const [toolsFormVisibility, setToolsFormVisibility] = useState<ToolsFormVisibility>({
     isUpdateProfileIconFormVisible: false,
   });
@@ -46,7 +46,7 @@ export default function ToolsHome({ publicUserData, setOpenToolsSection }: Tools
 
   return (
     <div
-      className={`tools flex flex-col justify-center items-center p-10 ${publicUserData.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
+      className={`tools flex flex-col justify-center items-center p-10 ${userPreferences.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
     >
       <div
         className="profile-icon-display mb-1"
@@ -55,7 +55,7 @@ export default function ToolsHome({ publicUserData, setOpenToolsSection }: Tools
         onMouseLeave={handleMouseLeave}
       >
         <img
-          src={`/static/assets-v2/profile-icons/${publicUserData.profileIconFileName.slice(0, -4)}-white.svg`}
+          src={`/static/assets-v2/profile-icons/${userPreferences.profileIconFileName.slice(0, -4)}-white.svg`}
           alt="Profile image"
         />
         {isChangeIconMessageVisible && <b className={"absolute z-4 mt-[87.5%] text-xs"}>Change Icon</b>}
@@ -97,8 +97,8 @@ export default function ToolsHome({ publicUserData, setOpenToolsSection }: Tools
 
       {toolsFormVisibility.isUpdateProfileIconFormVisible && (
         <ProfileIconUpdatingForm
-          oldIconFileName={publicUserData.profileIconFileName}
-          publicUserData={publicUserData}
+          oldIconFileName={userPreferences.profileIconFileName}
+          userPreferences={userPreferences}
           setToolsFormVisibility={setToolsFormVisibility}
         />
       )}

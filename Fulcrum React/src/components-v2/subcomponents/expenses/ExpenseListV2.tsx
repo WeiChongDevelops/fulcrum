@@ -5,7 +5,7 @@ import {
   ExpenseItemEntity,
   ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types";
@@ -24,7 +24,7 @@ interface ExpenseListV2Props {
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
 
   categoryDataMap: CategoryToIconGroupAndColourMap;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 
   categoryOptions: DropdownSelectorOption[];
 }
@@ -39,7 +39,7 @@ export default function ExpenseListV2({
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
   categoryDataMap,
-  publicUserData,
+  userPreferences,
   categoryOptions,
   oldExpenseBeingEdited,
 }: ExpenseListV2Props) {
@@ -62,7 +62,7 @@ export default function ExpenseListV2({
               setExpenseModalVisibility={setExpenseModalVisibility}
               setOldExpenseBeingEdited={setOldExpenseBeingEdited}
               setExpenseItemToDelete={setExpenseItemToDelete}
-              publicUserData={publicUserData}
+              userPreferences={userPreferences}
               categoryOptions={categoryOptions}
               key={key}
             />

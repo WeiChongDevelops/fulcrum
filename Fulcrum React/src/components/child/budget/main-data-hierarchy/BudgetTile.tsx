@@ -11,7 +11,7 @@ import {
   BudgetFormVisibility,
   BudgetModalVisibility,
   PreviousBudgetBeingEdited,
-  PublicUserData,
+  UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
 } from "../../../../utility/types.ts";
@@ -27,7 +27,7 @@ interface BudgetTileProps {
   setModalFormVisibility: SetModalVisibility<BudgetModalVisibility>;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
   setCategoryToDelete: Dispatch<SetStateAction<string>>;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
 /**
@@ -43,7 +43,7 @@ export default function BudgetTile({
   setModalFormVisibility,
   setCategoryToDelete,
   perCategoryExpenseTotalThisMonth,
-  publicUserData,
+  userPreferences,
 }: BudgetTileProps) {
   const spent = perCategoryExpenseTotalThisMonth.get(category)!;
   const [budgetExceeded, setBudgetExceeded] = useState(spent > amount);
@@ -70,7 +70,7 @@ export default function BudgetTile({
     changeFormOrModalVisibility(setModalFormVisibility, "isConfirmCategoryDeletionModalVisible", true);
   }
 
-  const currency = publicUserData.currency;
+  const currency = userPreferences.currency;
 
   return (
     <div

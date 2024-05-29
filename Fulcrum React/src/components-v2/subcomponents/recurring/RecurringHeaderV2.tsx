@@ -1,21 +1,21 @@
 import { Button } from "@/components-v2/ui/button.tsx";
-import { PublicUserData } from "@/utility/types.ts";
+import { UserPreferences } from "@/utility/types.ts";
 import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
 import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
 
 interface RecurringHeaderV2 {
   sideBarOpen: boolean;
-  publicUserData: PublicUserData;
+  userPreferences: UserPreferences;
 }
 
-export default function RecurringExpensesHeaderV2({ sideBarOpen, publicUserData }: RecurringHeaderV2) {
+export default function RecurringExpensesHeaderV2({ sideBarOpen, userPreferences }: RecurringHeaderV2) {
   return (
     <div
       className={`flex flex-row gap-4 justify-start items-center text-primary  bg-primary-foreground border-b-2 w-full ${sideBarOpen ? "w-[calc(100vw-13rem)]" : "w-[calc(100vw-5rem)]"} h-[6%]`}
     >
       <div className={"flex flex-row justify-center items-center gap-2 ml-auto mr-2"}>
         <p className={"mr-4 font-medium text-base"}>Recurring Expenses</p>
-        <CurrencySelectorV2 publicUserData={publicUserData} className={"w-26 mx-0 outline-none border-none shadow-none"} />
+        <CurrencySelectorV2 userPreferences={userPreferences} className={"w-26 mx-0 outline-none border-none shadow-none"} />
         <Button variant={"ghost"} className={"px-2.5 mr-2"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
