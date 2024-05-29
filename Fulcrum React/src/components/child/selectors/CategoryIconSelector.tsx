@@ -101,13 +101,16 @@ export default function CategoryIconSelector({ formData, setFormData, className 
     e.preventDefault();
     setSelectedIcon(e.currentTarget.getAttribute("data-value")!);
     setFormData((prevFormData: any) => ({ ...prevFormData, iconPath: e.currentTarget.getAttribute("data-value")! }));
-    setIsActive(true);
   };
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (!!selectorRef.current && !selectorRef.current.contains(e.target as Node)) {
-        setIsActive(false);
+      if (!!selectorRef.current) {
+        if (selectorRef.current.contains(e.target as Node)) {
+          setIsActive(true);
+        } else {
+          setIsActive(false);
+        }
       }
     };
     document.addEventListener("click", handleClick);
@@ -118,7 +121,7 @@ export default function CategoryIconSelector({ formData, setFormData, className 
     <div
       ref={selectorRef}
       className={cn(
-        `grid grid-cols-6 place-items-center gap-2 outline outline-1 shadow outline-gray-200 p-2 rounded-lg ${isActive ? "outline-black" : "outline-gray-200"}`,
+        `grid grid-cols-6 place-items-center gap-2 outline outline-1 shadow outline-gray-200 p-2 rounded-lg ${isActive ? "outline-primary" : "outline-muted"}`,
         className,
       )}
     >
@@ -135,7 +138,7 @@ export default function CategoryIconSelector({ formData, setFormData, className 
           data-value={IconComponent.displayName}
           key={index}
           onClick={handleIconSelection}
-          className={`flex justify-center items-center size-10 p-1.5 transition-all duration-100 ease-out rounded-full outline-primary outline-2 ${selectedIcon === IconComponent.displayName && "outline"}`}
+          className={`flex justify-center items-center size-10 p-1.5 text-primary transition-all duration-100 ease-out rounded-full outline-primary outline-2 ${selectedIcon === IconComponent.displayName && "outline"}`}
         >
           <IconComponent size={28} weight={"regular"} />
         </button>

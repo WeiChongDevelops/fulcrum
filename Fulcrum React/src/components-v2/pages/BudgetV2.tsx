@@ -274,7 +274,6 @@ export default function BudgetV2({
                     ))}
                 </SortableContext>
                 <CreateGroupFormV2
-                  publicUserData={publicUserData}
                   highestSortIndex={getHighestGroupSortIndex(groupArray)}
                   setLocalisedGroupArray={setLocalisedGroupArray}
                   className={"mt-1"}
@@ -282,6 +281,7 @@ export default function BudgetV2({
               </div>
             </DndContext>
           </div>
+          <ScrollBar forceMount orientation={"vertical"} />
         </ScrollArea>
       </div>
     </SetBudgetModalVisibilityContext.Provider>

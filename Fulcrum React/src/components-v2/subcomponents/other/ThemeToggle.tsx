@@ -39,7 +39,7 @@ export default function ThemeToggle({
   const [rerenderKey, setRerenderKey] = useState(0);
 
   return (
-    <div className={cn("flex flex-row justify-start items-center gap-3.5 font-semibold text-white mt-auto", className)}>
+    <div className={cn("flex flex-row justify-start items-center gap-3.5 font-semibold text-white", className)}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

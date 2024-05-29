@@ -21,13 +21,16 @@ export default function GroupColourSelector({ oldColour = "#fff", setFormData, c
   const handleColourSelection = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     setSelectedColour(e.currentTarget.getAttribute("data-value")!);
-    setIsActive(true);
   };
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (!!selectorRef.current && !selectorRef.current.contains(e.target as Node)) {
-        setIsActive(false);
+      if (!!selectorRef.current) {
+        if (selectorRef.current.contains(e.target as Node)) {
+          setIsActive(true);
+        } else {
+          setIsActive(false);
+        }
       }
     };
     document.addEventListener("click", handleClick);
@@ -42,7 +45,7 @@ export default function GroupColourSelector({ oldColour = "#fff", setFormData, c
     <div
       ref={selectorRef}
       className={cn(
-        `grid grid-cols-4 place-items-center gap-6 outline outline-1 transition-all duration-100 ease-out shadow p-6 rounded-lg ${isActive ? "outline-black" : "outline-gray-200"}`,
+        `grid grid-cols-4 place-items-center gap-6 outline outline-1 transition-all duration-100 ease-out shadow p-6 rounded-lg ${isActive ? "outline-primary" : "outline-muted"}`,
         className,
       )}
     >

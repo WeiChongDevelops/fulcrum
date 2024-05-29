@@ -9,6 +9,10 @@ import {
 } from "@/components-v2/ui/dialog.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, ReactNode, SetStateAction } from "react";
+import { cn } from "@/lib/utils.ts";
+import { PublicUserData } from "@/utility/types.ts";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEmail } from "@/utility/util.ts";
 
 interface FulcrumDialogTwoOptionsProps {
   dialogOpen: boolean;
@@ -40,6 +44,7 @@ export default function FulcrumDialogTwoOptions({
   rightButtonText,
   buttonTriggerComponent,
 }: FulcrumDialogTwoOptionsProps) {
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
   return (
     <div className={"col-start-3 col-span-3"}>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -48,7 +53,7 @@ export default function FulcrumDialogTwoOptions({
             {buttonTriggerComponent}
           </DialogTrigger>
         )}
-        <DialogContent className={"w-[80vw] flex flex-col gap-8"}>
+        <DialogContent className={cn("w-[80vw] flex flex-col gap-8", publicUserData.darkModeEnabled && "dark")}>
           <DialogHeader>
             <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription className={"pt-3"}>

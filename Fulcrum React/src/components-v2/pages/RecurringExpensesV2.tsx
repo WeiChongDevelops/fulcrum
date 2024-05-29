@@ -80,7 +80,6 @@ export default function RecurringExpensesV2({
           budgetArray={budgetArray}
           defaultCalendarDate={new Date()}
           mustBeRecurring={true}
-          publicUserData={publicUserData}
           perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
         />
         <div className={"mt-6 w-full"}>

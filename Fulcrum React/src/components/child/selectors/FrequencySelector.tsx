@@ -1,4 +1,4 @@
-import { colourStyles, recurringFrequencyOptions } from "../../../utility/util.ts";
+import { colourStyles, recurringFrequencyOptions, useEmail } from "../../../utility/util.ts";
 import CreatableSelect from "react-select/creatable";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { components } from "react-select";
@@ -9,6 +9,7 @@ import {
   ExpenseUpdatingFormData,
   PreviousExpenseBeingEdited,
   PreviousRecurringExpenseBeingEdited,
+  PublicUserData,
   RecurringExpenseFrequency,
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
@@ -29,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components-v2/ui/select.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface FrequencySelectorProps {
   setFormData:
@@ -50,6 +52,7 @@ export default function FrequencySelector({
   mustBeRecurring,
   initialFrequency,
 }: FrequencySelectorProps) {
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
   const [open, setOpen] = useState(false);
   const [selectedFrequency, setSelectedFrequency] = useState(
     initialFrequency ? initialFrequency : mustBeRecurring ? "monthly" : "never",
@@ -101,14 +104,15 @@ export default function FrequencySelector({
     // </Popover>
     <Select
       required
+      value={selectedFrequency}
       onValueChange={(currentValue) => {
         setSelectedFrequency(currentValue as RecurringExpenseFrequency);
       }}
     >
-      <SelectTrigger className={cn("px-4", className)}>
+      <SelectTrigger className={cn("px-4 dark:text-primary", publicUserData.darkModeEnabled && "dark", className)}>
         <SelectValue placeholder={"Select frequency..."} />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className={cn(publicUserData.darkModeEnabled && "dark")}>
         <SelectGroup>
           <SelectLabel>Repeat Frequency</SelectLabel>
           {(mustBeRecurring ? recurringFrequencyOptions.slice(1) : recurringFrequencyOptions).map((frequencyOption) => (

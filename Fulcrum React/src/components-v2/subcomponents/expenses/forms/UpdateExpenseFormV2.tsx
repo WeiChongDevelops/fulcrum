@@ -21,6 +21,7 @@ import {
   ExpenseItemEntity,
   ExpenseUpdatingFormData,
   PreviousExpenseBeingEdited,
+  PublicUserData,
   SetFormVisibility,
 } from "@/utility/types.ts";
 import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
@@ -28,6 +29,7 @@ import { toast } from "sonner";
 import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
 import useDeleteExpense from "@/hooks/mutations/expense/useDeleteExpense.ts";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils.ts";
 
 interface UpdateExpenseFormV2Props {
   categoryOptions: DropdownSelectorOption[];
@@ -62,6 +64,7 @@ export default function UpdateExpenseFormV2({
   });
   const { mutate: updateExpense } = useUpdateExpense();
   const { mutate: deleteExpense, isPending } = useDeleteExpense();
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
   const [showConfirmDeleteExpenseDialog, setShowConfirmDeleteExpenseDialog] = useState(false);
 
   const queryClient = useQueryClient();
@@ -137,7 +140,7 @@ export default function UpdateExpenseFormV2({
     >
       <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>
         <SheetTrigger onClick={updateOldExpenseBeingEdited} className={"w-full h-full"}></SheetTrigger>
-        <SheetContent>
+        <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
           <SheetHeader>
             <SheetTitle>Updating Expense</SheetTitle>
             <SheetDescription>{`Making changes to an existing expense entry.`}</SheetDescription>
@@ -159,7 +162,7 @@ export default function UpdateExpenseFormV2({
               <Label htmlFor="amount" className={"text-right"}>
                 Amount
               </Label>
-              <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-black text-sm">{currencySymbol}</b>
+              <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-primary text-sm">{currencySymbol}</b>
               <Input
                 type="text"
                 className={"col-span-3 pl-8"}

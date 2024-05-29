@@ -102,7 +102,7 @@ export const groupColourArray = [
   "#fffbeb",
   "#fefce8",
   "#f7fee7",
-  "#f7fee7",
+  "#f0fdf4",
   "#ecfdf5",
   "#f0fdfa",
   "#ecfeff",
@@ -564,6 +564,31 @@ export const colourStyles = {
   }),
   valueContainer: (styles: any) => ({ ...styles, padding: 0, margin: 0 }),
 };
+
+/**
+ * Creates a darkened version of a given colour.
+ * @param colour - The colour to darken.
+ * @param percent - The degree of darkening.
+ * @returns The darkened hexadecimal colour code.
+ */
+export function darkenColor(colour: string, percent: number): string {
+  const num = parseInt(colour.slice(1), 16);
+  const amt = Math.round(2.55 * percent);
+  const R = (num >> 16) - amt;
+  const G = ((num >> 8) & 0x00ff) - amt;
+  const B = (num & 0x0000ff) - amt;
+  return (
+    "#" +
+    (
+      0x1000000 +
+      (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+      (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+      (B < 255 ? (B < 1 ? 0 : B) : 255)
+    )
+      .toString(16)
+      .slice(1)
+  );
+}
 
 /**
  * Converts an array of budget category groups into the selector options format.

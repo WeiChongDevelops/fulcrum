@@ -7,6 +7,7 @@ import {
   BudgetUpdatingFormData,
   GroupItemEntity,
   PreviousBudgetBeingEdited,
+  PublicUserData,
 } from "@/utility/types.ts";
 import {
   capitaliseFirstLetter,
@@ -14,6 +15,7 @@ import {
   getRandomGroupColour,
   groupSort,
   handleInputChangeOnFormWithAmount,
+  useEmail,
   useSetBudgetModalVisibility,
 } from "@/utility/util.ts";
 import {
@@ -47,6 +49,8 @@ import {
 } from "@/components-v2/ui/dialog";
 import useDeleteBudget from "@/hooks/mutations/budget/useDeleteBudget.ts";
 import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
+import { useQueryClient } from "@tanstack/react-query";
+import GroupSelector from "@/components-v2/subcomponents/budget/GroupSelector.tsx";
 
 interface UpdateBudgetFormV2Props {
   oldBudgetBeingEdited: PreviousBudgetBeingEdited;
@@ -71,6 +75,7 @@ export default function UpdateBudgetFormV2({
   // const routerLocation = useContext(LocationContext);
   const { mutate: updateBudget } = useUpdateBudget();
   const { mutate: deleteBudget } = useDeleteBudget();
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
 
   const setBudgetModalVisibility = useSetBudgetModalVisibility()!;
 
@@ -169,7 +174,7 @@ export default function UpdateBudgetFormV2({
           {/*  </div>*/}
           {/*</Button>*/}
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
           <SheetHeader>
             <SheetTitle>Updating Budget Category</SheetTitle>
             <SheetDescription>{`Making changes to the budget for '${oldBudgetBeingEdited.oldCategory}'.`}</SheetDescription>
@@ -196,7 +201,7 @@ export default function UpdateBudgetFormV2({
               <Label htmlFor="amount" className={"text-right"}>
                 Amount
               </Label>
-              <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-black text-sm">{currencySymbol}</b>
+              <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-primary text-sm">{currencySymbol}</b>
               <Input
                 type="text"
                 className={"col-span-3 pl-8"}
@@ -213,18 +218,7 @@ export default function UpdateBudgetFormV2({
               <Label htmlFor="group" className={"text-right"}>
                 Group
               </Label>
-              <Select value={formData.group} onValueChange={handleGroupSelectChange}>
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {groupArray.sort(groupSort).map((groupItem, index) => (
-                    <SelectItem value={groupItem.group} key={index}>
-                      {groupItem.group}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <GroupSelector formData={formData} setFormData={setFormData} groupArray={groupArray} />
             </div>
 
             <div className={"grid grid-cols-4 items-center gap-5"}>

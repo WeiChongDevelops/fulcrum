@@ -11,6 +11,7 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import {
   changeFormOrModalVisibility,
+  darkenColor,
   DEFAULT_CATEGORY_GROUP,
   formatDollarAmountStatic,
   getCurrencySymbol,
@@ -119,12 +120,15 @@ export default function ExpenseItemV2({
         />
       )}
       <div
-        className="expense-item relative saturate-[275%] brightness-[98%]"
-        style={{ backgroundColor: groupColour }}
+        className="expense-item relative saturate-[275%] dark:saturate-[350%]"
+        style={{
+          backgroundColor: publicUserData.darkModeEnabled ? darkenColor(groupColour, 40) : darkenColor(groupColour, 5),
+        }}
         data-value={expenseId}
       >
         <div className="flex flex-row items-center">
-          <div className="rounded-full bg-primary text-primary-foreground p-2">
+          {/*<div className="rounded-full bg-primary text-primary-foreground p-2">*/}
+          <div className="rounded-full text-primary bg-background p-2">
             <DynamicIconComponent componentName={iconPath} props={{ size: 32 }} className={""} />
           </div>
           <div
@@ -133,8 +137,8 @@ export default function ExpenseItemV2({
               color: isMiscellaneous ? "white" : "black",
             }}
           >
-            <p className="font-bold text-[1.2rem] mb-[-2px]">{category}</p>
-            <p className="text-sm font-medium">{groupName}</p>
+            <p className="font-bold text-lg 2xl:text-xl mb-[-2px]">{category}</p>
+            <p className="text-xs 2xl:text-sm font-medium">{groupName}</p>
           </div>
         </div>
         <div
@@ -159,7 +163,7 @@ export default function ExpenseItemV2({
               />
             </svg>
           )}
-          <b className="text-xl mr-2">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
+          <b className="text-lg 2xl:text-xl mr-2">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
         </div>
       </div>
     </div>

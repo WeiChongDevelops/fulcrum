@@ -7,6 +7,7 @@ import {
   capitaliseFirstLetter,
   getRandomGroupColour,
   LocationContext,
+  useEmail,
 } from "@/utility/util.ts";
 import {
   Sheet,
@@ -24,26 +25,22 @@ import GroupColourSelector from "@/components/child/selectors/GroupColourSelecto
 import FulcrumButton from "@/components/child/buttons/FulcrumButton.tsx";
 import AddNewGroupButton from "@/components/child/budget/buttons/AddNewGroupButton.tsx";
 import { cn } from "@/lib/utils.ts";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateGroupFormV2Props {
   highestSortIndex: number;
   setLocalisedGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
-  publicUserData: PublicUserData;
   className?: string;
 }
 
-export default function CreateGroupFormV2({
-  highestSortIndex,
-  setLocalisedGroupArray,
-  publicUserData,
-  className,
-}: CreateGroupFormV2Props) {
+export default function CreateGroupFormV2({ highestSortIndex, setLocalisedGroupArray, className }: CreateGroupFormV2Props) {
   const [formData, setFormData] = useState<BasicGroupData>({
     group: "",
     colour: "",
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: createGroup } = useCreateGroup();
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
   const routerLocation = useContext(LocationContext);
 
   const [formIsOpen, setFormIsOpen] = useState(false);
@@ -106,7 +103,7 @@ export default function CreateGroupFormV2({
           <p>+ Add Group</p>
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
         <SheetHeader>
           <SheetTitle>New Category Group</SheetTitle>
           <SheetDescription>Create a new group to organise your budget categories.</SheetDescription>

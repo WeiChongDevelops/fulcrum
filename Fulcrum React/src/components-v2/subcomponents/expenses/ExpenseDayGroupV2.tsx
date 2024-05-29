@@ -73,7 +73,7 @@ export default function ExpenseDayGroupV2({
               : formatDate(dayExpenseGroup.calendarDate)}
         </p>
         {/*<div className={`dotted-line ${publicUserData.darkModeEnabled && "dotted-line-dark"}`}></div>*/}
-        <div className={"flex-grow h-[1px] bg-[#17423f] bg-opacity-20 mx-4"}></div>
+        <div className={"flex-grow h-[1px] bg-[#17423f] dark:bg-muted-foreground bg-opacity-20 mx-4"}></div>
         <p className="text-2xl text-right">{formatDollarAmountStatic(dayTotal, publicUserData.currency)}</p>
       </div>
       {dayExpenseGroup.dayExpenseArray.length > 0 && (

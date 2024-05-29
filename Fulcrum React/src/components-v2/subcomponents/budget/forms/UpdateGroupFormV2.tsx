@@ -10,14 +10,16 @@ import {
 import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
 import FulcrumButton from "@/components/child/buttons/FulcrumButton.tsx";
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { BasicGroupData, GroupItemEntity, PreviousGroupBeingEdited } from "@/utility/types.ts";
+import { BasicGroupData, GroupItemEntity, PreviousGroupBeingEdited, PublicUserData } from "@/utility/types.ts";
 import useUpdateGroup from "@/hooks/mutations/budget/useUpdateGroup.ts";
-import { addColourSelectionFunctionality, addFormExitListeners, LocationContext } from "@/utility/util.ts";
+import { addColourSelectionFunctionality, addFormExitListeners, LocationContext, useEmail } from "@/utility/util.ts";
 import { Input } from "@/components-v2/ui/input.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { toast } from "sonner";
 import * as React from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils.ts";
 
 interface UpdateGroupFormV2Props {
   oldGroupBeingEdited: PreviousGroupBeingEdited;
@@ -36,6 +38,7 @@ export default function UpdateGroupFormV2({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateGroup } = useUpdateGroup();
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
   const routerLocation = useContext(LocationContext);
 
   const [formIsOpen, setFormIsOpen] = useState(false);
@@ -117,7 +120,7 @@ export default function UpdateGroupFormV2({
           </div>
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
         <SheetHeader>
           <SheetTitle>Updating Category Group</SheetTitle>
           <SheetDescription>{`Making changes to the group '${oldGroupBeingEdited.oldGroupName}'.`}</SheetDescription>
@@ -149,7 +152,7 @@ export default function UpdateGroupFormV2({
             />
           </div>
 
-          <Button className={"mt-2 self-end"}>Add Expense</Button>
+          <Button className={"mt-2 self-end"}>Save Changes</Button>
         </form>
       </SheetContent>
     </Sheet>

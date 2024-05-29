@@ -4,6 +4,7 @@ import {
   ExpenseItemEntity,
   ExpenseUpdatingFormData,
   PreviousRecurringExpenseBeingEdited,
+  PublicUserData,
   RecurringExpenseFormVisibility,
   RecurringExpenseFrequency,
   RecurringExpenseItemEntity,
@@ -26,6 +27,7 @@ import useDeleteRecurringExpense from "@/hooks/mutations/recurring-expense/useDe
 import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
 import FulcrumDialogThreeOptions from "@/components-v2/subcomponents/other/FulcrumDialogThreeOptions.tsx";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils.ts";
 
 interface UpdateRecurringFormV2Props {
   categoryOptions: DropdownSelectorOption[];
@@ -60,6 +62,7 @@ export default function UpdateRecurringFormV2({
     frequency: oldRecurringExpenseBeingEdited.oldFrequency,
   });
   const { mutate: updateRecurringExpense } = useUpdateRecurringExpense();
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
 
   useEffect(() => {
     setFormData({
@@ -122,7 +125,7 @@ export default function UpdateRecurringFormV2({
     >
       <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>
         <SheetTrigger onClick={updateOldRecurringBeingEdited} className={"w-full h-full"}></SheetTrigger>
-        <SheetContent>
+        <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
           <SheetHeader>
             <SheetTitle>Updating Recurring Expense</SheetTitle>
             <SheetDescription>{`Making changes to your existing recurring expense.`}</SheetDescription>
@@ -144,7 +147,7 @@ export default function UpdateRecurringFormV2({
               <Label htmlFor="amount" className={"text-right"}>
                 Amount
               </Label>
-              <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-black text-sm">{currencySymbol}</b>
+              <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-primary text-sm">{currencySymbol}</b>
               <Input
                 type="text"
                 className={"col-span-3 pl-8"}
@@ -158,7 +161,7 @@ export default function UpdateRecurringFormV2({
             </div>
 
             <div className={"grid grid-cols-4 items-center gap-5"}>
-              <Label className={"text-right"}>Starting Date</Label>
+              <Label className={"text-right"}>Start Date</Label>
               <ExpenseDatePicker
                 setFormData={setFormData}
                 defaultDate={oldRecurringExpenseBeingEdited.oldTimestamp}

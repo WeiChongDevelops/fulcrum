@@ -21,7 +21,7 @@ export default function BudgetHeaderV2({ publicUserData, totalIncome, sideBarOpe
         <p className={"mr-4 font-medium text-base"}>Budget</p>
         <CurrencySelectorV2 publicUserData={publicUserData} className={"w-26 mx-0 outline-none border-none shadow-none"} />
 
-        <Button variant={"ghost"} className={"p-2 mr-2"}>
+        <Button variant={"ghost"} className={"px-2.5 mr-2"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

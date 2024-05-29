@@ -63,7 +63,6 @@ export const ExpenseMonthGroupV2 = memo(
           budgetArray={budgetArray}
           defaultCalendarDate={new Date()}
           mustBeRecurring={false}
-          publicUserData={publicUserData}
           perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
         />
 

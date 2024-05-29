@@ -18,6 +18,7 @@ import FulcrumTypematchModal from "@/components-v2/subcomponents/other/FulcrumTy
 import ReactCountryFlag from "react-country-flag";
 import ThemeToggle from "@/components-v2/subcomponents/other/ThemeToggle.tsx";
 import AccessibilityToggle from "@/components-v2/subcomponents/other/AccessibilityToggle.tsx";
+import { CalendarStar, Globe, Lock, PaintBrushBroad, PersonSimpleCircle, Scales } from "@phosphor-icons/react";
 
 interface SettingsV2Props {
   publicUserData: PublicUserData;
@@ -58,40 +59,51 @@ export default function SettingsV2({ publicUserData }: SettingsV2Props) {
   return (
     <div className={"flex flex-col justify-start items-center relative"}>
       <SettingsHeaderV2 publicUserData={publicUserData} />
-      <div className={"flex flex-col justify-start items-center gap-2 w-[95%] h-[94%] mt-[6vh] pt-8 font-extralight"}>
-        <div className={"settings-row bg-[#17423f] h-16"}>
-          <b>Currency</b>
+      <div className={"flex flex-col justify-start items-center gap-3.5 w-[95%] h-[94%] mt-[6vh] pt-8 font-extralight"}>
+        <div className={"settings-row outline outline-[1px] outline-primary text-primary shadow h-14"}>
+          <Globe size={"1.4rem"} />
+          <b className={"mr-auto ml-4"}>Currency</b>
           {/*<CurrencySelector publicUserData={publicUserData} />*/}
-          <CurrencySelectorV2 publicUserData={publicUserData} className={"w-28 mx-0 bg-primary"} />
+          <CurrencySelectorV2 publicUserData={publicUserData} className={"w-28  text-primary font-medium bg-background"} />
         </div>
 
-        <div className={"settings-row bg-[#17423f] h-16"}>
-          <b>Theme</b>
+        <div className={"settings-row outline outline-[1px] outline-primary text-primary shadow h-14"}>
+          <PaintBrushBroad size={"1.4rem"} />
+          <b className={"mr-auto ml-4"}>Theme</b>
           {/*<DarkModeToggleV2 publicUserData={publicUserData} />*/}
 
-          <ThemeToggle publicUserData={publicUserData} hideDescriptor />
+          <ThemeToggle publicUserData={publicUserData} className={"mr-2"} hideDescriptor />
         </div>
 
-        <div className={"settings-row bg-[#17423f] h-16"}>
-          <b>Accessibility</b>
+        <div className={"settings-row outline outline-[1px] outline-primary text-primary shadow h-14"}>
+          <PersonSimpleCircle size={"1.4rem"} />
+          <b className={"mr-auto ml-4"}>Accessibility</b>
           {/*<AccessibilityToggleV2 publicUserData={publicUserData} />*/}
-          <AccessibilityToggle publicUserData={publicUserData} hideDescriptor />
+          <AccessibilityToggle publicUserData={publicUserData} className={"mr-2"} hideDescriptor />
         </div>
 
-        <div className={"settings-row bg-[#17423f] h-16"}>
-          <b>Public License</b>
-          <Button onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}>
+        <div className={"settings-row outline outline-[1px] outline-primary text-primary shadow h-14"}>
+          <Scales size={"1.4rem"} />
+          <b className={"mr-auto ml-4"}>Public License</b>
+          <Button
+            size={"sm"}
+            onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}
+          >
             See Public License
           </Button>
         </div>
 
-        <div className={"settings-row bg-[#17423f] h-16"}>
-          <b>Privacy Policy</b>
-          <Button onClick={() => window.open(window.location.origin + "/privacy", "_blank")}>See Privacy Policy</Button>
+        <div className={"settings-row outline outline-[1px] outline-primary text-primary shadow h-14"}>
+          <Lock size={"1.4rem"} />
+          <b className={"mr-auto ml-4"}>Privacy Policy</b>
+          <Button size={"sm"} onClick={() => window.open(window.location.origin + "/privacy", "_blank")}>
+            See Privacy Policy
+          </Button>
         </div>
 
-        <div className={"settings-row bg-[#17423f] h-16"}>
-          <b>Joined On</b>
+        <div className={"settings-row outline outline-[1px] outline-primary text-primary shadow h-14"}>
+          <CalendarStar size={"1.4rem"} />
+          <b className={"mr-auto ml-4"}>Joined On</b>
           <p>{new Date(publicUserData.createdAt).toLocaleDateString()}</p>
         </div>
 

@@ -17,6 +17,7 @@ import {
   getCurrencySymbol,
   getHighestBudgetSortIndex,
   handleInputChangeOnFormWithAmount,
+  useEmail,
 } from "@/utility/util.ts";
 import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
@@ -40,13 +41,14 @@ import CategorySelector from "@/components/child/selectors/CategorySelector.tsx"
 import FrequencySelector from "@/components/child/selectors/FrequencySelector.tsx";
 import ExpenseDatePicker from "@/components/child/selectors/ExpenseDatePicker.tsx";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils.ts";
 
 interface CreateExpenseFormV2Props {
   categoryDataMap: CategoryToIconGroupAndColourMap;
   budgetArray: BudgetItemEntity[];
   defaultCalendarDate: Date;
   mustBeRecurring: boolean;
-  publicUserData: PublicUserData;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
 }
 
@@ -55,13 +57,13 @@ export default function CreateExpenseFormV2({
   budgetArray,
   defaultCalendarDate,
   mustBeRecurring,
-  publicUserData,
   perCategoryExpenseTotalThisMonth,
 }: CreateExpenseFormV2Props) {
   const [formIsOpen, setFormIsOpen] = useState(false);
 
   const { mutate: createExpense } = useCreateExpense();
   const { mutate: createRecurringExpense } = useCreateRecurringExpense();
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
   const [formData, setFormData] = useState<ExpenseCreationFormData>({
     category: "Other",
     amount: 0,
@@ -169,13 +171,13 @@ export default function CreateExpenseFormV2({
         <Button
           asChild
           variant={"empty"}
-          className={`w-[95%] h-14 mb-2 border-2 border-dashed border-black rounded-lg hover:rounded-3xl hover:bg-zinc-100 transition-all duration-300 ease-out font-semibold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`}
+          className={`w-[95%] h-14 mb-2 border-2 border-dashed border-primary rounded-lg hover:rounded-3xl hover:bg-zinc-100 transition-all duration-300 ease-out font-semibold ${publicUserData.darkModeEnabled && "create-expense-button-dark"}`}
         >
           <p>{`+ Add ${mustBeRecurring ? "Recurring " : ""}Expense`}</p>
         </Button>
       </SheetTrigger>
       <SheetOverlay>
-        <SheetContent>
+        <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
           <SheetHeader>
             <SheetTitle>{mustBeRecurring ? "New Recurring Expense" : "New Expense Entry"}</SheetTitle>
             <SheetDescription>
@@ -196,7 +198,7 @@ export default function CreateExpenseFormV2({
               <Label htmlFor="amount" className={"text-right"}>
                 Amount
               </Label>
-              <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-black text-sm">
+              <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-primary text-sm">
                 {getCurrencySymbol(publicUserData.currency)}
               </b>
               <Input

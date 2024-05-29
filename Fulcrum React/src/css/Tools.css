@@ -93,16 +93,16 @@
 }
 
 .settings-row {
-  color: white;
-  width: 100%;
   display: flex;
-  padding: 1rem 2rem;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  padding: 1rem 2rem;
   border-radius: 0.75rem;
   line-height: 1.75rem;
   text-align: left;
+  color: white;
 }
 
 .wipe-options {

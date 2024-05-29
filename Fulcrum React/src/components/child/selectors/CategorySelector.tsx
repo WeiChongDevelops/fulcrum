@@ -1,4 +1,4 @@
-import { categoryOptionSort, colourStyles, groupSort } from "../../../utility/util.ts";
+import { categoryOptionSort, colourStyles, groupSort, useEmail } from "../../../utility/util.ts";
 import CreatableSelect from "react-select/creatable";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { components } from "react-select";
@@ -11,6 +11,7 @@ import {
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
   DropdownSelectorOption,
+  PublicUserData,
 } from "../../../utility/types.ts";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components-v2/ui/button";
@@ -19,6 +20,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popo
 import { Check, ChevronsUpDown } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components-v2/ui/scroll-area.tsx";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CategorySelectorProps {
   categoryOptions: DropdownSelectorOption[];
@@ -42,6 +44,7 @@ export default function CategorySelector({
   className,
   defaultCategory,
 }: CategorySelectorProps) {
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(defaultCategory ?? "");
 
@@ -54,7 +57,7 @@ export default function CategorySelector({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild className={cn("dark:text-primary", publicUserData.darkModeEnabled && "dark")}>
         <Button
           variant="outline"
           role="combobox"
@@ -67,7 +70,7 @@ export default function CategorySelector({
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 ">
+      <PopoverContent className={cn("p-0 dark:text-primary", publicUserData.darkModeEnabled && "dark")}>
         <Command>
           <CommandInput placeholder="Search category..." className="h-9 font-normal" required />
           <CommandEmpty>No category found.</CommandEmpty>

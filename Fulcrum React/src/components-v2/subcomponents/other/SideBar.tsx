@@ -219,7 +219,7 @@ export default function SideBar({ publicUserData, sideBarOpen, setSideBarOpen }:
               </svg>
             }
           />
-          <ThemeToggle publicUserData={publicUserData} sideBarOpen={sideBarOpen} className={"pl-4 h-16"} />
+          <ThemeToggle publicUserData={publicUserData} sideBarOpen={sideBarOpen} className={"pl-4 h-12 mt-auto"} />
           <PageNavigationButton
             currentPage={currentPage}
             page={"help"}

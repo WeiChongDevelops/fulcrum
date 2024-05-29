@@ -31,7 +31,7 @@ export default function AccessibilityToggle({
   };
 
   return (
-    <div className={cn("flex flex-row justify-start items-center gap-3.5 font-semibold text-white mt-auto", className)}>
+    <div className={cn("flex flex-row justify-start items-center gap-3.5 font-semibold text-white", className)}>
       {accessibilityOn ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"

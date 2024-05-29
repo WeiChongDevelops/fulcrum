@@ -16,6 +16,7 @@ import { Dispatch, SetStateAction, useMemo } from "react";
 import {
   capitaliseFirstLetter,
   changeFormOrModalVisibility,
+  darkenColor,
   DEFAULT_CATEGORY_GROUP,
   formatDate,
   formatDollarAmountStatic,
@@ -105,12 +106,12 @@ export default function RecurringItemV2({
         oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
       />
       <div
-        className="expense-item relative saturate-[275%] brightness-[98%]"
-        style={{ backgroundColor: groupColour }}
+        className="expense-item relative saturate-[275%] dark:saturate-[350%]"
+        style={{ backgroundColor: publicUserData.darkModeEnabled ? darkenColor(groupColour, 40) : groupColour }}
         data-value={recurringExpenseId}
       >
         <div className="flex flex-row items-center">
-          <div className="rounded-full bg-primary text-primary-foreground p-2">
+          <div className="rounded-full text-primary bg-background p-2">
             <DynamicIconComponent componentName={iconPath} props={{ size: 32 }} className={""} />
           </div>
           <div
@@ -119,24 +120,24 @@ export default function RecurringItemV2({
               color: isMiscellaneous ? "white" : "black",
             }}
           >
-            <p className="font-bold text-xl mb-[-2px]">{category}</p>
-            <p className="text-sm font-medium">{groupName}</p>
+            <p className="font-bold text-lg 2xl:text-xl mb-[-2px]">{category}</p>
+            <p className="text-xs 2xl:text-sm font-medium">{groupName}</p>
           </div>
         </div>
         <div
-          className={"grid grid-cols-3 place-items-center"}
+          className={"grid grid-cols-[1fr_2fr_1fr] place-items-center w-[50%]"}
           style={{
             color: isMiscellaneous ? "white" : "black",
           }}
         >
-          <div className="flex flex-row w-44 items-center">
+          <div className="flex flex-row mx-auto items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="size-6"
+              className="size-5"
             >
               <path
                 strokeLinecap="round"
@@ -144,14 +145,14 @@ export default function RecurringItemV2({
                 d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
               />
             </svg>
-            <p className={"text-xl ml-3 mr-4 font-medium"}>{capitaliseFirstLetter(frequency)}</p>
+            <p className={"text-base 2xl:text-lg ml-2 font-medium"}>{capitaliseFirstLetter(frequency)}</p>
           </div>
 
-          <div className="mr-12">
+          <div className="text-xs xl:text-sm">
             <p className={"font-light"}>Next:</p>
             <p className={"font-bold"}>{nextRecurringInstance && formatDate(nextRecurringInstance)}</p>
           </div>
-          <b className="text-xl mr-4">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
+          <b className="text-lg 2xl:text-xl">{formatDollarAmountStatic(amount, publicUserData.currency)}</b>
           {/*<div className="flex flex-row items-center ml-2">*/}
           {/*  <button className="circle-button" onClick={handleEditClick}>*/}
           {/*    <img*/}

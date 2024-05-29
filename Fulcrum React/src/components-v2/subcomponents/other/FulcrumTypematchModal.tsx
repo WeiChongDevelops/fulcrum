@@ -11,6 +11,10 @@ import { Button } from "@/components-v2/ui/button.tsx";
 import { ChangeEvent, Dispatch, FormEvent, ReactNode, SetStateAction, useState } from "react";
 import { Input } from "@/components-v2/ui/input.tsx";
 import { toast } from "sonner";
+import { PublicUserData } from "@/utility/types.ts";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEmail } from "@/utility/util.ts";
+import { cn } from "@/lib/utils.ts";
 
 interface FulcrumTypematchModalProps {
   dialogOpen: boolean;
@@ -45,6 +49,7 @@ export default function FulcrumTypematchModal({
   buttonTriggerComponent,
   typeMatchString,
 }: FulcrumTypematchModalProps) {
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
   const [typeMatchValue, setTypeMatchValue] = useState("");
 
   const handleTypeMatchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +73,7 @@ export default function FulcrumTypematchModal({
             {buttonTriggerComponent}
           </DialogTrigger>
         )}
-        <DialogContent className={"w-[80vw] flex flex-col gap-8"}>
+        <DialogContent className={cn("w-[80vw] flex flex-col gap-8", publicUserData.darkModeEnabled && "dark")}>
           <DialogHeader>
             <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription className={"pt-1"}>
@@ -76,7 +81,7 @@ export default function FulcrumTypematchModal({
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit}>
-            <p>
+            <p className={"text-primary"}>
               Enter '<b>{typeMatchString}</b>' below to proceed.
             </p>
             <Input type={"text"} value={typeMatchValue} onChange={handleTypeMatchInputChange} className={"mt-3"} />

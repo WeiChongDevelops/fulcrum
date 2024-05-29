@@ -26,10 +26,11 @@ import {
   groupSort,
   handleInputChangeOnFormWithAmount,
   LocationContext,
+  useEmail,
 } from "@/utility/util.ts";
 import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
 import FulcrumButton from "@/components/child/buttons/FulcrumButton.tsx";
-import { BudgetCreationFormData, BudgetItemEntity, GroupItemEntity } from "@/utility/types.ts";
+import { BudgetCreationFormData, BudgetItemEntity, GroupItemEntity, PublicUserData } from "@/utility/types.ts";
 import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "@/components/child/selectors/CategoryIconSelector.tsx";
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
@@ -43,6 +44,9 @@ import {
   SelectGroup,
   SelectLabel,
 } from "@/components-v2/ui/select.tsx";
+import GroupSelector from "@/components-v2/subcomponents/budget/GroupSelector.tsx";
+import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils.ts";
 
 interface CreateBudgetFormV2Props {
   budgetArray: BudgetItemEntity[];
@@ -65,6 +69,7 @@ export default function CreateBudgetFormV2({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: createBudget } = useCreateBudget();
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
   const routerLocation = useContext(LocationContext);
   const [formIsOpen, setFormIsOpen] = useState(false);
 
@@ -137,10 +142,6 @@ export default function CreateBudgetFormV2({
     handleInputChangeOnFormWithAmount(e, setFormData);
   }
 
-  const handleGroupSelectChange = (group: string) => {
-    setFormData((prevFormData) => ({ ...prevFormData, group: group }));
-  };
-
   return (
     <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>
       <SheetTrigger>
@@ -152,7 +153,7 @@ export default function CreateBudgetFormV2({
           <b>+</b>
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className={cn(publicUserData.darkModeEnabled && "dark")}>
         <SheetHeader>
           <SheetTitle>New Budget Item</SheetTitle>
           <SheetDescription>Create a new budgeting category.</SheetDescription>
@@ -179,7 +180,7 @@ export default function CreateBudgetFormV2({
             <Label htmlFor="amount" className={"text-right"}>
               Amount
             </Label>
-            <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-black text-sm">{currencySymbol}</b>
+            <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-primary text-sm">{currencySymbol}</b>
             <Input
               type="text"
               className={"col-span-3 pl-8"}
@@ -196,18 +197,7 @@ export default function CreateBudgetFormV2({
             <Label htmlFor="group" className={"text-right"}>
               Group
             </Label>
-            <Select value={formData.group} onValueChange={handleGroupSelectChange}>
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                {groupArray.sort(groupSort).map((groupItem, index) => (
-                  <SelectItem value={groupItem.group} key={index}>
-                    {groupItem.group}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <GroupSelector formData={formData} setFormData={setFormData} groupArray={groupArray} />
           </div>
 
           <div className={"grid grid-cols-4 items-center gap-5"}>

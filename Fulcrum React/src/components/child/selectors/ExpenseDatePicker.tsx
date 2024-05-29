@@ -10,10 +10,12 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   ExpenseCreationFormData,
   ExpenseUpdatingFormData,
+  PublicUserData,
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
 } from "@/utility/types.ts";
-import { expenseStartDate } from "@/utility/util.ts";
+import { expenseStartDate, useEmail } from "@/utility/util.ts";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ExpenseDatePickerProps {
   setFormData:
@@ -26,6 +28,7 @@ interface ExpenseDatePickerProps {
 }
 
 export default function ExpenseDatePicker({ setFormData, className, defaultDate = new Date() }: ExpenseDatePickerProps) {
+  const publicUserData: PublicUserData = useQueryClient().getQueryData(["publicUserData", useEmail()])!;
   const [date, setDate] = useState<Date>(defaultDate);
 
   useEffect(() => {
@@ -37,7 +40,7 @@ export default function ExpenseDatePicker({ setFormData, className, defaultDate 
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild className={cn("bg-background text-primary", publicUserData.darkModeEnabled && "dark")}>
         <Button
           variant={"outline"}
           className={cn(" justify-start text-left font-normal", !date && "text-muted-foreground", className)}
@@ -46,12 +49,15 @@ export default function ExpenseDatePicker({ setFormData, className, defaultDate 
           {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="flex w-auto flex-col space-y-2 p-2">
+      <PopoverContent
+        align="start"
+        className={cn("flex w-auto flex-col space-y-2 p-2 dark", publicUserData.darkModeEnabled && "dark")}
+      >
         <Select onValueChange={(value) => setDate(addDays(new Date(), parseInt(value)))}>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
           </SelectTrigger>
-          <SelectContent position="popper">
+          <SelectContent position="popper" className={cn(publicUserData.darkModeEnabled && "dark")}>
             <SelectItem value="0">Today</SelectItem>
             <SelectItem value="1">Tomorrow</SelectItem>
             <SelectItem value="3">In 3 days</SelectItem>

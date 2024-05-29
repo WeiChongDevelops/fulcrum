@@ -19,7 +19,7 @@ import { Button } from "@/components-v2/ui/button.tsx";
 import UpdateGroupFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateGroupFormV2.tsx";
 import CreateBudgetFormV2 from "@/components-v2/subcomponents/budget/forms/CreateBudgetFormV2.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { budgetSort, changeFormOrModalVisibility, getCurrencySymbol } from "@/utility/util.ts";
+import { budgetSort, changeFormOrModalVisibility, darkenColor, getCurrencySymbol } from "@/utility/util.ts";
 import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
 import * as React from "react";
 import useDeleteGroup from "@/hooks/mutations/budget/useDeleteGroup.ts";
@@ -117,31 +117,12 @@ export default function GroupV2({
     );
   };
 
-  function darkenColor(color: string, percent: number): string {
-    const num = parseInt(color.slice(1), 16);
-    const amt = Math.round(2.55 * percent);
-    const R = (num >> 16) - amt;
-    const G = ((num >> 8) & 0x00ff) - amt;
-    const B = (num & 0x0000ff) - amt;
-    return (
-      "#" +
-      (
-        0x1000000 +
-        (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
-        (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
-        (B < 255 ? (B < 1 ? 0 : B) : 255)
-      )
-        .toString(16)
-        .slice(1)
-    );
-  }
-
   return (
     <div
       ref={setNodeRef}
       {...attributes}
       className={
-        "flex flex-row items-start gap-1 select-none rounded-xl relative overflow-hidden saturate-[250%] dark:saturate-[120%] brightness-[95%]"
+        "flex flex-row items-start gap-1 select-none rounded-xl relative overflow-hidden saturate-[250%] dark:saturate-[185%] brightness-[95%]"
       }
       style={{
         ...style,
