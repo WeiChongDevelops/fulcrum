@@ -1,16 +1,14 @@
 import { Button } from "@/components-v2/ui/button.tsx";
 import { UserPreferences } from "@/utility/types.ts";
 import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
-import { useSideBarIsOpen } from "@/utility/util.ts";
+import { useEmail, useSideBarIsOpen } from "@/utility/util.ts";
 import ReactCountryFlag from "react-country-flag";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popover.tsx";
 import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
-interface SettingsHeaderV2 {
-  userPreferences: UserPreferences;
-}
-
-export default function SettingsHeaderV2({ userPreferences }: SettingsHeaderV2) {
+export default function SettingsHeaderV2() {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const sideBarOpen = useSideBarIsOpen();
   return (
     <div
@@ -18,7 +16,7 @@ export default function SettingsHeaderV2({ userPreferences }: SettingsHeaderV2) 
     >
       <div className={"flex flex-row justify-center items-center gap-2 ml-auto mr-2"}>
         <p className={"mr-4 font-medium text-base"}>Settings</p>
-        <CurrencySelectorV2 userPreferences={userPreferences} className={"w-26 mx-0 outline-none border-none shadow-none"} />
+        <CurrencySelectorV2 className={"w-26 mx-0 outline-none border-none shadow-none"} />
 
         <Button variant={"ghost"} className={"px-2.5 mr-2"}>
           <svg

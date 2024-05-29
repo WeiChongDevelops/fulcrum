@@ -1,7 +1,7 @@
 import {
   BlacklistedExpenseItemEntity,
   BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   ExpenseItemEntity,
   GroupItemEntity,
   MonthExpenseGroupEntity,
@@ -17,6 +17,8 @@ import {
   updateRecurringExpenseInstances,
   expenseStartDate,
   useLocation,
+  useEmail,
+  useSideBarIsOpen,
 } from "@/utility/util.ts";
 import useBatchDeleteExpenses from "../../hooks/mutations/expense/useBatchDeleteExpenses.ts";
 import useBatchCreateExpenses from "../../hooks/mutations/expense/useBatchCreateExpenses.ts";
@@ -30,35 +32,16 @@ import "@/css/Expense.css";
 import { ScrollAreaDemo } from "@/components-v2/subcomponents/budget/Playground.tsx";
 import { Separator } from "@/components-v2/ui/separator.tsx";
 import { ScrollArea } from "@/components-v2/ui/scroll-area.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ExpensesV2Props {
-  userPreferences: UserPreferences;
-
-  expenseArray: ExpenseItemEntity[];
-  budgetArray: BudgetItemEntity[];
-  groupArray: GroupItemEntity[];
-  recurringExpenseArray: RecurringExpenseItemEntity[];
-
-  categoryDataMap: CategoryToIconGroupAndColourMap;
-  blacklistedExpenseArray: BlacklistedExpenseItemEntity[];
-  sideBarOpen: boolean;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
 }
 
 /**
  * The root component for the expense page.
  */
-export default function ExpensesV2({
-  userPreferences,
-  expenseArray,
-  budgetArray,
-  groupArray,
-  categoryDataMap,
-  blacklistedExpenseArray,
-  recurringExpenseArray,
-  sideBarOpen,
-  perCategoryExpenseTotalThisMonth,
-}: ExpensesV2Props) {
+export default function ExpensesV2({ perCategoryExpenseTotalThisMonth }: ExpensesV2Props) {
   const {
     expenseFormVisibility,
     setExpenseFormVisibility,
@@ -72,6 +55,24 @@ export default function ExpensesV2({
     defaultCalendarDate,
     setDefaultCalendarDate,
   } = useInitialExpenseData();
+
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+
+  const expenseArray: ExpenseItemEntity[] = useQueryClient().getQueryData(["expenseArray", useEmail()])!;
+  const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
+  const recurringExpenseArray: RecurringExpenseItemEntity[] = useQueryClient().getQueryData([
+    "recurringExpenseArray",
+    useEmail(),
+  ])!;
+  const categoryToIconAndColourMap: CategoryToIconAndColourMap = useQueryClient().getQueryData([
+    "categoryToIconAndColourMap",
+    useEmail(),
+  ])!;
+  const blacklistedExpenseArray: BlacklistedExpenseItemEntity[] = useQueryClient().getQueryData([
+    "blacklistedExpenseArray",
+    useEmail(),
+  ])!;
+  const sideBarOpen = useSideBarIsOpen();
 
   const [isLoading, setIsLoading] = useState(true);
   const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>();
@@ -134,22 +135,13 @@ export default function ExpensesV2({
 
   return (
     <div className={"flex flex-col justify-start items-end relative"}>
-      <ExpenseHeaderV2
-        carouselAPI={api!}
-        structuredExpenseData={structuredExpenseData}
-        startingIndex={startingIndex}
-        userPreferences={userPreferences}
-        sideBarOpen={sideBarOpen}
-      />
+      <ExpenseHeaderV2 carouselAPI={api!} structuredExpenseData={structuredExpenseData} startingIndex={startingIndex} />
       <ExpenseMonthCarouselV2
-        budgetArray={budgetArray}
         structuredExpenseData={structuredExpenseData!}
         setExpenseFormVisibility={setExpenseFormVisibility}
         setExpenseModalVisibility={setExpenseModalVisibility}
         setOldExpenseBeingEdited={setOldExpenseBeingEdited}
         setExpenseItemToDelete={setExpenseItemToDelete}
-        categoryDataMap={categoryDataMap}
-        userPreferences={userPreferences}
         setDefaultCalendarDate={setDefaultCalendarDate}
         setApi={setApi}
         startingIndex={startingIndex}

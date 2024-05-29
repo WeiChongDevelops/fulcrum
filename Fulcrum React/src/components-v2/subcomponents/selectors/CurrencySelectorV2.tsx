@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popo
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { currencyOptions, getCurrencyCountryCode, recurringFrequencyOptions } from "@/utility/util.ts";
+import { currencyOptions, getCurrencyCountryCode, recurringFrequencyOptions, useEmail } from "@/utility/util.ts";
 import {
   Select,
   SelectContent,
@@ -17,16 +17,17 @@ import {
   SelectValue,
 } from "@/components-v2/ui/select.tsx";
 import ReactCountryFlag from "react-country-flag";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CurrencySelectorV2Props {
-  userPreferences: UserPreferences;
   className?: string;
 }
 
 /**
  * A visual selector for the user to choose the application's currency. Does not perform conversion.
  */
-export default function CurrencySelectorV2({ userPreferences, className }: CurrencySelectorV2Props) {
+export default function CurrencySelectorV2({ className }: CurrencySelectorV2Props) {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const { mutate: updateUserPreferences } = useUpdateUserPreferences();
 
   // const [open, setOpen] = useState(false);

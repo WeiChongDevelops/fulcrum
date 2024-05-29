@@ -1,6 +1,6 @@
 import {
   BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   DropdownSelectorOption,
   ExpenseFormVisibility,
   ExpenseItemEntity,
@@ -15,17 +15,15 @@ import { Dispatch, memo, SetStateAction } from "react";
 import AddNewExpenseButton from "../../../components/child/expenses/buttons/AddNewExpenseButton.tsx";
 import ExpenseDayGroupV2 from "@/components-v2/subcomponents/expenses/ExpenseDayGroupV2.tsx";
 import CreateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/CreateExpenseFormV2.tsx";
-import { capitaliseFirstLetter } from "@/utility/util.ts";
+import { capitaliseFirstLetter, useEmail } from "@/utility/util.ts";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ExpenseMonthGroupV2Props {
-  budgetArray: BudgetItemEntity[];
   monthExpenseGroupItem: MonthExpenseGroupEntity;
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
-  categoryDataMap: CategoryToIconGroupAndColourMap;
-  userPreferences: UserPreferences;
   setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
@@ -36,20 +34,23 @@ interface ExpenseMonthGroupV2Props {
  */
 export const ExpenseMonthGroupV2 = memo(
   ({
-    budgetArray,
     monthExpenseGroupItem,
     setExpenseFormVisibility,
     setExpenseModalVisibility,
     setOldExpenseBeingEdited,
     setExpenseItemToDelete,
-    categoryDataMap,
-    userPreferences,
     oldExpenseBeingEdited,
     setDefaultCalendarDate,
     perCategoryExpenseTotalThisMonth,
   }: ExpenseMonthGroupV2Props) => {
+    const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
+    const categoryToIconAndColourMap: CategoryToIconAndColourMap = useQueryClient().getQueryData([
+      "categoryToIconAndColourMap",
+      useEmail(),
+    ])!;
+    const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
     const categoryOptions = budgetArray.map((budgetItem) => {
-      const dataMapEntry = categoryDataMap.get(budgetItem.category);
+      const dataMapEntry = categoryToIconAndColourMap.get(budgetItem.category);
       return {
         value: budgetItem.category,
         label: capitaliseFirstLetter(budgetItem.category),
@@ -59,8 +60,6 @@ export const ExpenseMonthGroupV2 = memo(
     return (
       <div className={"flex flex-col items-center w-full pt-8"}>
         <CreateExpenseFormV2
-          categoryDataMap={categoryDataMap}
-          budgetArray={budgetArray}
           defaultCalendarDate={new Date()}
           mustBeRecurring={false}
           perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
@@ -76,8 +75,6 @@ export const ExpenseMonthGroupV2 = memo(
                 setExpenseModalVisibility={setExpenseModalVisibility}
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                 setExpenseItemToDelete={setExpenseItemToDelete}
-                categoryDataMap={categoryDataMap}
-                userPreferences={userPreferences}
                 oldExpenseBeingEdited={oldExpenseBeingEdited}
                 key={key}
               />

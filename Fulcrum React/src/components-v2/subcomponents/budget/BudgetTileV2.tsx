@@ -8,7 +8,7 @@ import {
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types.ts";
-import { changeFormOrModalVisibility, formatDollarAmountStatic, getCurrencySymbol } from "@/utility/util.ts";
+import { changeFormOrModalVisibility, formatDollarAmountStatic, getCurrencySymbol, useEmail } from "@/utility/util.ts";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components-v2/ui/card.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
@@ -26,6 +26,7 @@ import {
 } from "@/components-v2/ui/dialog.tsx";
 import * as React from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components-v2/ui/tooltip.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface BudgetTileV2Props {
   filteredBudgetItem: BudgetItemEntity;
@@ -33,10 +34,8 @@ interface BudgetTileV2Props {
   setCategoryToDelete: Dispatch<SetStateAction<string>>;
   setBudgetModalVisibility: SetModalVisibility<BudgetModalVisibility>;
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
-  userPreferences: UserPreferences;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
   oldBudgetBeingEdited: PreviousBudgetBeingEdited;
-  groupArray: GroupItemEntity[];
 }
 
 export default function BudgetTileV2({
@@ -45,11 +44,10 @@ export default function BudgetTileV2({
   setCategoryToDelete,
   setBudgetModalVisibility,
   setBudgetFormVisibility,
-  userPreferences,
   perCategoryExpenseTotalThisMonth,
   oldBudgetBeingEdited,
-  groupArray,
 }: BudgetTileV2Props) {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setCategoryToDelete(filteredBudgetItem.category);
@@ -83,7 +81,6 @@ export default function BudgetTileV2({
         ) : (
           <UpdateBudgetFormV2
             oldBudgetBeingEdited={oldBudgetBeingEdited}
-            groupArray={groupArray}
             currencySymbol={getCurrencySymbol(userPreferences.currency)}
             updateOldBudgetBeingEdited={updateOldBudgetBeingEdited}
           />

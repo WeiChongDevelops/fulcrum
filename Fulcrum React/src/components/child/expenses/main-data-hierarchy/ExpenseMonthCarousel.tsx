@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { getMonthsFromToday, expenseStartDate } from "../../../../utility/util.ts";
 import { ExpenseMonthGroup } from "./ExpenseMonthGroup.tsx";
 import {
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseModalVisibility,
@@ -19,7 +19,7 @@ interface ExpenseMonthCarouselProps {
   setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
-  categoryDataMap: CategoryToIconGroupAndColourMap;
+  categoryToIconAndColourMap: CategoryToIconAndColourMap;
   userPreferences: UserPreferences;
   setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
 }
@@ -33,7 +33,7 @@ export default function ExpenseMonthCarousel({
   setExpenseModalVisibility,
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
-  categoryDataMap,
+  categoryToIconAndColourMap,
   userPreferences,
   setDefaultCalendarDate,
 }: ExpenseMonthCarouselProps) {
@@ -60,7 +60,7 @@ export default function ExpenseMonthCarousel({
                   setExpenseModalVisibility={setExpenseModalVisibility}
                   setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                   setExpenseItemToDelete={setExpenseItemToDelete}
-                  categoryDataMap={categoryDataMap}
+                  categoryToIconAndColourMap={categoryToIconAndColourMap}
                   userPreferences={userPreferences}
                   monthsFromY2KToNow={monthsFromY2KToNow}
                   monthPanelShowingIndex={monthPanelShowingIndex}

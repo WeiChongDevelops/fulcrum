@@ -1,12 +1,11 @@
 import useAnimationDataV2 from "@/hooks/queries/useAnimationDataV2.ts";
 import { cn } from "@/lib/utils.ts";
-import { formatDollarAmountStatic } from "@/utility/util.ts";
+import { formatDollarAmountStatic, useSideBarIsOpen } from "@/utility/util.ts";
 import SvgComponent from "@/components-v2/subcomponents/budget/BowlSVG.tsx";
 import BowlSVG from "@/components-v2/subcomponents/budget/BowlSVG.tsx";
 import PivotOutlineSVG from "@/components-v2/subcomponents/budget/PivotOutlineSVG.tsx";
 
 interface FulcrumAnimationV2Props {
-  sideBarOpen: boolean;
   totalIncome: number;
   totalBudget: number;
   currency: string;
@@ -14,12 +13,12 @@ interface FulcrumAnimationV2Props {
 }
 
 export default function FulcrumAnimationV2({
-  sideBarOpen,
   totalIncome,
   totalBudget,
   currency,
   budgetLayoutIsSideBySide,
 }: FulcrumAnimationV2Props) {
+  const sideBarOpen = useSideBarIsOpen();
   const { bowlWidth, containerRef, lineAngle, leverRef, bowlRef, leftOffset, rightOffset, shadowOpacity } =
     useAnimationDataV2({
       sideBarOpen,

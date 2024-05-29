@@ -1,7 +1,7 @@
 import { ErrorBoundary } from "../../components/child/other/ErrorBoundary.tsx";
 import { Outlet } from "react-router-dom";
 import SideBar from "@/components-v2/subcomponents/other/SideBar.tsx";
-import { Dispatch, SetStateAction, useContext, useEffect } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { UserPreferences } from "@/utility/types.ts";
 import Loader from "@/components/child/other/Loader.tsx";
 import { getSessionEmailOrNull } from "@/utility/api.ts";
@@ -12,16 +12,16 @@ import { cn } from "@/lib/utils.ts";
 
 interface FulcrumV2Props {
   userPreferences: UserPreferences;
-  sideBarOpen: boolean;
-  setSideBarOpen: Dispatch<SetStateAction<boolean>>;
   isAnyLoading: boolean;
 }
 
 /**
  * The Fulcrum component which renders the navigation bars and the active application section.
  */
-export default function FulcrumV2({ userPreferences, sideBarOpen, setSideBarOpen, isAnyLoading }: FulcrumV2Props) {
+export default function FulcrumV2({ userPreferences, isAnyLoading }: FulcrumV2Props) {
   const routerLocation = useContext(LocationContext);
+
+  const [sideBarOpen, setSideBarOpen] = useState(true);
 
   if (isAnyLoading) {
     return <Loader isLoading={isAnyLoading} isDarkMode={userPreferences.darkModeEnabled} />;
@@ -44,7 +44,7 @@ export default function FulcrumV2({ userPreferences, sideBarOpen, setSideBarOpen
           )}
         >
           <div className={"fixed top-0 w-screen bg-gray-400 h-[6vh]"}></div>
-          <SideBar userPreferences={userPreferences} sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} />
+          <SideBar sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} />
           <div
             className={cn(
               "absolute top-0 right-0 min-h-screen text-foreground bg-background z-40",

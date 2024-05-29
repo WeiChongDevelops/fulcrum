@@ -1,6 +1,6 @@
 import { UserPreferences, SettingsFormVisibility, SettingsModalVisibility } from "@/utility/types.ts";
 import { useContext, useEffect, useRef, useState } from "react";
-import { checkForOpenModalOrForm, LocationContext } from "@/utility/util.ts";
+import { checkForOpenModalOrForm, LocationContext, useEmail } from "@/utility/util.ts";
 import SettingsHeaderV2 from "@/components-v2/subcomponents/settings/SettingsHeaderV2.tsx";
 import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
 import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
@@ -19,15 +19,12 @@ import ReactCountryFlag from "react-country-flag";
 import ThemeToggle from "@/components-v2/subcomponents/other/ThemeToggle.tsx";
 import AccessibilityToggle from "@/components-v2/subcomponents/other/AccessibilityToggle.tsx";
 import { CalendarStar, Globe, Lock, PaintBrushBroad, PersonSimpleCircle, Scales } from "@phosphor-icons/react";
-
-interface SettingsV2Props {
-  userPreferences: UserPreferences;
-}
+import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * The root component for the settings page.
  */
-export default function SettingsV2({ userPreferences }: SettingsV2Props) {
+export default function SettingsV2() {
   // const [settingsFormVisibility, setSettingsFormVisibility] = useState<SettingsFormVisibility>({
   //   typeDeleteMyExpensesForm: false,
   //   typeDeleteMyBudgetForm: false,
@@ -48,6 +45,7 @@ export default function SettingsV2({ userPreferences }: SettingsV2Props) {
   //   setIsSettingsFormOrModalOpen(checkForOpenModalOrForm(settingsFormVisibility, settingsModalVisibility));
   // }, [settingsFormVisibility, settingsModalVisibility, routerLocation]);
 
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const { mutate: wipeExpenses } = useWipeExpenses();
   const { mutate: wipeData } = useWipeBudget();
   const { mutate: resetData } = useResetAccountData();
@@ -58,13 +56,13 @@ export default function SettingsV2({ userPreferences }: SettingsV2Props) {
 
   return (
     <div className={"flex flex-col justify-start items-center relative"}>
-      <SettingsHeaderV2 userPreferences={userPreferences} />
+      <SettingsHeaderV2 />
       <div className={"flex flex-col justify-start items-center gap-3.5 w-[95%] h-[94%] mt-[6vh] pt-8 font-extralight"}>
         <div className={"settings-row bg-secondary outline outline-[1px] outline-primary text-primary shadow h-14"}>
           <Globe size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Currency</b>
           {/*<CurrencySelector userPreferences={userPreferences} />*/}
-          <CurrencySelectorV2 userPreferences={userPreferences} className={"w-28 text-background font-medium bg-primary"} />
+          <CurrencySelectorV2 className={"w-28 text-background font-medium bg-primary"} />
         </div>
 
         <div className={"settings-row bg-secondary outline outline-[1px] outline-primary text-primary shadow h-14"}>
@@ -72,14 +70,14 @@ export default function SettingsV2({ userPreferences }: SettingsV2Props) {
           <b className={"mr-auto ml-4"}>Theme</b>
           {/*<DarkModeToggleV2 userPreferences={userPreferences} />*/}
 
-          <ThemeToggle userPreferences={userPreferences} className={"mr-2"} hideDescriptor />
+          <ThemeToggle className={"mr-2"} hideDescriptor />
         </div>
 
         <div className={"settings-row bg-secondary outline outline-[1px] outline-primary text-primary shadow h-14"}>
           <PersonSimpleCircle size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Accessibility</b>
           {/*<AccessibilityToggleV2 userPreferences={userPreferences} />*/}
-          <AccessibilityToggle userPreferences={userPreferences} className={"mr-2"} hideDescriptor />
+          <AccessibilityToggle className={"mr-2"} hideDescriptor />
         </div>
 
         <div className={"settings-row bg-secondary outline outline-[1px] outline-primary text-primary shadow h-14"}>

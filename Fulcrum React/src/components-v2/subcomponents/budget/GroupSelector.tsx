@@ -8,11 +8,11 @@ import { cn } from "@/lib/utils.ts";
 interface GroupSelectorProps {
   formData: BudgetCreationFormData | BudgetUpdatingFormData;
   setFormData: Dispatch<SetStateAction<BudgetCreationFormData>> | Dispatch<SetStateAction<BudgetUpdatingFormData>>;
-  groupArray: GroupItemEntity[];
 }
 
-export default function GroupSelector({ formData, setFormData, groupArray }: GroupSelectorProps) {
+export default function GroupSelector({ formData, setFormData }: GroupSelectorProps) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+  const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["groupArray", useEmail()])!;
   const handleGroupSelectChange = (group: string) => {
     setFormData((prevFormData: any) => ({ ...prevFormData, group: group }));
   };

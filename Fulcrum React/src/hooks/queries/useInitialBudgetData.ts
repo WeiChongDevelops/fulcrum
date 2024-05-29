@@ -30,6 +30,7 @@ export default function useInitialBudgetData() {
     oldCategory: "",
     oldGroup: "",
     oldIconPath: "",
+    id: -1,
   });
   const [oldGroupBeingEdited, setOldGroupBeingEdited] = useState<PreviousGroupBeingEdited>({
     oldColour: "",

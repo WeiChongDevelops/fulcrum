@@ -8,7 +8,7 @@ import RecurringExpenseItem from "./RecurringExpenseItem.tsx";
 import useInitialRecurringExpenseData from "../../../../hooks/queries/useInitialRecurringExpenseData.ts";
 import {
   BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   ExpenseItemEntity,
   GroupItemEntity,
   OpenToolsSection,
@@ -24,7 +24,7 @@ interface RecurringExpensesProps {
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
   recurringExpenseArray: RecurringExpenseItemEntity[];
-  categoryDataMap: CategoryToIconGroupAndColourMap;
+  categoryToIconAndColourMap: CategoryToIconAndColourMap;
 }
 
 /**
@@ -36,7 +36,7 @@ export default function RecurringExpenses({
   expenseArray,
   budgetArray,
   groupArray,
-  categoryDataMap,
+  categoryToIconAndColourMap,
   recurringExpenseArray,
 }: RecurringExpensesProps) {
   const routerLocation = useLocation();
@@ -110,16 +110,19 @@ export default function RecurringExpenses({
             <div className={"mt-6"}>
               {recurringExpenseArray.length > 0 ? (
                 recurringExpenseArray.map((recurringExpenseItem, key) => {
+                  const groupName = budgetArray.find(
+                    (budgetItem) => budgetItem.category === recurringExpenseItem.category,
+                  )!.group;
                   return (
                     <RecurringExpenseItem
                       recurringExpenseId={recurringExpenseItem.recurringExpenseId}
                       category={recurringExpenseItem.category}
                       amount={recurringExpenseItem.amount}
-                      iconPath={categoryDataMap.get(recurringExpenseItem.category)!.iconPath}
+                      iconPath={categoryToIconAndColourMap.get(recurringExpenseItem.category)!.iconPath}
                       timestamp={recurringExpenseItem.timestamp}
                       frequency={recurringExpenseItem.frequency}
-                      groupName={categoryDataMap.get(recurringExpenseItem.category)!.group}
-                      groupColour={categoryDataMap.get(recurringExpenseItem.category)!.colour}
+                      groupName={groupName}
+                      groupColour={categoryToIconAndColourMap.get(recurringExpenseItem.category)!.colour}
                       setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
                       setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
                       setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}

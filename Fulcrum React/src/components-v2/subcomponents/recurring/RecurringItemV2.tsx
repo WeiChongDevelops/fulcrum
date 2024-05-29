@@ -22,10 +22,12 @@ import {
   formatDollarAmountStatic,
   getCurrencySymbol,
   getNextRecurringInstance,
+  useEmail,
 } from "@/utility/util.ts";
 import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
 import UpdateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/UpdateExpenseFormV2.tsx";
 import UpdateRecurringFormV2 from "@/components-v2/subcomponents/recurring/forms/UpdateRecurringFormV2.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface RecurringItemV2Props {
   categoryOptions: DropdownSelectorOption[];
@@ -45,8 +47,6 @@ interface RecurringItemV2Props {
   setOldRecurringExpenseBeingEdited: Dispatch<SetStateAction<PreviousRecurringExpenseBeingEdited>>;
   oldRecurringExpenseBeingEdited: PreviousRecurringExpenseBeingEdited;
   setRecurringExpenseIdToDelete: Dispatch<SetStateAction<string>>;
-
-  userPreferences: UserPreferences;
 }
 
 /**
@@ -67,8 +67,8 @@ export default function RecurringItemV2({
   setOldRecurringExpenseBeingEdited,
   oldRecurringExpenseBeingEdited,
   setRecurringExpenseIdToDelete,
-  userPreferences,
 }: RecurringItemV2Props) {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   function handleEditClick() {
     setOldRecurringExpenseBeingEdited({
       recurringExpenseId: recurringExpenseId,

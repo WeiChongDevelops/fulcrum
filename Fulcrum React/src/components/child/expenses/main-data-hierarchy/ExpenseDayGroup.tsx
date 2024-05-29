@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 import ExpenseList from "./ExpenseList.tsx";
 import "../../../../css/Expense.css";
 import {
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   DayExpenseGroupEntity,
   ExpenseFormVisibility,
   ExpenseItemEntity,
@@ -23,7 +23,7 @@ interface ExpenseDayGroupProps {
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
 
-  categoryDataMap: CategoryToIconGroupAndColourMap;
+  categoryToIconAndColourMap: CategoryToIconAndColourMap;
   userPreferences: UserPreferences;
 }
 
@@ -36,7 +36,7 @@ export default function ExpenseDayGroup({
   setExpenseModalVisibility,
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
-  categoryDataMap,
+  categoryToIconAndColourMap,
   userPreferences,
 }: ExpenseDayGroupProps) {
   const expenseDayGroupCalendarDate = new Date(dayExpenseGroup.calendarDate).toLocaleDateString();
@@ -71,7 +71,7 @@ export default function ExpenseDayGroup({
           setExpenseModalVisibility={setExpenseModalVisibility}
           setOldExpenseBeingEdited={setOldExpenseBeingEdited}
           setExpenseItemToDelete={setExpenseItemToDelete}
-          categoryDataMap={categoryDataMap}
+          categoryToIconAndColourMap={categoryToIconAndColourMap}
           userPreferences={userPreferences}
         />
       )}

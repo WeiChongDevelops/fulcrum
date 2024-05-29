@@ -2,7 +2,7 @@ import { DEFAULT_CATEGORY_ICON, DEFAULT_GROUP_COLOUR, EmailContext, useEmail } f
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
-import { BudgetItemEntity, CategoryToIconGroupAndColourMap, ExpenseItemEntity } from "../../../utility/types.ts";
+import { BudgetItemEntity, CategoryToIconAndColourMap, ExpenseItemEntity } from "../../../utility/types.ts";
 import { handleExpenseCreation } from "../../../utility/api.ts";
 
 export interface ExpenseCreationMutationProps {
@@ -21,7 +21,7 @@ export default function useCreateExpense() {
     onMutate: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {
       toast.success("Expense added.");
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
-      await queryClient.cancelQueries({ queryKey: ["groupAndColourMap", email] });
+      await queryClient.cancelQueries({ queryKey: ["categoryToIconAndColourMap", email] });
       await queryClient.cancelQueries({ queryKey: ["recurringExpenseArray", email] });
       await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
 
@@ -33,22 +33,27 @@ export default function useCreateExpense() {
         });
       }
 
-      const categoryDataMapBeforeOptimisticUpdate = await queryClient.getQueryData(["groupAndColourMap", email]);
+      const categoryToIconAndColourMapBeforeOptimisticUpdate = await queryClient.getQueryData([
+        "categoryToIconAndColourMap",
+        email,
+      ]);
       if (expenseCreationMutationProps.newBudgetItem) {
         const newBudgetItem = expenseCreationMutationProps.newBudgetItem;
-        await queryClient.setQueryData(["groupAndColourMap", email], (prevCategoryMap: CategoryToIconGroupAndColourMap) => {
-          return new Map([
-            ...prevCategoryMap,
-            [
-              newBudgetItem.category,
-              {
-                iconPath: DEFAULT_CATEGORY_ICON,
-                group: newBudgetItem.group,
-                colour: DEFAULT_GROUP_COLOUR,
-              },
-            ],
-          ]);
-        });
+        await queryClient.setQueryData(
+          ["categoryToIconAndColourMap", email],
+          (prevCategoryMap: CategoryToIconAndColourMap) => {
+            return new Map([
+              ...prevCategoryMap,
+              [
+                newBudgetItem.category,
+                {
+                  iconPath: DEFAULT_CATEGORY_ICON,
+                  colour: DEFAULT_GROUP_COLOUR,
+                },
+              ],
+            ]);
+          },
+        );
       }
 
       const expenseArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["expenseArray", email]);
@@ -62,7 +67,7 @@ export default function useCreateExpense() {
       return {
         budgetArrayBeforeOptimisticUpdate,
         expenseArrayBeforeOptimisticUpdate,
-        categoryDataMapBeforeOptimisticUpdate,
+        categoryToIconAndColourMapBeforeOptimisticUpdate,
       };
     },
     onError: (_error, _variables, context) => {
@@ -73,12 +78,15 @@ export default function useCreateExpense() {
         },
       );
       queryClient.setQueryData(["budgetArray", email], context?.budgetArrayBeforeOptimisticUpdate);
-      queryClient.setQueryData(["groupAndColourMap", email], context?.categoryDataMapBeforeOptimisticUpdate);
+      queryClient.setQueryData(
+        ["categoryToIconAndColourMap", email],
+        context?.categoryToIconAndColourMapBeforeOptimisticUpdate,
+      );
       queryClient.setQueryData(["expenseArray", email], context?.expenseArrayBeforeOptimisticUpdate);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
-      await queryClient.invalidateQueries({ queryKey: ["groupAndColourMap", email] });
+      await queryClient.invalidateQueries({ queryKey: ["categoryToIconAndColourMap", email] });
       await queryClient.invalidateQueries({ queryKey: ["expenseArray", email] });
     },
   });

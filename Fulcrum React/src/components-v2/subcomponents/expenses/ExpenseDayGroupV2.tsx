@@ -1,5 +1,5 @@
 import {
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   DayExpenseGroupEntity,
   DropdownSelectorOption,
   ExpenseFormVisibility,
@@ -11,9 +11,9 @@ import {
   SetModalVisibility,
 } from "@/utility/types.ts";
 import { Dispatch, SetStateAction } from "react";
-import { formatDate, formatDollarAmountStatic } from "@/utility/util.ts";
+import { formatDate, formatDollarAmountStatic, useEmail } from "@/utility/util.ts";
 import ExpenseListV2 from "@/components-v2/subcomponents/expenses/ExpenseListV2.tsx";
-import { Separator } from "@/components-v2/ui/separator.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ExpenseDayGroupV2Props {
   dayExpenseGroup: DayExpenseGroupEntity;
@@ -24,8 +24,6 @@ interface ExpenseDayGroupV2Props {
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
 
-  categoryDataMap: CategoryToIconGroupAndColourMap;
-  userPreferences: UserPreferences;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   categoryOptions: DropdownSelectorOption[];
 }
@@ -39,11 +37,11 @@ export default function ExpenseDayGroupV2({
   setExpenseModalVisibility,
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
-  categoryDataMap,
-  userPreferences,
   oldExpenseBeingEdited,
   categoryOptions,
 }: ExpenseDayGroupV2Props) {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+
   const expenseDayGroupCalendarDate = new Date(dayExpenseGroup.calendarDate).toLocaleDateString();
   const dateStringToday = new Date().toLocaleDateString();
   let dateObjectYesterday = new Date();
@@ -83,8 +81,6 @@ export default function ExpenseDayGroupV2({
           setExpenseModalVisibility={setExpenseModalVisibility}
           setOldExpenseBeingEdited={setOldExpenseBeingEdited}
           setExpenseItemToDelete={setExpenseItemToDelete}
-          categoryDataMap={categoryDataMap}
-          userPreferences={userPreferences}
           oldExpenseBeingEdited={oldExpenseBeingEdited}
           categoryOptions={categoryOptions}
         />

@@ -1,5 +1,5 @@
 import {
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   DropdownSelectorOption,
   ExpenseFormVisibility,
   ExpenseItemEntity,
@@ -8,10 +8,13 @@ import {
   UserPreferences,
   SetFormVisibility,
   SetModalVisibility,
+  BudgetItemEntity,
 } from "@/utility/types";
 import { Dispatch, SetStateAction } from "react";
 import ExpenseItem from "@/components/child/expenses/main-data-hierarchy/ExpenseItem.tsx";
 import ExpenseItemV2 from "@/components-v2/subcomponents/expenses/ExpenseItemV2.tsx";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEmail } from "@/utility/util.ts";
 
 interface ExpenseListV2Props {
   dayExpenseArray: ExpenseItemEntity[];
@@ -22,9 +25,6 @@ interface ExpenseListV2Props {
 
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
-
-  categoryDataMap: CategoryToIconGroupAndColourMap;
-  userPreferences: UserPreferences;
 
   categoryOptions: DropdownSelectorOption[];
 }
@@ -38,14 +38,18 @@ export default function ExpenseListV2({
   setExpenseModalVisibility,
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
-  categoryDataMap,
-  userPreferences,
   categoryOptions,
   oldExpenseBeingEdited,
 }: ExpenseListV2Props) {
+  const categoryToIconAndColourMap: CategoryToIconAndColourMap = useQueryClient().getQueryData([
+    "categoryToIconAndColourMap",
+    useEmail(),
+  ])!;
+  const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
   return (
     <>
       {dayExpenseArray.map((expenseElement, key) => {
+        const groupName = budgetArray.find((budgetItem) => budgetItem.category === expenseElement.category)!.group;
         return (
           expenseElement && (
             <ExpenseItemV2
@@ -53,16 +57,15 @@ export default function ExpenseListV2({
               expenseId={expenseElement.expenseId}
               category={expenseElement.category}
               amount={expenseElement.amount}
-              iconPath={categoryDataMap.get(expenseElement.category)!.iconPath}
-              groupName={categoryDataMap.get(expenseElement.category)!.group}
-              groupColour={categoryDataMap.get(expenseElement.category)!.colour}
+              iconPath={categoryToIconAndColourMap.get(expenseElement.category)!.iconPath}
+              groupName={groupName}
+              groupColour={categoryToIconAndColourMap.get(expenseElement.category)!.colour}
               recurringExpenseId={expenseElement.recurringExpenseId}
               timestamp={expenseElement.timestamp}
               setExpenseFormVisibility={setExpenseFormVisibility}
               setExpenseModalVisibility={setExpenseModalVisibility}
               setOldExpenseBeingEdited={setOldExpenseBeingEdited}
               setExpenseItemToDelete={setExpenseItemToDelete}
-              userPreferences={userPreferences}
               categoryOptions={categoryOptions}
               key={key}
             />

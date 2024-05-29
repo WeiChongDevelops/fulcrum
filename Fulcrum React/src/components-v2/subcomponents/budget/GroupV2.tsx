@@ -19,7 +19,7 @@ import { Button } from "@/components-v2/ui/button.tsx";
 import UpdateGroupFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateGroupFormV2.tsx";
 import CreateBudgetFormV2 from "@/components-v2/subcomponents/budget/forms/CreateBudgetFormV2.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { budgetSort, changeFormOrModalVisibility, darkenColor, getCurrencySymbol } from "@/utility/util.ts";
+import { budgetSort, changeFormOrModalVisibility, darkenColor, getCurrencySymbol, useEmail } from "@/utility/util.ts";
 import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
 import * as React from "react";
 import useDeleteGroup from "@/hooks/mutations/budget/useDeleteGroup.ts";
@@ -28,8 +28,6 @@ import FulcrumDialogThreeOptions from "@/components-v2/subcomponents/other/Fulcr
 
 interface GroupV2Props {
   group: GroupItemEntity;
-  budgetArray: BudgetItemEntity[];
-  userPreferences: UserPreferences;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
   setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
   setBudgetModalVisibility: SetModalVisibility<BudgetModalVisibility>;
@@ -42,13 +40,10 @@ interface GroupV2Props {
   setGroupToDelete: Dispatch<SetStateAction<string>>;
   oldGroupBeingEdited: PreviousGroupBeingEdited;
   setLocalisedGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
-  groupArray: GroupItemEntity[];
 }
 
 export default function GroupV2({
   group,
-  budgetArray,
-  userPreferences,
   perCategoryExpenseTotalThisMonth,
   setBudgetFormVisibility,
   setBudgetModalVisibility,
@@ -61,8 +56,10 @@ export default function GroupV2({
   oldGroupBeingEdited,
   oldBudgetBeingEdited,
   setLocalisedGroupArray,
-  groupArray,
 }: GroupV2Props) {
+  const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+
   const [accordionIsOpen, setAccordionIsOpen] = useState<string>("item-1");
   const { isPending, mutate: deleteGroup } = useDeleteGroup();
 
@@ -157,20 +154,16 @@ export default function GroupV2({
                     <div key={index}>
                       <BudgetTileV2
                         filteredBudgetItem={filteredBudgetItem}
-                        userPreferences={userPreferences}
                         perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                         setBudgetFormVisibility={setBudgetFormVisibility}
                         setBudgetModalVisibility={setBudgetModalVisibility}
                         setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                         oldBudgetBeingEdited={oldBudgetBeingEdited}
-                        groupArray={groupArray}
                         setCategoryToDelete={setCategoryToDelete}
                       />
                     </div>
                   ))}
               <CreateBudgetFormV2
-                budgetArray={budgetArray}
-                groupArray={groupArray}
                 groupNameOfNewItem={group.group}
                 currencySymbol={getCurrencySymbol(userPreferences.currency)}
               />

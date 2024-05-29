@@ -5,7 +5,7 @@ import Settings from "./settings/Settings.tsx";
 import ToolsHome from "./tools-home/ToolsHome.tsx";
 import {
   BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   ExpenseItemEntity,
   GroupItemEntity,
   OpenToolsSection,
@@ -19,7 +19,7 @@ interface ToolsProps {
   budgetArray: BudgetItemEntity[];
   groupArray: GroupItemEntity[];
   recurringExpenseArray: RecurringExpenseItemEntity[];
-  categoryDataMap: CategoryToIconGroupAndColourMap;
+  categoryToIconAndColourMap: CategoryToIconAndColourMap;
 }
 
 /**
@@ -31,27 +31,28 @@ export default function Tools({
   budgetArray,
   groupArray,
   recurringExpenseArray,
-  categoryDataMap,
+  categoryToIconAndColourMap,
 }: ToolsProps) {
-  const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
-
-  if (openToolsSection === "settings") {
-    return <Settings setOpenToolsSection={setOpenToolsSection} userPreferences={userPreferences} />;
-  }
-
-  if (openToolsSection === "recurring") {
-    return (
-      <RecurringExpenses
-        setOpenToolsSection={setOpenToolsSection}
-        userPreferences={userPreferences}
-        expenseArray={expenseArray}
-        budgetArray={budgetArray}
-        groupArray={groupArray}
-        categoryDataMap={categoryDataMap}
-        recurringExpenseArray={recurringExpenseArray}
-      />
-    );
-  }
-
-  return <ToolsHome userPreferences={userPreferences} setOpenToolsSection={setOpenToolsSection} />;
+  // const [openToolsSection, setOpenToolsSection] = useState<OpenToolsSection>("home");
+  //
+  // if (openToolsSection === "settings") {
+  //   return <Settings setOpenToolsSection={setOpenToolsSection} userPreferences={userPreferences} />;
+  // }
+  //
+  // if (openToolsSection === "recurring") {
+  //   return (
+  //     <RecurringExpenses
+  //       setOpenToolsSection={setOpenToolsSection}
+  //       userPreferences={userPreferences}
+  //       expenseArray={expenseArray}
+  //       budgetArray={budgetArray}
+  //       groupArray={groupArray}
+  //       categoryToIconAndColourMap={categoryToIconAndColourMap}
+  //       recurringExpenseArray={recurringExpenseArray}
+  //     />
+  //   );
+  // }
+  //
+  // return <ToolsHome userPreferences={userPreferences} setOpenToolsSection={setOpenToolsSection} />;
+  return <></>;
 }

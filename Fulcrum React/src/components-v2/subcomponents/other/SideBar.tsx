@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components-v2/ui/avatar.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { EmailContext, LocationContext } from "@/utility/util.ts";
+import { EmailContext, LocationContext, useEmail } from "@/utility/util.ts";
 import { UserPreferences } from "@/utility/types.ts";
 import { handleUserLogout } from "@/utility/api.ts";
 import PageNavigationButton from "@/components-v2/subcomponents/other/PageNavigationButton.tsx";
@@ -11,14 +11,15 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { cn } from "@/lib/utils.ts";
 import { Switch } from "@/components-v2/ui/switch.tsx";
 import ThemeToggle from "@/components-v2/subcomponents/other/ThemeToggle.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface SideBarProps {
-  userPreferences: UserPreferences;
   sideBarOpen: boolean;
   setSideBarOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function SideBar({ userPreferences, sideBarOpen, setSideBarOpen }: SideBarProps) {
+export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const routerLocation = useContext(LocationContext);
   const activeEmail = useContext(EmailContext);
 
@@ -219,7 +220,7 @@ export default function SideBar({ userPreferences, sideBarOpen, setSideBarOpen }
               </svg>
             }
           />
-          <ThemeToggle userPreferences={userPreferences} sideBarOpen={sideBarOpen} className={"pl-4 h-12 mt-auto"} />
+          <ThemeToggle sideBarOpen={sideBarOpen} className={"pl-4 h-12 mt-auto"} />
           <PageNavigationButton
             currentPage={currentPage}
             page={"help"}

@@ -49,18 +49,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils.ts";
 
 interface CreateBudgetFormV2Props {
-  budgetArray: BudgetItemEntity[];
-  groupArray: GroupItemEntity[];
   groupNameOfNewItem: string;
   currencySymbol: string;
 }
 
-export default function CreateBudgetFormV2({
-  budgetArray,
-  groupArray,
-  groupNameOfNewItem,
-  currencySymbol,
-}: CreateBudgetFormV2Props) {
+export default function CreateBudgetFormV2({ groupNameOfNewItem, currencySymbol }: CreateBudgetFormV2Props) {
   const [formData, setFormData] = useState<BudgetCreationFormData>({
     category: "",
     amount: 0,
@@ -69,6 +62,8 @@ export default function CreateBudgetFormV2({
   });
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: createBudget } = useCreateBudget();
+  const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
+  const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["groupArray", useEmail()])!;
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const routerLocation = useContext(LocationContext);
   const [formIsOpen, setFormIsOpen] = useState(false);
@@ -197,7 +192,7 @@ export default function CreateBudgetFormV2({
             <Label htmlFor="group" className={"text-right"}>
               Group
             </Label>
-            <GroupSelector formData={formData} setFormData={setFormData} groupArray={groupArray} />
+            <GroupSelector formData={formData} setFormData={setFormData} />
           </div>
 
           <div className={"grid grid-cols-4 items-center gap-5"}>

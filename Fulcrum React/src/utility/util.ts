@@ -1,6 +1,6 @@
 import { ChangeEvent, createContext, Dispatch, RefObject, SetStateAction, useContext } from "react";
 import { v4 as uuid } from "uuid";
-import { UseMutateFunction } from "@tanstack/react-query";
+import { UseMutateFunction, useQueryClient } from "@tanstack/react-query";
 import {
   BasicGroupData,
   BlacklistedExpenseItemEntity,
@@ -8,7 +8,7 @@ import {
   BudgetItemEntity,
   BudgetModalVisibility,
   BudgetUpdatingFormData,
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   DayExpenseGroupEntity,
   DropdownSelectorOption,
   ExpenseCreationFormData,
@@ -22,6 +22,7 @@ import {
   RecurringExpenseItemEntity,
   SetFormVisibility,
   SetModalVisibility,
+  UserPreferences,
 } from "./types.ts";
 import {
   HandHeart,
@@ -938,11 +939,10 @@ export function getTotalAmountBudgeted(budgetArray: BudgetItemEntity[]): number 
  * @returns The map of category to icon, group, and colour.
  */
 export async function getGroupAndColourMap(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
-  const categoryToGroupAndColourMap: CategoryToIconGroupAndColourMap = new Map();
+  const categoryToGroupAndColourMap: CategoryToIconAndColourMap = new Map();
   budgetArray.forEach((budgetItem) => {
     categoryToGroupAndColourMap.set(budgetItem.category, {
       iconPath: budgetItem.iconPath,
-      group: budgetItem.group,
       colour: groupArray.find((groupItem) => groupItem.group === budgetItem.group)!.colour,
     });
   });

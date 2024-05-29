@@ -55,6 +55,7 @@ export default function BudgetTile({
       oldAmount: amount,
       oldGroup: group,
       oldIconPath: icon,
+      id: -1,
     });
     changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateBudgetVisible", true);
   }

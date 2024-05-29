@@ -49,7 +49,7 @@ export default function App() {
     recurringExpenseArray,
     blacklistedExpenseArray,
     userPreferences,
-    categoryDataMap,
+    categoryToIconAndColourMap,
     perCategoryExpenseTotalThisMonth,
     setPerCategoryExpenseTotalThisMonth,
     isAnyLoading,
@@ -59,8 +59,6 @@ export default function App() {
   } = useGlobalAppData();
 
   const location = useLocation();
-
-  const [sideBarOpen, setSideBarOpen] = useState(true);
 
   if (isAnyError) {
     return <FulcrumErrorPage errors={errors} />;
@@ -92,17 +90,7 @@ export default function App() {
             <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
             <Route path="/playground" element={<Playground />} />
             <Route path="/maintenance" element={<Maintenance />} />
-            <Route
-              path="/app/"
-              element={
-                <FulcrumV2
-                  userPreferences={userPreferences}
-                  sideBarOpen={sideBarOpen}
-                  isAnyLoading={isAnyLoading}
-                  setSideBarOpen={setSideBarOpen}
-                />
-              }
-            >
+            <Route path="/app/" element={<FulcrumV2 userPreferences={userPreferences} isAnyLoading={isAnyLoading} />}>
               {/*<Route path="/app/" element={<Fulcrum userPreferences={userPreferences} isAnyLoading={isAnyLoading} />}>*/}
               {/*  <Route index element={<Navigate replace to="budget" />} />*/}
               {/*<Route*/}
@@ -113,7 +101,7 @@ export default function App() {
               {/*      expenseArray={expenseArray}*/}
               {/*      budgetArray={budgetArray}*/}
               {/*      groupArray={groupArray}*/}
-              {/*      categoryDataMap={categoryDataMap}*/}
+              {/*      categoryToIconAndColourMap={categoryToIconAndColourMap}*/}
               {/*      recurringExpenseArray={recurringExpenseArray}*/}
               {/*      blacklistedExpenseArray={blacklistedExpenseArray}*/}
               {/*    />*/}
@@ -139,52 +127,23 @@ export default function App() {
               {/*      budgetArray={budgetArray}*/}
               {/*      groupArray={groupArray}*/}
               {/*      recurringExpenseArray={recurringExpenseArray}*/}
-              {/*      categoryDataMap={categoryDataMap}*/}
+              {/*      categoryToIconAndColourMap={categoryToIconAndColourMap}*/}
               {/*    />*/}
               {/*  }*/}
               {/*/>*/}
               <Route
                 path="expenses"
-                element={
-                  <ExpensesV2
-                    userPreferences={userPreferences}
-                    expenseArray={expenseArray}
-                    budgetArray={budgetArray}
-                    groupArray={groupArray}
-                    categoryDataMap={categoryDataMap}
-                    recurringExpenseArray={recurringExpenseArray}
-                    blacklistedExpenseArray={blacklistedExpenseArray}
-                    sideBarOpen={sideBarOpen}
-                    perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-                  />
-                }
+                element={<ExpensesV2 perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth} />}
               />
               <Route
                 path="recurring"
-                element={
-                  <RecurringExpensesV2
-                    userPreferences={userPreferences}
-                    expenseArray={expenseArray}
-                    budgetArray={budgetArray}
-                    groupArray={groupArray}
-                    categoryDataMap={categoryDataMap}
-                    recurringExpenseArray={recurringExpenseArray}
-                    sideBarOpen={sideBarOpen}
-                    perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-                  />
-                }
+                element={<RecurringExpensesV2 perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth} />}
               />
-              <Route path="settings" element={<SettingsV2 userPreferences={userPreferences} />} />
+              <Route path="settings" element={<SettingsV2 />} />
               <Route
                 path="budget"
                 element={
                   <BudgetV2
-                    userPreferences={userPreferences}
-                    expenseArray={expenseArray}
-                    budgetArray={budgetArray}
-                    groupArray={groupArray}
-                    sideBarOpen={sideBarOpen}
-                    categoryDataMap={categoryDataMap}
                     perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                     setPerCategoryExpenseTotalThisMonth={setPerCategoryExpenseTotalThisMonth}
                   />
@@ -199,7 +158,7 @@ export default function App() {
               {/*      budgetArray={budgetArray}*/}
               {/*      groupArray={groupArray}*/}
               {/*      recurringExpenseArray={recurringExpenseArray}*/}
-              {/*      categoryDataMap={categoryDataMap}*/}
+              {/*      categoryToIconAndColourMap={categoryToIconAndColourMap}*/}
               {/*    />*/}
               {/*  }*/}
               {/*/>*/}

@@ -1,7 +1,7 @@
 import {
   BudgetItemEntity,
   BudgetModalVisibility,
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   ExpenseItemEntity,
   GroupItemEntity,
   UserPreferences,
@@ -19,7 +19,9 @@ import {
   isCurrentMonth,
   LocationContext,
   SetBudgetModalVisibilityContext,
+  useEmail,
   useLocation,
+  useSideBarIsOpen,
 } from "@/utility/util.ts";
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import GroupV2 from "@/components-v2/subcomponents/budget/GroupV2.tsx";
@@ -42,28 +44,20 @@ import Playground from "@/components-v2/subcomponents/budget/Playground.tsx";
 import { ScrollArea, ScrollBar } from "@/components-v2/ui/scroll-area.tsx";
 import BudgetDataBento from "@/components-v2/subcomponents/budget/BudgetDataBento.tsx";
 import { debounce } from "lodash";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface BudgetV2Props {
-  userPreferences: UserPreferences;
-  budgetArray: BudgetItemEntity[];
-  expenseArray: ExpenseItemEntity[];
-  groupArray: GroupItemEntity[];
-  sideBarOpen: boolean;
-  categoryDataMap: CategoryToIconGroupAndColourMap;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
   setPerCategoryExpenseTotalThisMonth: Dispatch<SetStateAction<Map<string, number>>>;
 }
 
-export default function BudgetV2({
-  userPreferences,
-  budgetArray,
-  expenseArray,
-  groupArray,
-  sideBarOpen,
-  categoryDataMap,
-  perCategoryExpenseTotalThisMonth,
-  setPerCategoryExpenseTotalThisMonth,
-}: BudgetV2Props) {
+export default function BudgetV2({ perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth }: BudgetV2Props) {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+  const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
+  const expenseArray: ExpenseItemEntity[] = useQueryClient().getQueryData(["expenseArray", useEmail()])!;
+  const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["groupArray", useEmail()])!;
+  const sideBarOpen = useSideBarIsOpen();
+
   const routerLocation = useLocation();
 
   const {
@@ -209,7 +203,7 @@ export default function BudgetV2({
   return (
     <SetBudgetModalVisibilityContext.Provider value={setBudgetModalVisibility}>
       <div className="flex flex-col justify-start bg-transparent">
-        <BudgetHeaderV2 userPreferences={userPreferences} totalIncome={totalIncome!} sideBarOpen={sideBarOpen} />
+        <BudgetHeaderV2 totalIncome={totalIncome!} />
         {/*<BudgetModalsAndForms*/}
         {/*  budgetFormVisibility={budgetFormVisibility}*/}
         {/*  // budgetArray={budgetArray}*/}
@@ -230,17 +224,10 @@ export default function BudgetV2({
               <FulcrumAnimationV2
                 budgetLayoutIsSideBySide={budgetLayoutIsSideBySide}
                 currency={userPreferences.currency}
-                sideBarOpen={sideBarOpen}
                 totalIncome={totalIncome!}
                 totalBudget={totalBudget}
               />
-              <BudgetDataBento
-                budgetArray={budgetArray}
-                groupArray={groupArray}
-                budgetTotal={totalBudget}
-                categoryDataMap={categoryDataMap}
-                userPreferences={userPreferences}
-              />
+              <BudgetDataBento budgetTotal={totalBudget} />
             </div>
             <DndContext
               sensors={sensors}
@@ -254,15 +241,12 @@ export default function BudgetV2({
                     localisedGroupArray.map((group) => (
                       <GroupV2
                         group={group}
-                        groupArray={groupArray}
                         setOldBudgetBeingEdited={setOldBudgetBeingEdited}
-                        budgetArray={budgetArray}
                         setBudgetFormVisibility={setBudgetFormVisibility}
                         setBudgetModalVisibility={setBudgetModalVisibility}
                         perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                         groupNameOfNewItem={groupNameOfNewItem}
                         setGroupNameOfNewItem={setGroupNameOfNewItem}
-                        userPreferences={userPreferences}
                         setCategoryToDelete={setCategoryToDelete}
                         setGroupToDelete={setGroupToDelete}
                         setOldGroupBeingEdited={setOldGroupBeingEdited}

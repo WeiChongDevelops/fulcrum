@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { DEFAULT_CATEGORY_ICON, DEFAULT_GROUP_COLOUR, EmailContext, useEmail } from "../../../utility/util.ts";
 import { toast } from "sonner";
-import { BudgetItemEntity, CategoryToIconGroupAndColourMap, RecurringExpenseItemEntity } from "../../../utility/types.ts";
+import { BudgetItemEntity, CategoryToIconAndColourMap, RecurringExpenseItemEntity } from "../../../utility/types.ts";
 import { handleRecurringExpenseCreation } from "../../../utility/api.ts";
 
 interface RecurringExpenseCreationMutationProps {
@@ -20,7 +20,7 @@ export default function useCreateRecurringExpense() {
     },
     onMutate: async (recurringExpenseCreationMutationProps: RecurringExpenseCreationMutationProps) => {
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
-      await queryClient.cancelQueries({ queryKey: ["groupAndColourMap", email] });
+      await queryClient.cancelQueries({ queryKey: ["categoryToIconAndColourMap", email] });
       await queryClient.cancelQueries({ queryKey: ["recurringExpenseArray", email] });
       await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
 
@@ -31,22 +31,27 @@ export default function useCreateRecurringExpense() {
         });
       }
 
-      const categoryDataMapBeforeOptimisticUpdate = await queryClient.getQueryData(["groupAndColourMap", email]);
+      const categoryToIconAndColourMapBeforeOptimisticUpdate = await queryClient.getQueryData([
+        "categoryToIconAndColourMap",
+        email,
+      ]);
       if (recurringExpenseCreationMutationProps.newBudgetItem) {
         const newBudgetItem = recurringExpenseCreationMutationProps.newBudgetItem;
-        await queryClient.setQueryData(["groupAndColourMap", email], (prevCategoryMap: CategoryToIconGroupAndColourMap) => {
-          return new Map([
-            ...prevCategoryMap,
-            [
-              newBudgetItem.category,
-              {
-                iconPath: DEFAULT_CATEGORY_ICON,
-                group: newBudgetItem.group,
-                colour: DEFAULT_GROUP_COLOUR,
-              },
-            ],
-          ]);
-        });
+        await queryClient.setQueryData(
+          ["categoryToIconAndColourMap", email],
+          (prevCategoryMap: CategoryToIconAndColourMap) => {
+            return new Map([
+              ...prevCategoryMap,
+              [
+                newBudgetItem.category,
+                {
+                  iconPath: DEFAULT_CATEGORY_ICON,
+                  colour: DEFAULT_GROUP_COLOUR,
+                },
+              ],
+            ]);
+          },
+        );
       }
 
       const recurringExpenseArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["recurringExpenseArray", email]);
@@ -60,12 +65,15 @@ export default function useCreateRecurringExpense() {
       return {
         budgetArrayBeforeOptimisticUpdate,
         recurringExpenseArrayBeforeOptimisticUpdate,
-        categoryDataMapBeforeOptimisticUpdate,
+        categoryToIconAndColourMapBeforeOptimisticUpdate,
       };
     },
     onError: async (_error, _variables, context) => {
       await queryClient.setQueryData(["budgetArray", email], context?.budgetArrayBeforeOptimisticUpdate);
-      await queryClient.setQueryData(["groupAndColourMap", email], context?.categoryDataMapBeforeOptimisticUpdate);
+      await queryClient.setQueryData(
+        ["categoryToIconAndColourMap", email],
+        context?.categoryToIconAndColourMapBeforeOptimisticUpdate,
+      );
       queryClient.setQueryData(["recurringExpenseArray", email], context?.recurringExpenseArrayBeforeOptimisticUpdate);
       toast.error(
         "Oops! We couldn’t save your changes due to a network issue. We’ve restored your last settings. Please try again later.",
@@ -76,7 +84,7 @@ export default function useCreateRecurringExpense() {
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["budgetArray", email] });
-      await queryClient.invalidateQueries({ queryKey: ["groupAndColourMap", email] });
+      await queryClient.invalidateQueries({ queryKey: ["categoryToIconAndColourMap", email] });
       // Invalidation of recurringExpenseArray excluded as it causes visual update bugs for optimistic updates
       // Specifically, updateRecurringExpenseInstances is recalled while the first instance is still running.
     },

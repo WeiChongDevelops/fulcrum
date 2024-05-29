@@ -54,13 +54,11 @@ import GroupSelector from "@/components-v2/subcomponents/budget/GroupSelector.ts
 
 interface UpdateBudgetFormV2Props {
   oldBudgetBeingEdited: PreviousBudgetBeingEdited;
-  groupArray: GroupItemEntity[];
   currencySymbol: string;
   updateOldBudgetBeingEdited: (e: React.MouseEvent) => void;
 }
 
 export default function UpdateBudgetFormV2({
-  groupArray,
   oldBudgetBeingEdited,
   currencySymbol,
   updateOldBudgetBeingEdited,
@@ -75,6 +73,7 @@ export default function UpdateBudgetFormV2({
   // const routerLocation = useContext(LocationContext);
   const { mutate: updateBudget } = useUpdateBudget();
   const { mutate: deleteBudget } = useDeleteBudget();
+  const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["groupArray", useEmail()])!;
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
 
   const setBudgetModalVisibility = useSetBudgetModalVisibility()!;
@@ -218,7 +217,7 @@ export default function UpdateBudgetFormV2({
               <Label htmlFor="group" className={"text-right"}>
                 Group
               </Label>
-              <GroupSelector formData={formData} setFormData={setFormData} groupArray={groupArray} />
+              <GroupSelector formData={formData} setFormData={setFormData} />
             </div>
 
             <div className={"grid grid-cols-4 items-center gap-5"}>

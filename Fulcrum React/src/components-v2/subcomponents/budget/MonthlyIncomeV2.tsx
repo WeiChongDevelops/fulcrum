@@ -1,4 +1,4 @@
-import { formatDollarAmountStatic, getCurrencySymbol, handleInputChangeOnFormWithAmount } from "@/utility/util.ts";
+import { formatDollarAmountStatic, getCurrencySymbol, handleInputChangeOnFormWithAmount, useEmail } from "@/utility/util.ts";
 import { UserPreferences } from "@/utility/types.ts";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { cn } from "@/lib/utils.ts";
@@ -8,14 +8,16 @@ import { Label } from "@/components-v2/ui/label.tsx";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import useUpdateTotalIncome from "@/hooks/mutations/budget/useUpdateTotalIncome.ts";
 import * as React from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface MonthlyIncomeV2Props {
-  userPreferences: UserPreferences;
   className?: string;
   totalIncome: number;
 }
 
-export default function MonthlyIncomeV2({ userPreferences, className, totalIncome }: MonthlyIncomeV2Props) {
+export default function MonthlyIncomeV2({ className, totalIncome }: MonthlyIncomeV2Props) {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+
   const [formData, setFormData] = useState({ amount: totalIncome });
   const [incomeFormIsVisible, setIncomeFormIsVisible] = useState(false);
 

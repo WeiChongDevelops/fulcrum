@@ -12,7 +12,7 @@ import {
 import {
   BlacklistedExpenseItemEntity,
   BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   ExpenseItemEntity,
   GroupItemEntity,
   UserPreferences,
@@ -74,12 +74,14 @@ export function useGlobalAppData() {
     sessionStorage.setItem("accessibilityEnabled", userPreferences.accessibilityEnabled.toString());
   }
 
-  const categoryDataMapQuery = useQuery({
-    queryKey: ["groupAndColourMap", email],
+  const categoryToIconAndColourMapQuery = useQuery({
+    queryKey: ["categoryToIconAndColourMap", email],
     queryFn: () =>
       getGroupAndColourMap(
-        globalAppDataQueries[0].data as BudgetItemEntity[],
-        globalAppDataQueries[1].data as GroupItemEntity[],
+        // globalAppDataQueries[0].data as BudgetItemEntity[],
+        // globalAppDataQueries[1].data as GroupItemEntity[],
+        budgetArrayQuery.data as BudgetItemEntity[],
+        groupArrayQuery.data as GroupItemEntity[],
       ),
     enabled: !!email && !!budgetArrayQuery.data && !!groupArrayQuery.data,
   });
@@ -87,10 +89,11 @@ export function useGlobalAppData() {
   const [perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth] = useState<Map<string, number>>(new Map());
 
   const isAnyLoading =
-    globalAppDataQueries.some((query: UseQueryResult) => query.isLoading) || categoryDataMapQuery.isLoading;
-  const isAnyError = globalAppDataQueries.some((query: UseQueryResult) => query.isError) || categoryDataMapQuery.isError;
+    globalAppDataQueries.some((query: UseQueryResult) => query.isLoading) || categoryToIconAndColourMapQuery.isLoading;
+  const isAnyError =
+    globalAppDataQueries.some((query: UseQueryResult) => query.isError) || categoryToIconAndColourMapQuery.isError;
   const isAllSuccess = globalAppDataQueries.some(
-    (query: UseQueryResult) => query.isSuccess && categoryDataMapQuery.isSuccess,
+    (query: UseQueryResult) => query.isSuccess && categoryToIconAndColourMapQuery.isSuccess,
   );
   const errors = globalAppDataQueries
     .map((query: UseQueryResult) => query.error)
@@ -104,7 +107,7 @@ export function useGlobalAppData() {
     recurringExpenseArray: recurringExpenseArrayQuery.data as RecurringExpenseItemEntity[],
     blacklistedExpenseArray: blacklistedExpenseArrayQuery.data as BlacklistedExpenseItemEntity[],
     userPreferences: userPreferencesQuery.data as UserPreferences,
-    categoryDataMap: categoryDataMapQuery.data as CategoryToIconGroupAndColourMap,
+    categoryToIconAndColourMap: categoryToIconAndColourMapQuery.data as CategoryToIconAndColourMap,
     perCategoryExpenseTotalThisMonth,
     setPerCategoryExpenseTotalThisMonth,
     isAnyLoading,

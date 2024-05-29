@@ -15,10 +15,12 @@ import {
   DEFAULT_CATEGORY_GROUP,
   formatDollarAmountStatic,
   getCurrencySymbol,
+  useEmail,
 } from "@/utility/util.ts";
 import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
 import UpdateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/UpdateExpenseFormV2.tsx";
 import UpdateRecurringInstanceFormV2 from "@/components-v2/subcomponents/expenses/forms/UpdateRecurringInstanceFormV2.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ExpenseItemV2Props {
   expenseId: string;
@@ -38,7 +40,6 @@ interface ExpenseItemV2Props {
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
 
-  userPreferences: UserPreferences;
   categoryOptions: DropdownSelectorOption[];
 }
 
@@ -59,9 +60,9 @@ export default function ExpenseItemV2({
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
   oldExpenseBeingEdited,
-  userPreferences,
   categoryOptions,
 }: ExpenseItemV2Props) {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   function handleEditClick() {
     setOldExpenseBeingEdited({
       expenseId: expenseId,

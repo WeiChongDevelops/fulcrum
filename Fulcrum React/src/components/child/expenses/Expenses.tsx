@@ -16,7 +16,7 @@ import useBatchCreateExpenses from "../../../hooks/mutations/expense/useBatchCre
 import {
   BlacklistedExpenseItemEntity,
   BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   ExpenseItemEntity,
   GroupItemEntity,
   MonthExpenseGroupEntity,
@@ -32,7 +32,7 @@ interface ExpensesProps {
   groupArray: GroupItemEntity[];
   recurringExpenseArray: RecurringExpenseItemEntity[];
 
-  categoryDataMap: CategoryToIconGroupAndColourMap;
+  categoryToIconAndColourMap: CategoryToIconAndColourMap;
   blacklistedExpenseArray: BlacklistedExpenseItemEntity[];
 }
 
@@ -44,7 +44,7 @@ export default function Expenses({
   expenseArray,
   budgetArray,
   groupArray,
-  categoryDataMap,
+  categoryToIconAndColourMap,
   blacklistedExpenseArray,
   recurringExpenseArray,
 }: ExpensesProps) {
@@ -105,7 +105,7 @@ export default function Expenses({
             setExpenseModalVisibility={setExpenseModalVisibility}
             setOldExpenseBeingEdited={setOldExpenseBeingEdited}
             setExpenseItemToDelete={setExpenseItemToDelete}
-            categoryDataMap={categoryDataMap}
+            categoryToIconAndColourMap={categoryToIconAndColourMap}
             userPreferences={userPreferences}
             setDefaultCalendarDate={setDefaultCalendarDate}
           />

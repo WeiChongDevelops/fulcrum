@@ -231,7 +231,7 @@ export interface UserPreferences {
   profileIconFileName: string;
 }
 
-export type CategoryToIconGroupAndColourMap = Map<string, { iconPath: string; group: string; colour: string }>;
+export type CategoryToIconAndColourMap = Map<string, { iconPath: string; colour: string }>;
 
 export const loaderCssOverride = {
   display: "block",

@@ -17,30 +17,31 @@ interface FulcrumProps {
  * The Fulcrum component which renders the navigation bars and the active application section.
  */
 export default function Fulcrum({ userPreferences, isAnyLoading }: FulcrumProps) {
-  const routerLocation = useLocation();
-  if (isAnyLoading) {
-    return <Loader isLoading={isAnyLoading} isDarkMode={userPreferences.darkModeEnabled} />;
-  }
-
-  useEffect(() => {
-    getSessionEmailOrNull()
-      .then((result) => result === null && (window.location.href = "/login"))
-      .catch(() => (window.location.href = "/login"));
-  }, [routerLocation]);
-
-  return (
-    <div
-      className={`transition-filter duration-500 ease-in-out min-h-screen ${userPreferences.accessibilityEnabled && "accessibility-enabled"}`}
-    >
-      <NavbarUpper userPreferences={userPreferences} />
-      <NavbarLower darkModeEnabled={userPreferences.darkModeEnabled} />
-      {!window.location.href.includes("tools") && (
-        <div id="background" className={`${userPreferences.darkModeEnabled ? "bg-dark-2" : "bg-light"}`}></div>
-      )}
-
-      <ErrorBoundary>
-        <Outlet />
-      </ErrorBoundary>
-    </div>
-  );
+  // const routerLocation = useLocation();
+  // if (isAnyLoading) {
+  //   return <Loader isLoading={isAnyLoading} isDarkMode={userPreferences.darkModeEnabled} />;
+  // }
+  //
+  // useEffect(() => {
+  //   getSessionEmailOrNull()
+  //     .then((result) => result === null && (window.location.href = "/login"))
+  //     .catch(() => (window.location.href = "/login"));
+  // }, [routerLocation]);
+  //
+  // return (
+  //   <div
+  //     className={`transition-filter duration-500 ease-in-out min-h-screen ${userPreferences.accessibilityEnabled && "accessibility-enabled"}`}
+  //   >
+  //     <NavbarUpper userPreferences={userPreferences} />
+  //     <NavbarLower darkModeEnabled={userPreferences.darkModeEnabled} />
+  //     {!window.location.href.includes("tools") && (
+  //       <div id="background" className={`${userPreferences.darkModeEnabled ? "bg-dark-2" : "bg-light"}`}></div>
+  //     )}
+  //
+  //     <ErrorBoundary>
+  //       <Outlet />
+  //     </ErrorBoundary>
+  //   </div>
+  // );
+  return <></>;
 }

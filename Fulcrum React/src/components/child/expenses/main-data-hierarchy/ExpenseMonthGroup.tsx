@@ -3,7 +3,7 @@ import { Dispatch, memo, SetStateAction } from "react";
 import ExpenseDayGroup from "./ExpenseDayGroup.tsx";
 import AddNewExpenseButton from "../buttons/AddNewExpenseButton.tsx";
 import {
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseModalVisibility,
@@ -20,7 +20,7 @@ interface ExpenseMonthGroupProps {
   setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
-  categoryDataMap: CategoryToIconGroupAndColourMap;
+  categoryToIconAndColourMap: CategoryToIconAndColourMap;
   userPreferences: UserPreferences;
   monthsFromY2KToNow: number;
   monthPanelShowingIndex: number;
@@ -38,7 +38,7 @@ export const ExpenseMonthGroup = memo(
     setExpenseModalVisibility,
     setOldExpenseBeingEdited,
     setExpenseItemToDelete,
-    categoryDataMap,
+    categoryToIconAndColourMap,
     userPreferences,
     monthsFromY2KToNow,
     monthPanelShowingIndex,
@@ -113,7 +113,7 @@ export const ExpenseMonthGroup = memo(
                 setExpenseModalVisibility={setExpenseModalVisibility}
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                 setExpenseItemToDelete={setExpenseItemToDelete}
-                categoryDataMap={categoryDataMap}
+                categoryToIconAndColourMap={categoryToIconAndColourMap}
                 userPreferences={userPreferences}
                 key={key}
               />

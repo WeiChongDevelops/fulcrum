@@ -3,20 +3,18 @@ import { useContext, useEffect, useState } from "react";
 import { UserPreferences } from "@/utility/types.ts";
 import { cn } from "@/lib/utils.ts";
 import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
-import { LocationContext } from "@/utility/util.ts";
+import { LocationContext, useEmail } from "@/utility/util.ts";
 import { CircleHalf, Palette } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface AccessibilityToggleProps {
-  userPreferences: UserPreferences;
   hideDescriptor?: boolean;
   className?: string;
 }
 
-export default function AccessibilityToggle({
-  userPreferences,
-  hideDescriptor = false,
-  className,
-}: AccessibilityToggleProps) {
+export default function AccessibilityToggle({ hideDescriptor = false, className }: AccessibilityToggleProps) {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+
   const [accessibilityOn, setAccessibilityOn] = useState(userPreferences.darkModeEnabled);
   const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const routerLocation = useContext(LocationContext);

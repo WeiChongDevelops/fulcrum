@@ -10,7 +10,7 @@ import {
 } from "@/components-v2/ui/drawer.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { getGroupBudgetTotal, useEmail } from "@/utility/util.ts";
-import { BudgetItemEntity, CategoryToIconGroupAndColourMap, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
+import { BudgetItemEntity, CategoryToIconAndColourMap, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import { useEffect, useState } from "react";
 import {
   Select,
@@ -28,20 +28,18 @@ import { cn } from "@/lib/utils.ts";
 import { ScrollArea } from "@/components-v2/ui/scroll-area.tsx";
 
 interface BudgetDataBentoProps {
-  budgetArray: BudgetItemEntity[];
-  groupArray: GroupItemEntity[];
   budgetTotal: number;
-  categoryDataMap: CategoryToIconGroupAndColourMap;
-  userPreferences: UserPreferences;
 }
 
-export default function BudgetDataBento({
-  budgetArray,
-  groupArray,
-  budgetTotal,
-  categoryDataMap,
-  userPreferences,
-}: BudgetDataBentoProps) {
+export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
+  const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
+  const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["v", useEmail()])!;
+  const categoryToIconAndColourMap: CategoryToIconAndColourMap = useQueryClient().getQueryData([
+    "categoryToIconAndColourMap",
+    useEmail(),
+  ])!;
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+
   const budgetSizeSort = (budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) => {
     return budgetItemA.amount > budgetItemB.amount ? -1 : 1;
   };
@@ -164,7 +162,8 @@ export default function BudgetDataBento({
                                   <div
                                     className={"rounded-[50%] size-1.5 saturate-[600%] brightness-[90%] ml-4"}
                                     style={{
-                                      backgroundColor: categoryDataMap.get(budgetItem.category)?.colour ?? "black",
+                                      backgroundColor:
+                                        categoryToIconAndColourMap.get(budgetItem.category)?.colour ?? "black",
                                     }}
                                   ></div>
                                   <p>{budgetItem.category}</p>

@@ -3,21 +3,17 @@ import { useContext, useEffect, useState } from "react";
 import { UserPreferences } from "@/utility/types.ts";
 import { cn } from "@/lib/utils.ts";
 import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
-import { LocationContext } from "@/utility/util.ts";
+import { LocationContext, useEmail } from "@/utility/util.ts";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ThemeToggleProps {
-  userPreferences: UserPreferences;
   hideDescriptor?: boolean;
   sideBarOpen?: boolean;
   className?: string;
 }
 
-export default function ThemeToggle({
-  userPreferences,
-  sideBarOpen = true,
-  hideDescriptor = false,
-  className,
-}: ThemeToggleProps) {
+export default function ThemeToggle({ sideBarOpen = true, hideDescriptor = false, className }: ThemeToggleProps) {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const [darkModeOn, setDarkModeOn] = useState(userPreferences.darkModeEnabled);
   const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const routerLocation = useContext(LocationContext);

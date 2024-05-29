@@ -1,6 +1,6 @@
 import {
   BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseModalVisibility,
@@ -16,17 +16,15 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components-v2/ui/caro
 import { EmblaCarouselType } from "embla-carousel";
 import { ScrollArea } from "@/components-v2/ui/scroll-area";
 import { ScrollAreaDemo } from "@/components-v2/subcomponents/budget/Playground.tsx";
-import { capitaliseFirstLetter } from "@/utility/util.ts";
+import { capitaliseFirstLetter, useEmail } from "@/utility/util.ts";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ExpenseMonthCarouselV2Props {
-  budgetArray: BudgetItemEntity[];
   structuredExpenseData: MonthExpenseGroupEntity[];
   setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
   setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
-  categoryDataMap: CategoryToIconGroupAndColourMap;
-  userPreferences: UserPreferences;
   setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
   setApi: (api: EmblaCarouselType | undefined) => void;
   startingIndex: number;
@@ -38,20 +36,18 @@ interface ExpenseMonthCarouselV2Props {
  * Renders the horizontally traversable carousel of expenses, grouped by month.
  */
 export default function ExpenseMonthCarouselV2({
-  budgetArray,
   structuredExpenseData,
   setExpenseFormVisibility,
   setExpenseModalVisibility,
   setOldExpenseBeingEdited,
   setExpenseItemToDelete,
-  categoryDataMap,
-  userPreferences,
   setDefaultCalendarDate,
   setApi,
   startingIndex,
   oldExpenseBeingEdited,
   perCategoryExpenseTotalThisMonth,
 }: ExpenseMonthCarouselV2Props) {
+  const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
   return (
     <Carousel
       id={"expense-carousel"}
@@ -67,15 +63,12 @@ export default function ExpenseMonthCarouselV2({
               <CarouselItem key={key} className={"pl-24"}>
                 <ScrollArea className={"flex flex-row justify-center h-[94vh]"}>
                   <ExpenseMonthGroupV2
-                    budgetArray={budgetArray}
                     perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                     monthExpenseGroupItem={monthExpenseGroupItem}
                     setExpenseFormVisibility={setExpenseFormVisibility}
                     setExpenseModalVisibility={setExpenseModalVisibility}
                     setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                     setExpenseItemToDelete={setExpenseItemToDelete}
-                    categoryDataMap={categoryDataMap}
-                    userPreferences={userPreferences}
                     setDefaultCalendarDate={setDefaultCalendarDate}
                     oldExpenseBeingEdited={oldExpenseBeingEdited}
                   />

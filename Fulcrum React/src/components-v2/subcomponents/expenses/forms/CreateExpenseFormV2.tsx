@@ -23,7 +23,7 @@ import GroupColourSelector from "@/components/child/selectors/GroupColourSelecto
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
   BudgetItemEntity,
-  CategoryToIconGroupAndColourMap,
+  CategoryToIconAndColourMap,
   ExpenseCreationFormData,
   ExpenseFormVisibility,
   ExpenseItemEntity,
@@ -45,25 +45,25 @@ import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils.ts";
 
 interface CreateExpenseFormV2Props {
-  categoryDataMap: CategoryToIconGroupAndColourMap;
-  budgetArray: BudgetItemEntity[];
   defaultCalendarDate: Date;
   mustBeRecurring: boolean;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
 }
 
 export default function CreateExpenseFormV2({
-  categoryDataMap,
-  budgetArray,
   defaultCalendarDate,
   mustBeRecurring,
   perCategoryExpenseTotalThisMonth,
 }: CreateExpenseFormV2Props) {
   const [formIsOpen, setFormIsOpen] = useState(false);
-
   const { mutate: createExpense } = useCreateExpense();
   const { mutate: createRecurringExpense } = useCreateRecurringExpense();
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+  const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
+  const categoryToIconAndColourMap: CategoryToIconAndColourMap = useQueryClient().getQueryData([
+    "categoryToIconAndColourMap",
+    useEmail(),
+  ])!;
   const [formData, setFormData] = useState<ExpenseCreationFormData>({
     category: "Other",
     amount: 0,
@@ -157,7 +157,7 @@ export default function CreateExpenseFormV2({
   }
 
   const categoryOptions = budgetArray.map((budgetItem) => {
-    const dataMapEntry = categoryDataMap.get(budgetItem.category);
+    const dataMapEntry = categoryToIconAndColourMap.get(budgetItem.category);
     return {
       value: budgetItem.category,
       label: capitaliseFirstLetter(budgetItem.category),
