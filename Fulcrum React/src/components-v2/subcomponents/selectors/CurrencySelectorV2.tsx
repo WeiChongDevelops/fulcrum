@@ -57,7 +57,7 @@ export default function CurrencySelectorV2({ userPreferences, className }: Curre
         />
         <SelectValue placeholder={"Select currency..."} />
       </SelectTrigger>
-      <SelectContent className={userPreferences.darkModeEnabled && "dark"}>
+      <SelectContent className={cn(userPreferences.darkModeEnabled && "dark")}>
         <SelectGroup>
           {currencyOptions.map((currency) => (
             <SelectItem key={currency.value} value={currency.value}>

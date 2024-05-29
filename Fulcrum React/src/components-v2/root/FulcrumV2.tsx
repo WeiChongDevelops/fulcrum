@@ -36,13 +36,19 @@ export default function FulcrumV2({ userPreferences, sideBarOpen, setSideBarOpen
   return (
     <ErrorBoundary>
       <SideBarIsOpenContext.Provider value={sideBarOpen}>
-        <div className={"flex flex-row relative transition-all font-source"}>
+        <div
+          className={cn(
+            "flex flex-row relative transition-all font-source",
+            userPreferences.accessibilityEnabled && "saturate-0 contrast-125",
+            userPreferences.darkModeEnabled && "dark",
+          )}
+        >
           <div className={"fixed top-0 w-screen bg-gray-400 h-[6vh]"}></div>
           <SideBar userPreferences={userPreferences} sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} />
           <div
             className={cn(
-              `absolute top-0 right-0 min-h-screen text-foreground bg-background z-40 ${sideBarOpen ? "w-[calc(100vw-13rem)]" : "w-[calc(100vw-5rem)]"}`,
-              userPreferences.darkModeEnabled && "dark",
+              "absolute top-0 right-0 min-h-screen text-foreground bg-background z-40",
+              sideBarOpen ? "w-[calc(100vw-13rem)]" : "w-[calc(100vw-5rem)]",
             )}
           >
             <Outlet />
