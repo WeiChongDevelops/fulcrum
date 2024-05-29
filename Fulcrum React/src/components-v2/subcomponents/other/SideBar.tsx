@@ -19,7 +19,6 @@ interface SideBarProps {
 }
 
 export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
-  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const routerLocation = useContext(LocationContext);
   const activeEmail = useContext(EmailContext);
 
@@ -68,7 +67,7 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
       {/*</div>*/}
       <div
         ref={animatedMenuContainerRef}
-        className={`flex flex-col justify-start items-center relative h-screen bg-[#1e3836] dark:bg-[#223136] text-primary overflow-hidden pl-3 pr-4 transition-all duration-600 ease-out"}`}
+        className={`flex flex-col justify-start items-center relative h-screen bg-[#1e3836] dark:bg-[#223136] text-white overflow-hidden pl-3 pr-4 transition-all duration-600 ease-out"}`}
       >
         {sideBarOpen ? (
           <div className={"flex flex-row w-full justify-between items-center ml-4 mt-2.5"}>

@@ -33,7 +33,7 @@ interface BudgetDataBentoProps {
 
 export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
   const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
-  const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["v", useEmail()])!;
+  const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["groupArray", useEmail()])!;
   const categoryToIconAndColourMap: CategoryToIconAndColourMap = useQueryClient().getQueryData([
     "categoryToIconAndColourMap",
     useEmail(),
