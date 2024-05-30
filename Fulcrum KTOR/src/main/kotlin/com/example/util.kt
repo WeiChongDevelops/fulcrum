@@ -104,12 +104,6 @@ suspend fun executeExpenseDeletion(expenseId: String, call: ApplicationCall): Bo
 
 fun getDefaultGroups(uid: String, miscellaneousExists: Boolean): List<GroupCreateRequestSent> {
     val groups = mutableListOf(
-//        GroupCreateRequestSent(userId = uid, group = "Savings & Investment", colour = "#d1fae5", id = 1),
-//        GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#dbeafe", id = 2),
-//        GroupCreateRequestSent(userId = uid, group = "Transport", colour = "#fbcfe8", id = 3),
-//        GroupCreateRequestSent(userId = uid, group = "Utilities", colour = "#cffafe", id = 4),
-//        GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#e9d5ff", id = 5),
-//        GroupCreateRequestSent(userId = uid, group = "Leisure", colour = "#fef3c7", id = 6),
         GroupCreateRequestSent(userId = uid, group = "Savings & Investment", colour = "#ecfdf5", id = 1),
         GroupCreateRequestSent(userId = uid, group = "Housing", colour = "#f0f9ff", id = 2),
         GroupCreateRequestSent(userId = uid, group = "Food & Drink", colour = "#f5f3ff", id = 3),

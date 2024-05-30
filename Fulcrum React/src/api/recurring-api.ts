@@ -2,30 +2,39 @@ import { RecurringExpenseItemEntity } from "@/utility/types.ts";
 import { expenseSort } from "@/utility/util.ts";
 import { consolePostgrestError, getActiveUserId, supabaseClient } from "@/utility/supabase-client.ts";
 
-//
-// /**
-//  * Handles the creation of a new recurring expense.
-//  * @param newRecurringExpenseItem - The data for the new recurring expense.
-//  */
-// export async function handleRecurringExpenseCreation(newRecurringExpenseItem: RecurringExpenseItemEntity): Promise<void> {
-//   try {
-//     const response = await apiClient.post("/createRecurringExpense", {
-//       recurringExpenseId: newRecurringExpenseItem.recurringExpenseId,
-//       category: newRecurringExpenseItem.category,
-//       amount: newRecurringExpenseItem.amount,
-//       timestamp: newRecurringExpenseItem.timestamp,
-//       frequency: newRecurringExpenseItem.frequency as string,
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting recurring expense creation: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting recurring expense creation.");
-//     }
-//   }
-// }
-//
+/**
+ * Handles the creation of a new recurring expense.
+ * @param newRecurringExpenseItem - The data for the new recurring expense.
+ */
+export async function handleRecurringExpenseCreationDirect(
+  newRecurringExpenseItem: RecurringExpenseItemEntity,
+): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient
+      .from("recurring_expenses")
+      .insert({
+        userId: activeUserId,
+        recurringExpenseId: newRecurringExpenseItem.recurringExpenseId,
+        category: newRecurringExpenseItem.category,
+        amount: newRecurringExpenseItem.amount,
+        timestamp: newRecurringExpenseItem.timestamp,
+        frequency: newRecurringExpenseItem.frequency as string,
+      })
+      .select();
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log({ insertedRecurringExpense: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting recurring expense creation: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting recurring expense creation.");
+    }
+  }
+}
 
 /**
  * Retrieves the list of recurring expenses from the server.

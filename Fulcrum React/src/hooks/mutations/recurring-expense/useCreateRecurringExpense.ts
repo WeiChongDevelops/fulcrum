@@ -4,6 +4,7 @@ import { DEFAULT_CATEGORY_ICON, DEFAULT_GROUP_COLOUR, EmailContext, useEmail } f
 import { toast } from "sonner";
 import { BudgetItemEntity, CategoryToIconAndColourMap, RecurringExpenseItemEntity } from "../../../utility/types.ts";
 import { handleRecurringExpenseCreation } from "../../../utility/api.ts";
+import { handleRecurringExpenseCreationDirect } from "@/api/recurring-api.ts";
 
 interface RecurringExpenseCreationMutationProps {
   newRecurringExpenseItem: RecurringExpenseItemEntity;
@@ -16,7 +17,8 @@ export default function useCreateRecurringExpense() {
 
   return useMutation({
     mutationFn: async (recurringExpenseCreationMutationProps: RecurringExpenseCreationMutationProps) => {
-      await handleRecurringExpenseCreation(recurringExpenseCreationMutationProps.newRecurringExpenseItem);
+      // await handleRecurringExpenseCreation(recurringExpenseCreationMutationProps.newRecurringExpenseItem);
+      await handleRecurringExpenseCreationDirect(recurringExpenseCreationMutationProps.newRecurringExpenseItem);
     },
     onMutate: async (recurringExpenseCreationMutationProps: RecurringExpenseCreationMutationProps) => {
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });

@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { EmailContext, groupSort, useEmail } from "../../../utility/util.ts";
 import { BudgetItemEntity, GroupItemEntity } from "../../../utility/types.ts";
 import { handleBudgetCreation } from "../../../utility/api.ts";
+import { handleBudgetCreationDirect } from "@/api/budget-api.ts";
 
 export default function useCreateBudget() {
   const queryClient = useQueryClient();
@@ -15,8 +16,9 @@ export default function useCreateBudget() {
   }
 
   return useMutation({
-    mutationFn: (budgetCreationMutationProps: BudgetCreationMutationProps) =>
-      handleBudgetCreation(budgetCreationMutationProps.newBudgetItem),
+    mutationFn: async (budgetCreationMutationProps: BudgetCreationMutationProps) =>
+      // handleBudgetCreation(budgetCreationMutationProps.newBudgetItem),
+      await handleBudgetCreationDirect(budgetCreationMutationProps.newBudgetItem),
     onMutate: async (budgetCreationMutationProps: BudgetCreationMutationProps) => {
       if (!!budgetCreationMutationProps.newGroupItem) {
         await queryClient.cancelQueries({ queryKey: ["groupArray", email] });

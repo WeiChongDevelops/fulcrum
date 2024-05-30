@@ -24,6 +24,7 @@ export async function handleExpenseCreationDirect(newExpenseItem: ExpenseItemEnt
         expenseId: newExpenseItem.expenseId,
         category: newExpenseItem.category,
         timestamp: newExpenseItem.timestamp,
+        amount: newExpenseItem.amount,
         recurringExpenseId: newExpenseItem.recurringExpenseId,
       })
       .select();
