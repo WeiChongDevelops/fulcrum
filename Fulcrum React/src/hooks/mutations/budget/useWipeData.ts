@@ -14,13 +14,15 @@ export default function useWipeData() {
     onMutate: () => {
       queryClient.cancelQueries({ queryKey: ["budgetArray", email] });
       toast.dismiss();
-      toast.loading("Wiping budget...");
+      toast.loading("Wiping data...");
     },
     onSuccess: () => {
-      toast.success("Budget wiped.");
+      toast.dismiss();
+      toast.success("Data wiped.");
     },
     onError: () => {
-      toast.error("Oops! We couldn’t wipe your budget due to a network issue. Please try again later.", {
+      toast.dismiss();
+      toast.error("Oops! We couldn’t wipe your data due to a network issue. Please try again later.", {
         duration: 7_000,
       });
     },

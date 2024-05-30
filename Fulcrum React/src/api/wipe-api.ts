@@ -1,6 +1,7 @@
 import { consolePostgrestError, getActiveUserId, supabaseClient } from "@/utility/supabase-client.ts";
 import {
   initialiseDefaultCategories,
+  initialiseDefaultGroups,
   initialiseDefaultIncome,
   initialiseDefaultUserPreferences,
   rowsExistFor,
@@ -33,6 +34,33 @@ async function wipeRecurringExpenses() {
   }
 }
 
+async function wipeBudgets() {
+  const activeUserId = await getActiveUserId();
+  if (await rowsExistFor("budgets")) {
+    const { error } = await supabaseClient.from("budgets").delete().eq("userId", activeUserId);
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log("Successfully wiped budget data.");
+  } else {
+    console.log("No expenses found when wiping budget data.");
+  }
+}
+async function wipeGroups() {
+  const activeUserId = await getActiveUserId();
+  if (await rowsExistFor("groups")) {
+    const { error } = await supabaseClient.from("groups").delete().eq("userId", activeUserId);
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log("Successfully wiped group data.");
+  } else {
+    console.log("No recurring expenses found when group data.");
+  }
+}
+
 /**
  * Deletes all user expense records.
  */
@@ -54,6 +82,8 @@ export async function handleWipeExpensesDirect(): Promise<void> {
  */
 export async function handleWipeDataDirect(): Promise<void> {
   try {
+    await wipeBudgets();
+    await wipeGroups();
     console.log("Successfully wiped data.");
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -69,8 +99,9 @@ export async function handleWipeDataDirect(): Promise<void> {
  */
 export async function handleResetAccountDataDirect(): Promise<void> {
   try {
-    await initialiseDefaultCategories();
     await initialiseDefaultUserPreferences();
+    await initialiseDefaultGroups();
+    await initialiseDefaultCategories();
     await initialiseDefaultIncome();
     console.log("Successfully reset account data.");
   } catch (error: unknown) {

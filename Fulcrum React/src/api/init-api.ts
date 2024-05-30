@@ -22,7 +22,7 @@ export async function initialiseDefaultUserPreferences() {
   try {
     const activeUserId = await getActiveUserId();
     if (await rowsExistFor("user_preferences")) {
-      supabaseClient.from("user_preferences").delete().eq("userId", activeUserId);
+      await supabaseClient.from("user_preferences").delete().eq("userId", activeUserId);
     }
 
     const { data: newUserPrefs, error: initError } = await supabaseClient
@@ -50,7 +50,7 @@ export async function initialiseDefaultIncome() {
   try {
     const activeUserId = await getActiveUserId();
     if (await rowsExistFor("total_income")) {
-      supabaseClient.from("total_income").delete().eq("userId", activeUserId);
+      await supabaseClient.from("total_income").delete().eq("userId", activeUserId);
     }
 
     const { data: newTotalIncome, error: initError } = await supabaseClient
