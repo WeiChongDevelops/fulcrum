@@ -6,17 +6,17 @@ import { getParamFromFragmentURL, LocationContext, useLocation } from "../../../
 
 export default function OAuthRedirect() {
   const { mutate: initOAuthAccount } = useInitOAuthAccount();
-  const routerLocation = useLocation();
 
   useEffect(() => {
     toast.loading("Please wait to be redirected.");
-    const url = window.location.href;
-    const accessToken = getParamFromFragmentURL(url, "access_token");
-    const refreshToken = getParamFromFragmentURL(url, "refresh_token");
-    if (!!accessToken && !!refreshToken) {
-      handleUserOAuthLoginAttempt(accessToken, refreshToken).then(initOAuthAccount);
-    }
-  }, [routerLocation]);
+    // const url = window.location.href;
+    // const accessToken = getParamFromFragmentURL(url, "access_token");
+    // const refreshToken = getParamFromFragmentURL(url, "refresh_token");
+    // if (!!accessToken && !!refreshToken) {
+    //   handleUserOAuthLoginAttempt(accessToken, refreshToken).then(initOAuthAccount);
+    // }
+    initOAuthAccount();
+  }, []);
 
   return (
     <div className={"flex flex-col justify-center items-center h-screen gap-8 text-black"}>

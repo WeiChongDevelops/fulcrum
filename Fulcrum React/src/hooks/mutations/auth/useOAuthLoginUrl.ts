@@ -1,10 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import { handleUserOAuthLoginPrompt } from "../../../utility/api.ts";
+import { getOAuthLoginURLDirect } from "@/api/auth-api.ts";
 
 export default function useOAuthLoginUrl() {
+  // return useMutation({
+  //   mutationFn: (provider: string) => {
+  //     return getOAuthLoginURLDirect(provider);
+  //   },
+  //   onSuccess: (data) => (window.location.href = data),
+  // });
   return useMutation({
     mutationFn: (provider: string) => {
-      return handleUserOAuthLoginPrompt(provider);
+      return getOAuthLoginURLDirect(provider);
     },
     onSuccess: (data) => (window.location.href = data),
   });

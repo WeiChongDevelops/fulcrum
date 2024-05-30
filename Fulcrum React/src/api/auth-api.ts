@@ -5,6 +5,7 @@ import {
   initialiseDefaultGroups,
   initialiseDefaultIncome,
   initialiseDefaultUserPreferences,
+  rowsExistFor,
 } from "@/api/init-api.ts";
 
 /**
@@ -72,29 +73,42 @@ export async function handleUserLoginDirect(email: string, password: string): Pr
     }
   }
 }
-//
-// /**
-//  * Attempts to log in a user with the provided email and password.
-//  * Redirects to the budget page on successful login.
-//  * @param provider - The authentication provider
-//  * @returns The url for OAuth
-//  */
-// export async function handleUserOAuthLoginPrompt(provider: string): Promise<string> {
-//   try {
-//     const response = await apiClient.post("/oAuthLoginPrompt", {
-//       provider: provider,
-//     });
-//     console.log(response.data);
-//     return response.data;
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting oauth login: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting oauth login.");
-//     }
-//   }
-// }
-//
+
+/**
+ * Attempts to log in a user with the provided email and password.
+ * Redirects to the budget page on successful login.
+ * @param provider - The authentication provider
+ * @returns The url for OAuth
+ */
+export async function getOAuthLoginURLDirect(provider: string): Promise<string> {
+  try {
+    if (provider === "facebook") {
+      return "/whatintheworldwereyouthinkingmark";
+    }
+    if (provider !== "google") {
+      throw new Error("OAuth provider not recognised.");
+    }
+    const { data, error } = await supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: "https://fulcrumfinance.app/oAuthSuccess" },
+    });
+    if (error) {
+      consoleAuthError(error);
+      throw new Error(error.message);
+    }
+    if (data === null || data.url === null) {
+      throw new Error("Redirect URL not received.");
+    }
+    return data.url;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting OAuth login: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting OAuth login.");
+    }
+  }
+}
+
 // /**
 //  * Attempts to log in a user with the provided email and password.
 //  * Redirects to the budget page on successful login.
@@ -114,20 +128,24 @@ export async function handleUserLoginDirect(email: string, password: string): Pr
 //     }
 //   }
 // }
-//
-// export async function handleUserOAuthInit(): Promise<void> {
-//   try {
-//     const response = await apiClient.post("/oAuthDataInitialisation");
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting oauth init: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting oauth init.");
-//     }
-//   }
-// }
-//
+
+export async function handleUserOAuthInitDirect(): Promise<void> {
+  try {
+    if (!(await rowsExistFor("user_preferences"))) {
+      await initialiseDefaultUserPreferences();
+      await initialiseDefaultIncome();
+      await initialiseDefaultGroups();
+      await initialiseDefaultCategories();
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting oauth init: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting oauth init.");
+    }
+  }
+}
+
 /**
  * Logs out the current user and redirects to the login page.
  */
