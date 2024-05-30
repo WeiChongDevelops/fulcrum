@@ -98,28 +98,35 @@ export async function handleGroupUpdatingDirect(
   }
 }
 
-// /**
-//  * Reorders the groups by reassigning their sort indexes.
-//  * @param reorderedGroupArray - The array of the groups with updated sort indexes.
-//  */
-// export async function handleGroupReorder(reorderedGroupArray: GroupItemEntity[]) {
-//   try {
-//     await apiClient.put("/reorderGroups", {
-//       reorderedGroupArray: reorderedGroupArray.map((groupItem) => ({
-//         group: groupItem.group,
-//         id: groupItem.id,
-//       })),
-//     });
-//     console.log("Groups successfully reordered.");
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting group reorder: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting group reorder.");
-//     }
-//   }
-// }
-//
+/**
+ * Reorders the groups by reassigning their sort indexes.
+ * @param reorderedGroupArray - The array of the groups with updated sort indexes.
+ */
+export async function handleGroupReorderDirect(reorderedGroupArray: GroupItemEntity[]) {
+  try {
+    const activeUserId = await getActiveUserId();
+
+    for (const groupItemWithNewIndex of reorderedGroupArray) {
+      const { error } = await supabaseClient
+        .from("groups")
+        .update({ id: groupItemWithNewIndex.id })
+        .eq("group", groupItemWithNewIndex.group)
+        .eq("userId", activeUserId);
+      if (error) {
+        consolePostgrestError(error);
+        throw new Error(error.message);
+      }
+    }
+    console.log("Groups successfully reordered.");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting group reorder: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting group reorder.");
+    }
+  }
+}
+
 /**
  * Handles the deletion of a group and optionally keeps the contained budgets.
  * @param groupName - The name of the group to be deleted.

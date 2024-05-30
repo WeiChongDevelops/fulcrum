@@ -3,6 +3,7 @@ import { GroupItemEntity } from "@/utility/types.ts";
 import { handleGroupReorder } from "@/utility/api.ts";
 import { useContext } from "react";
 import { EmailContext } from "@/utility/util.ts";
+import { handleGroupReorderDirect } from "@/api/group-api.ts";
 
 export default function useReorderGroups() {
   const email = useContext(EmailContext);
@@ -10,7 +11,7 @@ export default function useReorderGroups() {
 
   return useMutation({
     mutationFn: (reorderedGroupArray: GroupItemEntity[]) => {
-      return handleGroupReorder(reorderedGroupArray);
+      return handleGroupReorderDirect(reorderedGroupArray);
     },
     onMutate: (reorderedGroupArray: GroupItemEntity[]) => {
       query.cancelQueries({ queryKey: ["groupArray", email] });
