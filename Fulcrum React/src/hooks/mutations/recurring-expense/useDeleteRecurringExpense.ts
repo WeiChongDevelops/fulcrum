@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { toast } from "sonner";
 import { ExpenseItemEntity, RecurringExpenseItemEntity } from "../../../utility/types.ts";
 import { handleBatchExpenseDeletion, handleRecurringExpenseDeletion } from "../../../utility/api.ts";
+import { handleRecurringExpenseDeletionDirect } from "@/api/recurring-api.ts";
 
 interface RecurringExpenseDeletionMutationProps {
   recurringExpenseId: string;
@@ -26,7 +27,7 @@ export default function useDeleteRecurringExpense() {
         console.log({ instancesFoundToDelete: recurringInstancesToDelete });
         await handleBatchExpenseDeletion(recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId));
       }
-      return handleRecurringExpenseDeletion(recurringExpenseDeletionMutationProps.recurringExpenseId);
+      return handleRecurringExpenseDeletionDirect(recurringExpenseDeletionMutationProps.recurringExpenseId);
     },
     onMutate: async (recurringExpenseDeletionMutationProps: RecurringExpenseDeletionMutationProps) => {
       await queryClient.cancelQueries({ queryKey: ["recurringExpenseArray", email] });

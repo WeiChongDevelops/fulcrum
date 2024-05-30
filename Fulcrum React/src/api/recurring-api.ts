@@ -103,22 +103,28 @@ export async function handleRecurringExpenseUpdatingDirect(
   }
 }
 
-// /**
-//  * Deletes a specified recurring expense.
-//  * @param recurringExpenseId - The ID of the recurring expense to delete.
-//  */
-// export async function handleRecurringExpenseDeletion(recurringExpenseId: string): Promise<void> {
-//   try {
-//     const response = await apiClient.delete("/deleteRecurringExpense", {
-//       data: { recurringExpenseId: recurringExpenseId },
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting recurring expense deletion: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting recurring expense deletion.");
-//     }
-//   }
-// }
-//
+/**
+ * Deletes a specified recurring expense.
+ * @param recurringExpenseId - The ID of the recurring expense to delete.
+ */
+export async function handleRecurringExpenseDeletionDirect(recurringExpenseId: string): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { error } = await supabaseClient
+      .from("recurring_expenses")
+      .delete()
+      .eq("userId", activeUserId)
+      .eq("recurringExpenseId", recurringExpenseId);
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log("Recurring expense deletion successful.");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting recurring expense deletion: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting recurring expense deletion.");
+    }
+  }
+}
