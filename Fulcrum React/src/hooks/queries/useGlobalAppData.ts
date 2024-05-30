@@ -19,6 +19,13 @@ import {
   RecurringExpenseItemEntity,
 } from "@/utility/types.ts";
 import { useState } from "react";
+import { getSessionEmailOrNullDirect } from "@/utility/supabase-client.ts";
+import { getBudgetListDirect } from "@/api/budget-api.ts";
+import { getGroupListDirect } from "@/api/group-api.ts";
+import { getExpenseListDirect } from "@/api/expense-api.ts";
+import { getRecurringExpenseListDirect } from "@/api/recurring-api.ts";
+import { getBlacklistedExpensesDirect } from "@/api/blacklist-api.ts";
+import { getUserPreferencesDirect } from "@/api/user-prefs-api.ts";
 
 export function useGlobalAppData() {
   const sessionStoredProfileIcon = sessionStorage.getItem("profileIconFileName");
@@ -29,7 +36,7 @@ export function useGlobalAppData() {
   const emailQuery = useQuery({
     queryKey: ["activeEmail"],
     initialData: !!sessionStoredEmail ? sessionStoredEmail : null,
-    queryFn: getSessionEmailOrNull,
+    queryFn: getSessionEmailOrNullDirect,
     enabled: window.location.href.split("/").includes("app"),
   });
 
@@ -38,14 +45,14 @@ export function useGlobalAppData() {
 
   const globalAppDataQueries: UseQueryResult[] = useQueries({
     queries: [
-      { queryKey: ["budgetArray", email], queryFn: getBudgetList, enabled: retrievalConditions },
-      { queryKey: ["groupArray", email], queryFn: getGroupList, enabled: retrievalConditions },
-      { queryKey: ["expenseArray", email], queryFn: getExpenseList, enabled: retrievalConditions },
-      { queryKey: ["recurringExpenseArray", email], queryFn: getRecurringExpenseList, enabled: retrievalConditions },
-      { queryKey: ["blacklistedExpenseArray", email], queryFn: getBlacklistedExpenses, enabled: retrievalConditions },
+      { queryKey: ["budgetArray", email], queryFn: getBudgetListDirect, enabled: retrievalConditions },
+      { queryKey: ["groupArray", email], queryFn: getGroupListDirect, enabled: retrievalConditions },
+      { queryKey: ["expenseArray", email], queryFn: getExpenseListDirect, enabled: retrievalConditions },
+      { queryKey: ["recurringExpenseArray", email], queryFn: getRecurringExpenseListDirect, enabled: retrievalConditions },
+      { queryKey: ["blacklistedExpenseArray", email], queryFn: getBlacklistedExpensesDirect, enabled: retrievalConditions },
       {
         queryKey: ["userPreferences", email],
-        queryFn: getUserPreferences,
+        queryFn: getUserPreferencesDirect,
         enabled: retrievalConditions,
         initialData: {
           createdAt: new Date(),

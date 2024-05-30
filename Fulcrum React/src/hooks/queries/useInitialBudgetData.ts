@@ -9,6 +9,8 @@ import {
 } from "../../utility/types.ts";
 import { getSessionEmailOrNull, getTotalIncome } from "../../utility/api.ts";
 import { useNavigate } from "react-router-dom";
+import { getSessionEmailOrNullDirect } from "@/utility/supabase-client.ts";
+import { getTotalIncomeDirect } from "@/api/total-income-api.ts";
 
 export default function useInitialBudgetData() {
   const [budgetFormVisibility, setBudgetFormVisibility] = useState<BudgetFormVisibility>({
@@ -52,16 +54,10 @@ export default function useInitialBudgetData() {
 
   async function retrieveInitialData() {
     try {
-      const isLoggedIn = (await getSessionEmailOrNull()) !== null;
-      if (isLoggedIn) {
-        console.log("User logged in.");
-      } else {
-        console.log("User not logged in, login redirect initiated.");
-        navigate("/login");
-      }
-      return getTotalIncome();
+      return getTotalIncomeDirect();
     } catch (error) {
       console.log(`Unsuccessful budget page data retrieval - error: ${error}`);
+      navigate("/login");
     }
   }
 

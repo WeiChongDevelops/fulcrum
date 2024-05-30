@@ -45,3 +45,4 @@ __mocks__/
 src/components/__tests__/
 jest.config.cjs
 stats.html
+**/.env

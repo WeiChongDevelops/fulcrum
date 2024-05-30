@@ -429,7 +429,10 @@ export function groupSort(a: GroupItemEntity, b: GroupItemEntity): number {
  * @param expenseItemB - The second expense item for comparison.
  * @returns Sorting order value.
  */
-export function expenseSort(expenseItemA: ExpenseItemEntity, expenseItemB: ExpenseItemEntity): number {
+export function expenseSort(
+  expenseItemA: ExpenseItemEntity | RecurringExpenseItemEntity,
+  expenseItemB: ExpenseItemEntity | RecurringExpenseItemEntity,
+): number {
   return new Date(expenseItemB.timestamp).getTime() - new Date(expenseItemA.timestamp).getTime();
 }
 

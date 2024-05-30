@@ -9,6 +9,7 @@ import { LocationContext, SideBarIsOpenContext } from "@/utility/util.ts";
 import { Toaster } from "sonner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { cn } from "@/lib/utils.ts";
+import { getSessionEmailOrNullDirect } from "@/utility/supabase-client.ts";
 
 interface FulcrumV2Props {
   userPreferences: UserPreferences;
@@ -28,9 +29,7 @@ export default function FulcrumV2({ userPreferences, isAnyLoading }: FulcrumV2Pr
   }
 
   useEffect(() => {
-    getSessionEmailOrNull()
-      .then((result) => result === null && (window.location.href = "/login"))
-      .catch(() => (window.location.href = "/login"));
+    getSessionEmailOrNullDirect().then((result) => result === null && (window.location.href = "/login"));
   }, [routerLocation]);
 
   return (

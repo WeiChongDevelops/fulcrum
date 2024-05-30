@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { toast } from "sonner";
 import { BudgetItemEntity, CategoryToIconAndColourMap, ExpenseItemEntity } from "../../../utility/types.ts";
 import { handleExpenseCreation } from "../../../utility/api.ts";
+import { handleExpenseCreationDirect } from "@/api/expense-api.ts";
 
 export interface ExpenseCreationMutationProps {
   newExpenseItem: ExpenseItemEntity;
@@ -16,7 +17,8 @@ export default function useCreateExpense() {
 
   return useMutation({
     mutationFn: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {
-      await handleExpenseCreation(expenseCreationMutationProps.newExpenseItem);
+      // await handleExpenseCreation(expenseCreationMutationProps.newExpenseItem);
+      await handleExpenseCreationDirect(expenseCreationMutationProps.newExpenseItem);
     },
     onMutate: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {
       toast.success("Expense added.");
@@ -70,7 +72,8 @@ export default function useCreateExpense() {
         categoryToIconAndColourMapBeforeOptimisticUpdate,
       };
     },
-    onError: (_error, _variables, context) => {
+    onError: (error, _variables, context) => {
+      console.error(error);
       toast.error(
         "Oops! We couldn’t save your changes due to a network issue. We’ve restored your last settings. Please try again later.",
         {

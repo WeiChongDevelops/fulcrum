@@ -2,11 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { LoginFormData } from "../../../utility/types.ts";
 import { handleUserLogin } from "../../../utility/api.ts";
+import { handleUserLoginDirect } from "@/api/auth-api.ts";
 
 export default function useLoginUser() {
   return useMutation({
     mutationFn: async (formData: LoginFormData) => {
-      await handleUserLogin(formData.email, formData.password);
+      // await handleUserLogin(formData.email, formData.password);
+      await handleUserLoginDirect(formData.email, formData.password);
     },
     onSuccess: () => {
       toast.success("Login successful!");

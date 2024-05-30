@@ -1,6 +1,10 @@
 services:
   frontend:
     image: weichongdevelops/fulcrum-frontend:1.0
+    build:
+      context: "./Fulcrum React"
+      args:
+        VITE_SUPABASE_KEY: ${SUPABASE_KEY}
     ports:
       - "80:3001"
     restart: "on-failure"
