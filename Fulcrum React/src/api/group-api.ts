@@ -120,26 +120,38 @@ export async function handleGroupUpdatingDirect(
 //   }
 // }
 //
-// /**
-//  * Handles the deletion of a group and optionally keeps the contained budgets.
-//  * @param groupName - The name of the group to be deleted.
-//  * @param keepContainedBudgets - Flag to keep or delete budgets contained within the group.
-//  */
-// export async function handleGroupDeletion(groupName: string, keepContainedBudgets: boolean): Promise<void> {
-//   try {
-//     const response = await apiClient.delete("/deleteGroup", {
-//       data: {
-//         group: groupName,
-//         keepContainedBudgets: keepContainedBudgets,
-//       },
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting group deletion: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting group deletion.");
-//     }
-//   }
-// }
-//
+/**
+ * Handles the deletion of a group and optionally keeps the contained budgets.
+ * @param groupName - The name of the group to be deleted.
+ * @param keepContainedBudgets - Flag to keep or delete budgets contained within the group.
+ */
+export async function handleGroupDeletionDirect(groupName: string, keepContainedBudgets: boolean): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+
+    if (keepContainedBudgets) {
+      const { error } = await supabaseClient
+        .from("budgets")
+        .update({ group: "Miscellaneous" })
+        .eq("userId", activeUserId)
+        .eq("group", groupName);
+      if (error) {
+        consolePostgrestError(error);
+        throw new Error(error.message);
+      }
+    }
+
+    const { error } = await supabaseClient.from("groups").delete().eq("userId", activeUserId).eq("group", groupName);
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log("Group deletion successful.");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting group deletion: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting group deletion.");
+    }
+  }
+}

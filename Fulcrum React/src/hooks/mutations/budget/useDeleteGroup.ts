@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleGroupDeletion } from "../../../utility/api.ts";
 import { GroupItemEntity } from "../../../utility/types.ts";
+import { handleGroupDeletionDirect } from "@/api/group-api.ts";
 
 interface GroupDeletionProps {
   groupToDelete: string;
@@ -16,7 +17,7 @@ export default function useDeleteGroup() {
 
   return useMutation({
     mutationFn: (groupDeletionProps: GroupDeletionProps) => {
-      return handleGroupDeletion(groupDeletionProps.groupToDelete, groupDeletionProps.keepContainedCategories);
+      return handleGroupDeletionDirect(groupDeletionProps.groupToDelete, groupDeletionProps.keepContainedCategories);
     },
     onMutate: async (groupDeletionProps: GroupDeletionProps) => {
       await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
