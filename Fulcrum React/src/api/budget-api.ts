@@ -71,31 +71,44 @@ export async function getBudgetListDirect(): Promise<BudgetItemEntity[]> {
     }
   }
 }
-//
-// /**
-//  * Updates an existing budget item based on the provided form data.
-//  * @param originalCategory - The category of the budget item to update.
-//  * @param updatedBudgetItem - The updated data for the budget item.
-//  */
-// export async function handleBudgetUpdating(originalCategory: string, updatedBudgetItem: BudgetItemEntity): Promise<void> {
-//   try {
-//     const response = await apiClient.put("/updateBudget", {
-//       category: originalCategory,
-//       newCategoryName: updatedBudgetItem.category.trim(),
-//       amount: updatedBudgetItem.amount,
-//       group: updatedBudgetItem.group.trim(),
-//       iconPath: updatedBudgetItem.iconPath,
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting budget updating: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting budget updating.");
-//     }
-//   }
-// }
-//
+
+/**
+ * Updates an existing budget item based on the provided form data.
+ * @param originalCategory - The category of the budget item to update.
+ * @param updatedBudgetItem - The updated data for the budget item.
+ */
+export async function handleBudgetUpdatingDirect(
+  originalCategory: string,
+  updatedBudgetItem: BudgetItemEntity,
+): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient
+      .from("budgets")
+      .update({
+        userId: activeUserId,
+        category: updatedBudgetItem.category.trim(),
+        amount: updatedBudgetItem.amount,
+        group: updatedBudgetItem.group.trim(),
+        iconPath: updatedBudgetItem.iconPath,
+      })
+      .eq("userId", activeUserId)
+      .eq("category", originalCategory)
+      .select();
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log({ updatedBudgetItem: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting budget updating: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting budget updating.");
+    }
+  }
+}
+
 // /**
 //  * Deletes a budget item.
 //  * @param category - The category of the budget item to be deleted.

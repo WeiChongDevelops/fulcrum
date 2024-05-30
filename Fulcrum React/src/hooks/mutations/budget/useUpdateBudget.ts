@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { BudgetItemEntity, GroupItemEntity } from "../../../utility/types.ts";
 import { budgetSort, EmailContext, groupSort, useEmail } from "../../../utility/util.ts";
 import { handleBudgetUpdating } from "../../../utility/api.ts";
+import { handleBudgetUpdatingDirect } from "@/api/budget-api.ts";
 
 interface BudgetUpdatingMutationProps {
   originalCategory: string;
@@ -17,7 +18,7 @@ export default function useUpdateBudget() {
 
   return useMutation({
     mutationFn: (budgetUpdatingMutationProps: BudgetUpdatingMutationProps) => {
-      return handleBudgetUpdating(
+      return handleBudgetUpdatingDirect(
         budgetUpdatingMutationProps.originalCategory,
         budgetUpdatingMutationProps.updatedBudgetItem,
       );
