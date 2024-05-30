@@ -90,9 +90,6 @@ export async function handleRecurringExpenseUpdatingDirect(
       consolePostgrestError(error);
       throw new Error(error.message);
     }
-    if (data === null) {
-      console.error("No change was made when updating recurring expense - unnecessary network request.");
-    }
     console.log({ updatedRecurringExpenseItem: data });
   } catch (error: unknown) {
     if (error instanceof Error) {

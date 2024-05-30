@@ -92,14 +92,10 @@ export async function handleBudgetUpdatingDirect(
         iconPath: updatedBudgetItem.iconPath,
       })
       .eq("userId", activeUserId)
-      .eq("category", originalCategory)
-      .select();
+      .eq("category", originalCategory);
     if (error) {
       consolePostgrestError(error);
       throw new Error(error.message);
-    }
-    if (data === null) {
-      console.error("No change was made when updating budget - unnecessary network request.");
     }
     console.log({ updatedBudgetItem: data });
   } catch (error: unknown) {

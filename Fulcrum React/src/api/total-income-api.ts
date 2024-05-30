@@ -44,9 +44,6 @@ export async function handleTotalIncomeUpdatingDirect(newTotalIncome: number): P
       consolePostgrestError(error);
       throw new Error(error.message);
     }
-    if (data === null) {
-      console.error("No change was made when updating total income - unnecessary network request.");
-    }
     console.log({ updatedIncome: data });
   } catch (error: unknown) {
     if (error instanceof Error) {

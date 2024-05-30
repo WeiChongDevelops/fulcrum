@@ -27,25 +27,34 @@ export async function getUserPreferencesDirect(): Promise<UserPreferences> {
     }
   }
 }
-//
-// /**
-//  * Updates user preferences with the specified settings.
-//  * @param updatedUserPreferences - The updated user preferences.
-//  */
-// export async function handleUserPreferencesUpdating(updatedUserPreferences: UserPreferences): Promise<void> {
-//   try {
-//     const response = await apiClient.put("/updateUserPreferences", {
-//       currency: updatedUserPreferences.currency,
-//       darkModeEnabled: updatedUserPreferences.darkModeEnabled,
-//       accessibilityEnabled: updatedUserPreferences.accessibilityEnabled,
-//       profileIconFileName: updatedUserPreferences.profileIconFileName,
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting user preferences update: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting user preferences update.");
-//     }
-//   }
-// }
+
+/**
+ * Updates user preferences with the specified settings.
+ * @param updatedUserPreferences - The updated user preferences.
+ */
+export async function handleUserPreferencesUpdatingDirect(updatedUserPreferences: UserPreferences): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient
+      .from("user_preferences")
+      .update({
+        currency: updatedUserPreferences.currency,
+        darkModeEnabled: updatedUserPreferences.darkModeEnabled,
+        accessibilityEnabled: updatedUserPreferences.accessibilityEnabled,
+        profileIconFileName: updatedUserPreferences.profileIconFileName,
+      })
+      .eq("userId", activeUserId)
+      .select();
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log({ updatedUserPrefs: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting user preferences update: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting user preferences update.");
+    }
+  }
+}

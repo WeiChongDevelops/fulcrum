@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { UserPreferences } from "../../../utility/types.ts";
 import { handleUserPreferencesUpdating } from "../../../utility/api.ts";
+import { handleUserPreferencesUpdatingDirect } from "@/api/user-prefs-api.ts";
 
 export default function useUpdateUserPreferences() {
   const email = useEmail();
@@ -11,7 +12,7 @@ export default function useUpdateUserPreferences() {
 
   return useMutation({
     mutationKey: ["userPreferences", email],
-    mutationFn: (updatedUserPreferences: UserPreferences) => handleUserPreferencesUpdating(updatedUserPreferences),
+    mutationFn: (updatedUserPreferences: UserPreferences) => handleUserPreferencesUpdatingDirect(updatedUserPreferences),
     onMutate: async (updatedUserPreferences: UserPreferences) => {
       await queryClient.cancelQueries({ queryKey: ["userPreferences", email] });
       const userPreferencesBeforeOptimisticUpdate = queryClient.getQueryData(["userPreferences", email]);

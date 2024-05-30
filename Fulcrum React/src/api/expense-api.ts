@@ -119,9 +119,6 @@ export async function handleExpenseUpdatingDirect(updatedExpenseItem: ExpenseIte
       consolePostgrestError(error);
       throw new Error(error.message);
     }
-    if (data === null) {
-      console.error("No change was made when updating expense - unnecessary network request.");
-    }
     console.log({ updatedExpenseItem: data });
   } catch (error: unknown) {
     if (error instanceof Error) {
