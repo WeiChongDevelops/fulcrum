@@ -131,7 +131,8 @@ export async function getOAuthLoginURLDirect(provider: string): Promise<string> 
 
 export async function handleUserOAuthInitDirect(): Promise<void> {
   try {
-    if (!(await rowsExistFor("user_preferences"))) {
+    const firstLogin = !(await rowsExistFor("user_preferences"));
+    if (firstLogin) {
       await initialiseDefaultUserPreferences();
       await initialiseDefaultIncome();
       await initialiseDefaultGroups();
