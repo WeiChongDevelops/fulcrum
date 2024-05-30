@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { ExpenseItemEntity } from "../../../utility/types.ts";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleExpenseUpdating } from "../../../utility/api.ts";
+import { handleExpenseUpdatingDirect } from "@/api/expense-api.ts";
 
 export default function useUpdateExpense() {
   const email = useEmail();
@@ -11,7 +12,7 @@ export default function useUpdateExpense() {
 
   return useMutation({
     mutationFn: (updatedExpenseItem: ExpenseItemEntity) => {
-      return handleExpenseUpdating(updatedExpenseItem);
+      return handleExpenseUpdatingDirect(updatedExpenseItem);
     },
     onMutate: async (updatedExpenseItem: ExpenseItemEntity) => {
       await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });

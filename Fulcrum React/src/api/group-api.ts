@@ -60,29 +60,44 @@ export async function getGroupListDirect(): Promise<GroupItemEntity[]> {
     }
   }
 }
-//
-// /**
-//  * Updates an existing budget category group.
-//  * @param originalGroupName - The original name of the group being updated.
-//  * @param updatedGroupItem - The new data for the group.
-//  */
-// export async function handleGroupUpdating(originalGroupName: string, updatedGroupItem: GroupItemEntity): Promise<void> {
-//   try {
-//     await apiClient.put("/updateGroup", {
-//       originalGroupName: originalGroupName,
-//       newGroupName: updatedGroupItem.group.trim(),
-//       newColour: updatedGroupItem.colour ? updatedGroupItem.colour : "",
-//     });
-//     console.log("Group successfully updated.");
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting group update: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting group update.");
-//     }
-//   }
-// }
-//
+
+/**
+ * Updates an existing budget category group.
+ * @param originalGroupName - The original name of the group being updated.
+ * @param updatedGroupItem - The new data for the group.
+ */
+export async function handleGroupUpdatingDirect(
+  originalGroupName: string,
+  updatedGroupItem: GroupItemEntity,
+): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient
+      .from("groups")
+      .update({
+        group: updatedGroupItem.group.trim(),
+        colour: updatedGroupItem.colour ? updatedGroupItem.colour : "",
+      })
+      .eq("userId", activeUserId)
+      .eq("group", originalGroupName)
+      .select();
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    if (data === null) {
+      console.error("No change was made when updating group - unnecessary network request.");
+    }
+    console.log({ updatedExpenseItem: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting group update: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting group update.");
+    }
+  }
+}
+
 // /**
 //  * Reorders the groups by reassigning their sort indexes.
 //  * @param reorderedGroupArray - The array of the groups with updated sort indexes.

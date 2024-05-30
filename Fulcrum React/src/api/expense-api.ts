@@ -89,30 +89,42 @@ export async function getExpenseListDirect(): Promise<ExpenseItemEntity[]> {
     }
   }
 }
-//
-// /**
-//  * Handles the updating of an existing expense item.
-//  * @param updatedExpenseItem - The updated data for the expense item.
-//  */
-// export async function handleExpenseUpdating(updatedExpenseItem: ExpenseItemEntity): Promise<void> {
-//   try {
-//     const response = await apiClient.put("/updateExpense", {
-//       expenseId: updatedExpenseItem.expenseId,
-//       category: updatedExpenseItem.category,
-//       amount: updatedExpenseItem.amount,
-//       timestamp: updatedExpenseItem.timestamp,
-//       recurringExpenseId: updatedExpenseItem.recurringExpenseId,
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting expense update: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting expense update.");
-//     }
-//   }
-// }
-//
+
+/**
+ * Handles the updating of an existing expense item.
+ * @param updatedExpenseItem - The updated data for the expense item.
+ */
+export async function handleExpenseUpdatingDirect(updatedExpenseItem: ExpenseItemEntity): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient
+      .from("expenses")
+      .update({
+        category: updatedExpenseItem.category,
+        amount: updatedExpenseItem.amount,
+        timestamp: updatedExpenseItem.timestamp,
+        recurringExpenseId: updatedExpenseItem.recurringExpenseId,
+      })
+      .eq("userId", activeUserId)
+      .eq("expenseId", updatedExpenseItem.expenseId)
+      .select();
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    if (data === null) {
+      console.error("No change was made when updating expense - unnecessary network request.");
+    }
+    console.log({ updatedExpenseItem: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting expense update: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting expense update.");
+    }
+  }
+}
+
 // /**
 //  * Handles the deletion of a specific expense item.
 //  * @param expenseId - The ID of the expense to be deleted.

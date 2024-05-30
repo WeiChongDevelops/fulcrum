@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { BudgetItemEntity, GroupItemEntity } from "../../../utility/types.ts";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleGroupUpdating } from "../../../utility/api.ts";
+import { handleGroupUpdatingDirect } from "@/api/group-api.ts";
 
 interface GroupUpdatingMutationProps {
   originalGroupName: string;
@@ -16,7 +17,7 @@ export default function useUpdateGroup() {
 
   return useMutation({
     mutationFn: (groupUpdatingMutationProps: GroupUpdatingMutationProps) =>
-      handleGroupUpdating(groupUpdatingMutationProps.originalGroupName, groupUpdatingMutationProps.updatedGroupItem),
+      handleGroupUpdatingDirect(groupUpdatingMutationProps.originalGroupName, groupUpdatingMutationProps.updatedGroupItem),
     onMutate: async (groupUpdatingMutationProps: GroupUpdatingMutationProps) => {
       await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
       const groupArrayBeforeOptimisticUpdate = await queryClient.getQueryData(["groupArray", email]);
