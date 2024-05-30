@@ -8,6 +8,7 @@ import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components-v2/ui/tooltip";
+import { cn } from "@/lib/utils.ts";
 
 export default function UpdateAvatarFormV2() {
   const [avatarFormOpen, setAvatarFormOpen] = useState(false);
@@ -69,7 +70,7 @@ export default function UpdateAvatarFormV2() {
           )}
         </div>
       </SheetTrigger>
-      <SheetContent className="w-[400px] sm:w-[540px]">
+      <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
         <SheetHeader>
           <SheetTitle>Edit Profile Picture</SheetTitle>
           <SheetDescription>Select a new avatar.</SheetDescription>

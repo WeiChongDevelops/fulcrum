@@ -8,6 +8,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import useUpdateTotalIncome from "@/hooks/mutations/budget/useUpdateTotalIncome.ts";
 import { UserPreferences } from "@/utility/types.ts";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils.ts";
 
 interface UpdateTotalIncomeFormV2Props {
   totalIncome: number;
@@ -55,7 +56,7 @@ export default function UpdateTotalIncomeFormV2({ totalIncome }: UpdateTotalInco
           </div>
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-[400px] sm:w-[540px]">
+      <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
         <SheetHeader>
           <SheetTitle>Edit Monthly Income</SheetTitle>
           <SheetDescription>Estimate your total monthly income.</SheetDescription>
@@ -65,7 +66,7 @@ export default function UpdateTotalIncomeFormV2({ totalIncome }: UpdateTotalInco
             <Label htmlFor="amount" className={"text-right"}>
               Amount
             </Label>
-            <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-black text-sm">
+            <b className="absolute inset-y-0 left-[7.5rem] flex items-center text-primary text-sm">
               {getCurrencySymbol(userPreferences.currency)}
             </b>
             <Input
