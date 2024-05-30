@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleResetAccountData, handleWipeBudget } from "../../../utility/api.ts";
+import { handleResetAccountDataDirect, handleWipeDataDirect } from "@/api/wipe-api.ts";
 
 export default function useResetAccountData() {
   const email = useEmail();
@@ -10,8 +11,8 @@ export default function useResetAccountData() {
 
   return useMutation({
     mutationFn: async () => {
-      await handleWipeBudget();
-      await handleResetAccountData();
+      await handleWipeDataDirect();
+      await handleResetAccountDataDirect();
     },
     onMutate: () => {
       queryClient.cancelQueries({ queryKey: ["budgetArray", email] });

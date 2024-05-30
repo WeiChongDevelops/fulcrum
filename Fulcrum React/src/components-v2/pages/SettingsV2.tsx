@@ -12,7 +12,7 @@ import "@/css/Tools.css";
 import { Button } from "@/components-v2/ui/button.tsx";
 import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
 import useWipeExpenses from "@/hooks/mutations/expense/useWipeExpenses.ts";
-import useWipeBudget from "@/hooks/mutations/budget/useWipeBudget.ts";
+import useWipeData from "@/hooks/mutations/budget/useWipeData.ts";
 import useResetAccountData from "@/hooks/mutations/other/useResetAccountData.ts";
 import FulcrumTypematchModal from "@/components-v2/subcomponents/other/FulcrumTypematchModal.tsx";
 import ReactCountryFlag from "react-country-flag";
@@ -47,7 +47,7 @@ export default function SettingsV2() {
 
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const { mutate: wipeExpenses } = useWipeExpenses();
-  const { mutate: wipeData } = useWipeBudget();
+  const { mutate: wipeData } = useWipeData();
   const { mutate: resetData } = useResetAccountData();
 
   const [showWipeExpenseTypematchModal, setShowWipeExpenseTypematchModal] = useState(false);

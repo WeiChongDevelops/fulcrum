@@ -1,7 +1,7 @@
 import { TypeMatchConfirmationForm } from "../../modals/TypeMatchConfirmationForm.tsx";
 import TwoOptionModal from "../../modals/TwoOptionModal.tsx";
 import { changeFormOrModalVisibility } from "../../../../utility/util.ts";
-import useWipeBudget from "../../../../hooks/mutations/budget/useWipeBudget.ts";
+import useWipeData from "../../../../hooks/mutations/budget/useWipeData.ts";
 import useWipeExpenses from "../../../../hooks/mutations/expense/useWipeExpenses.ts";
 import useResetAccountData from "../../../../hooks/mutations/other/useResetAccountData.ts";
 import {
@@ -28,7 +28,7 @@ export default function SettingsModalsAndForms({
   setSettingsModalVisibility,
 }: SettingsModalsAndFormsProps) {
   const { mutate: wipeExpenses } = useWipeExpenses();
-  const { mutate: wipeBudget } = useWipeBudget();
+  const { mutate: wipeBudget } = useWipeData();
   const { mutate: resetBudget } = useResetAccountData();
 
   return (

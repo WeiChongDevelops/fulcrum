@@ -3,13 +3,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleWipeExpenses } from "../../../utility/api.ts";
+import { handleWipeExpensesDirect } from "@/api/wipe-api.ts";
 
 export default function useWipeExpenses() {
   const email = useEmail();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: handleWipeExpenses,
+    mutationFn: handleWipeExpensesDirect,
     onMutate: () => {
       queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
       toast.dismiss();
