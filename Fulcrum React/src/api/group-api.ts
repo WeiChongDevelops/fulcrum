@@ -1,28 +1,36 @@
 import { GroupItemEntity } from "@/utility/types.ts";
-import { groupSort } from "@/utility/util.ts";
+import { DEFAULT_CATEGORY_GROUP, DEFAULT_CATEGORY_ICON, groupSort } from "@/utility/util.ts";
 import { consolePostgrestError, getActiveUserId, supabaseClient } from "@/utility/supabase-client.ts";
 
-// /**
-//  * Creates a new budget category group.
-//  * @param newGroupItem - The new group item data.
-//  */
-// export async function handleGroupCreation(newGroupItem: GroupItemEntity): Promise<void> {
-//   try {
-//     const response = await apiClient.post("/createGroup", {
-//       group: newGroupItem.group,
-//       colour: newGroupItem.colour,
-//       id: newGroupItem.id,
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting group creation: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting group creation.");
-//     }
-//   }
-// }
-//
+/**
+ * Creates a new budget category group.
+ * @param newGroupItem - The new group item data.
+ */
+export async function handleGroupCreationDirect(newGroupItem: GroupItemEntity): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient
+      .from("groups")
+      .insert({
+        userId: activeUserId,
+        group: newGroupItem.group,
+        colour: newGroupItem.colour,
+        id: newGroupItem.id,
+      })
+      .select();
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log({ insertedGroup: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting group creation: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting group creation.");
+    }
+  }
+}
 
 /**
  * Retrieves the list of groups from the server.

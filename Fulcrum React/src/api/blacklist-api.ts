@@ -1,31 +1,39 @@
 import { BlacklistedExpenseItemEntity } from "@/utility/types.ts";
 import { consolePostgrestError, getActiveUserId, supabaseClient } from "@/utility/supabase-client.ts";
 
-//
-// /**
-//  * Creates a record for a removed instance of a recurring expense, for blacklist purposes.
-//  * @param recurringExpenseId - The ID of the recurring expense from which an instance is removed.
-//  * @param timestampOfRemovedInstance - The timestamp of the removed expense instance.
-//  */
-// export async function handleBlacklistedExpenseCreation(
-//   recurringExpenseId: string,
-//   timestampOfRemovedInstance: Date,
-// ): Promise<void> {
-//   try {
-//     const response = await apiClient.post("/createBlacklistedExpense", {
-//       recurringExpenseId: recurringExpenseId,
-//       timestampOfRemovedInstance: timestampOfRemovedInstance,
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting blacklist entry creation: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting blacklist entry creation.");
-//     }
-//   }
-// }
-//
+/**
+ * Creates a record for a removed instance of a recurring expense, for blacklist purposes.
+ * @param recurringExpenseId - The ID of the recurring expense from which an instance is removed.
+ * @param timestampOfRemovedInstance - The timestamp of the removed expense instance.
+ */
+export async function handleBlacklistedExpenseCreationDirect(
+  recurringExpenseId: string,
+  timestampOfRemovedInstance: Date,
+): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient
+      .from("removed_recurring_expenses")
+      .insert({
+        userId: activeUserId,
+        recurringExpenseId: recurringExpenseId,
+        timestampOfRemovedInstance: timestampOfRemovedInstance,
+      })
+      .select();
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log({ insertedExpense: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting blacklist entry creation: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting blacklist entry creation.");
+    }
+  }
+}
+
 // /**
 //  * Handles the deletion of multiple expense items in a batch operation.
 //  * @param recurringExpenseId - The recurring expense ID shared by the new blacklist entries.

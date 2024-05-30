@@ -8,6 +8,7 @@ import {
   handleExpenseDeletion,
 } from "../../../utility/api.ts";
 import { BlacklistedExpenseItemEntity, ExpenseItemEntity } from "../../../utility/types.ts";
+import { handleBlacklistedExpenseCreationDirect } from "@/api/blacklist-api.ts";
 
 type ExpenseDeletionScale = "THIS" | "FUTURE" | "ALL";
 
@@ -25,7 +26,11 @@ export default function useDeleteExpense() {
     mutationFn: async (expenseDeletionMutationProps: ExpenseDeletionMutationProps) => {
       if (expenseDeletionMutationProps.deletionScale === "THIS") {
         if (!!expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId) {
-          await handleBlacklistedExpenseCreation(
+          // await handleBlacklistedExpenseCreation(
+          //   expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
+          //   expenseDeletionMutationProps.expenseItemToDelete.timestamp,
+          // );
+          await handleBlacklistedExpenseCreationDirect(
             expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
             expenseDeletionMutationProps.expenseItemToDelete.timestamp,
           );

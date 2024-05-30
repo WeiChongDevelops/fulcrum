@@ -4,13 +4,14 @@ import { toast } from "sonner";
 import { EmailContext, groupSort, useEmail } from "../../../utility/util.ts";
 import { GroupItemEntity } from "../../../utility/types.ts";
 import { handleGroupCreation } from "../../../utility/api.ts";
+import { handleGroupCreationDirect } from "@/api/group-api.ts";
 
 export default function useCreateGroup() {
   const queryClient = useQueryClient();
   const email = useEmail();
 
   return useMutation({
-    mutationFn: (newGroupItem: GroupItemEntity) => handleGroupCreation(newGroupItem),
+    mutationFn: (newGroupItem: GroupItemEntity) => handleGroupCreationDirect(newGroupItem),
     onMutate: async (newGroupItem: GroupItemEntity) => {
       await queryClient.cancelQueries({ queryKey: ["groupArray", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["groupArray", email]);
