@@ -25,23 +25,34 @@ export async function getTotalIncomeDirect(): Promise<number> {
     }
   }
 }
-//
-// /**
-//  * Updates the total income value on the server.
-//  * @param newTotalIncome - The new total income value.
-//  */
-// export async function handleTotalIncomeUpdating(newTotalIncome: number): Promise<void> {
-//   try {
-//     const response = await apiClient.put("/updateTotalIncome", {
-//       totalIncome: newTotalIncome,
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting total income update: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting total income update.");
-//     }
-//   }
-// }
-//
+
+/**
+ * Updates the total income value on the server.
+ * @param newTotalIncome - The new total income value.
+ */
+export async function handleTotalIncomeUpdatingDirect(newTotalIncome: number): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient
+      .from("total_income")
+      .update({
+        totalIncome: newTotalIncome,
+      })
+      .eq("userId", activeUserId)
+      .select();
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    if (data === null) {
+      console.error("No change was made when updating total income - unnecessary network request.");
+    }
+    console.log({ updatedIncome: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting total income update: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting total income update.");
+    }
+  }
+}

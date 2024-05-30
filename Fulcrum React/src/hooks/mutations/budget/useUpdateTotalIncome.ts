@@ -3,13 +3,14 @@ import { useContext } from "react";
 import { toast } from "sonner";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleTotalIncomeUpdating } from "../../../utility/api.ts";
+import { handleTotalIncomeUpdatingDirect } from "@/api/total-income-api.ts";
 
 export default function useUpdateTotalIncome() {
   const queryClient = useQueryClient();
   const email = useEmail();
 
   return useMutation({
-    mutationFn: (newTotalIncomeData: number) => handleTotalIncomeUpdating(newTotalIncomeData),
+    mutationFn: (newTotalIncomeData: number) => handleTotalIncomeUpdatingDirect(newTotalIncomeData),
     onMutate: async (newTotalIncomeData: number) => {
       await queryClient.cancelQueries({ queryKey: ["totalIncome", email] });
       const dataBeforeOptimisticUpdate = await queryClient.getQueryData(["totalIncome", email]);
