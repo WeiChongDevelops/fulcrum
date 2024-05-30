@@ -14,7 +14,10 @@ export default function UpdateAvatarFormV2() {
   const [avatarFormOpen, setAvatarFormOpen] = useState(false);
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
 
-  const [formData, setFormData] = useState<{ avatarBytes: File | null }>({ avatarBytes: null });
+  const [formData, setFormData] = useState<{ avatarFileName: string | null; avatarByteArray: ArrayBuffer | null }>({
+    avatarFileName: null,
+    avatarByteArray: null,
+  });
   const [triggerHovered, setTriggerHovered] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -29,12 +32,12 @@ export default function UpdateAvatarFormV2() {
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selectedImage = e.target.files[0];
-      if (e.target.files) {
-        setFormData({ avatarBytes: selectedImage });
-      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+        const fileReaderResult = reader.result;
+        setImagePreview(fileReaderResult as string);
+        setFormData({ ...formData, avatarFileName: selectedImage.name, avatarByteArray: fileReaderResult as ArrayBuffer });
       };
       reader.readAsDataURL(selectedImage);
       console.log("Image submitted:", selectedImage);
@@ -42,8 +45,12 @@ export default function UpdateAvatarFormV2() {
   };
 
   useEffect(() => {
-    setFormData({ avatarBytes: null });
+    setFormData({ ...formData, avatarFileName: null, avatarByteArray: null });
   }, [avatarFormOpen]);
+
+  useEffect(() => {
+    console.log({ pfpstuff: formData });
+  }, [formData]);
 
   return (
     <Sheet open={avatarFormOpen} onOpenChange={setAvatarFormOpen}>
