@@ -65,32 +65,44 @@ export async function getRecurringExpenseListDirect(): Promise<RecurringExpenseI
     }
   }
 }
-//
-// /**
-//  * Updates the details of an existing recurring expense.
-//  * @param updatedRecurringExpenseItem - The updated recurring expense item.
-//  */
-// export async function handleRecurringExpenseUpdating(
-//   updatedRecurringExpenseItem: RecurringExpenseItemEntity,
-// ): Promise<void> {
-//   try {
-//     const response = await apiClient.put("/updateRecurringExpense", {
-//       recurringExpenseId: updatedRecurringExpenseItem.recurringExpenseId,
-//       category: updatedRecurringExpenseItem.category,
-//       amount: updatedRecurringExpenseItem.amount,
-//       timestamp: updatedRecurringExpenseItem.timestamp,
-//       frequency: updatedRecurringExpenseItem.frequency,
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting recurring expense update: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting recurring expense update.");
-//     }
-//   }
-// }
-//
+
+/**
+ * Updates the details of an existing recurring expense.
+ * @param updatedRecurringExpenseItem - The updated recurring expense item.
+ */
+export async function handleRecurringExpenseUpdatingDirect(
+  updatedRecurringExpenseItem: RecurringExpenseItemEntity,
+): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient
+      .from("recurring_expenses")
+      .update({
+        category: updatedRecurringExpenseItem.category,
+        amount: updatedRecurringExpenseItem.amount,
+        timestamp: updatedRecurringExpenseItem.timestamp,
+        frequency: updatedRecurringExpenseItem.frequency,
+      })
+      .eq("userId", activeUserId)
+      .eq("recurringExpenseId", updatedRecurringExpenseItem.recurringExpenseId)
+      .select();
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    if (data === null) {
+      console.error("No change was made when updating recurring expense - unnecessary network request.");
+    }
+    console.log({ updatedRecurringExpenseItem: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting recurring expense update: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting recurring expense update.");
+    }
+  }
+}
+
 // /**
 //  * Deletes a specified recurring expense.
 //  * @param recurringExpenseId - The ID of the recurring expense to delete.

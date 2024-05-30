@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { RecurringExpenseItemEntity } from "../../../utility/types.ts";
 import { handleRecurringExpenseUpdating } from "../../../utility/api.ts";
+import { handleRecurringExpenseUpdatingDirect } from "@/api/recurring-api.ts";
 
 export default function useUpdateRecurringExpense() {
   const email = useEmail();
@@ -11,7 +12,7 @@ export default function useUpdateRecurringExpense() {
 
   return useMutation({
     mutationFn: (updatedRecurringExpenseItem: RecurringExpenseItemEntity) => {
-      return handleRecurringExpenseUpdating(updatedRecurringExpenseItem);
+      return handleRecurringExpenseUpdatingDirect(updatedRecurringExpenseItem);
     },
     onMutate: async (updatedRecurringExpenseItem: RecurringExpenseItemEntity) => {
       await queryClient.cancelQueries({ queryKey: ["recurringExpenseArray", email] });
