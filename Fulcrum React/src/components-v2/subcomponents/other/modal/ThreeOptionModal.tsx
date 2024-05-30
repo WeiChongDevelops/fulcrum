@@ -9,12 +9,12 @@ import {
 } from "@/components-v2/ui/dialog.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, ReactNode, SetStateAction } from "react";
-import { cn } from "@/lib/utils.ts";
 import { UserPreferences } from "@/utility/types.ts";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEmail } from "@/utility/util.ts";
+import { cn } from "@/lib/utils.ts";
 
-interface FulcrumDialogTwoOptionsProps {
+interface ThreeOptionModalProps {
   dialogOpen: boolean;
   setDialogOpen: Dispatch<SetStateAction<boolean>>;
   dialogTitle: string;
@@ -22,28 +22,35 @@ interface FulcrumDialogTwoOptionsProps {
 
   leftButtonFunction: () => void;
   leftButtonVariant?: "default" | "destructive" | "link" | "outline" | "secondary" | "ghost" | "empty";
-  rightButtonText: string;
+  leftButtonText: string;
 
   rightButtonFunction: () => void;
-  leftButtonText: string;
   rightButtonVariant?: "default" | "destructive" | "link" | "outline" | "secondary" | "ghost" | "empty";
+  rightButtonText: string;
+
+  midButtonFunction: () => void;
+  midButtonVariant?: "default" | "destructive" | "link" | "outline" | "secondary" | "ghost" | "empty";
+  midButtonText: string;
 
   buttonTriggerComponent?: ReactNode;
 }
 
-export default function FulcrumDialogTwoOptions({
+export default function ThreeOptionModal({
   dialogOpen,
   setDialogOpen,
   dialogTitle,
   dialogDescription = "",
-  leftButtonVariant = "default",
+  leftButtonVariant = "secondary",
+  midButtonVariant = "default",
   rightButtonVariant = "destructive",
   leftButtonFunction,
+  midButtonFunction,
   rightButtonFunction,
   leftButtonText,
+  midButtonText,
   rightButtonText,
   buttonTriggerComponent,
-}: FulcrumDialogTwoOptionsProps) {
+}: ThreeOptionModalProps) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   return (
     <div className={"col-start-3 col-span-3"}>
@@ -63,6 +70,9 @@ export default function FulcrumDialogTwoOptions({
           <DialogFooter className={"flex flex-row justify-end items-center"}>
             <Button variant={leftButtonVariant} onClick={leftButtonFunction} type={"button"}>
               {leftButtonText}
+            </Button>
+            <Button variant={midButtonVariant} onClick={midButtonFunction}>
+              {midButtonText}
             </Button>
             <Button variant={rightButtonVariant} onClick={rightButtonFunction}>
               {rightButtonText}

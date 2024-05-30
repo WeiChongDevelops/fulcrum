@@ -20,11 +20,11 @@ import UpdateGroupFormV2 from "@/components-v2/subcomponents/budget/forms/Update
 import CreateBudgetFormV2 from "@/components-v2/subcomponents/budget/forms/CreateBudgetFormV2.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import { budgetSort, changeFormOrModalVisibility, darkenColor, getCurrencySymbol, useEmail } from "@/utility/util.ts";
-import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
+import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
 import * as React from "react";
 import useDeleteGroup from "@/hooks/mutations/budget/useDeleteGroup.ts";
 import Loader from "@/components/child/other/Loader.tsx";
-import FulcrumDialogThreeOptions from "@/components-v2/subcomponents/other/FulcrumDialogThreeOptions.tsx";
+import ThreeOptionModal from "@/components-v2/subcomponents/other/modal/ThreeOptionModal.tsx";
 
 interface GroupV2Props {
   group: GroupItemEntity;
@@ -181,7 +181,7 @@ export default function GroupV2({
             />
 
             {budgetArray.find((budgetItem) => budgetItem.group === group.group) ? (
-              <FulcrumDialogThreeOptions
+              <ThreeOptionModal
                 dialogOpen={showDeleteGroupOptionsDialog}
                 setDialogOpen={setShowDeleteGroupOptionsDialog}
                 dialogTitle={`Keep the categories inside the group '${group.group}'?`}
@@ -228,7 +228,7 @@ export default function GroupV2({
                 }
               />
             ) : (
-              <FulcrumDialogTwoOptions
+              <TwoOptionModal
                 dialogOpen={showDeleteEmptyGroupDialog}
                 setDialogOpen={setShowDeleteEmptyGroupDialog}
                 dialogTitle={`Delete category group '${group.group}'?`}
@@ -268,7 +268,7 @@ export default function GroupV2({
                 }
               />
             )}
-            <FulcrumDialogTwoOptions
+            <TwoOptionModal
               dialogOpen={showConfirmDeleteGroupDialog}
               setDialogOpen={setShowConfirmDeleteGroupDialog}
               dialogTitle={`Delete all categories and expenses under '${group.group}'?`}

@@ -24,8 +24,8 @@ import FrequencySelector from "@/components/child/selectors/FrequencySelector.ts
 import { toast } from "sonner";
 import * as React from "react";
 import useDeleteRecurringExpense from "@/hooks/mutations/recurring-expense/useDeleteRecurringExpense.ts";
-import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
-import FulcrumDialogThreeOptions from "@/components-v2/subcomponents/other/FulcrumDialogThreeOptions.tsx";
+import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
+import ThreeOptionModal from "@/components-v2/subcomponents/other/modal/ThreeOptionModal.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils.ts";
 
@@ -180,7 +180,7 @@ export default function UpdateRecurringFormV2({
             </div>
 
             <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>
-              <FulcrumDialogThreeOptions
+              <ThreeOptionModal
                 dialogOpen={showDeleteRecurringOptionsDialog}
                 setDialogOpen={setShowDeleteRecurringOptionsDialog}
                 dialogTitle={"Keep past repeats of this recurring expense?"}
@@ -211,7 +211,7 @@ export default function UpdateRecurringFormV2({
               <Button className={"col-start-6 col-span-3"}>Save Changes</Button>
             </div>
 
-            <FulcrumDialogTwoOptions
+            <TwoOptionModal
               dialogOpen={showConfirmDeleteRecurringDialog}
               setDialogOpen={setShowConfirmDeleteRecurringDialog}
               dialogTitle={"Delete this recurring expense and past repeats?"}

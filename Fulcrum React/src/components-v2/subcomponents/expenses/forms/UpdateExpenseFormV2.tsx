@@ -26,7 +26,7 @@ import {
 } from "@/utility/types.ts";
 import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
 import { toast } from "sonner";
-import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
+import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
 import useDeleteExpense from "@/hooks/mutations/expense/useDeleteExpense.ts";
 import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils.ts";
@@ -185,7 +185,7 @@ export default function UpdateExpenseFormV2({
             </div>
 
             <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>
-              <FulcrumDialogTwoOptions
+              <TwoOptionModal
                 dialogOpen={showConfirmDeleteExpenseDialog}
                 setDialogOpen={setShowConfirmDeleteExpenseDialog}
                 dialogTitle={"Delete this expense?"}

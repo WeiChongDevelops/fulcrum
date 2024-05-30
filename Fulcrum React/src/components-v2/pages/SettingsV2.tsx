@@ -10,14 +10,14 @@ import ActiveFormClickShield from "@/components/child/other/ActiveFormClickShiel
 import SettingsModalsAndForms from "@/components/child/tools/settings/SettingsModalsAndForms.tsx";
 import "@/css/Tools.css";
 import { Button } from "@/components-v2/ui/button.tsx";
-import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
+import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
 import useWipeExpenses from "@/hooks/mutations/expense/useWipeExpenses.ts";
 import useWipeData from "@/hooks/mutations/budget/useWipeData.ts";
 import useResetAccountData from "@/hooks/mutations/other/useResetAccountData.ts";
-import FulcrumTypematchModal from "@/components-v2/subcomponents/other/FulcrumTypematchModal.tsx";
+import FulcrumTypematchModal from "@/components-v2/subcomponents/other/modal/FulcrumTypematchModal.tsx";
 import ReactCountryFlag from "react-country-flag";
-import ThemeToggle from "@/components-v2/subcomponents/other/ThemeToggle.tsx";
-import AccessibilityToggle from "@/components-v2/subcomponents/other/AccessibilityToggle.tsx";
+import ThemeToggle from "@/components-v2/subcomponents/other/toggles/ThemeToggle.tsx";
+import AccessibilityToggle from "@/components-v2/subcomponents/other/toggles/AccessibilityToggle.tsx";
 import { CalendarStar, Globe, Lock, PaintBrushBroad, PersonSimpleCircle, Scales } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 

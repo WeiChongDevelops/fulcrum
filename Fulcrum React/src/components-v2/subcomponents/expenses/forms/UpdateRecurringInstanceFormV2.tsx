@@ -19,8 +19,8 @@ import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
 import { toast } from "sonner";
 import * as React from "react";
 import useDeleteExpense from "@/hooks/mutations/expense/useDeleteExpense.ts";
-import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
-import FulcrumDialogThreeOptions from "@/components-v2/subcomponents/other/FulcrumDialogThreeOptions.tsx";
+import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
+import ThreeOptionModal from "@/components-v2/subcomponents/other/modal/ThreeOptionModal.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface UpdateRecurringInstanceFormV2Props {
@@ -190,7 +190,7 @@ export default function UpdateRecurringInstanceFormV2({
             </div>
 
             <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>
-              <FulcrumDialogThreeOptions
+              <ThreeOptionModal
                 dialogOpen={showDeleteInstanceOptionsModal}
                 setDialogOpen={setShowDeleteInstanceOptionsModal}
                 dialogTitle={"Delete which expense repeats?"}

@@ -48,7 +48,7 @@ import {
   DialogTrigger,
 } from "@/components-v2/ui/dialog";
 import useDeleteBudget from "@/hooks/mutations/budget/useDeleteBudget.ts";
-import FulcrumDialogTwoOptions from "@/components-v2/subcomponents/other/FulcrumDialogTwoOptions.tsx";
+import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import GroupSelector from "@/components-v2/subcomponents/budget/GroupSelector.tsx";
 
@@ -241,7 +241,7 @@ export default function UpdateBudgetFormV2({
               {/*>*/}
               {/*  Delete*/}
               {/*</Button>*/}
-              <FulcrumDialogTwoOptions
+              <TwoOptionModal
                 dialogOpen={showConfirmDeleteBudgetDialog}
                 setDialogOpen={setShowConfirmDeleteBudgetDialog}
                 dialogTitle={`Delete the budget category '${oldBudgetBeingEdited.oldCategory}'?`}

@@ -9,12 +9,12 @@ import {
 } from "@/components-v2/ui/dialog.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, ReactNode, SetStateAction } from "react";
+import { cn } from "@/lib/utils.ts";
 import { UserPreferences } from "@/utility/types.ts";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEmail } from "@/utility/util.ts";
-import { cn } from "@/lib/utils.ts";
 
-interface FulcrumDialogThreeOptionsProps {
+interface TwoOptionModalProps {
   dialogOpen: boolean;
   setDialogOpen: Dispatch<SetStateAction<boolean>>;
   dialogTitle: string;
@@ -22,35 +22,28 @@ interface FulcrumDialogThreeOptionsProps {
 
   leftButtonFunction: () => void;
   leftButtonVariant?: "default" | "destructive" | "link" | "outline" | "secondary" | "ghost" | "empty";
-  leftButtonText: string;
-
-  rightButtonFunction: () => void;
-  rightButtonVariant?: "default" | "destructive" | "link" | "outline" | "secondary" | "ghost" | "empty";
   rightButtonText: string;
 
-  midButtonFunction: () => void;
-  midButtonVariant?: "default" | "destructive" | "link" | "outline" | "secondary" | "ghost" | "empty";
-  midButtonText: string;
+  rightButtonFunction: () => void;
+  leftButtonText: string;
+  rightButtonVariant?: "default" | "destructive" | "link" | "outline" | "secondary" | "ghost" | "empty";
 
   buttonTriggerComponent?: ReactNode;
 }
 
-export default function FulcrumDialogThreeOptions({
+export default function TwoOptionModal({
   dialogOpen,
   setDialogOpen,
   dialogTitle,
   dialogDescription = "",
-  leftButtonVariant = "secondary",
-  midButtonVariant = "default",
+  leftButtonVariant = "default",
   rightButtonVariant = "destructive",
   leftButtonFunction,
-  midButtonFunction,
   rightButtonFunction,
   leftButtonText,
-  midButtonText,
   rightButtonText,
   buttonTriggerComponent,
-}: FulcrumDialogThreeOptionsProps) {
+}: TwoOptionModalProps) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   return (
     <div className={"col-start-3 col-span-3"}>
@@ -70,9 +63,6 @@ export default function FulcrumDialogThreeOptions({
           <DialogFooter className={"flex flex-row justify-end items-center"}>
             <Button variant={leftButtonVariant} onClick={leftButtonFunction} type={"button"}>
               {leftButtonText}
-            </Button>
-            <Button variant={midButtonVariant} onClick={midButtonFunction}>
-              {midButtonText}
             </Button>
             <Button variant={rightButtonVariant} onClick={rightButtonFunction}>
               {rightButtonText}

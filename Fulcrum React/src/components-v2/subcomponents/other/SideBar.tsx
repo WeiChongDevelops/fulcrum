@@ -10,8 +10,9 @@ import { SignOut } from "@phosphor-icons/react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components-v2/ui/dropdown-menu";
 import { cn } from "@/lib/utils.ts";
 import { Switch } from "@/components-v2/ui/switch.tsx";
-import ThemeToggle from "@/components-v2/subcomponents/other/ThemeToggle.tsx";
+import ThemeToggle from "@/components-v2/subcomponents/other/toggles/ThemeToggle.tsx";
 import { useQueryClient } from "@tanstack/react-query";
+import UpdateAvatarFormV2 from "@/components-v2/subcomponents/other/UpdateAvatarFormV2.tsx";
 
 interface SideBarProps {
   sideBarOpen: boolean;
@@ -106,11 +107,12 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
             </Button>
           </div>
         )}
-        <div className={"flex flex-row justify-start items-start w-full px-1 gap-3 text-left mt-6 min-h-12"}>
+        <div className={"flex flex-row justify-start items-start w-full mx-1 gap-3 text-left mt-6 min-h-12 relative"}>
+          <UpdateAvatarFormV2 />
           <Avatar className={"size-9"}>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>
-              <img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" className={"w-[65%]"} />
+              <img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" />
             </AvatarFallback>
           </Avatar>
           {sideBarOpen && (

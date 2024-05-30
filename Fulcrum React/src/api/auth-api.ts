@@ -19,13 +19,13 @@ export async function handleUserRegistrationDirect(email: string, password: stri
     //   password: password,
     // });
     // console.log(response.data);
-    const { data, error } = await supabaseClient.auth.signUp({
+    const { data, error: signupError } = await supabaseClient.auth.signUp({
       email,
       password,
     });
-    if (error) {
-      consoleAuthError(error);
-      throw new Error(error.message);
+    if (signupError) {
+      consoleAuthError(signupError);
+      throw new Error(signupError.message);
     }
 
     await initialiseDefaultUserPreferences();
@@ -33,9 +33,13 @@ export async function handleUserRegistrationDirect(email: string, password: stri
     await initialiseDefaultGroups();
     await initialiseDefaultCategories();
 
-    await handleUserLogoutDirect();
+    const { error: logoutError } = await supabaseClient.auth.signOut();
+    if (logoutError) {
+      consoleAuthError(logoutError);
+      throw new Error(logoutError.message);
+    }
 
-    console.log({ registrationSuccessfulFor: email });
+    console.log({ registrationSuccessfulFor: data });
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(`Error encountered when attempting user registration: ${error.message}`);
@@ -56,7 +60,7 @@ export async function handleUserLoginDirect(email: string, password: string): Pr
     //   password: password,
     // });
     // console.log(response.data);
-    const { error } = await supabaseClient.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
       email,
       password,
     });
@@ -64,7 +68,7 @@ export async function handleUserLoginDirect(email: string, password: string): Pr
       consoleAuthError(error);
       throw new Error(error.message);
     }
-    console.log({ loginSuccessfulFor: email });
+    console.log({ loginSuccessfulFor: data });
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(`Error encountered when attempting login: ${error.message}`);
@@ -99,6 +103,9 @@ export async function getOAuthLoginURLDirect(provider: string): Promise<string> 
     if (data === null || data.url === null) {
       throw new Error("Redirect URL not received.");
     }
+    const user = await supabaseClient.auth.getUser();
+    console.log({ fullUserObject: user.data });
+    console.log({ oAuthAvatarURL: user.data.user?.user_metadata.avatar_url });
     return data.url;
   } catch (error: unknown) {
     if (error instanceof Error) {
