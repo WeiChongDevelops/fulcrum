@@ -9,6 +9,7 @@ import {
 } from "../../../utility/api.ts";
 import { BlacklistedExpenseItemEntity, ExpenseItemEntity } from "../../../utility/types.ts";
 import { handleBlacklistedExpenseCreationDirect } from "@/api/blacklist-api.ts";
+import { handleExpenseDeletionDirect } from "@/api/expense-api.ts";
 
 type ExpenseDeletionScale = "THIS" | "FUTURE" | "ALL";
 
@@ -35,7 +36,7 @@ export default function useDeleteExpense() {
             expenseDeletionMutationProps.expenseItemToDelete.timestamp,
           );
         }
-        await handleExpenseDeletion(expenseDeletionMutationProps.expenseItemToDelete.expenseId);
+        await handleExpenseDeletionDirect(expenseDeletionMutationProps.expenseItemToDelete.expenseId);
       } else {
         let recurringInstancesToDelete: ExpenseItemEntity[] = [];
         if (expenseDeletionMutationProps.deletionScale === "FUTURE") {

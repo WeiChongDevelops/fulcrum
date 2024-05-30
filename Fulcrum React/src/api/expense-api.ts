@@ -125,25 +125,28 @@ export async function handleExpenseUpdatingDirect(updatedExpenseItem: ExpenseIte
   }
 }
 
-// /**
-//  * Handles the deletion of a specific expense item.
-//  * @param expenseId - The ID of the expense to be deleted.
-//  */
-// export async function handleExpenseDeletion(expenseId: string): Promise<void> {
-//   try {
-//     const response = await apiClient.delete("/deleteExpense", {
-//       data: { expenseId: expenseId },
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting expense deletion: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting expense deletion.");
-//     }
-//   }
-// }
-//
+/**
+ * Handles the deletion of a specific expense item.
+ * @param expenseId - The ID of the expense to be deleted.
+ */
+export async function handleExpenseDeletionDirect(expenseId: string): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { error } = await supabaseClient.from("expenses").delete().eq("userId", activeUserId).eq("expenseId", expenseId);
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log("Expense deletion successful.");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting expense deletion: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting expense deletion.");
+    }
+  }
+}
+
 // /**
 //  * Handles the deletion of multiple expense items in a batch operation.
 //  * @param expenseIdsToDelete - An array of IDs of the expenses to be deleted.
