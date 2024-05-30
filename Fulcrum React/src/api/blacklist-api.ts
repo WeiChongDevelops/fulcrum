@@ -34,30 +34,39 @@ export async function handleBlacklistedExpenseCreationDirect(
   }
 }
 
-// /**
-//  * Handles the deletion of multiple expense items in a batch operation.
-//  * @param recurringExpenseId - The recurring expense ID shared by the new blacklist entries.
-//  * @param timestampsToBlacklist - A set of Dates to include in blacklist entries.
-//  */
-// export async function handleBatchBlacklistedExpenseCreation(
-//   recurringExpenseId: string,
-//   timestampsToBlacklist: Date[],
-// ): Promise<void> {
-//   try {
-//     const response = await apiClient.post("/batchCreateBlacklistedExpenses", {
-//       recurringExpenseId: recurringExpenseId,
-//       timestampsToBlacklist: timestampsToBlacklist,
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting batch blacklist entry creation: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting batch blacklist entry creation.");
-//     }
-//   }
-// }
-//
+/**
+ * Handles the deletion of multiple expense items in a batch operation.
+ * @param recurringExpenseId - The recurring expense ID shared by the new blacklist entries.
+ * @param timestampsToBlacklist - A set of Dates to include in blacklist entries.
+ */
+export async function handleBatchBlacklistedExpenseCreationDirect(
+  recurringExpenseId: string,
+  timestampsToBlacklist: Date[],
+): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const blacklistEntries = timestampsToBlacklist.map((timestamp) => ({
+      userId: activeUserId,
+      recurringExpenseId: recurringExpenseId,
+      timestampOfRemovedInstance: timestamp,
+    }));
+    const { data, error } = await supabaseClient.from("removed_recurring_expenses").insert(blacklistEntries).select();
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    if (data === null) {
+      console.log("No entries were added during batch blacklist entry creation.");
+    }
+    console.log({ batchCreatedBlacklistEntries: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting batch blacklist entry creation: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting batch blacklist entry creation.");
+    }
+  }
+}
 
 /**
  * Retrieves the list of removed recurring expense instances from the server, for blacklist purposes.

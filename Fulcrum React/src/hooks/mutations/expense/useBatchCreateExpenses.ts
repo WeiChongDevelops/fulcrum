@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { EmailContext, expenseSort, useEmail } from "../../../utility/util.ts";
 import { ExpenseItemEntity } from "../../../utility/types.ts";
 import { handleBatchExpenseCreation } from "../../../utility/api.ts";
+import { handleBatchExpenseCreationDirect } from "@/api/expense-api.ts";
 
 export default function useBatchCreateExpenses() {
   const email = useEmail();
@@ -10,7 +11,7 @@ export default function useBatchCreateExpenses() {
 
   return useMutation({
     mutationFn: (expensesToCreate: ExpenseItemEntity[]) => {
-      return handleBatchExpenseCreation(expensesToCreate);
+      return handleBatchExpenseCreationDirect(expensesToCreate);
     },
     onMutate: async (expensesToCreate: ExpenseItemEntity[]) => {
       await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });

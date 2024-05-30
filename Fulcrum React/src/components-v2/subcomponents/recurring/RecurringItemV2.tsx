@@ -111,8 +111,8 @@ export default function RecurringItemV2({
         data-value={recurringExpenseId}
       >
         <div className="flex flex-row items-center">
-          <div className="rounded-full text-primary bg-background p-2">
-            <DynamicIconComponent componentName={iconPath} props={{ size: 32 }} className={""} />
+          <div className="rounded-full text-primary bg-background p-2 mr-1">
+            <DynamicIconComponent componentName={iconPath} props={{ size: "2rem" }} className={""} />
           </div>
           <div
             className="flex flex-col items-start ml-2"

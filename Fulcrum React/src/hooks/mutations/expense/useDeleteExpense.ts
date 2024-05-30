@@ -8,8 +8,8 @@ import {
   handleExpenseDeletion,
 } from "../../../utility/api.ts";
 import { BlacklistedExpenseItemEntity, ExpenseItemEntity } from "../../../utility/types.ts";
-import { handleBlacklistedExpenseCreationDirect } from "@/api/blacklist-api.ts";
-import { handleExpenseDeletionDirect } from "@/api/expense-api.ts";
+import { handleBatchBlacklistedExpenseCreationDirect, handleBlacklistedExpenseCreationDirect } from "@/api/blacklist-api.ts";
+import { handleBatchExpenseDeletionDirect, handleExpenseDeletionDirect } from "@/api/expense-api.ts";
 
 type ExpenseDeletionScale = "THIS" | "FUTURE" | "ALL";
 
@@ -52,11 +52,11 @@ export default function useDeleteExpense() {
             expenseStartDate,
           );
         }
-        await handleBatchBlacklistedExpenseCreation(
+        await handleBatchBlacklistedExpenseCreationDirect(
           expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
           recurringInstancesToDelete.map((expenseItem) => expenseItem.timestamp),
         );
-        await handleBatchExpenseDeletion(recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId));
+        await handleBatchExpenseDeletionDirect(recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId));
       }
     },
     onMutate: async (expenseDeletionMutationProps: ExpenseDeletionMutationProps) => {

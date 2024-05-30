@@ -42,25 +42,32 @@ export async function handleExpenseCreationDirect(newExpenseItem: ExpenseItemEnt
   }
 }
 
-// /**
-//  * Handles the creation of multiple expense items in a batch operation.
-//  * @param expensesToCreate - An array of expenses to be created.
-//  */
-// export async function handleBatchExpenseCreation(expensesToCreate: ExpenseItemEntity[]): Promise<void> {
-//   try {
-//     const response = await apiClient.post("/batchCreateExpenses", {
-//       expensesToCreate: expensesToCreate,
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting batch expense creation: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting batch expense creation.");
-//     }
-//   }
-// }
-//
+/**
+ * Handles the creation of multiple expense items in a batch operation.
+ * @param expensesToCreate - An array of expenses to be created.
+ */
+export async function handleBatchExpenseCreationDirect(expensesToCreate: ExpenseItemEntity[]): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const expensesWithId = expensesToCreate.map((expenseItem) => ({ ...expenseItem, userId: activeUserId }));
+    const { data, error } = await supabaseClient.from("expenses").insert(expensesWithId).select();
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    if (data === null) {
+      console.log("No expenses were added during batch expense creation.");
+    }
+    console.log({ batchCreatedExpenses: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting batch expense creation: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting batch expense creation.");
+    }
+  }
+}
+
 /**
  * Retrieves the list of expense items from the server.
  * @returns A sorted array of expense items, or an empty array in case of an error.
@@ -147,22 +154,28 @@ export async function handleExpenseDeletionDirect(expenseId: string): Promise<vo
   }
 }
 
-// /**
-//  * Handles the deletion of multiple expense items in a batch operation.
-//  * @param expenseIdsToDelete - An array of IDs of the expenses to be deleted.
-//  */
-// export async function handleBatchExpenseDeletion(expenseIdsToDelete: string[]): Promise<void> {
-//   try {
-//     const response = await apiClient.delete("/batchDeleteExpenses", {
-//       data: { expenseIdsToDelete: expenseIdsToDelete },
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting batch expense deletion: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting batch expense deletion.");
-//     }
-//   }
-// }
-//
+/**
+ * Handles the deletion of multiple expense items in a batch operation.
+ * @param expenseIdsToDelete - An array of IDs of the expenses to be deleted.
+ */
+export async function handleBatchExpenseDeletionDirect(expenseIdsToDelete: string[]): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { error } = await supabaseClient
+      .from("expenses")
+      .delete()
+      .eq("userId", activeUserId)
+      .in("expenseId", expenseIdsToDelete);
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log("Batch expense deletion successful.");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting batch expense deletion: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting batch expense deletion.");
+    }
+  }
+}
