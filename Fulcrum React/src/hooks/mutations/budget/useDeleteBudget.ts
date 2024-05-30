@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { handleBudgetDeletion } from "../../../utility/api.ts";
 import { BudgetItemEntity } from "../../../utility/types.ts";
+import { handleBudgetDeletionDirect } from "@/api/budget-api.ts";
 
 export default function useDeleteBudget() {
   const queryClient = useQueryClient();
@@ -11,7 +12,7 @@ export default function useDeleteBudget() {
 
   return useMutation({
     mutationFn: (categoryToDelete: string) => {
-      return handleBudgetDeletion(categoryToDelete);
+      return handleBudgetDeletionDirect(categoryToDelete);
     },
     onMutate: async (categoryToDelete: string) => {
       await queryClient.cancelQueries({ queryKey: ["budgetArray", email] });

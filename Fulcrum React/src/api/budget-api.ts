@@ -111,22 +111,24 @@ export async function handleBudgetUpdatingDirect(
   }
 }
 
-// /**
-//  * Deletes a budget item.
-//  * @param category - The category of the budget item to be deleted.
-//  */
-// export async function handleBudgetDeletion(category: string): Promise<void> {
-//   try {
-//     const response = await apiClient.delete("/deleteBudget", {
-//       data: { category: category },
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when requesting budget deletion: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when requesting budget deletion.");
-//     }
-//   }
-// }
-//
+/**
+ * Deletes a budget item.
+ * @param category - The category of the budget item to be deleted.
+ */
+export async function handleBudgetDeletionDirect(category: string): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { error } = await supabaseClient.from("budgets").delete().eq("userId", activeUserId).eq("category", category);
+    if (error) {
+      consolePostgrestError(error);
+      throw new Error(error.message);
+    }
+    console.log("Budget deletion successful.");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when requesting budget deletion: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when requesting budget deletion.");
+    }
+  }
+}
