@@ -13,6 +13,8 @@ import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPrefe
 import useUploadProfileImage from "@/hooks/mutations/other/useUploadProfileImage.ts";
 
 export default function UpdateAvatarFormV2() {
+  const maxFileSize = 16 * 1024 * 1024; // 16MB
+
   const [avatarFormOpen, setAvatarFormOpen] = useState(false);
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
 
@@ -22,6 +24,7 @@ export default function UpdateAvatarFormV2() {
   });
   const [triggerHovered, setTriggerHovered] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const { mutate: uploadProfileImage } = useUploadProfileImage();
@@ -36,6 +39,13 @@ export default function UpdateAvatarFormV2() {
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selectedImage = e.target.files[0];
+
+      if (selectedImage.size > maxFileSize) {
+        setImagePreview("");
+        setError("File size should not exceed 16MB.");
+        return;
+      }
+      setError(null);
 
       const previewReader = new FileReader();
       previewReader.readAsDataURL(selectedImage);
@@ -53,9 +63,9 @@ export default function UpdateAvatarFormV2() {
     }
   };
 
-  // useEffect(() => {
-  //   !avatarFormOpen && setFormData({ ...formData, avatarFileName: null, avatarByteArray: null });
-  // }, [avatarFormOpen]);
+  useEffect(() => {
+    setImagePreview(null);
+  }, [avatarFormOpen]);
 
   useEffect(() => {
     console.log(formData);
@@ -107,8 +117,11 @@ export default function UpdateAvatarFormV2() {
             />
           </div>
           {imagePreview && <img src={imagePreview} className={"w-24 max-h-48 ml-auto"} alt="Preview" />}
+          {error && <p className={"ml-auto text-red-500"}>{error}</p>}
 
-          <Button className={"mt-2 self-end"}>Save Changes</Button>
+          <Button className={"mt-2 self-end"} variant={userPreferences.darkModeEnabled ? "secondary" : "default"}>
+            Save Changes
+          </Button>
         </form>
       </SheetContent>
     </Sheet>

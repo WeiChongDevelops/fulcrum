@@ -29,8 +29,9 @@ export default function useUpdateUserPreferences() {
         },
       );
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userPreferences", email] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["userPreferences", email] });
+      await queryClient.invalidateQueries({ queryKey: ["profileImageURL", email] });
     },
   });
 }

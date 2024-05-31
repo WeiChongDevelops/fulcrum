@@ -36,8 +36,8 @@ export default function TwoOptionModal({
   setDialogOpen,
   dialogTitle,
   dialogDescription = "",
-  leftButtonVariant = "default",
-  rightButtonVariant = "destructive",
+  leftButtonVariant,
+  rightButtonVariant,
   leftButtonFunction,
   rightButtonFunction,
   leftButtonText,
@@ -61,10 +61,14 @@ export default function TwoOptionModal({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className={"flex flex-row justify-end items-center"}>
-            <Button variant={leftButtonVariant} onClick={leftButtonFunction} type={"button"}>
+            <Button
+              variant={leftButtonVariant ?? userPreferences.darkModeEnabled ? "secondary" : "default"}
+              onClick={leftButtonFunction}
+              type={"button"}
+            >
               {leftButtonText}
             </Button>
-            <Button variant={rightButtonVariant} onClick={rightButtonFunction}>
+            <Button variant={rightButtonVariant ?? "destructive"} onClick={rightButtonFunction}>
               {rightButtonText}
             </Button>
           </DialogFooter>

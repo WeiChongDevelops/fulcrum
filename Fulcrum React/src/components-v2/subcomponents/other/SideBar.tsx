@@ -117,7 +117,7 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
         <div className={"flex flex-row justify-start items-start w-full mx-1 gap-3 text-left mt-6 min-h-12 relative"}>
           <UpdateAvatarFormV2 />
           <Avatar className={"size-9"}>
-            <AvatarImage src={activeProfileImageURL} />
+            <AvatarImage src={activeProfileImageURL} className={"bg-zinc-500"} />
             <AvatarFallback>
               <img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" />
             </AvatarFallback>
