@@ -189,7 +189,7 @@ export default function BudgetV2({ perCategoryExpenseTotalThisMonth, setPerCateg
   }, [sideBarOpen]);
 
   useEffect(() => {
-    setTimeout(updateBentoLayout, 300);
+    setTimeout(updateBentoLayout, 600);
   }, []);
 
   if (isError) {
