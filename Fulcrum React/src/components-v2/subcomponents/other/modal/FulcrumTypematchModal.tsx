@@ -40,8 +40,8 @@ export default function FulcrumTypematchModal({
   setDialogOpen,
   dialogTitle,
   dialogDescription = "",
-  leftButtonVariant = "default",
-  rightButtonVariant = "destructive",
+  leftButtonVariant,
+  rightButtonVariant,
   leftButtonFunction,
   rightButtonFunction,
   leftButtonText,
@@ -86,10 +86,14 @@ export default function FulcrumTypematchModal({
             </p>
             <Input type={"text"} value={typeMatchValue} onChange={handleTypeMatchInputChange} className={"mt-3"} />
             <DialogFooter className={"flex flex-row justify-end items-center pt-8"}>
-              <Button variant={leftButtonVariant} onClick={leftButtonFunction} type={"button"}>
+              <Button
+                variant={leftButtonVariant ?? userPreferences.darkModeEnabled ? "secondary" : "default"}
+                onClick={leftButtonFunction}
+                type={"button"}
+              >
                 {leftButtonText}
               </Button>
-              <Button variant={rightButtonVariant} type={"submit"}>
+              <Button variant={rightButtonVariant ?? "destructive"} type={"submit"}>
                 {rightButtonText}
               </Button>
             </DialogFooter>
