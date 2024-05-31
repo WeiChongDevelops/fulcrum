@@ -232,7 +232,12 @@ export default function UpdateRecurringInstanceFormV2({
                 }
               />
 
-              <Button className={"col-start-6 col-span-3"}>Save Changes</Button>
+              <Button
+                className={"col-start-6 col-span-3"}
+                variant={userPreferences.darkModeEnabled ? "secondary" : "default"}
+              >
+                Save Changes
+              </Button>
             </div>
           </form>
         </SheetContent>

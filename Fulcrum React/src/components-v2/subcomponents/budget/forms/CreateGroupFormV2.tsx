@@ -132,7 +132,9 @@ export default function CreateGroupFormV2({ highestSortIndex, setLocalisedGroupA
             </Label>
             <GroupColourSelector setFormData={setFormData} className={"col-span-3"} />
           </div>
-          <Button className={"mt-2 self-end"}>Create Group</Button>
+          <Button className={"mt-2 self-end"} variant={userPreferences.darkModeEnabled ? "secondary" : "default"}>
+            Add Group
+          </Button>
         </form>
       </SheetContent>
     </Sheet>

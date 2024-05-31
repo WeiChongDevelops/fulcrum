@@ -81,7 +81,9 @@ export default function UpdateTotalIncomeFormV2({ totalIncome }: UpdateTotalInco
             />
           </div>
 
-          <Button className={"mt-2 self-end"}>Save Changes</Button>
+          <Button className={"mt-2 self-end"} variant={userPreferences.darkModeEnabled ? "secondary" : "default"}>
+            Save Changes
+          </Button>
         </form>
       </SheetContent>
     </Sheet>

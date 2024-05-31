@@ -201,7 +201,9 @@ export default function CreateBudgetFormV2({ groupNameOfNewItem, currencySymbol 
             </Label>
             <CategoryIconSelector setFormData={setFormData} className={"col-span-3"} />
           </div>
-          <Button className={"mt-2 self-end"}>Insert Budget</Button>
+          <Button className={"mt-2 self-end"} variant={userPreferences.darkModeEnabled ? "secondary" : "default"}>
+            Add Budget
+          </Button>
         </form>
       </SheetContent>
     </Sheet>

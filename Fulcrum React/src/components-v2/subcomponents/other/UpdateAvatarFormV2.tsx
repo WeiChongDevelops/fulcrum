@@ -86,8 +86,8 @@ export default function UpdateAvatarFormV2() {
                 <TooltipTrigger></TooltipTrigger>
                 <TooltipContent
                   side={"bottom"}
-                  sideOffset={30}
-                  className={"ml-4 py-0.5 px-2 bg-background text-primary rounded-sm"}
+                  sideOffset={20}
+                  className={"ml-10 py-0.5 px-2 bg-background text-primary rounded-sm"}
                 >
                   <span className={"text-[0.6rem]"}>Change Avatar</span>
                 </TooltipContent>

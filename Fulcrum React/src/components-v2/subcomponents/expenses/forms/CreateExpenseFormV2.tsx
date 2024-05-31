@@ -223,7 +223,9 @@ export default function CreateExpenseFormV2({
               <FrequencySelector setFormData={setFormData} className={"col-span-3"} mustBeRecurring={mustBeRecurring} />
             </div>
 
-            <Button className={"mt-2 self-end"}>Add Expense</Button>
+            <Button className={"mt-2 self-end"} variant={userPreferences.darkModeEnabled ? "secondary" : "default"}>
+              Add Expense
+            </Button>
           </form>
         </SheetContent>
       </SheetOverlay>

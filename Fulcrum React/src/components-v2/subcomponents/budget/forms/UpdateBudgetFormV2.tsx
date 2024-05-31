@@ -260,7 +260,12 @@ export default function UpdateBudgetFormV2({
                   </Button>
                 }
               />
-              <Button className={"col-start-6 col-span-3"}>Save Changes</Button>
+              <Button
+                className={"col-start-6 col-span-3"}
+                variant={userPreferences.darkModeEnabled ? "secondary" : "default"}
+              >
+                Save Changes
+              </Button>
             </div>
           </form>
         </SheetContent>
