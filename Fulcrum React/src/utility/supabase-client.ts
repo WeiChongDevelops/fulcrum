@@ -30,10 +30,14 @@ export function consoleAuthError(postgrestError: AuthError): void {
 }
 
 export async function getActiveUserId(): Promise<string> {
+  const locallyStoredUID = localStorage.getItem("activeUserId");
+  if (!!locallyStoredUID) return locallyStoredUID;
+
   const user = await supabaseClient.auth.getUser();
   if (!user.data.user) {
     throw new Error("User was not found when retrieving UID.");
   }
+  localStorage.setItem("activeUserId", user.data.user.id);
   return user.data.user.id;
 }
 
