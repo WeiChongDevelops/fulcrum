@@ -23,6 +23,13 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
   const routerLocation = useContext(LocationContext);
   const activeEmail = useContext(EmailContext);
 
+  const profileImageURL: string = useQueryClient().getQueryData(["profileImageURL", useEmail()])!;
+  const [activeProfileImageURL, setActiveProfileImageURL] = useState(profileImageURL);
+
+  useEffect(() => {
+    setActiveProfileImageURL(profileImageURL);
+  }, [profileImageURL]);
+
   const [currentPage, setCurrentPage] = useState(window.location.pathname.split("/")[2]);
 
   useEffect(() => {
@@ -110,7 +117,7 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
         <div className={"flex flex-row justify-start items-start w-full mx-1 gap-3 text-left mt-6 min-h-12 relative"}>
           <UpdateAvatarFormV2 />
           <Avatar className={"size-9"}>
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarImage src={activeProfileImageURL} />
             <AvatarFallback>
               <img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" />
             </AvatarFallback>

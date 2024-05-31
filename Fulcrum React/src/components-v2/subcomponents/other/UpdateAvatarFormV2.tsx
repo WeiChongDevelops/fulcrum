@@ -9,6 +9,8 @@ import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components-v2/ui/tooltip";
 import { cn } from "@/lib/utils.ts";
+import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
+import useUploadProfileImage from "@/hooks/mutations/other/useUploadProfileImage.ts";
 
 export default function UpdateAvatarFormV2() {
   const [avatarFormOpen, setAvatarFormOpen] = useState(false);
@@ -21,35 +23,42 @@ export default function UpdateAvatarFormV2() {
   const [triggerHovered, setTriggerHovered] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  // const { mutate: updateTotalIncome } = useUpdateTotalIncome();
+  const { mutate: updateUserPreferences } = useUpdateUserPreferences();
+  const { mutate: uploadProfileImage } = useUploadProfileImage();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // updateTotalIncome(formData.amount);
     setAvatarFormOpen(false);
+    updateUserPreferences({ ...userPreferences, profileIconFileName: formData.avatarFileName! });
+    uploadProfileImage({ byteArray: formData.avatarByteArray!, fileName: formData.avatarFileName! });
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selectedImage = e.target.files[0];
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const fileReaderResult = reader.result;
-        setImagePreview(fileReaderResult as string);
-        setFormData({ ...formData, avatarFileName: selectedImage.name, avatarByteArray: fileReaderResult as ArrayBuffer });
+      const previewReader = new FileReader();
+      previewReader.readAsDataURL(selectedImage);
+      previewReader.onloadend = () => {
+        const preview = previewReader.result as string;
+        setImagePreview(preview);
       };
-      reader.readAsDataURL(selectedImage);
-      console.log("Image submitted:", selectedImage);
+
+      const formDataReader = new FileReader();
+      formDataReader.readAsArrayBuffer(selectedImage);
+      formDataReader.onloadend = () => {
+        const formDataResult = formDataReader.result as ArrayBuffer;
+        setFormData({ avatarFileName: selectedImage.name, avatarByteArray: formDataResult });
+      };
     }
   };
 
-  useEffect(() => {
-    setFormData({ ...formData, avatarFileName: null, avatarByteArray: null });
-  }, [avatarFormOpen]);
+  // useEffect(() => {
+  //   !avatarFormOpen && setFormData({ ...formData, avatarFileName: null, avatarByteArray: null });
+  // }, [avatarFormOpen]);
 
   useEffect(() => {
-    console.log({ pfpstuff: formData });
+    console.log(formData);
   }, [formData]);
 
   return (
@@ -90,7 +99,7 @@ export default function UpdateAvatarFormV2() {
             <Input
               type="file"
               accept={"image/*"}
-              className={"col-span-3 hover:cursor-pointer hover:opacity-75 bg-[#223136] text-left text-white"}
+              className={"col-span-3 hover:cursor-pointer hover:opacity-75 bg-[#223136] text-left text-white font-medium"}
               onChange={handleImageChange}
               name="avatar"
               id="avatar"

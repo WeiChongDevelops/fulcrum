@@ -58,3 +58,44 @@ export async function handleUserPreferencesUpdatingDirect(updatedUserPreferences
     }
   }
 }
+
+export async function handleProfileImageUploadDirect(byteArray: ArrayBuffer, fileName: string): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient.storage
+      .from("profile-picture")
+      .upload(`${activeUserId}/${fileName}`, byteArray, {
+        upsert: true,
+        contentType: "image/*",
+      });
+    if (error) {
+      throw new Error(error.message);
+    }
+    console.log({ uploadedImage: data });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when uploading profile picture: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when uploading profile picture.");
+    }
+  }
+}
+
+export async function getProfileImageDirect(fileName: string): Promise<string> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient.storage.from("profile-picture").download(`${activeUserId}/${fileName}`);
+    if (error) {
+      throw new Error(error.message);
+    }
+    const imageURL = URL.createObjectURL(data);
+    console.log({ downloadedImageURL: imageURL });
+    return imageURL;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when uploading profile picture: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when uploading profile picture.");
+    }
+  }
+}

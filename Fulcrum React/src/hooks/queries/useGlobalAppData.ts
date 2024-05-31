@@ -25,7 +25,7 @@ import { getGroupListDirect } from "@/api/group-api.ts";
 import { getExpenseListDirect } from "@/api/expense-api.ts";
 import { getRecurringExpenseListDirect } from "@/api/recurring-api.ts";
 import { getBlacklistedExpensesDirect } from "@/api/blacklist-api.ts";
-import { getUserPreferencesDirect } from "@/api/user-prefs-api.ts";
+import { getProfileImageDirect, getUserPreferencesDirect } from "@/api/user-prefs-api.ts";
 
 export function useGlobalAppData() {
   const sessionStoredProfileIcon = sessionStorage.getItem("profileIconFileName");
@@ -93,6 +93,15 @@ export function useGlobalAppData() {
     enabled: !!email && !!budgetArrayQuery.data && !!groupArrayQuery.data,
   });
 
+  const profileImageURLQuery = useQuery({
+    queryKey: ["profileImageURL", email],
+    queryFn: () => {
+      const userPreferences = userPreferencesQuery.data as UserPreferences;
+      return getProfileImageDirect(userPreferences.profileIconFileName);
+    },
+    enabled: !!userPreferencesQuery.data,
+  });
+
   const [perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth] = useState<Map<string, number>>(new Map());
 
   const isAnyLoading =
@@ -114,6 +123,7 @@ export function useGlobalAppData() {
     recurringExpenseArray: recurringExpenseArrayQuery.data as RecurringExpenseItemEntity[],
     blacklistedExpenseArray: blacklistedExpenseArrayQuery.data as BlacklistedExpenseItemEntity[],
     userPreferences: userPreferencesQuery.data as UserPreferences,
+    profileImageURL: profileImageURLQuery.data as string,
     categoryToIconAndColourMap: categoryToIconAndColourMapQuery.data as CategoryToIconAndColourMap,
     perCategoryExpenseTotalThisMonth,
     setPerCategoryExpenseTotalThisMonth,

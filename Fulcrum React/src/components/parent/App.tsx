@@ -49,6 +49,7 @@ export default function App() {
     recurringExpenseArray,
     blacklistedExpenseArray,
     userPreferences,
+    profileImageURL,
     categoryToIconAndColourMap,
     perCategoryExpenseTotalThisMonth,
     setPerCategoryExpenseTotalThisMonth,
