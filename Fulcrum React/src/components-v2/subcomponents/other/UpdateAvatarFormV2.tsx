@@ -11,6 +11,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { cn } from "@/lib/utils.ts";
 import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
 import useUploadProfileImage from "@/hooks/mutations/other/useUploadProfileImage.ts";
+import Loader from "@/components/child/other/Loader.tsx";
+import { Skeleton } from "@/components-v2/ui/skeleton.tsx";
 
 export default function UpdateAvatarFormV2() {
   const maxFileSize = 16 * 1024 * 1024; // 16MB
@@ -32,7 +34,11 @@ export default function UpdateAvatarFormV2() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setAvatarFormOpen(false);
-    updateUserPreferences({ ...userPreferences, profileIconFileName: formData.avatarFileName! });
+    updateUserPreferences({
+      ...userPreferences,
+      profileIconFileName: formData.avatarFileName!,
+      prefersUploadedAvatar: true,
+    });
     uploadProfileImage({ byteArray: formData.avatarByteArray!, fileName: formData.avatarFileName! });
   };
 
@@ -49,6 +55,7 @@ export default function UpdateAvatarFormV2() {
 
       const previewReader = new FileReader();
       previewReader.readAsDataURL(selectedImage);
+      setImagePreview("loading");
       previewReader.onloadend = () => {
         const preview = previewReader.result as string;
         setImagePreview(preview);
@@ -100,6 +107,7 @@ export default function UpdateAvatarFormV2() {
         <SheetHeader>
           <SheetTitle>Edit Profile Picture</SheetTitle>
           <SheetDescription>Select a new avatar.</SheetDescription>
+          <SheetDescription>The accepted formats are jpg, png and gif.</SheetDescription>
         </SheetHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4 mt-4">
           <div className={"grid grid-cols-4 items-center gap-5 relative"}>
@@ -116,7 +124,11 @@ export default function UpdateAvatarFormV2() {
               required
             />
           </div>
-          {imagePreview && <img src={imagePreview} className={"w-24 max-h-48 ml-auto"} alt="Preview" />}
+          {imagePreview === "loading" ? (
+            <div className={"size-24 ml-auto animate-pulse bg-zinc-100"}></div>
+          ) : (
+            imagePreview && <img src={imagePreview} className={"w-24 max-h-48 ml-auto"} alt={""} />
+          )}
           {error && <p className={"ml-auto text-red-500"}>{error}</p>}
 
           <Button className={"mt-2 self-end"} variant={userPreferences.darkModeEnabled ? "secondary" : "default"}>

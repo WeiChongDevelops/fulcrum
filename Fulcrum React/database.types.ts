@@ -221,7 +221,7 @@ export type Database = {
           //   createdAt: string
           //   currency: string
           //   darkModeEnabled: boolean | null
-          //   prefersDefaultAvatar: boolean
+          //   prefersUploadedAvatar: boolean
           //   profileIconFileName: string
           //   userId: string
           // }
@@ -230,7 +230,7 @@ export type Database = {
             createdAt?: string;
             currency?: string;
             darkModeEnabled?: boolean | null;
-            prefersDefaultAvatar?: boolean;
+            prefersUploadedAvatar?: boolean;
             profileIconFileName?: string;
             userId?: string;
           };
@@ -239,7 +239,7 @@ export type Database = {
             createdAt?: string;
             currency?: string;
             darkModeEnabled?: boolean | null;
-            prefersDefaultAvatar?: boolean;
+            prefersUploadedAvatar?: boolean;
             profileIconFileName?: string;
             userId?: string;
           };

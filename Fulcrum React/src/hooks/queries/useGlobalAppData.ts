@@ -1,5 +1,5 @@
 import { getGroupAndColourMap } from "@/utility/util.ts";
-import { useQueries, useQuery, UseQueryResult } from "@tanstack/react-query";
+import { useQueries, useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
 import {
   getBlacklistedExpenses,
   getBudgetList,
@@ -18,7 +18,7 @@ import {
   UserPreferences,
   RecurringExpenseItemEntity,
 } from "@/utility/types.ts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getSessionEmailOrNullDirect } from "@/utility/supabase-client.ts";
 import { getBudgetListDirect } from "@/api/budget-api.ts";
 import { getGroupListDirect } from "@/api/group-api.ts";
@@ -41,7 +41,7 @@ export function useGlobalAppData() {
   const storedProfileIcon = localStorage.getItem("profileIconFileName");
   const storedDarkMode = localStorage.getItem("darkModeEnabled");
   const storedAccessibilityMode = localStorage.getItem("accessibilityEnabled");
-  const storedAvatarPreference = localStorage.getItem("prefersDefaultAvatar");
+  const storedAvatarPreference = localStorage.getItem("prefersUploadedAvatar");
 
   const retrievalConditions = !!email && window.location.href.split("/").includes("app");
 
@@ -62,11 +62,15 @@ export function useGlobalAppData() {
           profileIconFileName: storedProfileIcon ? storedProfileIcon : "profile-icon-default",
           darkModeEnabled: storedDarkMode === "true",
           accessibilityEnabled: storedAccessibilityMode === "true",
-          prefersDefaultAvatar: storedAvatarPreference !== "false",
+          prefersUploadedAvatar: storedAvatarPreference === "true",
         },
       },
     ],
   });
+
+  useEffect(() => {
+    console.log(`PREFERS UPLOADED AVATAR CHANGED TO: ${storedAvatarPreference}`);
+  }, [storedAvatarPreference]);
 
   const [
     budgetArrayQuery,
@@ -82,7 +86,7 @@ export function useGlobalAppData() {
     localStorage.setItem("profileIconFileName", userPreferences.profileIconFileName);
     localStorage.setItem("darkModeEnabled", userPreferences.darkModeEnabled.toString());
     localStorage.setItem("accessibilityEnabled", userPreferences.accessibilityEnabled.toString());
-    localStorage.setItem("prefersDefaultAvatar", userPreferences.prefersDefaultAvatar.toString());
+    localStorage.setItem("prefersUploadedAvatar", userPreferences.prefersUploadedAvatar.toString());
   }
 
   const categoryToIconAndColourMapQuery = useQuery({
@@ -97,12 +101,13 @@ export function useGlobalAppData() {
     enabled: !!email && !!budgetArrayQuery.data && !!groupArrayQuery.data,
   });
 
+  const queryClient = useQueryClient();
+
   const profileImageURLQuery = useQuery({
     queryKey: ["profileImageURL", email],
-    queryFn: () => {
-      const userPreferences = userPreferencesQuery.data as UserPreferences;
-      console.log({ prefs: userPreferences });
-      return userPreferences.prefersDefaultAvatar ? "" : getProfileImageDirect(userPreferences.profileIconFileName);
+    queryFn: async () => {
+      const userPreferences: UserPreferences = queryClient.getQueryData(["userPreferences", email])!;
+      return userPreferences.prefersUploadedAvatar ? await getProfileImageDirect(userPreferences.profileIconFileName) : "";
     },
     enabled: !!userPreferencesQuery.data,
   });

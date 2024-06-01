@@ -32,7 +32,7 @@ describe("ExpenseItem", () => {
       profileIconFileName: "profile-icon-default",
       darkModeEnabled: false,
       accessibilityEnabled: false,
-      prefersDefaultAvatar: true,
+      prefersUploadedAvatar: true,
     },
   };
 
