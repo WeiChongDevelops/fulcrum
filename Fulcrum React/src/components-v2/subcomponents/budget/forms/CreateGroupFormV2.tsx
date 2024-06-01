@@ -5,6 +5,7 @@ import {
   addColourSelectionFunctionality,
   addFormExitListeners,
   capitaliseFirstLetter,
+  getHighestGroupSortIndex,
   getRandomGroupColour,
   LocationContext,
   useEmail,
@@ -28,12 +29,11 @@ import { cn } from "@/lib/utils.ts";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateGroupFormV2Props {
-  highestSortIndex: number;
   setLocalisedGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
   className?: string;
 }
 
-export default function CreateGroupFormV2({ highestSortIndex, setLocalisedGroupArray, className }: CreateGroupFormV2Props) {
+export default function CreateGroupFormV2({ setLocalisedGroupArray, className }: CreateGroupFormV2Props) {
   const [formData, setFormData] = useState<BasicGroupData>({
     group: "",
     colour: "",
@@ -41,9 +41,15 @@ export default function CreateGroupFormV2({ highestSortIndex, setLocalisedGroupA
   const formRef = useRef<HTMLDivElement>(null);
   const { mutate: createGroup } = useCreateGroup();
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+  const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["groupArray", useEmail()])!;
   const routerLocation = useContext(LocationContext);
 
   const [formIsOpen, setFormIsOpen] = useState(false);
+  const [nextHighestSortIndex, setNextHighestSortIndex] = useState(999);
+
+  useEffect(() => {
+    !!groupArray && setNextHighestSortIndex(getHighestGroupSortIndex(groupArray) + 1);
+  }, [groupArray]);
 
   function hideForm() {
     // changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateGroupVisible", false);
@@ -80,7 +86,7 @@ export default function CreateGroupFormV2({ highestSortIndex, setLocalisedGroupA
       group: formData.group,
       colour: formData.colour ? formData.colour : getRandomGroupColour(),
       timestamp: new Date(),
-      id: highestSortIndex + 1,
+      id: nextHighestSortIndex,
     };
     setLocalisedGroupArray((prevLocalisedGroupArray) => [...prevLocalisedGroupArray, newGroupItem]);
 

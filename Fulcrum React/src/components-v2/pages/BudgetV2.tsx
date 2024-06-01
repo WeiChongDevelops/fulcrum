@@ -91,10 +91,10 @@ export default function BudgetV2({ perCategoryExpenseTotalThisMonth, setPerCateg
   //   setTotalBudget(getTotalAmountBudgeted(budgetArray));
   // }, [budgetArray]);
 
-  const [totalBudget, setTotalBudget] = useState(() => getTotalAmountBudgeted(budgetArray));
+  const [totalBudget, setTotalBudget] = useState(0);
 
   useEffect(() => {
-    setTotalBudget(getTotalAmountBudgeted(budgetArray));
+    !!budgetArray && setTotalBudget(getTotalAmountBudgeted(budgetArray));
   }, [budgetArray]);
 
   useEffect(() => {
@@ -123,7 +123,7 @@ export default function BudgetV2({ perCategoryExpenseTotalThisMonth, setPerCateg
   // useEffect(fadeBudget, [sideBarOpen]);
 
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
-  const [localisedGroupArray, setLocalisedGroupArray] = useState([...groupArray]);
+  const [localisedGroupArray, setLocalisedGroupArray] = useState(!!groupArray ? [...groupArray] : []);
 
   const getIndexOf = (id: UniqueIdentifier | number) => {
     return localisedGroupArray.findIndex((groupItem) => groupItem.id === (id as number));
@@ -192,6 +192,10 @@ export default function BudgetV2({ perCategoryExpenseTotalThisMonth, setPerCateg
     setTimeout(updateBentoLayout, 600);
   }, []);
 
+  useEffect(() => {
+    setTimeout(updateBentoLayout, 200);
+  }, [routerLocation]);
+
   if (isError) {
     return <FulcrumErrorPage errors={[error!]} />;
   }
@@ -257,11 +261,7 @@ export default function BudgetV2({ perCategoryExpenseTotalThisMonth, setPerCateg
                       />
                     ))}
                 </SortableContext>
-                <CreateGroupFormV2
-                  highestSortIndex={getHighestGroupSortIndex(groupArray)}
-                  setLocalisedGroupArray={setLocalisedGroupArray}
-                  className={"mt-1"}
-                />
+                <CreateGroupFormV2 setLocalisedGroupArray={setLocalisedGroupArray} className={"mt-1"} />
               </div>
             </DndContext>
           </div>

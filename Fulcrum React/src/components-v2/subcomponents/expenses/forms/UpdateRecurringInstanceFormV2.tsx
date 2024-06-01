@@ -14,6 +14,7 @@ import {
   PreviousExpenseBeingEdited,
   RecurringExpenseInstanceUpdatingFormData,
   SetFormVisibility,
+  UserPreferences,
 } from "@/utility/types.ts";
 import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
 import { toast } from "sonner";
@@ -56,6 +57,7 @@ export default function UpdateRecurringInstanceFormV2({
 
   const queryClient = useQueryClient();
   const expenseArray: ExpenseItemEntity[] = queryClient.getQueryData(["expenseArray", useEmail()])!;
+  const userPreferences: UserPreferences = queryClient.getQueryData(["userPreferences", useEmail()])!;
 
   const hideForm = () => {
     setFormIsOpen(false);

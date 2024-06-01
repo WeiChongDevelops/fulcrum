@@ -214,40 +214,45 @@ export type Database = {
         ];
       };
       user_preferences: {
-        Row: UserPreferences;
-        // Row: {
-        //   accessibilityEnabled: boolean | null;
-        //   createdAt: string;
-        //   currency: string;
-        //   darkModeEnabled: boolean | null;
-        //   profileIconFileName: string;
-        //   userId: string;
-        // };
-        Insert: {
-          accessibilityEnabled?: boolean | null;
-          createdAt?: string;
-          currency?: string;
-          darkModeEnabled?: boolean | null;
-          profileIconFileName?: string;
-          userId?: string;
+        user_preferences: {
+          Row: UserPreferences;
+          // {
+          //   accessibilityEnabled: boolean | null
+          //   createdAt: string
+          //   currency: string
+          //   darkModeEnabled: boolean | null
+          //   prefersDefaultAvatar: boolean
+          //   profileIconFileName: string
+          //   userId: string
+          // }
+          Insert: {
+            accessibilityEnabled?: boolean | null;
+            createdAt?: string;
+            currency?: string;
+            darkModeEnabled?: boolean | null;
+            prefersDefaultAvatar?: boolean;
+            profileIconFileName?: string;
+            userId?: string;
+          };
+          Update: {
+            accessibilityEnabled?: boolean | null;
+            createdAt?: string;
+            currency?: string;
+            darkModeEnabled?: boolean | null;
+            prefersDefaultAvatar?: boolean;
+            profileIconFileName?: string;
+            userId?: string;
+          };
+          Relationships: [
+            {
+              foreignKeyName: "public_public_user_data_userId_fkey";
+              columns: ["userId"];
+              isOneToOne: true;
+              referencedRelation: "users";
+              referencedColumns: ["id"];
+            },
+          ];
         };
-        Update: {
-          accessibilityEnabled?: boolean | null;
-          createdAt?: string;
-          currency?: string;
-          darkModeEnabled?: boolean | null;
-          profileIconFileName?: string;
-          userId?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "public_public_user_data_userId_fkey";
-            columns: ["userId"];
-            isOneToOne: true;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
       };
     };
     Views: {

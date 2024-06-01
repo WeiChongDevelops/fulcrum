@@ -4,6 +4,7 @@ import { EmailContext } from "../../../utility/util.ts";
 import { useContext } from "react";
 import { UserPreferences } from "../../../utility/types.ts";
 import { handleUserLogout } from "../../../utility/api.ts";
+import { handleUserLogoutDirect } from "@/api/auth-api.ts";
 
 interface NavbarUpperProps {
   userPreferences: UserPreferences;
@@ -38,7 +39,7 @@ export default function NavbarUpper({ userPreferences }: NavbarUpperProps) {
             className="profile-icon h-12"
             alt="Profile icon"
           />
-          <FulcrumButton displayText="Log Out" onClick={handleUserLogout} optionalTailwind={"text-sm"} />
+          <FulcrumButton displayText="Log Out" onClick={handleUserLogoutDirect} optionalTailwind={"text-sm"} />
         </div>
       </div>
     </nav>

@@ -56,7 +56,8 @@ export default function ExpenseMonthCarouselV2({
       opts={{ startIndex: startingIndex, watchDrag: false }}
     >
       <CarouselContent className={"-ml-24"}>
-        {budgetArray.length > 0 &&
+        {!!budgetArray &&
+          budgetArray.length > 0 &&
           structuredExpenseData.length > 0 &&
           structuredExpenseData.map((monthExpenseGroupItem, key) => {
             return (

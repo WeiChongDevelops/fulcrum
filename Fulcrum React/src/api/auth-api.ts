@@ -159,6 +159,7 @@ export async function handleUserOAuthInitDirect(): Promise<void> {
  */
 export async function handleUserLogoutDirect(): Promise<void> {
   try {
+    localStorage.clear();
     sessionStorage.clear();
     const { error } = await supabaseClient.auth.signOut();
     if (error) {

@@ -37,6 +37,7 @@ describe("BudgetTile", () => {
       profileIconFileName: "profile-icon-default",
       darkModeEnabled: false,
       accessibilityEnabled: false,
+      prefersDefaultAvatar: true,
     },
   };
 

@@ -27,12 +27,8 @@ import { getRecurringExpenseListDirect } from "@/api/recurring-api.ts";
 import { getBlacklistedExpensesDirect } from "@/api/blacklist-api.ts";
 import { getProfileImageDirect, getUserPreferencesDirect } from "@/api/user-prefs-api.ts";
 
+const sessionStoredEmail = sessionStorage.getItem("email");
 export function useGlobalAppData() {
-  const sessionStoredProfileIcon = sessionStorage.getItem("profileIconFileName");
-  const sessionStoredDarkMode = sessionStorage.getItem("darkModeEnabled");
-  const sessionStoredAccessibilityMode = sessionStorage.getItem("accessibilityEnabled");
-  const sessionStoredEmail = sessionStorage.getItem("email");
-
   const emailQuery = useQuery({
     queryKey: ["activeEmail"],
     initialData: !!sessionStoredEmail ? sessionStoredEmail : null,
@@ -41,6 +37,12 @@ export function useGlobalAppData() {
   });
 
   const email = emailQuery.data;
+
+  const storedProfileIcon = localStorage.getItem("profileIconFileName");
+  const storedDarkMode = localStorage.getItem("darkModeEnabled");
+  const storedAccessibilityMode = localStorage.getItem("accessibilityEnabled");
+  const storedAvatarPreference = localStorage.getItem("prefersDefaultAvatar");
+
   const retrievalConditions = !!email && window.location.href.split("/").includes("app");
 
   const globalAppDataQueries: UseQueryResult[] = useQueries({
@@ -57,9 +59,10 @@ export function useGlobalAppData() {
         initialData: {
           createdAt: new Date(),
           currency: "AUD",
-          profileIconFileName: sessionStoredProfileIcon ? sessionStoredProfileIcon : "profile-icon-default",
-          darkModeEnabled: sessionStoredDarkMode === "true",
-          accessibilityEnabled: sessionStoredAccessibilityMode === "true",
+          profileIconFileName: storedProfileIcon ? storedProfileIcon : "profile-icon-default",
+          darkModeEnabled: storedDarkMode === "true",
+          accessibilityEnabled: storedAccessibilityMode === "true",
+          prefersDefaultAvatar: storedAvatarPreference !== "false",
         },
       },
     ],
@@ -76,9 +79,10 @@ export function useGlobalAppData() {
 
   if (!!userPreferencesQuery.data) {
     const userPreferences = userPreferencesQuery.data as UserPreferences;
-    sessionStorage.setItem("profileIconFileName", userPreferences.profileIconFileName);
-    sessionStorage.setItem("darkModeEnabled", userPreferences.darkModeEnabled.toString());
-    sessionStorage.setItem("accessibilityEnabled", userPreferences.accessibilityEnabled.toString());
+    localStorage.setItem("profileIconFileName", userPreferences.profileIconFileName);
+    localStorage.setItem("darkModeEnabled", userPreferences.darkModeEnabled.toString());
+    localStorage.setItem("accessibilityEnabled", userPreferences.accessibilityEnabled.toString());
+    localStorage.setItem("prefersDefaultAvatar", userPreferences.prefersDefaultAvatar.toString());
   }
 
   const categoryToIconAndColourMapQuery = useQuery({
@@ -97,7 +101,8 @@ export function useGlobalAppData() {
     queryKey: ["profileImageURL", email],
     queryFn: () => {
       const userPreferences = userPreferencesQuery.data as UserPreferences;
-      return getProfileImageDirect(userPreferences.profileIconFileName);
+      console.log({ prefs: userPreferences });
+      return userPreferences.prefersDefaultAvatar ? "" : getProfileImageDirect(userPreferences.profileIconFileName);
     },
     enabled: !!userPreferencesQuery.data,
   });

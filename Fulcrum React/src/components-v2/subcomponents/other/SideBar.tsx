@@ -13,6 +13,7 @@ import { Switch } from "@/components-v2/ui/switch.tsx";
 import ThemeToggle from "@/components-v2/subcomponents/other/toggles/ThemeToggle.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import UpdateAvatarFormV2 from "@/components-v2/subcomponents/other/UpdateAvatarFormV2.tsx";
+import { handleUserLogoutDirect } from "@/api/auth-api.ts";
 
 interface SideBarProps {
   sideBarOpen: boolean;
@@ -118,8 +119,9 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
           <UpdateAvatarFormV2 />
           <Avatar className={"size-9"}>
             <AvatarImage src={activeProfileImageURL} className={"bg-zinc-500"} />
-            <AvatarFallback>
-              <img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" />
+            <AvatarFallback className={"text-primary tracking-tight bg-cyan-500/90"}>
+              {/*<img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" />*/}
+              {activeEmail.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           {sideBarOpen && (
@@ -135,7 +137,7 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
                     />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className={"flex flex-col items-start"} side={"right"} sideOffset={20}>
-                    <DropdownMenuItem className={"w-full hover:cursor-pointer here"} onSelect={handleUserLogout}>
+                    <DropdownMenuItem className={"w-full hover:cursor-pointer here"} onSelect={handleUserLogoutDirect}>
                       <span className={"text-red-500 text-xs font-semibold"}>Sign Out</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>

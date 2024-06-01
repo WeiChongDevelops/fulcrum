@@ -5,6 +5,7 @@ import ProfileIconUpdatingForm from "./ProfileIconUpdatingForm.tsx";
 import { OpenToolsSection, UserPreferences, ToolsFormVisibility } from "../../../../utility/types.ts";
 import { handleUserLogout } from "../../../../utility/api.ts";
 import ActiveFormClickShield from "../../other/ActiveFormClickShield.tsx";
+import { handleUserLogoutDirect } from "@/api/auth-api.ts";
 
 interface ToolsHomeProps {
   userPreferences: UserPreferences;
@@ -62,7 +63,7 @@ export default function ToolsHome({ userPreferences, setOpenToolsSection }: Tool
       </div>
       <p className={"font-bold text-xl text-white mb-4"}>{email}</p>
       <div>
-        <FulcrumButton displayText={"Sign Out"} backgroundColour={"white"} onClick={handleUserLogout} />
+        <FulcrumButton displayText={"Sign Out"} backgroundColour={"white"} onClick={handleUserLogoutDirect} />
       </div>
 
       {toolsFormVisibility.isUpdateProfileIconFormVisible && <ActiveFormClickShield />}

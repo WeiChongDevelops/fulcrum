@@ -229,6 +229,7 @@ export interface UserPreferences {
   darkModeEnabled: boolean;
   accessibilityEnabled: boolean;
   profileIconFileName: string;
+  prefersDefaultAvatar: boolean;
 }
 
 export type CategoryToIconAndColourMap = Map<string, { iconPath: string; colour: string }>;

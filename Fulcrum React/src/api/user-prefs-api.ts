@@ -12,12 +12,13 @@ export async function getUserPreferencesDirect(): Promise<UserPreferences> {
     const activeUserId = await getActiveUserId();
     const { data, error } = await supabaseClient
       .from("user_preferences")
-      .select("currency, createdAt, darkModeEnabled, accessibilityEnabled, profileIconFileName")
+      .select("currency, createdAt, darkModeEnabled, accessibilityEnabled, profileIconFileName, prefersDefaultAvatar")
       .eq("userId", activeUserId);
     if (error) {
       consolePostgrestError(error);
       throw new Error(error.message);
     }
+    console.log({ userPrefs: data[0] });
     return data[0];
   } catch (error: unknown) {
     if (error instanceof Error) {
