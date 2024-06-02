@@ -17,13 +17,6 @@ export default function useUpdateUserPreferences() {
       await queryClient.cancelQueries({ queryKey: ["userPreferences", email] });
       const userPreferencesBeforeOptimisticUpdate = queryClient.getQueryData(["userPreferences", email]);
       await queryClient.setQueryData(["userPreferences", email], updatedUserPreferences);
-      console.log("!!!!!!!!!!!");
-      console.log("!!!!!!!!!!!");
-      console.log("!!!!!!!!!!!");
-      console.log(updatedUserPreferences);
-      console.log("!!!!!!!!!!!");
-      console.log("!!!!!!!!!!!");
-      console.log("!!!!!!!!!!!");
       toast.success("Preferences updated!");
       return { userPreferencesBeforeOptimisticUpdate };
     },

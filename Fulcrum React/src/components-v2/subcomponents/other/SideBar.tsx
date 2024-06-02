@@ -115,11 +115,13 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
             </Button>
           </div>
         )}
-        <div className={"flex flex-row justify-start items-start w-full mx-1 gap-3 text-left mt-6 min-h-12 relative"}>
+        <div
+          className={"flex flex-row justify-start items-start w-full mx-1 pl-0.5 gap-2.5 text-left mt-6 min-h-12 relative"}
+        >
           <UpdateAvatarFormV2 />
           <Avatar className={"size-9"}>
             <AvatarImage src={activeProfileImageURL} className={"bg-zinc-300"} />
-            <AvatarFallback className={"text-primary tracking-tight bg-cyan-500/90"}>
+            <AvatarFallback className={"text-primary tracking-tighter bg-cyan-400 font-semibold"}>
               {/*<img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" />*/}
               {activeEmail.substring(0, 2).toUpperCase()}
             </AvatarFallback>
