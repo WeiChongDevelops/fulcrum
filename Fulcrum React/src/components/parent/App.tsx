@@ -28,7 +28,6 @@ import RecurringExpenses from "@/components/child/tools/recurring-expenses/Recur
 import RecurringExpensesV2 from "@/components-v2/pages/RecurringExpensesV2.tsx";
 import SettingsV2 from "@/components-v2/pages/SettingsV2.tsx";
 import BudgetV2 from "@/components-v2/pages/BudgetV2.tsx";
-import "@/css/global.css";
 import Playground from "@/components-v2/subcomponents/budget/Playground.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import Maintenance from "@/components-v2/pages/Maintenance.tsx";

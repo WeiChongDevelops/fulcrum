@@ -3,7 +3,6 @@ import QueryTypeSelector from "../../selectors/QueryTypeSelector.tsx";
 import emailjs from "@emailjs/browser";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import Loader from "../../other/Loader.tsx";
-
 /**
  * The Contact section of the Fulcrum homepage.
  */
@@ -83,7 +82,7 @@ export default function Contact() {
   return (
     <div
       className={
-        "contact-container w-screen h-[calc(100vh-100px)] relative flex flex-row justify-around py-[6.5vw] -mb-[2.5rem] xl:-mb-[7.5rem] text-left text-black "
+        "contact-container w-screen h-[calc(100vh-100px)] bg-emerald-200/20 relative flex flex-row justify-around py-[6.5vw] -mb-[2.5rem] xl:-mb-[7.5rem] text-left text-black "
       }
     >
       <img

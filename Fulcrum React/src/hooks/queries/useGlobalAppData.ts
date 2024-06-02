@@ -68,10 +68,6 @@ export function useGlobalAppData() {
     ],
   });
 
-  useEffect(() => {
-    console.log(`PREFERS UPLOADED AVATAR CHANGED TO: ${storedAvatarPreference}`);
-  }, [storedAvatarPreference]);
-
   const [
     budgetArrayQuery,
     groupArrayQuery,
