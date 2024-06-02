@@ -3,6 +3,9 @@ import QueryTypeSelector from "../../selectors/QueryTypeSelector.tsx";
 import emailjs from "@emailjs/browser";
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
 import Loader from "../../other/Loader.tsx";
+import { Label } from "@/components-v2/ui/label.tsx";
+import { Input } from "@/components-v2/ui/input.tsx";
+import { Textarea } from "@/components-v2/ui/textarea.tsx";
 /**
  * The Contact section of the Fulcrum homepage.
  */
@@ -82,7 +85,7 @@ export default function Contact() {
   return (
     <div
       className={
-        "contact-container w-screen h-[calc(100vh-100px)] bg-emerald-200/20 relative flex flex-row justify-around py-[6.5vw] -mb-[2.5rem] xl:-mb-[7.5rem] text-left text-black "
+        "contact-container w-screen h-[calc(100vh-100px)] bg-sky-200/20 relative flex flex-row justify-around py-[6.5vw] -mb-[2.5rem] xl:-mb-[7.5rem] text-left text-black "
       }
     >
       <img
@@ -96,7 +99,7 @@ export default function Contact() {
 
       <div className={"contact-copy"}>
         <p className={"text-5xl font-bold mb-4"}>We're here to help.</p>
-        <p className={"mt-2 font-bold"}>Reach out to our team for assistance or inquiries via the contact form.</p>
+        <p className={"mt-2 font-bold"}>Reach out to our team for assistance.</p>
         {formStatus && (
           <p className={"my-6 font-bold text-green-500 contact-status w-40%"} key={statusAnimationKey}>
             {formStatus}
@@ -106,81 +109,79 @@ export default function Contact() {
       </div>
       <div className={"contact-form-container"}>
         <form
-          className={"flex flex-col bg-[#282d33] px-10 py-5 rounded-md w-full bg-opacity-80 text-sm"}
+          className={"flex flex-col bg-[#282d33] px-10 py-10 rounded-md w-full bg-opacity-80 text-sm"}
           ref={formRef}
           onSubmit={handleSubmit}
         >
-          <p className={"font-bold text-white text-center text-xl"}>Contact Us</p>
-
-          <label htmlFor="queryType" className={"text-white text-sm"}>
+          <Label htmlFor="queryType" className={"text-white text-sm font-bold"}>
             Query Type
-          </label>
-          <QueryTypeSelector setFormData={setFormData} />
+          </Label>
+          <QueryTypeSelector formData={formData} setFormData={setFormData} className={"mt-2"} />
 
           <div className={"flex flex-row justify-between"}>
             <div className={"flex flex-col w-[38%]"}>
-              <label htmlFor="firstName" className={"mt-4 text-white"}>
+              <Label htmlFor="firstName" className={"mt-4 text-white font-bold"}>
                 First Name
-              </label>
-              <input
+              </Label>
+              <Input
                 id={"firstName"}
                 value={formData.firstName}
-                placeholder={"Your first name"}
+                placeholder={"Name"}
                 name={"firstName"}
                 onChange={handleInputChange}
-                className={"mt-2 py-1.5 px-3"}
+                className={"mt-2 py-1.5 px-3 bg-white"}
                 autoComplete={"off"}
                 required
               />
             </div>
 
             <div className={"flex flex-col w-[56%]"}>
-              <label htmlFor="email" className={"mt-4 text-white"}>
+              <Label htmlFor="email" className={"mt-4 text-white font-bold"}>
                 Email
-              </label>
-              <input
+              </Label>
+              <Input
                 type={"email"}
                 id={"email"}
                 value={formData.email}
                 placeholder={"email@example.com"}
                 name={"email"}
                 onChange={handleInputChange}
-                className={"mt-2 py-1.5 px-3"}
+                className={"mt-2 py-1.5 px-3 bg-white"}
                 autoComplete={"email"}
                 required
               />
             </div>
           </div>
 
-          <label htmlFor="subject" className={"mt-4 text-white"}>
+          <Label htmlFor="subject" className={"mt-4 text-white font-bold"}>
             Subject
-          </label>
-          <input
+          </Label>
+          <Input
             type="text"
             id={"subject"}
             value={formData.subject}
             name={"subject"}
             placeholder={getActivePlaceholder(formData.queryType)}
             onChange={handleInputChange}
-            className={"mt-2 py-1.5 px-3"}
+            className={"mt-2 py-1.5 px-3 bg-white"}
             autoComplete={"off"}
             required
           />
 
-          <label htmlFor="description" className={"mt-4 text-white"}>
+          <Label htmlFor="description" className={"mt-4 text-white font-bold"}>
             Description
-          </label>
-          <textarea
+          </Label>
+          <Textarea
             id={"description"}
             value={formData.description}
             name={"description"}
             placeholder={"Please include all information relevant to your issue."}
             onChange={handleInputChange}
-            className={"mt-2 py-1.5 px-3 mb-3.5"}
+            className={"mt-2 py-1.5 px-3 mb-6 bg-white"}
             autoComplete={"off"}
             required
           />
-          <FulcrumButton displayText={"Send"} backgroundColour={"grey"} hoverShadow={true} />
+          <FulcrumButton displayText={"Send"} backgroundColour={"white"} hoverShadow={true} />
         </form>
       </div>
     </div>

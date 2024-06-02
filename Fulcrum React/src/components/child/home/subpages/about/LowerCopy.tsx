@@ -1,3 +1,5 @@
+import NumberInstructionPair from "@/components-v2/subcomponents/NumberInstructionPair";
+
 /**
  * Lower-page component displaying extended use steps infographic.
  */
@@ -25,31 +27,10 @@ export default function LowerCopy() {
         absolutePosition={"bottom-[12%] right-[11%] w-[41.5%]"}
       />
       <img
-        src="/static/assets-v2/homepage-assets/mid-lower-copy-background.png"
+        src="/static/assets-v2/homepage-assets/mid-lower-copy-background-2.png"
         alt="App instructions"
         className={"w-full"}
       />
-    </div>
-  );
-}
-
-interface NumberInstructionPairProps {
-  number: number;
-  instruction: string;
-  absolutePosition: string;
-}
-
-function NumberInstructionPair({ number, instruction, absolutePosition }: NumberInstructionPairProps) {
-  return (
-    <div
-      className={`absolute flex flex-row justify-start items-start gap-3 font-bold text-black text-sm sm:text-sm md:text-base ${absolutePosition}`}
-    >
-      <div className={"bg-white size-8 px-[2.5%] py-[1%] rounded-full flex justify-center items-center"}>
-        <p>{number}</p>
-      </div>
-      <div className={"bg-white rounded-2xl w-[85%] text-left px-[3%] py-[1%]"}>
-        <p>{instruction}</p>
-      </div>
     </div>
   );
 }
