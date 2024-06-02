@@ -53,10 +53,12 @@ export default function useUploadProfileImage() {
       await queryClient.setQueryData(["profileImageURL", email], context?.profileImageURLBeforeOptimisticUpdate);
     },
     onSuccess: async () => {
-      toast.dismiss();
-      toast.success("Avatar updated.");
       await queryClient.invalidateQueries({ queryKey: ["userPreferences", email] });
       await queryClient.invalidateQueries({ queryKey: ["profileImageURL", email] });
+      setTimeout(() => {
+        toast.dismiss();
+        toast.success("Avatar updated.");
+      }, 1750);
     },
   });
 }
