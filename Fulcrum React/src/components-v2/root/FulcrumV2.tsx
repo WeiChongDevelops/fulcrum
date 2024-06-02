@@ -29,7 +29,13 @@ export default function FulcrumV2({ userPreferences, isAnyLoading }: FulcrumV2Pr
   }
 
   useEffect(() => {
-    getSessionEmailOrNullDirect().then((result) => result === null && (window.location.href = "/login"));
+    getSessionEmailOrNullDirect().then((result) => {
+      if (result === null) {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "/login";
+      }
+    });
   }, [routerLocation]);
 
   return (

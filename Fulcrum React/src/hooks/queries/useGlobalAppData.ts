@@ -98,7 +98,7 @@ export function useGlobalAppData() {
         budgetArrayQuery.data as BudgetItemEntity[],
         groupArrayQuery.data as GroupItemEntity[],
       ),
-    enabled: !!email && !!budgetArrayQuery.data && !!groupArrayQuery.data,
+    enabled: retrievalConditions && !!budgetArrayQuery.data && !!groupArrayQuery.data,
   });
 
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", email])!;
@@ -106,12 +106,10 @@ export function useGlobalAppData() {
   const profileImageURLQuery = useQuery({
     queryKey: ["profileImageURL", email],
     queryFn: async () => {
-      console.log(`ON INVALIDATION, LOOKING FOR ${userPreferences.profileIconFileName}`);
-      console.log("Invalidation detected here.");
       return userPreferences.prefersUploadedAvatar ? await getProfileImageDirect(userPreferences.profileIconFileName) : "";
     },
     initialData: localStorage.getItem("profileImageURL"),
-    enabled: !!email && !!userPreferencesQuery.data,
+    enabled: retrievalConditions && !!userPreferencesQuery.data,
   });
 
   const [perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth] = useState<Map<string, number>>(new Map());
