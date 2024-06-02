@@ -13,13 +13,14 @@ export async function getUserPreferencesDirect(): Promise<UserPreferences> {
     const { data, error } = await supabaseClient
       .from("user_preferences")
       .select("currency, createdAt, darkModeEnabled, accessibilityEnabled, profileIconFileName, prefersUploadedAvatar")
-      .eq("userId", activeUserId);
+      .eq("userId", activeUserId)
+      .maybeSingle();
     if (error) {
       consolePostgrestError(error);
       throw new Error(error.message);
     }
-    console.log({ userPrefs: data[0] });
-    return data[0];
+    console.log({ userPrefs: data });
+    return data as UserPreferences;
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(`An error occurred while fetching user preferences: ${error.message}`);

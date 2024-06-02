@@ -7,8 +7,10 @@ export default function useInitOAuthAccount() {
   return useMutation({
     mutationFn: handleUserOAuthInitDirect,
     onSuccess: () => {
-      toast.dismiss();
-      window.location.href = "/app";
+      setTimeout(() => {
+        toast.dismiss();
+        window.location.href = "/app/budget";
+      }, 1200);
     },
   });
 }

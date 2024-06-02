@@ -14,7 +14,7 @@ app.enable("trust proxy");
 app.use(express.json());
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://fulcrumfinance.app"],
+  origin: ["http://localhost:5173", "http://localhost:3001", "https://fulcrumfinance.app", "https://www.fulcrumfinance.app"],
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));

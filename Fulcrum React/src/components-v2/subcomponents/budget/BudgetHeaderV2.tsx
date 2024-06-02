@@ -9,6 +9,7 @@ import { useEmail, useSideBarIsOpen } from "@/utility/util.ts";
 import { ChatCircleDots, ChatCircleText } from "@phosphor-icons/react";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components-v2/ui/tooltip.tsx";
+import { rowsExistFor } from "@/api/init-api.ts";
 
 interface BudgetHeaderV2Props {
   totalIncome: number;
@@ -33,6 +34,7 @@ export default function BudgetHeaderV2({ totalIncome }: BudgetHeaderV2Props) {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
+      {/*<Button onClick={() => rowsExistFor("user_preferences")}></Button>*/}
       <MonthlyIncomeV2 totalIncome={totalIncome} />
       <div className={"flex flex-row justify-center items-center gap-2 ml-auto mr-2"}>
         <p className={"mr-4 font-medium text-base"}>Budget</p>

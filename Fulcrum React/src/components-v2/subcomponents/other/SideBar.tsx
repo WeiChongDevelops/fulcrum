@@ -123,7 +123,7 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
             <AvatarImage src={activeProfileImageURL} className={"bg-zinc-300"} />
             <AvatarFallback className={"text-primary tracking-tighter bg-cyan-400 font-semibold"}>
               {/*<img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" />*/}
-              {activeEmail.substring(0, 2).toUpperCase()}
+              {activeEmail ? activeEmail.substring(0, 2).toUpperCase() : "FF"}
             </AvatarFallback>
           </Avatar>
           {sideBarOpen && (

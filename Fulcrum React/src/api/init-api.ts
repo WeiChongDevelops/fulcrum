@@ -8,7 +8,9 @@ export async function rowsExistFor(table: string) {
       consolePostgrestError(checkError);
       throw new Error(checkError.message);
     }
-    return data !== null;
+    console.log(`When checking if rows exist in ${table} for user ${activeUserId}, see what was found, if any, below.`);
+    console.log({ whatWasFound: data });
+    return data.length > 0;
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(`Error encountered when checking for existing rows in ${table}: ${error.message}`);

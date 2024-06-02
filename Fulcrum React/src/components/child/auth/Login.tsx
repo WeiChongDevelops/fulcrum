@@ -7,6 +7,8 @@ import OAuthLoginButton from "../buttons/OAuthLoginButton.tsx";
 import useOAuthLoginUrl from "../../../hooks/mutations/auth/useOAuthLoginUrl.ts";
 import { LocationContext } from "@/utility/util.ts";
 import "@/css/Auth.css";
+import { Label } from "@/components-v2/ui/label.tsx";
+import { Input } from "@/components-v2/ui/input.tsx";
 
 /**
  * The login page for the Fulcrum application.
@@ -73,8 +75,10 @@ export default function Login() {
             </div>
             <form className={"auth-form"} onSubmit={handleSubmit}>
               <div className={"auth-label-input-pair w-full"}>
-                <label htmlFor={"email"}>Email</label>
-                <input
+                <Label htmlFor={"email"} className={"font-bold mb-1.5"}>
+                  Email
+                </Label>
+                <Input
                   type="email"
                   placeholder={"name@example.com"}
                   id={"email"}
@@ -86,8 +90,10 @@ export default function Login() {
                 />
               </div>
               <div className={"auth-label-input-pair my-6"}>
-                <label htmlFor={"password"}>Password</label>
-                <input
+                <Label htmlFor={"password"} className={"font-bold mb-1.5"}>
+                  Password
+                </Label>
+                <Input
                   type="password"
                   placeholder={"Your password..."}
                   id={"password"}

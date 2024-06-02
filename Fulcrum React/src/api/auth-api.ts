@@ -19,6 +19,8 @@ export async function handleUserRegistrationDirect(email: string, password: stri
     //   password: password,
     // });
     // console.log(response.data);
+    sessionStorage.clear();
+    localStorage.clear();
     const { data, error: signupError } = await supabaseClient.auth.signUp({
       email,
       password,
@@ -60,6 +62,8 @@ export async function handleUserLoginDirect(email: string, password: string): Pr
     //   password: password,
     // });
     // console.log(response.data);
+    sessionStorage.clear();
+    localStorage.clear();
     const { data, error } = await supabaseClient.auth.signInWithPassword({
       email,
       password,
@@ -86,6 +90,8 @@ export async function handleUserLoginDirect(email: string, password: string): Pr
  */
 export async function getOAuthLoginURLDirect(provider: string): Promise<string> {
   try {
+    sessionStorage.clear();
+    localStorage.clear();
     if (provider === "facebook") {
       return "/whatintheworldwereyouthinkingmark";
     }
@@ -138,12 +144,18 @@ export async function getOAuthLoginURLDirect(provider: string): Promise<string> 
 
 export async function handleUserOAuthInitDirect(): Promise<void> {
   try {
+    sessionStorage.clear();
+    localStorage.clear();
     const firstLogin = !(await rowsExistFor("user_preferences"));
     if (firstLogin) {
+      console.log("Identified NEW OAuth user.");
       await initialiseDefaultUserPreferences();
       await initialiseDefaultIncome();
       await initialiseDefaultGroups();
       await initialiseDefaultCategories();
+      console.log("Successfully initialised data for NEW OAuth user.");
+    } else {
+      console.log("This is not the OAuth user's first login - no data initialised.");
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
