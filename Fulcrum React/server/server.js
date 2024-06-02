@@ -14,17 +14,17 @@ app.enable("trust proxy");
 app.use(express.json());
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://localhost:3001", "https://fulcrumfinance.app"],
+  origin: ["http://localhost:5173", "https://fulcrumfinance.app"],
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 
-const serveStatic = express.static(path.join(__dirname, "../dist"));
-app.use((req, res, next) => {
-  if (req.path.endsWith(".jpg") || req.path.endsWith(".png") || req.path.endsWith(".svg") || req.path.endsWith(".webp")) {
-    res.set("Cache-Control", "public, max-age=31557600");
-  }
-  next();
+const serveStatic = express.static(path.join(__dirname, "../dist"), {
+  setHeaders: (res, path) => {
+    if (path.endsWith(".jpg") || path.endsWith(".png") || path.endsWith(".svg") || path.endsWith(".webp")) {
+      res.set("Cache-Control", "public, max-age=31557600");
+    }
+  },
 });
 app.use(serveStatic);
 
@@ -32,8 +32,8 @@ app.use("/api", async (req, res) => {
   try {
     const response = await axios({
       method: req.method,
-      // url: `http://backend:8080/api${req.url}`,
-      url: `http://localhost:8080/api${req.url}`,
+      url: `http://backend:8080/api${req.url}`,
+      // url: `http://localhost:8080/api${req.url}`,
       data: req.body,
     });
     res.send(response.data);

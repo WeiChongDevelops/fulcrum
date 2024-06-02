@@ -13,8 +13,8 @@ import axios from "axios";
 import { toast } from "sonner";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:3001/api",
-  // baseURL: window.location.origin + "/api",
+  // baseURL: "http://localhost:3001/api",
+  baseURL: window.location.origin + "/api",
   headers: { "Content-Type": "application/json" },
 });
 

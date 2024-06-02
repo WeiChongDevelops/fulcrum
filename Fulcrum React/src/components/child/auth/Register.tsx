@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { RegisterFormData } from "../../../utility/types.ts";
 import OAuthLoginButton from "../buttons/OAuthLoginButton.tsx";
 import useOAuthLoginUrl from "../../../hooks/mutations/auth/useOAuthLoginUrl.ts";
+import { Label } from "@/components-v2/ui/label.tsx";
+import { Input } from "@/components-v2/ui/input.tsx";
 
 /**
  * The registration page for the Fulcrum application.
@@ -122,8 +124,10 @@ export default function Register() {
             </div>
             <form className={"auth-form"} onSubmit={handleSubmit}>
               <div className={"auth-label-input-pair"}>
-                <label htmlFor={"email"}>Email</label>
-                <input
+                <Label htmlFor={"email"} className={"font-bold mb-1.5"}>
+                  Email
+                </Label>
+                <Input
                   type="email"
                   id="email"
                   placeholder={"name@example.com"}
@@ -135,8 +139,10 @@ export default function Register() {
                 />
               </div>
               <div className={`auth-label-input-pair my-5`}>
-                <label htmlFor={"password"}>Password</label>
-                <input
+                <Label htmlFor={"password"} className={"font-bold mb-1.5"}>
+                  Password
+                </Label>
+                <Input
                   ref={passwordField}
                   type="password"
                   id="password"
@@ -153,8 +159,10 @@ export default function Register() {
                 </b>
               </div>
               <div className={"auth-label-input-pair mb-6"}>
-                <label htmlFor={"password"}>Confirm Password</label>
-                <input
+                <Label htmlFor={"confirmPassword"} className={"font-bold mb-1.5"}>
+                  Confirm Password
+                </Label>
+                <Input
                   ref={confirmPasswordField}
                   type="password"
                   id="confirmPassword"

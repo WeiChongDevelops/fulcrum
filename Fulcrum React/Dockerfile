@@ -6,6 +6,12 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_KEY
+
+ENV VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+ENV VITE_SUPABASE_KEY=${VITE_SUPABASE_KEY}
+
 # Copy and build project
 COPY . .
 RUN npm run build --debug

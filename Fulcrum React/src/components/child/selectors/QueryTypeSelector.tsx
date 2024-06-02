@@ -23,7 +23,7 @@ interface QueryTypeSelectorProps {
  * A creatable selector for the user to select a category for an expense.
  */
 export default function QueryTypeSelector({ formData, setFormData, className }: QueryTypeSelectorProps) {
-  const [selectedQueryType, setSelectedQueryType] = useState<string>(null);
+  const [selectedQueryType, setSelectedQueryType] = useState<string | null>(null);
 
   useEffect(() => {
     setFormData((currentFormData: any) => ({

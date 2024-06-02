@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import HomeNavbar from "./shared/HomeNavbar.tsx";
 import HomeFooter from "./shared/HomeFooter.tsx";
 import { getWindowLocation } from "../../../utility/util.ts";
+import "@/css/Home.css";
 
 /**
  * The main component for the Fulcrum homepage.

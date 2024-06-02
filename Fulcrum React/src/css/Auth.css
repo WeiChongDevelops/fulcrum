@@ -8,6 +8,11 @@
   height: 100svh;
   position: relative;
   overflow: hidden;
+  font-family: "Quicksand", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.auth-page-container input {
+  font-weight: bold;
 }
 
 .auth-page-container::before {

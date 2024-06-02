@@ -1,5 +1,4 @@
 import FulcrumButton from "../../buttons/FulcrumButton.tsx";
-import "../../../../css/Home.css";
 
 /**
  * The header of the Fulcrum homepage.
