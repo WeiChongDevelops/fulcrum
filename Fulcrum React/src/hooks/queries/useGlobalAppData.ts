@@ -101,15 +101,17 @@ export function useGlobalAppData() {
     enabled: !!email && !!budgetArrayQuery.data && !!groupArrayQuery.data,
   });
 
-  const queryClient = useQueryClient();
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", email])!;
 
   const profileImageURLQuery = useQuery({
     queryKey: ["profileImageURL", email],
     queryFn: async () => {
-      const userPreferences: UserPreferences = queryClient.getQueryData(["userPreferences", email])!;
+      console.log(`ON INVALIDATION, LOOKING FOR ${userPreferences.profileIconFileName}`);
+      console.log("Invalidation detected here.");
       return userPreferences.prefersUploadedAvatar ? await getProfileImageDirect(userPreferences.profileIconFileName) : "";
     },
-    enabled: !!userPreferencesQuery.data,
+    initialData: localStorage.getItem("profileImageURL"),
+    enabled: !!email && !!userPreferencesQuery.data,
   });
 
   const [perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth] = useState<Map<string, number>>(new Map());

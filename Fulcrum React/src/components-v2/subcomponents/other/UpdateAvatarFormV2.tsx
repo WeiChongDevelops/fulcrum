@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { UserPreferences } from "@/utility/types.ts";
 import { useQueryClient } from "@tanstack/react-query";
 import { getCurrencySymbol, handleInputChangeOnFormWithAmount, useEmail } from "@/utility/util.ts";
@@ -13,33 +13,53 @@ import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPrefe
 import useUploadProfileImage from "@/hooks/mutations/other/useUploadProfileImage.ts";
 import Loader from "@/components/child/other/Loader.tsx";
 import { Skeleton } from "@/components-v2/ui/skeleton.tsx";
+import useWipeProfileImageData from "@/hooks/mutations/other/useWipeProfileImageData.ts";
 
 export default function UpdateAvatarFormV2() {
   const maxFileSize = 16 * 1024 * 1024; // 16MB
 
   const [avatarFormOpen, setAvatarFormOpen] = useState(false);
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+  const profileImageURL: string = useQueryClient().getQueryData(["profileImageURL", useEmail()])!;
 
-  const [formData, setFormData] = useState<{ avatarFileName: string | null; avatarByteArray: ArrayBuffer | null }>({
-    avatarFileName: null,
+  const [formData, setFormData] = useState<{
+    avatarFileName: string | null;
+    avatarByteArray: ArrayBuffer | null;
+  }>({
+    avatarFileName: userPreferences.profileIconFileName,
     avatarByteArray: null,
   });
   const [triggerHovered, setTriggerHovered] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(profileImageURL);
   const [error, setError] = useState<string | null>(null);
 
   const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const { mutate: uploadProfileImage } = useUploadProfileImage();
+  const { mutate: removeProfileImages } = useWipeProfileImageData();
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setAvatarFormOpen(false);
-    updateUserPreferences({
-      ...userPreferences,
-      profileIconFileName: formData.avatarFileName!,
-      prefersUploadedAvatar: true,
+
+    if (!fileInputRef.current || !fileInputRef.current.value) {
+      removeProfileImages();
+      setAvatarFormOpen(false);
+      return;
+    }
+
+    if (userPreferences.profileIconFileName === formData.avatarFileName) {
+      console.log("File name unchanged.");
+      setAvatarFormOpen(false);
+      return;
+    }
+
+    uploadProfileImage({
+      optimisticURL: imagePreview!,
+      byteArray: formData.avatarByteArray!,
+      fileName: formData.avatarFileName!,
     });
-    uploadProfileImage({ byteArray: formData.avatarByteArray!, fileName: formData.avatarFileName! });
+    setAvatarFormOpen(false);
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +75,6 @@ export default function UpdateAvatarFormV2() {
 
       const previewReader = new FileReader();
       previewReader.readAsDataURL(selectedImage);
-      setImagePreview("loading");
       previewReader.onloadend = () => {
         const preview = previewReader.result as string;
         setImagePreview(preview);
@@ -65,13 +84,35 @@ export default function UpdateAvatarFormV2() {
       formDataReader.readAsArrayBuffer(selectedImage);
       formDataReader.onloadend = () => {
         const formDataResult = formDataReader.result as ArrayBuffer;
-        setFormData({ avatarFileName: selectedImage.name, avatarByteArray: formDataResult });
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          avatarFileName: selectedImage.name,
+          avatarByteArray: formDataResult,
+        }));
       };
     }
   };
 
-  useEffect(() => {
+  const handleClickRemoveAvatar = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setFormData({
+      avatarFileName: null,
+      avatarByteArray: null,
+    });
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setError(null);
     setImagePreview(null);
+  };
+
+  const handleClickCancel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setAvatarFormOpen(false);
+  };
+
+  useEffect(() => {
+    setImagePreview(profileImageURL);
   }, [avatarFormOpen]);
 
   useEffect(() => {
@@ -119,21 +160,25 @@ export default function UpdateAvatarFormV2() {
               accept={"image/*"}
               className={"col-span-3 hover:cursor-pointer hover:opacity-75 bg-[#223136] text-left text-white font-medium"}
               onChange={handleImageChange}
+              ref={fileInputRef}
               name="avatar"
               id="avatar"
-              required
             />
           </div>
-          {imagePreview === "loading" ? (
-            <div className={"size-24 ml-auto animate-pulse bg-zinc-100"}></div>
-          ) : (
-            imagePreview && <img src={imagePreview} className={"w-24 max-h-48 ml-auto"} alt={""} />
-          )}
+          {imagePreview && <img src={imagePreview} className={"w-24 max-h-48 ml-auto"} alt={""} />}
           {error && <p className={"ml-auto text-red-500"}>{error}</p>}
+          <div className={"flex flex-row gap-3 items-center mt-2 self-end"}>
+            <Button onClick={handleClickCancel} variant={"secondary"} type={"button"}>
+              Cancel
+            </Button>
+            {imagePreview && (
+              <Button onClick={handleClickRemoveAvatar} variant={"destructive"}>
+                Remove
+              </Button>
+            )}
 
-          <Button className={"mt-2 self-end"} variant={userPreferences.darkModeEnabled ? "secondary" : "default"}>
-            Save Changes
-          </Button>
+            <Button variant={userPreferences.darkModeEnabled ? "secondary" : "default"}>Save Changes</Button>
+          </div>
         </form>
       </SheetContent>
     </Sheet>

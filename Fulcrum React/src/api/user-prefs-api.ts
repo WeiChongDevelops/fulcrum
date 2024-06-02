@@ -101,3 +101,20 @@ export async function getProfileImageDirect(fileName: string): Promise<string> {
     }
   }
 }
+
+export async function handleProfileImageDataWipe(): Promise<void> {
+  try {
+    const activeUserId = await getActiveUserId();
+    const { data, error } = await supabaseClient.storage.from("profile-picture").remove([activeUserId]);
+    if (error) {
+      throw new Error(error.message);
+    }
+    console.log("Avatar deletion successful.");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error encountered when wiping avatar data: ${error.message}`);
+    } else {
+      throw new Error("Unknown error encountered when wiping avatar data.");
+    }
+  }
+}
