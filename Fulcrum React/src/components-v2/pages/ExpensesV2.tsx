@@ -22,7 +22,7 @@ import {
 } from "@/utility/util.ts";
 import useBatchDeleteExpenses from "../../hooks/mutations/expense/useBatchDeleteExpenses.ts";
 import useBatchCreateExpenses from "../../hooks/mutations/expense/useBatchCreateExpenses.ts";
-import Loader from "../../components/child/other/Loader.tsx";
+import Loader from "../subcomponents/other/Loader.tsx";
 import ActiveFormClickShield from "../../components/child/other/ActiveFormClickShield.tsx";
 import ExpenseModalsAndForms from "../../components/child/expenses/ExpenseModalsAndForms.tsx";
 import ExpenseMonthCarouselV2 from "../subcomponents/expenses/ExpenseMonthCarouselV2.tsx";

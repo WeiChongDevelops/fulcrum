@@ -23,7 +23,7 @@ import { budgetSort, changeFormOrModalVisibility, darkenColor, getCurrencySymbol
 import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
 import * as React from "react";
 import useDeleteGroup from "@/hooks/mutations/budget/useDeleteGroup.ts";
-import Loader from "@/components/child/other/Loader.tsx";
+import Loader from "@/components-v2/subcomponents/other/Loader.tsx";
 import ThreeOptionModal from "@/components-v2/subcomponents/other/modal/ThreeOptionModal.tsx";
 
 interface GroupV2Props {

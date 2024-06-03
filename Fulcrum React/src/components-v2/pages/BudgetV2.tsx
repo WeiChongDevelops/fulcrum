@@ -9,8 +9,8 @@ import {
 import BudgetHeaderV2 from "@/components-v2/subcomponents/budget/BudgetHeaderV2.tsx";
 import FulcrumAnimationV2 from "@/components-v2/subcomponents/budget/FulcrumAnimationV2.tsx";
 import useInitialBudgetData from "@/hooks/queries/useInitialBudgetData.ts";
-import FulcrumErrorPage from "@/components/child/other/FulcrumErrorPage.tsx";
-import Loader from "@/components/child/other/Loader.tsx";
+import FulcrumErrorPage from "@/components-v2/subcomponents/other/FulcrumErrorPage.tsx";
+import Loader from "@/components-v2/subcomponents/other/Loader.tsx";
 import {
   getCurrencySymbol,
   getGroupBudgetTotal,

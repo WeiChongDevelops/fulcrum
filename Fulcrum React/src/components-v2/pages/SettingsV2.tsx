@@ -5,7 +5,7 @@ import SettingsHeaderV2 from "@/components-v2/subcomponents/settings/SettingsHea
 import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
 import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
 import AccessibilityToggleV2 from "@/components-v2/subcomponents/toggles/AccessibilityToggleV2.tsx";
-import FulcrumButton from "@/components/child/buttons/FulcrumButton.tsx";
+import FulcrumButton from "@/components-v2/subcomponents/buttons/FulcrumButton.tsx";
 import ActiveFormClickShield from "@/components/child/other/ActiveFormClickShield.tsx";
 import SettingsModalsAndForms from "@/components/child/tools/settings/SettingsModalsAndForms.tsx";
 import "@/css/Tools.css";
@@ -86,7 +86,7 @@ export default function SettingsV2() {
           <Button
             size={"sm"}
             variant={"secondary"}
-            className={"text-primary bg-background hover:bg-zinc-700"}
+            className={"text-primary bg-background dark:hover:bg-zinc-700"}
             onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}
           >
             See Public License
@@ -99,7 +99,7 @@ export default function SettingsV2() {
           <Button
             size={"sm"}
             variant={"secondary"}
-            className={"text-primary bg-background hover:bg-zinc-700"}
+            className={"text-primary bg-background dark:hover:bg-zinc-700"}
             onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
           >
             See Privacy Policy

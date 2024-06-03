@@ -11,7 +11,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { cn } from "@/lib/utils.ts";
 import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
 import useUploadProfileImage from "@/hooks/mutations/other/useUploadProfileImage.ts";
-import Loader from "@/components/child/other/Loader.tsx";
+import Loader from "@/components-v2/subcomponents/other/Loader.tsx";
 import { Skeleton } from "@/components-v2/ui/skeleton.tsx";
 import useWipeProfileImageData from "@/hooks/mutations/other/useWipeProfileImageData.ts";
 

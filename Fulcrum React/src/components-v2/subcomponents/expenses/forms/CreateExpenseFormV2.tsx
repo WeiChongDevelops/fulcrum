@@ -19,7 +19,7 @@ import {
   handleInputChangeOnFormWithAmount,
   useEmail,
 } from "@/utility/util.ts";
-import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
+import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
   BudgetItemEntity,
@@ -37,9 +37,9 @@ import {
 import { v4 as uuid } from "uuid";
 import useCreateExpense from "@/hooks/mutations/expense/useCreateExpense.ts";
 import useCreateRecurringExpense from "@/hooks/mutations/recurring-expense/useCreateRecurringExpense.ts";
-import CategorySelector from "@/components/child/selectors/CategorySelector.tsx";
-import FrequencySelector from "@/components/child/selectors/FrequencySelector.tsx";
-import ExpenseDatePicker from "@/components/child/selectors/ExpenseDatePicker.tsx";
+import CategorySelector from "@/components-v2/subcomponents/selectors/CategorySelector.tsx";
+import FrequencySelector from "@/components-v2/subcomponents/selectors/FrequencySelector.tsx";
+import ExpenseDatePicker from "@/components-v2/subcomponents/selectors/ExpenseDatePicker.tsx";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils.ts";

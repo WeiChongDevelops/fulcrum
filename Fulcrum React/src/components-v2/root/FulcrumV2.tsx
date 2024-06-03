@@ -1,9 +1,9 @@
-import { ErrorBoundary } from "../../components/child/other/ErrorBoundary.tsx";
+import { ErrorBoundary } from "../subcomponents/other/ErrorBoundary.tsx";
 import { Outlet } from "react-router-dom";
 import SideBar from "@/components-v2/subcomponents/other/SideBar.tsx";
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { UserPreferences } from "@/utility/types.ts";
-import Loader from "@/components/child/other/Loader.tsx";
+import Loader from "@/components-v2/subcomponents/other/Loader.tsx";
 import { getSessionEmailOrNull } from "@/utility/api.ts";
 import { LocationContext, SideBarIsOpenContext } from "@/utility/util.ts";
 import { Toaster } from "sonner";

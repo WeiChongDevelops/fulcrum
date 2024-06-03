@@ -1,9 +1,9 @@
 import { handleInputChangeOnFormWithAmount, useEmail, useSideBarIsOpen } from "@/utility/util.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
-import CategorySelector from "@/components/child/selectors/CategorySelector.tsx";
+import CategorySelector from "@/components-v2/subcomponents/selectors/CategorySelector.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
-import ExpenseDatePicker from "@/components/child/selectors/ExpenseDatePicker.tsx";
+import ExpenseDatePicker from "@/components-v2/subcomponents/selectors/ExpenseDatePicker.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
 import {

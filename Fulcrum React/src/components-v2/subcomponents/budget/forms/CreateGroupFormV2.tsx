@@ -22,8 +22,8 @@ import {
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
-import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
-import FulcrumButton from "@/components/child/buttons/FulcrumButton.tsx";
+import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
+import FulcrumButton from "@/components-v2/subcomponents/buttons/FulcrumButton.tsx";
 import AddNewGroupButton from "@/components/child/budget/buttons/AddNewGroupButton.tsx";
 import { cn } from "@/lib/utils.ts";
 import { useQueryClient } from "@tanstack/react-query";
@@ -62,15 +62,6 @@ export default function CreateGroupFormV2({ setLocalisedGroupArray, className }:
       colour: "",
     });
   }, [formIsOpen]);
-
-  useEffect(() => {
-    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
-    const removeColourEventListeners = addColourSelectionFunctionality(setFormData);
-    return () => {
-      removeFormExitEventListeners();
-      removeColourEventListeners();
-    };
-  }, [routerLocation]);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     setFormData((oldFormData) => {

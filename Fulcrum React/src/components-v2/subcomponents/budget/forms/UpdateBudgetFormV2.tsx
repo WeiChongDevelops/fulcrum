@@ -30,10 +30,10 @@ import {
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
-import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
+import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
 import useUpdateBudget from "@/hooks/mutations/budget/useUpdateBudget.ts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components-v2/ui/select.tsx";
-import CategoryIconSelector from "@/components/child/selectors/CategoryIconSelector.tsx";
+import CategoryIconSelector from "@/components-v2/subcomponents/selectors/CategoryIconSelector.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { cn } from "@/lib/utils.ts";
 import * as React from "react";

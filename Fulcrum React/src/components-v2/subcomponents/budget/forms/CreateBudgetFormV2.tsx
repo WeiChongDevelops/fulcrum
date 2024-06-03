@@ -28,11 +28,11 @@ import {
   LocationContext,
   useEmail,
 } from "@/utility/util.ts";
-import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
-import FulcrumButton from "@/components/child/buttons/FulcrumButton.tsx";
+import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
+import FulcrumButton from "@/components-v2/subcomponents/buttons/FulcrumButton.tsx";
 import { BudgetCreationFormData, BudgetItemEntity, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import CreatableSelect from "react-select/creatable";
-import CategoryIconSelector from "@/components/child/selectors/CategoryIconSelector.tsx";
+import CategoryIconSelector from "@/components-v2/subcomponents/selectors/CategoryIconSelector.tsx";
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import useCreateBudget from "@/hooks/mutations/budget/useCreateBudget.ts";
 import {
@@ -73,14 +73,14 @@ export default function CreateBudgetFormV2({ groupNameOfNewItem, currencySymbol 
     setFormIsOpen(false);
   }
 
-  useEffect(() => {
-    const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
-    const removeIconEventListeners = addIconSelectionFunctionality(setFormData, "category");
-    return () => {
-      removeIconEventListeners();
-      removeFormExitEventListeners();
-    };
-  }, [routerLocation]);
+  // useEffect(() => {
+  //   const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
+  //   const removeIconEventListeners = addIconSelectionFunctionality(setFormData, "category");
+  //   return () => {
+  //     removeIconEventListeners();
+  //     removeFormExitEventListeners();
+  //   };
+  // }, [routerLocation]);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     handleInputChangeOnFormWithAmount(e, setFormData);

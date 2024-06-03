@@ -2,8 +2,8 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
-import GroupColourSelector from "@/components/child/selectors/GroupColourSelector.tsx";
-import CategorySelector from "@/components/child/selectors/CategorySelector.tsx";
+import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
+import CategorySelector from "@/components-v2/subcomponents/selectors/CategorySelector.tsx";
 import {
   capitaliseFirstLetter,
   getCurrencySymbol,
@@ -11,8 +11,8 @@ import {
   useEmail,
   useSideBarIsOpen,
 } from "@/utility/util.ts";
-import ExpenseDatePicker from "@/components/child/selectors/ExpenseDatePicker.tsx";
-import FrequencySelector from "@/components/child/selectors/FrequencySelector.tsx";
+import ExpenseDatePicker from "@/components-v2/subcomponents/selectors/ExpenseDatePicker.tsx";
+import FrequencySelector from "@/components-v2/subcomponents/selectors/FrequencySelector.tsx";
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
 import {
   BudgetItemEntity,

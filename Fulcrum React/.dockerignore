@@ -42,7 +42,7 @@ Thumbs.db
 #Other
 .eslintrc.cjs
 __mocks__/
-src/components/__tests__/
+src/components-v2/__tests__/
 jest.config.cjs
 stats.html
 **/.env
