@@ -72,7 +72,7 @@ export default function BudgetDistributionDrawer({
                               </div>
                               <div
                                 className={"text-right"}
-                              >{`${((getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === groupItem.group)) / budgetTotal) * 100).toFixed(0)}%`}</div>
+                              >{`${((getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === groupItem.group)) / budgetTotal) * 100).toFixed(1)}%`}</div>
                             </div>
                           ))}
                         </div>
@@ -97,7 +97,7 @@ export default function BudgetDistributionDrawer({
                                 </div>
                                 <div
                                   className={"ml-auto mr-4"}
-                                >{`${((budgetItem.amount / budgetTotal) * 100).toFixed(0)}%`}</div>
+                                >{`${((budgetItem.amount / budgetTotal) * 100).toFixed(1)}%`}</div>
                               </div>
                             ))}
                           </div>

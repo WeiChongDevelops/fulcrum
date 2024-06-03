@@ -20,7 +20,7 @@ export default function ExpenseHeaderV2({ carouselAPI, structuredExpenseData, st
   const [activeMonthAndYear, setActiveMonthAndYear] = useState<{
     month: string;
     year: number;
-  }>();
+  }>({ month: monthStringArray[new Date().getMonth()], year: new Date().getFullYear() });
   const sideBarOpen = useSideBarIsOpen();
 
   const prevSlide = () => {
@@ -59,9 +59,7 @@ export default function ExpenseHeaderV2({ carouselAPI, structuredExpenseData, st
         >
           <img src="/static/assets-v2/UI-icons/left-navigation-arrow.svg" alt="Left navigation arrow" />
         </button>
-        <p className={"text-lg font-medium"}>
-          {!!activeMonthAndYear ? activeMonthAndYear.month + " " + activeMonthAndYear.year.toString() : "Loading..."}
-        </p>
+        <p className={"text-lg font-medium"}>{activeMonthAndYear.month + " " + activeMonthAndYear.year.toString()}</p>
         <button
           onClick={nextSlide}
           disabled={activeCarouselIndex === startingIndex + 12}

@@ -25,7 +25,7 @@ export default function MonthlyIncomeV2({ className, totalIncome }: MonthlyIncom
         `flex flex-row justify-between items-center px-4 py-1 w-[35%] bg-[#002E38] text-white rounded-xl text-xs ${className}`,
       )}
     >
-      <span className={"font-light"}>Monthly Income: </span>
+      <span>Monthly Income: </span>
       <span className={"font-bold ml-1 mr-auto"}>
         {!!totalIncome ? formatDollarAmountStatic(totalIncome, userPreferences.currency) : ""}
       </span>
