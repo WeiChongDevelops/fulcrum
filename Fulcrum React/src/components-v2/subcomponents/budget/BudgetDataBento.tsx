@@ -91,25 +91,29 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <div className={"relative h-full w-[34rem] md:w-[30rem] pt-4"}>
-            {sortByGroup ? (
-              <GroupPieChart
-                sortedGroupDataArray={groupArraySortedByAmount.map((groupItem) => ({
-                  group: groupItem.group,
-                  amount: getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group == groupItem.group)),
-                  colour: groupItem.colour,
-                }))}
-                currency={userPreferences.currency}
-                key={rerenderKey}
-              />
-            ) : (
-              <CategoryPieChart
-                sortedBudgetArray={budgetArraySortedByAmount}
-                currency={userPreferences.currency}
-                key={rerenderKey}
-              />
-            )}
-          </div>
+          {budgetArray.length > 0 ? (
+            <div className={"relative h-full w-[34rem] md:w-[30rem] pt-4"}>
+              {sortByGroup ? (
+                <GroupPieChart
+                  sortedGroupDataArray={groupArraySortedByAmount.map((groupItem) => ({
+                    group: groupItem.group,
+                    amount: getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group == groupItem.group)),
+                    colour: groupItem.colour,
+                  }))}
+                  currency={userPreferences.currency}
+                  key={rerenderKey}
+                />
+              ) : (
+                <CategoryPieChart
+                  sortedBudgetArray={budgetArraySortedByAmount}
+                  currency={userPreferences.currency}
+                  key={rerenderKey}
+                />
+              )}
+            </div>
+          ) : (
+            <p className={"font-medium text-sm"}>Create a Budget to View Insights.</p>
+          )}
           <div className={"absolute top-3 right-3"}>
             <Drawer>
               <DrawerTrigger asChild>
@@ -128,56 +132,61 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
                       <div className="flex-1 text-center">
                         {/*<div className="text-7xl font-bold tracking-tighter">Goal</div>*/}
                         {/*<div className="text-[0.70rem] uppercase text-muted-foreground">Calories/day</div>*/}
-                        <div>
-                          {sortByGroup ? (
-                            <div className={"flex flex-col items-center mb-4"}>
-                              {groupArraySortedByAmount.map((groupItem, index) => (
-                                <div
-                                  className={"grid text-sm font-medium w-3/4"}
-                                  style={{ gridTemplateColumns: "2fr 1fr" }}
-                                  key={index}
-                                >
-                                  <div className={"flex flex-row justify-start items-center gap-2 text-left"}>
-                                    <div
-                                      className={"rounded-[50%] size-2 saturate-[650%] brightness-[90%]"}
-                                      style={{ backgroundColor: groupItem.colour }}
-                                    ></div>
-                                    <p>{groupItem.group}</p>
-                                  </div>
+
+                        {budgetArray.length > 0 ? (
+                          <div>
+                            {sortByGroup ? (
+                              <div className={"flex flex-col items-center mb-4"}>
+                                {groupArraySortedByAmount.map((groupItem, index) => (
                                   <div
-                                    className={"text-right"}
-                                  >{`${((getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === groupItem.group)) / budgetTotal) * 100).toFixed(0)}%`}</div>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <ScrollArea className={"flex flex-col items-center mb-4 h-48"}>
-                              <div>
-                                {budgetArraySortedByAmount.map((budgetItem, index) => (
-                                  <div
-                                    className={"grid text-sm font-medium w-full"}
-                                    style={{ gridTemplateColumns: "1fr 1fr" }}
+                                    className={"grid text-sm font-medium w-3/4"}
+                                    style={{ gridTemplateColumns: "2fr 1fr" }}
                                     key={index}
                                   >
                                     <div className={"flex flex-row justify-start items-center gap-2 text-left"}>
                                       <div
-                                        className={"rounded-[50%] size-1.5 saturate-[600%] brightness-[90%] ml-4"}
-                                        style={{
-                                          backgroundColor:
-                                            categoryToIconAndColourMap.get(budgetItem.category)?.colour ?? "black",
-                                        }}
+                                        className={"rounded-[50%] size-2 saturate-[650%] brightness-[90%]"}
+                                        style={{ backgroundColor: groupItem.colour }}
                                       ></div>
-                                      <p>{budgetItem.category}</p>
+                                      <p>{groupItem.group}</p>
                                     </div>
                                     <div
-                                      className={"ml-auto mr-4"}
-                                    >{`${((budgetItem.amount / budgetTotal) * 100).toFixed(0)}%`}</div>
+                                      className={"text-right"}
+                                    >{`${((getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === groupItem.group)) / budgetTotal) * 100).toFixed(0)}%`}</div>
                                   </div>
                                 ))}
                               </div>
-                            </ScrollArea>
-                          )}
-                        </div>
+                            ) : (
+                              <ScrollArea className={"flex flex-col items-center mb-4 h-48"}>
+                                <div>
+                                  {budgetArraySortedByAmount.map((budgetItem, index) => (
+                                    <div
+                                      className={"grid text-sm font-medium w-full"}
+                                      style={{ gridTemplateColumns: "1fr 1fr" }}
+                                      key={index}
+                                    >
+                                      <div className={"flex flex-row justify-start items-center gap-2 text-left"}>
+                                        <div
+                                          className={"rounded-[50%] size-1.5 saturate-[600%] brightness-[90%] ml-4"}
+                                          style={{
+                                            backgroundColor:
+                                              categoryToIconAndColourMap.get(budgetItem.category)?.colour ?? "black",
+                                          }}
+                                        ></div>
+                                        <p>{budgetItem.category}</p>
+                                      </div>
+                                      <div
+                                        className={"ml-auto mr-4"}
+                                      >{`${((budgetItem.amount / budgetTotal) * 100).toFixed(0)}%`}</div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </ScrollArea>
+                            )}
+                          </div>
+                        ) : (
+                          <p className={"font-medium text-sm my-8"}>Create a Budget to View Insights.</p>
+                        )}
                       </div>
                     </div>
                   </div>
