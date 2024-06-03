@@ -2,7 +2,7 @@ import * as React from "react";
 import { CaretSortIcon, CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 
-import { cn } from "@/lib/utils.ts";
+import { cn } from "@/utility/util.ts";
 const Select = SelectPrimitive.Root;
 
 const SelectGroup = SelectPrimitive.Group;

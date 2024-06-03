@@ -1,8 +1,7 @@
 import "../../../css/Budget.css";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { groupColourArray } from "../../../utility/util.ts";
+import { cn, groupColourArray } from "../../../utility/util.ts";
 import { BasicGroupData } from "@/utility/types.ts";
-import { cn } from "@/lib/utils.ts";
 
 interface GroupColourSelectorProps {
   oldColour?: string;

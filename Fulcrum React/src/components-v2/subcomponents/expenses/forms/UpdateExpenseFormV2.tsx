@@ -6,6 +6,7 @@ import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupCo
 import CategorySelector from "@/components-v2/subcomponents/selectors/CategorySelector.tsx";
 import {
   capitaliseFirstLetter,
+  cn,
   getCurrencySymbol,
   handleInputChangeOnFormWithAmount,
   useEmail,
@@ -29,7 +30,6 @@ import { toast } from "sonner";
 import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
 import useDeleteExpense from "@/hooks/mutations/expense/useDeleteExpense.ts";
 import { useQueryClient } from "@tanstack/react-query";
-import { cn } from "@/lib/utils.ts";
 
 interface UpdateExpenseFormV2Props {
   categoryOptions: DropdownSelectorOption[];

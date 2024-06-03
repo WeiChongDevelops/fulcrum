@@ -1,9 +1,8 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components-v2/ui/select.tsx";
-import { groupSort, useEmail } from "@/utility/util.ts";
+import { cn, groupSort, useEmail } from "@/utility/util.ts";
 import { BudgetCreationFormData, BudgetUpdatingFormData, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import { Dispatch, SetStateAction } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { cn } from "@/lib/utils.ts";
 
 interface GroupSelectorProps {
   formData: BudgetCreationFormData | BudgetUpdatingFormData;

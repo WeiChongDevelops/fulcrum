@@ -1,6 +1,5 @@
 import useAnimationDataV2 from "@/hooks/queries/useAnimationDataV2.ts";
-import { cn } from "@/lib/utils.ts";
-import { formatDollarAmountStatic, useSideBarIsOpen } from "@/utility/util.ts";
+import { cn, formatDollarAmountStatic, useSideBarIsOpen } from "@/utility/util.ts";
 import SvgComponent from "@/components-v2/subcomponents/budget/BowlSVG.tsx";
 import BowlSVG from "@/components-v2/subcomponents/budget/BowlSVG.tsx";
 import PivotOutlineSVG from "@/components-v2/subcomponents/budget/PivotOutlineSVG.tsx";

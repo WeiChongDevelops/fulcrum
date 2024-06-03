@@ -9,8 +9,7 @@ import {
   DrawerTrigger,
 } from "@/components-v2/ui/drawer.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
-import { cn } from "@/lib/utils.ts";
-import { getGroupBudgetTotal, useEmail } from "@/utility/util.ts";
+import { cn, getGroupBudgetTotal, useEmail } from "@/utility/util.ts";
 import { ScrollArea } from "@/components-v2/ui/scroll-area.tsx";
 import { BudgetItemEntity, CategoryToIconAndColourMap, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import { useQueryClient } from "@tanstack/react-query";

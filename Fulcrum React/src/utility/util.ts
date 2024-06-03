@@ -1,6 +1,8 @@
 import { ChangeEvent, createContext, Dispatch, RefObject, SetStateAction, useContext } from "react";
 import { v4 as uuid } from "uuid";
-import { UseMutateFunction, useQueryClient } from "@tanstack/react-query";
+import { UseMutateFunction } from "@tanstack/react-query";
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 import {
   BasicGroupData,
   BlacklistedExpenseItemEntity,
@@ -22,46 +24,45 @@ import {
   RecurringExpenseItemEntity,
   SetFormVisibility,
   SetModalVisibility,
-  UserPreferences,
 } from "./types.ts";
 import {
-  HandHeart,
-  Drop,
-  PiggyBank,
-  Martini,
+  AirplaneTilt,
+  Barbell,
+  BowlFood,
+  Broom,
   CarProfile,
-  Money,
-  Lightning,
+  ChartLine,
+  Coin,
+  Couch,
+  Devices,
+  Drop,
+  FilmStrip,
+  FireExtinguisher,
+  ForkKnife,
+  GasPump,
   Gift,
+  GraduationCap,
+  HandHeart,
+  HandSoap,
   Heartbeat,
   HouseLine,
-  FilmStrip,
+  Lightning,
+  Martini,
+  Money,
   MusicNotes,
-  PawPrint,
-  GasPump,
-  AirplaneTilt,
-  TShirt,
-  Wrench,
-  Train,
   Orange,
-  ShoppingCart,
-  FireExtinguisher,
-  BowlFood,
-  Barbell,
+  PawPrint,
+  PiggyBank,
   Pill,
-  Users,
-  Devices,
-  Volleyball,
-  Television,
-  ForkKnife,
-  WifiHigh,
-  Coin,
-  ChartLine,
-  GraduationCap,
-  HandSoap,
+  ShoppingCart,
   Shovel,
-  Broom,
-  Couch,
+  Television,
+  Train,
+  TShirt,
+  Users,
+  Volleyball,
+  WifiHigh,
+  Wrench,
 } from "@phosphor-icons/react";
 import { Location } from "react-router-dom";
 
@@ -753,6 +754,10 @@ export function dynamicallySizeBudgetNumberDisplays(): void {
 }
 
 // OTHER UTILITY FUNCTIONS AND DATA //
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export const monthStringArray = [
   "January",

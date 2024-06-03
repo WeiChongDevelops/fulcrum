@@ -9,10 +9,9 @@ import {
 } from "@/components-v2/ui/dialog.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, ReactNode, SetStateAction } from "react";
-import { cn } from "@/lib/utils.ts";
 import { UserPreferences } from "@/utility/types.ts";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEmail } from "@/utility/util.ts";
+import { cn, useEmail } from "@/utility/util.ts";
 
 interface TwoOptionModalProps {
   dialogOpen: boolean;

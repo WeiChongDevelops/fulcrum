@@ -38,9 +38,9 @@ import {
   Broom,
   Couch,
 } from "@phosphor-icons/react";
-import { cn } from "@/lib/utils.ts";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { BudgetCreationFormData, BudgetUpdatingFormData } from "@/utility/types.ts";
+import { cn } from "@/utility/util.ts";
 
 interface CategoryIconSelectorProps {
   formData?: BudgetCreationFormData | BudgetUpdatingFormData;

@@ -1,4 +1,4 @@
-import { categoryOptionSort, colourStyles, groupSort, useEmail } from "../../../utility/util.ts";
+import { categoryOptionSort, cn, colourStyles, groupSort, useEmail } from "../../../utility/util.ts";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   ExpenseCreationFormData,
@@ -10,7 +10,6 @@ import {
   DropdownSelectorOption,
   UserPreferences,
 } from "../../../utility/types.ts";
-import { cn } from "@/lib/utils.ts";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components-v2/ui/command.tsx";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popover.tsx";

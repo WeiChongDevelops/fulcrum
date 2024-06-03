@@ -1,9 +1,8 @@
 import { Switch } from "@/components-v2/ui/switch.tsx";
 import { useContext, useEffect, useState } from "react";
 import { UserPreferences } from "@/utility/types.ts";
-import { cn } from "@/lib/utils.ts";
 import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
-import { LocationContext, useEmail } from "@/utility/util.ts";
+import { cn, LocationContext, useEmail } from "@/utility/util.ts";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ThemeToggleProps {

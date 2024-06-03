@@ -13,8 +13,7 @@ import { Input } from "@/components-v2/ui/input.tsx";
 import { toast } from "sonner";
 import { UserPreferences } from "@/utility/types.ts";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEmail } from "@/utility/util.ts";
-import { cn } from "@/lib/utils.ts";
+import { cn, useEmail } from "@/utility/util.ts";
 
 interface FulcrumTypematchModalProps {
   dialogOpen: boolean;

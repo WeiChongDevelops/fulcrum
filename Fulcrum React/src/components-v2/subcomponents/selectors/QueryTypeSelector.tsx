@@ -1,4 +1,4 @@
-import { colourStyles, queryTypeOptions, recurringFrequencyOptions, useEmail } from "../../../utility/util.ts";
+import { cn, colourStyles, queryTypeOptions, recurringFrequencyOptions, useEmail } from "../../../utility/util.ts";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ContactFormData, RecurringExpenseFrequency, UserPreferences } from "../../../utility/types.ts";
 import {
@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components-v2/ui/select.tsx";
-import { cn } from "@/lib/utils.ts";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface QueryTypeSelectorProps {

@@ -1,8 +1,7 @@
 import { Button } from "@/components-v2/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
-import { capitaliseFirstLetter, useEmail } from "@/utility/util.ts";
+import { capitaliseFirstLetter, cn, useEmail } from "@/utility/util.ts";
 import { ReactNode } from "react";
-import { cn } from "@/lib/utils.ts";
 import { useQueryClient } from "@tanstack/react-query";
 import { UserPreferences } from "@/utility/types.ts";
 

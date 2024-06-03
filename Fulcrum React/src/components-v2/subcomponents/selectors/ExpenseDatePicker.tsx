@@ -1,7 +1,6 @@
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { addDays, format } from "date-fns";
 
-import { cn } from "@/lib/utils.ts";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Calendar } from "@/components-v2/ui/calendar.tsx";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popover.tsx";
@@ -14,7 +13,7 @@ import {
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
 } from "@/utility/types.ts";
-import { expenseStartDate, useEmail } from "@/utility/util.ts";
+import { cn, expenseStartDate, useEmail } from "@/utility/util.ts";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ExpenseDatePickerProps {

@@ -12,7 +12,7 @@ import {
   SetFormVisibility,
 } from "@/utility/types.ts";
 import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
-import { handleInputChangeOnFormWithAmount, useEmail, useSideBarIsOpen } from "@/utility/util.ts";
+import { cn, handleInputChangeOnFormWithAmount, useEmail, useSideBarIsOpen } from "@/utility/util.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import CategorySelector from "@/components-v2/subcomponents/selectors/CategorySelector.tsx";
@@ -27,7 +27,6 @@ import useDeleteRecurringExpense from "@/hooks/mutations/recurring-expense/useDe
 import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
 import ThreeOptionModal from "@/components-v2/subcomponents/other/modal/ThreeOptionModal.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { cn } from "@/lib/utils.ts";
 
 interface UpdateRecurringFormV2Props {
   categoryOptions: DropdownSelectorOption[];

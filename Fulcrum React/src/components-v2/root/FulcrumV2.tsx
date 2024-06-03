@@ -5,10 +5,9 @@ import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react
 import { UserPreferences } from "@/utility/types.ts";
 import Loader from "@/components-v2/subcomponents/other/Loader.tsx";
 import { getSessionEmailOrNull } from "@/utility/api.ts";
-import { LocationContext, SideBarIsOpenContext } from "@/utility/util.ts";
+import { cn, LocationContext, SideBarIsOpenContext } from "@/utility/util.ts";
 import { Toaster } from "sonner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { cn } from "@/lib/utils.ts";
 import { getSessionEmailOrNullDirect } from "@/utility/supabase-client.ts";
 
 interface FulcrumV2Props {

@@ -15,6 +15,7 @@ import {
   addIconSelectionFunctionality,
   capitaliseFirstLetter,
   changeFormOrModalVisibility,
+  cn,
   colourStyles,
   DEFAULT_CATEGORY_GROUP,
   DEFAULT_CATEGORY_ICON,
@@ -45,7 +46,6 @@ import {
 } from "@/components-v2/ui/select.tsx";
 import GroupSelector from "@/components-v2/subcomponents/budget/GroupSelector.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { cn } from "@/lib/utils.ts";
 
 interface CreateBudgetFormV2Props {
   groupNameOfNewItem: string;

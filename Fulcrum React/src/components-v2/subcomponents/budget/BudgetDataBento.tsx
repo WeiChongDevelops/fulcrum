@@ -9,7 +9,7 @@ import {
   DrawerTrigger,
 } from "@/components-v2/ui/drawer.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
-import { getGroupBudgetTotal, useEmail } from "@/utility/util.ts";
+import { cn, getGroupBudgetTotal, useEmail } from "@/utility/util.ts";
 import { BudgetItemEntity, CategoryToIconAndColourMap, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import { useEffect, useState } from "react";
 import {
@@ -24,7 +24,6 @@ import {
 import GroupPieChart from "@/components-v2/subcomponents/budget/graphs/GroupPieChart.tsx";
 import CategoryPieChart from "@/components-v2/subcomponents/budget/graphs/CategoryPieChart.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { cn } from "@/lib/utils.ts";
 import { ScrollArea } from "@/components-v2/ui/scroll-area.tsx";
 import BudgetDistributionDrawer from "@/components-v2/subcomponents/budget/BudgetDistributionDrawer.tsx";
 

@@ -11,6 +11,7 @@ import {
 } from "@/utility/types.ts";
 import {
   capitaliseFirstLetter,
+  cn,
   getHighestGroupSortIndex,
   getRandomGroupColour,
   groupSort,
@@ -35,7 +36,6 @@ import useUpdateBudget from "@/hooks/mutations/budget/useUpdateBudget.ts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components-v2/ui/select.tsx";
 import CategoryIconSelector from "@/components-v2/subcomponents/selectors/CategoryIconSelector.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { cn } from "@/lib/utils.ts";
 import * as React from "react";
 import { toast } from "sonner";
 import {

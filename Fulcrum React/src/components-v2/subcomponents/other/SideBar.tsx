@@ -1,14 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components-v2/ui/avatar.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { EmailContext, LocationContext, useEmail } from "@/utility/util.ts";
+import { cn, EmailContext, LocationContext, useEmail } from "@/utility/util.ts";
 import { UserPreferences } from "@/utility/types.ts";
 import { handleUserLogout } from "@/utility/api.ts";
 import PageNavigationButton from "@/components-v2/subcomponents/other/PageNavigationButton.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { SignOut } from "@phosphor-icons/react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components-v2/ui/dropdown-menu";
-import { cn } from "@/lib/utils.ts";
 import { Switch } from "@/components-v2/ui/switch.tsx";
 import ThemeToggle from "@/components-v2/subcomponents/other/toggles/ThemeToggle.tsx";
 import { useQueryClient } from "@tanstack/react-query";

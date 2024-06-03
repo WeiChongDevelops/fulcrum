@@ -8,14 +8,13 @@ import {
   SetFormVisibility,
   SetModalVisibility,
 } from "@/utility/types.ts";
-import { changeFormOrModalVisibility, formatDollarAmountStatic, getCurrencySymbol, useEmail } from "@/utility/util.ts";
+import { changeFormOrModalVisibility, cn, formatDollarAmountStatic, getCurrencySymbol, useEmail } from "@/utility/util.ts";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components-v2/ui/card.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
 import UpdateBudgetFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateBudgetFormV2.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { cn } from "@/lib/utils.ts";
 import {
   Dialog,
   DialogContent,

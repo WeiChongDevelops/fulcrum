@@ -12,14 +12,13 @@ import FulcrumButton from "@/components-v2/subcomponents/buttons/FulcrumButton.t
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import { BasicGroupData, GroupItemEntity, PreviousGroupBeingEdited, UserPreferences } from "@/utility/types.ts";
 import useUpdateGroup from "@/hooks/mutations/budget/useUpdateGroup.ts";
-import { addColourSelectionFunctionality, addFormExitListeners, LocationContext, useEmail } from "@/utility/util.ts";
+import { addColourSelectionFunctionality, addFormExitListeners, cn, LocationContext, useEmail } from "@/utility/util.ts";
 import { Input } from "@/components-v2/ui/input.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { toast } from "sonner";
 import * as React from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { cn } from "@/lib/utils.ts";
 
 interface UpdateGroupFormV2Props {
   oldGroupBeingEdited: PreviousGroupBeingEdited;

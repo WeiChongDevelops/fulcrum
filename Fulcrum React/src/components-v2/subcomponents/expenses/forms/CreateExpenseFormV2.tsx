@@ -12,6 +12,7 @@ import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
 import {
   capitaliseFirstLetter,
+  cn,
   DEFAULT_CATEGORY_GROUP,
   DEFAULT_CATEGORY_ICON,
   getCurrencySymbol,
@@ -42,7 +43,6 @@ import FrequencySelector from "@/components-v2/subcomponents/selectors/Frequency
 import ExpenseDatePicker from "@/components-v2/subcomponents/selectors/ExpenseDatePicker.tsx";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { cn } from "@/lib/utils.ts";
 
 interface CreateExpenseFormV2Props {
   defaultCalendarDate: Date;

@@ -1,12 +1,11 @@
 import { UserPreferences, RecurringExpenseFrequency } from "@/utility/types.ts";
 import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
-import { cn } from "@/lib/utils.ts";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components-v2/ui/command.tsx";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popover.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { currencyOptions, getCurrencyCountryCode, recurringFrequencyOptions, useEmail } from "@/utility/util.ts";
+import { cn, currencyOptions, getCurrencyCountryCode, recurringFrequencyOptions, useEmail } from "@/utility/util.ts";
 import {
   Select,
   SelectContent,
