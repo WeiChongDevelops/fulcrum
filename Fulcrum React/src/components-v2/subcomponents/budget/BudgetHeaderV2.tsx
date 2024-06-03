@@ -24,7 +24,7 @@ export default function BudgetHeaderV2({ totalIncome }: BudgetHeaderV2Props) {
     >
       <TooltipProvider>
         <Tooltip delayDuration={425}>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button variant={"ghost"} className={"ml-6 px-2"} onClick={() => window.open("/home/contact", "_blank")}>
               <ChatCircleText size={"1.4rem"} />
             </Button>
@@ -34,7 +34,6 @@ export default function BudgetHeaderV2({ totalIncome }: BudgetHeaderV2Props) {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      {/*<Button onClick={() => rowsExistFor("user_preferences")}></Button>*/}
       <MonthlyIncomeV2 totalIncome={totalIncome} />
       <div className={"flex flex-row justify-center items-center gap-2 ml-auto mr-2"}>
         <p className={"mr-4 font-medium text-base"}>Budget</p>
@@ -42,7 +41,7 @@ export default function BudgetHeaderV2({ totalIncome }: BudgetHeaderV2Props) {
 
         <TooltipProvider>
           <Tooltip delayDuration={425}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button variant={"ghost"} className={"px-2.5 mr-2"} onClick={() => window.open("/home/faq", "_blank")}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
