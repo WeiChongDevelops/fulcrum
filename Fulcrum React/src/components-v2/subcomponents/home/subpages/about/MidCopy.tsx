@@ -30,21 +30,21 @@ export default function MidCopy() {
         <InfoTile
           initialDisplayText={"Simplify Your Finances"}
           hoverDisplayText={"No confusing features. Nothing more or less than what you need."}
-          backgroundColour={"#17423F"}
+          backgroundColour={"#002E38"}
           iconPathFront={"/static/assets-v2/homepage-assets/tile-icon-simplify-front.svg"}
           iconPathBack={"/static/assets-v2/homepage-assets/tile-icon-simplify-back.svg"}
         />
         <InfoTile
           initialDisplayText={"Adapt Your Finances"}
           hoverDisplayText={"Flexible budgets designed to change alongside you."}
-          backgroundColour={"#17423F"}
+          backgroundColour={"#002E38"}
           iconPathFront={"/static/assets-v2/homepage-assets/tile-icon-adapt-front.svg"}
           iconPathBack={"/static/assets-v2/homepage-assets/tile-icon-adapt-back.svg"}
         />
         <InfoTile
           initialDisplayText={"Master Your Finances"}
           hoverDisplayText={"Finally figure out where last week's paycheck disappeared off to."}
-          backgroundColour={"#17423F"}
+          backgroundColour={"#002E38"}
           iconPathFront={"/static/assets-v2/homepage-assets/tile-icon-master-front.svg"}
           iconPathBack={"/static/assets-v2/homepage-assets/tile-icon-master-back.svg"}
         />

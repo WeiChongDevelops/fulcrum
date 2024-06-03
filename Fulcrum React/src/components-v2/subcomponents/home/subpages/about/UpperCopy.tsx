@@ -32,23 +32,23 @@ export default function UpperCopy() {
   return (
     <div className={"flex flex-col justify-start items-center w-screen px-20 pt-40 pb-6 text-black relative"}>
       <div className={"upper-copy-first-row"}>
-        <div className={"upper-copy-left-col mr-8 sm:mr-32"}>
+        <div className={"upper-copy-left-col mr-8 sm:mr-32 gap-1"}>
           <img
-            src="/assets-v2/homepage-assets/homepage-highlight-1.png"
+            src="/static/assets-v2/homepage-assets/homepage-highlight-1.png"
             className={"w-8 absolute left-[100%] top-0"}
             alt="Page highlight"
           />
           <p className={"text-5xl text-left font-bold"}>It's time to start paying yourself first.</p>
           <p className={"my-6 font-bold"}>180,000 others have found their balance.</p>
           <div className={"flex flex-row justify-start items-center mb-8"}>
-            <img src="/assets-v2/homepage-assets/testimonials.svg" alt="Testimonials" className={"w-32"} />
+            <img src="/static/assets-v2/homepage-assets/testimonials.svg" alt="Testimonials" className={"w-32"} />
             <div
               className={
                 "flex flex-row justify-start items-center rounded-full bg-[#F7FFFAFF] py-2 pl-2.5 pr-6 ml-2 relative"
               }
             >
               <img
-                src="/assets-v2/homepage-assets/kylie.webp"
+                src="/static/assets-v2/homepage-assets/kylie.webp"
                 className={
                   "rounded-full border-4 border-white w-20 hover:scale-110 transition-transform ease-out duration-150"
                 }
@@ -62,7 +62,7 @@ export default function UpperCopy() {
               </div>
             </div>
           </div>
-          <p className={"font-medium"}>Integrated Budgeting and Expense Tracking</p>
+          <p className={"font-medium text-zinc-700 mt-3"}>Integrated budgeting and expense tracking, demystified.</p>
         </div>
         <div className={"upper-instructions-container"}>
           <div className={"upper-instruction"}>
@@ -79,7 +79,7 @@ export default function UpperCopy() {
           </div>
           <div className={"upper-instruction mt-4"}>
             <div className={"homepage-number-circle"}>4</div>
-            <p>Watch as your savings grow and your financial stress fade away.</p>
+            <p>Watch as your savings grow and your financial stress fade away!</p>
           </div>
           <div>
             <a href={"/register"}>
@@ -93,7 +93,7 @@ export default function UpperCopy() {
               />
             </a>
             <img
-              src="/assets-v2/homepage-assets/homepage-highlight-2.png"
+              src="/static/assets-v2/homepage-assets/homepage-highlight-2.png"
               className={"w-8 absolute left-[90%] bottom-0"}
               alt="Page highlight"
             />
@@ -108,7 +108,7 @@ export default function UpperCopy() {
       >
         <div className={"circle-spotlight"} ref={spotlightRef}></div>
         <img
-          src="/assets-v2/homepage-assets/complicated.png"
+          src="/static/assets-v2/homepage-assets/complicated.png"
           className={"w-[30rem] sm:w-[42rem] mb-3 relative z-10"}
           alt="Homepage copy"
         />
@@ -118,7 +118,7 @@ export default function UpperCopy() {
       </div>
       <div className={"flex flex-row justify-start items-center relative mt-20 font-bold text-lg sm:text-[1.7rem]"}>
         <img
-          src="/assets-v2/homepage-assets/homepage-highlight-3.png"
+          src="/static/assets-v2/homepage-assets/homepage-highlight-3.png"
           className={"w-2 sm:w-5 mr-6 mb-3"}
           alt="Page highlight"
         />
@@ -127,7 +127,7 @@ export default function UpperCopy() {
           <div className={"flex flex-col items-center sm:ml-1"}>
             <p>forever.</p>
             <img
-              src="/assets-v2/homepage-assets/homepage-highlight-4.png"
+              src="/static/assets-v2/homepage-assets/homepage-highlight-4.png"
               className={"w-20 sm:w-[6.5rem] -bottom-[1rem]"}
               alt="Page highlight"
             />

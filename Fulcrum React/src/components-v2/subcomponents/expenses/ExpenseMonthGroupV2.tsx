@@ -12,7 +12,6 @@ import {
   SetModalVisibility,
 } from "../../../utility/types.ts";
 import { Dispatch, memo, SetStateAction } from "react";
-import AddNewExpenseButton from "../../../components/child/expenses/buttons/AddNewExpenseButton.tsx";
 import ExpenseDayGroupV2 from "@/components-v2/subcomponents/expenses/ExpenseDayGroupV2.tsx";
 import CreateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/CreateExpenseFormV2.tsx";
 import { capitaliseFirstLetter, useEmail } from "@/utility/util.ts";

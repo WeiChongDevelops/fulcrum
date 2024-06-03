@@ -31,7 +31,6 @@ import {
 import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
 import FulcrumButton from "@/components-v2/subcomponents/buttons/FulcrumButton.tsx";
 import { BudgetCreationFormData, BudgetItemEntity, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
-import CreatableSelect from "react-select/creatable";
 import CategoryIconSelector from "@/components-v2/subcomponents/selectors/CategoryIconSelector.tsx";
 import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
 import useCreateBudget from "@/hooks/mutations/budget/useCreateBudget.ts";

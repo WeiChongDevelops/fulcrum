@@ -1,8 +1,5 @@
 import { colourStyles, recurringFrequencyOptions, useEmail } from "../../../utility/util.ts";
-import CreatableSelect from "react-select/creatable";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { components } from "react-select";
-import { InputProps } from "react-select";
 import {
   DropdownSelectorOption,
   ExpenseCreationFormData,

@@ -11,7 +11,6 @@ import {
   BudgetItemEntity,
 } from "@/utility/types";
 import { Dispatch, SetStateAction } from "react";
-import ExpenseItem from "@/components/child/expenses/main-data-hierarchy/ExpenseItem.tsx";
 import ExpenseItemV2 from "@/components-v2/subcomponents/expenses/ExpenseItemV2.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEmail } from "@/utility/util.ts";

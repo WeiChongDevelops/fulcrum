@@ -1,4 +1,3 @@
-import AddNewRecurringExpenseButton from "@/components/child/tools/recurring-expenses/buttons/AddNewRecurringExpenseButton.tsx";
 import {
   BudgetItemEntity,
   CategoryToIconAndColourMap,
@@ -10,9 +9,6 @@ import {
 import { useContext, useEffect } from "react";
 import { capitaliseFirstLetter, checkForOpenModalOrForm, LocationContext, useEmail } from "@/utility/util.ts";
 import useInitialRecurringExpenseData from "@/hooks/queries/useInitialRecurringExpenseData.ts";
-import RecurringExpenseItem from "@/components/child/tools/recurring-expenses/RecurringExpenseItem.tsx";
-import ActiveFormClickShield from "@/components/child/other/ActiveFormClickShield.tsx";
-import RecurringExpenseModalsAndForms from "@/components/child/tools/recurring-expenses/RecurringExpenseModalsAndForms.tsx";
 import RecurringExpensesHeaderV2 from "@/components-v2/subcomponents/recurring/RecurringHeaderV2.tsx";
 import { ScrollArea } from "@/components-v2/ui/scroll-area.tsx";
 import RecurringItemV2 from "@/components-v2/subcomponents/recurring/RecurringItemV2.tsx";

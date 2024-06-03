@@ -89,7 +89,7 @@ export default function Contact() {
       }
     >
       <img
-        src="/assets-v2/homepage-assets/contact-background.png"
+        src="/static/assets-v2/homepage-assets/contact-background.png"
         className={"absolute top-0 left-0 -mt-28 -z-10 w-full h-[100vh]"}
         alt="Pricing background"
       />

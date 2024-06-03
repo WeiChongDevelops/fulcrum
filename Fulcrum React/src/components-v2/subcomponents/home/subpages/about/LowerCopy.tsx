@@ -26,7 +26,11 @@ export default function LowerCopy() {
         instruction={"Watch as your savings grow and your financial stress fades away!"}
         absolutePosition={"bottom-[12%] right-[11%] w-[41.5%]"}
       />
-      <img src="/assets-v2/homepage-assets/mid-lower-copy-background-2.png" alt="App instructions" className={"w-full"} />
+      <img
+        src="/static/assets-v2/homepage-assets/mid-lower-copy-background-2.png"
+        alt="App instructions"
+        className={"w-full"}
+      />
     </div>
   );
 }

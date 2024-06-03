@@ -158,7 +158,7 @@ export default function UpdateAvatarFormV2() {
             <Input
               type="file"
               accept={"image/*"}
-              className={"col-span-3 hover:cursor-pointer hover:opacity-75 bg-[#223136] text-left text-white font-medium"}
+              className={"col-span-3 hover:cursor-pointer hover:opacity-75 bg-[#002E38] text-left text-white font-medium"}
               onChange={handleImageChange}
               ref={fileInputRef}
               name="avatar"
@@ -177,7 +177,7 @@ export default function UpdateAvatarFormV2() {
               </Button>
             )}
 
-            <Button variant={userPreferences.darkModeEnabled ? "secondary" : "default"}>Save Changes</Button>
+            <Button variant={"default"}>Save Changes</Button>
           </div>
         </form>
       </SheetContent>

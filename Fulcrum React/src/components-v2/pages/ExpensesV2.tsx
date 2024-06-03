@@ -23,8 +23,6 @@ import {
 import useBatchDeleteExpenses from "../../hooks/mutations/expense/useBatchDeleteExpenses.ts";
 import useBatchCreateExpenses from "../../hooks/mutations/expense/useBatchCreateExpenses.ts";
 import Loader from "../subcomponents/other/Loader.tsx";
-import ActiveFormClickShield from "../../components/child/other/ActiveFormClickShield.tsx";
-import ExpenseModalsAndForms from "../../components/child/expenses/ExpenseModalsAndForms.tsx";
 import ExpenseMonthCarouselV2 from "../subcomponents/expenses/ExpenseMonthCarouselV2.tsx";
 import { CarouselApi } from "@/components-v2/ui/carousel.tsx";
 import ExpenseHeaderV2 from "@/components-v2/subcomponents/expenses/ExpenseHeaderV2.tsx";

@@ -49,7 +49,7 @@ export default function ExpenseHeaderV2({ carouselAPI, structuredExpenseData, st
     >
       <div
         className={
-          "flex flex-row justify-between items-center ml-6 w-[40vw] sm:w-[35vw] md:w-[32vw] lg:w-[30vw] py-0.5 my-4 bg-[#1e3836] rounded-3xl text-white select-none"
+          "flex flex-row justify-between items-center ml-6 w-[40vw] sm:w-[35vw] md:w-[32vw] lg:w-[30vw] py-0.5 my-4 bg-[#002E38] rounded-3xl text-white select-none"
         }
       >
         <button

@@ -28,6 +28,11 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
   const [activeProfileImageURL, setActiveProfileImageURL] = useState(profileImageURL);
 
   useEffect(() => {
+    const preloadImage = (src: string) => {
+      const img = new Image();
+      img.src = src;
+    };
+    preloadImage(profileImageURL);
     setActiveProfileImageURL(profileImageURL);
   }, [profileImageURL]);
 
@@ -120,7 +125,7 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
         >
           <UpdateAvatarFormV2 />
           <Avatar className={"size-9"}>
-            <AvatarImage src={activeProfileImageURL} className={"bg-zinc-300"} />
+            <AvatarImage decoding={"async"} src={activeProfileImageURL} className={"bg-zinc-300"} />
             <AvatarFallback className={"text-primary tracking-tighter bg-cyan-400 font-semibold"}>
               {/*<img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" />*/}
               {activeEmail ? activeEmail.substring(0, 2).toUpperCase() : "FF"}
