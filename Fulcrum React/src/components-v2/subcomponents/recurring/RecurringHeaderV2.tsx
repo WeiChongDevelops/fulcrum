@@ -16,7 +16,7 @@ export default function RecurringExpensesHeaderV2() {
     >
       <TooltipProvider>
         <Tooltip delayDuration={425}>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button variant={"ghost"} className={"ml-6 px-2"} onClick={() => window.open("/home/contact", "_blank")}>
               <ChatCircleText size={"1.4rem"} />
             </Button>
@@ -31,8 +31,8 @@ export default function RecurringExpensesHeaderV2() {
         <CurrencySelectorV2 className={"w-26 mx-0 outline-none border-none shadow-none"} />
         <TooltipProvider>
           <Tooltip delayDuration={425}>
-            <TooltipTrigger>
-              <Button asChild variant={"ghost"} className={"px-2.5 mr-2"} onClick={() => window.open("/home/faq", "_blank")}>
+            <TooltipTrigger asChild>
+              <Button variant={"ghost"} className={"px-2.5 mr-2"} onClick={() => window.open("/home/faq", "_blank")}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

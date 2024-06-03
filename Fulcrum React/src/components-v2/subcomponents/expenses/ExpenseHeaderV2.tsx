@@ -80,8 +80,8 @@ export default function ExpenseHeaderV2({ carouselAPI, structuredExpenseData, st
         <CurrencySelectorV2 className={"w-26 mx-0 outline-none border-none shadow-none"} />
         <TooltipProvider>
           <Tooltip delayDuration={425}>
-            <TooltipTrigger>
-              <Button asChild variant={"ghost"} className={"px-2.5 mr-2"} onClick={() => window.open("/home/faq", "_blank")}>
+            <TooltipTrigger asChild>
+              <Button variant={"ghost"} className={"px-2.5 mr-2"} onClick={() => window.open("/home/faq", "_blank")}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

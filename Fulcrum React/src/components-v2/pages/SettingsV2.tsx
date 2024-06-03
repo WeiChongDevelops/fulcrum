@@ -62,7 +62,7 @@ export default function SettingsV2() {
           <Globe size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Currency</b>
           {/*<CurrencySelector userPreferences={userPreferences} />*/}
-          <CurrencySelectorV2 className={"w-28 text-background font-medium bg-primary"} />
+          <CurrencySelectorV2 className={"w-28 text-primary bg-background font-medium "} />
         </div>
 
         <div className={"settings-row dark:bg-secondary outline outline-[1px] outline-primary text-primary shadow h-14"}>
@@ -85,6 +85,8 @@ export default function SettingsV2() {
           <b className={"mr-auto ml-4"}>Public License</b>
           <Button
             size={"sm"}
+            variant={"secondary"}
+            className={"text-primary bg-background hover:bg-zinc-700"}
             onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}
           >
             See Public License
@@ -94,12 +96,21 @@ export default function SettingsV2() {
         <div className={"settings-row dark:bg-secondary outline outline-[1px] outline-primary text-primary shadow h-14"}>
           <Lock size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Privacy Policy</b>
-          <Button size={"sm"} onClick={() => window.open(window.location.origin + "/privacy", "_blank")}>
+          <Button
+            size={"sm"}
+            variant={"secondary"}
+            className={"text-primary bg-background hover:bg-zinc-700"}
+            onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
+          >
             See Privacy Policy
           </Button>
         </div>
 
-        <div className={"settings-row dark:bg-secondary outline outline-[1px] outline-primary text-primary shadow h-14"}>
+        <div
+          className={
+            "settings-row dark:bg-secondary outline outline-[1px] outline-primary text-primary bg-background shadow h-14"
+          }
+        >
           <CalendarStar size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Joined On</b>
           <p>{new Date(userPreferences.createdAt).toLocaleDateString()}</p>
