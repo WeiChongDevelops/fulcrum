@@ -1,9 +1,5 @@
 /* GLOBAL STYLES */
 
-#react-select-2-input {
-  text-align: left;
-}
-
 .bg-light {
   background-color: #f1f5f9;
 }
@@ -51,77 +47,7 @@
   outline: none;
 }
 
-/* FORMS AND MODALS */
-
-.fulcrum-form {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  z-index: 3;
-  top: 50%;
-  left: 50%;
-  padding: 1vw;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  width: 35rem;
-  border-radius: 1.5rem;
-  color: white;
-}
-
-.fulcrum-form form input {
-  text-align: center;
-}
-
-#react-select-1-input,
-#react-select-2-input,
-#react-select-3-input,
-#react-select-4-input,
-#react-select-5-input,
-#react-select-6-input,
-#react-select-7-input,
-#react-select-8-input,
-#react-select-9-input,
-#react-select-10-input,
-#react-select-11-input,
-#react-select-12-input {
-  text-align: left;
-}
-
-.fulcrum-modal {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  top: 50%;
-  left: 50%;
-  padding: 1vw;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  width: 35rem;
-  border-radius: 1.5rem;
-  color: white;
-}
-
-/* LOGOS */
-
-.app-navbar-fulcrum-logo {
-  height: 50px;
-  user-select: none;
-  margin-right: 3rem;
-}
-
-.app-navbar-fulcrum-logo:hover {
-  cursor: pointer;
-}
-
 /* TOGGLES */
-
-.toggle-right-shift {
-  transform: translateX(130%);
-}
 
 .sun-glow {
   box-shadow: 0 0 12px 5px rgba(255, 255, 255, 0.2);
@@ -162,57 +88,7 @@
   animation: rainbowGlow 9s infinite alternate;
 }
 
-.accessibility-enabled {
-  filter: grayscale(100%) contrast(150%) brightness(140%) saturate(380%);
-}
-
-/* BACKGROUND BLUR FOCUS EFFECT*/
-
-.elementsBelowPopUpForm {
-  transition: all 0.1s ease-out;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  z-index: 2;
-}
-
-.blur {
-  filter: blur(5px);
-}
-
-/* MEDIA QUERIES */
-
-@media (max-width: 670px) {
-  .navbar-email {
-    display: none;
-  }
-
-  .app-navbar-fulcrum-logo {
-    width: 30vw;
-    height: auto;
-  }
-}
-
 /* OTHER */
-
-.lower-navbar-button {
-  display: flex;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0.75rem;
-  font-weight: 700;
-  width: 33.33%;
-  border-color: black;
-  transition: all 300ms ease-out;
-}
-
-/*.fadeOut {*/
-/*  opacity: 0;*/
-/*  filter: blur(10px);*/
-/*}*/
 
 @keyframes budgetFade {
   0%,
