@@ -1,20 +1,3 @@
-.dotted-line {
-  flex-grow: 1;
-  margin: 0 25px 0 15px;
-  height: 5px;
-  background: repeating-linear-gradient(to right, black, black 16px, transparent 2px, transparent 30px);
-}
-
-.dotted-line-dark {
-  background: repeating-linear-gradient(
-    to right,
-    white,
-    white 16px,
-    transparent 2px /* dash width */,
-    transparent 30px /* dash spacing */
-  );
-}
-
 .expense-item {
   display: flex;
   flex-direction: row;
@@ -69,11 +52,6 @@
   color: white;
 }
 
-.react-date-picker__wrapper {
-  color: black;
-  background-color: white;
-}
-
 @keyframes bounceLeft {
   0% {
     transform: translateX(0px);
@@ -125,47 +103,7 @@
   animation: bounceRight 1800ms ease-in-out infinite;
 }
 
-/*.left-nav-arrow {*/
-/*  outline: none;*/
-/*  animation: bounceLeft 1200ms ease-in-out infinite;*/
-/*}*/
-
-/*.right-nav-arrow {*/
-/*  outline: none;*/
-/*  animation: bounceRight 1200ms ease-out infinite;*/
-/*}*/
-
 .expense-carousel {
   transition: transform 250ms ease-out;
   filter: motionBlur(200px);
-}
-
-@media (max-width: 800px) {
-  /*.create-expense-button {*/
-  /*  width: 92vw;*/
-  /*}*/
-  /*.expense-item {*/
-  /*  width: 92vw;*/
-  /*}*/
-}
-
-@media (max-width: 600px) {
-  /*.create-expense-button {*/
-  /*  width: 90vw;*/
-  /*}*/
-  /*.expense-item {*/
-  /*  width: 90vw;*/
-  /*}*/
-}
-
-@media (max-width: 460px) {
-  .dotted-line {
-    height: 3px;
-  }
-}
-
-@media (max-width: 325px) {
-  .dotted-line {
-    display: none;
-  }
 }
