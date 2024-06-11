@@ -102,7 +102,7 @@ export default function UpperCopy() {
       </div>
       <div
         className={
-          "relative overflow-hidden flex flex-col justify-center items-center rounded-lg w-[90vw] h-60 bg-[#282d33] text-white text-xl shadow-[1rem_1rem_0_black] select-none mt-40"
+          "relative overflow-hidden flex flex-col justify-center items-center rounded-lg w-[90vw] h-60 bg-[#002E38] text-white text-xl shadow-[1rem_1rem_0_black] select-none mt-40"
         }
         ref={spotlightContainerRef}
       >

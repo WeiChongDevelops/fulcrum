@@ -8,7 +8,7 @@ import {
   getUserPreferences,
   getRecurringExpenseList,
   getSessionEmailOrNull,
-} from "@/utility/api.ts";
+} from "@/api/api.ts";
 import {
   BlacklistedExpenseItemEntity,
   BudgetItemEntity,

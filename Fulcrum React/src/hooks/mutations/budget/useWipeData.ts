@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { handleWipeBudget } from "../../../utility/api.ts";
+import { handleWipeBudget } from "../../../api/api.ts";
 import { handleWipeDataDirect } from "@/api/wipe-api.ts";
 
 export default function useWipeData() {

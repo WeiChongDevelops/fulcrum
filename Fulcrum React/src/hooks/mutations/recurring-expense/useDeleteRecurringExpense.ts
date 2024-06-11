@@ -3,7 +3,7 @@ import { EmailContext, getRecurringExpenseInstancesAfterDate, expenseStartDate, 
 import { useContext } from "react";
 import { toast } from "sonner";
 import { ExpenseItemEntity, RecurringExpenseItemEntity } from "../../../utility/types.ts";
-import { handleBatchExpenseDeletion, handleRecurringExpenseDeletion } from "../../../utility/api.ts";
+import { handleBatchExpenseDeletion, handleRecurringExpenseDeletion } from "../../../api/api.ts";
 import { handleRecurringExpenseDeletionDirect } from "@/api/recurring-api.ts";
 
 interface RecurringExpenseDeletionMutationProps {

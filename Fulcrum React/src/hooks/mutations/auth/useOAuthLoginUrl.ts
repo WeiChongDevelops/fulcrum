@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { handleUserOAuthLoginPrompt } from "../../../utility/api.ts";
+import { handleUserOAuthLoginPrompt } from "../../../api/api.ts";
 import { getOAuthLoginURLDirect } from "@/api/auth-api.ts";
 
 export default function useOAuthLoginUrl() {

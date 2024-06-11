@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { GroupItemEntity } from "@/utility/types.ts";
-import { handleGroupReorder } from "@/utility/api.ts";
+import { handleGroupReorder } from "@/api/api.ts";
 import { useContext } from "react";
 import { EmailContext } from "@/utility/util.ts";
 import { handleGroupReorderDirect } from "@/api/group-api.ts";

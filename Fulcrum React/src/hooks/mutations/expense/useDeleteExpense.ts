@@ -6,7 +6,7 @@ import {
   handleBatchExpenseDeletion,
   handleBlacklistedExpenseCreation,
   handleExpenseDeletion,
-} from "../../../utility/api.ts";
+} from "../../../api/api.ts";
 import { BlacklistedExpenseItemEntity, ExpenseItemEntity } from "../../../utility/types.ts";
 import { handleBatchBlacklistedExpenseCreationDirect, handleBlacklistedExpenseCreationDirect } from "@/api/blacklist-api.ts";
 import { handleBatchExpenseDeletionDirect, handleExpenseDeletionDirect } from "@/api/expense-api.ts";

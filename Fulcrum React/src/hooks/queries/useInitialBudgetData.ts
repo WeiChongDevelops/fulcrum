@@ -7,7 +7,7 @@ import {
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
 } from "../../utility/types.ts";
-import { getSessionEmailOrNull, getTotalIncome } from "../../utility/api.ts";
+import { getSessionEmailOrNull, getTotalIncome } from "../../api/api.ts";
 import { useNavigate } from "react-router-dom";
 import { getSessionEmailOrNullDirect } from "@/utility/supabase-client.ts";
 import { getTotalIncomeDirect } from "@/api/total-income-api.ts";

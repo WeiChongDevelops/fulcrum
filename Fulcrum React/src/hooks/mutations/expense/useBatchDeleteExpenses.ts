@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
-import { handleBatchExpenseDeletion } from "../../../utility/api.ts";
+import { handleBatchExpenseDeletion } from "../../../api/api.ts";
 import { ExpenseItemEntity } from "../../../utility/types.ts";
 
 export default function useBatchDeleteExpenses() {

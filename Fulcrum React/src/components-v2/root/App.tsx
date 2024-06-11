@@ -54,12 +54,12 @@ export default function App() {
 
   const location = useLocation();
 
-  if (isAnyError) {
-    return <FulcrumErrorPage errors={errors} />;
-  }
-
   if (isAnyLoading) {
     return <Loader isLoading={isAnyLoading} isDarkMode={false} />;
+  }
+
+  if (isAnyError) {
+    return <FulcrumErrorPage errors={errors} />;
   }
 
   return (

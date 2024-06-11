@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { DEFAULT_CATEGORY_ICON, DEFAULT_GROUP_COLOUR, EmailContext, useEmail } from "../../../utility/util.ts";
 import { toast } from "sonner";
 import { BudgetItemEntity, CategoryToIconAndColourMap, RecurringExpenseItemEntity } from "../../../utility/types.ts";
-import { handleRecurringExpenseCreation } from "../../../utility/api.ts";
+import { handleRecurringExpenseCreation } from "../../../api/api.ts";
 import { handleRecurringExpenseCreationDirect } from "@/api/recurring-api.ts";
 
 interface RecurringExpenseCreationMutationProps {

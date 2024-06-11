@@ -196,12 +196,12 @@ export default function BudgetV2({ perCategoryExpenseTotalThisMonth, setPerCateg
     setTimeout(updateBentoLayout, 200);
   }, [routerLocation]);
 
-  if (isError) {
-    return <FulcrumErrorPage errors={[error!]} />;
-  }
-
   if (isLoading) {
     return <Loader isLoading={!isLoading} isDarkMode={userPreferences.darkModeEnabled ?? false} size={10} />;
+  }
+
+  if (isError) {
+    return <FulcrumErrorPage errors={[error!]} />;
   }
 
   return (

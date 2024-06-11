@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ExpenseItemEntity } from "../../../utility/types.ts";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
-import { handleExpenseUpdating } from "../../../utility/api.ts";
+import { handleExpenseUpdating } from "../../../api/api.ts";
 import { handleExpenseUpdatingDirect } from "@/api/expense-api.ts";
 
 export default function useUpdateExpense() {

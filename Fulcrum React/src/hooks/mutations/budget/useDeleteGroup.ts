@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
-import { handleGroupDeletion } from "../../../utility/api.ts";
+import { handleGroupDeletion } from "../../../api/api.ts";
 import { GroupItemEntity } from "../../../utility/types.ts";
 import { handleGroupDeletionDirect } from "@/api/group-api.ts";
 

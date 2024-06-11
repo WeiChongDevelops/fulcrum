@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { LoginFormData } from "../../../utility/types.ts";
-import { handleUserLogin } from "../../../utility/api.ts";
+import { handleUserLogin } from "../../../api/api.ts";
 import { handleUserLoginDirect } from "@/api/auth-api.ts";
 
 export default function useLoginUser() {

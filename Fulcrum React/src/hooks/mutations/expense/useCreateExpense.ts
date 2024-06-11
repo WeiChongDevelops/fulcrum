@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
 import { BudgetItemEntity, CategoryToIconAndColourMap, ExpenseItemEntity } from "../../../utility/types.ts";
-import { handleExpenseCreation } from "../../../utility/api.ts";
+import { handleExpenseCreation } from "../../../api/api.ts";
 import { handleExpenseCreationDirect } from "@/api/expense-api.ts";
 
 export interface ExpenseCreationMutationProps {

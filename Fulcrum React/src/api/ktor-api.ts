@@ -1,5 +1,3 @@
-// Expense API //
-
 import {
   BlacklistedExpenseItemEntity,
   BudgetItemEntity,
@@ -7,8 +5,8 @@ import {
   GroupItemEntity,
   UserPreferences,
   RecurringExpenseItemEntity,
-} from "./types.ts";
-import { budgetSort, DEFAULT_CATEGORY_GROUP, DEFAULT_CATEGORY_ICON, expenseSort, groupSort } from "./util.ts";
+} from "../utility/types.ts";
+import { budgetSort, DEFAULT_CATEGORY_GROUP, DEFAULT_CATEGORY_ICON, expenseSort, groupSort } from "../utility/util.ts";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -31,6 +29,7 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+// Expense API //
 
 /**
  * Handles the creation of a new expense item.

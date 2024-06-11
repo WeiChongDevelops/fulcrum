@@ -185,6 +185,5 @@ fun Application.configureOtherRouting() {
                 call.respondError("Error while updating user preferences: $e")
             }
         }
-
     }
 }

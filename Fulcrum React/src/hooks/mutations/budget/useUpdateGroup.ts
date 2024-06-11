@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { toast } from "sonner";
 import { BudgetItemEntity, GroupItemEntity } from "../../../utility/types.ts";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
-import { handleGroupUpdating } from "../../../utility/api.ts";
+import { handleGroupUpdating } from "../../../api/api.ts";
 import { handleGroupUpdatingDirect } from "@/api/group-api.ts";
 
 interface GroupUpdatingMutationProps {

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
-import { handleBudgetDeletion } from "../../../utility/api.ts";
+import { handleBudgetDeletion } from "../../../api/api.ts";
 import { BudgetItemEntity } from "../../../utility/types.ts";
 import { handleBudgetDeletionDirect } from "@/api/budget-api.ts";
 

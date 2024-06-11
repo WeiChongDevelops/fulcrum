@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
-import { handleTotalIncomeUpdating } from "../../../utility/api.ts";
+import { handleTotalIncomeUpdating } from "../../../api/api.ts";
 import { handleTotalIncomeUpdatingDirect } from "@/api/total-income-api.ts";
 
 export default function useUpdateTotalIncome() {

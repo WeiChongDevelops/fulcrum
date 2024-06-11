@@ -1,84 +1,46 @@
 # Fulcrum
 
-Welcome to Fulcrum, a free budgeting and expense tracking web application.
-
-Fulcrum is designed to make the (often tedious) process of creating a budget and keeping track of expenses, as simple and intuitive as possible. This sentiment is reflected in the app design, with the user interface focused on clarity and satisfaction, and the feature set focused on the essentials for practical use.
-
-
-
-# Getting Started
-
-Try Fulcrum today at https://fulcrumfinance.app/!
-
-The homepage provides further info, to help get you hitting the ground running as fast as possible.
+## A free web application for budgeting and expense tracking.
+Features including recurring expenses, theme customisation and data visualisation, support a holistic user experience.
+Try Fulcrum today at https://fulcrumfinance.app/ !
 
 
-# Technologies Used
+## Budget
 
-## React TypeScript
+* Set an estimated total income.
+* Starting with some defaults, create budgets for various types of expenses in your life.
+* Organise your budgets into reorderable groups, choosing colours and icons that suit your tastes.
+* Visualise your budget distributions by category or category group, and view more granular insights. 
 
-React was leveraged for frontend development primarily because of the modular separation of concerns enabled by its functional components.
+## One-Time Expenses
 
-The most utilised node packages were [@tanstack/react-query](https://www.npmjs.com/package/@tanstack/react-query) and [react-router-dom](https://www.npmjs.com/package/react-router).
+* Log expenses as they arise, categorised by your budget (choose the 'Other' option if you haven't budgeted for it).
+* View totals and records across time, aggregated by day and month.
+* Recurring expenses can be created from this menu if a frequency aside from the default "None" is selected.
 
-The former helps prevent race conditions, improves maintainability through concise syntax and has retries, loading stat, error state and data invalidation built in.
+## Recurring Expenses
 
-The latter is self-explanatory.
-
-TypeScript was used, of course, for its type safety, accelerating debugging and increasing code maintainability.
-
-
-## Kotlin Ktor
-
-Kotlin Ktor was used for construction of API endpoints - leveraged for PostgreSQL database interactions through HTTP requests from the frontend, such as data CRUD and authentication.
-
-Kotlin is favourable over Java as an increasingly rising industry standard (we are seeing increasingly wide adoption by silicon valley giants such as Google, Netflix and Facebook). It’s null-safe, less verbose, offers coroutines, and more.
+* Record expenses your expect to arise regularly to save yourself time and energy.
+* Manage these recurring expenses, changing the start date, frequency, category and amount as desired.
 
 
-## Supabase PostgreSQL
+## User Preferences
 
-Supabase is an open source alternative to Google Firebase, chosen for its native support of PostgreSQL. It provides database hosting and a RESTful interface to interact with PostgreSQL via HTTP client calls.
-
-PostgreSQL was preferred for its data integrity, schema enforcement and performance.
-
-The scalability of Google Firebase’s NoSQL databases was deemed superfluous for this project.
-
-AWS RDS was avoided due to unnecessary cost implications.
+* Select a theme (dark/light).
+* Toggle accessibility mode, designed for visual impairments.
+* Select a display currency ($AUD, $USD, £GBP, ¥CNY, ¥JPY, ₩KRW, RZAR).
+* View other application and user information.
 
 
-## Express JS
+## Technologies
 
-Express JS was utilised to leverage the docker network for API communication and serving static files.
-
-
-## Docker
-
-Docker was used to containerise the front and back end and coordinate them via Docker Compose, providing a consistent and reproducible deployment environment.
-
-It allows for easy packaging and distribution of the application along with its dependencies, ensuring that the application runs smoothly across different systems.
-
-
-## Amazon Web Services (AWS)
-
-AWS was utilised for reliably hosting and deploying the Fulcrum application (EC2, ELB, Route 53, ACM)
-
-
-## Prettier
-
-Opinionated formatter for consistent codebase format.
-
-
-## Tailwind CSS
-
-Tailwind CSS was used for styling, alongside standard CSS.
-
-The heuristic for when each technology is used is simple:
-
-- Tailwind CSS has been used for:
-    1. Styling disparities between otherwise identical elements
-    2. Single-instance unique elements that don’t require the precision of raw CSS
-- With CSS used for everything else.
-- Although Tailwind CSS can be used in stylesheets, its entire utility is predicated on inline use, and so it was limited to this.
+* React Typescript - modular, type-safe frontend development.
+* Supabase PostgreSQL - an open source alternative to Google Firebase, chosen for its native support of PostgreSQL (data integrity, schema enforcement and performance).
+* Docker Compose - in-tandem container coordination, providing reproducible production environment.
+* Amazon Web Services - various services used for hosting, load balancing, DNS, and SSL certificate management (EC2, ELB, Route 53, ACM).
+* Kotlin Ktor - API endpoints (largely phased out in favour of direct client-interactions during late beta due to Supabase's opinionated client API for authentication)
+* Tanstack React Query - mitigating race conditions, data invalidation and ridiculously verbose data state management.
+* Tailwind CSS - for high-velocity styling and front-end development.
 
 
 # Contribution

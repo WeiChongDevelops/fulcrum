@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { toast } from "sonner";
 import { EmailContext, groupSort, useEmail } from "../../../utility/util.ts";
 import { BudgetItemEntity, GroupItemEntity } from "../../../utility/types.ts";
-import { handleBudgetCreation } from "../../../utility/api.ts";
+import { handleBudgetCreation } from "../../../api/api.ts";
 import { handleBudgetCreationDirect } from "@/api/budget-api.ts";
 
 export default function useCreateBudget() {

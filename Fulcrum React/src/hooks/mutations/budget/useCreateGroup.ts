@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { toast } from "sonner";
 import { EmailContext, groupSort, useEmail } from "../../../utility/util.ts";
 import { GroupItemEntity } from "../../../utility/types.ts";
-import { handleGroupCreation } from "../../../utility/api.ts";
+import { handleGroupCreation } from "../../../api/api.ts";
 import { handleGroupCreationDirect } from "@/api/group-api.ts";
 
 export default function useCreateGroup() {

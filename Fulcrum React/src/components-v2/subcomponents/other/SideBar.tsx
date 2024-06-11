@@ -3,7 +3,7 @@ import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import { cn, EmailContext, LocationContext, useEmail } from "@/utility/util.ts";
 import { UserPreferences } from "@/utility/types.ts";
-import { handleUserLogout } from "@/utility/api.ts";
+import { handleUserLogout } from "@/api/api.ts";
 import PageNavigationButton from "@/components-v2/subcomponents/other/PageNavigationButton.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { SignOut } from "@phosphor-icons/react";
