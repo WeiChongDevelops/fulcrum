@@ -1,14 +1,5 @@
 import { AuthError, createClient, PostgrestError } from "@supabase/supabase-js";
 import { Database } from "database.types.ts";
-import {
-  BlacklistedExpenseItemEntity,
-  BudgetItemEntity,
-  ExpenseItemEntity,
-  GroupItemEntity,
-  RecurringExpenseItemEntity,
-  UserPreferences,
-} from "@/utility/types.ts";
-import { budgetSort, DEFAULT_CATEGORY_GROUP, DEFAULT_CATEGORY_ICON, expenseSort, groupSort } from "@/utility/util.ts";
 
 export const checkEnv = () => {
   console.log(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_KEY);

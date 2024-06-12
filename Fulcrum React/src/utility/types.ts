@@ -1,5 +1,6 @@
-//  EXPENSE ENTITIES //
 import { Dispatch, SetStateAction } from "react";
+
+//  EXPENSE ENTITIES //
 
 export interface ExpenseItemEntity {
   expenseId: string;
@@ -129,8 +130,6 @@ export interface ExpenseModalVisibility {
 
 // TOOLS ENTITIES //
 
-export type OpenToolsSection = "home" | "settings" | "recurring";
-
 export type RecurringExpenseFrequency = "never" | "daily" | "weekly" | "fortnightly" | "monthly" | "annually";
 
 export interface RecurringExpenseItemEntity {
@@ -183,10 +182,6 @@ export interface SettingsFormVisibility {
 export interface BlacklistedExpenseItemEntity {
   recurringExpenseId: string;
   timestampOfRemovedInstance: Date;
-}
-
-export interface ProfileIconUpdatingFormData {
-  iconPath: string;
 }
 
 export interface ToolsFormVisibility {

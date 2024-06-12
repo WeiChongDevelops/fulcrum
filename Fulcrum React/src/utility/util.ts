@@ -70,7 +70,6 @@ import { Location } from "react-router-dom";
 
 export const expenseStartDate = new Date("2020-01-01T00:00:00Z");
 export const DEFAULT_GROUP_COLOUR = "#3f4240";
-// export const DEFAULT_CATEGORY_ICON = "category-default-icon.svg";
 export const DEFAULT_CATEGORY_ICON = "Coin";
 export const DEFAULT_CATEGORY_GROUP = "Miscellaneous";
 
@@ -84,12 +83,6 @@ export const useLocation = () => useContext(LocationContext);
 export const SideBarIsOpenContext = createContext<boolean>(true);
 export const useSideBarIsOpen = () => useContext(SideBarIsOpenContext);
 
-// export const SetBudgetModalStateContext = createContext<BudgetModalVisibility>({
-//   showChooseDeleteGroupOptionModal: false,
-//   showConfirmDeleteGroupModal: false,
-//   showConfirmDeleteCategoryModal: false,
-//   showDataVisModal: false,
-// });
 export const SetBudgetModalVisibilityContext = createContext<Dispatch<SetStateAction<BudgetModalVisibility>> | undefined>(
   undefined,
 );
