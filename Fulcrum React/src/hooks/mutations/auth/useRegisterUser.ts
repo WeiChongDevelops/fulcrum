@@ -1,13 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { RegisterFormData } from "../../../utility/types.ts";
-import { handleUserRegistration } from "../../../api/api.ts";
+import { RegisterFormData } from "@/utility/types.ts";
 import { handleUserRegistrationDirect } from "@/api/auth-api.ts";
 
 export default function useRegisterUser() {
   return useMutation({
     mutationFn: async (formData: RegisterFormData) => {
-      // await handleUserRegistration(formData.email, formData.password);
       await handleUserRegistrationDirect(formData.email, formData.password);
     },
     onSuccess: () => {

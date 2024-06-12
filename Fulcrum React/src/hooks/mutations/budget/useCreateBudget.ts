@@ -1,9 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useContext } from "react";
 import { toast } from "sonner";
-import { EmailContext, groupSort, useEmail } from "../../../utility/util.ts";
-import { BudgetItemEntity, GroupItemEntity } from "../../../utility/types.ts";
-import { handleBudgetCreation } from "../../../api/api.ts";
+import { groupSort, useEmail } from "@/utility/util.ts";
+import { BudgetItemEntity, GroupItemEntity } from "@/utility/types.ts";
 import { handleBudgetCreationDirect } from "@/api/budget-api.ts";
 
 export default function useCreateBudget() {
@@ -17,7 +15,6 @@ export default function useCreateBudget() {
 
   return useMutation({
     mutationFn: async (budgetCreationMutationProps: BudgetCreationMutationProps) =>
-      // handleBudgetCreation(budgetCreationMutationProps.newBudgetItem),
       await handleBudgetCreationDirect(budgetCreationMutationProps.newBudgetItem),
     onMutate: async (budgetCreationMutationProps: BudgetCreationMutationProps) => {
       if (!!budgetCreationMutationProps.newGroupItem) {

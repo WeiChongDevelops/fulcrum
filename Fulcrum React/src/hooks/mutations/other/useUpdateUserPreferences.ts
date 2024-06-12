@@ -1,8 +1,7 @@
-import { useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { EmailContext, useEmail } from "../../../utility/util.ts";
-import { UserPreferences } from "../../../utility/types.ts";
+import { useEmail } from "@/utility/util.ts";
+import { UserPreferences } from "@/utility/types.ts";
 import { handleUserPreferencesUpdatingDirect } from "@/api/user-prefs-api.ts";
 
 export default function useUpdateUserPreferences() {

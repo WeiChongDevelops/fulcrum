@@ -1,13 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getRecurringExpenseInstancesAfterDate, expenseStartDate, useEmail } from "../../../utility/util.ts";
+import { getRecurringExpenseInstancesAfterDate, expenseStartDate, useEmail } from "@/utility/util.ts";
 import { toast } from "sonner";
-import {
-  handleBatchBlacklistedExpenseCreation,
-  handleBatchExpenseDeletion,
-  handleBlacklistedExpenseCreation,
-  handleExpenseDeletion,
-} from "../../../api/api.ts";
-import { BlacklistedExpenseItemEntity, ExpenseItemEntity } from "../../../utility/types.ts";
+import { BlacklistedExpenseItemEntity, ExpenseItemEntity } from "@/utility/types.ts";
 import { handleBatchBlacklistedExpenseCreationDirect, handleBlacklistedExpenseCreationDirect } from "@/api/blacklist-api.ts";
 import { handleBatchExpenseDeletionDirect, handleExpenseDeletionDirect } from "@/api/expense-api.ts";
 
@@ -27,10 +21,6 @@ export default function useDeleteExpense() {
     mutationFn: async (expenseDeletionMutationProps: ExpenseDeletionMutationProps) => {
       if (expenseDeletionMutationProps.deletionScale === "THIS") {
         if (!!expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId) {
-          // await handleBlacklistedExpenseCreation(
-          //   expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
-          //   expenseDeletionMutationProps.expenseItemToDelete.timestamp,
-          // );
           await handleBlacklistedExpenseCreationDirect(
             expenseDeletionMutationProps.expenseItemToDelete.recurringExpenseId!,
             expenseDeletionMutationProps.expenseItemToDelete.timestamp,

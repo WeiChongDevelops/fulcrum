@@ -1,9 +1,7 @@
-import { DEFAULT_CATEGORY_ICON, DEFAULT_GROUP_COLOUR, EmailContext, useEmail } from "../../../utility/util.ts";
+import { DEFAULT_CATEGORY_ICON, DEFAULT_GROUP_COLOUR, useEmail } from "../../../utility/util.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useContext } from "react";
 import { toast } from "sonner";
 import { BudgetItemEntity, CategoryToIconAndColourMap, ExpenseItemEntity } from "../../../utility/types.ts";
-import { handleExpenseCreation } from "../../../api/api.ts";
 import { handleExpenseCreationDirect } from "@/api/expense-api.ts";
 
 export interface ExpenseCreationMutationProps {
@@ -17,7 +15,6 @@ export default function useCreateExpense() {
 
   return useMutation({
     mutationFn: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {
-      // await handleExpenseCreation(expenseCreationMutationProps.newExpenseItem);
       await handleExpenseCreationDirect(expenseCreationMutationProps.newExpenseItem);
     },
     onMutate: async (expenseCreationMutationProps: ExpenseCreationMutationProps) => {
