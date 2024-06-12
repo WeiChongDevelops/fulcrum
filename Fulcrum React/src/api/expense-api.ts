@@ -8,14 +8,6 @@ import { consolePostgrestError, getActiveUserId, supabaseClient } from "@/utilit
  */
 export async function handleExpenseCreationDirect(newExpenseItem: ExpenseItemEntity): Promise<void> {
   try {
-    // const response = await apiClient.post("/createExpense", {
-    //   expenseId: newExpenseItem.expenseId,
-    //   category: newExpenseItem.category,
-    //   amount: newExpenseItem.amount,
-    //   timestamp: newExpenseItem.timestamp,
-    //   recurringExpenseId: newExpenseItem.recurringExpenseId,
-    // });
-    // console.log(response.data);
     const activeUserId = await getActiveUserId();
     const { data, error } = await supabaseClient
       .from("expenses")
@@ -74,9 +66,6 @@ export async function handleBatchExpenseCreationDirect(expensesToCreate: Expense
  */
 export async function getExpenseListDirect(): Promise<ExpenseItemEntity[]> {
   try {
-    // const response = await apiClient.get("/getExpenses");
-    // console.log({ Expense_List_Retrieved: response.data.sort(expenseSort) });
-    // return response.data.sort(expenseSort);
     const activeUserId = await getActiveUserId();
     const { data, error } = await supabaseClient
       .from("expenses")

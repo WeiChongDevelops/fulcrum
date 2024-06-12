@@ -3,8 +3,8 @@ import { EmailContext, getRecurringExpenseInstancesAfterDate, expenseStartDate, 
 import { useContext } from "react";
 import { toast } from "sonner";
 import { ExpenseItemEntity, RecurringExpenseItemEntity } from "../../../utility/types.ts";
-import { handleBatchExpenseDeletion, handleRecurringExpenseDeletion } from "../../../api/api.ts";
 import { handleRecurringExpenseDeletionDirect } from "@/api/recurring-api.ts";
+import { handleBatchExpenseDeletionDirect } from "@/api/expense-api.ts";
 
 interface RecurringExpenseDeletionMutationProps {
   recurringExpenseId: string;
@@ -25,7 +25,7 @@ export default function useDeleteRecurringExpense() {
           expenseStartDate,
         );
         console.log({ instancesFoundToDelete: recurringInstancesToDelete });
-        await handleBatchExpenseDeletion(recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId));
+        await handleBatchExpenseDeletionDirect(recurringInstancesToDelete.map((expenseItem) => expenseItem.expenseId));
       }
       return handleRecurringExpenseDeletionDirect(recurringExpenseDeletionMutationProps.recurringExpenseId);
     },

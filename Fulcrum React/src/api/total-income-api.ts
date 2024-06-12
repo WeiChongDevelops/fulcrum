@@ -6,9 +6,6 @@ import { consolePostgrestError, getActiveUserId, supabaseClient } from "@/utilit
  */
 export async function getTotalIncomeDirect(): Promise<number> {
   try {
-    // const response = await apiClient.get("/getTotalIncome");
-    //     // console.log(response.data);
-    //     // return response.data.totalIncome;
     const activeUserId = await getActiveUserId();
     const { data, error } = await supabaseClient.from("total_income").select("totalIncome").eq("userId", activeUserId);
     if (error) {

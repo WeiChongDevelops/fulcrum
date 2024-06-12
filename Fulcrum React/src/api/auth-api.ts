@@ -1,5 +1,4 @@
-import { consoleAuthError, consolePostgrestError, getActiveUserId, supabaseClient } from "@/utility/supabase-client.ts";
-import { GroupItemEntity } from "@/utility/types.ts";
+import { consoleAuthError, supabaseClient } from "@/utility/supabase-client.ts";
 import {
   initialiseDefaultCategories,
   initialiseDefaultGroups,
@@ -14,11 +13,6 @@ import {
  */
 export async function handleUserRegistrationDirect(email: string, password: string): Promise<void> {
   try {
-    // const response = await apiClient.post("/register", {
-    //   email: email,
-    //   password: password,
-    // });
-    // console.log(response.data);
     sessionStorage.clear();
     localStorage.clear();
     const { data, error: signupError } = await supabaseClient.auth.signUp({
@@ -57,11 +51,6 @@ export async function handleUserRegistrationDirect(email: string, password: stri
  */
 export async function handleUserLoginDirect(email: string, password: string): Promise<void> {
   try {
-    // const response = await apiClient.post("/login", {
-    //   email: email,
-    //   password: password,
-    // });
-    // console.log(response.data);
     sessionStorage.clear();
     localStorage.clear();
     const { data, error } = await supabaseClient.auth.signInWithPassword({
@@ -121,26 +110,6 @@ export async function getOAuthLoginURLDirect(provider: string): Promise<string> 
     }
   }
 }
-
-// /**
-//  * Attempts to log in a user with the provided email and password.
-//  * Redirects to the budget page on successful login.
-//  */
-// export async function handleUserOAuthLoginAttempt(accessToken: string, refreshToken: string): Promise<void> {
-//   try {
-//     const response = await apiClient.post("/oAuthLoginAttempt", {
-//       accessToken: accessToken,
-//       refreshToken: refreshToken,
-//     });
-//     console.log(response.data);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       throw new Error(`Error encountered when attempting oauth login: ${error.message}`);
-//     } else {
-//       throw new Error("Unknown error encountered when attempting oauth login.");
-//     }
-//   }
-// }
 
 export async function handleUserOAuthInitDirect(): Promise<void> {
   try {

@@ -74,10 +74,6 @@ export async function handleBatchBlacklistedExpenseCreationDirect(
  */
 export async function getBlacklistedExpensesDirect(): Promise<BlacklistedExpenseItemEntity[]> {
   try {
-    // const response = await apiClient.get("/getBlacklistedExpenses");
-    // console.log({ Blacklisted_Expenses_Retrieved: response.data });
-    // return response.data;
-
     const activeUserId = await getActiveUserId();
     const { data, error } = await supabaseClient
       .from("removed_recurring_expenses")

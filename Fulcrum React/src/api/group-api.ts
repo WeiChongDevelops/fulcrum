@@ -1,5 +1,5 @@
 import { GroupItemEntity } from "@/utility/types.ts";
-import { DEFAULT_CATEGORY_GROUP, DEFAULT_CATEGORY_ICON, groupSort } from "@/utility/util.ts";
+import { groupSort } from "@/utility/util.ts";
 import { consolePostgrestError, getActiveUserId, supabaseClient } from "@/utility/supabase-client.ts";
 
 /**
@@ -38,9 +38,6 @@ export async function handleGroupCreationDirect(newGroupItem: GroupItemEntity): 
  */
 export async function getGroupListDirect(): Promise<GroupItemEntity[]> {
   try {
-    // const response = await apiClient.get("/getGroups");
-    // console.log({ Groups_Retrieved: response.data.sort(groupSort) });
-    // return response.data.sort(groupSort);
     const activeUserId = await getActiveUserId();
     const { data, error } = await supabaseClient
       .from("groups")

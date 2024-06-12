@@ -8,15 +8,6 @@ import { consolePostgrestError, getActiveUserId, supabaseClient } from "@/utilit
  */
 export async function handleBudgetCreationDirect(newBudgetItem: BudgetItemEntity): Promise<void> {
   try {
-    // console.log(`Found path: ${newBudgetItem.iconPath}`);
-    // const response = await apiClient.post("/createBudget", {
-    //   category: newBudgetItem.category.trim(),
-    //   amount: newBudgetItem.amount ? newBudgetItem.amount : 0,
-    //   iconPath: newBudgetItem.iconPath != "" ? newBudgetItem.iconPath : DEFAULT_CATEGORY_ICON,
-    //   group: newBudgetItem.group ? newBudgetItem.group.trim() : DEFAULT_CATEGORY_GROUP,
-    //   id: newBudgetItem.id,
-    // });
-
     const activeUserId = await getActiveUserId();
     const { data, error } = await supabaseClient
       .from("budgets")
@@ -49,9 +40,6 @@ export async function handleBudgetCreationDirect(newBudgetItem: BudgetItemEntity
  */
 export async function getBudgetListDirect(): Promise<BudgetItemEntity[]> {
   try {
-    // const response = await apiClient.get("/getBudget");
-    // console.log({ Budget_List_Retrieved: response.data.sort(budgetSort) });
-    // return response.data.sort(budgetSort);
     const activeUserId = await getActiveUserId();
     const { data, error } = await supabaseClient
       .from("budgets")

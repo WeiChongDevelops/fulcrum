@@ -6,9 +6,6 @@ import { consolePostgrestError, getActiveUserId, supabaseClient } from "@/utilit
  */
 export async function getUserPreferencesDirect(): Promise<UserPreferences> {
   try {
-    // const response = await apiClient.get("/getUserPreferences");
-    // console.log({ userPreferences: response.data });
-    // return response.data;
     const activeUserId = await getActiveUserId();
     const { data, error } = await supabaseClient
       .from("user_preferences")

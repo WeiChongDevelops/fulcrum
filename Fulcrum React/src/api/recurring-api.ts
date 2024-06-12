@@ -42,10 +42,6 @@ export async function handleRecurringExpenseCreationDirect(
  */
 export async function getRecurringExpenseListDirect(): Promise<RecurringExpenseItemEntity[]> {
   try {
-    // const response = await apiClient.get("/getRecurringExpenses");
-    // console.log({ Recurring_Expenses_Retrieved: response.data.sort(expenseSort) });
-    // return response.data.sort(expenseSort);
-
     const activeUserId = await getActiveUserId();
     const { data, error } = await supabaseClient
       .from("recurring_expenses")

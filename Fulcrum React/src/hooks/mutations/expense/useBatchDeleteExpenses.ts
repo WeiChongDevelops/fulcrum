@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { EmailContext, useEmail } from "../../../utility/util.ts";
-import { handleBatchExpenseDeletion } from "../../../api/api.ts";
 import { ExpenseItemEntity } from "../../../utility/types.ts";
+import { handleBatchExpenseDeletionDirect } from "@/api/expense-api.ts";
 
 export default function useBatchDeleteExpenses() {
   const email = useEmail();
@@ -10,7 +10,7 @@ export default function useBatchDeleteExpenses() {
 
   return useMutation({
     mutationFn: (expenseIdsToDelete: string[]) => {
-      return handleBatchExpenseDeletion(expenseIdsToDelete);
+      return handleBatchExpenseDeletionDirect(expenseIdsToDelete);
     },
     onMutate: async (expenseIdsToDelete: string[]) => {
       await queryClient.cancelQueries({ queryKey: ["expenseArray", email] });
