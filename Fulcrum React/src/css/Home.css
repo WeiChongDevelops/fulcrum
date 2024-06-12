@@ -243,7 +243,6 @@
 
 .pricing-badge-container {
   position: relative;
-  bottom: 7vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -274,6 +273,10 @@
   top: 4vw;
 }
 
+.animate-bobbing {
+  animation: bobbing 5500ms infinite ease-in-out;
+}
+
 @keyframes bobbing {
   0%,
   100% {
@@ -281,6 +284,41 @@
   }
   50% {
     transform: translateY(-14px);
+  }
+}
+
+.loop-animate-opacity {
+  animation: 9s opacityFlux infinite ease-in-out;
+}
+
+@keyframes opacityFlux {
+  0%,
+  100% {
+    filter: none;
+    opacity: 0;
+  }
+  25%,
+  75% {
+    filter: saturate(200%);
+  }
+  35%,
+  65% {
+    filter: none;
+    opacity: 1;
+  }
+}
+
+.loop-animate-scale {
+  animation: 5500ms scaleFlux infinite ease-in-out;
+}
+
+@keyframes scaleFlux {
+  0%,
+  100% {
+    transform: none;
+  }
+  50% {
+    transform: scale(150%);
   }
 }
 
