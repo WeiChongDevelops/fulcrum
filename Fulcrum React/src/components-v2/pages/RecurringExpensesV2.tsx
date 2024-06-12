@@ -1,13 +1,5 @@
-import {
-  BudgetItemEntity,
-  CategoryToIconAndColourMap,
-  ExpenseItemEntity,
-  GroupItemEntity,
-  UserPreferences,
-  RecurringExpenseItemEntity,
-} from "@/utility/types.ts";
-import { useContext, useEffect } from "react";
-import { capitaliseFirstLetter, checkForOpenModalOrForm, LocationContext, useEmail } from "@/utility/util.ts";
+import { BudgetItemEntity, CategoryToIconAndColourMap, RecurringExpenseItemEntity } from "@/utility/types.ts";
+import { capitaliseFirstLetter, useEmail } from "@/utility/util.ts";
 import useInitialRecurringExpenseData from "@/hooks/queries/useInitialRecurringExpenseData.ts";
 import RecurringExpensesHeaderV2 from "@/components-v2/subcomponents/recurring/RecurringHeaderV2.tsx";
 import { ScrollArea } from "@/components-v2/ui/scroll-area.tsx";
@@ -33,25 +25,7 @@ export default function RecurringExpensesV2({ perCategoryExpenseTotalThisMonth }
     useEmail(),
   ])!;
 
-  const routerLocation = useContext(LocationContext);
-  const {
-    recurringExpenseModalVisibility,
-    setRecurringExpenseModalVisibility,
-    recurringExpenseFormVisibility,
-    setRecurringExpenseFormVisibility,
-    isRecurringExpenseFormOrModalOpen,
-    setIsRecurringExpenseFormOrModalOpen,
-    oldRecurringExpenseBeingEdited,
-    setOldRecurringExpenseBeingEdited,
-    recurringExpenseIdToDelete,
-    setRecurringExpenseIdToDelete,
-  } = useInitialRecurringExpenseData();
-
-  useEffect(() => {
-    setIsRecurringExpenseFormOrModalOpen(
-      checkForOpenModalOrForm(recurringExpenseFormVisibility, recurringExpenseModalVisibility),
-    );
-  }, [recurringExpenseFormVisibility, recurringExpenseModalVisibility, routerLocation]);
+  const { oldRecurringExpenseBeingEdited, setOldRecurringExpenseBeingEdited } = useInitialRecurringExpenseData();
 
   const categoryOptions = budgetArray.map((budgetItem) => {
     const dataMapEntry = categoryToIconAndColourMap.get(budgetItem.category);
@@ -88,11 +62,8 @@ export default function RecurringExpensesV2({ perCategoryExpenseTotalThisMonth }
                   frequency={recurringExpenseItem.frequency}
                   groupName={groupName}
                   groupColour={categoryToIconAndColourMap.get(recurringExpenseItem.category)!.colour}
-                  setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
-                  setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
                   setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}
                   oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
-                  setRecurringExpenseIdToDelete={setRecurringExpenseIdToDelete}
                   key={key}
                 />
               );
@@ -102,93 +73,6 @@ export default function RecurringExpensesV2({ perCategoryExpenseTotalThisMonth }
           )}
         </div>
       </ScrollArea>
-      {/*<RecurringExpenseModalsAndForms*/}
-      {/*  recurringExpenseModalVisibility={recurringExpenseModalVisibility}*/}
-      {/*  recurringExpenseFormVisibility={recurringExpenseFormVisibility}*/}
-      {/*  expenseArray={expenseArray}*/}
-      {/*  groupArray={groupArray}*/}
-      {/*  setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}*/}
-      {/*  setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}*/}
-      {/*  recurringExpenseIdToDelete={recurringExpenseIdToDelete}*/}
-      {/*  userPreferences={userPreferences}*/}
-      {/*  budgetArray={budgetArray}*/}
-      {/*  oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}*/}
-      {/*/>*/}
     </div>
-    // <>
-    //   <div
-    //     className={`justify-start items-center min-h-screen relative ${userPreferences.darkModeEnabled ? "bg-[#252e2e]" : "bg-[#455259]"}`}
-    //   >
-    //     <div>
-    //       <div
-    //         className={`justify-center items-center w-[100vw] elementsBelowPopUpForm
-    //                     ${isRecurringExpenseFormOrModalOpen && "blur"}`}
-    //       >
-    //         {/*<div className="flex justify-between items-center mt-6 w-full">*/}
-    //         {/*  <img*/}
-    //         {/*    className={"w-12 h-auto"}*/}
-    //         {/*    src="/static/assets-v2/UI-icons/tools-recurring-icon-white.svg"*/}
-    //         {/*    alt="Cycle icon"*/}
-    //         {/*  />*/}
-    //         {/*  <h1 className="recurring-expenses-title text-white font-bold mx-8">Recurring Expenses</h1>*/}
-    //         {/*  <img*/}
-    //         {/*    className={"w-12 h-auto"}*/}
-    //         {/*    src="/static/assets-v2/UI-icons/tools-recurring-icon-white.svg"*/}
-    //         {/*    alt="Cycle icon"*/}
-    //         {/*  />*/}
-    //         {/*</div>*/}
-    //
-    //         {/*<p className={"my-4"}>Add recurring expenses for transactions you expect to arise regularly.</p>*/}
-    //
-    //         <AddNewRecurringExpenseButton
-    //           setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
-    //           isDarkMode={true}
-    //         />
-    //
-    //         <div className={"mt-6"}>
-    //           {recurringExpenseArray.length > 0 ? (
-    //             recurringExpenseArray.map((recurringExpenseItem, key) => {
-    //               return (
-    //                 <RecurringExpenseItem
-    //                   recurringExpenseId={recurringExpenseItem.recurringExpenseId}
-    //                   category={recurringExpenseItem.category}
-    //                   amount={recurringExpenseItem.amount}
-    //                   iconPath={categoryToIconAndColourMap.get(recurringExpenseItem.category)!.iconPath}
-    //                   timestamp={recurringExpenseItem.timestamp}
-    //                   frequency={recurringExpenseItem.frequency}
-    //                   groupName={categoryToIconAndColourMap.get(recurringExpenseItem.category)!.group}
-    //                   groupColour={categoryToIconAndColourMap.get(recurringExpenseItem.category)!.colour}
-    //                   setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
-    //                   setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
-    //                   setOldRecurringExpenseBeingEdited={setOldRecurringExpenseBeingEdited}
-    //                   setRecurringExpenseIdToDelete={setRecurringExpenseIdToDelete}
-    //                   userPreferences={userPreferences}
-    //                   key={key}
-    //                 />
-    //               );
-    //             })
-    //           ) : (
-    //             <p className={"text-2xl mt-48"}>Add recurring expenses for transactions you expect to arise regularly.</p>
-    //           )}
-    //         </div>
-    //       </div>
-    //
-    //       {isRecurringExpenseFormOrModalOpen && <ActiveFormClickShield />}
-    //
-    //       <RecurringExpenseModalsAndForms
-    //         recurringExpenseModalVisibility={recurringExpenseModalVisibility}
-    //         recurringExpenseFormVisibility={recurringExpenseFormVisibility}
-    //         expenseArray={expenseArray}
-    //         groupArray={groupArray}
-    //         setRecurringExpenseFormVisibility={setRecurringExpenseFormVisibility}
-    //         setRecurringExpenseModalVisibility={setRecurringExpenseModalVisibility}
-    //         recurringExpenseIdToDelete={recurringExpenseIdToDelete}
-    //         userPreferences={userPreferences}
-    //         budgetArray={budgetArray}
-    //         oldRecurringExpenseBeingEdited={oldRecurringExpenseBeingEdited}
-    //       />
-    //     </div>
-    //   </div>
-    // </>
   );
 }

@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
-
 //  EXPENSE ENTITIES //
 
 export interface ExpenseItemEntity {
@@ -102,32 +100,6 @@ export interface PreviousGroupBeingEdited {
   oldId: number;
 }
 
-// FORM AND MODAL VISIBILITY ENTITIES //
-
-export interface BudgetFormVisibility {
-  isCreateBudgetVisible: boolean;
-  isUpdateBudgetVisible: boolean;
-  isCreateGroupVisible: boolean;
-  isUpdateGroupVisible: boolean;
-}
-
-export interface BudgetModalVisibility {
-  showChooseDeleteGroupOptionModal: boolean;
-  showConfirmDeleteGroupModal: boolean;
-  showConfirmDeleteCategoryModal: boolean;
-  showDataVisModal: boolean;
-}
-
-export interface ExpenseFormVisibility {
-  isCreateExpenseVisible: boolean;
-  isUpdateExpenseVisible: boolean;
-  isUpdateRecurringExpenseInstanceVisible: boolean;
-}
-
-export interface ExpenseModalVisibility {
-  isConfirmExpenseDeletionModalVisible: boolean;
-}
-
 // TOOLS ENTITIES //
 
 export type RecurringExpenseFrequency = "never" | "daily" | "weekly" | "fortnightly" | "monthly" | "annually";
@@ -138,16 +110,6 @@ export interface RecurringExpenseItemEntity {
   amount: number;
   timestamp: Date;
   frequency: RecurringExpenseFrequency;
-}
-
-export interface RecurringExpenseModalVisibility {
-  isConfirmRecurringExpenseDeletionModalVisible: boolean;
-  isSelectRecurringExpenseDeletionTypeModalVisible: boolean;
-}
-
-export interface RecurringExpenseFormVisibility {
-  isCreateExpenseVisible: boolean;
-  isUpdateRecurringExpenseVisible: boolean;
 }
 
 export interface PreviousRecurringExpenseBeingEdited {
@@ -165,20 +127,6 @@ export interface RecurringExpenseUpdatingFormData {
   frequency: RecurringExpenseFrequency;
 }
 
-export interface SettingsModalVisibility {
-  isConfirmExpenseWipeModalVisible: boolean;
-  isConfirmBudgetWipeModalVisible: boolean;
-  isConfirmAllDataWipeModalVisible: boolean;
-  isConfirmBudgetResetModalVisible: boolean;
-}
-
-export interface SettingsFormVisibility {
-  typeDeleteMyExpensesForm: boolean;
-  typeDeleteMyBudgetForm: boolean;
-  typeDeleteMyDataForm: boolean;
-  typeResetMyAccountForm: boolean;
-}
-
 export interface BlacklistedExpenseItemEntity {
   recurringExpenseId: string;
   timestampOfRemovedInstance: Date;
@@ -189,23 +137,6 @@ export interface ToolsFormVisibility {
 }
 
 // MISCELLANEOUS ENTITIES //
-
-export type ModalVisibility =
-  | BudgetModalVisibility
-  | ExpenseModalVisibility
-  | RecurringExpenseModalVisibility
-  | SettingsModalVisibility;
-
-export type SetModalVisibility<T extends ModalVisibility> = Dispatch<SetStateAction<T>>;
-
-export type FormVisibility =
-  | BudgetFormVisibility
-  | ExpenseFormVisibility
-  | RecurringExpenseFormVisibility
-  | SettingsFormVisibility
-  | ToolsFormVisibility;
-
-export type SetFormVisibility<T extends FormVisibility> = Dispatch<SetStateAction<T>>;
 
 export interface LoginFormData {
   email: string;

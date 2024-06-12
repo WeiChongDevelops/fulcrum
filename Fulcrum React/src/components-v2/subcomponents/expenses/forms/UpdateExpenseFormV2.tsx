@@ -2,28 +2,16 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
-import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
 import CategorySelector from "@/components-v2/subcomponents/selectors/CategorySelector.tsx";
-import {
-  capitaliseFirstLetter,
-  cn,
-  getCurrencySymbol,
-  handleInputChangeOnFormWithAmount,
-  useEmail,
-  useSideBarIsOpen,
-} from "@/utility/util.ts";
+import { cn, handleInputChangeOnFormWithAmount, useEmail, useSideBarIsOpen } from "@/utility/util.ts";
 import ExpenseDatePicker from "@/components-v2/subcomponents/selectors/ExpenseDatePicker.tsx";
-import FrequencySelector from "@/components-v2/subcomponents/selectors/FrequencySelector.tsx";
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
 import {
-  BudgetItemEntity,
   DropdownSelectorOption,
-  ExpenseFormVisibility,
   ExpenseItemEntity,
   ExpenseUpdatingFormData,
   PreviousExpenseBeingEdited,
   UserPreferences,
-  SetFormVisibility,
 } from "@/utility/types.ts";
 import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
 import { toast } from "sonner";

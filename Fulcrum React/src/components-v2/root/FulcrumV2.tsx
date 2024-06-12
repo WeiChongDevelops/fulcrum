@@ -1,25 +1,23 @@
 import { ErrorBoundary } from "../subcomponents/other/ErrorBoundary.tsx";
 import { Outlet } from "react-router-dom";
 import SideBar from "@/components-v2/subcomponents/other/SideBar.tsx";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { UserPreferences } from "@/utility/types.ts";
+import { useContext, useEffect, useState } from "react";
 import Loader from "@/components-v2/subcomponents/other/Loader.tsx";
-import { getSessionEmailOrNull } from "@/api/api.ts";
-import { cn, LocationContext, SideBarIsOpenContext } from "@/utility/util.ts";
-import { Toaster } from "sonner";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { cn, LocationContext, SideBarIsOpenContext, useEmail } from "@/utility/util.ts";
 import { getSessionEmailOrNullDirect } from "@/utility/supabase-client.ts";
+import { UserPreferences } from "@/utility/types.ts";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface FulcrumV2Props {
-  userPreferences: UserPreferences;
   isAnyLoading: boolean;
 }
 
 /**
  * The Fulcrum component which renders the navigation bars and the active application section.
  */
-export default function FulcrumV2({ userPreferences, isAnyLoading }: FulcrumV2Props) {
+export default function FulcrumV2({ isAnyLoading }: FulcrumV2Props) {
   const routerLocation = useContext(LocationContext);
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
 
   const [sideBarOpen, setSideBarOpen] = useState(true);
 

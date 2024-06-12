@@ -1,21 +1,12 @@
 import {
   DropdownSelectorOption,
-  ExpenseFormVisibility,
-  ExpenseItemEntity,
-  ExpenseModalVisibility,
-  PreviousExpenseBeingEdited,
   PreviousRecurringExpenseBeingEdited,
   UserPreferences,
-  RecurringExpenseFormVisibility,
   RecurringExpenseFrequency,
-  RecurringExpenseModalVisibility,
-  SetFormVisibility,
-  SetModalVisibility,
 } from "@/utility/types.ts";
 import { Dispatch, SetStateAction, useMemo } from "react";
 import {
   capitaliseFirstLetter,
-  changeFormOrModalVisibility,
   darkenColor,
   DEFAULT_CATEGORY_GROUP,
   formatDate,
@@ -25,7 +16,6 @@ import {
   useEmail,
 } from "@/utility/util.ts";
 import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
-import UpdateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/UpdateExpenseFormV2.tsx";
 import UpdateRecurringFormV2 from "@/components-v2/subcomponents/recurring/forms/UpdateRecurringFormV2.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -41,12 +31,8 @@ interface RecurringItemV2Props {
   groupName: string;
   groupColour: string;
 
-  setRecurringExpenseFormVisibility: Dispatch<SetStateAction<RecurringExpenseFormVisibility>>;
-  setRecurringExpenseModalVisibility: Dispatch<SetStateAction<RecurringExpenseModalVisibility>>;
-
   setOldRecurringExpenseBeingEdited: Dispatch<SetStateAction<PreviousRecurringExpenseBeingEdited>>;
   oldRecurringExpenseBeingEdited: PreviousRecurringExpenseBeingEdited;
-  setRecurringExpenseIdToDelete: Dispatch<SetStateAction<string>>;
 }
 
 /**
@@ -62,30 +48,10 @@ export default function RecurringItemV2({
   frequency,
   groupName,
   groupColour,
-  setRecurringExpenseFormVisibility,
-  setRecurringExpenseModalVisibility,
   setOldRecurringExpenseBeingEdited,
   oldRecurringExpenseBeingEdited,
-  setRecurringExpenseIdToDelete,
 }: RecurringItemV2Props) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
-  function handleEditClick() {
-    setOldRecurringExpenseBeingEdited({
-      recurringExpenseId: recurringExpenseId,
-      oldCategory: category,
-      oldAmount: amount,
-      oldTimestamp: timestamp,
-      oldFrequency: frequency,
-    });
-    // changeFormOrModalVisibility(setRecurringExpenseFormVisibility, "isUpdateRecurringExpenseVisible", true);
-  }
-
-  function handleDeleteClick(e: React.MouseEvent) {
-    e.stopPropagation();
-    setRecurringExpenseIdToDelete(recurringExpenseId);
-    // changeFormOrModalVisibility(setRecurringExpenseModalVisibility, "isConfirmRecurringExpenseDeletionModalVisible", true);
-  }
-
   const nextRecurringInstance = useMemo(() => {
     return getNextRecurringInstance(timestamp, frequency);
   }, [timestamp, frequency]);
@@ -153,22 +119,6 @@ export default function RecurringItemV2({
             <p className={"font-bold"}>{nextRecurringInstance && formatDate(nextRecurringInstance)}</p>
           </div>
           <b className="text-lg 2xl:text-xl">{formatDollarAmountStatic(amount, userPreferences.currency)}</b>
-          {/*<div className="flex flex-row items-center ml-2">*/}
-          {/*  <button className="circle-button" onClick={handleEditClick}>*/}
-          {/*    <img*/}
-          {/*      src={`/static/assets-v2/UI-icons/edit-pencil-${isMiscellaneous ? "white" : "black"}-icon.svg`}*/}
-          {/*      alt="Expense edit icon"*/}
-          {/*      className="mx-1 w-6 h-6"*/}
-          {/*    />*/}
-          {/*  </button>*/}
-          {/*  <button className="circle-button" onClick={handleDeleteClick}>*/}
-          {/*    <img*/}
-          {/*      src={`/static/assets-v2/UI-icons/delete-trash-${isMiscellaneous ? "white" : "black"}-icon.svg`}*/}
-          {/*      alt="Expense delete icon"*/}
-          {/*      className="mx-1 w-6 h-6"*/}
-          {/*    />*/}
-          {/*  </button>*/}
-          {/*</div>*/}
         </div>
       </div>
     </div>

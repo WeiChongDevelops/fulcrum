@@ -1,27 +1,21 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components-v2/ui/accordion.tsx";
 import BudgetTileV2 from "@/components-v2/subcomponents/budget/BudgetTileV2.tsx";
-import AddNewBudgetToGroupButtonV2 from "@/components-v2/subcomponents/budget/AddNewBudgetToGroupButtonV2.tsx";
 import {
-  BudgetFormVisibility,
   BudgetItemEntity,
-  BudgetModalVisibility,
   GroupItemEntity,
   PreviousBudgetBeingEdited,
   PreviousGroupBeingEdited,
   UserPreferences,
-  SetFormVisibility,
-  SetModalVisibility,
 } from "@/utility/types.ts";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components-v2/ui/button.tsx";
 import UpdateGroupFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateGroupFormV2.tsx";
 import CreateBudgetFormV2 from "@/components-v2/subcomponents/budget/forms/CreateBudgetFormV2.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { budgetSort, changeFormOrModalVisibility, darkenColor, getCurrencySymbol, useEmail } from "@/utility/util.ts";
+import { budgetSort, darkenColor, getCurrencySymbol, useEmail } from "@/utility/util.ts";
 import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
-import * as React from "react";
 import useDeleteGroup from "@/hooks/mutations/budget/useDeleteGroup.ts";
 import Loader from "@/components-v2/subcomponents/other/Loader.tsx";
 import ThreeOptionModal from "@/components-v2/subcomponents/other/modal/ThreeOptionModal.tsx";
@@ -29,30 +23,20 @@ import ThreeOptionModal from "@/components-v2/subcomponents/other/modal/ThreeOpt
 interface GroupV2Props {
   group: GroupItemEntity;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
-  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
-  setBudgetModalVisibility: SetModalVisibility<BudgetModalVisibility>;
-  setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>;
-  setCategoryToDelete: Dispatch<SetStateAction<string>>;
-  setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
   groupNameOfNewItem: string;
-  setOldGroupBeingEdited: Dispatch<SetStateAction<PreviousGroupBeingEdited>>;
-  oldBudgetBeingEdited: PreviousBudgetBeingEdited;
-  setGroupToDelete: Dispatch<SetStateAction<string>>;
   oldGroupBeingEdited: PreviousGroupBeingEdited;
+  setGroupNameOfNewItem: Dispatch<SetStateAction<string>>;
+  oldBudgetBeingEdited: PreviousBudgetBeingEdited;
+  setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>;
+  setOldGroupBeingEdited: Dispatch<SetStateAction<PreviousGroupBeingEdited>>;
   setLocalisedGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
 }
 
 export default function GroupV2({
   group,
   perCategoryExpenseTotalThisMonth,
-  setBudgetFormVisibility,
-  setBudgetModalVisibility,
   setOldBudgetBeingEdited,
   setOldGroupBeingEdited,
-  setCategoryToDelete,
-  setGroupNameOfNewItem,
-  groupNameOfNewItem,
-  setGroupToDelete,
   oldGroupBeingEdited,
   oldBudgetBeingEdited,
   setLocalisedGroupArray,
@@ -63,33 +47,13 @@ export default function GroupV2({
   const [accordionIsOpen, setAccordionIsOpen] = useState<string>("item-1");
   const { isPending, mutate: deleteGroup } = useDeleteGroup();
 
-  // useEffect(() => {
-  //   window.alert(accordionIsOpen);
-  // }, [accordionIsOpen]);
-
-  // const handleEditClick = (e: React.MouseEvent) => {
-  //   e.stopPropagation();
-  //   setOldGroupBeingEdited({
-  //     oldGroupName: group.group,
-  //     oldColour: group.colour,
-  //     oldId: group.id,
-  //   });
-  //   changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", true);
-
   const updateOldGroupBeingEdited = () => {
     setOldGroupBeingEdited({
       oldGroupName: group.group,
       oldColour: group.colour,
       oldId: group.id,
     });
-    // changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", true);
   };
-  // const handleDeleteClick = (e: React.MouseEvent) => {
-  //   e.stopPropagation();
-  //   setGroupToDelete(group.group);
-  //   changeFormOrModalVisibility(setBudgetModalVisibility, "isConfirmGroupDeletionModalVisible", true);
-  // };
-
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: group.id,
   });
@@ -154,12 +118,9 @@ export default function GroupV2({
                     <div key={index}>
                       <BudgetTileV2
                         filteredBudgetItem={filteredBudgetItem}
-                        perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-                        setBudgetFormVisibility={setBudgetFormVisibility}
-                        setBudgetModalVisibility={setBudgetModalVisibility}
-                        setOldBudgetBeingEdited={setOldBudgetBeingEdited}
                         oldBudgetBeingEdited={oldBudgetBeingEdited}
-                        setCategoryToDelete={setCategoryToDelete}
+                        setOldBudgetBeingEdited={setOldBudgetBeingEdited}
+                        perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                       />
                     </div>
                   ))}
@@ -289,7 +250,6 @@ export default function GroupV2({
           </>
         )}
         <div
-          // className={"grid font-bold text-2xl place-items-baseline size-6 hover:scale-110 origin-center transition-all"}
           className={"z-10 font-bold size-6 mb-3 mr-5 hover:scale-110 hover:-translate-y-[1px] origin-center transition-all"}
           onMouseDown={() => setAccordionIsOpen("")}
           {...listeners}

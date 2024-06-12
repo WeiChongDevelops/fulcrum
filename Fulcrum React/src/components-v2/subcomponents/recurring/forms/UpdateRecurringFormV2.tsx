@@ -2,16 +2,12 @@ import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState }
 import {
   DropdownSelectorOption,
   ExpenseItemEntity,
-  ExpenseUpdatingFormData,
   PreviousRecurringExpenseBeingEdited,
   UserPreferences,
-  RecurringExpenseFormVisibility,
   RecurringExpenseFrequency,
   RecurringExpenseItemEntity,
   RecurringExpenseUpdatingFormData,
-  SetFormVisibility,
 } from "@/utility/types.ts";
-import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
 import { cn, handleInputChangeOnFormWithAmount, useEmail, useSideBarIsOpen } from "@/utility/util.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
@@ -21,8 +17,6 @@ import ExpenseDatePicker from "@/components-v2/subcomponents/selectors/ExpenseDa
 import { Button } from "@/components-v2/ui/button.tsx";
 import useUpdateRecurringExpense from "@/hooks/mutations/recurring-expense/useUpdateRecurringExpense.ts";
 import FrequencySelector from "@/components-v2/subcomponents/selectors/FrequencySelector.tsx";
-import { toast } from "sonner";
-import * as React from "react";
 import useDeleteRecurringExpense from "@/hooks/mutations/recurring-expense/useDeleteRecurringExpense.ts";
 import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
 import ThreeOptionModal from "@/components-v2/subcomponents/other/modal/ThreeOptionModal.tsx";

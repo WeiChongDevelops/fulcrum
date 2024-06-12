@@ -1,17 +1,7 @@
-import { useContext, useEffect, useState } from "react";
-import { checkForOpenModalOrForm, LocationContext, useLocation } from "../../utility/util.ts";
-import { ExpenseItemEntity, ExpenseModalVisibility, PreviousExpenseBeingEdited } from "../../utility/types.ts";
+import { PreviousExpenseBeingEdited } from "@/utility/types.ts";
+import { useState } from "react";
 
 export default function useInitialExpenseData() {
-  const [expenseFormVisibility, setExpenseFormVisibility] = useState({
-    isCreateExpenseVisible: false,
-    isUpdateExpenseVisible: false,
-    isUpdateRecurringExpenseInstanceVisible: false,
-  });
-  const [expenseModalVisibility, setExpenseModalVisibility] = useState<ExpenseModalVisibility>({
-    isConfirmExpenseDeletionModalVisible: false,
-  });
-  const [isExpenseFormOrModalOpen, setIsExpenseFormOrModalOpen] = useState(false);
   const [oldExpenseBeingEdited, setOldExpenseBeingEdited] = useState<PreviousExpenseBeingEdited>({
     expenseId: "",
     recurringExpenseId: "",
@@ -19,31 +9,9 @@ export default function useInitialExpenseData() {
     oldTimestamp: new Date(),
     oldAmount: 0,
   });
-  const [expenseItemToDelete, setExpenseItemToDelete] = useState<ExpenseItemEntity>({
-    expenseId: "",
-    category: "",
-    amount: 0,
-    timestamp: new Date(),
-    recurringExpenseId: null,
-  });
-  const [defaultCalendarDate, setDefaultCalendarDate] = useState(new Date());
-  const routerLocation = useLocation();
-
-  useEffect(() => {
-    setIsExpenseFormOrModalOpen(checkForOpenModalOrForm(expenseFormVisibility, expenseModalVisibility));
-  }, [expenseFormVisibility, expenseModalVisibility, routerLocation]);
 
   return {
-    expenseFormVisibility,
-    setExpenseFormVisibility,
-    expenseModalVisibility,
-    setExpenseModalVisibility,
-    isExpenseFormOrModalOpen,
     oldExpenseBeingEdited,
     setOldExpenseBeingEdited,
-    expenseItemToDelete,
-    setExpenseItemToDelete,
-    defaultCalendarDate,
-    setDefaultCalendarDate,
   };
 }

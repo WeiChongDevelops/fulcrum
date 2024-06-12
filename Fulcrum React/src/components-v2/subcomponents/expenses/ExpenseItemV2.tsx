@@ -1,16 +1,6 @@
-import {
-  DropdownSelectorOption,
-  ExpenseFormVisibility,
-  ExpenseItemEntity,
-  ExpenseModalVisibility,
-  PreviousExpenseBeingEdited,
-  UserPreferences,
-  SetFormVisibility,
-  SetModalVisibility,
-} from "@/utility/types.ts";
+import { DropdownSelectorOption, PreviousExpenseBeingEdited, UserPreferences } from "@/utility/types.ts";
 import { Dispatch, SetStateAction } from "react";
 import {
-  changeFormOrModalVisibility,
   darkenColor,
   DEFAULT_CATEGORY_GROUP,
   formatDollarAmountStatic,
@@ -33,11 +23,7 @@ interface ExpenseItemV2Props {
   groupName: string;
   groupColour: string;
 
-  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
-
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-  setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
 
   categoryOptions: DropdownSelectorOption[];
@@ -55,40 +41,11 @@ export default function ExpenseItemV2({
   iconPath,
   groupName,
   groupColour,
-  setExpenseFormVisibility,
-  setExpenseModalVisibility,
   setOldExpenseBeingEdited,
-  setExpenseItemToDelete,
   oldExpenseBeingEdited,
   categoryOptions,
 }: ExpenseItemV2Props) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
-  function handleEditClick() {
-    setOldExpenseBeingEdited({
-      expenseId: expenseId,
-      recurringExpenseId: recurringExpenseId,
-      oldCategory: category,
-      oldAmount: amount,
-      oldTimestamp: timestamp,
-    });
-    if (recurringExpenseId === null) {
-      changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateExpenseVisible", true);
-    } else {
-      changeFormOrModalVisibility(setExpenseFormVisibility, "isUpdateRecurringExpenseInstanceVisible", true);
-    }
-  }
-
-  function handleDeleteClick(e: React.MouseEvent) {
-    e.stopPropagation();
-    setExpenseItemToDelete({
-      expenseId: expenseId,
-      category: category,
-      amount: amount,
-      timestamp: timestamp,
-      recurringExpenseId: recurringExpenseId,
-    });
-    changeFormOrModalVisibility(setExpenseModalVisibility, "isConfirmExpenseDeletionModalVisible", true);
-  }
 
   const isMiscellaneous = groupName === DEFAULT_CATEGORY_GROUP;
   const currencySymbol = getCurrencySymbol(userPreferences.currency);
@@ -128,7 +85,6 @@ export default function ExpenseItemV2({
         data-value={expenseId}
       >
         <div className="flex flex-row items-center">
-          {/*<div className="rounded-full bg-primary text-primary-foreground p-2">*/}
           <div className="rounded-full text-primary bg-background p-2 mr-1">
             <DynamicIconComponent componentName={iconPath} props={{ size: "2rem" }} className={""} />
           </div>

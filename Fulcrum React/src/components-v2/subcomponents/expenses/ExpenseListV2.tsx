@@ -1,13 +1,8 @@
 import {
   CategoryToIconAndColourMap,
   DropdownSelectorOption,
-  ExpenseFormVisibility,
   ExpenseItemEntity,
-  ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
-  UserPreferences,
-  SetFormVisibility,
-  SetModalVisibility,
   BudgetItemEntity,
 } from "@/utility/types";
 import { Dispatch, SetStateAction } from "react";
@@ -18,13 +13,7 @@ import { useEmail } from "@/utility/util.ts";
 interface ExpenseListV2Props {
   dayExpenseArray: ExpenseItemEntity[];
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
-
-  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
-
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-  setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
-
   categoryOptions: DropdownSelectorOption[];
 }
 
@@ -33,12 +22,9 @@ interface ExpenseListV2Props {
  */
 export default function ExpenseListV2({
   dayExpenseArray,
-  setExpenseFormVisibility,
-  setExpenseModalVisibility,
-  setOldExpenseBeingEdited,
-  setExpenseItemToDelete,
-  categoryOptions,
   oldExpenseBeingEdited,
+  setOldExpenseBeingEdited,
+  categoryOptions,
 }: ExpenseListV2Props) {
   const categoryToIconAndColourMap: CategoryToIconAndColourMap = useQueryClient().getQueryData([
     "categoryToIconAndColourMap",
@@ -52,7 +38,6 @@ export default function ExpenseListV2({
         return (
           expenseElement && (
             <ExpenseItemV2
-              oldExpenseBeingEdited={oldExpenseBeingEdited}
               expenseId={expenseElement.expenseId}
               category={expenseElement.category}
               amount={expenseElement.amount}
@@ -61,10 +46,8 @@ export default function ExpenseListV2({
               groupColour={categoryToIconAndColourMap.get(expenseElement.category)!.colour}
               recurringExpenseId={expenseElement.recurringExpenseId}
               timestamp={expenseElement.timestamp}
-              setExpenseFormVisibility={setExpenseFormVisibility}
-              setExpenseModalVisibility={setExpenseModalVisibility}
+              oldExpenseBeingEdited={oldExpenseBeingEdited}
               setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-              setExpenseItemToDelete={setExpenseItemToDelete}
               categoryOptions={categoryOptions}
               key={key}
             />

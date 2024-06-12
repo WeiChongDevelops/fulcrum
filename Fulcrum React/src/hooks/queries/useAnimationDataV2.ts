@@ -15,20 +15,16 @@ export default function useAnimationDataV2({
   totalBudget,
   budgetLayoutIsSideBySide,
 }: useAnimationDataV2Props) {
-  const [lineAngle, setLineAngle] = useState(0);
   const leverRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const bowlRef = useRef<HTMLImageElement>(null);
 
+  const [lineAngle, setLineAngle] = useState(0);
   const [leverLeft, setLeverLeft] = useState(0);
-
   const [containerLeft, setContainerLeft] = useState(0);
-
   const [leftOffset, setLeftOffset] = useState(leverLeft - containerLeft);
   const [rightOffset, setRightOffset] = useState(leftOffset);
-
   const [bowlWidth, setBowlWidth] = useState(0);
-
   const [shadowOpacity, setShadowOpacity] = useState(1);
 
   const updateRect = async () => {

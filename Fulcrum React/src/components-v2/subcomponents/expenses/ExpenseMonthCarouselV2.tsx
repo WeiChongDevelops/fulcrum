@@ -1,31 +1,15 @@
-import {
-  BudgetItemEntity,
-  CategoryToIconAndColourMap,
-  ExpenseFormVisibility,
-  ExpenseItemEntity,
-  ExpenseModalVisibility,
-  MonthExpenseGroupEntity,
-  PreviousExpenseBeingEdited,
-  UserPreferences,
-  SetFormVisibility,
-  SetModalVisibility,
-} from "@/utility/types.ts";
+import { BudgetItemEntity, MonthExpenseGroupEntity, PreviousExpenseBeingEdited } from "@/utility/types.ts";
 import { Dispatch, SetStateAction } from "react";
 import { ExpenseMonthGroupV2 } from "./ExpenseMonthGroupV2.tsx";
 import { Carousel, CarouselContent, CarouselItem } from "@/components-v2/ui/carousel.tsx";
 import { EmblaCarouselType } from "embla-carousel";
 import { ScrollArea } from "@/components-v2/ui/scroll-area";
-import { ScrollAreaDemo } from "@/components-v2/subcomponents/budget/Playground.tsx";
-import { capitaliseFirstLetter, useEmail } from "@/utility/util.ts";
+import { useEmail } from "@/utility/util.ts";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ExpenseMonthCarouselV2Props {
   structuredExpenseData: MonthExpenseGroupEntity[];
-  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-  setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
-  setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
   setApi: (api: EmblaCarouselType | undefined) => void;
   startingIndex: number;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
@@ -37,11 +21,7 @@ interface ExpenseMonthCarouselV2Props {
  */
 export default function ExpenseMonthCarouselV2({
   structuredExpenseData,
-  setExpenseFormVisibility,
-  setExpenseModalVisibility,
   setOldExpenseBeingEdited,
-  setExpenseItemToDelete,
-  setDefaultCalendarDate,
   setApi,
   startingIndex,
   oldExpenseBeingEdited,
@@ -66,11 +46,7 @@ export default function ExpenseMonthCarouselV2({
                   <ExpenseMonthGroupV2
                     perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
                     monthExpenseGroupItem={monthExpenseGroupItem}
-                    setExpenseFormVisibility={setExpenseFormVisibility}
-                    setExpenseModalVisibility={setExpenseModalVisibility}
                     setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-                    setExpenseItemToDelete={setExpenseItemToDelete}
-                    setDefaultCalendarDate={setDefaultCalendarDate}
                     oldExpenseBeingEdited={oldExpenseBeingEdited}
                   />
                 </ScrollArea>

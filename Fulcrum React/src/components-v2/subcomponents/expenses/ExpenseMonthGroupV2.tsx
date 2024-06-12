@@ -1,16 +1,10 @@
 import {
   BudgetItemEntity,
   CategoryToIconAndColourMap,
-  DropdownSelectorOption,
-  ExpenseFormVisibility,
-  ExpenseItemEntity,
-  ExpenseModalVisibility,
   MonthExpenseGroupEntity,
   PreviousExpenseBeingEdited,
   UserPreferences,
-  SetFormVisibility,
-  SetModalVisibility,
-} from "../../../utility/types.ts";
+} from "@/utility/types.ts";
 import { Dispatch, memo, SetStateAction } from "react";
 import ExpenseDayGroupV2 from "@/components-v2/subcomponents/expenses/ExpenseDayGroupV2.tsx";
 import CreateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/CreateExpenseFormV2.tsx";
@@ -19,11 +13,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 interface ExpenseMonthGroupV2Props {
   monthExpenseGroupItem: MonthExpenseGroupEntity;
-  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-  setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
-  setDefaultCalendarDate: Dispatch<SetStateAction<Date>>;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
 }
@@ -34,12 +24,8 @@ interface ExpenseMonthGroupV2Props {
 export const ExpenseMonthGroupV2 = memo(
   ({
     monthExpenseGroupItem,
-    setExpenseFormVisibility,
-    setExpenseModalVisibility,
     setOldExpenseBeingEdited,
-    setExpenseItemToDelete,
     oldExpenseBeingEdited,
-    setDefaultCalendarDate,
     perCategoryExpenseTotalThisMonth,
   }: ExpenseMonthGroupV2Props) => {
     const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
@@ -70,10 +56,7 @@ export const ExpenseMonthGroupV2 = memo(
               <ExpenseDayGroupV2
                 categoryOptions={categoryOptions}
                 dayExpenseGroup={dayExpenseGroup}
-                setExpenseFormVisibility={setExpenseFormVisibility}
-                setExpenseModalVisibility={setExpenseModalVisibility}
                 setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-                setExpenseItemToDelete={setExpenseItemToDelete}
                 oldExpenseBeingEdited={oldExpenseBeingEdited}
                 key={key}
               />

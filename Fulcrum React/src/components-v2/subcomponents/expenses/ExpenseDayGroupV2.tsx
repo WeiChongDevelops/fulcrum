@@ -1,14 +1,8 @@
 import {
-  CategoryToIconAndColourMap,
   DayExpenseGroupEntity,
   DropdownSelectorOption,
-  ExpenseFormVisibility,
-  ExpenseItemEntity,
-  ExpenseModalVisibility,
   PreviousExpenseBeingEdited,
   UserPreferences,
-  SetFormVisibility,
-  SetModalVisibility,
 } from "@/utility/types.ts";
 import { Dispatch, SetStateAction } from "react";
 import { formatDate, formatDollarAmountStatic, useEmail } from "@/utility/util.ts";
@@ -17,13 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 interface ExpenseDayGroupV2Props {
   dayExpenseGroup: DayExpenseGroupEntity;
-
-  setExpenseFormVisibility: SetFormVisibility<ExpenseFormVisibility>;
-  setExpenseModalVisibility: SetModalVisibility<ExpenseModalVisibility>;
-
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
-  setExpenseItemToDelete: Dispatch<SetStateAction<ExpenseItemEntity>>;
-
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   categoryOptions: DropdownSelectorOption[];
 }
@@ -33,10 +21,7 @@ interface ExpenseDayGroupV2Props {
  */
 export default function ExpenseDayGroupV2({
   dayExpenseGroup,
-  setExpenseFormVisibility,
-  setExpenseModalVisibility,
   setOldExpenseBeingEdited,
-  setExpenseItemToDelete,
   oldExpenseBeingEdited,
   categoryOptions,
 }: ExpenseDayGroupV2Props) {
@@ -57,12 +42,6 @@ export default function ExpenseDayGroupV2({
       <div
         className={`flex flex-row justify-between items-center relative ${userPreferences.darkModeEnabled ? "text-white" : "text-black"}`}
       >
-        {/*<div*/}
-        {/*  className={`grid grid-cols-3 outline`}*/}
-        {/*  style={{*/}
-        {/*    gridTemplateColumns: "1fr 1fr 1fr",*/}
-        {/*  }}*/}
-        {/*>*/}
         <p className="text-2xl text-left">
           {expenseDayGroupCalendarDate === dateStringToday
             ? "Today"
@@ -70,17 +49,13 @@ export default function ExpenseDayGroupV2({
               ? "Yesterday"
               : formatDate(dayExpenseGroup.calendarDate)}
         </p>
-        {/*<div className={`dotted-line ${userPreferences.darkModeEnabled && "dotted-line-dark"}`}></div>*/}
         <div className={"flex-grow h-[1px] bg-[#17423f] dark:bg-muted-foreground bg-opacity-20 mx-4"}></div>
         <p className="text-2xl text-right">{formatDollarAmountStatic(dayTotal, userPreferences.currency)}</p>
       </div>
       {dayExpenseGroup.dayExpenseArray.length > 0 && (
         <ExpenseListV2
           dayExpenseArray={dayExpenseGroup.dayExpenseArray}
-          setExpenseFormVisibility={setExpenseFormVisibility}
-          setExpenseModalVisibility={setExpenseModalVisibility}
           setOldExpenseBeingEdited={setOldExpenseBeingEdited}
-          setExpenseItemToDelete={setExpenseItemToDelete}
           oldExpenseBeingEdited={oldExpenseBeingEdited}
           categoryOptions={categoryOptions}
         />

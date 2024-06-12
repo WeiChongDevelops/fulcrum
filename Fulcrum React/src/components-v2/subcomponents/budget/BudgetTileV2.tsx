@@ -1,58 +1,27 @@
-import {
-  BudgetFormVisibility,
-  BudgetItemEntity,
-  BudgetModalVisibility,
-  GroupItemEntity,
-  PreviousBudgetBeingEdited,
-  UserPreferences,
-  SetFormVisibility,
-  SetModalVisibility,
-} from "@/utility/types.ts";
-import { changeFormOrModalVisibility, cn, formatDollarAmountStatic, getCurrencySymbol, useEmail } from "@/utility/util.ts";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components-v2/ui/card.tsx";
-import { Button } from "@/components-v2/ui/button.tsx";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { BudgetItemEntity, PreviousBudgetBeingEdited, UserPreferences } from "@/utility/types.ts";
+import { cn, formatDollarAmountStatic, getCurrencySymbol, useEmail } from "@/utility/util.ts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components-v2/ui/card.tsx";
+import { Dispatch, SetStateAction } from "react";
 import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
 import UpdateBudgetFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateBudgetFormV2.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components-v2/ui/dialog.tsx";
-import * as React from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components-v2/ui/tooltip.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface BudgetTileV2Props {
   filteredBudgetItem: BudgetItemEntity;
-  setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>;
-  setCategoryToDelete: Dispatch<SetStateAction<string>>;
-  setBudgetModalVisibility: SetModalVisibility<BudgetModalVisibility>;
-  setBudgetFormVisibility: SetFormVisibility<BudgetFormVisibility>;
-  perCategoryExpenseTotalThisMonth: Map<string, number>;
   oldBudgetBeingEdited: PreviousBudgetBeingEdited;
+  setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>;
+  perCategoryExpenseTotalThisMonth: Map<string, number>;
 }
 
 export default function BudgetTileV2({
   filteredBudgetItem,
-  setOldBudgetBeingEdited,
-  setCategoryToDelete,
-  setBudgetModalVisibility,
-  setBudgetFormVisibility,
-  perCategoryExpenseTotalThisMonth,
   oldBudgetBeingEdited,
+  setOldBudgetBeingEdited,
+  perCategoryExpenseTotalThisMonth,
 }: BudgetTileV2Props) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
-  const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    setCategoryToDelete(filteredBudgetItem.category);
-    changeFormOrModalVisibility(setBudgetModalVisibility, "isDeleteOptionsModalVisible", true);
-  };
-
   const updateOldBudgetBeingEdited = () => {
     setOldBudgetBeingEdited({
       oldAmount: filteredBudgetItem.amount,

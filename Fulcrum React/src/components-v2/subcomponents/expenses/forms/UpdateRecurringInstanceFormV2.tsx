@@ -8,19 +8,14 @@ import { Button } from "@/components-v2/ui/button.tsx";
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
 import {
   DropdownSelectorOption,
-  ExpenseFormVisibility,
   ExpenseItemEntity,
-  ExpenseUpdatingFormData,
   PreviousExpenseBeingEdited,
   RecurringExpenseInstanceUpdatingFormData,
-  SetFormVisibility,
   UserPreferences,
 } from "@/utility/types.ts";
 import useUpdateExpense from "@/hooks/mutations/expense/useUpdateExpense.ts";
 import { toast } from "sonner";
-import * as React from "react";
 import useDeleteExpense from "@/hooks/mutations/expense/useDeleteExpense.ts";
-import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
 import ThreeOptionModal from "@/components-v2/subcomponents/other/modal/ThreeOptionModal.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 

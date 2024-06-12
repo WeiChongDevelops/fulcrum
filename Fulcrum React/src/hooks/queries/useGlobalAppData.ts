@@ -1,15 +1,6 @@
 import { getGroupAndColourMap } from "@/utility/util.ts";
 import { useQueries, useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
 import {
-  getBlacklistedExpenses,
-  getBudgetList,
-  getExpenseList,
-  getGroupList,
-  getUserPreferences,
-  getRecurringExpenseList,
-  getSessionEmailOrNull,
-} from "@/api/api.ts";
-import {
   BlacklistedExpenseItemEntity,
   BudgetItemEntity,
   CategoryToIconAndColourMap,
@@ -18,7 +9,7 @@ import {
   UserPreferences,
   RecurringExpenseItemEntity,
 } from "@/utility/types.ts";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getSessionEmailOrNullDirect } from "@/utility/supabase-client.ts";
 import { getBudgetListDirect } from "@/api/budget-api.ts";
 import { getGroupListDirect } from "@/api/group-api.ts";
@@ -88,12 +79,7 @@ export function useGlobalAppData() {
   const categoryToIconAndColourMapQuery = useQuery({
     queryKey: ["categoryToIconAndColourMap", email],
     queryFn: () =>
-      getGroupAndColourMap(
-        // globalAppDataQueries[0].data as BudgetItemEntity[],
-        // globalAppDataQueries[1].data as GroupItemEntity[],
-        budgetArrayQuery.data as BudgetItemEntity[],
-        groupArrayQuery.data as GroupItemEntity[],
-      ),
+      getGroupAndColourMap(budgetArrayQuery.data as BudgetItemEntity[], groupArrayQuery.data as GroupItemEntity[]),
     enabled: retrievalConditions && !!budgetArrayQuery.data && !!groupArrayQuery.data,
   });
 
