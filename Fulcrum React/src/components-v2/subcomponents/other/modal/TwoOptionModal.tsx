@@ -44,6 +44,7 @@ export default function TwoOptionModal({
   buttonTriggerComponent,
 }: TwoOptionModalProps) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+
   return (
     <div className={"col-start-3 col-span-3"}>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

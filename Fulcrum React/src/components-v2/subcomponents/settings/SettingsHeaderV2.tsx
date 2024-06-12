@@ -1,17 +1,11 @@
-import { Button } from "@/components-v2/ui/button.tsx";
-import { UserPreferences } from "@/utility/types.ts";
-import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
-import { useEmail, useSideBarIsOpen } from "@/utility/util.ts";
-import ReactCountryFlag from "react-country-flag";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popover.tsx";
-import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
-import { useQueryClient } from "@tanstack/react-query";
-import { ChatCircleDots, ChatCircleText } from "@phosphor-icons/react";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components-v2/ui/tooltip.tsx";
+import { Button } from "@/components-v2/ui/button.tsx";
+import { useSideBarIsOpen } from "@/utility/util.ts";
+import { ChatCircleText } from "@phosphor-icons/react";
+import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
 
 export default function SettingsHeaderV2() {
-  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const sideBarOpen = useSideBarIsOpen();
   return (
     <div

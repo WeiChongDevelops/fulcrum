@@ -1,6 +1,5 @@
 import useAnimationDataV2 from "@/hooks/queries/useAnimationDataV2.ts";
 import { cn, formatDollarAmountStatic, useSideBarIsOpen } from "@/utility/util.ts";
-import SvgComponent from "@/components-v2/subcomponents/budget/BowlSVG.tsx";
 import BowlSVG from "@/components-v2/subcomponents/budget/BowlSVG.tsx";
 import PivotOutlineSVG from "@/components-v2/subcomponents/budget/PivotOutlineSVG.tsx";
 
@@ -41,7 +40,6 @@ export default function FulcrumAnimationV2({
           style={{ transform: `translateX(-50%) rotate(${lineAngle}deg)`, transition: "transform ease-out 400ms" }}
         >
           <div className={"flex flex-col items-center relative -mr-10"}>
-            {/*<div className={"absolute -top-full "} style={{ transform: `rotate(${-lineAngle}deg` }}>*/}
             <div
               className={"absolute -top-full origin-bottom-right -left-3.5"}
               style={{ transform: `rotate(${-lineAngle}deg` }}

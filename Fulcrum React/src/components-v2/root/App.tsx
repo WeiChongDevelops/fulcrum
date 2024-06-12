@@ -22,7 +22,6 @@ import FulcrumV2 from "./FulcrumV2.tsx";
 import RecurringExpensesV2 from "@/components-v2/pages/RecurringExpensesV2.tsx";
 import SettingsV2 from "@/components-v2/pages/SettingsV2.tsx";
 import BudgetV2 from "@/components-v2/pages/BudgetV2.tsx";
-import Playground from "@/components-v2/subcomponents/budget/Playground.tsx";
 import Maintenance from "@/components-v2/pages/Maintenance.tsx";
 
 /**
@@ -65,7 +64,6 @@ export default function App() {
             <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
-            <Route path="/playground" element={<Playground />} />
             <Route path="/maintenance" element={<Maintenance />} />
             <Route path="/app/" element={<FulcrumV2 isAnyLoading={isAnyLoading} />}>
               <Route

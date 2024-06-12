@@ -2,13 +2,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components-v2/ui/avatar.t
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import { cn, EmailContext, LocationContext, useEmail } from "@/utility/util.ts";
-import { UserPreferences } from "@/utility/types.ts";
-import { handleUserLogout } from "@/api/api.ts";
 import PageNavigationButton from "@/components-v2/subcomponents/other/PageNavigationButton.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { SignOut } from "@phosphor-icons/react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components-v2/ui/dropdown-menu";
-import { Switch } from "@/components-v2/ui/switch.tsx";
 import ThemeToggle from "@/components-v2/subcomponents/other/toggles/ThemeToggle.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import UpdateAvatarFormV2 from "@/components-v2/subcomponents/other/UpdateAvatarFormV2.tsx";
@@ -22,9 +19,12 @@ interface SideBarProps {
 export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
   const routerLocation = useContext(LocationContext);
   const activeEmail = useContext(EmailContext);
-
   const profileImageURL: string = useQueryClient().getQueryData(["profileImageURL", useEmail()])!;
+
   const [activeProfileImageURL, setActiveProfileImageURL] = useState(profileImageURL);
+  const [signOutMenuOpen, setSignOutMenuOpen] = useState(false);
+  const animatedMenuContainerRef = useRef<HTMLDivElement>(null);
+  const [autoAnimateRef] = useAutoAnimate();
 
   useEffect(() => {
     const preloadImage = (src: string) => {
@@ -41,8 +41,6 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
     setCurrentPage(window.location.pathname.split("/")[2]);
   }, [routerLocation]);
 
-  const animatedMenuContainerRef = useRef<HTMLDivElement>(null);
-
   const toggleNavMenu = () => {
     if (!!animatedMenuContainerRef.current) {
       if (sideBarOpen) {
@@ -54,30 +52,11 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
     setSideBarOpen(!sideBarOpen);
   };
 
-  const [autoAnimateRef] = useAutoAnimate();
-  const [signOutMenuOpen, setSignOutMenuOpen] = useState(false);
-
   return (
     <div
       className={`fixed flex flex-col ${sideBarOpen ? "w-[13rem]" : "w-[5rem]"} h-screen z-50 transition-all duration-400 ease-out`}
       ref={autoAnimateRef}
     >
-      {/*<div className={"flex justify-start items-center h-[6vh] w-full bg-gray-700"}>*/}
-      {/*  <img*/}
-      {/*    src={`/static/assets-v2/fulcrum-logos/fulcrum-long-${userPreferences.darkModeEnabled ? "white" : "black"}.webp`}*/}
-      {/*    className="w-32 ml-4"*/}
-      {/*    onClick={() => (window.location.href = "/app/budget")}*/}
-      {/*    alt="Fulcrum logo"*/}
-      {/*  />*/}
-      {/*</div>*/}
-      {/*<div className={"flex justify-start items-center h-[6vh] w-full bg-gray-700"}>*/}
-      {/*  <img*/}
-      {/*    src={`/static/assets-v2/fulcrum-logos/fulcrum-long-${userPreferences.darkModeEnabled ? "white" : "black"}.webp`}*/}
-      {/*    className="w-32 ml-4"*/}
-      {/*    onClick={() => (window.location.href = "/app/budget")}*/}
-      {/*    alt="Fulcrum logo"*/}
-      {/*  />*/}
-      {/*</div>*/}
       <div
         ref={animatedMenuContainerRef}
         className={`flex flex-col justify-start items-center relative h-screen bg-[#1e383b] dark:bg-[#223136] text-white overflow-hidden pl-3 pr-4 transition-all duration-600 ease-out"}`}
@@ -126,7 +105,6 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
           <Avatar className={"size-9"}>
             <AvatarImage decoding={"async"} src={activeProfileImageURL} className={"bg-zinc-300"} />
             <AvatarFallback className={"text-primary tracking-tighter bg-cyan-400 font-semibold"}>
-              {/*<img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Avatar fallback" />*/}
               {activeEmail ? activeEmail.substring(0, 2).toUpperCase() : "FF"}
             </AvatarFallback>
           </Avatar>

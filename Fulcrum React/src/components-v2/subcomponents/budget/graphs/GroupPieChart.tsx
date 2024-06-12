@@ -1,7 +1,7 @@
 import { PieChart, Pie, ResponsiveContainer, Sector, Cell } from "recharts";
 import { useState } from "react";
-import { BudgetItemEntity, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
-import { formatDollarAmountStatic, getCurrencySymbol, useEmail } from "@/utility/util.ts";
+import { UserPreferences } from "@/utility/types.ts";
+import { formatDollarAmountStatic, useEmail } from "@/utility/util.ts";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface GroupPieChartProps {

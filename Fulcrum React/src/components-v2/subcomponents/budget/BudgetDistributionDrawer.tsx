@@ -33,6 +33,7 @@ export default function BudgetDistributionDrawer({
     "categoryToIconAndColourMap",
     useEmail(),
   ])!;
+
   return (
     <div className={"absolute top-3 right-3"}>
       <Drawer>
@@ -50,9 +51,6 @@ export default function BudgetDistributionDrawer({
             <div className="p-4 pb-0">
               <div className="flex items-center justify-center space-x-2">
                 <div className="flex-1 text-center">
-                  {/*<div className="text-7xl font-bold tracking-tighter">Goal</div>*/}
-                  {/*<div className="text-[0.70rem] uppercase text-muted-foreground">Calories/day</div>*/}
-
                   {budgetArray.length > 0 ? (
                     <div>
                       {sortByGroup ? (

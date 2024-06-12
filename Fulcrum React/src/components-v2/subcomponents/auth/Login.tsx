@@ -50,12 +50,12 @@ export default function Login() {
     <>
       <Loader isLoading={isUserLoginPending || isOAuthURLPending} isDarkMode={false} />
       <div className={`${(isUserLoginPending || isOAuthURLPending) && "opacity-80 animate-pulse transition-opacity"}`}>
-        <img src="/assets-v2/other-assets/login-bg-cmp.webp" className={"hidden"} alt="" />
+        <img src="/static/assets-v2/other-assets/login-bg-cmp.webp" className={"hidden"} alt="" />
         <div className={"auth-page-container login-page"}>
           <div className={"auth-page-left-column"}>
             <div className={"flex-1"}>
               <img
-                src="/assets-v2/fulcrum-logos/fulcrum-long-white.webp"
+                src="/static/assets-v2/fulcrum-logos/fulcrum-logo-white-v2.webp"
                 className={"auth-standard-fulcrum-logo"}
                 alt="Fulcrum logo"
               />
@@ -68,7 +68,7 @@ export default function Login() {
           <div className={"auth-page-right-column"}>
             <div className={"flex-1"}>
               <img
-                src="/assets-v2/fulcrum-logos/fulcrum-long-white.webp"
+                src="/static/assets-v2/fulcrum-logos/fulcrum-logo-white-v2.webp"
                 className={"auth-mobile-fulcrum-logo"}
                 alt="Fulcrum logo"
               />

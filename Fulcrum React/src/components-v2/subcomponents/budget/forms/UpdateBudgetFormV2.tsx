@@ -1,9 +1,6 @@
-import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
-  BasicGroupData,
-  BudgetFormVisibility,
   BudgetItemEntity,
-  BudgetModalVisibility,
   BudgetUpdatingFormData,
   GroupItemEntity,
   PreviousBudgetBeingEdited,
@@ -14,39 +11,17 @@ import {
   cn,
   getHighestGroupSortIndex,
   getRandomGroupColour,
-  groupSort,
   handleInputChangeOnFormWithAmount,
   useEmail,
-  useSetBudgetModalVisibility,
 } from "@/utility/util.ts";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetOverlay,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components-v2/ui/sheet.tsx";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
-import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
 import useUpdateBudget from "@/hooks/mutations/budget/useUpdateBudget.ts";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components-v2/ui/select.tsx";
 import CategoryIconSelector from "@/components-v2/subcomponents/selectors/CategoryIconSelector.tsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import * as React from "react";
-import { toast } from "sonner";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components-v2/ui/dialog";
 import useDeleteBudget from "@/hooks/mutations/budget/useDeleteBudget.ts";
 import TwoOptionModal from "@/components-v2/subcomponents/other/modal/TwoOptionModal.tsx";
 import { useQueryClient } from "@tanstack/react-query";
@@ -69,14 +44,10 @@ export default function UpdateBudgetFormV2({
     iconPath: oldBudgetBeingEdited.oldIconPath,
     group: oldBudgetBeingEdited.oldGroup,
   });
-  // const formRef = useRef<HTMLDivElement>(null);
-  // const routerLocation = useContext(LocationContext);
   const { mutate: updateBudget } = useUpdateBudget();
   const { mutate: deleteBudget } = useDeleteBudget();
   const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["groupArray", useEmail()])!;
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
-
-  const setBudgetModalVisibility = useSetBudgetModalVisibility()!;
 
   const [formIsOpen, setFormIsOpen] = useState(false);
 
@@ -90,23 +61,10 @@ export default function UpdateBudgetFormV2({
   }, [oldBudgetBeingEdited, formIsOpen]);
 
   function hideForm() {
-    // changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", false);
     setFormIsOpen(false);
   }
 
-  // useEffect(() => {
-  //   const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
-  //   const removeColourEventListeners = addColourSelectionFunctionality(setFormData);
-  //   return () => {
-  //     removeFormExitEventListeners();
-  //     removeColourEventListeners();
-  //   };
-  // }, [routerLocation]);
-
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-    // setFormData((currentFormData) => {
-    //   return { ...currentFormData, [e.target.name]: e.target.value };
-    // });
     handleInputChangeOnFormWithAmount(e, setFormData);
   }
 
@@ -145,34 +103,13 @@ export default function UpdateBudgetFormV2({
     });
   }
 
-  const handleGroupSelectChange = (group: string) => {
-    setFormData((prevFormData) => ({ ...prevFormData, group: group }));
-  };
-
   const [autoAnimateRef] = useAutoAnimate();
   const [showConfirmDeleteBudgetDialog, setShowConfirmDeleteBudgetDialog] = useState(false);
 
   return (
     <div className={"update-budget-trigger size-44 absolute"} ref={autoAnimateRef}>
       <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>
-        <SheetTrigger onClick={updateOldBudgetBeingEdited} className={"w-full h-full"}>
-          {/*<Button*/}
-          {/*  asChild*/}
-          {/*  variant={"ghost"}*/}
-          {/*  className={"standard-edit-delete-button flex-justify-center px-2.5 py-0 rounded-[50%] transition-all"}*/}
-          {/*>*/}
-          {/*  <div className={"edit-delete-button-icon-container origin-center transition-all"}>*/}
-          {/*    <svg*/}
-          {/*      xmlns="http://www.w3.org/2000/svg"*/}
-          {/*      viewBox="0 0 20 20"*/}
-          {/*      fill="currentColor"*/}
-          {/*      className="size-4 transition-all duration-200 ease-out"*/}
-          {/*    >*/}
-          {/*      <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />*/}
-          {/*    </svg>*/}
-          {/*  </div>*/}
-          {/*</Button>*/}
-        </SheetTrigger>
+        <SheetTrigger onClick={updateOldBudgetBeingEdited} className={"w-full h-full"}></SheetTrigger>
         <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
           <SheetHeader>
             <SheetTitle>Updating Budget Category</SheetTitle>
@@ -228,19 +165,6 @@ export default function UpdateBudgetFormV2({
             </div>
 
             <div className={"grid grid-cols-8 items-center gap-5 mt-2"}>
-              {/*<Button*/}
-              {/*  className={"col-start-3 col-span-3"}*/}
-              {/*  variant={"destructive"}*/}
-              {/*  onClick={() =>*/}
-              {/*    setBudgetModalVisibility((previousVisibility) => ({*/}
-              {/*      ...previousVisibility,*/}
-              {/*      showConfirmDeleteCategoryModal: true,*/}
-              {/*    }))*/}
-              {/*  }*/}
-              {/*  type={"button"}*/}
-              {/*>*/}
-              {/*  Delete*/}
-              {/*</Button>*/}
               <TwoOptionModal
                 dialogOpen={showConfirmDeleteBudgetDialog}
                 setDialogOpen={setShowConfirmDeleteBudgetDialog}

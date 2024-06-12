@@ -125,14 +125,6 @@ export default function CategoryIconSelector({ formData, setFormData, className 
         className,
       )}
     >
-      {/*{categoryIconArray.map((iconFileName, key) => {*/}
-      {/*  return (*/}
-      {/*    <button data-value={iconFileName} className="category-icon-selectable" key={key}>*/}
-      {/*      <img src={`/static/assets-v2/category-icons/${iconFileName}`} alt="Icon option" />*/}
-      {/*    </button>*/}
-      {/*  );*/}
-      {/*})}*/}
-
       {iconComponents.map((IconComponent, index) => (
         <button
           data-value={IconComponent.displayName}

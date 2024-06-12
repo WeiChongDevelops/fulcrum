@@ -29,7 +29,6 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     if (this.state.hasError) {
       return <FulcrumErrorPage errors={[this.state.error!]} />;
     }
-
     return this.props.children;
   }
 }

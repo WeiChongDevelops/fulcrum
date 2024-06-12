@@ -1,30 +1,12 @@
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
 import { BasicGroupData, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import useCreateGroup from "@/hooks/mutations/budget/useCreateGroup.ts";
-import {
-  addColourSelectionFunctionality,
-  addFormExitListeners,
-  capitaliseFirstLetter,
-  cn,
-  getHighestGroupSortIndex,
-  getRandomGroupColour,
-  LocationContext,
-  useEmail,
-} from "@/utility/util.ts";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components-v2/ui/sheet.tsx";
+import { capitaliseFirstLetter, cn, getHighestGroupSortIndex, getRandomGroupColour, useEmail } from "@/utility/util.ts";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
 import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
-import FulcrumButton from "@/components-v2/subcomponents/buttons/FulcrumButton.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateGroupFormV2Props {
@@ -37,11 +19,9 @@ export default function CreateGroupFormV2({ setLocalisedGroupArray, className }:
     group: "",
     colour: "",
   });
-  const formRef = useRef<HTMLDivElement>(null);
   const { mutate: createGroup } = useCreateGroup();
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["groupArray", useEmail()])!;
-  const routerLocation = useContext(LocationContext);
 
   const [formIsOpen, setFormIsOpen] = useState(false);
   const [nextHighestSortIndex, setNextHighestSortIndex] = useState(999);
@@ -51,16 +31,8 @@ export default function CreateGroupFormV2({ setLocalisedGroupArray, className }:
   }, [groupArray]);
 
   function hideForm() {
-    // changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateGroupVisible", false);
     setFormIsOpen(false);
   }
-
-  useEffect(() => {
-    setFormData({
-      group: "",
-      colour: "",
-    });
-  }, [formIsOpen]);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     setFormData((oldFormData) => {
@@ -84,6 +56,13 @@ export default function CreateGroupFormV2({ setLocalisedGroupArray, className }:
 
     setFormData({ group: "", colour: "" });
   }
+
+  useEffect(() => {
+    setFormData({
+      group: "",
+      colour: "",
+    });
+  }, [formIsOpen]);
 
   return (
     <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>

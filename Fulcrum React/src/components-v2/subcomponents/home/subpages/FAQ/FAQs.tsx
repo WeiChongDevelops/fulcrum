@@ -1,5 +1,5 @@
 import FAQItem from "./FAQItem.tsx";
-import { faqData } from "../../../../../utility/util.ts";
+import { faqData } from "@/utility/util.ts";
 
 export default function FAQs() {
   return (

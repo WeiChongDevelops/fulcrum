@@ -1,4 +1,4 @@
-import NumberInstructionPair from "@/components-v2/subcomponents/NumberInstructionPair.tsx";
+import NumberInstructionPair from "@/components-v2/subcomponents/home/subpages/about/NumberInstructionPair.tsx";
 
 /**
  * Lower-page component displaying extended use steps infographic.

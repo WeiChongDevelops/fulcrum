@@ -12,9 +12,11 @@ interface GroupSelectorProps {
 export default function GroupSelector({ formData, setFormData }: GroupSelectorProps) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["groupArray", useEmail()])!;
+
   const handleGroupSelectChange = (group: string) => {
     setFormData((prevFormData: any) => ({ ...prevFormData, group: group }));
   };
+
   return (
     <Select value={formData.group} onValueChange={handleGroupSelectChange}>
       <SelectTrigger className={cn("col-span-3 dark:text-primary", userPreferences.darkModeEnabled && "dark")}>

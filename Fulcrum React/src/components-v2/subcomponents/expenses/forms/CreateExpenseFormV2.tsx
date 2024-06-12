@@ -20,20 +20,14 @@ import {
   handleInputChangeOnFormWithAmount,
   useEmail,
 } from "@/utility/util.ts";
-import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
   BudgetItemEntity,
   CategoryToIconAndColourMap,
   ExpenseCreationFormData,
-  ExpenseFormVisibility,
   ExpenseItemEntity,
   UserPreferences,
-  RecurringExpenseFormVisibility,
   RecurringExpenseItemEntity,
-  DropdownSelectorOption,
-  SetFormVisibility,
-  Value,
 } from "@/utility/types.ts";
 import { v4 as uuid } from "uuid";
 import useCreateExpense from "@/hooks/mutations/expense/useCreateExpense.ts";
@@ -150,10 +144,6 @@ export default function CreateExpenseFormV2({
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     handleInputChangeOnFormWithAmount(e, setFormData);
-  }
-
-  function onDateInputChange(newValue: Value) {
-    setFormData((prevFormData) => ({ ...prevFormData, timestamp: newValue }));
   }
 
   const categoryOptions = budgetArray.map((budgetItem) => {

@@ -1,14 +1,12 @@
-import { ChangeEvent, createContext, Dispatch, RefObject, SetStateAction, useContext } from "react";
+import { ChangeEvent, createContext, Dispatch, SetStateAction, useContext } from "react";
 import { v4 as uuid } from "uuid";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import {
-  BasicGroupData,
   BlacklistedExpenseItemEntity,
   BudgetCreationFormData,
   BudgetItemEntity,
-  BudgetModalVisibility,
   BudgetUpdatingFormData,
   CategoryToIconAndColourMap,
   DayExpenseGroupEntity,
@@ -16,14 +14,10 @@ import {
   ExpenseCreationFormData,
   ExpenseItemEntity,
   ExpenseUpdatingFormData,
-  FormVisibility,
   GroupItemEntity,
-  ModalVisibility,
   MonthExpenseGroupEntity,
   RecurringExpenseFrequency,
   RecurringExpenseItemEntity,
-  SetFormVisibility,
-  SetModalVisibility,
 } from "./types.ts";
 import {
   AirplaneTilt,
@@ -83,12 +77,6 @@ export const useLocation = () => useContext(LocationContext);
 export const SideBarIsOpenContext = createContext<boolean>(true);
 export const useSideBarIsOpen = () => useContext(SideBarIsOpenContext);
 
-export const SetBudgetModalVisibilityContext = createContext<Dispatch<SetStateAction<BudgetModalVisibility>> | undefined>(
-  undefined,
-);
-
-export const useSetBudgetModalVisibility = () => useContext(SetBudgetModalVisibilityContext);
-
 // SELECTOR CONTENT ARRAYS //
 
 export const groupColourArray = [
@@ -108,48 +96,6 @@ export const groupColourArray = [
   "#faf5ff",
   "#fdf4ff",
   "#e3e3e3",
-];
-
-export const categoryIconArray = [
-  "category-bank-icon.svg",
-  "category-water-icon.svg",
-  "category-pig-icon.svg",
-  "category-beer-icon.svg",
-  "category-car-icon.svg",
-  "category-cash-icon.svg",
-  "category-electricity-icon.svg",
-  "category-gift-icon.svg",
-  "category-health-icon.svg",
-  "category-house-icon.svg",
-  "category-movie-icon.svg",
-  "category-music-icon.svg",
-  "category-pet-icon.svg",
-  "category-petrol-icon.svg",
-  "category-plane-icon.svg",
-  "category-shirt-icon.svg",
-  "category-tool-icon.svg",
-  "category-train-icon.svg",
-  "category-apple-icon.svg",
-  "category-cart-icon.svg",
-  "category-emergency-icon.svg",
-  "category-fastfood-icon.svg",
-  "category-gym-icon.svg",
-  "category-meds-icon.svg",
-  "category-people-icon.svg",
-  "category-phone-icon.svg",
-  "category-soccer-icon.svg",
-  "category-tv-icon.svg",
-  "category-utensils-icon.svg",
-  "category-wifi-icon.svg",
-];
-
-export const profileIconArray = [
-  "profile-icon-default.svg",
-  "profile-icon-partners.svg",
-  "profile-icon-family.svg",
-  "profile-icon-household.svg",
-  "profile-icon-business.svg",
-  "profile-icon-country.svg",
 ];
 
 // FORMATTING FUNCTIONS //
@@ -316,92 +262,6 @@ export function formatDate(date: Date): string {
   return `${formattedDayOfWeek}, ${formattedDayOfMonth}${ordinalSuffix} ${formattedMonth} ${formattedYear}`;
 }
 
-// ICON AND COLOUR SELECTOR IMPLEMENTATIONS //
-
-/**
- * Adds click event listeners to icon elements for icon selection functionality.
- * @template T - A generic type extending an object that optionally includes an iconPath property.
- * @param setFormData - Dispatch function that updates state for selected icon.
- * @param selectorType - The base part of the class name used to select icon elements.
- * @return - A cleanup function for the event listeners
- */
-export function addIconSelectionFunctionality<T extends { iconPath?: string }>(
-  setFormData: Dispatch<SetStateAction<T>>,
-  selectorType: string,
-): () => void {
-  // Get array of icons and initialise array of listeners (for later cleanup)
-  const icons: NodeListOf<HTMLImageElement> = document.querySelectorAll(`.${selectorType}-icon-selectable`);
-  const listeners: Array<{ element: Element; handler: (event: any) => void }> = [];
-
-  // Iterate over each icon to add click event listeners
-  icons.forEach((icon): void => {
-    const eventHandler = (e: MouseEvent) => {
-      e.preventDefault(); // Prevent default action
-
-      // Retrieve the icon's path from its data-value attribute
-      const iconPath = icon.getAttribute("data-value")!;
-      if (!iconPath) return; // Exit if iconPath is null or undefined
-
-      // Update the form data with the selected icon's path
-      setFormData((currentFormData) => ({
-        ...currentFormData,
-        iconPath: iconPath,
-      }));
-
-      // Visual feedback for icon selection
-      icons.forEach((icon2) => icon2.classList.remove("selected-icon"));
-      icon.classList.add("selected-icon");
-      console.log(`iconPath: ${iconPath}`);
-    };
-    icon.addEventListener("click", eventHandler);
-    listeners.push({ element: icon, handler: eventHandler });
-  });
-  return () => {
-    listeners.forEach(({ element, handler }) => {
-      element.removeEventListener("click", handler);
-    });
-  };
-}
-
-/**
- * Adds click event listeners to colour selection elements for group colour selection functionality.
- * @param setFormData - Dispatch function to update state for the selected colour.
- */
-export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAction<BasicGroupData>>): () => void {
-  // Query all colour selection containers
-  const colourElementList: NodeListOf<HTMLImageElement> = document.querySelectorAll(".group-colour-selectable-container");
-  const listeners: Array<{ element: Element; handler: (event: any) => void }> = [];
-
-  // Iterate over each colour selection container to add click event listeners
-  colourElementList.forEach((colourSelectable) => {
-    const eventHandler = (e: MouseEvent) => {
-      // Prevent the default action of the event
-      e.preventDefault();
-
-      // Update form data with the selected colour's value
-      const triangleElement = colourSelectable.firstChild as HTMLDivElement;
-      setFormData((current: BasicGroupData) => ({
-        ...current,
-        ["colour"]: triangleElement.getAttribute("data-value"), // Extract colour value
-      }));
-
-      // Visual feedback
-      colourElementList.forEach((colourSelectable) => {
-        const triangle = colourSelectable.firstChild as HTMLDivElement;
-        triangle.classList.remove("selectedColour");
-      });
-      triangleElement.classList.add("selectedColour");
-    };
-    colourSelectable.addEventListener("click", eventHandler);
-    listeners.push({ element: colourSelectable, handler: eventHandler });
-  });
-  return () => {
-    listeners.forEach(({ element, handler }) => {
-      element.removeEventListener("click", handler);
-    });
-  };
-}
-
 // SORTING FUNCTIONS //
 
 /**
@@ -411,9 +271,6 @@ export function addColourSelectionFunctionality(setFormData: Dispatch<SetStateAc
  * @returns Sorting order value.
  */
 export function groupSort(a: GroupItemEntity, b: GroupItemEntity): number {
-  // if (a.group === DEFAULT_CATEGORY_GROUP) return 1;
-  // if (b.group === DEFAULT_CATEGORY_GROUP) return -1;
-  // return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
   return a.id < b.id ? -1 : 1;
 }
 
@@ -438,12 +295,17 @@ export function expenseSort(
  * @returns Sorting order value, or logs error if timestamp conversion fails.
  */
 export function budgetSort(budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity): number {
-  // const dateA = new Date(budgetItemA.timestamp!).getTime();
-  // const dateB = new Date(budgetItemB.timestamp!).getTime();
-  // if (dateA === dateB) return -1;
-  // return dateA - dateB;
   return budgetItemA.id - budgetItemB.id;
 }
+
+/**
+ * Sorts budget items by amount budgeted.
+ * @param budgetItemA
+ * @param budgetItemB
+ */
+export const budgetSizeSort = (budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) => {
+  return budgetItemA.amount > budgetItemB.amount ? -1 : 1;
+};
 
 /**
  * Groups category options in the selector, by group.
@@ -520,49 +382,6 @@ export const recurringFrequencyOptions = [
   },
 ];
 
-const dot = (color = "transparent") => ({
-  alignItems: "center",
-  display: "flex",
-
-  ":before": {
-    backgroundColor: color,
-    borderRadius: 10,
-    content: '" "',
-    display: "block",
-    marginRight: 8,
-    height: 10,
-    width: 10,
-  },
-});
-
-export const colourStyles = {
-  control: (styles: any) => ({
-    ...styles,
-    fontSize: 12,
-    fontWeight: "medium",
-    backgroundColor: "white",
-    maxHeight: "0.5rem",
-    borderRadius: "calc(var(--radius) - 2px)",
-    borderWidth: "0.5px",
-  }),
-  option: (styles: any, { data }: any) => {
-    return {
-      ...styles,
-      color: data.colour,
-      fontSize: 12,
-      fontWeight: "medium",
-      filter: "brightness(65%)",
-    };
-  },
-  input: (styles: any) => ({ ...styles, ...dot() }),
-  placeholder: (styles: any) => ({ ...styles, ...dot("#ccc") }),
-  singleValue: (styles: any, { data }: any) => ({
-    ...styles,
-    ...dot(data.colour),
-  }),
-  valueContainer: (styles: any) => ({ ...styles, padding: 0, margin: 0 }),
-};
-
 /**
  * Creates a darkened version of a given colour.
  * @param colour - The colour to darken.
@@ -586,39 +405,6 @@ export function darkenColor(colour: string, percent: number): string {
       .toString(16)
       .slice(1)
   );
-}
-
-/**
- * Converts an array of budget category groups into the selector options format.
- * @param groupArray - The array of budget category groups to convert.
- */
-export function groupListAsOptions(groupArray: GroupItemEntity[]): DropdownSelectorOption[] {
-  return groupArray.map((groupItemEntity) => {
-    return {
-      value: groupItemEntity.group,
-      label: groupItemEntity.group,
-      colour: groupItemEntity.colour,
-    };
-  });
-}
-
-/**
- * Converts an array of budget categories into the selector options format, with colour data derived from their group.
- * @param budgetArray - The array of budget categories to convert.
- * @param groupArray - The array of budget category groups.
- */
-export function categoryListAsOptions(budgetArray: BudgetItemEntity[], groupArray: GroupItemEntity[]) {
-  return budgetArray
-    .map((budgetItemEntity) => {
-      const groupOfCategory = getGroupOfCategory(budgetArray, budgetItemEntity.category);
-      const colourOfGroup = getGroupOfCategory(budgetArray, budgetItemEntity.category);
-      return {
-        value: budgetItemEntity.category,
-        label: budgetItemEntity.category,
-        colour: groupOfCategory && colourOfGroup ? getColourOfGroup(groupOfCategory, groupArray)! : "#17423f",
-      };
-    })
-    .sort(categoryOptionSort);
 }
 
 export const currencyOptions = [
@@ -693,58 +479,6 @@ export const categoryIconComponentMap: { [key: string]: React.FC } = {
   Broom,
   Couch,
 };
-
-// DYNAMIC SIZING FUNCTIONS //
-
-/**
- * Dynamically sizes the font of budget name displays based on their length.
- */
-export function dynamicallySizeBudgetNameDisplays(): void {
-  const budgetNameElements = document.querySelectorAll(".budget-name") as NodeListOf<HTMLElement>;
-  budgetNameElements.forEach((budgetNameElement) => {
-    const budgetNameText = budgetNameElement.textContent;
-
-    let dynamicFontSize = "";
-    const budgetNameLength = budgetNameText?.length!;
-
-    if (budgetNameLength <= 5) {
-      dynamicFontSize = "1.4rem";
-    } else if (budgetNameLength <= 9) {
-      dynamicFontSize = "1.2rem";
-    } else if (budgetNameLength <= 14) {
-      dynamicFontSize = "1.1rem";
-    } else if (budgetNameLength <= 18) {
-      dynamicFontSize = "1rem";
-    }
-    budgetNameElement.style.fontSize = dynamicFontSize;
-
-    if (budgetNameText?.split(" ")[0].length! >= 12) {
-      budgetNameElement.textContent = budgetNameText!.slice(0, 11) + "\n...";
-    }
-  });
-}
-
-/**
- * Dynamically sizes the font of budget number displays based on their length.
- */
-export function dynamicallySizeBudgetNumberDisplays(): void {
-  const budgetNumberElements = document.querySelectorAll(".budgeting-values-container") as NodeListOf<HTMLElement>;
-  budgetNumberElements.forEach((budgetNumberElement) => {
-    let dynamicFontSize = "0.6rem";
-    const budgetNumberFirstLine = budgetNumberElement.firstChild! as HTMLElement;
-    const budgetNumberLength = budgetNumberFirstLine.textContent?.length;
-    if (budgetNumberLength) {
-      if (budgetNumberLength <= 28) {
-        dynamicFontSize = "0.875rem";
-      } else if (budgetNumberLength <= 32) {
-        dynamicFontSize = "0.78rem";
-      } else if (budgetNumberLength <= 40) {
-        dynamicFontSize = "0.68rem";
-      }
-    }
-    budgetNumberElement.style.fontSize = dynamicFontSize;
-  });
-}
 
 // OTHER UTILITY FUNCTIONS AND DATA //
 
@@ -901,28 +635,6 @@ export function getGroupExpenditureTotal(
 }
 
 /**
- * Get the group of a given category.
- * @param budgetArray - The array of budget items.
- * @param category - The category to search for.
- * @returns The group of the given category, or null if not found.
- */
-export function getGroupOfCategory(budgetArray: BudgetItemEntity[], category: string): string | null {
-  const budgetItem = budgetArray.filter((budgetItemEntity) => budgetItemEntity.category === category)[0];
-  return budgetItem.group ? budgetItem.group : null;
-}
-
-/**
- * Get the colour of a given group.
- * @param groupName - The name of the group to search for.
- * @param groupArray - The array of group items.
- * @returns The colour of the given group, or null if not found.
- */
-export function getColourOfGroup(groupName: string, groupArray: GroupItemEntity[]): string | null {
-  const group = groupArray.find((groupItemEntity) => groupItemEntity.group === groupName);
-  return !!group ? group.colour : null;
-}
-
-/**
  * Get the total amount budgeted across all categories in all groups.
  * @param budgetArray - The array of budget items.
  * @returns The total amount budgeted across all categories in all groups.
@@ -1000,16 +712,6 @@ export function handleInputChangeOnFormWithAmount(
       },
     );
   }
-}
-
-/**
- * Check if any modal or form is open.
- * @param  formVisibility - The visibility of the expense form.
- * @param  modalVisibility - The visibility of the expense modal.
- * @returns True if any modal or form is open, false otherwise.
- */
-export function checkForOpenModalOrForm(formVisibility: FormVisibility, modalVisibility: ModalVisibility) {
-  return Object.values(formVisibility).includes(true) || Object.values(modalVisibility).includes(true);
 }
 
 /**
@@ -1103,39 +805,42 @@ function populateStructuredExpenseData(
   expenseArray: ExpenseItemEntity[],
   newStructuredExpenseData: MonthExpenseGroupEntity[],
 ): MonthExpenseGroupEntity[] {
-  if (!!expenseArray && expenseArray.length !== 0) {
-    for (const expenseItem of expenseArray) {
-      for (let monthExpenseGroupItem of newStructuredExpenseData) {
-        if (
-          monthExpenseGroupItem.monthIndex === new Date(expenseItem.timestamp).getMonth() &&
-          monthExpenseGroupItem.year === new Date(expenseItem.timestamp).getFullYear()
-        ) {
-          let matchingDayGroupExists = false;
-          for (let dayExpenseGroupItem of monthExpenseGroupItem.monthExpenseArray) {
-            if (
-              new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString() ===
-              new Date(expenseItem.timestamp).toLocaleDateString()
-            ) {
-              // console.log(`Adding expense to old group on ${new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString()}`);
-              dayExpenseGroupItem.dayExpenseArray = [...dayExpenseGroupItem.dayExpenseArray, expenseItem];
-              matchingDayGroupExists = true;
-              break;
-            }
-          }
-          if (matchingDayGroupExists) {
+  if (!expenseArray) {
+    throw new Error("No expense array found when populating structured expense data.");
+  }
+
+  if (expenseArray.length !== 0) {
+    throw new Error("Expense array length zero found when populating structured expense data.");
+  }
+
+  for (const expenseItem of expenseArray) {
+    for (let monthExpenseGroupItem of newStructuredExpenseData) {
+      if (
+        monthExpenseGroupItem.monthIndex === new Date(expenseItem.timestamp).getMonth() &&
+        monthExpenseGroupItem.year === new Date(expenseItem.timestamp).getFullYear()
+      ) {
+        let matchingDayGroupExists = false;
+        for (let dayExpenseGroupItem of monthExpenseGroupItem.monthExpenseArray) {
+          if (
+            new Date(dayExpenseGroupItem.calendarDate).toLocaleDateString() ===
+            new Date(expenseItem.timestamp).toLocaleDateString()
+          ) {
+            dayExpenseGroupItem.dayExpenseArray = [...dayExpenseGroupItem.dayExpenseArray, expenseItem];
+            matchingDayGroupExists = true;
             break;
           }
-          // Otherwise, make a new DayExpenseGroupEntity for the expenseItem's day and add it in.
-          // console.log(`Adding expense item to new group on ${new Date(expenseItem.timestamp).toLocaleDateString()}`);
-          const startOfDayCalendarDate = new Date(expenseItem.timestamp);
-          startOfDayCalendarDate.setHours(0, 0, 0, 0);
-
-          const newDayExpenseGroup: DayExpenseGroupEntity = {
-            calendarDate: startOfDayCalendarDate,
-            dayExpenseArray: [expenseItem],
-          };
-          monthExpenseGroupItem.monthExpenseArray = [...monthExpenseGroupItem.monthExpenseArray, newDayExpenseGroup];
         }
+        if (matchingDayGroupExists) {
+          break;
+        }
+        const startOfDayCalendarDate = new Date(expenseItem.timestamp);
+        startOfDayCalendarDate.setHours(0, 0, 0, 0);
+
+        const newDayExpenseGroup: DayExpenseGroupEntity = {
+          calendarDate: startOfDayCalendarDate,
+          dayExpenseArray: [expenseItem],
+        };
+        monthExpenseGroupItem.monthExpenseArray = [...monthExpenseGroupItem.monthExpenseArray, newDayExpenseGroup];
       }
     }
   }
@@ -1295,60 +1000,4 @@ export async function getRecurringExpenseInstancesAfterDate(
     }
   }
   return Array.from(requestedExpenseList);
-}
-
-/**
- * Changes the visibility of a particular form or modal, hiding or showing it.
- * @param setVisibility - The state updating function used to change visibility.
- * @param visibilityAttribute - The form/modal-specific identifier.
- * @param showNotHide - True if the caller wishes to show the form or modal, false if they wish to hide it.
- */
-export function changeFormOrModalVisibility<T extends FormVisibility, U extends ModalVisibility>(
-  setVisibility: SetFormVisibility<T> | SetModalVisibility<U>,
-  visibilityAttribute: string,
-  showNotHide: boolean,
-): void {
-  setVisibility((prevVisibility: any) => ({ ...prevVisibility, [visibilityAttribute]: showNotHide }));
-}
-
-/**
- * Enables form exit on 'Esc' keystroke or click outside form.
- * @param hideForm - The function that hides the form.
- * @param formRef - The reference of the form.
- * @returns The cleanup function that dismounts added event listeners.
- */
-export function addFormExitListeners(hideForm: () => void, formRef: RefObject<HTMLDivElement>) {
-  const handleClickOutside = (e: MouseEvent) => {
-    if (formRef.current && !formRef.current.contains(e.target as Node)) {
-      hideForm();
-    }
-  };
-
-  const handleEscPress = (e: KeyboardEvent) => {
-    if (e.key == "Escape") {
-      hideForm();
-    }
-  };
-  document.addEventListener("mousedown", handleClickOutside);
-  document.addEventListener("keydown", handleEscPress);
-
-  return () => {
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscPress);
-  };
-}
-
-/**
- * Provides given parameter values from the url given.
- * Function presumes url has fragment symbol.
- * @param url - The url from which to extract parameter values
- * @param paramKey - The parameter key, of which to find the value
- * @returns Request parameter.
- */
-export function getParamFromFragmentURL(url: string, paramKey: string): string | null {
-  const hashIndex = url.indexOf("#");
-  if (hashIndex === -1) return null;
-
-  const params = new URLSearchParams(url.slice(hashIndex + 1));
-  return params.get(paramKey);
 }

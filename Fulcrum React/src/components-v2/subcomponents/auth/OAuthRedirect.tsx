@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import useInitOAuthAccount from "../../../hooks/mutations/auth/useInitOAuthAccount.ts";
 
 export default function OAuthRedirect() {
@@ -7,12 +7,6 @@ export default function OAuthRedirect() {
 
   useEffect(() => {
     toast.loading("Please wait to be redirected.");
-    // const url = window.location.href;
-    // const accessToken = getParamFromFragmentURL(url, "access_token");
-    // const refreshToken = getParamFromFragmentURL(url, "refresh_token");
-    // if (!!accessToken && !!refreshToken) {
-    //   handleUserOAuthLoginAttempt(accessToken, refreshToken).then(initOAuthAccount);
-    // }
     initOAuthAccount();
   }, []);
 

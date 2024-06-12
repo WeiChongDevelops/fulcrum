@@ -1,23 +1,18 @@
 import { Button } from "@/components-v2/ui/button.tsx";
-import { UserPreferences } from "@/utility/types.ts";
-import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
 import MonthlyIncomeV2 from "@/components-v2/subcomponents/budget/MonthlyIncomeV2.tsx";
-import ReactCountryFlag from "react-country-flag";
 import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
-import { useQueryClient } from "@tanstack/react-query";
-import { useEmail, useSideBarIsOpen } from "@/utility/util.ts";
-import { ChatCircleDots, ChatCircleText } from "@phosphor-icons/react";
+import { useSideBarIsOpen } from "@/utility/util.ts";
+import { ChatCircleText } from "@phosphor-icons/react";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components-v2/ui/tooltip.tsx";
-import { rowsExistFor } from "@/api/init-api.ts";
 
 interface BudgetHeaderV2Props {
   totalIncome: number;
 }
 
 export default function BudgetHeaderV2({ totalIncome }: BudgetHeaderV2Props) {
-  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const sideBarOpen = useSideBarIsOpen();
+
   return (
     <div
       className={`fixed flex flex-row z-40 gap-4 justify-start items-center self-end text-primary border-b-2 ${sideBarOpen ? "w-[calc(100vw-13rem)]" : "w-[calc(100vw-5rem)]"} h-[6vh]`}

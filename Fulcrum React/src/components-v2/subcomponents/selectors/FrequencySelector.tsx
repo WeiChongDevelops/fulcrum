@@ -1,22 +1,13 @@
-import { cn, colourStyles, recurringFrequencyOptions, useEmail } from "../../../utility/util.ts";
+import { cn, recurringFrequencyOptions, useEmail } from "@/utility/util.ts";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
-  DropdownSelectorOption,
   ExpenseCreationFormData,
   ExpenseUpdatingFormData,
-  PreviousExpenseBeingEdited,
-  PreviousRecurringExpenseBeingEdited,
   UserPreferences,
   RecurringExpenseFrequency,
   RecurringExpenseInstanceUpdatingFormData,
   RecurringExpenseUpdatingFormData,
-} from "../../../utility/types.ts";
-import { Button } from "@/components-v2/ui/button.tsx";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components-v2/ui/command.tsx";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popover.tsx";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { ScrollArea, ScrollBar } from "@/components-v2/ui/scroll-area.tsx";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+} from "@/utility/types.ts";
 import {
   Select,
   SelectContent,
@@ -49,7 +40,6 @@ export default function FrequencySelector({
   initialFrequency,
 }: FrequencySelectorProps) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
-  const [open, setOpen] = useState(false);
   const [selectedFrequency, setSelectedFrequency] = useState(
     initialFrequency ? initialFrequency : mustBeRecurring ? "monthly" : "never",
   );
@@ -62,42 +52,6 @@ export default function FrequencySelector({
   }, [selectedFrequency]);
 
   return (
-    // <Popover open={open} onOpenChange={setOpen}>
-    //   <PopoverTrigger asChild>
-    //     <Button variant="outline" role="combobox" aria-expanded={open} className={cn("justify-between", className)}>
-    //       {selectedFrequency
-    //         ? recurringFrequencyOptions.find((frequencyOption) => frequencyOption.value === selectedFrequency)?.label
-    //         : "Select frequency..."}
-    //       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-    //     </Button>
-    //   </PopoverTrigger>
-    //   <PopoverContent className="p-0">
-    //     <Command>
-    //       <CommandInput placeholder="Search frequency..." maxLength={18} />
-    //       <CommandEmpty>No framework found.</CommandEmpty>
-    //       <CommandGroup>
-    //         <CommandList>
-    //           {(mustBeRecurring ? recurringFrequencyOptions.slice(1) : recurringFrequencyOptions).map((frequencyOption) => (
-    //             <CommandItem
-    //               key={frequencyOption.value}
-    //               value={frequencyOption.value}
-    //               onSelect={(currentValue) => {
-    //                 setSelectedFrequency(currentValue as RecurringExpenseFrequency);
-    //                 setOpen(false);
-    //               }}
-    //               className={"flex flex-row items-center"}
-    //             >
-    //               <span className={"ml-2 mr-auto text-left"}>{frequencyOption.label}</span>
-    //               <CheckIcon
-    //                 className={cn("ml-r h-4 w-4", selectedFrequency === frequencyOption.value ? "opacity-100" : "opacity-0")}
-    //               />
-    //             </CommandItem>
-    //           ))}
-    //         </CommandList>
-    //       </CommandGroup>
-    //     </Command>
-    //   </PopoverContent>
-    // </Popover>
     <Select
       required
       value={selectedFrequency}

@@ -1,22 +1,12 @@
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components-v2/ui/sheet.tsx";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
-import FulcrumButton from "@/components-v2/subcomponents/buttons/FulcrumButton.tsx";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
 import { BasicGroupData, GroupItemEntity, PreviousGroupBeingEdited, UserPreferences } from "@/utility/types.ts";
 import useUpdateGroup from "@/hooks/mutations/budget/useUpdateGroup.ts";
-import { addColourSelectionFunctionality, addFormExitListeners, cn, LocationContext, useEmail } from "@/utility/util.ts";
+import { cn, useEmail } from "@/utility/util.ts";
 import { Input } from "@/components-v2/ui/input.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
-import { toast } from "sonner";
 import * as React from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -35,33 +25,14 @@ export default function UpdateGroupFormV2({
     colour: oldGroupBeingEdited.oldColour,
     group: oldGroupBeingEdited.oldGroupName,
   });
-  const formRef = useRef<HTMLDivElement>(null);
   const { mutate: updateGroup } = useUpdateGroup();
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
-  const routerLocation = useContext(LocationContext);
 
   const [formIsOpen, setFormIsOpen] = useState(false);
 
-  useEffect(() => {
-    setFormData({
-      colour: oldGroupBeingEdited.oldColour,
-      group: oldGroupBeingEdited.oldGroupName,
-    });
-  }, [oldGroupBeingEdited, formIsOpen]);
-
   function hideForm() {
-    // changeFormOrModalVisibility(setBudgetFormVisibility, "isUpdateGroupVisible", false);
     setFormIsOpen(false);
   }
-
-  // useEffect(() => {
-  //   const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
-  //   const removeColourEventListeners = addColourSelectionFunctionality(setFormData);
-  //   return () => {
-  //     removeFormExitEventListeners();
-  //     removeColourEventListeners();
-  //   };
-  // }, [routerLocation]);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     setFormData((currentFormData) => {
@@ -98,6 +69,13 @@ export default function UpdateGroupFormV2({
       group: oldGroupBeingEdited.oldGroupName,
     });
   }
+
+  useEffect(() => {
+    setFormData({
+      colour: oldGroupBeingEdited.oldColour,
+      group: oldGroupBeingEdited.oldGroupName,
+    });
+  }, [oldGroupBeingEdited, formIsOpen]);
 
   return (
     <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>

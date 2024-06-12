@@ -1,6 +1,6 @@
-import { cn, colourStyles, queryTypeOptions, recurringFrequencyOptions, useEmail } from "../../../utility/util.ts";
+import { cn, queryTypeOptions } from "@/utility/util.ts";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { ContactFormData, RecurringExpenseFrequency, UserPreferences } from "../../../utility/types.ts";
+import { ContactFormData } from "@/utility/types.ts";
 import {
   Select,
   SelectContent,
@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components-v2/ui/select.tsx";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface QueryTypeSelectorProps {
   formData: ContactFormData;
@@ -32,25 +31,6 @@ export default function QueryTypeSelector({ formData, setFormData, className }: 
   }, [selectedQueryType]);
 
   return (
-    // <Select
-    //   id="queryType"
-    //   name="queryType"
-    //   options={queryTypeOptions}
-    //   onChange={handleInputChange}
-    //   defaultValue={queryTypeOptions[2]}
-    //   styles={colourStyles}
-    //   className="mt-2"
-    //   theme={(theme: any) => ({
-    //     ...theme,
-    //     borderRadius: 0,
-    //     colors: {
-    //       ...theme.colors,
-    //       primary25: "rgba(201,223,201,0.1)",
-    //       primary: "rgba(34,237,34,0.18)",
-    //     },
-    //   })}
-    //   required
-    // />
     <Select
       required
       value={formData.queryType}

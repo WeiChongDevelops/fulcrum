@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import HomeNavbar from "../subcomponents/home/shared/HomeNavbar.tsx";
 import HomeFooter from "../subcomponents/home/shared/HomeFooter.tsx";
-import { getWindowLocation } from "../../utility/util.ts";
+import { getWindowLocation } from "@/utility/util.ts";
 import "@/css/Home.css";
 
 /**

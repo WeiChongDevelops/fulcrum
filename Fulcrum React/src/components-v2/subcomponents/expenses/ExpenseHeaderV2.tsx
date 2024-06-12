@@ -1,11 +1,9 @@
 import { Button } from "@/components-v2/ui/button.tsx";
-import { monthStringArray, useEmail, useSideBarIsOpen } from "@/utility/util.ts";
+import { monthStringArray, useSideBarIsOpen } from "@/utility/util.ts";
 import { useEffect, useState } from "react";
 import { EmblaCarouselType } from "embla-carousel";
-import { MonthExpenseGroupEntity, UserPreferences } from "@/utility/types.ts";
-import DarkModeToggleV2 from "@/components-v2/subcomponents/toggles/DarkModeToggleV2.tsx";
+import { MonthExpenseGroupEntity } from "@/utility/types.ts";
 import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
-import { useQueryClient } from "@tanstack/react-query";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components-v2/ui/tooltip.tsx";
 
@@ -16,12 +14,13 @@ interface ExpenseHeaderV2Props {
 }
 
 export default function ExpenseHeaderV2({ carouselAPI, structuredExpenseData, startingIndex }: ExpenseHeaderV2Props) {
+  const sideBarOpen = useSideBarIsOpen();
+
   const [activeCarouselIndex, setActiveCarouselIndex] = useState(startingIndex);
   const [activeMonthAndYear, setActiveMonthAndYear] = useState<{
     month: string;
     year: number;
   }>({ month: monthStringArray[new Date().getMonth()], year: new Date().getFullYear() });
-  const sideBarOpen = useSideBarIsOpen();
 
   const prevSlide = () => {
     carouselAPI?.scrollPrev();

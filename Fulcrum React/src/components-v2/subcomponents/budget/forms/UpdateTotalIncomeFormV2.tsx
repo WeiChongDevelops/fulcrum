@@ -3,7 +3,6 @@ import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { cn, getCurrencySymbol, handleInputChangeOnFormWithAmount, useEmail } from "@/utility/util.ts";
 import { Input } from "@/components-v2/ui/input.tsx";
-import * as React from "react";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import useUpdateTotalIncome from "@/hooks/mutations/budget/useUpdateTotalIncome.ts";
 import { UserPreferences } from "@/utility/types.ts";
@@ -14,9 +13,9 @@ interface UpdateTotalIncomeFormV2Props {
 }
 
 export default function UpdateTotalIncomeFormV2({ totalIncome }: UpdateTotalIncomeFormV2Props) {
-  const [incomeFormIsVisible, setIncomeFormIsVisible] = useState(false);
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
 
+  const [incomeFormIsVisible, setIncomeFormIsVisible] = useState(false);
   const [formData, setFormData] = useState({ amount: totalIncome });
 
   const { mutate: updateTotalIncome } = useUpdateTotalIncome();
@@ -34,6 +33,7 @@ export default function UpdateTotalIncomeFormV2({ totalIncome }: UpdateTotalInco
   useEffect(() => {
     setFormData({ amount: totalIncome });
   }, [incomeFormIsVisible]);
+
   return (
     <Sheet open={incomeFormIsVisible} onOpenChange={setIncomeFormIsVisible}>
       <SheetTrigger className={"standard-edit-delete-button"}>

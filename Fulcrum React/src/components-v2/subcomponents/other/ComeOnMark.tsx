@@ -21,13 +21,13 @@ export default function ComeOnMark() {
             <FulcrumButton displayText={"Back to Login"} hoverShadow onClick={() => navigate("/login")} />
           </div>
           <div ref={elementRef} className={"-z-20 w-16 h-16"}>
-            <img src="/assets-v2/auth-icons/facebook-icon-inverted.png" alt="Fulcrum icon" className={"w-48"} />
+            <img src="/static/assets-v2/auth-icons/facebook-icon-inverted.png" alt="Fulcrum icon" className={"w-48"} />
           </div>
           <div ref={elementRef2} className={"-z-20 w-16 h-16"}>
-            <img src="/assets-v2/auth-icons/meta-logo.png" alt="Fulcrum icon" className={"w-48"} />
+            <img src="/static/assets-v2/auth-icons/meta-logo.png" alt="Fulcrum icon" className={"w-48"} />
           </div>
           <div ref={elementRef3} className={"-z-20 w-24"}>
-            <img src="/assets-v2/auth-icons/zuck.jpeg" alt="Fulcrum icon" className={"w-24 rounded-full"} />
+            <img src="/static/assets-v2/auth-icons/zuck.jpeg" alt="Fulcrum icon" className={"w-24 rounded-full"} />
           </div>
         </div>
       </div>

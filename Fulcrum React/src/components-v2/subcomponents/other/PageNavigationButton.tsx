@@ -22,10 +22,12 @@ export default function PageNavigationButton({
   sideBarOpen,
   className,
 }: PageNavigationButtonProps) {
+  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const navigate = useNavigate();
+
   const isActive = currentPage === page;
   const isAppPage = ["budget", "expenses", "recurring", "settings"].includes(page);
-  const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+
   return (
     <Button
       variant={isActive ? "default" : "ghost"}

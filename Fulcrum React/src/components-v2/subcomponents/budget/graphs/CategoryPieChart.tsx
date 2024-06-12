@@ -1,6 +1,6 @@
 import { PieChart, Pie, ResponsiveContainer, Sector, Cell } from "recharts";
 import { useState } from "react";
-import { BudgetItemEntity, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
+import { BudgetItemEntity, UserPreferences } from "@/utility/types.ts";
 import { formatDollarAmountStatic, useEmail } from "@/utility/util.ts";
 import { useQueryClient } from "@tanstack/react-query";
 

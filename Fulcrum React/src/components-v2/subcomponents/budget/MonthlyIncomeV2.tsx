@@ -1,13 +1,5 @@
-import {
-  cn,
-  formatDollarAmountStatic,
-  getCurrencySymbol,
-  handleInputChangeOnFormWithAmount,
-  useEmail,
-} from "@/utility/util.ts";
+import { cn, formatDollarAmountStatic, useEmail } from "@/utility/util.ts";
 import { UserPreferences } from "@/utility/types.ts";
-import { Button } from "@/components-v2/ui/button.tsx";
-import * as React from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import UpdateTotalIncomeFormV2 from "@/components-v2/subcomponents/budget/forms/UpdateTotalIncomeFormV2.tsx";
 

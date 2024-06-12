@@ -1,49 +1,22 @@
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components-v2/ui/sheet.tsx";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
 import {
-  addFormExitListeners,
-  addIconSelectionFunctionality,
   capitaliseFirstLetter,
-  changeFormOrModalVisibility,
   cn,
-  colourStyles,
   DEFAULT_CATEGORY_GROUP,
   DEFAULT_CATEGORY_ICON,
-  getColourOfGroup,
   getHighestBudgetSortIndex,
   getHighestGroupSortIndex,
   getRandomGroupColour,
-  groupListAsOptions,
-  groupSort,
   handleInputChangeOnFormWithAmount,
-  LocationContext,
   useEmail,
 } from "@/utility/util.ts";
-import GroupColourSelector from "@/components-v2/subcomponents/selectors/GroupColourSelector.tsx";
-import FulcrumButton from "@/components-v2/subcomponents/buttons/FulcrumButton.tsx";
 import { BudgetCreationFormData, BudgetItemEntity, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import CategoryIconSelector from "@/components-v2/subcomponents/selectors/CategoryIconSelector.tsx";
-import { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import useCreateBudget from "@/hooks/mutations/budget/useCreateBudget.ts";
-import {
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectLabel,
-} from "@/components-v2/ui/select.tsx";
 import GroupSelector from "@/components-v2/subcomponents/budget/GroupSelector.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -59,27 +32,15 @@ export default function CreateBudgetFormV2({ groupNameOfNewItem, currencySymbol 
     iconPath: "",
     group: groupNameOfNewItem,
   });
-  const formRef = useRef<HTMLDivElement>(null);
   const { mutate: createBudget } = useCreateBudget();
   const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
   const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["groupArray", useEmail()])!;
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
-  const routerLocation = useContext(LocationContext);
   const [formIsOpen, setFormIsOpen] = useState(false);
 
   function hideForm() {
-    // changeFormOrModalVisibility(setBudgetFormVisibility, "isCreateBudgetVisible", false);
     setFormIsOpen(false);
   }
-
-  // useEffect(() => {
-  //   const removeFormExitEventListeners = addFormExitListeners(hideForm, formRef);
-  //   const removeIconEventListeners = addIconSelectionFunctionality(setFormData, "category");
-  //   return () => {
-  //     removeIconEventListeners();
-  //     removeFormExitEventListeners();
-  //   };
-  // }, [routerLocation]);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     handleInputChangeOnFormWithAmount(e, setFormData);
@@ -127,14 +88,6 @@ export default function CreateBudgetFormV2({ groupNameOfNewItem, currencySymbol 
       group: groupNameOfNewItem,
     });
   }, [formIsOpen]);
-
-  function handleGroupInputChange(e: any) {
-    // setFormData((currentFormData: BudgetCreationFormData) => ({
-    //   ...currentFormData,
-    //   group: e.value,
-    // }));
-    handleInputChangeOnFormWithAmount(e, setFormData);
-  }
 
   return (
     <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>

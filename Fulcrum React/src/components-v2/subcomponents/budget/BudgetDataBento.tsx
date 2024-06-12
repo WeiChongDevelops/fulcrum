@@ -1,30 +1,10 @@
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components-v2/ui/drawer.tsx";
-import { Button } from "@/components-v2/ui/button.tsx";
-import { cn, getGroupBudgetTotal, useEmail } from "@/utility/util.ts";
-import { BudgetItemEntity, CategoryToIconAndColourMap, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
+import { budgetSizeSort, cn, getGroupBudgetTotal, useEmail } from "@/utility/util.ts";
+import { BudgetItemEntity, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import { useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components-v2/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components-v2/ui/select";
 import GroupPieChart from "@/components-v2/subcomponents/budget/graphs/GroupPieChart.tsx";
 import CategoryPieChart from "@/components-v2/subcomponents/budget/graphs/CategoryPieChart.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { ScrollArea } from "@/components-v2/ui/scroll-area.tsx";
 import BudgetDistributionDrawer from "@/components-v2/subcomponents/budget/BudgetDistributionDrawer.tsx";
 
 interface BudgetDataBentoProps {
@@ -36,10 +16,6 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
   const groupArray: GroupItemEntity[] = useQueryClient().getQueryData(["groupArray", useEmail()])!;
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
 
-  const budgetSizeSort = (budgetItemA: BudgetItemEntity, budgetItemB: BudgetItemEntity) => {
-    return budgetItemA.amount > budgetItemB.amount ? -1 : 1;
-  };
-
   const groupSizeSort = (groupItemA: GroupItemEntity, groupItemB: GroupItemEntity) =>
     getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === groupItemA.group)) <=
     getGroupBudgetTotal(budgetArray.filter((budgetItem) => budgetItem.group === groupItemB.group))
@@ -49,6 +25,12 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
   const [sortByGroup, setSortByGroup] = useState(false);
   const [groupArraySortedByAmount, setGroupArraySortedByAmount] = useState(groupArray.sort(groupSizeSort));
   const [budgetArraySortedByAmount, setBudgetArraySortedByAmount] = useState(budgetArray.sort(budgetSizeSort));
+
+  const handleValueChange = (value: string) => {
+    setSortByGroup(value === "group");
+    setRerenderKey(rerenderKey + 1);
+  };
+
   useEffect(() => {
     setGroupArraySortedByAmount(groupArray.sort(groupSizeSort));
   }, [groupArray]);
@@ -57,11 +39,6 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
     setBudgetArraySortedByAmount(budgetArray.sort(budgetSizeSort));
   }, [budgetArray]);
   const [rerenderKey, setRerenderKey] = useState(0);
-
-  const handleValueChange = (value: string) => {
-    setSortByGroup(value === "group");
-    setRerenderKey(rerenderKey + 1);
-  };
 
   return (
     <div

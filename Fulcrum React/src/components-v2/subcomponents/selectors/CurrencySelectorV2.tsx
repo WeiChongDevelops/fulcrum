@@ -1,20 +1,8 @@
-import { UserPreferences, RecurringExpenseFrequency } from "@/utility/types.ts";
+import { UserPreferences } from "@/utility/types.ts";
 import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components-v2/ui/command.tsx";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components-v2/ui/popover.tsx";
-import { Button } from "@/components-v2/ui/button.tsx";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { cn, currencyOptions, getCurrencyCountryCode, recurringFrequencyOptions, useEmail } from "@/utility/util.ts";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components-v2/ui/select.tsx";
+import { useEffect, useState } from "react";
+import { cn, currencyOptions, getCurrencyCountryCode, useEmail } from "@/utility/util.ts";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components-v2/ui/select.tsx";
 import ReactCountryFlag from "react-country-flag";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -29,7 +17,6 @@ export default function CurrencySelectorV2({ className }: CurrencySelectorV2Prop
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const { mutate: updateUserPreferences } = useUpdateUserPreferences();
 
-  // const [open, setOpen] = useState(false);
   const [currencyValue, setCurrencyValue] = useState(userPreferences.currency);
 
   useEffect(() => {
@@ -38,7 +25,6 @@ export default function CurrencySelectorV2({ className }: CurrencySelectorV2Prop
 
   const handleSelect = (currentValue: string) => {
     setCurrencyValue(currentValue === currencyValue ? "" : currentValue);
-    // setOpen(false);
     const updatedUserPreferences: UserPreferences = { ...userPreferences, currency: currentValue };
     updateUserPreferences(updatedUserPreferences);
   };

@@ -1,7 +1,7 @@
 export default function PrivacyPolicy() {
   return (
     <div className={"prose prose-lg prose-indigo m-auto mt-12 text-left max-w-[60vw]"}>
-      <img src="/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Fulcrum icon" className={"w-24"} />
+      <img src="/static/assets-v2/fulcrum-logos/fulcrum-icon.png" alt="Fulcrum icon" className={"w-24"} />
       <h1>Fulcrum Finance | Privacy Policy</h1>
       <p>Last updated: April 20, 2024</p>
       <p>

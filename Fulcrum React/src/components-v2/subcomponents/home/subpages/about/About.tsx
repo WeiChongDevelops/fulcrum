@@ -1,8 +1,8 @@
 import UpperCopy from "./UpperCopy.tsx";
 import MidCopy from "./MidCopy.tsx";
 import LowerCopy from "./LowerCopy.tsx";
-import { useContext, useEffect, useRef, useState } from "react";
-import { LocationContext, useLocation } from "../../../../../utility/util.ts";
+import { useEffect, useRef, useState } from "react";
+import { useLocation } from "@/utility/util.ts";
 import { CaretDown } from "@phosphor-icons/react";
 
 /**
@@ -32,11 +32,6 @@ export default function About() {
 
   return (
     <div className={"z-10 bg-[#e0eddf] relative"}>
-      {/*<img*/}
-      {/*  src="/static/assets-v2/homepage-assets/scroll-arrow.svg"*/}
-      {/*  className={`fixed top-[95vh] bouncy-arrow left-[50vw] w-[2vw] h-[2vw] z-50 opacity-75 ${showArrow ? "block" : "hidden"}`}*/}
-      {/*  alt={"scroll indicator"}*/}
-      {/*></img>*/}
       <CaretDown
         className={`fixed top-[95vh] bouncy-arrow left-1/2 z-50 opacity-75 ${showArrow ? "block" : "hidden"}`}
         size={24}

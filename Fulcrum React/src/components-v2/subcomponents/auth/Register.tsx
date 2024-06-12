@@ -5,7 +5,7 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import useRegisterUser from "../../../hooks/mutations/auth/useRegisterUser.ts";
 import Loader from "../other/Loader.tsx";
 import { toast } from "sonner";
-import { RegisterFormData } from "../../../utility/types.ts";
+import { RegisterFormData } from "@/utility/types.ts";
 import OAuthLoginButton from "@/components-v2/subcomponents/buttons/OAuthLoginButton.tsx";
 import useOAuthLoginUrl from "../../../hooks/mutations/auth/useOAuthLoginUrl.ts";
 import { Label } from "@/components-v2/ui/label.tsx";
@@ -99,12 +99,12 @@ export default function Register() {
     <>
       <Loader isLoading={isRegistrationPending || isOAuthURLPending} isDarkMode={false} />
       <div className={`${(isRegistrationPending || isOAuthURLPending) && "opacity-80 animate-pulse transition-opacity"}`}>
-        <img src="/assets-v2/other-assets/register-bg-cmp.webp" className={"hidden"} />
+        <img src="/static/assets-v2/other-assets/register-bg-cmp.webp" className={"hidden"} alt={""} />
         <div className={"auth-page-container register-page"}>
           <div className={"auth-page-left-column"}>
             <div className={"flex-1"}>
               <img
-                src="/assets-v2/fulcrum-logos/fulcrum-long-white.webp"
+                src="/static/assets-v2/fulcrum-logos/fulcrum-logo-white-v2.webp"
                 className={"auth-standard-fulcrum-logo"}
                 alt="Fulcrum logo"
               />
@@ -117,7 +117,7 @@ export default function Register() {
           <div className={"auth-page-right-column"}>
             <div className={"flex-1"}>
               <img
-                src="/assets-v2/fulcrum-logos/fulcrum-long-white.webp"
+                src="/static/assets-v2/fulcrum-logos/fulcrum-logo-white-v2.webp"
                 className={"auth-mobile-fulcrum-logo"}
                 alt="Fulcrum logo"
               />

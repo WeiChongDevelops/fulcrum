@@ -1,23 +1,17 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { UserPreferences } from "@/utility/types.ts";
 import { useQueryClient } from "@tanstack/react-query";
-import { cn, getCurrencySymbol, handleInputChangeOnFormWithAmount, useEmail } from "@/utility/util.ts";
-import useUpdateTotalIncome from "@/hooks/mutations/budget/useUpdateTotalIncome.ts";
+import { cn, useEmail } from "@/utility/util.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components-v2/ui/sheet.tsx";
 import { Button } from "@/components-v2/ui/button.tsx";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components-v2/ui/tooltip";
-import useUpdateUserPreferences from "@/hooks/mutations/other/useUpdateUserPreferences.ts";
 import useUploadProfileImage from "@/hooks/mutations/other/useUploadProfileImage.ts";
-import Loader from "@/components-v2/subcomponents/other/Loader.tsx";
-import { Skeleton } from "@/components-v2/ui/skeleton.tsx";
 import useWipeProfileImageData from "@/hooks/mutations/other/useWipeProfileImageData.ts";
 
 export default function UpdateAvatarFormV2() {
   const maxFileSize = 16 * 1024 * 1024; // 16MB
-
-  const [avatarFormOpen, setAvatarFormOpen] = useState(false);
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const profileImageURL: string = useQueryClient().getQueryData(["profileImageURL", useEmail()])!;
 
@@ -28,11 +22,11 @@ export default function UpdateAvatarFormV2() {
     avatarFileName: userPreferences.profileIconFileName,
     avatarByteArray: null,
   });
+  const [avatarFormOpen, setAvatarFormOpen] = useState(false);
   const [triggerHovered, setTriggerHovered] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(profileImageURL);
   const [error, setError] = useState<string | null>(null);
 
-  const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const { mutate: uploadProfileImage } = useUploadProfileImage();
   const { mutate: removeProfileImages } = useWipeProfileImageData();
 

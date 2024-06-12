@@ -1,5 +1,5 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { LocationContext, useLocation } from "../../../../../utility/util.ts";
+import { useEffect, useRef, useState } from "react";
+import { useLocation } from "@/utility/util.ts";
 
 interface InfoTileProps {
   initialDisplayText: string;
@@ -48,14 +48,6 @@ export default function InfoTile({
   function handleTouch() {
     setIsHovered(!isHovered);
   }
-
-  // useEffect(() => {
-  //   if (isHovered) {
-  //     tileRef.current?.classList.add("budget-tile-raise-flip");
-  //   } else {
-  //     tileRef.current?.classList.remove("budget-tile-raise-flip");
-  //   }
-  // }, [isHovered, routerLocation]);
 
   return (
     <div className={"single-tile-container hide-tile select-none hover:cursor-default"} ref={tileRef}>
