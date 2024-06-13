@@ -6,10 +6,10 @@ import { cn } from "@/utility/util.ts";
  */
 export default function Pricing() {
   return (
-    <div className={"flex flex-col"}>
+    <div className={"flex flex-col items-center"}>
       <div
         className={
-          "pricing-container flex flex-row justify-around w-screen relative bg-[#C0E2D1] pt-[5vw] px-[20vw] pb-[10vw] -mb-[3vw] z-0"
+          "pricing-container flex flex-row justify-around items-center w-screen relative bg-[#C0E2D1] pt-[5vw] px-[20vw] pb-[10vw] -mb-[3vw] z-0"
         }
       >
         <div className={"pricing-copy"}>
@@ -55,10 +55,23 @@ export default function Pricing() {
         {/*  />*/}
         {/*</div>*/}
       </div>
-      <div className={cn("w-full flex flex-row justify-center items-center gap-8 -mt-24 z-10")}>
-        <div className={"w-[30vw] aspect-[5/3] bg-black rounded-lg"}></div>
-        <div className={"w-[30vw] aspect-[5/3] bg-black rounded-lg"}></div>
+      <div className={cn("w-full flex flex-row justify-center items-center gap-12 -mt-24 z-10")}>
+        <div className={"w-[28vw] aspect-[5/3] bg-black rounded-lg"}></div>
+        <div className={"w-[28vw] aspect-[5/3] bg-black rounded-lg"}></div>
       </div>
+      <div className={"flex flex-row justify-center mt-14 relative"}>
+        <img src="/static/assets-v2/homepage-assets/homepage-highlight-3.png" className={"size-5"} alt="" />
+        <p className={"w-[55ch] font-medium"}>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores, rerum, veritatis. A ad, odio omnis qui ratione
+          rerum ullam.
+        </p>
+        <img
+          src="/static/assets-v2/homepage-assets/homepage-highlight-2.png"
+          className={"w-14 absolute -top-12 -right-60"}
+          alt=""
+        />
+      </div>
+      <FulcrumButton displayText={"Lorem ipsum"} optionalTailwind={"w-48 mt-6"} />
     </div>
   );
 }

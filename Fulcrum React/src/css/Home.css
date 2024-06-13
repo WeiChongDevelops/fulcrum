@@ -288,22 +288,14 @@
 }
 
 .loop-animate-opacity {
-  animation: 9s opacityFlux infinite ease-in-out;
+  animation: 4s opacityFlux forwards ease-in-out;
 }
 
 @keyframes opacityFlux {
-  0%,
-  100% {
-    filter: none;
+  0% {
     opacity: 0;
   }
-  25%,
-  75% {
-    filter: saturate(200%);
-  }
-  35%,
-  65% {
-    filter: none;
+  100% {
     opacity: 1;
   }
 }

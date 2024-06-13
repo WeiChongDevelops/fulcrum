@@ -1,4 +1,5 @@
 import { RefObject } from "react";
+import { cn } from "@/utility/util.ts";
 
 interface FulcrumButtonProps {
   displayText: string;
@@ -40,9 +41,12 @@ export default function FulcrumButton({
   return (
     <button
       onClick={onClick}
-      className={`fulcrum-button font-bold rounded-xl py-[0.4em] px-[1.4em] text-center hover:opacity-90
-        ${hoverShadow && "transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[6px_6px_0px_black]"}
-        ${optionalTailwind}`}
+      className={cn(
+        "fulcrum-button font-bold rounded-xl py-[0.4em] px-[1.4em] text-center hover:opacity-90",
+        hoverShadow &&
+          "transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[6px_6px_0px_black]",
+        optionalTailwind,
+      )}
       style={{
         backgroundColor: backgroundStyles(),
         color: backgroundStyles() === "white" ? "black" : "white",
