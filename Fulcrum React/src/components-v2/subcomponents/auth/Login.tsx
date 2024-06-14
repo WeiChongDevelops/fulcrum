@@ -60,9 +60,9 @@ export default function Login() {
                 alt="Fulcrum logo"
               />
             </div>
-            <div className={"auth-text"}>
+            <div className={"auth-text mt-36"}>
               <b className={"text-5xl"}>Log into your account.</b>
-              <p className={"text-lg ml-2 mt-8"}>Every dollar deserves a job.</p>
+              <p className={"text-lg ml-1 mt-8 font-sans font-light"}>Every dollar deserves a job.</p>
             </div>
           </div>
           <div className={"auth-page-right-column"}>
@@ -104,7 +104,7 @@ export default function Login() {
                 />
               </div>
               <div className={"flex flex-row justify-between items-end w-full"}>
-                <div className={"mr-8 text-xs font-medium"}>
+                <div className={"mr-8 text-xs font-medium font-sans"}>
                   <span>Don't have an account? </span>
                   <a href={"/register"} className={"underline text-[#17423F] font-semibold"}>
                     Register
@@ -140,7 +140,7 @@ export default function Login() {
                   openOAuthLogin={openOAuthLogin}
                 />
               </div>
-              <div className={"mt-6 text-xs"}>
+              <div className={"mt-6 text-xs font-sans"}>
                 <span>See our </span>
                 <a href={"/privacy"} className={"underline text-[#17423F] font-semibold hover:cursor-pointer"}>
                   Privacy Policy

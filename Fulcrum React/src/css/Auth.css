@@ -40,7 +40,6 @@
 .auth-page-left-column {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
   height: 65vh;
   padding: 0 0 8rem 6rem;
@@ -51,7 +50,6 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  /*height: 50vh;*/
   margin-right: 4rem;
 }
 
@@ -109,7 +107,6 @@
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
   height: 100vh;
   width: 35vw;

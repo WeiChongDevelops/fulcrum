@@ -1,6 +1,6 @@
 import FulcrumButton from "@/components-v2/subcomponents/buttons/FulcrumButton.tsx";
-import { useContext, useEffect, useRef } from "react";
-import { LocationContext, useLocation } from "../../../../../utility/util.ts";
+import { useEffect, useRef } from "react";
+import { useLocation } from "@/utility/util.ts";
 
 /**
  * Upper-page component displaying sales copy and a concise version of the user steps.

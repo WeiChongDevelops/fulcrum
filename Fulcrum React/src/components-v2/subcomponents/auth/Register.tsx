@@ -109,9 +109,9 @@ export default function Register() {
                 alt="Fulcrum logo"
               />
             </div>
-            <div className={"auth-text"}>
+            <div className={"auth-text mt-36"}>
               <b className={"text-5xl"}>Register for an account.</b>
-              <p className={"text-lg ml-2 mt-8"}>Start saving for free today.</p>
+              <p className={"text-lg ml-1 mt-8 font-sans font-light"}>Start saving for free today.</p>
             </div>
           </div>
           <div className={"auth-page-right-column"}>
@@ -174,7 +174,7 @@ export default function Register() {
                 />
               </div>
               <div className={"flex flex-row justify-between items-end w-full"}>
-                <div className={"mr-8 text-xs font-medium"}>
+                <div className={"mr-8 text-xs font-medium font-sans"}>
                   <span>Already have an account? </span>
                   <a href={"/login"} className={"underline text-[#17423F] font-semibold"}>
                     Login
@@ -210,7 +210,7 @@ export default function Register() {
                   openOAuthLogin={openOAuthLogin}
                 />
               </div>
-              <div className={"mt-6 text-xs"}>
+              <div className={"mt-6 text-xs font-sans"}>
                 <span>See our </span>
                 <span
                   className={"underline text-[#17423F] font-semibold hover:cursor-pointer"}

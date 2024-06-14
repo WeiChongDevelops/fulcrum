@@ -1,6 +1,6 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import InfoTile from "./InfoTile.tsx";
-import { LocationContext, useLocation } from "../../../../../utility/util.ts";
+import { useLocation } from "@/utility/util.ts";
 
 /**
  * Mid-page component displaying sales copy on interactive tiles for key benefits.
