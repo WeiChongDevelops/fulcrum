@@ -85,7 +85,7 @@ export default function Contact() {
   return (
     <div
       className={
-        "contact-container w-screen h-[calc(100vh-100px)] bg-sky-200/20 relative flex flex-row justify-around py-[6.5vw] -mb-[2.5rem] xl:-mb-[7.5rem] text-left text-black "
+        "contact-container w-screen h-[calc(100vh-100px)] bg-gradient-to-br from-sky-100 to-emerald-200 relative flex flex-row justify-around py-[6.5vw] -mb-[2.5rem] xl:-mb-[7.5rem] text-left text-black "
       }
     >
       <img
@@ -94,12 +94,12 @@ export default function Contact() {
         alt="Pricing background"
       />
       <div
-        className={"pricing-stripe absolute w-[150vw] h-[8vw] top-[38vh] -left-40 rotate-[-20deg] bg-[#17423f] -z-10"}
+        className={"pricing-stripe absolute w-[150vw] h-[8vw] top-[38vh] -left-40 rotate-[-20deg] bg-[#17423f] z-10"}
       ></div>
 
       <div className={"contact-copy"}>
         <p className={"text-5xl font-bold mb-4"}>We're here to help.</p>
-        <p className={"mt-2 font-bold"}>Reach out to our team for assistance.</p>
+        <p className={"mt-2 font-bold font-open font-sans"}>Contact our customer support team for assistance.</p>
         {formStatus && (
           <p className={"my-6 font-bold text-green-500 contact-status w-40%"} key={statusAnimationKey}>
             {formStatus}
@@ -107,7 +107,7 @@ export default function Contact() {
         )}
         <Loader isLoading={isLoading} isDarkMode={false} positioning={"flex justify-center items-center mt-12"} />
       </div>
-      <div className={"contact-form-container"}>
+      <div className={"contact-form-container z-20"}>
         <form
           className={"flex flex-col bg-[#282d33] px-10 py-10 rounded-md w-full bg-opacity-80 text-sm"}
           ref={formRef}
@@ -118,7 +118,7 @@ export default function Contact() {
           </Label>
           <QueryTypeSelector formData={formData} setFormData={setFormData} className={"mt-2"} />
 
-          <div className={"flex flex-row justify-between"}>
+          <div className={"flex flex-row justify-between font-medium"}>
             <div className={"flex flex-col w-[38%]"}>
               <Label htmlFor="firstName" className={"mt-4 text-white font-bold"}>
                 First Name

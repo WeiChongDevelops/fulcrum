@@ -421,22 +421,22 @@ export const queryTypeOptions = [
   {
     value: "reportIssue",
     label: "Report Issue",
-    colour: "black",
   },
   {
     value: "accountInquiry",
     label: "Account Inquiry",
-    colour: "black",
   },
   {
     value: "deleteAccount",
     label: "Account Deletion Request",
-    colour: "black",
+  },
+  {
+    value: "contactSales",
+    label: "Contact Sales",
   },
   {
     value: "generalInquiry",
     label: "General Inquiry",
-    colour: "black",
   },
 ];
 

@@ -42,9 +42,9 @@ export default function FulcrumButton({
     <button
       onClick={onClick}
       className={cn(
-        "fulcrum-button font-bold rounded-xl py-[0.4em] px-[1.4em] text-center hover:opacity-90",
+        "fulcrum-button font-bold rounded-lg py-[0.4em] px-[1.4em] text-center hover:opacity-90",
         hoverShadow &&
-          "transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[6px_6px_0px_black]",
+          "transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-sm hover:shadow-[6px_6px_0px_black]",
         optionalTailwind,
       )}
       style={{

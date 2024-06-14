@@ -34,7 +34,7 @@ export default function About() {
     <div className={"z-10 bg-[#e0eddf] relative"}>
       <CaretDown
         className={`fixed top-[95vh] bouncy-arrow left-1/2 z-50 opacity-75 ${showArrow ? "block" : "hidden"}`}
-        size={24}
+        size={30}
       />
       <UpperCopy />
       <MidCopy />

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "@/utility/util.ts";
+import { cn, useLocation } from "@/utility/util.ts";
 
 interface InfoTileProps {
   initialDisplayText: string;
@@ -66,10 +66,14 @@ export default function InfoTile({
           <p className={"text-xs mt-2"}>(Hover/Tap to Learn More)</p>
         </div>
         <div
-          className={`absolute flex flex-col justify-center items-center p-5 font-medium ${isHovered ? "block" : "hidden"}`}
+          className={cn(
+            "absolute flex flex-col justify-center items-center font-medium",
+            isHovered ? "block" : "hidden",
+            "2xl:px-10 px-5",
+          )}
         >
           <p className={"text-lg"}>{hoverDisplayText}</p>
-          <img src={iconPathBack} alt="Info tile icon" className={"w-6 h-auto mt-4"} />
+          <img src={iconPathBack} alt="Info tile icon" className={"w-6 h-auto mt-4 mx-auto"} />
         </div>
       </div>
     </div>

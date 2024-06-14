@@ -39,7 +39,7 @@ export default function UpperCopy() {
             alt="Page highlight"
           />
           <p className={"text-5xl text-left font-bold"}>It's time to start paying yourself first.</p>
-          <p className={"my-6 font-bold"}>180,000 others have found their balance.</p>
+          <p className={"my-6 font-bold font-sans"}>180,000 others have found their balance.</p>
           <div className={"flex flex-row justify-start items-center mb-8"}>
             <img src="/static/assets-v2/homepage-assets/testimonials.svg" alt="Testimonials" className={"w-32"} />
             <div
@@ -62,7 +62,9 @@ export default function UpperCopy() {
               </div>
             </div>
           </div>
-          <p className={"font-medium text-zinc-700 mt-3"}>Integrated budgeting and expense tracking, demystified.</p>
+          <p className={"font-medium text-zinc-700 mt-3 font-sans"}>
+            Integrated budgeting and expense tracking, demystified.
+          </p>
         </div>
         <div className={"upper-instructions-container"}>
           <div className={"upper-instruction"}>

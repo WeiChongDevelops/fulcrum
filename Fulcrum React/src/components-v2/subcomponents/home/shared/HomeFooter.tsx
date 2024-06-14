@@ -39,33 +39,33 @@ export default function HomeFooter({ backgroundPath }: HomeFooterProps) {
         </div>
 
         <b className={"row-start-5 col-start-2 pl-[10vw] pb-1"}>Navigation</b>
-        <a href={"/home/about"} className={"homepage-footer-link row-start-6 col-start-2 pl-[10vw]"}>
+        <a href={"/home/about"} className={"homepage-footer-link row-start-6 col-start-2 pl-[10vw] font-sans"}>
           About
         </a>
-        <a href={"/home/pricing"} className={"homepage-footer-link row-start-7 col-start-2 pl-[10vw]"}>
+        <a href={"/home/pricing"} className={"homepage-footer-link row-start-7 col-start-2 pl-[10vw] font-sans"}>
           Pricing
         </a>
-        <a href={"/home/contact"} className={"homepage-footer-link row-start-[8] col-start-2 pl-[10vw]"}>
+        <a href={"/home/contact"} className={"homepage-footer-link row-start-[8] col-start-2 pl-[10vw] font-sans"}>
           Contact
         </a>
 
         <b className={"row-start-5 col-start-3 pl-[10vw] pb-1"}>Additional</b>
         <a
           href={"https://github.com/WeiChongDevelops/Fulcrum"}
-          className={"homepage-footer-link row-start-6 col-start-3 pl-[10vw]"}
+          className={"homepage-footer-link row-start-6 col-start-3 pl-[10vw] font-sans"}
         >
           GitHub
         </a>
         <a
           href={"https://github.com/WeiChongDevelops/Fulcrum/blob/main/LICENSE"}
-          className={"homepage-footer-link row-start-7 col-start-3 pl-[10vw]"}
+          className={"homepage-footer-link row-start-7 col-start-3 pl-[10vw] font-sans"}
         >
           License
         </a>
-        <a href={"https://weichong.dev/"} className={"homepage-footer-link row-start-[8] col-start-3 pl-[10vw]"}>
+        <a href={"https://weichong.dev/"} className={"homepage-footer-link row-start-[8] col-start-3 pl-[10vw] font-sans"}>
           More from Developer
         </a>
-        <a href={"/privacy"} className={"homepage-footer-link row-start-[9] col-start-3 pl-[10vw]"}>
+        <a href={"/privacy"} className={"homepage-footer-link row-start-[9] col-start-3 pl-[10vw] font-sans"}>
           Privacy Policy
         </a>
       </div>
