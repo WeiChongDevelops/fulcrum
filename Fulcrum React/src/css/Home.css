@@ -74,7 +74,7 @@
 .upper-copy-first-row {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .upper-copy-left-col {
@@ -91,10 +91,10 @@
 .upper-copy-left-col:after {
   content: "";
   background-color: #282d33;
-  width: 1px;
+  width: 2px;
   position: absolute;
   height: 100%;
-  left: 113%;
+  left: 119%;
 }
 
 .homepage-number-circle {

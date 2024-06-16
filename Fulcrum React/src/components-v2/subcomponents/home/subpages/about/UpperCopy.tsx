@@ -31,8 +31,8 @@ export default function UpperCopy() {
 
   return (
     <div className={"flex flex-col justify-start items-center w-screen px-20 pt-40 pb-6 text-black relative"}>
-      <div className={"upper-copy-first-row"}>
-        <div className={"upper-copy-left-col mr-8 sm:mr-32 gap-1"}>
+      <div className={"upper-copy-first-row w-screen px-[5vw]"}>
+        <div className={"upper-copy-left-col mr-8 sm:mr-36 2xl:mr-64"}>
           <img
             src="/static/assets-v2/homepage-assets/homepage-highlight-1.png"
             className={"w-8 absolute left-[100%] top-0"}
@@ -62,11 +62,9 @@ export default function UpperCopy() {
               </div>
             </div>
           </div>
-          <p className={"font-medium text-zinc-700 mt-3 font-sans"}>
-            Integrated budgeting and expense tracking, demystified.
-          </p>
+          <p className={"font-medium text-zinc-700 mt-1"}>Integrated budgeting and expense tracking, demystified.</p>
         </div>
-        <div className={"upper-instructions-container"}>
+        <div className={"upper-instructions-container "}>
           <div className={"upper-instruction"}>
             <div className={"homepage-number-circle"}>1</div>
             <p>Sign up for a free account.</p>

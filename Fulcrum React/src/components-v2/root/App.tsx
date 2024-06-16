@@ -25,8 +25,6 @@ import BudgetV2 from "@/components-v2/pages/BudgetV2.tsx";
 import Maintenance from "@/components-v2/pages/Maintenance.tsx";
 import * as Frigade from "@frigade/react";
 import Playground from "@/Playground.tsx";
-import { useFlow } from "@frigade/react";
-
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
  */
