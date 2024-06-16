@@ -179,7 +179,6 @@ export default function BudgetV2({ perCategoryExpenseTotalThisMonth, setPerCateg
                       setLocalisedGroupArray={setLocalisedGroupArray}
                       oldGroupBeingEdited={oldGroupBeingEdited}
                       key={group.id}
-                      id={group.id === 1 ? "tooltip-select-1" : ""}
                     />
                   ))}
               </SortableContext>

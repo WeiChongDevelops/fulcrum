@@ -31,7 +31,7 @@ export default function CurrencySelectorV2({ className }: CurrencySelectorV2Prop
 
   return (
     <Select value={currencyValue} onValueChange={handleSelect}>
-      <SelectTrigger className={cn("px-4 flex flex-row items-center gap-1", className)}>
+      <SelectTrigger className={cn("px-4 flex flex-row items-center gap-1 w-28", className)}>
         <ReactCountryFlag
           countryCode={getCurrencyCountryCode(userPreferences.currency)}
           svg

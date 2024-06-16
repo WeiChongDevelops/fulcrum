@@ -15,7 +15,7 @@ export default function MonthlyIncomeV2({ className, totalIncome, id }: MonthlyI
   return (
     <div
       className={cn(
-        `flex flex-row justify-between items-center px-4 py-1 w-[35%] bg-[#002E38] text-white rounded-xl text-xs ${className}`,
+        `flex flex-row justify-between items-center pl-5 pr-6 py-1 w-[35%] bg-[#002E38] text-white rounded-xl text-xs ${className}`,
       )}
       id={id}
     >

@@ -23,8 +23,12 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
       : -1;
 
   const [sortByGroup, setSortByGroup] = useState(false);
-  const [groupArraySortedByAmount, setGroupArraySortedByAmount] = useState(groupArray.sort(groupSizeSort));
-  const [budgetArraySortedByAmount, setBudgetArraySortedByAmount] = useState(budgetArray.sort(budgetSizeSort));
+  const [groupArraySortedByAmount, setGroupArraySortedByAmount] = useState(
+    !!groupArray && groupArray.length > 1 ? groupArray.sort(groupSizeSort) : [],
+  );
+  const [budgetArraySortedByAmount, setBudgetArraySortedByAmount] = useState(
+    !!budgetArray && budgetArray.length > 1 ? budgetArray.sort(budgetSizeSort) : [],
+  );
 
   const handleValueChange = (value: string) => {
     setSortByGroup(value === "group");

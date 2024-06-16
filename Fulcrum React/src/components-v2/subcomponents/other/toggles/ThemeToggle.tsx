@@ -9,21 +9,19 @@ interface ThemeToggleProps {
   hideDescriptor?: boolean;
   sideBarOpen?: boolean;
   className?: string;
+  alwaysWhite?: boolean;
 }
 
-export default function ThemeToggle({ sideBarOpen = true, hideDescriptor = false, className }: ThemeToggleProps) {
+export default function ThemeToggle({
+  sideBarOpen = true,
+  hideDescriptor = false,
+  className,
+  alwaysWhite,
+}: ThemeToggleProps) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const [darkModeOn, setDarkModeOn] = useState(userPreferences.darkModeEnabled);
   const { mutate: updateUserPreferences } = useUpdateUserPreferences();
   const routerLocation = useContext(LocationContext);
-
-  useEffect(() => {
-    setDarkModeOn(userPreferences.darkModeEnabled);
-  }, [userPreferences, routerLocation]);
-
-  useEffect(() => {
-    setRerenderKey(rerenderKey + 1);
-  }, [darkModeOn]);
 
   const handleToggleChange = () => {
     setDarkModeOn(!darkModeOn);
@@ -33,8 +31,22 @@ export default function ThemeToggle({ sideBarOpen = true, hideDescriptor = false
 
   const [rerenderKey, setRerenderKey] = useState(0);
 
+  useEffect(() => {
+    setDarkModeOn(userPreferences.darkModeEnabled);
+  }, [userPreferences, routerLocation]);
+
+  useEffect(() => {
+    setRerenderKey(rerenderKey + 1);
+  }, [darkModeOn]);
+
   return (
-    <div className={cn("flex flex-row justify-start items-center gap-3.5 font-semibold text-white", className)}>
+    <div
+      className={cn(
+        "flex flex-row justify-start items-center gap-3.5 font-semibold text-white",
+        className,
+        alwaysWhite ? "text-white" : "text-primary",
+      )}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

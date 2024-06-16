@@ -29,7 +29,7 @@ export default function AccessibilityToggle({ hideDescriptor = false, className 
   };
 
   return (
-    <div className={cn("flex flex-row justify-start items-center gap-3.5 font-semibold text-white", className)}>
+    <div className={cn("flex flex-row justify-start items-center gap-3.5 font-semibold text-primary", className)}>
       {accessibilityOn ? <CircleHalf size={"1.5rem"} /> : <Palette size={"1.5rem"} />}
       {!hideDescriptor && <p>Accessibility</p>}
       <Switch checked={accessibilityOn} onCheckedChange={handleToggleChange} className={"shadow sun-glow"} />

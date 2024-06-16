@@ -215,7 +215,7 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
               </svg>
             }
           />
-          <ThemeToggle sideBarOpen={sideBarOpen} className={"pl-4 h-12 mt-auto"} />
+          <ThemeToggle sideBarOpen={sideBarOpen} className={"pl-4 h-12 mt-auto"} alwaysWhite />
           <PageNavigationButton
             currentPage={currentPage}
             page={"help"}

@@ -7,6 +7,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import useUpdateTotalIncome from "@/hooks/mutations/budget/useUpdateTotalIncome.ts";
 import { UserPreferences } from "@/utility/types.ts";
 import { useQueryClient } from "@tanstack/react-query";
+import { useFlow } from "@frigade/react";
 
 interface UpdateTotalIncomeFormV2Props {
   totalIncome: number;
@@ -14,6 +15,7 @@ interface UpdateTotalIncomeFormV2Props {
 
 export default function UpdateTotalIncomeFormV2({ totalIncome }: UpdateTotalIncomeFormV2Props) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
+  const { flow } = useFlow("flow_Yof1mJfk");
 
   const [incomeFormIsVisible, setIncomeFormIsVisible] = useState(false);
   const [formData, setFormData] = useState({ amount: totalIncome });
@@ -80,7 +82,13 @@ export default function UpdateTotalIncomeFormV2({ totalIncome }: UpdateTotalInco
             />
           </div>
 
-          <Button className={"mt-2 self-end"} variant={userPreferences.darkModeEnabled ? "secondary" : "default"}>
+          <Button
+            onClick={() => {
+              flow?.steps.get("welcome-tooltip-1")?.complete();
+            }}
+            className={"mt-2 self-end"}
+            variant={userPreferences.darkModeEnabled ? "secondary" : "default"}
+          >
             Save Changes
           </Button>
         </form>

@@ -103,7 +103,7 @@ export async function getProfileImageDirect(fileName: string): Promise<string> {
 export async function handleProfileImageDataWipe(): Promise<void> {
   try {
     const activeUserId = await getActiveUserId();
-    const { data, error } = await supabaseClient.storage.from("profile-picture").remove([activeUserId]);
+    const { error } = await supabaseClient.storage.from("profile-picture").remove([activeUserId]);
     if (error) {
       throw new Error(error.message);
     }

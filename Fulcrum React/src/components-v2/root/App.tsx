@@ -55,7 +55,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <Frigade.Provider apiKey={import.meta.env.VITE_FRIGADE_API_KEY} userId={activeUserId}>
+      <Frigade.Provider apiKey={import.meta.env.VITE_FRIGADE_KEY} userId={activeUserId}>
         <EmailContext.Provider value={email!}>
           <LocationContext.Provider value={location}>
             <Toaster richColors />

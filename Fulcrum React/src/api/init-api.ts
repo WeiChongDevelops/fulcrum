@@ -209,7 +209,7 @@ function getDefaultCategories(userId: string) {
       userId: userId,
       category: "General Savings",
       amount: 3000.0,
-      iconPath: "FireExtinguisher",
+      iconPath: "PiggyBank",
       group: "Savings & Investment",
       id: 3,
     },

@@ -25,7 +25,7 @@ export default function SettingsHeaderV2() {
       </TooltipProvider>
       <div className={"flex flex-row justify-center items-center gap-2 ml-auto mr-2"}>
         <p className={"mr-4 font-medium text-base"}>Settings</p>
-        <CurrencySelectorV2 className={"w-26 mx-0 outline-none border-none shadow-none"} />
+        <CurrencySelectorV2 className={"mx-0 outline-none border-none shadow-none"} />
 
         <TooltipProvider>
           <Tooltip delayDuration={425}>

@@ -29,14 +29,12 @@ export default function SettingsV2() {
 
   return (
     <div className={"flex flex-col justify-start items-center relative"}>
-      {/*<div className={"size-64 bg-red-500"} id={"tooltip-select-0"}></div>*/}
-      {/*<div className={"size-64 bg-blue-500 absolute bottom-0 right-0"} id={"tooltip-select-1"}></div>*/}
       <SettingsHeaderV2 />
       <div className={"flex flex-col justify-start items-center gap-3.5 w-[95%] h-[94%] mt-[6vh] pt-8 font-extralight"}>
         <div className={"settings-row dark:bg-secondary outline outline-[1px] outline-primary text-primary shadow h-14"}>
           <Globe size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Currency</b>
-          <CurrencySelectorV2 className={"w-28 text-primary bg-background font-medium "} />
+          <CurrencySelectorV2 className={"w-28 text-background bg-primary font-medium "} />
         </div>
 
         <div className={"settings-row dark:bg-secondary outline outline-[1px] outline-primary text-primary shadow h-14"}>
@@ -57,8 +55,6 @@ export default function SettingsV2() {
           <b className={"mr-auto ml-4"}>Public License</b>
           <Button
             size={"sm"}
-            variant={"secondary"}
-            className={"text-primary bg-background dark:hover:bg-zinc-700"}
             onClick={() => window.open("https://github.com/WeiChongDevelops/Fulcrum/blob/main/README.md", "_blank")}
           >
             See Public License
@@ -68,12 +64,7 @@ export default function SettingsV2() {
         <div className={"settings-row dark:bg-secondary outline outline-[1px] outline-primary text-primary shadow h-14"}>
           <Lock size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Privacy Policy</b>
-          <Button
-            size={"sm"}
-            variant={"secondary"}
-            className={"text-primary bg-background dark:hover:bg-zinc-700"}
-            onClick={() => window.open(window.location.origin + "/privacy", "_blank")}
-          >
+          <Button size={"sm"} onClick={() => window.open(window.location.origin + "/privacy", "_blank")}>
             See Privacy Policy
           </Button>
         </div>
@@ -85,7 +76,7 @@ export default function SettingsV2() {
         >
           <CalendarStar size={"1.4rem"} />
           <b className={"mr-auto ml-4"}>Joined On</b>
-          <p>{new Date(userPreferences.createdAt).toLocaleDateString()}</p>
+          <p className={"font-light"}>{new Date(userPreferences.createdAt).toLocaleDateString()}</p>
         </div>
 
         <div className={"settings-row wipe-options"}>

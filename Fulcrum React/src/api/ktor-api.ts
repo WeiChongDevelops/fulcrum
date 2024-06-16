@@ -621,11 +621,10 @@ export async function handleUserRegistration(email: string, password: string): P
  */
 export async function handleUserLogin(email: string, password: string): Promise<void> {
   try {
-    const response = await apiClient.post("/login", {
+    await apiClient.post("/login", {
       email: email,
       password: password,
     });
-    // console.log(response.data);
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(`Error encountered when attempting login: ${error.message}`);
