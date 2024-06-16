@@ -106,7 +106,7 @@ export default function BudgetV2({ perCategoryExpenseTotalThisMonth, setPerCateg
     }
   }, [localisedGroupArray]);
 
-  const [budgetLayoutIsSideBySide, setBudgetLayoutIsSideBySide] = useState(false);
+  const [budgetLayoutIsSideBySide, setBudgetLayoutIsSideBySide] = useState(true);
 
   const updateBentoLayout = () => {
     if (!!budgetContainer.current) {
@@ -179,6 +179,7 @@ export default function BudgetV2({ perCategoryExpenseTotalThisMonth, setPerCateg
                       setLocalisedGroupArray={setLocalisedGroupArray}
                       oldGroupBeingEdited={oldGroupBeingEdited}
                       key={group.id}
+                      id={group.id === 1 ? "tooltip-select-1" : ""}
                     />
                   ))}
               </SortableContext>

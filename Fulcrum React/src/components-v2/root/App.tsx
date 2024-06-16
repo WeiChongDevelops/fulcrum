@@ -23,6 +23,8 @@ import RecurringExpensesV2 from "@/components-v2/pages/RecurringExpensesV2.tsx";
 import SettingsV2 from "@/components-v2/pages/SettingsV2.tsx";
 import BudgetV2 from "@/components-v2/pages/BudgetV2.tsx";
 import Maintenance from "@/components-v2/pages/Maintenance.tsx";
+import * as Frigade from "@frigade/react";
+import Playground from "@/Playground.tsx";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
@@ -30,8 +32,15 @@ import Maintenance from "@/components-v2/pages/Maintenance.tsx";
 export default function App() {
   // window.console.log = () => {};
 
-  const { email, perCategoryExpenseTotalThisMonth, setPerCategoryExpenseTotalThisMonth, isAnyLoading, isAnyError, errors } =
-    useGlobalAppData();
+  const {
+    email,
+    activeUserId,
+    perCategoryExpenseTotalThisMonth,
+    setPerCategoryExpenseTotalThisMonth,
+    isAnyLoading,
+    isAnyError,
+    errors,
+  } = useGlobalAppData();
 
   const location = useLocation();
   const homePaths = ["/", "/home"];
@@ -46,55 +55,58 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <EmailContext.Provider value={email!}>
-        <LocationContext.Provider value={location}>
-          <Toaster richColors />
-          <Routes>
-            {homePaths.map((path) => (
-              <Route key={path} path={path} element={<Home />}>
-                <Route index element={<Navigate replace to="about" />} />
-                <Route path="about" element={<About />} />
-                <Route path="contact" element={<Contact />} />
-                <Route path="pricing" element={<Pricing />} />
-                <Route path="faq" element={<FAQs />} />
+      <Frigade.Provider apiKey={import.meta.env.VITE_FRIGADE_API_KEY} userId={activeUserId}>
+        <EmailContext.Provider value={email!}>
+          <LocationContext.Provider value={location}>
+            <Toaster richColors />
+            <Routes>
+              {homePaths.map((path) => (
+                <Route key={path} path={path} element={<Home />}>
+                  <Route index element={<Navigate replace to="about" />} />
+                  <Route path="about" element={<About />} />
+                  <Route path="contact" element={<Contact />} />
+                  <Route path="pricing" element={<Pricing />} />
+                  <Route path="faq" element={<FAQs />} />
+                </Route>
+              ))}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
+              <Route path="/maintenance" element={<Maintenance />} />
+              <Route path="/app/" element={<FulcrumV2 isAnyLoading={isAnyLoading} />}>
+                <Route
+                  path="expenses"
+                  element={<ExpensesV2 perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth} />}
+                />
+                <Route
+                  path="recurring"
+                  element={<RecurringExpensesV2 perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth} />}
+                />
+                <Route path="settings" element={<SettingsV2 />} />
+                <Route
+                  path="budget"
+                  element={
+                    <BudgetV2
+                      perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
+                      setPerCategoryExpenseTotalThisMonth={setPerCategoryExpenseTotalThisMonth}
+                    />
+                  }
+                />
               </Route>
-            ))}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/oAuthSuccess" element={<OAuthRedirect />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
-            <Route path="/maintenance" element={<Maintenance />} />
-            <Route path="/app/" element={<FulcrumV2 isAnyLoading={isAnyLoading} />}>
-              <Route
-                path="expenses"
-                element={<ExpensesV2 perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth} />}
-              />
-              <Route
-                path="recurring"
-                element={<RecurringExpensesV2 perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth} />}
-              />
-              <Route path="settings" element={<SettingsV2 />} />
-              <Route
-                path="budget"
-                element={
-                  <BudgetV2
-                    perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
-                    setPerCategoryExpenseTotalThisMonth={setPerCategoryExpenseTotalThisMonth}
-                  />
-                }
-              />
-            </Route>
-            <Route path="/3753b177" element={<Wall user={"Louise"} />} />
-            <Route path="/11e2e386" element={<Wall user={"Saaiq"} />} />
-            <Route path="/86419f8c" element={<Wall user={"Colin"} />} />
-            <Route path="/7763fcm3" element={<Wall user={"Matthew"} />} />
-            <Route path="/2753asd1" element={<Wall user={"Abhinav"} />} />
+              <Route path="/playground" element={<Playground />} />
+              <Route path="/3753b177" element={<Wall user={"Louise"} />} />
+              <Route path="/11e2e386" element={<Wall user={"Saaiq"} />} />
+              <Route path="/86419f8c" element={<Wall user={"Colin"} />} />
+              <Route path="/7763fcm3" element={<Wall user={"Matthew"} />} />
+              <Route path="/2753asd1" element={<Wall user={"Abhinav"} />} />
 
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </LocationContext.Provider>
-      </EmailContext.Provider>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </LocationContext.Provider>
+        </EmailContext.Provider>
+      </Frigade.Provider>
     </ErrorBoundary>
   );
 }

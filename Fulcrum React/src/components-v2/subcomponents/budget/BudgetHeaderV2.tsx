@@ -29,7 +29,7 @@ export default function BudgetHeaderV2({ totalIncome }: BudgetHeaderV2Props) {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <MonthlyIncomeV2 totalIncome={totalIncome} />
+      <MonthlyIncomeV2 totalIncome={totalIncome} id={"tooltip-select-0"} />
       <div className={"flex flex-row justify-center items-center gap-2 ml-auto mr-2"}>
         <p className={"mr-4 font-medium text-base"}>Budget</p>
         <CurrencySelectorV2 className={"w-26 mx-0 outline-none border-none shadow-none"} />

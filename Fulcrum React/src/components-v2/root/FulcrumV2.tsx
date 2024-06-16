@@ -7,6 +7,7 @@ import { cn, LocationContext, SideBarIsOpenContext, useEmail } from "@/utility/u
 import { getSessionEmailOrNullDirect } from "@/utility/supabase-client.ts";
 import { UserPreferences } from "@/utility/types.ts";
 import { useQueryClient } from "@tanstack/react-query";
+import * as Frigade from "@frigade/react";
 
 interface FulcrumV2Props {
   isAnyLoading: boolean;
@@ -21,10 +22,6 @@ export default function FulcrumV2({ isAnyLoading }: FulcrumV2Props) {
 
   const [sideBarOpen, setSideBarOpen] = useState(true);
 
-  if (isAnyLoading) {
-    return <Loader isLoading={isAnyLoading} isDarkMode={userPreferences.darkModeEnabled} />;
-  }
-
   useEffect(() => {
     getSessionEmailOrNullDirect().then((result) => {
       if (result === null) {
@@ -35,8 +32,13 @@ export default function FulcrumV2({ isAnyLoading }: FulcrumV2Props) {
     });
   }, [routerLocation]);
 
+  if (isAnyLoading) {
+    return <Loader isLoading={isAnyLoading} isDarkMode={userPreferences.darkModeEnabled} />;
+  }
+
   return (
     <ErrorBoundary>
+      <Frigade.Tour flowId="flow_Yof1mJfk" zIndex={1000} style={{ textAlign: "left" }} />
       <SideBarIsOpenContext.Provider value={sideBarOpen}>
         <div
           className={cn(

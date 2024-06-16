@@ -170,6 +170,7 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
                 />
               </svg>
             }
+            id={"tooltip-select-3"}
           />
           <PageNavigationButton
             page={"recurring"}

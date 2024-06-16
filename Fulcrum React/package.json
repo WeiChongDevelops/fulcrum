@@ -23,6 +23,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@emailjs/browser": "^4.3.3",
     "@formkit/auto-animate": "^0.8.2",
+    "@frigade/react": "^2.2.9",
     "@phosphor-icons/react": "^2.1.5",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-avatar": "^1.0.4",

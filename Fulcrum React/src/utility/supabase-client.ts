@@ -1,10 +1,6 @@
 import { AuthError, createClient, PostgrestError } from "@supabase/supabase-js";
 import { Database } from "database.types.ts";
 
-export const checkEnv = () => {
-  console.log(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_KEY);
-};
-
 export const supabaseClient = createClient<Database>(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_KEY);
 
 export function consolePostgrestError(postgrestError: PostgrestError): void {

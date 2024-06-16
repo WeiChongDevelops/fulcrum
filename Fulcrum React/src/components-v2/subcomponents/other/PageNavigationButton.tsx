@@ -12,6 +12,7 @@ interface PageNavigationButtonProps {
   nonAppRedirectUrl?: string;
   sideBarOpen: boolean;
   className?: string;
+  id?: string;
 }
 
 export default function PageNavigationButton({
@@ -21,6 +22,7 @@ export default function PageNavigationButton({
   nonAppRedirectUrl = "/app/register",
   sideBarOpen,
   className,
+  id,
 }: PageNavigationButtonProps) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
   const navigate = useNavigate();
@@ -37,6 +39,7 @@ export default function PageNavigationButton({
         !isActive && "hover:bg-[#e6e6e6] hover:text-black",
         className,
       )}
+      id={id}
       onClick={() => (isAppPage ? navigate(`/app/${page}`) : (window.location.href = nonAppRedirectUrl))}
     >
       {svgIcon}

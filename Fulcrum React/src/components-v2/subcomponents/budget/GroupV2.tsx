@@ -30,6 +30,7 @@ interface GroupV2Props {
   setOldBudgetBeingEdited: Dispatch<SetStateAction<PreviousBudgetBeingEdited>>;
   setOldGroupBeingEdited: Dispatch<SetStateAction<PreviousGroupBeingEdited>>;
   setLocalisedGroupArray: Dispatch<SetStateAction<GroupItemEntity[]>>;
+  id?: string;
 }
 
 export default function GroupV2({
@@ -40,6 +41,7 @@ export default function GroupV2({
   oldGroupBeingEdited,
   oldBudgetBeingEdited,
   setLocalisedGroupArray,
+  id,
 }: GroupV2Props) {
   const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
@@ -91,6 +93,7 @@ export default function GroupV2({
         display: "flex",
         userSelect: "none",
       }}
+      id={id}
     >
       <Loader
         isLoading={isPending}
@@ -108,7 +111,7 @@ export default function GroupV2({
           <AccordionTrigger className={"px-7 select-none group-accordion-trigger"}>
             <p className={"font-medium text-base text-primary"}>{group.group}</p>
           </AccordionTrigger>
-          <AccordionContent className={"pt-3 pb-6 pl-6"}>
+          <AccordionContent className={"pt-2 pb-4 pl-6"}>
             <div className={"flex flex-row gap-5 justify-start items-center w-[109%] flex-wrap "}>
               {budgetArray.length > 0 &&
                 budgetArray

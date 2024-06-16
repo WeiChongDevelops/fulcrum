@@ -37,7 +37,7 @@ export default function BudgetTileV2({
   const spent = perCategoryExpenseTotalThisMonth.get(filteredBudgetItem.category) ?? 0;
 
   return (
-    <div className={"size-44 relative"}>
+    <div className={"size-36 relative"}>
       <TooltipProvider delayDuration={200} disableHoverableContent={false}>
         {filteredBudgetItem.category === "Other (Default)" ? (
           <Tooltip>
@@ -53,19 +53,19 @@ export default function BudgetTileV2({
             updateOldBudgetBeingEdited={updateOldBudgetBeingEdited}
           />
         )}
-        <Card className="size-44 bg-white dark:bg-zinc-900 outline outline-3 outline-zinc-800 dark:outline-zinc-400 relative transition-all duration-150 ease -z-10 flex flex-col justify-center">
-          <CardHeader className={"py-2"}>
-            <CardTitle className={"text-xs lg:text-sm font-bold"}>{filteredBudgetItem.category}</CardTitle>
+        <Card className="size-36 bg-white dark:bg-zinc-900 outline outline-2 lg:outline-[3px] outline-zinc-800 dark:outline-zinc-400 relative transition-all duration-150 ease -z-10 flex flex-col justify-center">
+          <CardHeader className={"py-2 px-0"}>
+            <CardTitle className={"text-xs font-bold"}>{filteredBudgetItem.category}</CardTitle>
           </CardHeader>
           <CardContent className={"flex flex-col gap-4 pb-2 justify-center items-center"}>
             <div ref={autoAnimateRef}>
               <DynamicIconComponent
                 componentName={filteredBudgetItem.iconPath}
-                props={{ size: "3rem" }}
+                props={{ size: "2.5rem" }}
                 className={"mt-1"}
               />
             </div>
-            <div>
+            <div className={"text-xs"}>
               <p className={"truncate font-light"}>
                 <span>{"Budget: "}</span>
                 <span className={"font-bold"}>

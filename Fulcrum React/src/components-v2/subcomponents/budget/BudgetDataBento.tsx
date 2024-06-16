@@ -32,11 +32,11 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
   };
 
   useEffect(() => {
-    setGroupArraySortedByAmount(groupArray.sort(groupSizeSort));
+    !!groupArray && groupArray.length > 1 && setGroupArraySortedByAmount(groupArray.sort(groupSizeSort));
   }, [groupArray]);
 
   useEffect(() => {
-    setBudgetArraySortedByAmount(budgetArray.sort(budgetSizeSort));
+    !!budgetArray && budgetArray.length > 1 && setBudgetArraySortedByAmount(budgetArray.sort(budgetSizeSort));
   }, [budgetArray]);
   const [rerenderKey, setRerenderKey] = useState(0);
 

@@ -95,7 +95,7 @@ export default function CreateBudgetFormV2({ groupNameOfNewItem, currencySymbol 
         <Button
           asChild
           variant={"empty"}
-          className="size-44 rounded-xl border-2 border-dashed border-primary hover:rounded-md hover:bg-[#DEDEDE33] transition-all duration-200 ease-out"
+          className="size-36 rounded-xl border-2 border-dashed border-primary hover:rounded-md hover:bg-[#DEDEDE33] transition-all duration-200 ease-out"
         >
           <b>+</b>
         </Button>

@@ -31,7 +31,11 @@ export default function FulcrumAnimationV2({
 
   return (
     <div className={"relative bg-primary-foreground z-10 border-[3px] border-border rounded-xl"}>
-      <div className={"z-10 px-32 py-40 rounded-xl transition-opacity enableFadeIn h-96"} ref={containerRef}>
+      <div
+        className={"z-10 px-32 py-40 rounded-xl transition-opacity enableFadeIn h-96"}
+        ref={containerRef}
+        id={"tooltip-select-2"}
+      >
         <div
           className={cn(
             "absolute flex flex-row justify-center bottom-[8.3rem] z-20 left-1/2 w-[90%] origin-top",

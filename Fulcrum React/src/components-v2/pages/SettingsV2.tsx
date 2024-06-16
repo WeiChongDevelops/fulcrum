@@ -29,6 +29,8 @@ export default function SettingsV2() {
 
   return (
     <div className={"flex flex-col justify-start items-center relative"}>
+      {/*<div className={"size-64 bg-red-500"} id={"tooltip-select-0"}></div>*/}
+      {/*<div className={"size-64 bg-blue-500 absolute bottom-0 right-0"} id={"tooltip-select-1"}></div>*/}
       <SettingsHeaderV2 />
       <div className={"flex flex-col justify-start items-center gap-3.5 w-[95%] h-[94%] mt-[6vh] pt-8 font-extralight"}>
         <div className={"settings-row dark:bg-secondary outline outline-[1px] outline-primary text-primary shadow h-14"}>

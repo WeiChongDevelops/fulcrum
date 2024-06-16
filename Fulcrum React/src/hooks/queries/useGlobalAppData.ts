@@ -10,7 +10,7 @@ import {
   RecurringExpenseItemEntity,
 } from "@/utility/types.ts";
 import { useState } from "react";
-import { getSessionEmailOrNullDirect } from "@/utility/supabase-client.ts";
+import { getActiveUserId, getSessionEmailOrNullDirect } from "@/utility/supabase-client.ts";
 import { getBudgetListDirect } from "@/api/budget-api.ts";
 import { getGroupListDirect } from "@/api/group-api.ts";
 import { getExpenseListDirect } from "@/api/expense-api.ts";
@@ -56,6 +56,7 @@ export function useGlobalAppData() {
           prefersUploadedAvatar: storedAvatarPreference === "true",
         },
       },
+      { queryKey: ["activeUserId", email], queryFn: getActiveUserId, enabled: retrievalConditions },
     ],
   });
 
@@ -66,6 +67,7 @@ export function useGlobalAppData() {
     recurringExpenseArrayQuery,
     blacklistedExpenseArrayQuery,
     userPreferencesQuery,
+    userIdQuery,
   ] = globalAppDataQueries;
 
   if (!!userPreferencesQuery.data) {
@@ -117,6 +119,7 @@ export function useGlobalAppData() {
     userPreferences: userPreferencesQuery.data as UserPreferences,
     profileImageURL: profileImageURLQuery.data as string,
     categoryToIconAndColourMap: categoryToIconAndColourMapQuery.data as CategoryToIconAndColourMap,
+    activeUserId: userIdQuery.data as string,
     perCategoryExpenseTotalThisMonth,
     setPerCategoryExpenseTotalThisMonth,
     isAnyLoading,
