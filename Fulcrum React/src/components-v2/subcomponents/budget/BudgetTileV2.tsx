@@ -53,7 +53,7 @@ export default function BudgetTileV2({
             updateOldBudgetBeingEdited={updateOldBudgetBeingEdited}
           />
         )}
-        <Card className="size-36 bg-white dark:bg-zinc-900 outline outline-2 lg:outline-[3px] outline-zinc-800 dark:outline-zinc-400 relative transition-all duration-150 ease -z-10 flex flex-col justify-center">
+        <Card className="size-36 bg-white dark:bg-zinc-900 outline outline-2 xl:outline-[3px] outline-zinc-800 dark:outline-zinc-400 relative transition-all duration-150 ease -z-10 flex flex-col justify-center">
           <CardHeader className={"py-2 px-0"}>
             <CardTitle className={"text-xs font-bold"}>{filteredBudgetItem.category}</CardTitle>
           </CardHeader>
