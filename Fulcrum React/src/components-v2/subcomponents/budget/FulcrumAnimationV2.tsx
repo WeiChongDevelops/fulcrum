@@ -80,7 +80,7 @@ export default function FulcrumAnimationV2({
           <div className={cn("absolute w-60", budgetLayoutIsSideBySide ? "-top-[115%]" : "-top-full")}>
             {leftToBudget !== 0 ? (
               <>
-                <p className={"font-extrabold text-[#FF3F3F] mb-1"}>
+                <p className={"font-extrabold text-[#FF3F3F] text-lg mb-1"}>
                   {leftToBudget > 0 ? "Give every dollar a job!" : "Budget exceeds income."}
                 </p>
                 {leftToBudget < 0 ? (
@@ -95,7 +95,7 @@ export default function FulcrumAnimationV2({
               </>
             ) : (
               <>
-                <p className={"font-extrabold text-[#058403] mb-1"}>Every dollar has a job!</p>
+                <p className={"font-extrabold text-[#058403] text-lg mb-1"}>Every dollar has a job!</p>
                 <p className={"font-light text-xs"}>Make sure your budget below reflects your monthly expenditure.</p>
               </>
             )}

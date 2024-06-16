@@ -16,7 +16,7 @@ export default function useCreateGroup() {
       await queryClient.setQueryData(["groupArray", email], (prevGroupCache: GroupItemEntity[]) => {
         return [...prevGroupCache, newGroupItem].sort(groupSort);
       });
-      toast.success("Budget group added.");
+      toast.success("Budget category group added.");
       return { dataBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {

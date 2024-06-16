@@ -234,7 +234,7 @@ export default function GroupV2({
             <TwoOptionModal
               dialogOpen={showConfirmDeleteGroupDialog}
               setDialogOpen={setShowConfirmDeleteGroupDialog}
-              dialogTitle={`Delete all categories and expenses under '${group.group}'?`}
+              dialogTitle={`Delete all categories and expenses for '${group.group}'?`}
               leftButtonText={"Cancel"}
               leftButtonFunction={() => {
                 setShowConfirmDeleteGroupDialog(false);

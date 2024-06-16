@@ -64,7 +64,11 @@ export default function useAnimationDataV2({
     debouncedShadowMoveEnd();
     !!bowlRef.current && setBowlWidth(bowlRef.current.getBoundingClientRect().width);
     return () => debouncedShadowMoveEnd.cancel();
-  }, [lineAngle, sideBarOpen, budgetLayoutIsSideBySide, containerRef.current?.style.rotate]);
+  }, [sideBarOpen, budgetLayoutIsSideBySide, containerRef.current?.style.rotate]);
+
+  useEffect(() => {
+    updateRect();
+  }, [lineAngle]);
 
   useEffect(() => {
     setLineAngle(getLineAngle(totalBudget - totalIncome, totalIncome));

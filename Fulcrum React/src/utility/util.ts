@@ -677,7 +677,7 @@ export function getLineAngle(amountLeftToBudget: number, totalIncome: number): n
     ? 10
     : functionalPercentageIncomeRemaining === 100
       ? -10
-      : functionalPercentageIncomeRemaining / (-100 / 14.5);
+      : functionalPercentageIncomeRemaining / (-100 / 30);
 }
 
 /**

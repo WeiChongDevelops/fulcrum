@@ -23,7 +23,7 @@ export default function useDeleteGroup() {
       await queryClient.setQueryData(["groupArray", email], (prevGroupCache: GroupItemEntity[]) => {
         return prevGroupCache.filter((groupItem) => groupItem.group !== groupDeletionProps.groupToDelete);
       });
-      toast.success("Budget group removed.");
+      toast.success("Budget category group removed.");
       return { dataBeforeOptimisticUpdate };
     },
     onError: (_error, _variables, context) => {
