@@ -25,12 +25,13 @@ import BudgetV2 from "@/components-v2/pages/BudgetV2.tsx";
 import Maintenance from "@/components-v2/pages/Maintenance.tsx";
 import * as Frigade from "@frigade/react";
 import Playground from "@/Playground.tsx";
+import { useFlow } from "@frigade/react";
 
 /**
  * The main application component, handling shared data retrieval, routing and rendering.
  */
 export default function App() {
-  // window.console.log = () => {};
+  window.console.log = () => {};
 
   const {
     email,
@@ -45,6 +46,21 @@ export default function App() {
   const location = useLocation();
   const homePaths = ["/", "/home"];
 
+  const FRIGADE_THEME_OVERRIDES = {
+    colors: {
+      primary: {
+        background: "#000000",
+        border: "#000000",
+        surface: "#000000",
+        hover: {
+          background: "#17423f",
+          border: "#17423f",
+          surface: "#17423f",
+        },
+      },
+    },
+  };
+
   if (isAnyLoading) {
     return <Loader isLoading={isAnyLoading} isDarkMode={false} />;
   }
@@ -55,7 +71,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <Frigade.Provider apiKey={import.meta.env.VITE_FRIGADE_KEY} userId={activeUserId}>
+      <Frigade.Provider apiKey={import.meta.env.VITE_FRIGADE_KEY} userId={activeUserId} theme={FRIGADE_THEME_OVERRIDES}>
         <EmailContext.Provider value={email!}>
           <LocationContext.Provider value={location}>
             <Toaster richColors />

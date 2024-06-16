@@ -38,7 +38,7 @@ export default function FulcrumV2({ isAnyLoading }: FulcrumV2Props) {
 
   return (
     <ErrorBoundary>
-      <Frigade.Tour flowId="flow_Yof1mJfk" zIndex={1000} style={{ textAlign: "left" }} />
+      <Frigade.Tour flowId="flow_Yof1mJfk" zIndex={1000} style={{ textAlign: "left", width: "25rem" }} />
       <SideBarIsOpenContext.Provider value={sideBarOpen}>
         <div
           className={cn(
