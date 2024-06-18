@@ -52,7 +52,7 @@ export default function ExpenseDayGroupV2({
         <div className={"flex-grow h-[1px] bg-[#17423f] dark:bg-muted-foreground bg-opacity-20 mx-4"}></div>
         <p className="text-2xl text-right">{formatDollarAmountStatic(dayTotal, userPreferences.currency)}</p>
       </div>
-      {dayExpenseGroup.dayExpenseArray.length > 0 && (
+      {!!dayExpenseGroup.dayExpenseArray && dayExpenseGroup.dayExpenseArray.length > 0 && (
         <ExpenseListV2
           dayExpenseArray={dayExpenseGroup.dayExpenseArray}
           setOldExpenseBeingEdited={setOldExpenseBeingEdited}

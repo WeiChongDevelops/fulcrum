@@ -46,7 +46,7 @@ export default function RecurringExpensesV2({ perCategoryExpenseTotalThisMonth }
           perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
         />
         <div className={"mt-6 w-full"}>
-          {recurringExpenseArray.length > 0 ? (
+          {!!recurringExpenseArray && recurringExpenseArray.length > 0 ? (
             recurringExpenseArray.map((recurringExpenseItem, key) => {
               const groupName = budgetArray.find(
                 (budgetItem) => budgetItem.category === recurringExpenseItem.category,

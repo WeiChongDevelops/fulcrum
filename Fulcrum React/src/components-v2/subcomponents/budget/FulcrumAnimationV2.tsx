@@ -41,7 +41,10 @@ export default function FulcrumAnimationV2({
             "absolute flex flex-row justify-center bottom-[8.3rem] z-20 left-1/2 w-[90%] origin-top",
             lineAngle === 0 && "animateInfiniteWobble",
           )}
-          style={{ transform: `translateX(-50%) rotate(${lineAngle}deg)`, transition: "transform ease-out 400ms" }}
+          style={{
+            transform: `translateX(-50%) translateZ(0) rotate(${lineAngle}deg)`,
+            transition: "transform ease-out 400ms",
+          }}
         >
           <div className={"flex flex-col items-center relative -mr-10"}>
             <div

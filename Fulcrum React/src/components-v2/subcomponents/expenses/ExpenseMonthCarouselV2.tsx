@@ -38,6 +38,7 @@ export default function ExpenseMonthCarouselV2({
       <CarouselContent className={"-ml-24"}>
         {!!budgetArray &&
           budgetArray.length > 0 &&
+          !!structuredExpenseData &&
           structuredExpenseData.length > 0 &&
           structuredExpenseData.map((monthExpenseGroupItem, key) => {
             return (

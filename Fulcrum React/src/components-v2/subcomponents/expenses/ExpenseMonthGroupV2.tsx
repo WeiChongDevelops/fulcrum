@@ -34,14 +34,16 @@ export const ExpenseMonthGroupV2 = memo(
       useEmail(),
     ])!;
     const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
-    const categoryOptions = budgetArray.map((budgetItem) => {
-      const dataMapEntry = categoryToIconAndColourMap.get(budgetItem.category);
-      return {
-        value: budgetItem.category,
-        label: capitaliseFirstLetter(budgetItem.category),
-        colour: !!dataMapEntry && !!dataMapEntry.colour ? dataMapEntry.colour : "black",
-      };
-    });
+    const categoryOptions = !!budgetArray
+      ? budgetArray.map((budgetItem) => {
+          const dataMapEntry = categoryToIconAndColourMap.get(budgetItem.category);
+          return {
+            value: budgetItem.category,
+            label: capitaliseFirstLetter(budgetItem.category),
+            colour: !!dataMapEntry && !!dataMapEntry.colour ? dataMapEntry.colour : "black",
+          };
+        })
+      : [];
     return (
       <div className={"flex flex-col items-center w-full pt-8"}>
         <CreateExpenseFormV2
@@ -50,7 +52,9 @@ export const ExpenseMonthGroupV2 = memo(
           perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
         />
 
-        {monthExpenseGroupItem.monthExpenseArray.length > 0 ? (
+        {!!monthExpenseGroupItem &&
+        !!monthExpenseGroupItem.monthExpenseArray &&
+        monthExpenseGroupItem.monthExpenseArray.length > 0 ? (
           monthExpenseGroupItem.monthExpenseArray.map((dayExpenseGroup, key) => {
             return (
               <ExpenseDayGroupV2
