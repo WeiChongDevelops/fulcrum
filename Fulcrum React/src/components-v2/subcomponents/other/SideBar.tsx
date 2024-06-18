@@ -64,7 +64,7 @@ export default function SideBar({ sideBarOpen, setSideBarOpen }: SideBarProps) {
         {sideBarOpen ? (
           <div className={"flex flex-row w-full justify-between items-center ml-4 mt-2.5"}>
             <img
-              src={`/static/assets-v2/fulcrum-logos/fulcrum-logo-white-v2.webp`}
+              src={`/static/assets-v2/fulcrum-logos/fulcrum-logo-white-v3.webp`}
               className={cn(sideBarOpen ? "w-28" : "w-0")}
               onClick={() => (window.location.href = "/home/about")}
               alt="Fulcrum logo"

@@ -81,7 +81,7 @@
 }
 
 .animateInfiniteWobble {
-  animation: 10s ease-in-out 0ms wobble infinite;
+  animation: 10s ease-in-out 600ms wobble infinite;
 }
 
 @keyframes rightShadowSway {

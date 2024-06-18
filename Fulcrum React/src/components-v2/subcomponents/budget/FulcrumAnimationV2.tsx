@@ -38,21 +38,30 @@ export default function FulcrumAnimationV2({
       >
         <div
           className={cn(
-            "absolute flex flex-row justify-center bottom-[8.3rem] z-20 left-1/2 w-[90%] origin-top",
+            "rotating-container absolute flex flex-row justify-center bottom-[8.3rem] z-20 left-1/2 w-[90%] origin-top will-change-transform",
             lineAngle === 0 && "animateInfiniteWobble",
           )}
           style={{
-            transform: `translateX(-50%) translateZ(0) rotate(${lineAngle}deg)`,
+            transform: `translateX(-50%) translateZ(0) rotate(${lineAngle}deg) `,
             transition: "transform ease-out 400ms",
+            textRendering: "optimizeLegibility",
           }}
         >
           <div className={"flex flex-col items-center relative -mr-10"}>
             <div
-              className={"absolute -top-full origin-bottom-right -left-3.5"}
-              style={{ transform: `rotate(${-lineAngle}deg` }}
+              className={"absolute -top-full origin-bottom-right -left-3.5 will-change-transform"}
+              style={{
+                transform: `rotate(${-lineAngle}deg`,
+                transition: "transform ease-out 650ms",
+                textRendering: "optimizeLegibility",
+              }}
             >
-              <p className={"font-bold text-xs"}>Budget</p>
-              <p className={"font-light text-[1.25rem]"}>{formatDollarAmountStatic(totalBudget, currency)}</p>
+              <p className={"font-bold text-xs"} style={{ textRendering: "optimizeLegibility" }}>
+                Budget
+              </p>
+              <p className={"font-light text-[1.25rem]"} style={{ textRendering: "optimizeLegibility" }}>
+                {formatDollarAmountStatic(totalBudget, currency)}
+              </p>
             </div>
             <BowlSVG
               className={"text-lever w-20 z-20 origin-top animateSettleSwingLeft"}
@@ -64,11 +73,19 @@ export default function FulcrumAnimationV2({
 
           <div className={"flex flex-col items-center relative -ml-10"}>
             <div
-              className={"absolute -top-full origin-bottom-left -right-3.5"}
-              style={{ transform: `rotate(${-lineAngle}deg` }}
+              className={"absolute -top-full origin-bottom-left -right-3.5 will-change-transform"}
+              style={{
+                transform: `rotate(${-lineAngle}deg`,
+                transition: "transform ease-out 650ms",
+                textRendering: "optimizeLegibility",
+              }}
             >
-              <p className={"font-bold text-xs"}>Income</p>
-              <p className={"font-light text-[1.25rem]"}>{formatDollarAmountStatic(totalIncome, currency)}</p>
+              <p className={"font-bold text-xs"} style={{ textRendering: "optimizeLegibility" }}>
+                Income
+              </p>
+              <p className={"font-light text-[1.25rem]"} style={{ textRendering: "optimizeLegibility" }}>
+                {formatDollarAmountStatic(totalIncome, currency)}
+              </p>
             </div>
             <BowlSVG
               className={"text-lever w-20 z-20 origin-top animateSettleSwingRight"}

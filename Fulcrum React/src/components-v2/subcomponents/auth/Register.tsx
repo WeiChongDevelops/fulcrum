@@ -124,7 +124,7 @@ export default function Register() {
           <div className={"auth-page-right-column"}>
             <div className={"flex-1"}>
               <img
-                src="/static/assets-v2/fulcrum-logos/fulcrum-logo-white-v2.webp"
+                src="/static/assets-v2/fulcrum-logos/fulcrum-logo-white-v3.webp"
                 className={"auth-mobile-fulcrum-logo"}
                 alt="Fulcrum logo"
               />

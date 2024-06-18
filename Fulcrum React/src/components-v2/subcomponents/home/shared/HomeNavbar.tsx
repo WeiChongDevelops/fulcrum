@@ -10,7 +10,7 @@ export default function HomeNavbar() {
         <div className={"flex flex-row justify-start w-40 transition-all cursor-pointer hover:-rotate-3 hover:scale-110"}>
           <a href={"/home/about"}>
             <img
-              src={`/static/assets-v2/fulcrum-logos/fulcrum-logo-black-v2.webp`}
+              src={`/static/assets-v2/fulcrum-logos/fulcrum-logo-black-v3.webp`}
               alt="Fulcrum logo in navbar"
               className="w-full h-auto"
             />
