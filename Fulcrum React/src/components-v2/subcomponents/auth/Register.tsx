@@ -1,7 +1,7 @@
 import FulcrumButton from "@/components-v2/subcomponents/buttons/FulcrumButton.tsx";
 import "../../../css/App.css";
 import "../../../css/Auth.css";
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import useRegisterUser from "../../../hooks/mutations/auth/useRegisterUser.ts";
 import Loader from "../other/Loader.tsx";
 import { toast } from "sonner";
@@ -10,6 +10,7 @@ import OAuthLoginButton from "@/components-v2/subcomponents/buttons/OAuthLoginBu
 import useOAuthLoginUrl from "../../../hooks/mutations/auth/useOAuthLoginUrl.ts";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
+import { getActiveUserId } from "@/utility/supabase-client.ts";
 
 /**
  * The registration page for the Fulcrum application.
@@ -94,6 +95,12 @@ export default function Register() {
       attemptedIgnore: false,
     };
   }
+
+  useEffect(() => {
+    getActiveUserId()
+      .then(() => (window.location.href = "/app"))
+      .catch(() => console.log("No active session found - not initiating app redirect."));
+  }, []);
 
   return (
     <>

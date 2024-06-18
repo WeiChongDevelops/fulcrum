@@ -9,6 +9,7 @@ import { LocationContext } from "@/utility/util.ts";
 import "@/css/Auth.css";
 import { Label } from "@/components-v2/ui/label.tsx";
 import { Input } from "@/components-v2/ui/input.tsx";
+import { getActiveUserId } from "@/utility/supabase-client.ts";
 
 /**
  * The login page for the Fulcrum application.
@@ -45,6 +46,12 @@ export default function Login() {
       });
     }
   }, [isLoginSuccess, routerLocation]);
+
+  useEffect(() => {
+    getActiveUserId()
+      .then(() => (window.location.href = "/app"))
+      .catch(() => console.log("No active session found - not initiating app redirect."));
+  }, []);
 
   return (
     <>

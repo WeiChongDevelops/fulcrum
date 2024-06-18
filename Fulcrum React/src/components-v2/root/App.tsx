@@ -89,7 +89,8 @@ export default function App() {
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/whatintheworldwereyouthinkingmark" element={<ComeOnMark />} />
               <Route path="/maintenance" element={<Maintenance />} />
-              <Route path="/app/" element={<FulcrumV2 isAnyLoading={isAnyLoading} />}>
+              <Route path="/app" element={<FulcrumV2 isAnyLoading={isAnyLoading} />}>
+                <Route index element={<Navigate replace to="budget" />} />
                 <Route
                   path="expenses"
                   element={<ExpensesV2 perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth} />}
