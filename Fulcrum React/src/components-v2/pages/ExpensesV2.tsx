@@ -59,7 +59,7 @@ export default function ExpensesV2({ perCategoryExpenseTotalThisMonth }: Expense
 
   useEffect(() => {
     const updateStructuredExpenseData = async () => {
-      setStructuredExpenseData(await getStructuredExpenseData(expenseArray));
+      !!expenseArray && setStructuredExpenseData(await getStructuredExpenseData(expenseArray));
     };
     updateStructuredExpenseData().then(() => setIsLoading(false));
   }, [expenseArray, routerLocation]);

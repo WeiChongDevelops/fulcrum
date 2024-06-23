@@ -809,7 +809,7 @@ function populateStructuredExpenseData(
     throw new Error("No expense array found when populating structured expense data.");
   }
 
-  if (expenseArray.length !== 0) {
+  if (expenseArray.length === 0) {
     throw new Error("Expense array length zero found when populating structured expense data.");
   }
 
