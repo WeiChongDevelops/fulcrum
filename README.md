@@ -1,7 +1,5 @@
-# Fulcrum
-
-## A free web application for budgeting and expense tracking.
-Features including recurring expenses, theme customisation and data visualisation, support a holistic user experience.
+# Fulcrum - A free web application for budgeting and expense tracking.
+Features including recurring expenses, theme customisation and data visualisation, supporting a holistic user experience.
 Try Fulcrum today at https://fulcrumfinance.app/ !
 
 
@@ -34,7 +32,7 @@ Try Fulcrum today at https://fulcrumfinance.app/ !
 
 ## Technologies
 
-* React Typescript - modular, type-safe frontend development.
+* React Typescript - modular, typesafe frontend development.
 * Supabase PostgreSQL - an open source alternative to Google Firebase, chosen for its native support of PostgreSQL (data integrity, schema enforcement and performance).
 * Docker Compose - in-tandem container coordination, providing reproducible production environment.
 * Amazon Web Services - various services used for hosting, load balancing, DNS, and SSL certificate management (EC2, ELB, Route 53, ACM).

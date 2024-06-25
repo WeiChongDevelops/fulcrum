@@ -1,11 +1,12 @@
 services:
   frontend:
-    image: weichongdevelops/fulcrum-frontend:2.2
+    image: weichongdevelops/fulcrum-frontend:2.3
     build:
       context: "./Fulcrum React"
       args:
         VITE_SUPABASE_KEY: ${SUPABASE_KEY}
         VITE_SUPABASE_URL: ${SUPABASE_URL}
+        VITE_FRIGADE_KEY: ${FRIGADE_KEY}
     platform: linux/amd64
     ports:
       - "80:3001"
@@ -15,7 +16,7 @@ services:
     depends_on:
       - backend
   backend:
-    image: weichongdevelops/fulcrum-backend:2.2
+    image: weichongdevelops/fulcrum-backend:2.3
     platform: linux/amd64
     ports:
       - "8080:8080"
