@@ -806,11 +806,11 @@ function populateStructuredExpenseData(
   newStructuredExpenseData: MonthExpenseGroupEntity[],
 ): MonthExpenseGroupEntity[] {
   if (!expenseArray) {
-    throw new Error("No expense array found when populating structured expense data.");
+    return newStructuredExpenseData;
   }
 
   if (expenseArray.length === 0) {
-    throw new Error("Expense array length zero found when populating structured expense data.");
+    return newStructuredExpenseData;
   }
 
   for (const expenseItem of expenseArray) {

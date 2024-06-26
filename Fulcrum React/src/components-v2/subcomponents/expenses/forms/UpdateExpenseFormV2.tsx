@@ -183,6 +183,7 @@ export default function UpdateExpenseFormV2({
                 rightButtonText={"Delete"}
                 rightButtonFunction={() => {
                   setShowConfirmDeleteExpenseDialog(false);
+                  setFormIsOpen(false);
                   deleteExpense({
                     expenseItemToDelete: {
                       expenseId: expenseId,
