@@ -107,9 +107,9 @@ export default function UpdateBudgetFormV2({
   const [showConfirmDeleteBudgetDialog, setShowConfirmDeleteBudgetDialog] = useState(false);
 
   return (
-    <div className={"update-budget-trigger size-44 absolute"} ref={autoAnimateRef}>
+    <div className={"update-budget-trigger size-36 absolute"} ref={autoAnimateRef}>
       <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>
-        <SheetTrigger onClick={updateOldBudgetBeingEdited} className={"w-full h-full"}></SheetTrigger>
+        <SheetTrigger onClick={updateOldBudgetBeingEdited} className={"size-36 outline"}></SheetTrigger>
         <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
           <SheetHeader>
             <SheetTitle>Updating Budget Category</SheetTitle>
