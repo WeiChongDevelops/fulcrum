@@ -38,7 +38,7 @@ export default function ExpenseDayGroupV2({
   );
 
   return (
-    <div className="my-4 w-[95%]">
+    <div className="mt-3 mb-2 w-[95%]">
       <div
         className={`flex flex-row justify-between items-center relative ${userPreferences.darkModeEnabled ? "text-white" : "text-black"}`}
       >

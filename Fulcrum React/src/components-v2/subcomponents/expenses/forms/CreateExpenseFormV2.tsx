@@ -162,7 +162,7 @@ export default function CreateExpenseFormV2({
 
   return (
     <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>
-      <SheetTrigger className={"w-full"}>
+      <SheetTrigger className={"w-full mb-2"}>
         <Button
           asChild
           variant={"empty"}

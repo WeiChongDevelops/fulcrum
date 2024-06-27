@@ -806,10 +806,12 @@ function populateStructuredExpenseData(
   newStructuredExpenseData: MonthExpenseGroupEntity[],
 ): MonthExpenseGroupEntity[] {
   if (!expenseArray) {
+    console.log("HERE");
     return newStructuredExpenseData;
   }
 
   if (expenseArray.length === 0) {
+    console.log("HERE");
     return newStructuredExpenseData;
   }
 

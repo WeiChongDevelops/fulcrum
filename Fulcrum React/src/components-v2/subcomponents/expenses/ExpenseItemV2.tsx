@@ -1,12 +1,6 @@
 import { DropdownSelectorOption, PreviousExpenseBeingEdited, UserPreferences } from "@/utility/types.ts";
 import { Dispatch, SetStateAction } from "react";
-import {
-  darkenColor,
-  DEFAULT_CATEGORY_GROUP,
-  formatDollarAmountStatic,
-  getCurrencySymbol,
-  useEmail,
-} from "@/utility/util.ts";
+import { darkenColor, formatDollarAmountStatic, getCurrencySymbol, useEmail } from "@/utility/util.ts";
 import DynamicIconComponent from "@/components-v2/subcomponents/other/DynamicIconComponent.tsx";
 import UpdateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/UpdateExpenseFormV2.tsx";
 import UpdateRecurringInstanceFormV2 from "@/components-v2/subcomponents/expenses/forms/UpdateRecurringInstanceFormV2.tsx";
@@ -47,7 +41,6 @@ export default function ExpenseItemV2({
 }: ExpenseItemV2Props) {
   const userPreferences: UserPreferences = useQueryClient().getQueryData(["userPreferences", useEmail()])!;
 
-  const isMiscellaneous = groupName === DEFAULT_CATEGORY_GROUP;
   const currencySymbol = getCurrencySymbol(userPreferences.currency);
 
   return (
@@ -88,22 +81,12 @@ export default function ExpenseItemV2({
           <div className="rounded-full text-primary bg-background p-2 mr-1">
             <DynamicIconComponent componentName={iconPath} props={{ size: "2rem" }} className={""} />
           </div>
-          <div
-            className="flex flex-col items-start ml-2"
-            style={{
-              color: isMiscellaneous ? "white" : "black",
-            }}
-          >
+          <div className="flex flex-col items-start ml-2">
             <p className="font-bold text-lg 2xl:text-xl mb-[-2px]">{category}</p>
             <p className="text-xs 2xl:text-sm font-medium">{groupName}</p>
           </div>
         </div>
-        <div
-          className="flex flex-row items-center"
-          style={{
-            color: isMiscellaneous ? "white" : "black",
-          }}
-        >
+        <div className="flex flex-row items-center">
           {recurringExpenseId && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
