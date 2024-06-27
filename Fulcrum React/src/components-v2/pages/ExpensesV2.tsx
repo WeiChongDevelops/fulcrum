@@ -32,8 +32,6 @@ interface ExpensesV2Props {
  * The root component for the expense page.
  */
 export default function ExpensesV2({ perCategoryExpenseTotalThisMonth }: ExpensesV2Props) {
-  const { oldExpenseBeingEdited, setOldExpenseBeingEdited } = useInitialExpenseData();
-
   const expenseArray: ExpenseItemEntity[] = useQueryClient().getQueryData(["expenseArray", useEmail()])!;
   const recurringExpenseArray: RecurringExpenseItemEntity[] = useQueryClient().getQueryData([
     "recurringExpenseArray",
@@ -43,37 +41,19 @@ export default function ExpensesV2({ perCategoryExpenseTotalThisMonth }: Expense
     "blacklistedExpenseArray",
     useEmail(),
   ])!;
+  const { oldExpenseBeingEdited, setOldExpenseBeingEdited } = useInitialExpenseData();
   const sideBarOpen = useSideBarIsOpen();
+  const routerLocation = useLocation();
+
+  const { mutate: batchDeleteExpenses } = useBatchDeleteExpenses();
+  const { mutate: batchCreateExpenses, isSuccess: expenseCreationIsSuccess } = useBatchCreateExpenses();
+  const startingIndex = getMonthsFromToday(expenseStartDate.getMonth(), expenseStartDate.getFullYear());
 
   const [isLoading, setIsLoading] = useState(true);
   const [structuredExpenseData, setStructuredExpenseData] = useState<MonthExpenseGroupEntity[]>();
   const [api, setApi] = useState<CarouselApi>();
   const [carouselWidth, setCarouselWidth] = useState(0);
-
-  const routerLocation = useLocation();
-
-  const { mutate: batchDeleteExpenses } = useBatchDeleteExpenses();
-  const { mutate: batchCreateExpenses, isSuccess: expenseCreationIsSuccess } = useBatchCreateExpenses();
-
-  const startingIndex = getMonthsFromToday(expenseStartDate.getMonth(), expenseStartDate.getFullYear());
-
-  useEffect(() => {
-    const updateStructuredExpenseData = async () => {
-      !!expenseArray && setStructuredExpenseData(await getStructuredExpenseData(expenseArray));
-    };
-    updateStructuredExpenseData().then(() => setIsLoading(false));
-  }, [expenseArray, routerLocation]);
-
-  useEffect(() => {
-    updateRecurringExpenseInstances(
-      recurringExpenseArray,
-      expenseArray,
-      blacklistedExpenseArray,
-      batchDeleteExpenses,
-      batchCreateExpenses,
-      expenseCreationIsSuccess,
-    );
-  }, [recurringExpenseArray, routerLocation]);
+  const [activeCarouselIndex, setActiveCarouselIndex] = useState(startingIndex ?? new Date());
 
   const rerenderCarousel = () => {
     const carousel = document.querySelector("#expense-carousel");
@@ -92,6 +72,23 @@ export default function ExpensesV2({ perCategoryExpenseTotalThisMonth }: Expense
   };
 
   useEffect(() => {
+    const updateStructuredExpenseData = async () => {
+      !!expenseArray && setStructuredExpenseData(await getStructuredExpenseData(expenseArray));
+    };
+    updateStructuredExpenseData().then(() => setIsLoading(false));
+  }, [expenseArray, routerLocation]);
+
+  useEffect(() => {
+    updateRecurringExpenseInstances(
+      recurringExpenseArray,
+      expenseArray,
+      blacklistedExpenseArray,
+      batchDeleteExpenses,
+      batchCreateExpenses,
+      expenseCreationIsSuccess,
+    );
+  }, [recurringExpenseArray, routerLocation]);
+  useEffect(() => {
     rerenderCarousel();
   }, [sideBarOpen, carouselWidth]);
 
@@ -106,12 +103,19 @@ export default function ExpensesV2({ perCategoryExpenseTotalThisMonth }: Expense
 
   return (
     <div className={"flex flex-col justify-start items-end relative"}>
-      <ExpenseHeaderV2 carouselAPI={api!} structuredExpenseData={structuredExpenseData} startingIndex={startingIndex} />
+      <ExpenseHeaderV2
+        carouselAPI={api!}
+        structuredExpenseData={structuredExpenseData}
+        startingIndex={startingIndex}
+        activeCarouselIndex={activeCarouselIndex}
+        setActiveCarouselIndex={setActiveCarouselIndex}
+      />
       <ExpenseMonthCarouselV2
         structuredExpenseData={structuredExpenseData!}
         setOldExpenseBeingEdited={setOldExpenseBeingEdited}
         setApi={setApi}
         startingIndex={startingIndex}
+        activeCarouselIndex={activeCarouselIndex}
         oldExpenseBeingEdited={oldExpenseBeingEdited}
         perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
       />

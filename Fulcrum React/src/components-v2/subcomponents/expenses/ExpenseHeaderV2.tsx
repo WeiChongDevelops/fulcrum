@@ -1,6 +1,6 @@
 import { Button } from "@/components-v2/ui/button.tsx";
 import { monthStringArray, useSideBarIsOpen } from "@/utility/util.ts";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { EmblaCarouselType } from "embla-carousel";
 import { MonthExpenseGroupEntity } from "@/utility/types.ts";
 import CurrencySelectorV2 from "@/components-v2/subcomponents/selectors/CurrencySelectorV2.tsx";
@@ -8,15 +8,22 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components-v2/ui/tooltip.tsx";
 
 interface ExpenseHeaderV2Props {
-  carouselAPI: EmblaCarouselType;
+  carouselAPI: EmblaCarouselType | undefined;
   structuredExpenseData: MonthExpenseGroupEntity[] | undefined;
   startingIndex: number;
+  setActiveCarouselIndex: Dispatch<SetStateAction<number>>;
+  activeCarouselIndex: number;
 }
 
-export default function ExpenseHeaderV2({ carouselAPI, structuredExpenseData, startingIndex }: ExpenseHeaderV2Props) {
+export default function ExpenseHeaderV2({
+  carouselAPI,
+  structuredExpenseData,
+  startingIndex,
+  setActiveCarouselIndex,
+  activeCarouselIndex,
+}: ExpenseHeaderV2Props) {
   const sideBarOpen = useSideBarIsOpen();
 
-  const [activeCarouselIndex, setActiveCarouselIndex] = useState(startingIndex);
   const [activeMonthAndYear, setActiveMonthAndYear] = useState<{
     month: string;
     year: number;

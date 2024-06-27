@@ -11,6 +11,7 @@ interface ExpenseMonthCarouselV2Props {
   structuredExpenseData: MonthExpenseGroupEntity[];
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   setApi: (api: EmblaCarouselType | undefined) => void;
+  activeCarouselIndex: number;
   startingIndex: number;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
@@ -24,6 +25,7 @@ export default function ExpenseMonthCarouselV2({
   setOldExpenseBeingEdited,
   setApi,
   startingIndex,
+  activeCarouselIndex,
   oldExpenseBeingEdited,
   perCategoryExpenseTotalThisMonth,
 }: ExpenseMonthCarouselV2Props) {
@@ -49,6 +51,8 @@ export default function ExpenseMonthCarouselV2({
                     monthExpenseGroupItem={monthExpenseGroupItem}
                     setOldExpenseBeingEdited={setOldExpenseBeingEdited}
                     oldExpenseBeingEdited={oldExpenseBeingEdited}
+                    startingIndex={startingIndex}
+                    activeCarouselIndex={activeCarouselIndex}
                   />
                 </ScrollArea>
               </CarouselItem>

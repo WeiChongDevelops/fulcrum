@@ -5,16 +5,18 @@ import {
   PreviousExpenseBeingEdited,
   UserPreferences,
 } from "@/utility/types.ts";
-import { Dispatch, memo, SetStateAction } from "react";
+import { Dispatch, memo, SetStateAction, useEffect, useState } from "react";
 import ExpenseDayGroupV2 from "@/components-v2/subcomponents/expenses/ExpenseDayGroupV2.tsx";
 import CreateExpenseFormV2 from "@/components-v2/subcomponents/expenses/forms/CreateExpenseFormV2.tsx";
-import { capitaliseFirstLetter, useEmail } from "@/utility/util.ts";
+import { capitaliseFirstLetter, expenseStartDate, useEmail } from "@/utility/util.ts";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ExpenseMonthGroupV2Props {
   monthExpenseGroupItem: MonthExpenseGroupEntity;
   setOldExpenseBeingEdited: Dispatch<SetStateAction<PreviousExpenseBeingEdited>>;
   oldExpenseBeingEdited: PreviousExpenseBeingEdited;
+  activeCarouselIndex: number;
+  startingIndex: number;
   perCategoryExpenseTotalThisMonth: Map<string, number>;
 }
 
@@ -27,7 +29,11 @@ export const ExpenseMonthGroupV2 = memo(
     setOldExpenseBeingEdited,
     oldExpenseBeingEdited,
     perCategoryExpenseTotalThisMonth,
+    activeCarouselIndex,
+    startingIndex,
   }: ExpenseMonthGroupV2Props) => {
+    const [defaultCalendarDate, setDefaultCalendarDate] = useState(new Date());
+
     const budgetArray: BudgetItemEntity[] = useQueryClient().getQueryData(["budgetArray", useEmail()])!;
     const categoryToIconAndColourMap: CategoryToIconAndColourMap = useQueryClient().getQueryData([
       "categoryToIconAndColourMap",
@@ -44,10 +50,32 @@ export const ExpenseMonthGroupV2 = memo(
           };
         })
       : [];
+
+    const updateDefaultCalendarDate = () => {
+      let defaultCalendarDate = new Date();
+
+      const monthDelta = (activeCarouselIndex - startingIndex) % 12;
+      const activeYear = expenseStartDate.getFullYear() + Math.floor(activeCarouselIndex / 12);
+
+      if (monthDelta === 0 && activeYear === defaultCalendarDate.getFullYear()) {
+        return new Date();
+      }
+
+      const startingMonthIndex = defaultCalendarDate.getMonth();
+      defaultCalendarDate.setMonth(startingMonthIndex + monthDelta);
+      defaultCalendarDate.setFullYear(activeYear);
+      defaultCalendarDate.setDate(1);
+      return defaultCalendarDate;
+    };
+
+    useEffect(() => {
+      setDefaultCalendarDate(updateDefaultCalendarDate);
+    }, [activeCarouselIndex]);
+
     return (
       <div className={"flex flex-col items-center w-full pt-8"}>
         <CreateExpenseFormV2
-          defaultCalendarDate={new Date()}
+          defaultCalendarDate={defaultCalendarDate}
           mustBeRecurring={false}
           perCategoryExpenseTotalThisMonth={perCategoryExpenseTotalThisMonth}
         />

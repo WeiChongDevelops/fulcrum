@@ -29,7 +29,7 @@ import Playground from "@/Playground.tsx";
  * The main application component, handling shared data retrieval, routing and rendering.
  */
 export default function App() {
-  window.console.log = () => {};
+  // window.console.log = () => {};
 
   const {
     email,

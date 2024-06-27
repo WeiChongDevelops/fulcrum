@@ -78,6 +78,11 @@ export default function CreateExpenseFormV2({
     });
   }, [formIsOpen]);
 
+  useEffect(() => {
+    setFormData((prevFormData) => ({ ...prevFormData, timestamp: defaultCalendarDate }));
+    console.log("DEFAULT APPLIED: " + defaultCalendarDate);
+  }, [defaultCalendarDate]);
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (formData.category === "") {
@@ -205,7 +210,7 @@ export default function CreateExpenseFormV2({
 
             <div className={"grid grid-cols-4 items-center gap-5"}>
               <Label className={"text-right"}>Date</Label>
-              <ExpenseDatePicker setFormData={setFormData} className={"col-span-3"} />
+              <ExpenseDatePicker setFormData={setFormData} defaultDate={defaultCalendarDate} className={"col-span-3"} />
             </div>
 
             <div className={"grid grid-cols-4 items-center gap-5"}>
