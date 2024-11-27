@@ -32,3 +32,6 @@ replay_pid*
 **/.env
 **/dist/
 **/build/
+
+"Fulcrum App.fig"
+"Fulcrum Home.fig"

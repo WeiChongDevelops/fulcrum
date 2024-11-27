@@ -179,3 +179,5 @@ export interface DropdownSelectorOption {
   label: string;
   colour: string;
 }
+
+export type ActiveChart = "categoryPieChart" | "groupPieChart" | "groupRadarChart";

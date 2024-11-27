@@ -109,7 +109,7 @@ export default function UpdateBudgetFormV2({
   return (
     <div className={"update-budget-trigger size-36 absolute"} ref={autoAnimateRef}>
       <Sheet open={formIsOpen} onOpenChange={setFormIsOpen}>
-        <SheetTrigger onClick={updateOldBudgetBeingEdited} className={"size-36 outline"}></SheetTrigger>
+        <SheetTrigger onClick={updateOldBudgetBeingEdited} className={"size-36 "}></SheetTrigger>
         <SheetContent className={cn(userPreferences.darkModeEnabled && "dark")}>
           <SheetHeader>
             <SheetTitle>Updating Budget Category</SheetTitle>

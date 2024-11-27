@@ -1,11 +1,13 @@
 import { budgetSizeSort, cn, getGroupBudgetTotal, useEmail } from "@/utility/util.ts";
-import { BudgetItemEntity, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
+import { ActiveChart, BudgetItemEntity, GroupItemEntity, UserPreferences } from "@/utility/types.ts";
 import { useEffect, useState } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components-v2/ui/select";
 import GroupPieChart from "@/components-v2/subcomponents/budget/graphs/GroupPieChart.tsx";
 import CategoryPieChart from "@/components-v2/subcomponents/budget/graphs/CategoryPieChart.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import BudgetDistributionDrawer from "@/components-v2/subcomponents/budget/BudgetDistributionDrawer.tsx";
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components-v2/ui/chart";
 
 interface BudgetDataBentoProps {
   budgetTotal: number;
@@ -23,6 +25,7 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
       : -1;
 
   const [sortByGroup, setSortByGroup] = useState(false);
+  const [activeChart, setActiveChart] = useState<ActiveChart>("categoryPieChart");
   const [groupArraySortedByAmount, setGroupArraySortedByAmount] = useState(
     !!groupArray && groupArray.length > 1 ? groupArray.sort(groupSizeSort) : [],
   );
@@ -31,7 +34,8 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
   );
 
   const handleValueChange = (value: string) => {
-    setSortByGroup(value === "group");
+    setSortByGroup(value.includes("group"));
+    setActiveChart(value as ActiveChart);
     setRerenderKey(rerenderKey + 1);
   };
 
@@ -44,6 +48,20 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
   }, [budgetArray]);
   const [rerenderKey, setRerenderKey] = useState(0);
 
+  const chartData2 = groupArray.map((groupItem) => {
+    return {
+      group: groupItem.group,
+      Amount: getGroupBudgetTotal(budgetArray.filter((budget) => budget.group === groupItem.group)),
+    };
+  });
+
+  const chartConfig = {
+    desktop: {
+      label: "Desktop",
+      color: "hsl(var(--chart-1))",
+    },
+  } satisfies ChartConfig;
+
   return (
     <div
       className={cn(
@@ -52,24 +70,33 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
     >
       {!!groupArray && !!budgetArray && (
         <>
-          <Select onValueChange={handleValueChange} defaultValue={"category"}>
+          <Select onValueChange={handleValueChange} defaultValue={"categoryPieChart"}>
             <SelectTrigger className="w-[32ch] absolute top-3 left-4 z-30 bg-background text-xs font-medium">
               <SelectValue placeholder={`Budget Distribution by ${sortByGroup ? "Group" : "Category"}`} />
             </SelectTrigger>
             <SelectContent className={cn("bg-background", userPreferences.darkModeEnabled && "dark")}>
               <SelectGroup>
-                <SelectItem value="category" className={"text-xs font-medium"}>
+                <SelectItem value="categoryPieChart" className={"text-xs font-medium"}>
                   Budget Distribution by Category
                 </SelectItem>
-                <SelectItem value="group" className={"text-xs font-medium"}>
-                  Budget Distribution by Group
+                <SelectItem value="groupPieChart" className={"text-xs font-medium"}>
+                  Budget Distribution by Group (Donut)
+                </SelectItem>
+                <SelectItem value="groupRadarChart" className={"text-xs font-medium"}>
+                  Budget Distribution by Group (Radar)
                 </SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
           {budgetArray.length > 0 ? (
             <div className={"relative h-full w-[34rem] md:w-[30rem] pt-4"}>
-              {sortByGroup ? (
+              {activeChart === "categoryPieChart" ? (
+                <CategoryPieChart
+                  sortedBudgetArray={budgetArraySortedByAmount}
+                  currency={userPreferences.currency}
+                  key={rerenderKey}
+                />
+              ) : activeChart === "groupPieChart" ? (
                 <GroupPieChart
                   sortedGroupDataArray={groupArraySortedByAmount.map((groupItem) => ({
                     group: groupItem.group,
@@ -80,11 +107,22 @@ export default function BudgetDataBento({ budgetTotal }: BudgetDataBentoProps) {
                   key={rerenderKey}
                 />
               ) : (
-                <CategoryPieChart
-                  sortedBudgetArray={budgetArraySortedByAmount}
-                  currency={userPreferences.currency}
-                  key={rerenderKey}
-                />
+                <ChartContainer config={chartConfig} className="mx-auto mt-10">
+                  <RadarChart data={chartData2}>
+                    <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                    <PolarAngleAxis dataKey="group" />
+                    <PolarGrid className="fill-[--color-desktop] opacity-20" />
+                    <Radar
+                      dataKey="Amount"
+                      fill="var(--color-desktop)"
+                      fillOpacity={0.6}
+                      dot={{
+                        r: 4,
+                        fillOpacity: 1,
+                      }}
+                    />
+                  </RadarChart>
+                </ChartContainer>
               )}
             </div>
           ) : (
